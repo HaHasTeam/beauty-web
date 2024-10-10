@@ -10,7 +10,7 @@ export default function RouterProvider() {
       element: <Home />,
     },
     {
-      path: '/about',
+      path: '/about3',
       element: <About />,
     },
   ])
