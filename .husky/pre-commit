@@ -1,5 +1,3 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
+export HUSKY=0
 npm lint && npm format
 npm run build
