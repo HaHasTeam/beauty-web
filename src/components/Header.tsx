@@ -1,3 +1,5 @@
+import { useNavigate } from 'react-router-dom'
 export default function Header() {
-  return <div>Headeđfsfr</div>fdsf;
+  const navigate = useNavigate()
+  return <div>Headeđfsfr</div>
 }

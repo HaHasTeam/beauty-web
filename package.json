@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc && vite build --mode production",
     "build:docker": "tsc && vite build --mode docker",
-    "lint": "tsc && eslint . --ext .js,.ts,.jsx,.tsx --fix",
+    "lint": "tsc && eslint \"**/*.{ts,tsx}\" --fix",
     "format": "prettier --write \"./**/*.{html,tsx,ts,js,json,md}\"",
     "preview": "vite preview",
     "prepare": "husky",
