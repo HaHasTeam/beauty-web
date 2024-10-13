@@ -1,12 +1,12 @@
+import Home from '@/views/Home'
 import { useRoutes } from 'react-router-dom'
 
 import About from '@/views/About'
-import Home from '@/views/Home'
 
 export default function RouterProvider() {
   return useRoutes([
     {
-      path: '/fdsfd',
+      path: '/',
       element: <Home />,
     },
     {

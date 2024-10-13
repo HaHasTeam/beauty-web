@@ -1,6 +1,8 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import './App.css'
+
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+
 import RouterProvider from '@/router'
 // Create a client
 const queryClient = new QueryClient()

@@ -1,6 +1,7 @@
-import { useUserStore } from '@/store/user'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+
+import { useUserStore } from '@/store/user'
 
 function About() {
   const navigate = useNavigate()
