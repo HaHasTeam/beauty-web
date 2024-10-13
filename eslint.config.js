@@ -6,7 +6,7 @@ import tseslint from 'typescript-eslint'
 import pluginQuery from '@tanstack/eslint-plugin-query'
 import simpleImportSort from 'eslint-plugin-simple-import-sort'
 export default tseslint.config(
-  { ignores: ['dist'] },
+  { ignores: ['dist', '/node_modules'] },
   {
     parserOptions: {
       sourceType: 'module',

@@ -6,7 +6,7 @@ import Home from '@/views/Home'
 export default function RouterProvider() {
   return useRoutes([
     {
-      path: '/',
+      path: '/fdsfd',
       element: <Home />,
     },
     {
