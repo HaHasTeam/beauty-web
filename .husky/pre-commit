@@ -1,5 +1,8 @@
 #!/usr/bin/env sh
 
 npm run lint 
+echo "Linting"
+echo "FORMATING"
 npm run format
+echo "BUILDING"
 npm run build
