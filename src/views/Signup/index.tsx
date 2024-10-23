@@ -41,7 +41,7 @@ const SignUp = () => {
   return (
     <div className="min-h-screen bg-[#FFF8F5] flex items-center justify-center p-4 relative">
       {/* <h1 className="text-5xl font-bold text-[#FFA07A] mb-6 absolute top-10 left-50% ">Allure</h1> */}
-      <div className="w-full max-w-6xl bg-white rounded-lg shadow-lg overflow-hidden">
+      <div className="w-full max-w-5xl bg-white rounded-lg shadow-lg overflow-hidden">
         <div className="flex flex-col md:flex-row">
           <div className="md:w-1/2 relative bg-blend-color-burn">
             <div className="absolute  top-4 right-4 bg-white px-2 py-1 rounded text-sm flex cursor-pointer">
