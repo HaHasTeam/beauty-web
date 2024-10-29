@@ -12,9 +12,8 @@ const ServerError = () => {
       </div>
 
       <div className="mx-auto max-w-md text-center">
-        <p className="mt-4 text-lg text-muted-foreground">
-          Oops! Something went wrong on our end. Please try again later.
-        </p>
+        <p className="mt-4 text-lg text-muted-foreground">Oops! Something went wrong on our end.</p>
+        <p className="mt-1 text-lg text-muted-foreground">Please try again later.</p>
         <div className="mt-6">
           <Link
             to="/"
