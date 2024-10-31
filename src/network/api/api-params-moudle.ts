@@ -10,3 +10,21 @@ export interface getCanvasData {
   endTime: string
   city: string
 }
+
+export interface createAccountParams {
+  username?: string
+  email: string
+  firstName: string
+  lastName: string
+  password: string
+  role: string
+  gender?: string
+  phone?: string
+  dob?: string
+  avatar?: string
+}
+
+export interface signInParams {
+  email: string
+  password: string
+}

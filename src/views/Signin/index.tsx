@@ -1,18 +1,114 @@
-import { ChevronRight, Eye, EyeOff } from 'lucide-react'
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation } from '@tanstack/react-query'
+import { AxiosError } from 'axios'
+import { ChevronRight } from 'lucide-react'
+import { useForm } from 'react-hook-form'
+import { Link, useNavigate } from 'react-router-dom'
+import { z } from 'zod'
 
 import Hero01 from '@/assets/images/hero01.png'
 import OrVector from '@/assets/images/orVector.png'
 import OrVector02 from '@/assets/images/orVector02.png'
 import { Icons } from '@/components/Icons'
 import { Button, buttonVariants } from '@/components/ui/button'
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import { PasswordInput } from '@/components/ui/password-input'
+import { useToast } from '@/hooks/use-toast'
+import { formSignInSchema } from '@/lib/schema'
 import { cn } from '@/lib/utils'
+import { login } from '@/network/api/api'
+import { signInParams } from '@/network/api/api-params-moudle'
 
 const SignIn = () => {
-  const [showPassword, setShowPassword] = useState(false)
+  const { toast } = useToast()
+  const navigate = useNavigate()
+
+  const form = useForm<z.infer<typeof formSignInSchema>>({
+    resolver: zodResolver(formSignInSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  })
+  const { mutateAsync: signInCustomerMutate } = useMutation({
+    mutationFn: async (data: signInParams) => {
+      return login(data)
+    },
+    onSuccess: (data: any) => {
+      // if (!data.ok) {
+      //   // if (data.error) {
+      //   //   const errs = data.error as { [key: string]: { message: string } }
+      //   //   Object.entries(errs).forEach(([key, value]) => {
+      //   //     form.setError(key as keyof createAccountParams, {
+      //   //       type: 'manual',
+      //   //       message: value.message,
+      //   //     })
+      //   //   })
+      //   // }
+      //   toast({
+      //     variant: 'destructive',
+      //     title: 'Uh oh! Something went wrong.',
+      //     description: data.message || data.statusText,
+      //   })
+      //   throw new Error(data.message || data.statusText)
+      // }
+      if (data.message) {
+        form.reset()
+        navigate('/')
+        return toast({
+          variant: 'default',
+          className: 'bg-green-600 text-white',
+          title: 'Message from system',
+          description: data.message,
+        })
+      }
+
+      return toast({
+        variant: 'default',
+        title: 'Submitted successfully',
+        description: (
+          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+            <code className="text-white">{JSON.stringify(data.message, null, 2)}</code>
+          </pre>
+        ),
+      })
+    },
+    onError(error: AxiosError) {
+      const { response } = error
+      if (response?.data?.message) {
+        return toast({
+          variant: 'destructive',
+          title: 'Message from system',
+          description: response.data.message,
+        })
+      }
+    },
+  })
+  function onSubmit(values: z.infer<typeof formSignInSchema>) {
+    try {
+      // toast({
+      //   title: 'data onSubmit',
+      //   description: (
+      //     <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+      //       <code className="text-white">{JSON.stringify(values, null, 2)}</code>
+      //     </pre>
+      //   ),
+      // })
+      console.log(values)
+      const formateData: signInParams = {
+        ...values,
+      }
+      signInCustomerMutate(formateData)
+    } catch (error) {
+      console.error('Form submission error', error)
+      toast({
+        variant: 'destructive',
+        title: 'Uh oh! Something went wrong.',
+        description: 'Failed to submit the form. Please try again.',
+      })
+    }
+  }
   return (
     <div className="min-h-screen bg-[#FFF8F5] flex items-center justify-center p-4 relative">
       {/* <h1 className="text-5xl font-bold text-[#FFA07A] mb-6 absolute top-10 left-50% ">Allure</h1> */}
@@ -36,38 +132,40 @@ const SignIn = () => {
           <div className="md:w-1/2 p-8">
             <h2 className="text-2xl font-medium mb-2 text-center text-[#FFA07A]">Welcome to Allure</h2>
             <p className="text-gray-500 mb-6 text-center">Unleash your inner beauty. Log in now.</p>
-            <form className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input type="email" placeholder="Email" className="w-full" />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
-                <div className="">
-                  <div className="relative">
-                    <Input type={showPassword ? 'text' : 'password'} placeholder="Password" className="w-full pr-10" />
-                    <button
-                      type="button"
-                      className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                      onClick={() => setShowPassword(!showPassword)}
-                    >
-                      {showPassword ? (
-                        <EyeOff className="h-5 w-5 text-gray-400" />
-                      ) : (
-                        <Eye className="h-5 w-5 text-gray-400" />
-                      )}
-                    </button>
-                  </div>
-                  <Link
-                    to="/forgot-password"
-                    className="text-xs sm:text-sm text-[#FFA07A] hover:underline block text-right mt-1"
-                  >
-                    Forgot your password?
-                  </Link>
-                </div>
-              </div>
-              <Button className="w-full bg-[#FFA07A] hover:bg-[#FF8C5A] text-white">Log in</Button>
-            </form>
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Please enter your email" type="email" {...field} />
+                      </FormControl>
+
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Password</FormLabel>
+                      <FormControl>
+                        <PasswordInput placeholder="Please Enter your password." {...field} />
+                      </FormControl>
+
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Button className="w-full bg-[#FFA07A] hover:bg-[#FF8C5A] text-white">Log in</Button>
+              </form>
+            </Form>
+
             <div className="mt-6 text-center">
               <div className="flex items-baseline justify-center gap-2">
                 <img src={OrVector} alt="vector" />
