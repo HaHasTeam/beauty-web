@@ -4,7 +4,7 @@ import AboutImage from '@/assets/images/about-image.jpg'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
-export default function Component() {
+export default function About() {
   return (
     <div className="container my-8">
       <div className="w-[1200px] mx-auto mb-8">
