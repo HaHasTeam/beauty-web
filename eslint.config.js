@@ -7,7 +7,7 @@ import pluginQuery from '@tanstack/eslint-plugin-query'
 import simpleImportSort from 'eslint-plugin-simple-import-sort'
 import importPlugin from 'eslint-plugin-import'
 export default tseslint.config(
-  { ignores: ['dist', '/node_modules'] },
+  { ignores: ['dist/**/*', '/node_modules'] },
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended, importPlugin.flatConfigs.recommended],
     files: ['**/*.{ts,tsx}'],
