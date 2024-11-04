@@ -1,6 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
-import { AxiosError } from 'axios'
 import { ChevronRight } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
@@ -35,7 +34,9 @@ const SignIn = () => {
     mutationFn: async (data: signInParams) => {
       return login(data)
     },
-    onSuccess: (data: any) => {
+    onSuccess: (data) => {
+      console.log('data', data)
+
       // if (!data.ok) {
       //   // if (data.error) {
       //   //   const errs = data.error as { [key: string]: { message: string } }
@@ -65,27 +66,27 @@ const SignIn = () => {
       }
 
       return toast({
-        variant: 'default',
         title: 'Submitted successfully',
         description: (
           <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <code className="text-white">{JSON.stringify(data.message, null, 2)}</code>
+            <code className="text-white">{data.message}</code>
           </pre>
         ),
       })
     },
-    onError(error: AxiosError) {
-      const { response } = error
-      if (response?.data?.message) {
-        return toast({
-          variant: 'destructive',
-          title: 'Message from system',
-          description: response.data.message,
-        })
-      }
+    onError(error) {
+      // console.log('error', error)
+
+      // if (error) {
+      return toast({
+        // variant: 'destructive',
+        title: 'Message from system',
+        description: error.message,
+      })
+      // }
     },
   })
-  function onSubmit(values: z.infer<typeof formSignInSchema>) {
+  async function onSubmit(values: z.infer<typeof formSignInSchema>) {
     try {
       // toast({
       //   title: 'data onSubmit',
@@ -99,7 +100,7 @@ const SignIn = () => {
       const formateData: signInParams = {
         ...values,
       }
-      signInCustomerMutate(formateData)
+      await signInCustomerMutate(formateData)
     } catch (error) {
       console.error('Form submission error', error)
       toast({

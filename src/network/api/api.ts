@@ -1,7 +1,8 @@
 import { request } from '@/network/axios'
+import { ActionResponse } from '@/types'
 
 import { createAccountParams, getCanvasData, signInParams } from './api-params-moudle'
-import { GetCityTotal } from './api-res-model'
+import { GetCityTotal, LoginResponse } from './api-res-model'
 
 enum APIS {
   GET_CITY_TOTAL_NUMBER = '/xxxx/xxxx/xxxxx',
@@ -12,5 +13,6 @@ enum APIS {
 export const getCityTotalNumber = (params: getCanvasData) =>
   request.get<GetCityTotal>(APIS.GET_CITY_TOTAL_NUMBER, params)
 
-export const createAccount = async (data: createAccountParams) => await request.post(APIS.CREATE_ACCOUNT, data)
-export const login = async (data: signInParams) => await request.post(APIS.SIGN_IN, data)
+export const createAccount = async (data: createAccountParams) =>
+  await request.post<ActionResponse<LoginResponse>>(APIS.CREATE_ACCOUNT, data)
+export const login = async (data: signInParams) => await request.post<ActionResponse<LoginResponse>>(APIS.SIGN_IN, data)

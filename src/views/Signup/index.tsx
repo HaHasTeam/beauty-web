@@ -1,6 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
-import { AxiosError } from 'axios'
 import { ChevronRight } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
@@ -42,7 +41,7 @@ const SignUp = () => {
     mutationFn: async (data: createAccountParams) => {
       return createAccount(data)
     },
-    onSuccess: (data: any) => {
+    onSuccess: (data) => {
       // if (!data.ok) {
       //   // if (data.error) {
       //   //   const errs = data.error as { [key: string]: { message: string } }
@@ -81,15 +80,12 @@ const SignUp = () => {
         ),
       })
     },
-    onError(error: AxiosError) {
-      const { response } = error
-      if (response?.data?.message) {
-        return toast({
-          variant: 'destructive',
-          title: 'Message from system',
-          description: response.data.message,
-        })
-      }
+    onError(error) {
+      return toast({
+        variant: 'destructive',
+        title: 'Message from system',
+        description: error.message,
+      })
     },
   })
   function onSubmit(values: z.infer<typeof formRegisterSchema>) {
