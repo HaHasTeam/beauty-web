@@ -1,13 +1,13 @@
 import i18n from 'i18next'
 import detector from 'i18next-browser-languagedetector'
-import HttpApi from 'i18next-http-backend'
+import Backend from 'i18next-http-backend'
 import intervalPlural from 'i18next-intervalplural-postprocessor'
 import { initReactI18next } from 'react-i18next'
 
 export const supportedLngs = ['en', 'vi']
 
 i18n
-  .use(HttpApi)
+  .use(Backend)
   .use(detector)
   .use(initReactI18next)
   .use(intervalPlural)
