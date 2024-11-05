@@ -8,6 +8,7 @@ enum APIS {
   GET_CITY_TOTAL_NUMBER = '/xxxx/xxxx/xxxxx',
   CREATE_ACCOUNT = '/accounts',
   SIGN_IN = '/auth/login',
+  SIGN_UP =                                                    '/auth/regiset',
 }
 
 export const getCityTotalNumber = (params: getCanvasData) =>
