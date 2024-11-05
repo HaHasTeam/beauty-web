@@ -2,6 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
 import { ChevronRight } from 'lucide-react'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router-dom'
 import { z } from 'zod'
 
@@ -22,7 +23,7 @@ import { signInParams } from '@/network/api/api-params-moudle'
 const SignIn = () => {
   const { toast } = useToast()
   const navigate = useNavigate()
-
+  const { t } = useTranslation()
   const form = useForm<z.infer<typeof formSignInSchema>>({
     resolver: zodResolver(formSignInSchema),
     defaultValues: {
@@ -131,7 +132,7 @@ const SignIn = () => {
             </div> */}
           </div>
           <div className="md:w-1/2 p-8">
-            <h2 className="text-2xl font-medium mb-2 text-center text-[#FFA07A]">Welcome to Allure</h2>
+            <h2 className="text-2xl font-medium mb-2 text-center text-[#FFA07A]">{t('welcome')}</h2>
             <p className="text-gray-500 mb-6 text-center">Unleash your inner beauty. Log in now.</p>
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
