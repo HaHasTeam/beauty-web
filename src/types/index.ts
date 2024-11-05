@@ -1,5 +1,4 @@
-import { CartSlice } from '@/store/cart-slice'
-import { UserSlice } from '@/store/user-slice'
+import { RouteConfigType } from './routes'
 
 export enum ActionResponseErrorCodeEnum {
   INTERNAL_SERVER_ERROR = 500,
@@ -24,6 +23,7 @@ export interface ActionResponse<T> {
   message: string
 }
 
-export type Store = UserSlice & CartSlice
-
+export type ConfigType = {
+  routes: RouteConfigType
+}
 export type CartProduct = Product & { qty: number }

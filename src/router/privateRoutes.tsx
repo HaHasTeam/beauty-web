@@ -1,11 +1,18 @@
+import { Navigate } from 'react-router-dom'
+
+import MainLayout from '@/components/layout/MainLayout'
+import configs from '@/config'
+
+import AuthGuard from './guard/AuthGuard'
+
 const privateRoutes = [
   {
     element: (
-      <VerifiedEmailGuard>
-        <AuthGuard>
-          <MainLayout />
-        </AuthGuard>
-      </VerifiedEmailGuard>
+      // <VerifiedEmailGuard>
+      <AuthGuard>
+        <MainLayout />
+      </AuthGuard>
+      // </VerifiedEmailGuard>
     ),
     children: [
       {
@@ -15,7 +22,7 @@ const privateRoutes = [
       },
       {
         path: configs.routes.messages,
-        element: <Messages />,
+        element: <div>message page</div>,
       },
     ],
   },
@@ -24,13 +31,13 @@ const privateRoutes = [
     path: configs.routes.notVerifyEmail,
     element: (
       <AuthGuard>
-        <NotVerifyEmail />
+        <div>Not verify email</div>
       </AuthGuard>
     ),
   },
   {
     path: configs.routes.notFound,
-    element: <NotFound />,
+    element: <div className="">not found section</div>,
   },
 ]
 export default privateRoutes

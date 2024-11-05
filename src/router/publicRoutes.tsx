@@ -1,10 +1,15 @@
+import AuthLayout from '@/components/layout/AuthLayout'
+import configs from '@/config'
+import SignIn from '@/views/Signin'
+import SignUp from '@/views/Signup'
+
 import GuestGuard from './guard/GuestGuard'
 
 const publicRoutes = [
   {
     element: (
       <GuestGuard>
-        <AuthLayout title="Sign In" description="Welcome back, you’ve been missed!" />
+        <AuthLayout />
       </GuestGuard>
     ),
     children: [
@@ -17,7 +22,7 @@ const publicRoutes = [
   {
     element: (
       <GuestGuard>
-        <AuthLayout title="Getting Started" description="Create an account to continue and connect with the people." />
+        <AuthLayout />
       </GuestGuard>
     ),
     children: [
@@ -29,15 +34,17 @@ const publicRoutes = [
   },
   {
     path: configs.routes.forgotPassword,
-    element: <ForgotPassword />,
+    // element: <ForgotPassword />,
+    element: <div className="">ForgotPasswordp</div>,
   },
   {
     path: configs.routes.checkEmail,
-    element: <CheckEmail />,
+    // element: <CheckEmail />,
+    element: <div className="">Check mail</div>,
   },
   {
     path: configs.routes.notFound,
-    element: <NotFound />,
+    element: <div>Not found</div>,
   },
 ]
 
