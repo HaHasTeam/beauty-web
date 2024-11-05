@@ -58,7 +58,7 @@ class MyAxios {
           return data
         }
       },
-      (error: AxiosError) => {
+      (error: AxiosError<{ data: { message: string } }>) => {
         console.log('axios error', error)
 
         //ElementUI   import { Message } from 'element-ui';

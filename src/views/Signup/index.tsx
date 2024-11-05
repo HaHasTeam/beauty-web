@@ -15,6 +15,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/ui/password-input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import configs from '@/config'
 import { useToast } from '@/hooks/use-toast'
 import { formRegisterSchema } from '@/lib/schema'
 import { cn } from '@/lib/utils'
@@ -61,7 +62,7 @@ const SignUp = () => {
       // }
       if (data.message) {
         form.reset()
-        navigate('/signin')
+        navigate(configs.routes.signIn)
         return toast({
           variant: 'default',
           className: 'bg-green-600 text-white',
