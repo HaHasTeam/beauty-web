@@ -19,7 +19,7 @@ export type Product = {
 }
 export interface ActionResponse<T> {
   error?: ActionResponseError
-  data?: T | object
+  data?: T
   message: string
 }
 

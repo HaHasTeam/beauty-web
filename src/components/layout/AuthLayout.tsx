@@ -6,7 +6,7 @@ const AuthLayout = () => {
       <header className="auth__header">{/* <Logo to={configs.routes.signIn} onClick={handleShowToast} /> */}</header>
 
       <section className="">
-        <h1 className="">Auth Layout</h1>
+        <h1 className="">Auth Layout test</h1>
 
         <div className="">
           <Outlet />
