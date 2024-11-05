@@ -20,7 +20,7 @@ import { useToast } from '@/hooks/use-toast'
 import { formRegisterSchema } from '@/lib/schema'
 import { cn } from '@/lib/utils'
 import { createAccount } from '@/network/api/api'
-import { createAccountParams } from '@/network/api/api-params-moudle'
+import { createAccountParams, ICommonResponse } from '@/network/api/api-params-moudle'
 
 const SignUp = () => {
   const { toast } = useToast()
@@ -42,7 +42,7 @@ const SignUp = () => {
     mutationFn: async (data: createAccountParams) => {
       return createAccount(data)
     },
-    onSuccess: (data: any) => {
+    onSuccess: (data: ICommonResponse) => {
       // if (!data.ok) {
       //   // if (data.error) {
       //   //   const errs = data.error as { [key: string]: { message: string } }

@@ -18,7 +18,7 @@ import { useToast } from '@/hooks/use-toast'
 import { formSignInSchema } from '@/lib/schema'
 import { cn } from '@/lib/utils'
 import { login } from '@/network/api/api'
-import { signInParams } from '@/network/api/api-params-moudle'
+import { ICommonResponse, signInParams } from '@/network/api/api-params-moudle'
 
 const SignIn = () => {
   const { toast } = useToast()
@@ -35,7 +35,7 @@ const SignIn = () => {
     mutationFn: async (data: signInParams) => {
       return login(data)
     },
-    onSuccess: (data: any) => {
+    onSuccess: (data: ICommonResponse) => {
       // if (!data.ok) {
       //   // if (data.error) {
       //   //   const errs = data.error as { [key: string]: { message: string } }

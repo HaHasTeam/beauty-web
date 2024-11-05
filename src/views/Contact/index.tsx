@@ -19,21 +19,27 @@ export default function Contact() {
           </p>
           <div className="space-y-4">
             <div className="flex items-center space-x-4">
-              <Home className="text-primary" />
+              <div className="p-3 rounded-lg bg-[#FFF5F1]">
+                <Home className="text-primary " />
+              </div>
               <div>
                 <h4 className="font-semibold text-gray-800">Our Location</h4>
                 <p className="text-gray-600">99 S.t Jomblo Park Pekanbaru 28292, Indonesia</p>
               </div>
             </div>
-            <div className="flex items-center space-x-4">
-              <Phone className="text-primary" />
+            <div className="flex items-center space-x-4 ">
+              <div className="p-3 rounded-lg bg-[#FFF5F1]">
+                <Phone className="text-primary" />
+              </div>
               <div>
                 <h4 className="font-semibold text-gray-800">Phone Number</h4>
                 <p className="text-gray-600">(+62)81 414 257 9980</p>
               </div>
             </div>
             <div className="flex items-center space-x-4">
-              <Mail className="text-primary" />
+              <div className="p-3 rounded-lg bg-[#FFF5F1]">
+                <Mail className="text-primary" />
+              </div>
               <div>
                 <h4 className="font-semibold text-gray-800">Email Address</h4>
                 <p className="text-gray-600">info@yourdomain.com</p>
