@@ -5,8 +5,7 @@ function About() {
 
   return (
     <div>
-      <br />
-      <br />
+      <div className=""> this is about page </div>
       <button onClick={() => navigate(-1)}>back</button>
     </div>
   )
