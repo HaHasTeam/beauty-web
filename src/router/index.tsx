@@ -7,9 +7,19 @@ import Forbidden from '@/views/Forbidden'
 import Home from '@/views/Home'
 import NotFound from '@/views/NotFound'
 import ServerError from '@/views/ServerError'
+import SignIn from '@/views/Signin'
+import SignUp from '@/views/Signup'
 
 export default function RouterProvider() {
   return useRoutes([
+    {
+      path: '/signin',
+      element: <SignIn />,
+    },
+    {
+      path: '/signup',
+      element: <SignUp />,
+    },
     {
       element: <PrimaryLayout />,
       children: [
