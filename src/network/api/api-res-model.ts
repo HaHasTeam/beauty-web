@@ -1,3 +1,5 @@
+import { IAccount } from './model/account'
+
 export interface resBaseInfo<DataModel> {
   rsCode: string
   rsCause: string
@@ -10,3 +12,5 @@ export interface GetCityTotalNumberModel {
 }
 
 export type GetCityTotal = GetCityTotalNumberModel[]
+
+export type LoginResponse = IAccount

@@ -1,0 +1,28 @@
+{
+  "welcome": "Chào mứng tới Allure",
+  "header": {
+    "login": "Đăng nhập",
+    "logout": "Thoát",
+    "profile": "Hồ sơ của tôi",
+    "allCategories": "Tất cả danh mục",
+    "loginGoogle": "Đăng nhập với Google"
+  },
+  "profile": {},
+
+  "error": {
+    "loginError": "Đăng nhập không thành công",
+    "logoutError": "Đăng xuất không thành công",
+    "noToken": "Bạn Chưa đăng nhập",
+    "errorLoading": "Đã xảy ra lỗi. Vui lòng thử lại sau",
+    "errorSubmit": "Nộp bài không thành công"
+  },
+
+  "errorNotification": "Oops, có chút sự cố, bạn chờ một lát nha!",
+  "loginRcm": "Đăng nhập để cập nhật kỹ năng bạn nha!",
+  "facebook": "Facebook",
+  "button": {
+    "goBack": "Quay lại"
+  },
+
+  "noData": "Không tìm thấy dữ liệu phù hợp"
+}

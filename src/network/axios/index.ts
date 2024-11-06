@@ -45,9 +45,9 @@ class MyAxios {
 
     this.axiosInstance.interceptors.response.use(
       (response) => {
-        // formate Data
+        // format Data
         const { data } = response
-        console.log('data', data)
+        // console.log('data', data)
         // if (data.rsCode !== 0) {
         //   // alert(`${data.rsCause}`)
         //   return Promise.reject(data.data)
@@ -58,7 +58,7 @@ class MyAxios {
           return data
         }
       },
-      (error: AxiosError) => {
+      (error: AxiosError<{ data: { message: string } }>) => {
         console.log('axios error', error)
 
         //ElementUI   import { Message } from 'element-ui';

@@ -1,10 +1,12 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
-import { AxiosError } from 'axios'
+import type { AxiosError } from 'axios'
 import { ChevronRight } from 'lucide-react'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router-dom'
 import { z } from 'zod'
+import { useShallow } from 'zustand/react/shallow'
 
 import Hero01 from '@/assets/images/hero01.png'
 import OrVector from '@/assets/images/orVector.png'
@@ -14,16 +16,25 @@ import { Button, buttonVariants } from '@/components/ui/button'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/ui/password-input'
+import configs from '@/config'
 import { useToast } from '@/hooks/use-toast'
 import { formSignInSchema } from '@/lib/schema'
 import { cn } from '@/lib/utils'
 import { login } from '@/network/api/api'
 import { signInParams } from '@/network/api/api-params-moudle'
+import { LoginResponse } from '@/network/api/api-res-model'
+import { useStore } from '@/store/store'
+import { ActionResponse } from '@/types'
 
 const SignIn = () => {
+  const { initialize } = useStore(
+    useShallow((state) => ({
+      initialize: state.initialize,
+    })),
+  )
   const { toast } = useToast()
   const navigate = useNavigate()
-
+  const { t } = useTranslation()
   const form = useForm<z.infer<typeof formSignInSchema>>({
     resolver: zodResolver(formSignInSchema),
     defaultValues: {
@@ -31,11 +42,17 @@ const SignIn = () => {
       password: '',
     },
   })
-  const { mutateAsync: signInCustomerMutate } = useMutation({
+  const { mutateAsync: signInCustomerMutate } = useMutation<
+    ActionResponse<LoginResponse>,
+    AxiosError<{ message: string }>,
+    signInParams
+  >({
     mutationFn: async (data: signInParams) => {
       return login(data)
     },
-    onSuccess: (data: any) => {
+    onSuccess: (data) => {
+      console.log('data', data)
+
       // if (!data.ok) {
       //   // if (data.error) {
       //   //   const errs = data.error as { [key: string]: { message: string } }
@@ -53,9 +70,11 @@ const SignIn = () => {
       //   })
       //   throw new Error(data.message || data.statusText)
       // }
-      if (data.message) {
+      if (data.message && data.data) {
+        initialize(true, data.data)
         form.reset()
         navigate('/')
+
         return toast({
           variant: 'default',
           className: 'bg-green-600 text-white',
@@ -65,49 +84,49 @@ const SignIn = () => {
       }
 
       return toast({
-        variant: 'default',
         title: 'Submitted successfully',
         description: (
           <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <code className="text-white">{JSON.stringify(data.message, null, 2)}</code>
+            <code className="text-white">{data.message}</code>
           </pre>
         ),
       })
     },
-    onError(error: AxiosError) {
-      const { response } = error
-      if (response?.data?.message) {
+    onError(error) {
+      console.log('error', error)
+
+      if (error.response) {
         return toast({
           variant: 'destructive',
           title: 'Message from system',
-          description: response.data.message,
+          description: error.response.data.message,
         })
       }
     },
   })
-  function onSubmit(values: z.infer<typeof formSignInSchema>) {
-    try {
-      // toast({
-      //   title: 'data onSubmit',
-      //   description: (
-      //     <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-      //       <code className="text-white">{JSON.stringify(values, null, 2)}</code>
-      //     </pre>
-      //   ),
-      // })
-      console.log(values)
-      const formateData: signInParams = {
-        ...values,
-      }
-      signInCustomerMutate(formateData)
-    } catch (error) {
-      console.error('Form submission error', error)
-      toast({
-        variant: 'destructive',
-        title: 'Uh oh! Something went wrong.',
-        description: 'Failed to submit the form. Please try again.',
-      })
+  async function onSubmit(values: z.infer<typeof formSignInSchema>) {
+    // try {
+    // toast({
+    //   title: 'data onSubmit',
+    //   description: (
+    //     <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+    //       <code className="text-white">{JSON.stringify(values, null, 2)}</code>
+    //     </pre>
+    //   ),
+    // })
+    console.log(values)
+    const formateData: signInParams = {
+      ...values,
     }
+    await signInCustomerMutate(formateData)
+    // } catch (error) {
+    //   console.error('Form submission error', error)
+    //   toast({
+    //     variant: 'destructive',
+    //     title: 'Uh oh! Something went wrong.',
+    //     description: error.response.data.message,
+    //   })
+    // }
   }
   return (
     <div className="min-h-screen bg-[#FFF8F5] flex items-center justify-center p-4 relative">
@@ -130,7 +149,7 @@ const SignIn = () => {
             </div> */}
           </div>
           <div className="md:w-1/2 p-8">
-            <h2 className="text-2xl font-medium mb-2 text-center text-[#FFA07A]">Welcome to Allure</h2>
+            <h2 className="text-2xl font-medium mb-2 text-center text-[#FFA07A]">{t('welcome')}</h2>
             <p className="text-gray-500 mb-6 text-center">Unleash your inner beauty. Log in now.</p>
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -162,6 +181,12 @@ const SignIn = () => {
                     </FormItem>
                   )}
                 />
+                <Link
+                  to="/forgot-password"
+                  className="text-xs sm:text-sm text-[#FFA07A] hover:underline block text-right mt-1"
+                >
+                  Forgot your password?
+                </Link>
                 <Button className="w-full bg-[#FFA07A] hover:bg-[#FF8C5A] text-white">Log in</Button>
               </form>
             </Form>
@@ -183,7 +208,7 @@ const SignIn = () => {
               </a>
               <p className="mt-4 text-sm text-gray-600">
                 Haven't an account yet?{' '}
-                <Link to="/signup" className="text-[#FFA07A] hover:underline">
+                <Link to={configs.routes.signUp} className="text-[#FFA07A] hover:underline">
                   Create an Account
                 </Link>
               </p>
