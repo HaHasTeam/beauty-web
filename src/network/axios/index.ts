@@ -45,20 +45,20 @@ class MyAxios {
 
     this.axiosInstance.interceptors.response.use(
       (response) => {
-        // formate Data
+        // format Data
         const { data } = response
-        console.log('data', data)
-        if (data.rsCode !== 0) {
-          alert(`${data.rsCause}`)
-          return Promise.reject(data.data)
-        }
+        // console.log('data', data)
+        // if (data.rsCode !== 0) {
+        //   // alert(`${data.rsCause}`)
+        //   return Promise.reject(data.data)
+        // }
         if (data instanceof Blob) {
           return response
         } else {
-          return data.data
+          return data
         }
       },
-      (error: AxiosError) => {
+      (error: AxiosError<{ data: { message: string } }>) => {
         console.log('axios error', error)
 
         //ElementUI   import { Message } from 'element-ui';
@@ -104,7 +104,7 @@ class MyAxios {
     return this.axiosInstance.post(url, formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
       onUploadProgress,
-      signal: controller ? controller.signal : undefined, //用于文件上传可以取消  只需在外部调用controller.abort()即可。 参考//https://juejin.cn/post/6954919023205154824
+      signal: controller ? controller.signal : undefined,
     })
   }
 
