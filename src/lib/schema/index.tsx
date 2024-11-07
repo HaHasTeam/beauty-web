@@ -6,10 +6,10 @@ export const formRegisterSchema = z
     firstName: z.string().min(0).max(50),
     lastName: z.string().max(50),
     email: z.string().email(),
-    password: z.string().min(3).max(20),
+    password: z.string().min(8).max(20),
     gender: z.string().optional(),
     phone: z.string().regex(phoneRegex, 'Invalid phone number!').max(10).min(1).optional(),
-    passwordConfirm: z.string().min(3).max(20),
+    passwordConfirm: z.string().min(8).max(20),
     acceptTerms: z.boolean(),
   })
   .refine((data) => data.password === data.passwordConfirm, {
@@ -19,5 +19,5 @@ export const formRegisterSchema = z
 
 export const formSignInSchema = z.object({
   email: z.string().email(),
-  password: z.string().min(3).max(20),
+  password: z.string().min(8).max(20),
 })
