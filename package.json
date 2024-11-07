@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc && vite build --mode production",
     "build:docker": "tsc && vite build --mode docker",
-    "lint": "eslint . --max-warnings=0 --fix",
+    "lint": "eslint --fix . --max-warnings=0 ",
     "format": "prettier . --write",
     "preview": "vite preview",
     "prepare": "husky",
