@@ -1,3 +1,3 @@
 export default function Header() {
-  return <div>Headeđfsfr</div>
+  return <div>Navigation bar</div>
 }
