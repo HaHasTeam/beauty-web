@@ -8,7 +8,34 @@
     "loginGoogle": "Đăng nhập với Google"
   },
   "profile": {},
-
+  "home": {
+    "title": "Trang chủ",
+    "description": "Tìm kiếm và đăng bài tai nạn",
+    "consultantTitle": "Beauty Consulting",
+    "standardConsultantTitle": "Standard Consultation",
+    "premiumConsultantTitle": "Premium Consultation",
+    "standardConsultantDescription": "Get a detailed beauty analysis based on your responses to a comprehensive beauty questionnaire.",
+    "premiumConsultantDescription": "Experience a live, one-on-one video consultation with an expert, tailored to address your specific beauty goals.",
+    "exclusiveBeautyOffersTitle": "Exclusive Beauty Offers",
+    "preOderCardTitle": "Pre-orders",
+    "groupBuyingDealsCardTitle": "Group-Buying Deals"
+  },
+  "productCard": {
+    "currentPrice": "{{price, currency}}",
+    "price": "{{price, currency}}",
+    "sold": "Sold {{amount}}"
+  },
+  "productTag": {
+    "bestSeller": "Best Seller",
+    "limitedEdition": "Limited Edition",
+    "newArrival": "New Arrival",
+    "hotDeal": "Hot Deal",
+    "flashSale": "Flash Sale"
+  },
+  "flashSale": {
+    "title": "Flash Sale",
+    "seeAll": "See All"
+  },
   "error": {
     "loginError": "Đăng nhập không thành công",
     "logoutError": "Đăng xuất không thành công",
@@ -21,7 +48,10 @@
   "loginRcm": "Đăng nhập để cập nhật kỹ năng bạn nha!",
   "facebook": "Facebook",
   "button": {
-    "goBack": "Quay lại"
+    "goBack": "Quay lại",
+    "preOderAction": "Pre-Order Now",
+    "groupBuyingAction": "Explore Group-Buy Deals",
+    "addToCard": "Add to Card"
   },
 
   "noData": "Không tìm thấy dữ liệu phù hợp"

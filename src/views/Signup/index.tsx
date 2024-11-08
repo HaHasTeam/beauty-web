@@ -303,7 +303,7 @@ const SignUp = () => {
               </a>
               <p className="mt-4 text-sm text-gray-600">
                 Already have an account?{' '}
-                <Link to="/signup" className="text-[#FFA07A] hover:underline">
+                <Link to="/sign-in" className="text-[#FFA07A] hover:underline">
                   Log in
                 </Link>
               </p>

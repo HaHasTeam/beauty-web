@@ -1,10 +1,9 @@
 import { FC, PropsWithChildren } from 'react'
-import { Navigate } from 'react-router-dom'
 import { useShallow } from 'zustand/react/shallow'
 
 import LoadingIcon from '@/components/Loading'
-import configs from '@/config'
 import { useStore } from '@/store/store'
+import Home from '@/views/Home'
 
 // GuestGuard is a component that will be used to protect routes
 // that should only be accessed by unauthenticated users.
@@ -18,8 +17,8 @@ const GuestGuard: FC<PropsWithChildren> = ({ children }) => {
 
   if (isLoading) return <LoadingIcon />
 
-  if (isAuthenticated) return <Navigate to={configs.routes.home} replace />
-
+  // if (!isAuthenticated) return <Navigate to={configs.routes.home} replace />
+  if (!isAuthenticated) return <Home />
   return <>{children}</>
 }
 

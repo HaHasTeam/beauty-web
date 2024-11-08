@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import GroupBuyingImg from '@/assets/images/group-buying.jpg'
@@ -26,19 +27,27 @@ const OfferCard = ({ title, imgSrc, linkTo, buttonText }: OfferCardProps) => (
   </Link>
 )
 
-const BeautyOffers = () => (
-  <section>
-    <h2 className="text-2xl font-semibold mb-6">Exclusive Beauty Offers</h2>
-    <div className="grid md:grid-cols-2 gap-6">
-      <OfferCard title="Pre-orders" imgSrc={PreOrdersImg} linkTo="/products/pre-orders" buttonText="Pre-Order Now" />
-      <OfferCard
-        title="Group-Buying Deals"
-        imgSrc={GroupBuyingImg}
-        linkTo="/products/group-buying"
-        buttonText="Explore Group-Buy Deals"
-      />
-    </div>
-  </section>
-)
+const BeautyOffers = () => {
+  const { t } = useTranslation()
+  return (
+    <section>
+      <h2 className="text-2xl font-semibold mb-6">{t('home.exclusiveBeautyOffersTitle')}</h2>
+      <div className="grid md:grid-cols-2 gap-6">
+        <OfferCard
+          title={t('home.preOderCardTitle')}
+          imgSrc={PreOrdersImg}
+          linkTo="/products/pre-orders"
+          buttonText={t('button.preOderAction')}
+        />
+        <OfferCard
+          title={t('home.groupBuyingDealsCardTitle')}
+          imgSrc={GroupBuyingImg}
+          linkTo="/products/group-buying"
+          buttonText={t('button.groupBuyingAction')}
+        />
+      </div>
+    </section>
+  )
+}
 
 export default BeautyOffers

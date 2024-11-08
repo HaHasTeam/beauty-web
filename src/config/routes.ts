@@ -14,6 +14,13 @@ const routes = {
   forgotPassword: '/forgot-password',
   checkEmail: '/check-email',
   notVerifyEmail: '/not-verify-email',
+  about: '/about',
+  contact: '/contact',
+  serverError: '/server-error',
+  forbidden: '/forbidden',
+  consultationStandard: '/consultation/standard',
+  consultationPremium: '/consultation/premium',
+  productFlashSale: '/flash-sale',
   notFound: '*',
 }
 
