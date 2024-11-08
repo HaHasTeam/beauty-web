@@ -2,9 +2,10 @@ import { useTranslation } from 'react-i18next'
 
 interface ProductTagProps {
   tag: string
+  text?: string
 }
 
-export default function ProductTag({ tag }: ProductTagProps) {
+export default function ProductTag({ tag, text }: ProductTagProps) {
   const { t } = useTranslation()
 
   let tagColorClass = ''
@@ -28,6 +29,9 @@ export default function ProductTag({ tag }: ProductTagProps) {
       tagColorClass = 'bg-red-200 text-red-800'
       tagText = t('productTag.hotDeal')
       break
+    case 'DealPercent':
+      tagColorClass = 'bg-rose-500 text-white'
+      break
     case 'Flash Sale':
       tagColorClass = 'bg-orange-200 text-orange-800'
       tagText = t('productTag.flashSale')
@@ -38,5 +42,5 @@ export default function ProductTag({ tag }: ProductTagProps) {
       break
   }
 
-  return <span className={`px-2 py-1 rounded-md text-sm font-medium ${tagColorClass}`}>{tagText}</span>
+  return <span className={`px-2 py-1 rounded-md text-sm font-medium ${tagColorClass}`}>{text ? text : tagText}</span>
 }

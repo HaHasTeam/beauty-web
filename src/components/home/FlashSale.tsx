@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 import configs from '@/config'
 import { IProductCard } from '@/types/product-card.interface'
 
-import ProductCard from '../product/ProductCard'
+import SaleProductCard from '../product/SaleProductCard'
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '../ui/carousel'
 
 const FlashSale = () => {
@@ -14,94 +14,131 @@ const FlashSale = () => {
   const flashSaleProducts: IProductCard[] = [
     {
       id: '1',
+      name: 'Cherry Blossom Serum',
       tag: 'Best Seller',
       price: 29.99,
+      currentPrice: 20.09, // Calculated with deal
       deal: 0.33,
-      soldAmount: 65,
+      flashSale: {
+        productAmount: 200,
+        soldAmount: 65,
+      },
       imageUrl: 'path/to/image1.png',
-      name: 'Cherry Blossom Serum',
-      currentPrice: 20.09, // 29.99 - (29.99 * 0.33)
-      productAmount: 200,
+      rating: 0,
+      ratingAmount: 0,
+      soldInPastMonth: 0,
     },
     {
       id: '2',
+      name: 'Aloe Vera Moisturizer',
       tag: 'Limited Edition',
       price: 34.99,
+      currentPrice: 24.84, // Calculated with deal
       deal: 0.29,
-      soldAmount: 120,
+      flashSale: {
+        productAmount: 190,
+        soldAmount: 120,
+      },
       imageUrl: 'path/to/image2.png',
-      name: 'Aloe Vera Moisturizer',
-      currentPrice: 24.84, // 34.99 - (34.99 * 0.29)
-      productAmount: 190,
+      rating: 0,
+      ratingAmount: 0,
+      soldInPastMonth: 0,
     },
     {
       id: '3',
+      name: 'Vitamin C Brightening Serum',
       tag: 'New Arrival',
       price: 19.99,
+      currentPrice: 14.99, // Calculated with deal
       deal: 0.25,
-      soldAmount: 80,
+      flashSale: {
+        productAmount: 190,
+        soldAmount: 80,
+      },
       imageUrl: 'path/to/image3.png',
-      name: 'Vitamin C Brightening Serum',
-      currentPrice: 14.99, // 19.99 - (19.99 * 0.25)
-      productAmount: 190,
+      rating: 0,
+      ratingAmount: 0,
+      soldInPastMonth: 0,
     },
     {
       id: '4',
+      name: 'Hydrating Face Mist',
       tag: 'Hot Deal',
       price: 15.99,
+      currentPrice: 12.79, // Calculated with deal
       deal: 0.2,
-      soldAmount: 50,
+      flashSale: {
+        productAmount: 190,
+        soldAmount: 50,
+      },
       imageUrl: 'path/to/image4.png',
-      name: 'Hydrating Face Mist',
-      currentPrice: 12.79,
-      productAmount: 190,
+      rating: 0,
+      ratingAmount: 0,
+      soldInPastMonth: 0,
     },
     {
       id: '5',
+      name: 'Green Tea Cleanser',
       tag: 'Flash Sale',
       price: 12.99,
+      currentPrice: 10.0, // Calculated with deal
       deal: 0.23,
-      soldAmount: 30,
+      flashSale: {
+        productAmount: 80,
+        soldAmount: 30,
+      },
       imageUrl: 'path/to/image5.png',
-      name: 'Green Tea Cleanser',
-      currentPrice: 10.0,
-      productAmount: 80,
+      rating: 0,
+      ratingAmount: 0,
+      soldInPastMonth: 0,
     },
-
     {
       id: '6',
+      name: 'Green Tea Cleanser',
       tag: 'Flash Sale',
       price: 12.99,
+      currentPrice: 10.0, // Calculated with deal
       deal: 0.23,
-      soldAmount: 30,
+      flashSale: {
+        productAmount: 70,
+        soldAmount: 30,
+      },
       imageUrl: 'path/to/image5.png',
-      name: 'Green Tea Cleanser',
-      currentPrice: 10.0,
-      productAmount: 70,
+      rating: 0,
+      ratingAmount: 0,
+      soldInPastMonth: 0,
     },
-
     {
       id: '7',
+      name: 'Green Tea Cleanser',
       tag: 'Flash Sale',
       price: 12.99,
+      currentPrice: 10.0, // Calculated with deal
       deal: 0.23,
-      soldAmount: 30,
+      flashSale: {
+        productAmount: 200,
+        soldAmount: 30,
+      },
       imageUrl: 'path/to/image5.png',
-      name: 'Green Tea Cleanser',
-      currentPrice: 10.0,
-      productAmount: 200,
+      rating: 0,
+      ratingAmount: 0,
+      soldInPastMonth: 0,
     },
-
     {
       id: '8',
-      tag: '',
-      price: 12.99,
-      deal: 0.23,
-      soldAmount: 30,
-      imageUrl: 'path/to/image5.png',
       name: 'Green Tea Cleanser',
-      currentPrice: 10.0,
-      productAmount: 100,
+      tag: '', // No specific tag
+      price: 12.99,
+      currentPrice: 10.0, // Calculated with deal
+      deal: 0.23,
+      flashSale: {
+        productAmount: 100,
+        soldAmount: 30,
+      },
+      imageUrl: 'path/to/image5.png',
+      rating: 0,
+      ratingAmount: 0,
+      soldInPastMonth: 0,
     },
   ]
 
@@ -144,9 +181,9 @@ const FlashSale = () => {
     <div>
       <div className="flex items-center justify-between w-full max-w-screen-xl mx-auto">
         <div className="flex items-center gap-2 mb-4">
-          <h2 className="text-xl font-semibold flex items-center gap-1">
+          <h2 className="text-xl font-semibold flex items-center gap-1 text-rose-500">
             {t('flashSale.title')}
-            <Zap className="w-5 h-5 fill-current" />
+            <Zap className="w-5 h-5 fill-current text-rose-500" />
           </h2>
           <div className="flex gap-1 ml-2">
             {[time.hours, time.minutes, time.seconds].map((unit, index) => (
@@ -163,7 +200,7 @@ const FlashSale = () => {
           to={configs.routes.productFlashSale}
           className="text-[#FF6B35] hover:opacity-80 transition-opacity flex items-center gap-1"
         >
-          {t('flashSale.seeAll')}
+          {t('button.seeAll')}
           <ArrowRight className="w-4 h-4" />
         </Link>
       </div>
@@ -173,7 +210,7 @@ const FlashSale = () => {
             {flashSaleProducts.map((product) => (
               <CarouselItem key={product?.id} className="pl-1 basis-1/3 sm:basis-1/3 lg:basis-1/5">
                 <div className="p-1">
-                  <ProductCard product={product} />
+                  <SaleProductCard product={product} />
                 </div>
               </CarouselItem>
             ))}

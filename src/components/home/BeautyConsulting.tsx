@@ -35,7 +35,7 @@ export default function BeautyConsulting() {
   const { t } = useTranslation()
   return (
     <section className="container mx-auto">
-      <h1 className="text-2xl font-semibold mb-6">{t('home.consultantTitle')}</h1>
+      <h1 className="text-2xl font-semibold mb-6 text-primary">{t('home.consultantTitle')}</h1>
 
       <div className="grid md:grid-cols-2 gap-4">
         <ConsultationCard

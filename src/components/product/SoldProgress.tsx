@@ -14,7 +14,7 @@ export default function SoldProgress({ soldAmount, maxAmount }: SoldProgressProp
       <div className="absolute z-10 h-full bg-rose-500 rounded-full " style={{ width: `${progress}%` }}></div>
       <div className="w-full absolute z-20 flex items-center justify-center">
         <span className="text-muted-foreground text-center text-xs">
-          {t('product.sold', { amount: soldAmount ? soldAmount : 0 })}
+          {t('productCard.soldFlashSale', { amount: soldAmount ? soldAmount : 0 })}
         </span>
       </div>
     </div>

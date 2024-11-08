@@ -4,8 +4,13 @@ export type IProductCard = {
   tag?: string
   price?: number
   currentPrice?: number
-  productAmount: number
   imageUrl: string
   deal?: number
-  soldAmount?: number
+  flashSale?: {
+    productAmount: number
+    soldAmount?: number
+  }
+  rating: number
+  ratingAmount: number
+  soldInPastMonth: number
 }

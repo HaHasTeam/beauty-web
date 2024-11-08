@@ -31,7 +31,7 @@ const BeautyOffers = () => {
   const { t } = useTranslation()
   return (
     <section>
-      <h2 className="text-2xl font-semibold mb-6">{t('home.exclusiveBeautyOffersTitle')}</h2>
+      <h2 className="text-2xl font-semibold mb-6 text-primary">{t('home.exclusiveBeautyOffersTitle')}</h2>
       <div className="grid md:grid-cols-2 gap-6">
         <OfferCard
           title={t('home.preOderCardTitle')}

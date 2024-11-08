@@ -1,4 +1,4 @@
-import { ChevronDown, Heart } from 'lucide-react'
+import { Heart } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
 import productImage from '@/assets/images/product_sample_img.png'
@@ -6,13 +6,13 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import { IProductCard } from '@/types/product-card.interface'
 
-import { Ratings } from '../ui/rating'
 import ProductTag from './ProductTag'
+import SoldProgress from './SoldProgress'
 
 interface ProductCardProps {
   product: IProductCard
 }
-export default function ProductCard({ product }: ProductCardProps) {
+export default function SaleProductCard({ product }: ProductCardProps) {
   const { t } = useTranslation()
   return (
     <Card>
@@ -26,34 +26,27 @@ export default function ProductCard({ product }: ProductCardProps) {
           <img src={productImage} alt="Pink serum bottle with cherry blossoms" className="object-cover w-full h-full" />
         </div>
       </CardContent>
-      <CardFooter className="flex flex-col gap-3 p-4 p-md-3">
-        <div className="w-full h-lg-[130px] h-[150px]">
-          <span className="text-semibold line-clamp-2">{product?.name}</span>
-          <div className="flex gap-1 items-center w-full">
-            <Ratings rating={product?.rating} size={13} variant="yellow" />
-            <ChevronDown size={11} />
-            <span className="text-sm">({product?.ratingAmount})</span>
-          </div>
-          <div className="mt-1 mb-2">
-            <span className="text-gray-500 text-sm">
-              {t('productCard.soldInPastMonth', { amount: product?.soldInPastMonth ?? 0 })}
+      <CardFooter className="flex flex-col gap-3 p-4">
+        <div className="flex justify-between items-center w-full">
+          <div className="flex items-baseline gap-2">
+            <span className="text-xl font-semibold">
+              {t('productCard.currentPrice', { price: product?.currentPrice })}
             </span>
-          </div>
-          <div className="flex justify-between items-center w-full">
-            <div className="flex items-baseline gap-2">
-              <span className="text-lg font-semibold">
-                {t('productCard.currentPrice', { price: product?.currentPrice })}
-              </span>
-              {product?.deal && product?.deal > 0 && (
-                <span className="text-sm text-muted-foreground line-through">
-                  {t('productCard.price', { price: product?.price })}
-                </span>
-              )}
-            </div>
             {product?.deal && product?.deal > 0 && (
-              <ProductTag tag="DealPercent" text={`-${(product?.deal * 100).toFixed(0)}%`} />
+              <span className="text-sm text-muted-foreground line-through">
+                {t('productCard.price', { price: product?.price })}
+              </span>
             )}
           </div>
+          {product?.deal && product?.deal > 0 && (
+            <ProductTag tag="DealPercent" text={`-${(product?.deal * 100).toFixed(0)}%`} />
+          )}
+        </div>
+        <div className="w-full space-y-1.5">
+          <SoldProgress
+            soldAmount={product?.flashSale?.soldAmount ?? 0}
+            maxAmount={product?.flashSale?.productAmount ?? 0}
+          />
         </div>
         <Button className="w-full bg-[#FFD7C9] hover:bg-[#FFD7C9]/90 text-black">{t('button.addToCard')}</Button>
       </CardFooter>

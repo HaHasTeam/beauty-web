@@ -1,16 +1,14 @@
 {
   "welcome": "Welcome to Allure",
   "header": {
-    "login": "Đăng nhập",
-    "logout": "Thoát",
-    "profile": "Hồ sơ của tôi",
-    "allCategories": "Tất cả danh mục",
-    "loginGoogle": "Đăng nhập với Google"
+    "login": "Login",
+    "logout": "Logout",
+    "profile": "My Profile",
+    "allCategories": "All Categories",
+    "loginGoogle": "Login with Google"
   },
   "profile": {},
   "home": {
-    "title": "Trang chủ",
-    "description": "Tìm kiếm và đăng bài tai nạn",
     "consultantTitle": "Beauty Consulting",
     "standardConsultantTitle": "Standard Consultation",
     "premiumConsultantTitle": "Premium Consultation",
@@ -18,12 +16,14 @@
     "premiumConsultantDescription": "Experience a live, one-on-one video consultation with an expert, tailored to address your specific beauty goals.",
     "exclusiveBeautyOffersTitle": "Exclusive Beauty Offers",
     "preOderCardTitle": "Pre-orders",
-    "groupBuyingDealsCardTitle": "Group-Buying Deals"
+    "groupBuyingDealsCardTitle": "Group-Buying Deals",
+    "recommendProductsTitle": "Recommend Products"
   },
   "productCard": {
     "currentPrice": "{{price, currency}}",
     "price": "{{price, currency}}",
-    "sold": "Sold {{amount}}"
+    "soldFlashSale": "Sold {{amount}}",
+    "soldInPastMonth": "{{amount}} bought in past month"
   },
   "productTag": {
     "bestSeller": "Best Seller",
@@ -33,26 +33,25 @@
     "flashSale": "Flash Sale"
   },
   "flashSale": {
-    "title": "Flash Sale",
-    "seeAll": "See All"
+    "title": "Flash Sale"
   },
   "error": {
-    "loginError": "Đăng nhập không thành công",
-    "logoutError": "Đăng xuất không thành công",
-    "noToken": "Bạn Chưa đăng nhập",
-    "errorLoading": "Đã xảy ra lỗi. Vui lòng thử lại sau",
-    "errorSubmit": "Nộp bài không thành công"
+    "loginError": "Login unsuccessful",
+    "logoutError": "Logout unsuccessful",
+    "noToken": "You are not logged in",
+    "errorLoading": "An error occurred. Please try again later",
+    "errorSubmit": "Submission unsuccessful"
   },
-
-  "errorNotification": "Oops, có chút sự cố, bạn chờ một lát nha!",
-  "loginRcm": "Đăng nhập để cập nhật kỹ năng bạn nha!",
+  "errorNotification": "Oops, there was a problem, please wait a moment!",
+  "loginRcm": "Log in to update your skills!",
   "facebook": "Facebook",
   "button": {
-    "goBack": "Quay lại",
+    "goBack": "Go Back",
     "preOderAction": "Pre-Order Now",
     "groupBuyingAction": "Explore Group-Buy Deals",
-    "addToCard": "Add to Card"
+    "addToCard": "Add to Cart",
+    "seeAll": "See All",
+    "viewAll": "View All"
   },
-
-  "noData": "Không tìm thấy dữ liệu phù hợp"
+  "noData": "No matching data found"
 }

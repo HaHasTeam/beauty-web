@@ -1,6 +1,7 @@
 import BeautyConsulting from '@/components/home/BeautyConsulting'
 import BeautyOffers from '@/components/home/BeautyOffers'
 import FlashSale from '@/components/home/FlashSale'
+import RecommendProduct from '@/components/home/RecommendProduct'
 
 function Home() {
   return (
@@ -8,6 +9,7 @@ function Home() {
       <BeautyConsulting />
       <BeautyOffers />
       <FlashSale />
+      <RecommendProduct />
     </div>
   )
 }
