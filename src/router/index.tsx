@@ -1,11 +1,13 @@
 import { useRoutes } from 'react-router-dom'
 
 import PrimaryLayout from '@/components/layout/PrimaryLayout'
+import configs from '@/config'
 import About from '@/views/About'
 import Contact from '@/views/Contact'
 import Forbidden from '@/views/Forbidden'
 import Home from '@/views/Home'
 import NotFound from '@/views/NotFound'
+import RecommendProducts from '@/views/RecommendProducts'
 import ServerError from '@/views/ServerError'
 
 import privateRoutes from './privateRoutes'
@@ -19,8 +21,12 @@ export default function RouterProvider() {
       element: <PrimaryLayout />,
       children: [
         {
-          path: '/',
+          path: configs.routes.home,
           element: <Home />,
+        },
+        {
+          path: configs.routes.recommendProducts,
+          element: <RecommendProducts />,
         },
       ],
     },
@@ -28,25 +34,25 @@ export default function RouterProvider() {
       element: <PrimaryLayout />,
       children: [
         {
-          path: '/about',
+          path: configs.routes.about,
           element: <About />,
         },
         {
-          path: '/contact',
+          path: configs.routes.contact,
           element: <Contact />,
         },
       ],
     },
     {
-      path: '/server-error',
+      path: configs.routes.serverError,
       element: <ServerError />,
     },
     {
-      path: '/forbidden',
+      path: configs.routes.forbidden,
       element: <Forbidden />,
     },
     {
-      path: '*',
+      path: configs.routes.notFound,
       element: <NotFound />,
     },
   ])

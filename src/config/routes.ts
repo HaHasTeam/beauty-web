@@ -21,6 +21,7 @@ const routes = {
   consultationStandard: '/consultation/standard',
   consultationPremium: '/consultation/premium',
   productFlashSale: '/flash-sale',
+  recommendProducts: '/products/recommend-products',
   notFound: '*',
 }
 

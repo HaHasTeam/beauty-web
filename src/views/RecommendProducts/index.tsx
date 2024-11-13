@@ -1,16 +1,10 @@
-import { ArrowRight } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { Link, useNavigate } from 'react-router-dom'
 
-import configs from '@/config'
+import ProductCard from '@/components/product/ProductCard'
 import { IProductCard } from '@/types/product-card.interface'
 
-import ProductCard from '../product/ProductCard'
-import { Button } from '../ui/button'
-
-const RecommendProduct = () => {
+const RecommendProducts = () => {
   const { t } = useTranslation()
-  const navigate = useNavigate()
   const recommendProducts: IProductCard[] = [
     {
       id: '1',
@@ -157,36 +151,20 @@ const RecommendProduct = () => {
       soldInPastMonth: 300,
     },
   ]
-
   return (
-    <div>
-      <div className="flex items-center justify-between w-full max-w-screen-xl mx-auto">
+    <div className="w-[1200px] container mx-auto px-4 py-8 space-y-8">
+      <div>
         <div className="flex items-center gap-2 mb-4">
           <h2 className="text-xl font-semibold flex items-center gap-1 text-primary">
             {t('home.recommendProductsTitle')}
           </h2>
         </div>
-        <Link
-          to={configs.routes.recommendProducts}
-          className="text-[#FF6B35] hover:opacity-80 transition-opacity flex items-center gap-1"
-        >
-          {t('button.seeAll')}
-          <ArrowRight className="w-4 h-4" />
-        </Link>
-      </div>
-      <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-        {recommendProducts?.map((product) => <ProductCard key={product?.id} product={product} />)}
-      </div>
-      <div className="flex justify-center mt-4">
-        <Button
-          className="bg-[#FFD7C9] hover:bg-[#FFD7C9]/90 text-black px-8"
-          onClick={() => navigate(configs.routes.recommendProducts)}
-        >
-          {t('button.viewAll')}
-        </Button>
+        <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+          {recommendProducts?.map((product) => <ProductCard key={product?.id} product={product} />)}
+        </div>
       </div>
     </div>
   )
 }
 
-export default RecommendProduct
+export default RecommendProducts
