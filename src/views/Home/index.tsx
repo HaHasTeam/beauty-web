@@ -1,5 +1,17 @@
+import BeautyConsulting from '@/components/home/BeautyConsulting'
+import BeautyOffers from '@/components/home/BeautyOffers'
+import FlashSale from '@/components/home/FlashSale'
+import RecommendProduct from '@/components/home/RecommendProduct'
+
 function Home() {
-  return <div>Home</div>
+  return (
+    <div className="w-[1200px] container mx-auto px-4 py-8 space-y-12">
+      <BeautyConsulting />
+      <BeautyOffers />
+      <FlashSale />
+      <RecommendProduct />
+    </div>
+  )
 }
 
 export default Home

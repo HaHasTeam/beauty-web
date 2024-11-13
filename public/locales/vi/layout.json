@@ -1,28 +1,57 @@
 {
-  "welcome": "Chào mứng tới Allure",
+  "welcome": "Chào mừng đến với Allure",
   "header": {
     "login": "Đăng nhập",
-    "logout": "Thoát",
+    "logout": "Đăng xuất",
     "profile": "Hồ sơ của tôi",
     "allCategories": "Tất cả danh mục",
     "loginGoogle": "Đăng nhập với Google"
   },
   "profile": {},
-
+  "home": {
+    "consultantTitle": "Tư vấn sắc đẹp",
+    "standardConsultantTitle": "Tư vấn tiêu chuẩn",
+    "premiumConsultantTitle": "Tư vấn cao cấp",
+    "standardConsultantDescription": "Nhận phân tích sắc đẹp chi tiết dựa trên câu trả lời của bạn cho bảng câu hỏi toàn diện về sắc đẹp.",
+    "premiumConsultantDescription": "Trải nghiệm tư vấn trực tiếp một-một qua video với chuyên gia, được thiết kế để đáp ứng mục tiêu sắc đẹp cụ thể của bạn.",
+    "exclusiveBeautyOffersTitle": "Ưu đãi sắc đẹp độc quyền",
+    "preOderCardTitle": "Đơn đặt trước",
+    "groupBuyingDealsCardTitle": "Ưu đãi mua chung",
+    "recommendProductsTitle": "Gợi ý sản phẩm"
+  },
+  "productCard": {
+    "currentPrice": "{{price, currency}}",
+    "price": "{{price, currency}}",
+    "soldFlashSale": "Đã bán {{amount}}",
+    "soldInPastMonth": "Đã bán {{amount}} trong tháng qua"
+  },
+  "productTag": {
+    "bestSeller": "Bán chạy nhất",
+    "limitedEdition": "Phiên bản giới hạn",
+    "newArrival": "Hàng mới về",
+    "hotDeal": "Ưu đãi hấp dẫn",
+    "flashSale": "Flash sale"
+  },
+  "flashSale": {
+    "title": "Flash Sale"
+  },
   "error": {
     "loginError": "Đăng nhập không thành công",
     "logoutError": "Đăng xuất không thành công",
-    "noToken": "Bạn Chưa đăng nhập",
+    "noToken": "Bạn chưa đăng nhập",
     "errorLoading": "Đã xảy ra lỗi. Vui lòng thử lại sau",
-    "errorSubmit": "Nộp bài không thành công"
+    "errorSubmit": "Nộp không thành công"
   },
-
-  "errorNotification": "Oops, có chút sự cố, bạn chờ một lát nha!",
-  "loginRcm": "Đăng nhập để cập nhật kỹ năng bạn nha!",
+  "errorNotification": "Rất tiếc, có sự cố xảy ra, vui lòng chờ một chút!",
+  "loginRcm": "Đăng nhập để cập nhật kỹ năng của bạn!",
   "facebook": "Facebook",
   "button": {
-    "goBack": "Quay lại"
+    "goBack": "Quay lại",
+    "preOderAction": "Đặt trước ngay",
+    "groupBuyingAction": "Khám phá ưu đãi mua chung",
+    "addToCard": "Thêm vào giỏ",
+    "seeAll": "Xem tất cả",
+    "viewAll": "Xem tất cả"
   },
-
   "noData": "Không tìm thấy dữ liệu phù hợp"
 }

@@ -1,5 +1,6 @@
 import AuthLayout from '@/components/layout/AuthLayout'
 import configs from '@/config'
+import Home from '@/views/Home'
 import SignIn from '@/views/Signin'
 import SignUp from '@/views/Signup'
 
@@ -33,9 +34,22 @@ const publicRoutes = [
     ],
   },
   {
+    element: (
+      <GuestGuard>
+        <AuthLayout />
+      </GuestGuard>
+    ),
+    children: [
+      {
+        path: configs.routes.home,
+        element: <Home />,
+      },
+    ],
+  },
+  {
     path: configs.routes.forgotPassword,
     // element: <ForgotPassword />,
-    element: <div className="">ForgotPasswordp</div>,
+    element: <div className="">Forgot Password</div>,
   },
   {
     path: configs.routes.checkEmail,

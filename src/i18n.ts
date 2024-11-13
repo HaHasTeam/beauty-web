@@ -20,7 +20,16 @@ i18n
     defaultNS: 'layout',
     fallbackLng: ['vi'],
     lng: 'vi',
-    interpolation: { escapeValue: false },
+    interpolation: {
+      escapeValue: false,
+      format: (value, format, lng) => {
+        if (format === 'currency') {
+          const currency = lng === 'vi' ? 'VND' : 'USD' // Change currency per language
+          return Intl.NumberFormat(lng, { style: 'currency', currency }).format(value)
+        }
+        return value
+      },
+    },
   })
 
 export default i18n
