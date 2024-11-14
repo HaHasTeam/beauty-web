@@ -22,6 +22,16 @@ const routes = {
   consultationPremium: '/consultation/premium',
   productFlashSale: '/flash-sale',
   recommendProducts: '/products/recommend-products',
+  helpCenter: '/portal',
+  productDetail: '/products/:productId',
+  productReview: '/products/:productId/review',
+  accountWishlist: '/account/wishlist',
+  accountProfile: '/account/profile',
+  accountAddress: '/account/address',
+  accountOrder: '/account/order',
+  blogs: '/blogs',
+  privacyPolicy: '/privacy-policy',
+  termsAndConditions: '/terms-and-condition',
   notFound: '*',
 }
 

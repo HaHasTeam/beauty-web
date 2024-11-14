@@ -35,6 +35,9 @@
   "flashSale": {
     "title": "Flash Sale"
   },
+  "footer": {
+    "contactTitle": "Discover nature's beauty with our natural care products."
+  },
   "error": {
     "loginError": "Đăng nhập không thành công",
     "logoutError": "Đăng xuất không thành công",

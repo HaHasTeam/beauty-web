@@ -174,7 +174,7 @@ const RecommendProduct = () => {
           <ArrowRight className="w-4 h-4" />
         </Link>
       </div>
-      <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
         {recommendProducts?.map((product) => <ProductCard key={product?.id} product={product} />)}
       </div>
       <div className="flex justify-center mt-4">

@@ -1,9 +1,14 @@
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import APIPagination from '@/components/pagination/Pagination'
 import ProductCard from '@/components/product/ProductCard'
 import { IProductCard } from '@/types/product-card.interface'
 
 const RecommendProducts = () => {
+  const [currentPage, setCurrentPage] = useState(0)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [totalPages, setTotalPages] = useState(0)
   const { t } = useTranslation()
   const recommendProducts: IProductCard[] = [
     {
@@ -151,17 +156,21 @@ const RecommendProducts = () => {
       soldInPastMonth: 300,
     },
   ]
+
   return (
-    <div className="w-[1200px] container mx-auto px-4 py-8 space-y-8">
-      <div>
-        <div className="flex items-center gap-2 mb-4">
-          <h2 className="text-xl font-semibold flex items-center gap-1 text-primary">
-            {t('home.recommendProductsTitle')}
-          </h2>
+    <div className="w-full mx-auto py-8">
+      <div className="w-full lg:px-44 md:px-40 sm:px-16 px-10">
+        <div>
+          <div className="flex items-center gap-2 mb-4">
+            <h2 className="text-xl font-semibold flex items-center gap-1 text-primary">
+              {t('home.recommendProductsTitle')}
+            </h2>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            {recommendProducts?.map((product) => <ProductCard key={product?.id} product={product} />)}
+          </div>
         </div>
-        <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-          {recommendProducts?.map((product) => <ProductCard key={product?.id} product={product} />)}
-        </div>
+        <APIPagination totalPages={totalPages} currentPage={currentPage} onPageChange={setCurrentPage} />
       </div>
     </div>
   )
