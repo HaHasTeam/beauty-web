@@ -50,47 +50,49 @@ const APIPagination = ({ totalPages, currentPage, onPageChange }: APIPaginationP
   const pageNumbers = generatePageNumbers()
 
   return (
-    <Pagination>
-      <PaginationContent>
-        <PaginationItem
-          className={`${currentPage <= 1 ? 'text-accent hover:cursor-default' : 'text-black hover:cursor-pointer'} rounded-md`}
-        >
-          <PaginationPrevious
-            className={`${currentPage <= 1 ? 'hover:cursor-default hover:text-accent hover:bg-white' : 'hover:cursor-pointer hover:bg-accent hover:text-accent-foreground '} rounded-md `}
-            onClick={() => currentPage !== 1 && handlePageChange(currentPage - 1)}
-          />
-        </PaginationItem>
-
-        {/* Render page number buttons */}
-        {pageNumbers.map((page) => (
-          <PaginationItem key={page}>
-            <PaginationLink
-              className="hover:cursor-pointer"
-              onClick={() => handlePageChange(page)}
-              isActive={page === currentPage}
-            >
-              {page}
-            </PaginationLink>
+    totalPages > 0 && (
+      <Pagination>
+        <PaginationContent>
+          <PaginationItem
+            className={`${currentPage <= 1 ? 'text-accent hover:cursor-default' : 'text-black hover:cursor-pointer'} rounded-md`}
+          >
+            <PaginationPrevious
+              className={`${currentPage <= 1 ? 'hover:cursor-default hover:text-accent hover:bg-white' : 'hover:cursor-pointer hover:bg-accent hover:text-accent-foreground '} rounded-md `}
+              onClick={() => currentPage !== 1 && handlePageChange(currentPage - 1)}
+            />
           </PaginationItem>
-        ))}
 
-        {/* Show ellipses if totalPages > 5 */}
-        {totalPages > 5 && pageNumbers[pageNumbers.length - 1] < totalPages && (
-          <PaginationItem>
-            <PaginationEllipsis />
+          {/* Render page number buttons */}
+          {pageNumbers.map((page) => (
+            <PaginationItem key={page}>
+              <PaginationLink
+                className="hover:cursor-pointer"
+                onClick={() => handlePageChange(page)}
+                isActive={page === currentPage}
+              >
+                {page}
+              </PaginationLink>
+            </PaginationItem>
+          ))}
+
+          {/* Show ellipses if totalPages > 5 */}
+          {totalPages > 5 && pageNumbers[pageNumbers.length - 1] < totalPages && (
+            <PaginationItem>
+              <PaginationEllipsis />
+            </PaginationItem>
+          )}
+
+          <PaginationItem
+            className={`${currentPage === totalPages ? 'text-accent hover:cursor-default' : 'text-black hover:cursor-pointer'} rounded-md`}
+          >
+            <PaginationNext
+              className={`${currentPage === totalPages ? 'hover:cursor-default hover:text-accent hover:bg-white' : 'hover:cursor-pointer hover:bg-accent hover:text-accent-foreground '} rounded-md `}
+              onClick={() => currentPage !== totalPages && handlePageChange(currentPage + 1)}
+            />
           </PaginationItem>
-        )}
-
-        <PaginationItem
-          className={`${currentPage === totalPages ? 'text-accent hover:cursor-default' : 'text-black hover:cursor-pointer'} rounded-md`}
-        >
-          <PaginationNext
-            className={`${currentPage === totalPages ? 'hover:cursor-default hover:text-accent hover:bg-white' : 'hover:cursor-pointer hover:bg-accent hover:text-accent-foreground '} rounded-md `}
-            onClick={() => currentPage !== totalPages && handlePageChange(currentPage + 1)}
-          />
-        </PaginationItem>
-      </PaginationContent>
-    </Pagination>
+        </PaginationContent>
+      </Pagination>
+    )
   )
 }
 

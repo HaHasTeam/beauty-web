@@ -55,7 +55,9 @@ export default function ProductCard({ product }: ProductCardProps) {
             )}
           </div>
         </div>
-        <Button className="w-full bg-[#FFD7C9] hover:bg-[#FFD7C9]/90 text-black">{t('button.addToCard')}</Button>
+        <Button className="w-full bg-primary hover:bg-primary/70 text-primary-foreground">
+          {t('button.addToCard')}
+        </Button>
       </CardFooter>
     </Card>
   )

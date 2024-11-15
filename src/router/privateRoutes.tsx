@@ -1,4 +1,4 @@
-import MainLayout from '@/components/layout/MainLayout'
+import PrimaryLayout from '@/components/layout/PrimaryLayout'
 import configs from '@/config'
 import Home from '@/views/Home'
 
@@ -9,7 +9,8 @@ const privateRoutes = [
     element: (
       // <VerifiedEmailGuard>
       <AuthGuard>
-        <MainLayout />
+        {/* <MainLayout /> */}
+        <PrimaryLayout />
       </AuthGuard>
       // </VerifiedEmailGuard>
     ),

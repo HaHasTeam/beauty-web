@@ -1,15 +1,17 @@
-import { Bell, HelpCircle, Menu, Search, ShoppingBag, X } from 'lucide-react'
+import { Bell, CircleUserRound, HelpCircle, Menu, ShoppingBag, X } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router-dom'
+import { useShallow } from 'zustand/react/shallow'
 
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import configs from '@/config'
+import { useStore } from '@/store/store'
 import { ProjectInformationEnum } from '@/types/enum'
 
 import LanguageSwitcher from './LanguageSwitcher'
 import WebNotification from './notification/WebNotification'
+import SearchBar from './search-bar/SearchBar'
 
 export default function Header() {
   const notifications = [
@@ -25,6 +27,12 @@ export default function Header() {
   const navigate = useNavigate()
   const { t } = useTranslation()
   const [menuOpen, setMenuOpen] = useState(false)
+  const { isAuthenticated, isLoading } = useStore(
+    useShallow((state) => ({
+      isAuthenticated: state.isAuthenticated,
+      isLoading: state.isLoading,
+    })),
+  )
   return (
     <header className="w-full bg-white relative">
       <div className="">
@@ -54,37 +62,38 @@ export default function Header() {
           <Link to={configs.routes.home} className="text-3xl font-bold text-primary hidden md:block">
             {ProjectInformationEnum.name}
           </Link>
-          <div className="flex-1 px-2 md:px-12">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-              <Input type="search" placeholder="Search..." className="w-full pl-10 pr-4" defaultValue="mask" />
-            </div>
-            <div className="mt-1 flex space-x-4 text-sm text-gray-500">
-              <span>mask</span>
-              <span>toner</span>
-              <span>cushion</span>
-              <span>lipstick</span>
-            </div>
-          </div>
+          <SearchBar />
           {/* desktop menu */}
           <div className="md:flex items-center space-x-3 hidden">
             <WebNotification
               notifications={notifications}
               notificationCount={notifications.length}
-              className="text-blue-500"
-              style={{ fontSize: '1.25rem' }}
               onNotificationClick={handleNotificationClick}
             />
-            <Button
-              variant="default"
-              className="text-primary-foreground"
-              onClick={() => navigate(configs.routes.signIn)}
-            >
-              {t('header.loginOrRegister')}
-            </Button>
+            {!isLoading && isAuthenticated ? (
+              <Button
+                variant="ghost"
+                className="flex justify-start text-base"
+                onClick={() => {
+                  setMenuOpen(false)
+                  navigate(configs.routes.profile)
+                }}
+              >
+                <CircleUserRound />
+                <span>{t('header.profile')}</span>
+              </Button>
+            ) : (
+              <Button
+                variant="default"
+                className="text-primary-foreground"
+                onClick={() => navigate(configs.routes.signIn)}
+              >
+                {t('header.loginOrRegister')}
+              </Button>
+            )}
 
             <Button variant="ghost" size="icon" onClick={() => navigate(configs.routes.cart)}>
-              <ShoppingBag className="h-6 w-6" />
+              <ShoppingBag />
               <span className="sr-only">{t('header.shoppingCart')}</span>
             </Button>
           </div>
@@ -102,7 +111,7 @@ export default function Header() {
           <div className="p-4">
             <div className="flex gap-2">
               <Button variant="ghost" onClick={() => navigate(configs.routes.notification)}>
-                <Bell className="text-gray-700" />
+                <Bell className="h-5 w-5" />
                 <span> {t('header.notification')}</span>
               </Button>
             </div>
@@ -119,16 +128,30 @@ export default function Header() {
                 <span>{t('header.shoppingCart')}</span>
               </Button>
             </div>
-            <Button
-              variant="default"
-              className="w-full text-primary-foreground"
-              onClick={() => {
-                setMenuOpen(false)
-                navigate(configs.routes.signIn)
-              }}
-            >
-              {t('header.loginOrRegister')}
-            </Button>
+            {!isLoading && isAuthenticated ? (
+              <Button
+                variant="ghost"
+                className="flex justify-start"
+                onClick={() => {
+                  setMenuOpen(false)
+                  navigate(configs.routes.profile)
+                }}
+              >
+                <CircleUserRound className="h-5 w-5" />
+                <span>{t('header.profile')}</span>
+              </Button>
+            ) : (
+              <Button
+                variant="default"
+                className="w-full text-primary-foreground"
+                onClick={() => {
+                  setMenuOpen(false)
+                  navigate(configs.routes.signIn)
+                }}
+              >
+                {t('header.loginOrRegister')}
+              </Button>
+            )}
           </div>
         </div>
       )}

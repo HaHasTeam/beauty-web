@@ -179,7 +179,7 @@ const RecommendProduct = () => {
       </div>
       <div className="flex justify-center mt-4">
         <Button
-          className="bg-[#FFD7C9] hover:bg-[#FFD7C9]/90 text-black px-8"
+          className="bg-primary hover:bg-primary/70 text-primary-foreground px-8"
           onClick={() => navigate(configs.routes.recommendProducts)}
         >
           {t('button.viewAll')}
