@@ -29,7 +29,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             <img
               src={productImage}
               alt="Pink serum bottle with cherry blossoms"
-              className="object-cover w-full h-full"
+              className="object-cover w-full h-full rounded-tl-xl rounded-tr-xl"
             />
           </div>
         </CardContent>

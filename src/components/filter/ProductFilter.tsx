@@ -1,11 +1,11 @@
-import { ChevronDown, ChevronUp } from 'lucide-react'
+import { ChevronDown, ChevronUp, Filter } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { validatePrice } from '@/utils/validation'
 
 import { Button } from '../ui/button'
-import { CardContent, CardHeader, CardTitle } from '../ui/card'
+import { CardContent, CardHeader } from '../ui/card'
 import { Checkbox } from '../ui/checkbox'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '../ui/collapsible'
 import { Input } from '../ui/input'
@@ -86,7 +86,22 @@ const ProductFilter = () => {
   }
 
   const handleRadioChange = (category: string, id: string) => {
+    // Clear custom price when a predefined range is selected
+    if (category === 'Price Range') {
+      setCustomPrice({ min: '', max: '' })
+    }
     setSelectedOptions((prev) => ({ ...prev, [category]: [id] }))
+  }
+
+  const handleCustomPriceInput = (key: 'min' | 'max', value: string) => {
+    // Auto-select custom price option when user inputs values
+    setCustomPrice((prev) => {
+      const updatedPrice = { ...prev, [key]: value }
+      if (updatedPrice.min || updatedPrice.max) {
+        setSelectedOptions((prev) => ({ ...prev, 'Price Range': [updatedPrice.min + '-' + updatedPrice.max] }))
+      }
+      return updatedPrice
+    })
   }
 
   const handleApply = () => {
@@ -102,8 +117,9 @@ const ProductFilter = () => {
 
   return (
     <div className="w-full h-full shadow-sm">
-      <CardHeader>
-        <CardTitle className="uppercase font-bold">{t('filter.title')}</CardTitle>
+      <CardHeader className="text-primary pb-2 flex flex-row gap-2 items-center align-middle">
+        <Filter className="h-5 w-5" />
+        <span className="uppercase font-bold">{t('filter.title')}</span>
       </CardHeader>
       <CardContent className="space-y-2">
         {categories.map((category) => (
@@ -139,37 +155,41 @@ const ProductFilter = () => {
                       <Label htmlFor={child.id}>{child.label}</Label>
                     </div>
                   ))}
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value={customPrice.min + '-' + customPrice.max} id="custom-price" />
+                    <div className="flex items-center gap-2 justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm">{t('filter.currency')}</span>
+                        <Input
+                          type="number"
+                          placeholder="Min"
+                          className="h-8 w-20"
+                          value={customPrice.min}
+                          onChange={(e) => handleCustomPriceInput('min', e.target.value)}
+                        />
+                      </div>
+                      <div>
+                        <div className="text-sm bg-gray-400 w-3 h-[1px]"></div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm">{t('filter.currency')}</span>
+                        <Input
+                          type="number"
+                          placeholder="Max"
+                          className="h-8 w-20"
+                          value={customPrice.max}
+                          onChange={(e) => handleCustomPriceInput('max', e.target.value)}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  {priceError && <p className="text-red-500 text-sm">{priceError}</p>}
                 </RadioGroup>
               )}
             </CollapsibleContent>
           </Collapsible>
         ))}
-        <div className="flex items-center gap-2 mt-3 justify-between">
-          <div className="flex items-center gap-2">
-            <span className="text-sm">{t('filter.currency')}</span>
-            <Input
-              type="number"
-              placeholder="Min"
-              className="h-8 w-20"
-              value={customPrice.min}
-              onChange={(e) => setCustomPrice((prev) => ({ ...prev, min: e.target.value }))}
-            />
-          </div>
-          <div>
-            <div className="text-sm bg-gray-400 w-3 h-[1px]"></div>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="text-sm">{t('filter.currency')}</span>
-            <Input
-              type="number"
-              placeholder="Max"
-              className="h-8 w-20"
-              value={customPrice.max}
-              onChange={(e) => setCustomPrice((prev) => ({ ...prev, max: e.target.value }))}
-            />
-          </div>
-        </div>
-        {priceError && <p className="text-red-500 text-sm">{priceError}</p>}
+
         <Button className="w-full" onClick={handleApply}>
           {t('filter.apply')}
         </Button>

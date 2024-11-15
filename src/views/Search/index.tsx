@@ -9,6 +9,7 @@ import ProductFilter from '@/components/filter/ProductFilter'
 import LoadingIcon from '@/components/Loading'
 import APIPagination from '@/components/pagination/Pagination'
 import ProductCard from '@/components/product/ProductCard'
+import ProductSort from '@/components/sort/ProductSort'
 import { IProductCard } from '@/types/product-card.interface'
 
 const SearchPage = () => {
@@ -199,8 +200,11 @@ const SearchPage = () => {
               <div>
                 <ProductFilter />
               </div>
-              <div className="mt-2 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
-                {searchedProducts?.map((product) => <ProductCard key={product?.id} product={product} />)}
+              <div className="">
+                <ProductSort />
+                <div className="mt-2 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+                  {searchedProducts?.map((product) => <ProductCard key={product?.id} product={product} />)}
+                </div>
               </div>
             </div>
           ) : (

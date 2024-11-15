@@ -84,6 +84,15 @@
     "apply": "Apply",
     "currency": "$"
   },
+  "sort": {
+    "title": "Sort by",
+    "related": "Related",
+    "lasted": "Lasted",
+    "trend": "Trend",
+    "price": "Price",
+    "lowToHigh": "Low to High",
+    "highToLow": "High to Low"
+  },
   "empty": {
     "search": {
       "title": "No results found",
