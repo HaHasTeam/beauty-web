@@ -1,9 +1,29 @@
 import { Search } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
 
 const SearchBar = () => {
+  const [query, setQuery] = useState('')
+  const navigate = useNavigate()
+  const location = useLocation()
+
+  const handleSearch = () => {
+    if (query.trim()) {
+      navigate(`/search?keyword=${encodeURIComponent(query)}`)
+    }
+  }
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search)
+    const keyword = searchParams.get('keyword') || ''
+    setQuery(keyword)
+    if (keyword) {
+      handleSearch() // Trigger search when query parameter is found in URL
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.search])
   return (
     <div className="flex-1 px-2 md:px-12">
       <div className="flex w-full">
@@ -13,10 +33,12 @@ const SearchBar = () => {
             type="search"
             placeholder="Search..."
             className="w-full pl-10 pr-4 rounded-r-none"
-            defaultValue="mask"
+            onChange={(e) => setQuery(e.target.value)}
+            value={query}
+            onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
           />
         </div>
-        <Button className="rounded-l-none border-primary">
+        <Button className="rounded-l-none border-primary" onClick={() => handleSearch()}>
           <Search className="text-primary-foreground" />
         </Button>
       </div>

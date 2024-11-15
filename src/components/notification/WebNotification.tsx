@@ -57,9 +57,8 @@ const WebNotification: React.FC<WebNotificationProps> = ({
           {notifications.length > 0 ? (
             <>
               {notifications.map((notification) => (
-                <Link to={notification.url}>
+                <Link to={notification.url} key={notification.id}>
                   <div
-                    key={notification.id}
                     onClick={() => handleNotificationClick(notification.id)}
                     className="flex gap-2 align-middle text-black text-sm p-3 cursor-pointer hover:bg-gray-100 rounded-md"
                   >

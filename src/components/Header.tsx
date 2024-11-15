@@ -58,7 +58,7 @@ export default function Header() {
             <LanguageSwitcher />
           </div>
         </div>
-        <div className="px-2 md:px-4 flex items-center justify-between py-4 border-t border-secondary">
+        <div className="px-2 md:px-8 flex items-center justify-between py-4 border-t border-secondary">
           <Link to={configs.routes.home} className="text-3xl font-bold text-primary hidden md:block">
             {ProjectInformationEnum.name}
           </Link>

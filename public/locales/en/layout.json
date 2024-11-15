@@ -74,5 +74,86 @@
     "title": "Language",
     "english": "EN",
     "vietnamese": "VN"
+  },
+  "search": {
+    "result": "Search results: {{total}} data"
+  },
+  "filter": {
+    "title": "Filter",
+    "reset": "Reset",
+    "apply": "Apply",
+    "currency": "$"
+  },
+  "empty": {
+    "search": {
+      "title": "No results found",
+      "description": "Try adjusting your search to find what you are looking for",
+      "button": "Search again"
+    },
+    "image": {
+      "title": "No images",
+      "description": "Start uploading images",
+      "button": "Upload now"
+    },
+    "document": {
+      "title": "No documents",
+      "description": "Start creating your documents",
+      "button": "Create a new document"
+    },
+    "GPS": {
+      "title": "No GPS connection",
+      "description": "Please check for location permission",
+      "button": "Go to GPS settings"
+    },
+    "setupCompleted": {
+      "title": "Setup completed",
+      "description": "Congratulations! You are all set up!",
+      "button": "OK"
+    },
+    "inbox": {
+      "title": "Your inbox is empty",
+      "description": "All incoming requests will be listed in this folder",
+      "button": "OK"
+    },
+    "message": {
+      "title": "No messages",
+      "description": "You have no active chats",
+      "button": "Start a new chat"
+    },
+    "creditCard": {
+      "title": "No credit cards",
+      "description": "Please add some credit card to your account",
+      "button": "Add a credit card"
+    },
+    "cart": {
+      "title": "Your cart is empty",
+      "description": "Check out what's trending",
+      "button": "Discover Products"
+    },
+    "favorite": {
+      "title": "Favorites",
+      "description": "No favorites saved yet",
+      "button": "Discover Products"
+    },
+    "notification": {
+      "title": "No Notifications",
+      "description": "No notifications enabled",
+      "button": "OK"
+    },
+    "schedule": {
+      "title": "Your schedule is empty",
+      "description": "There are no appointments scheduled",
+      "button": "Book an appointment"
+    },
+    "wallet": {
+      "title": "Wallet",
+      "description": "Your wallet is empty. Please add payment methods first.",
+      "button": "Add payment method"
+    },
+    "caughtUp": {
+      "title": "You're all caught up!",
+      "description": "Check back later for new tasks",
+      "button": "OK"
+    }
   }
 }

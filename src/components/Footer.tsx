@@ -11,7 +11,7 @@ import appQRDownload from '../assets/images/appQRDownload.png'
 export default function Footer() {
   const { t } = useTranslation()
   return (
-    <div className="w-full  bg-zinc-800 text-zinc-200">
+    <footer className="w-full  bg-zinc-800 text-zinc-200">
       <div className="p-6">
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-6">
           <div className="col-span-2">
@@ -90,6 +90,6 @@ export default function Footer() {
           <Link to={configs.routes.termsAndConditions}>Terms And Conditions</Link>
         </div>
       </div>
-    </div>
+    </footer>
   )
 }

@@ -23,6 +23,7 @@ const routes = {
   productFlashSale: '/flash-sale',
   recommendProducts: '/products/recommend-products',
   helpCenter: '/portal',
+  products: '/products',
   productDetail: '/products/:productId',
   productReview: '/products/:productId/review',
   accountWishlist: '/account/wishlist',
@@ -35,6 +36,7 @@ const routes = {
   cart: '/cart',
   sellLanding: '/landing/sell',
   professionalLanding: '/landing/professional',
+  search: '/search',
   notFound: '*',
 }
 
