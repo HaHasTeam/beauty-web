@@ -7,7 +7,7 @@ const routes = {
   feed: '/feed',
   community: '/community',
   messages: '/messages',
-  notification: '/notification',
+  notification: '/notifications',
   explore: '/explore',
   profile: '/profile',
   settings: '/settings',
@@ -32,6 +32,9 @@ const routes = {
   blogs: '/blogs',
   privacyPolicy: '/privacy-policy',
   termsAndConditions: '/terms-and-condition',
+  cart: '/cart',
+  sellLanding: '/landing/sell',
+  professionalLanding: '/landing/professional',
   notFound: '*',
 }
 

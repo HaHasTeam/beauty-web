@@ -5,7 +5,9 @@
     "logout": "Đăng xuất",
     "profile": "Hồ sơ của tôi",
     "allCategories": "Tất cả danh mục",
-    "loginGoogle": "Đăng nhập với Google"
+    "loginGoogle": "Đăng nhập với Google",
+    "loginOrRegister": "Login/Register",
+    "shoppingCart": "Shopping Cart"
   },
   "profile": {},
   "home": {
@@ -56,5 +58,20 @@
     "seeAll": "Xem tất cả",
     "viewAll": "Xem tất cả"
   },
-  "noData": "Không tìm thấy dữ liệu phù hợp"
+  "noData": "Không tìm thấy dữ liệu phù hợp",
+  "sell": {
+    "action": "Sell now"
+  },
+  "professional": {
+    "action": "Become Beauty Professional"
+  },
+  "helpCenter": {
+    "name": "Help",
+    "title": "Help Center"
+  },
+  "language": {
+    "title": "Language",
+    "english": "EN",
+    "vietnamese": "VN"
+  }
 }
