@@ -7,6 +7,7 @@ import Contact from '@/views/Contact'
 import Forbidden from '@/views/Forbidden'
 import Home from '@/views/Home'
 import NotFound from '@/views/NotFound'
+import ProductDetail from '@/views/ProductDetail'
 import RecommendProducts from '@/views/RecommendProducts'
 import SearchPage from '@/views/Search'
 import ServerError from '@/views/ServerError'
@@ -28,6 +29,10 @@ export default function RouterProvider() {
         {
           path: configs.routes.search,
           element: <SearchPage />,
+        },
+        {
+          path: configs.routes.productDetail,
+          element: <ProductDetail />,
         },
         {
           path: configs.routes.recommendProducts,
