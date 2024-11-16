@@ -37,6 +37,8 @@ const routes = {
   sellLanding: '/landing/sell',
   professionalLanding: '/landing/professional',
   search: '/search',
+  brands: '/brands',
+  brandDetail: '/brands/brandId',
   notFound: '*',
 }
 

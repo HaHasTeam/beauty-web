@@ -1,4 +1,4 @@
-import { ChevronDown, Heart } from 'lucide-react'
+import { Heart } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
@@ -8,7 +8,7 @@ import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import configs from '@/config'
 import { IProductCard } from '@/types/product-card.interface'
 
-import { Ratings } from '../ui/rating'
+import ProductStar from './ProductStar'
 import ProductTag from './ProductTag'
 
 interface ProductCardProps {
@@ -36,11 +36,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         <CardFooter className="flex flex-col gap-3 p-4 p-md-3">
           <div className="w-full h-lg-[130px] h-[150px]">
             <span className="text-semibold line-clamp-2">{product?.name}</span>
-            <div className="flex gap-1 items-center w-full">
-              <Ratings rating={product?.rating} size={13} variant="yellow" />
-              <ChevronDown size={11} />
-              <span className="text-sm">({product?.ratingAmount})</span>
-            </div>
+            <ProductStar rating={product?.rating} ratingAmount={product?.ratingAmount} />
             <div className="mt-1 mb-2">
               <span className="text-gray-500 text-sm">
                 {t('productCard.soldInPastMonth', { amount: product?.soldInPastMonth ?? 0 })}

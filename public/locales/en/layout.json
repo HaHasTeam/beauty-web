@@ -164,5 +164,62 @@
       "description": "Check back later for new tasks",
       "button": "OK"
     }
+  },
+  "productDetail": {
+    "addToCart": "Add to Cart",
+    "buyNow": "Buy Now",
+    "quantity": "Quantity",
+    "total": "Total",
+    "priceDetail": "Price Detail",
+    "descriptionTitle": "Description"
+  },
+  "event": {
+    "finishIn": "Finish In"
+  },
+  "reviews": {
+    "title": "Reviews",
+    "writeReview": "Write a Review",
+    "rating": "Rating",
+    "yourRating": "Your Rating",
+    "addReview": "Add Review",
+    "averageRating": "Average Rating",
+    "viewAllReviews": "View All Reviews",
+    "reviewTitle": "Review Title",
+    "reviewContent": "Review Content",
+    "reviewBy": "Review By",
+    "reviewDate": "Review Date",
+    "customerReview": "Customer Review",
+    "overall": "Overall",
+    "reviewCount": "{{amount}} reviews"
+  },
+  "brand": {
+    "title": "HANGY",
+    "lastOnline": "Online {{time}} Ago",
+    "reviews": {
+      "title": "Reviews",
+      "count": "{{count}}k"
+    },
+    "responseRate": {
+      "title": "Response Rate",
+      "value": "{{rate}}%"
+    },
+    "responseTime": {
+      "title": "Response Time",
+      "value": "within {{time}}"
+    },
+    "joined": {
+      "title": "Joined",
+      "value": "{{time}} ago"
+    },
+    "products": {
+      "title": "Products",
+      "count": "{{count}}"
+    },
+    "followers": {
+      "title": "Followers",
+      "count": "{{count}}k"
+    },
+    "chatNow": "Chat Now",
+    "viewShop": "View Shop"
   }
 }

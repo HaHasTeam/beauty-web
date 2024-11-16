@@ -1,13 +1,15 @@
+import { IClassification } from './classification.interface'
+
 type IProductImage = {
   id: string
   image: string
 }
 
-export type IProductCard = {
+export type IProduct = {
   id: string
   name: string
   tag?: string
-  price?: number
+  price: number
   currentPrice?: number
   images: IProductImage[]
   deal?: number
@@ -18,4 +20,6 @@ export type IProductCard = {
   rating: number
   ratingAmount: number
   soldInPastMonth: number
+  description: string
+  classifications: IClassification[]
 }

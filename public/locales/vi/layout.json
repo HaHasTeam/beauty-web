@@ -166,5 +166,62 @@
       "description": "Check back later for new tasks",
       "button": "OK"
     }
+  },
+  "productDetail": {
+    "addToCart": "Thêm vào giỏ",
+    "buyNow": "Mua ngay",
+    "quantity": "Số lượng",
+    "total": "Tạm tính",
+    "priceDetail": "Chi tiết giá",
+    "descriptionTitle": "Mô tả thêm"
+  },
+  "event": {
+    "finishIn": "Kết thúc trong"
+  },
+  "reviews": {
+    "title": "Reviews",
+    "writeReview": "Write a Review",
+    "rating": "Rating",
+    "yourRating": "Your Rating",
+    "addReview": "Add Review",
+    "averageRating": "Average Rating",
+    "viewAllReviews": "View All Reviews",
+    "reviewTitle": "Review Title",
+    "reviewContent": "Review Content",
+    "reviewBy": "Review By",
+    "reviewDate": "Review Date",
+    "customerReview": "Khách hàng đánh giá",
+    "overall": "Tổng quan",
+    "reviewCount": "{{amount}} reviews"
+  },
+  "brand": {
+    "title": "HANGY",
+    "lastOnline": "Online {{time}} Ago",
+    "reviews": {
+      "title": "Reviews",
+      "count": "{{count}}k"
+    },
+    "responseRate": {
+      "title": "Response Rate",
+      "value": "{{rate}}%"
+    },
+    "responseTime": {
+      "title": "Response Time",
+      "value": "within {{time}}"
+    },
+    "joined": {
+      "title": "Joined",
+      "value": "{{time}} ago"
+    },
+    "products": {
+      "title": "Products",
+      "count": "{{count}}"
+    },
+    "followers": {
+      "title": "Followers",
+      "count": "{{count}}k"
+    },
+    "chatNow": "Chat Now",
+    "viewShop": "View Shop"
   }
 }
