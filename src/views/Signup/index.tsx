@@ -21,6 +21,7 @@ import { formRegisterSchema } from '@/lib/schema'
 import { cn } from '@/lib/utils'
 import { createAccount } from '@/network/api/api'
 import { createAccountParams } from '@/network/api/api-params-moudle'
+import { RoleEnum } from '@/types/enum'
 
 const SignUp = () => {
   const { toast } = useToast()
@@ -95,14 +96,14 @@ const SignUp = () => {
       //   title: 'data onSubmit',
       //   description: (
       //     <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-      //       <code className="text-white">{JSON.stringify(values, null, 2)}</code>
+      //       <code className="text-w  hite">{JSON.stringify(values, null, 2)}</code>
       //     </pre>
       //   ),
       // })
       console.log(values)
       const formateData: createAccountParams = {
         ...values,
-        role: 'CUSTOMER',
+        role: RoleEnum.CUSTOMER,
         username: values.firstName + ' ' + values.lastName,
       }
       signUpCustomerMutate(formateData)
