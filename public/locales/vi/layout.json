@@ -84,7 +84,11 @@
     "title": "Filter",
     "reset": "Reset",
     "apply": "Apply",
-    "currency": "đ"
+    "currency": "đ",
+    "filterBy": "Lọc theo",
+    "newest": "Mới nhất",
+    "hasImage": "Có hình ảnh",
+    "numberOfStar": "{{count}} sao"
   },
   "sort": {
     "title": "Sort by",

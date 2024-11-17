@@ -44,7 +44,7 @@ const ProductDetailInformation = ({ product }: ProductDetailInformationProps) =>
 
         {/* brand deals */}
         <div className="flex gap-2">
-          <span>Brand Deal</span>
+          <span className="text-gray-600">Brand Deal</span>
           {product?.deal && product?.deal > 0 && <ProductTag tag="DealPercent" text={product?.deal * 100 + '%'} />}
         </div>
         {/* classification */}

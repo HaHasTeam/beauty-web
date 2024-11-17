@@ -82,7 +82,11 @@
     "title": "Filter",
     "reset": "Reset",
     "apply": "Apply",
-    "currency": "$"
+    "currency": "$",
+    "filterBy": "Filter by",
+    "newest": "Newest",
+    "hasImage": "Has image",
+    "numberOfStar": "{{count}} star"
   },
   "sort": {
     "title": "Sort by",
@@ -188,7 +192,7 @@
     "reviewContent": "Review Content",
     "reviewBy": "Review By",
     "reviewDate": "Review Date",
-    "customerReview": "Customer Review",
+    "customerReview": "Customer Reviews",
     "overall": "Overall",
     "reviewCount": "{{amount}} reviews"
   },

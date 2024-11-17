@@ -7,7 +7,7 @@ import { Ratings } from '../ui/rating'
 export default function ReviewOverall() {
   const { t } = useTranslation()
   const ratings = [
-    { stars: 5, count: 165 },
+    { stars: 5, count: 16.5 },
     { stars: 4, count: 20 },
     { stars: 3, count: 1 },
     { stars: 2, count: 2 },
@@ -18,7 +18,7 @@ export default function ReviewOverall() {
   const averageRating = ratings.reduce((sum, rating) => sum + rating.stars * rating.count, 0) / totalReviews
 
   return (
-    <div className="max-w-md p-4">
+    <div className="p-4">
       <h2 className="text-xl font-medium mb-4 text-primary">{t('reviews.customerReview')}</h2>
 
       <div className="mb-6 ">
@@ -36,7 +36,7 @@ export default function ReviewOverall() {
             <Ratings rating={stars} size={13} variant="yellow" />
 
             <Progress value={(count / totalReviews) * 100} className="h-2 w-48" />
-            <span className="text-sm text-gray-600 w-8">{count}</span>
+            <span className="text-sm text-gray-600 w-8">{count}%</span>
           </div>
         ))}
       </div>
