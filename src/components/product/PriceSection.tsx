@@ -14,23 +14,25 @@ const PriceSection = ({ price, currentPrice, deal }: PriceSectionProps) => {
   return (
     <div className="flex gap-1">
       <div className="flex items-center gap-2">
-        <span className="text-red-500 text-2xl font-medium">{currentPrice}đ</span>
+        <span className="text-red-500 text-2xl font-medium">
+          {t('productCard.currentPrice', { price: currentPrice })}
+        </span>
         <ProductTag tag="DealPercent" text={deal * 100 + '%'} />
-        <span className="text-gray-400 text-sm line-through">{price}đ</span>
+        <span className="text-gray-400 text-sm line-through">{t('productCard.price', { price: price })}</span>
       </div>
       <HoverCard>
         <HoverCardTrigger asChild>
-          <CircleAlert className="text-gray-400 h-4 w-4" />
+          <CircleAlert className="text-gray-400 h-4 w-4 hover:cursor-pointer" />
         </HoverCardTrigger>
-        <HoverCardContent className="w-80">
-          <div className="bg-red-50/50 p-4 rounded-lg max-w-md">
-            <div className="space-y-4">
+        <HoverCardContent className="w-80 p-0">
+          <div className="w-full bg-red-50/50 rounded-lg">
+            <div className="space-y-4 p-4">
               <h3 className="font-medium text-gray-900">{t('productDetail.priceDetail')}</h3>
 
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-gray-600">Giá gốc</span>
-                  <span className="text-red-500">{price}đ</span>
+                  <span className="text-red-500">{t('productCard.price', { price: price })}</span>
                 </div>
 
                 <div className="flex justify-between">

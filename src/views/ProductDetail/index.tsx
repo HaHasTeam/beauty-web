@@ -1,8 +1,10 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
 import BrandSection from '@/components/brand/BrandSection'
+import CustomBreadcrumb from '@/components/breadcrumb/CustomBreadcrumb'
 import ReviewFilter from '@/components/filter/ReviewFilter'
+import APIPagination from '@/components/pagination/Pagination'
 import ProductCarousel from '@/components/product/ProductCarousel'
 import ProductDetailAction from '@/components/product/ProductDetailAction'
 import ProductDetailInformation from '@/components/product/ProductDetailInformation'
@@ -166,13 +168,18 @@ const ProductDetail = () => {
       brandLogo: 'https://i.pinimg.com/736x/d2/b4/7f/d2b47f1580b061d66b7f6b436d431228.jpg',
     },
   ]
+  const reviewSectionRef = useRef<HTMLDivElement | null>(null)
 
+  const scrollToReviews = () => {
+    reviewSectionRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [classification, setClassification] = useState<IClassification>(product.classifications[0])
   return (
-    <div className="w-full container mx-auto px-4 py-8 ">
+    <div className="w-full mx-auto px-4 py-5 ">
       {/* product information */}
-      <div className="w-full lg:px-20 md:px-10 sm:px-8 px-3 space-y-12">
+      <div className="w-full lg:px-20 md:px-10 sm:px-8 px-3 space-y-3 ">
+        <CustomBreadcrumb dynamicSegments={[{ segment: product.name ?? '' }]} />
         <div className="flex gap-2 w-full">
           {/* product image carousel */}
           <div className="shadow-sm p-3 bg-white rounded-lg w-[calc(30%-8px)]">
@@ -181,7 +188,7 @@ const ProductDetail = () => {
 
           {/* product detail information */}
           <div className="w-[calc(50%-8px)]">
-            <ProductDetailInformation product={product} />
+            <ProductDetailInformation product={product} scrollToReviews={scrollToReviews} />
           </div>
           {/* call to action */}
           <div className="shadow-sm p-3 bg-white rounded-lg w-[calc(20%-8px)]">
@@ -193,7 +200,7 @@ const ProductDetail = () => {
         <BrandSection />
 
         {/* product reviews */}
-        <div className="flex gap-2 bg-white rounded-lg">
+        <div className="flex gap-2 bg-white rounded-lg" id="customerReviews" ref={reviewSectionRef}>
           <ReviewOverall />
           <div>
             <div className="border-b border-gray-200">
@@ -218,8 +225,10 @@ const ProductDetail = () => {
                 />
               ))}
             </div>
+            <APIPagination currentPage={1} onPageChange={() => {}} totalPages={5} />
           </div>
         </div>
+
         {/* other product in same brand */}
       </div>
     </div>

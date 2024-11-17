@@ -76,7 +76,7 @@
     "vietnamese": "VN"
   },
   "search": {
-    "result": "Search results: {{total}} data"
+    "result": "Search results for {{keyword}}: {{total}} data"
   },
   "filter": {
     "title": "Filter",
@@ -175,7 +175,10 @@
     "quantity": "Quantity",
     "total": "Total",
     "priceDetail": "Price Detail",
-    "descriptionTitle": "Description"
+    "descriptionTitle": "Description",
+    "breadcrumbProductName": "{{name}}",
+    "brandDeal": "Brand Deal",
+    "classification": "Classifications"
   },
   "event": {
     "finishIn": "Finish In"
@@ -225,5 +228,11 @@
     },
     "chatNow": "Chat Now",
     "viewShop": "View Shop"
+  },
+  "breadcrumb": {
+    "home": "Home"
+  },
+  "date": {
+    "toLocaleDateString": "{{val, MM/DD/YYYY}}"
   }
 }

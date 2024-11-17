@@ -1,4 +1,5 @@
 import { UserCircle } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 import { Ratings } from '../ui/rating'
 
@@ -22,6 +23,7 @@ const CustomerReview = ({
   description,
   images,
 }: CustomerReviewProps) => {
+  const { t } = useTranslation()
   return (
     <div className="flex flex-col gap-1">
       <div>
@@ -30,7 +32,7 @@ const CustomerReview = ({
           <span className="font-semibold">{author}</span>
         </div>
         <div>
-          <span className="text-gray-500 text-sm">{updatedAt}</span>
+          <span className="text-gray-500 text-sm">{t('date.toLocaleDateString', { val: new Date(updatedAt) })}</span>
         </div>
       </div>
       <div className="flex gap-3">

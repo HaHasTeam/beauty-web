@@ -10,9 +10,10 @@ import SpecialEvent from './SpecialEvent'
 
 interface ProductDetailInformationProps {
   product: IProduct
+  scrollToReviews: () => void
 }
 
-const ProductDetailInformation = ({ product }: ProductDetailInformationProps) => {
+const ProductDetailInformation = ({ product, scrollToReviews }: ProductDetailInformationProps) => {
   const { t } = useTranslation()
   const handleSelectClassification = (classificationId: string) => {
     console.log(classificationId)
@@ -28,8 +29,10 @@ const ProductDetailInformation = ({ product }: ProductDetailInformationProps) =>
 
         {/* rating */}
         <div className="flex gap-2 align-middle items-center">
-          <span className="font-semibold">{product?.rating}</span>
-          <ProductStar rating={product?.rating} ratingAmount={product?.ratingAmount} />
+          <div className="flex gap-2 align-middle items-center hover:cursor-pointer" onClick={scrollToReviews}>
+            <span className="font-semibold">{product?.rating}</span>
+            <ProductStar rating={product?.rating} ratingAmount={product?.ratingAmount} />
+          </div>
           <div className="border-l border-gray-300 px-2">
             <span className="text-gray-500 text-sm">
               {t('productCard.soldInPastMonth', { amount: product?.soldInPastMonth ?? 0 })}
@@ -44,12 +47,12 @@ const ProductDetailInformation = ({ product }: ProductDetailInformationProps) =>
 
         {/* brand deals */}
         <div className="flex gap-2">
-          <span className="text-gray-600">Brand Deal</span>
+          <span className="text-gray-600">{t('productDetail.brandDeal')}</span>
           {product?.deal && product?.deal > 0 && <ProductTag tag="DealPercent" text={product?.deal * 100 + '%'} />}
         </div>
         {/* classification */}
         <div className="flex gap-2 items-center">
-          <span className="text-gray-600">Categories</span>
+          <span className="text-gray-600">{t('productDetail.classification')}</span>
           <div className="flex flex-wrap items-start gap-4">
             {product?.classifications?.map((classification) => (
               <Button

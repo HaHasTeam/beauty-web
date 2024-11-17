@@ -77,7 +77,7 @@
   },
 
   "search": {
-    "result": "Search results: {{total}} data"
+    "result": "Search results for {{keyword}}: {{total}} data"
   },
 
   "filter": {
@@ -177,7 +177,10 @@
     "quantity": "Số lượng",
     "total": "Tạm tính",
     "priceDetail": "Chi tiết giá",
-    "descriptionTitle": "Mô tả thêm"
+    "descriptionTitle": "Mô tả thêm",
+    "breadcrumbProductName": "{{name}}",
+    "brandDeal": "Brand Deal",
+    "classification": "Classifications"
   },
   "event": {
     "finishIn": "Kết thúc trong"
@@ -227,5 +230,11 @@
     },
     "chatNow": "Chat Now",
     "viewShop": "View Shop"
+  },
+  "breadcrumb": {
+    "home": "Trang chủ"
+  },
+  "date": {
+    "toLocaleDateString": "{{val, DD/MM/YYYY}}"
   }
 }

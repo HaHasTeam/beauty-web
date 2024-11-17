@@ -192,7 +192,7 @@ const SearchPage = () => {
         <div className="flex flex-col gap-2">
           <CustomBreadcrumb
             customSegments={{
-              search: t('search.result', { total: searchedProducts.length }),
+              search: t('search.result', { total: searchedProducts.length, keyword: query }),
             }}
           />
           {searchedProducts?.length > 0 ? (

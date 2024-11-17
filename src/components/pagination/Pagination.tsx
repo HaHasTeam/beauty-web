@@ -11,14 +11,13 @@ import {
 type APIPaginationProps = {
   totalPages: number
   currentPage: number
-  onPageChange: (page: number) => void // This will trigger an API call
+  onPageChange: (page: number) => void
 }
 
 const APIPagination = ({ totalPages, currentPage, onPageChange }: APIPaginationProps) => {
-  // Handle page changes (Next, Previous, or direct page click)
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) {
-      onPageChange(page) // Trigger API call via parent handler
+      onPageChange(page)
     }
   }
 
