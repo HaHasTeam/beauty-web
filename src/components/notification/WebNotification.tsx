@@ -1,9 +1,13 @@
 import { Bell } from 'lucide-react'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
+import emptyNotification from '@/assets/images/EmptyInbox.png'
 import logo from '@/assets/images/logo.png'
 import configs from '@/config'
+
+import Empty from '../empty/Empty'
 
 type Notification = {
   id: number
@@ -26,6 +30,7 @@ const WebNotification: React.FC<WebNotificationProps> = ({
   style,
   onNotificationClick,
 }) => {
+  const { t } = useTranslation()
   const [isDropdownOpen, setDropdownOpen] = useState(false)
 
   // Toggle dropdown visibility
@@ -73,11 +78,15 @@ const WebNotification: React.FC<WebNotificationProps> = ({
                 to={configs.routes.notification}
                 className="text-primary w-full flex justify-center align-middle text-sm font-semibold hover:bg-gray-100 p-3"
               >
-                View all
+                {t('notification.viewAll')}
               </Link>
             </>
           ) : (
-            <div className="text-center text-gray-500 p-2">No notifications</div>
+            <Empty
+              title={t('empty.notification.title')}
+              description={t('empty.notification.description')}
+              icon={emptyNotification}
+            />
           )}
         </div>
       )}

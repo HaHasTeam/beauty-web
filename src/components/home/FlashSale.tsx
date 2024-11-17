@@ -23,7 +23,7 @@ const FlashSale = () => {
         productAmount: 200,
         soldAmount: 65,
       },
-      imageUrl: 'path/to/image1.png',
+      images: [],
       rating: 0,
       ratingAmount: 0,
       soldInPastMonth: 0,
@@ -39,10 +39,10 @@ const FlashSale = () => {
         productAmount: 190,
         soldAmount: 120,
       },
-      imageUrl: 'path/to/image2.png',
       rating: 0,
       ratingAmount: 0,
       soldInPastMonth: 0,
+      images: [],
     },
     {
       id: '3',
@@ -55,7 +55,7 @@ const FlashSale = () => {
         productAmount: 190,
         soldAmount: 80,
       },
-      imageUrl: 'path/to/image3.png',
+      images: [],
       rating: 0,
       ratingAmount: 0,
       soldInPastMonth: 0,
@@ -71,7 +71,7 @@ const FlashSale = () => {
         productAmount: 190,
         soldAmount: 50,
       },
-      imageUrl: 'path/to/image4.png',
+      images: [],
       rating: 0,
       ratingAmount: 0,
       soldInPastMonth: 0,
@@ -87,7 +87,7 @@ const FlashSale = () => {
         productAmount: 80,
         soldAmount: 30,
       },
-      imageUrl: 'path/to/image5.png',
+      images: [],
       rating: 0,
       ratingAmount: 0,
       soldInPastMonth: 0,
@@ -103,7 +103,7 @@ const FlashSale = () => {
         productAmount: 70,
         soldAmount: 30,
       },
-      imageUrl: 'path/to/image5.png',
+      images: [],
       rating: 0,
       ratingAmount: 0,
       soldInPastMonth: 0,
@@ -119,7 +119,7 @@ const FlashSale = () => {
         productAmount: 200,
         soldAmount: 30,
       },
-      imageUrl: 'path/to/image5.png',
+      images: [],
       rating: 0,
       ratingAmount: 0,
       soldInPastMonth: 0,
@@ -135,7 +135,7 @@ const FlashSale = () => {
         productAmount: 100,
         soldAmount: 30,
       },
-      imageUrl: 'path/to/image5.png',
+      images: [],
       rating: 0,
       ratingAmount: 0,
       soldInPastMonth: 0,
@@ -206,7 +206,7 @@ const FlashSale = () => {
       </div>
       <div className="relative">
         <Carousel className="w-full">
-          <CarouselContent className="w-full">
+          <CarouselContent className="w-full m-0">
             {flashSaleProducts.map((product) => (
               <CarouselItem key={product?.id} className="pl-1 basis-1/3 sm:basis-1/3 lg:basis-1/5">
                 <div className="p-1">
@@ -215,10 +215,10 @@ const FlashSale = () => {
               </CarouselItem>
             ))}
           </CarouselContent>
-          <div className="absolute left-14 top-2/4">
+          <div className="absolute left-16 top-2/4">
             <CarouselPrevious />
           </div>
-          <div className="absolute right-14 top-2/4">
+          <div className="absolute right-16 top-2/4">
             <CarouselNext />
           </div>
         </Carousel>

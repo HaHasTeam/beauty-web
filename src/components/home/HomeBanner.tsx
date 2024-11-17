@@ -27,7 +27,7 @@ const HomeBanner = () => {
     })
   }, [api])
 
-  const plugin = useRef(Autoplay({ delay: 2000, stopOnInteraction: true }))
+  const plugin = useRef(Autoplay({ delay: 3000, stopOnInteraction: true }))
 
   const banners = [
     { id: '0', image: homeBanner1, alt: 'Home Banner 1' },

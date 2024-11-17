@@ -1,16 +1,14 @@
 import { ArrowRight } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 import configs from '@/config'
 import { IProductCard } from '@/types/product-card.interface'
 
 import ProductCard from '../product/ProductCard'
-import { Button } from '../ui/button'
 
 const RecommendProduct = () => {
   const { t } = useTranslation()
-  const navigate = useNavigate()
   const recommendProducts: IProductCard[] = [
     {
       id: '1',
@@ -178,12 +176,12 @@ const RecommendProduct = () => {
         {recommendProducts?.map((product) => <ProductCard key={product?.id} product={product} />)}
       </div>
       <div className="flex justify-center mt-4">
-        <Button
-          className="bg-primary hover:bg-primary/70 text-primary-foreground px-8"
-          onClick={() => navigate(configs.routes.recommendProducts)}
+        <Link
+          to={configs.routes.recommendProducts}
+          className="py-2 rounded-md bg-primary hover:bg-primary/70 text-primary-foreground px-12"
         >
           {t('button.viewAll')}
-        </Button>
+        </Link>
       </div>
     </div>
   )

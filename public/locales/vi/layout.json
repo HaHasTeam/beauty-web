@@ -236,5 +236,9 @@
   },
   "date": {
     "toLocaleDateString": "{{val, DD/MM/YYYY}}"
+  },
+  "notification": {
+    "viewAll": "Xem tất cả",
+    "viewNotification": "Xem thông báo"
   }
 }

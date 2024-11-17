@@ -1,7 +1,7 @@
 import { Bell, CircleUserRound, HelpCircle, Menu, ShoppingBag, X } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useShallow } from 'zustand/react/shallow'
 
 import { Button } from '@/components/ui/button'
@@ -24,7 +24,6 @@ export default function Header() {
     console.log(`Notification ${id} clicked`)
     // Perform any other action like marking as read or navigating
   }
-  const navigate = useNavigate()
   const { t } = useTranslation()
   const [menuOpen, setMenuOpen] = useState(false)
   const { isAuthenticated, isLoading } = useStore(
@@ -46,56 +45,46 @@ export default function Header() {
             </Link>
           </div>
           <div className="flex items-center space-x-4">
-            <Button
-              variant="ghost"
-              size="sm"
-              className="text-black h-8 w-full px-2"
-              onClick={() => navigate(configs.routes.helpCenter)}
-            >
+            <Link to={configs.routes.helpCenter} className="flex gap-2 items-center text-black h-8 w-full px-2">
               <HelpCircle className="h-4 w-4" />
               <span className="text-sm">{t('helpCenter.name')}</span>
-            </Button>
+            </Link>
             <LanguageSwitcher />
           </div>
         </div>
-        <div className="px-2 md:px-8 flex items-center justify-between py-4 border-t border-secondary">
+        <div className="px-2 md:px-8 flex justify-between py-4 border-t border-secondary">
           <Link to={configs.routes.home} className="text-3xl font-bold text-primary hidden md:block">
             {ProjectInformationEnum.name}
           </Link>
           <SearchBar />
           {/* desktop menu */}
-          <div className="md:flex items-center space-x-3 hidden">
+          <div className="md:flex gap-3 hidden">
             <WebNotification
               notifications={notifications}
               notificationCount={notifications.length}
               onNotificationClick={handleNotificationClick}
             />
             {!isLoading && isAuthenticated ? (
-              <Button
-                variant="ghost"
-                className="flex justify-start text-base"
+              <Link
+                to={configs.routes.profile}
+                className="flex gap-1 justify-start text-base"
                 onClick={() => {
                   setMenuOpen(false)
-                  navigate(configs.routes.profile)
                 }}
               >
                 <CircleUserRound />
                 <span>{t('header.profile')}</span>
-              </Button>
+              </Link>
             ) : (
-              <Button
-                variant="default"
-                className="text-primary-foreground"
-                onClick={() => navigate(configs.routes.signIn)}
-              >
+              <Link to={configs.routes.signIn} className="p-2 rounded-md text-primary-foreground">
                 {t('header.loginOrRegister')}
-              </Button>
+              </Link>
             )}
 
-            <Button variant="ghost" size="icon" onClick={() => navigate(configs.routes.cart)}>
+            <Link to={configs.routes.cart}>
               <ShoppingBag />
               <span className="sr-only">{t('header.shoppingCart')}</span>
-            </Button>
+            </Link>
           </div>
           {/* Mobile Menu Toggle */}
           <div className="flex md:hidden">
@@ -110,47 +99,44 @@ export default function Header() {
         <div className="md:hidden absolute z-20 top-full left-0 w-full bg-white shadow-md border-t">
           <div className="p-4">
             <div className="flex gap-2">
-              <Button variant="ghost" onClick={() => navigate(configs.routes.notification)}>
+              <Link to={configs.routes.notification}>
                 <Bell className="h-5 w-5" />
                 <span> {t('header.notification')}</span>
-              </Button>
+              </Link>
             </div>
             <div className="flex gap-2">
-              <Button
-                variant="ghost"
+              <Link
+                to={configs.routes.cart}
                 className="flex justify-start"
                 onClick={() => {
                   setMenuOpen(false)
-                  navigate(configs.routes.cart)
                 }}
               >
                 <ShoppingBag className="h-5 w-5" />
                 <span>{t('header.shoppingCart')}</span>
-              </Button>
+              </Link>
             </div>
             {!isLoading && isAuthenticated ? (
-              <Button
-                variant="ghost"
+              <Link
+                to={configs.routes.profile}
                 className="flex justify-start"
                 onClick={() => {
                   setMenuOpen(false)
-                  navigate(configs.routes.profile)
                 }}
               >
                 <CircleUserRound className="h-5 w-5" />
                 <span>{t('header.profile')}</span>
-              </Button>
+              </Link>
             ) : (
-              <Button
-                variant="default"
+              <Link
+                to={configs.routes.signIn}
                 className="w-full text-primary-foreground"
                 onClick={() => {
                   setMenuOpen(false)
-                  navigate(configs.routes.signIn)
                 }}
               >
                 {t('header.loginOrRegister')}
-              </Button>
+              </Link>
             )}
           </div>
         </div>

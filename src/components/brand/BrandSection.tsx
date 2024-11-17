@@ -1,13 +1,12 @@
 import { MessageSquare, Store } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 import { Button } from '@/components/ui/button'
 import configs from '@/config'
 
 export default function BrandSection() {
   const { t } = useTranslation()
-  const navigate = useNavigate()
   return (
     <div className="p-4 shadow-sm rounded-lg border-gray-200 border">
       <div className="flex flex-col md:flex-row items-start gap-4">
@@ -63,14 +62,13 @@ export default function BrandSection() {
             <MessageSquare className="w-4 h-4 mr-2" />
             {t('brand.chatNow')}
           </Button>
-          <Button
-            variant="outline"
-            className="flex-1 md:flex-none border-primary text-primary hover:text-primary hover:bg-primary/10"
-            onClick={() => navigate(configs.routes.brands + '/brandId')}
+          <Link
+            to={configs.routes.brands + '/brandId'}
+            className="rounded-md flex-1 md:flex-none border-primary text-primary hover:text-primary hover:bg-primary/10"
           >
             <Store className="w-4 h-4 mr-2" />
             {t('brand.viewShop')}
-          </Button>
+          </Link>
         </div>
       </div>
     </div>

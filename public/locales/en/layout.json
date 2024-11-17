@@ -234,5 +234,9 @@
   },
   "date": {
     "toLocaleDateString": "{{val, MM/DD/YYYY}}"
+  },
+  "notification": {
+    "viewAll": "View All",
+    "viewNotification": "View Notifications"
   }
 }

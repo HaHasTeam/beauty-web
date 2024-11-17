@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import productImage from '@/assets/images/product_sample_img.png'
-import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import configs from '@/config'
 import { IProductCard } from '@/types/product-card.interface'
@@ -55,9 +54,9 @@ export default function SaleProductCard({ product }: ProductCardProps) {
               maxAmount={product?.flashSale?.productAmount ?? 0}
             />
           </div>
-          <Button className="w-full bg-primary hover:bg-primary/70 text-primary-foreground">
+          {/* <Button className="w-full bg-primary hover:bg-primary/70 text-primary-foreground">
             {t('button.addToCard')}
-          </Button>
+          </Button> */}
         </CardFooter>
       </Card>
     </Link>

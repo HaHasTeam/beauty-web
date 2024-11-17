@@ -34,6 +34,7 @@ const routes = {
   privacyPolicy: '/privacy-policy',
   termsAndConditions: '/terms-and-condition',
   cart: '/cart',
+  checkout: '/checkout',
   sellLanding: '/landing/sell',
   professionalLanding: '/landing/professional',
   search: '/search',
