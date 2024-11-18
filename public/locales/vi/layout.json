@@ -33,7 +33,10 @@
     "limitedEdition": "Phiên bản giới hạn",
     "newArrival": "Hàng mới về",
     "hotDeal": "Ưu đãi hấp dẫn",
-    "flashSale": "Flash sale"
+    "flashSale": "Flash sale",
+    "liveStream": "Live Stream",
+    "preOrder": "Pre Order",
+    "groupBuying": "Group Buying"
   },
   "flashSale": {
     "title": "Flash Sale"
@@ -235,10 +238,56 @@
     "home": "Trang chủ"
   },
   "date": {
-    "toLocaleDateString": "{{val, DD/MM/YYYY}}"
+    "toLocaleDateString": "{{val, DD/MM/YYYY}}",
+    "expiredDate": "HSD"
   },
   "notification": {
     "viewAll": "Xem tất cả",
     "viewNotification": "Xem thông báo"
+  },
+  "cart": {
+    "title": "Cart",
+    "total": "Total",
+    "remove": "Remove",
+    "checkout": "Checkout",
+    "continueShopping": "Continue Shopping",
+    "emptyCart": "Your cart is empty",
+    "product": "Product",
+    "price": "Price",
+    "quantity": "Quantity",
+    "totalPrice": "Total Price",
+    "viewMoreVoucher": "View More Voucher"
+  },
+  "address": {
+    "title": "Address",
+    "add": "Add Address",
+    "edit": "Thay đổi",
+    "default": "Default Address",
+    "delete": "Delete Address",
+    "setDefault": "Set as Default",
+    "address": "Address",
+    "street": "Street",
+    "city": "City",
+    "state": "State",
+    "country": "Country",
+    "postalCode": "Postal Code",
+    "phoneNumber": "Phone Number",
+    "save": "Save",
+    "cancel": "Cancel",
+    "addressBook": "Address Book",
+    "noAddress": "No Address Found",
+    "addNewAddress": "Add New Address",
+    "deliveryTo": "Giao tới"
+  },
+  "voucher": {
+    "title": "Voucher",
+    "apply": "Apply",
+    "code": "Code",
+    "invalid": "Invalid code",
+    "applied": "Applied",
+    "used": "Used",
+    "expired": "Expired",
+    "codePlaceholder": "Enter your voucher code here",
+    "input": "Enter your voucher code here"
   }
 }

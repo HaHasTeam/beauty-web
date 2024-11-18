@@ -33,7 +33,7 @@ export default function Header() {
     })),
   )
   return (
-    <header className="w-full bg-white relative">
+    <header className="w-full bg-white relative shadow-lg">
       <div className="">
         <div className="px-4 flex items-center justify-between py-2 text-sm">
           <div className="flex space-x-4">
