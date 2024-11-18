@@ -1,10 +1,15 @@
+type IProductImage = {
+  id: string
+  image: string
+}
+
 export type IProductCard = {
   id: string
   name: string
   tag?: string
   price?: number
   currentPrice?: number
-  imageUrl: string
+  images: IProductImage[]
   deal?: number
   flashSale?: {
     productAmount: number

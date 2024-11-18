@@ -13,6 +13,7 @@ export type RouteKey =
   | 'forgotPassword'
   | 'checkEmail'
   | 'notVerifyEmail'
+  | 'recommendProducts'
   | 'notFound'
 
 export type RouteValue =
@@ -29,6 +30,7 @@ export type RouteValue =
   | '/forgot-password'
   | '/check-email'
   | '/not-verify-email'
+  | '/products/recommend-products'
   | '*'
 
 export type RouteConfigType = { [K in RouteKey]: RouteValue }

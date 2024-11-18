@@ -6,7 +6,6 @@ import configs from '@/config'
 import { IProductCard } from '@/types/product-card.interface'
 
 import ProductCard from '../product/ProductCard'
-import { Button } from '../ui/button'
 
 const RecommendProduct = () => {
   const { t } = useTranslation()
@@ -17,7 +16,7 @@ const RecommendProduct = () => {
       tag: 'Best Seller',
       price: 29.99,
       currentPrice: 20.09,
-      imageUrl: 'path/to/image1.png',
+      images: [{ id: '1', image: 'path/to/image1.png' }],
       deal: 0.33,
       flashSale: {
         productAmount: 100,
@@ -33,7 +32,7 @@ const RecommendProduct = () => {
       tag: 'Limited Edition',
       price: 34.99,
       currentPrice: 24.84,
-      imageUrl: 'path/to/image2.png',
+      images: [{ id: '1', image: 'path/to/image1.png' }],
       deal: 0.29,
       flashSale: {
         productAmount: 200,
@@ -49,7 +48,7 @@ const RecommendProduct = () => {
       tag: 'New Arrival',
       price: 19.99,
       currentPrice: 14.99,
-      imageUrl: 'path/to/image3.png',
+      images: [{ id: '1', image: 'path/to/image1.png' }],
       deal: 0.25,
       rating: 4.6,
       ratingAmount: 180,
@@ -61,7 +60,7 @@ const RecommendProduct = () => {
       tag: 'Hot Deal',
       price: 15.99,
       currentPrice: 12.79,
-      imageUrl: 'path/to/image4.png',
+      images: [{ id: '1', image: 'path/to/image1.png' }],
       deal: 0.2,
       flashSale: {
         productAmount: 80,
@@ -77,7 +76,7 @@ const RecommendProduct = () => {
       tag: 'Flash Sale',
       price: 12.99,
       currentPrice: 10.0,
-      imageUrl: 'path/to/image5.png',
+      images: [{ id: '1', image: 'path/to/image1.png' }],
       deal: 0.23,
       flashSale: {
         productAmount: 50,
@@ -93,7 +92,7 @@ const RecommendProduct = () => {
       tag: 'Best Seller',
       price: 25.99,
       currentPrice: 20.79,
-      imageUrl: 'path/to/image6.png',
+      images: [{ id: '1', image: 'path/to/image1.png' }],
       deal: 0.2,
       rating: 4.9,
       ratingAmount: 400,
@@ -105,7 +104,7 @@ const RecommendProduct = () => {
       tag: 'Limited Edition',
       price: 49.99,
       currentPrice: 39.99,
-      imageUrl: 'path/to/image7.png',
+      images: [{ id: '1', image: 'path/to/image1.png' }],
       deal: 0.2,
       rating: 4.4,
       ratingAmount: 210,
@@ -117,7 +116,7 @@ const RecommendProduct = () => {
       tag: 'Hot Deal',
       price: 18.99,
       currentPrice: 15.19,
-      imageUrl: 'path/to/image8.png',
+      images: [{ id: '1', image: 'path/to/image1.png' }],
       deal: 0.2,
       rating: 4.3,
       ratingAmount: 170,
@@ -129,7 +128,7 @@ const RecommendProduct = () => {
       tag: 'Best Seller',
       price: 29.99,
       currentPrice: 20.09,
-      imageUrl: 'path/to/image1.png',
+      images: [{ id: '1', image: 'path/to/image1.png' }],
       deal: 0.33,
       flashSale: {
         productAmount: 100,
@@ -145,7 +144,7 @@ const RecommendProduct = () => {
       tag: 'Best Seller',
       price: 29.99,
       currentPrice: 20.09,
-      imageUrl: 'path/to/image1.png',
+      images: [{ id: '1', image: 'path/to/image1.png' }],
       deal: 0.33,
       flashSale: {
         productAmount: 100,
@@ -166,18 +165,23 @@ const RecommendProduct = () => {
           </h2>
         </div>
         <Link
-          to={configs.routes.productFlashSale}
+          to={configs.routes.recommendProducts}
           className="text-[#FF6B35] hover:opacity-80 transition-opacity flex items-center gap-1"
         >
           {t('button.seeAll')}
           <ArrowRight className="w-4 h-4" />
         </Link>
       </div>
-      <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
         {recommendProducts?.map((product) => <ProductCard key={product?.id} product={product} />)}
       </div>
       <div className="flex justify-center mt-4">
-        <Button className="bg-[#FFD7C9] hover:bg-[#FFD7C9]/90 text-black px-8">{t('button.viewAll')}</Button>
+        <Link
+          to={configs.routes.recommendProducts}
+          className="py-2 rounded-md bg-primary hover:bg-primary/70 text-primary-foreground px-12"
+        >
+          {t('button.viewAll')}
+        </Link>
       </div>
     </div>
   )
