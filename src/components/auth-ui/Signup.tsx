@@ -1,99 +1,295 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
-
-import { Button } from '@/components/ui/button'
-
-import { Input } from '../ui/input'
-
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation } from '@tanstack/react-query'
+import { useForm } from 'react-hook-form'
+import { Link, useNavigate } from 'react-router-dom'
 // Define prop type with allowEmail boolean
-interface SignUpProps {
-  allowEmail: boolean
-}
+import { z } from 'zod'
 
-export default function SignUp({ allowEmail }: SignUpProps) {
-  const [isSubmitting, setIsSubmitting] = useState(false)
+import OrVector from '@/assets/images/orVector.png'
+import OrVector02 from '@/assets/images/orVector02.png'
+import { Button, buttonVariants } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
+import { PasswordInput } from '@/components/ui/password-input'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import configs from '@/config'
+import { useToast } from '@/hooks/use-toast'
+import { formRegisterSchema } from '@/lib/schema'
+import { cn } from '@/lib/utils'
+import { createAccount } from '@/network/api/api'
+import { createAccountParams } from '@/network/api/api-params-moudle'
+import { RoleEnum } from '@/types/enum'
 
-  const handleSubmit = async () => {
-    setIsSubmitting(true) // Disable the button while the request is being handled
+import { Icons } from '../Icons'
 
-    setIsSubmitting(false)
+export default function SignUp() {
+  // const [isSubmitting, setIsSubmitting] = useState(false)
+  const { toast } = useToast()
+  const navigate = useNavigate()
+  const form = useForm<z.infer<typeof formRegisterSchema>>({
+    resolver: zodResolver(formRegisterSchema),
+    defaultValues: {
+      email: '',
+      firstName: '',
+      lastName: '',
+      gender: '',
+      password: '',
+      passwordConfirm: '',
+      acceptTerms: false,
+      phone: '',
+    },
+  })
+  const { mutateAsync: signUpCustomerMutate } = useMutation({
+    mutationFn: async (data: createAccountParams) => {
+      return createAccount(data)
+    },
+    onSuccess: (data) => {
+      // if (!data.ok) {
+      //   // if (data.error) {
+      //   //   const errs = data.error as { [key: string]: { message: string } }
+      //   //   Object.entries(errs).forEach(([key, value]) => {
+      //   //     form.setError(key as keyof createAccountParams, {
+      //   //       type: 'manual',
+      //   //       message: value.message,
+      //   //     })
+      //   //   })
+      //   // }
+      //   toast({
+      //     variant: 'destructive',
+      //     title: 'Uh oh! Something went wrong.',
+      //     description: data.message || data.statusText,
+      //   })
+      //   throw new Error(data.message || data.statusText)
+      // }
+      if (data.message) {
+        form.reset()
+        navigate(configs.routes.signIn)
+        return toast({
+          variant: 'default',
+          className: 'bg-green-600 text-white',
+          title: 'Message from system',
+          description: data.message,
+        })
+      }
+
+      return toast({
+        variant: 'default',
+        title: 'Submitted successfully',
+        description: (
+          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+            <code className="text-white">{JSON.stringify(data.message, null, 2)}</code>
+          </pre>
+        ),
+      })
+    },
+    onError(error) {
+      return toast({
+        variant: 'destructive',
+        title: 'Message from system',
+        description: error.message,
+      })
+    },
+  })
+  function onSubmit(values: z.infer<typeof formRegisterSchema>) {
+    try {
+      // toast({
+      //   title: 'data onSubmit',
+      //   description: (
+      //     <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+      //       <code className="text-w  hite">{JSON.stringify(values, null, 2)}</code>
+      //     </pre>
+      //   ),
+      // })
+      console.log(values)
+      const formateData: createAccountParams = {
+        ...values,
+        role: RoleEnum.CUSTOMER,
+        username: values.firstName + ' ' + values.lastName,
+      }
+      signUpCustomerMutate(formateData)
+    } catch (error) {
+      console.error('Form submission error', error)
+      toast({
+        variant: 'destructive',
+        title: 'Uh oh! Something went wrong.',
+        description: 'Failed to submit the form. Please try again.',
+      })
+    }
   }
 
   return (
-    <div className="mb-8">
-      <form noValidate={true} className="mb-4" onSubmit={handleSubmit}>
-        <div className="grid gap-2">
-          <div className="grid gap-1">
-            <label className="text-zinc-950 dark:text-white" htmlFor="email">
-              Email
-            </label>
-            <Input
-              className="mr-2.5 mb-2 h-full min-h-[44px] w-full px-4 py-3 focus:outline-0 dark:placeholder:text-zinc-400"
-              id="email"
-              placeholder="name@example.com"
-              type="email"
-              name="email"
-              autoCapitalize="none"
-              autoComplete="email"
-              autoCorrect="off"
+    <div className="my-8 ">
+      <p className="text-[32px] font-bold text-primary dark:text-white text-center">Sign Up</p>
+      <p className="mb-2.5 mt-2.5 font-normal text-zinc-950 dark:text-zinc-400 text-center">Enter your information</p>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <div className="flex gap-4">
+            <FormField
+              control={form.control}
+              name="firstName"
+              render={({ field }) => (
+                <FormItem className="flex-1">
+                  <FormLabel>First Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Please enter your first name" type="text" {...field} />
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-            <label className="text-zinc-950 mt-2 dark:text-white" htmlFor="password">
-              Password
-            </label>
-            <Input
-              id="password"
-              placeholder="Password"
-              type="password"
-              name="password"
-              autoComplete="current-password"
-              className="mr-2.5 mb-2 h-full min-h-[44px] w-full px-4 py-3 focus:outline-0 dark:placeholder:text-zinc-400"
+
+            <FormField
+              control={form.control}
+              name="lastName"
+              render={({ field }) => (
+                <FormItem className="flex-1">
+                  <FormLabel>Last Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Please enter your last name" type="text" {...field} />
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
             />
           </div>
-          <Button
-            type="submit"
-            className="mt-2 flex h-[unset] w-full items-center justify-center rounded-lg px-4 py-4 text-sm font-medium"
-          >
-            {isSubmitting ? (
-              <svg
-                aria-hidden="true"
-                role="status"
-                className="mr-2 inline h-4 w-4 animate-spin text-zinc-200 duration-500 dark:text-zinc-950"
-                viewBox="0 0 100 101"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                  fill="currentColor"
-                ></path>
-                <path
-                  d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                  fill="white"
-                ></path>
-              </svg>
-            ) : (
-              'Sign up'
+
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input placeholder="Please enter your email" type="email" {...field} />
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
             )}
+          />
+
+          <div className="flex gap-4">
+            <FormField
+              control={form.control}
+              name="gender"
+              render={({ field }) => (
+                <FormItem className="flex-1">
+                  <FormLabel>Gender</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Choose your gender" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="MALE">Male</SelectItem>
+                      <SelectItem value="FEMALE">Female</SelectItem>
+                      <SelectItem value="OTHER">Other</SelectItem>
+                    </SelectContent>
+                  </Select>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="phone"
+              render={({ field }) => (
+                <FormItem className="flex-1">
+                  <FormLabel>Phone</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Please enter your phone number" {...field} />
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Password</FormLabel>
+                <FormControl>
+                  <PasswordInput placeholder="Please Enter your password." {...field} />
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="passwordConfirm"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Confirm Password</FormLabel>
+                <FormControl>
+                  <PasswordInput placeholder="Please Enter your confirm password." {...field} />
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="acceptTerms"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0  p-4">
+                <FormControl>
+                  <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+                </FormControl>
+                <div className="space-y-1 leading-none">
+                  <FormLabel>
+                    {' '}
+                    I accept the{' '}
+                    <Link to="/terms" className="text-[#FFA07A] hover:underline">
+                      Terms and Conditions
+                    </Link>
+                  </FormLabel>
+
+                  <FormMessage />
+                </div>
+              </FormItem>
+            )}
+          />
+          <Button type="submit" className="w-full bg-primary hover:bg-[#FF8C5A] text-white">
+            Register
           </Button>
+        </form>
+      </Form>
+      <div className="mt-6 text-center">
+        <div className="flex items-baseline justify-center gap-2">
+          <img src={OrVector} alt="vector" />
+          <p className="text-sm text-gray-600 mb-4">OR</p>
+          <img src={OrVector02} alt="vector" />
         </div>
-      </form>
-      <p>
-        <Link to="/auth/signin/forgot_password" className="font-medium text-zinc-950 dark:text-white text-sm">
-          Forgot your password?
-        </Link>
-      </p>
-      <p className="font-medium text-sm dark:text-white">
-        <Link to="/auth/signin/password_signin" className="font-medium text-sm dark:text-white">
-          Already have an account?
-        </Link>
-      </p>
-      {allowEmail && (
-        <p className="font-medium text-sm dark:text-white">
-          <Link to="/auth/signin/email_signin" className="font-medium text-sm dark:text-white">
-            Sign in via magic link
+        <a
+          className={cn(
+            buttonVariants({ variant: 'outline' }),
+            'w-full mb-4 flex items-center justify-center cursor-pointer',
+          )}
+        >
+          <Icons.GoogleIcon />
+          Continue with Google
+        </a>
+        <p className="mt-4 text-sm text-gray-600">
+          Already have an account?{' '}
+          <Link to="/sign-in" className="text-[#FFA07A] hover:underline">
+            Log in
           </Link>
         </p>
-      )}
+      </div>
     </div>
   )
 }

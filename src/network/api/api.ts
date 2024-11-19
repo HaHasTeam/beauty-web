@@ -1,7 +1,7 @@
 import { request } from '@/network/axios'
 import { ActionResponse } from '@/types'
 
-import { createAccountParams, getCanvasData, signInParams } from './api-params-moudle'
+import { createAccountParams, getCanvasData, sendRequestResetPasswordParams, signInParams } from './api-params-moudle'
 import { GetCityTotal, LoginResponse } from './api-res-model'
 
 enum APIS {
@@ -9,6 +9,7 @@ enum APIS {
   CREATE_ACCOUNT = '/accounts',
   SIGN_IN = '/auth/login',
   SIGN_UP = '/auth/regiset',
+  REQUEST_RESET_PASSWORD = '/accounts/request-reset-pass',
 }
 
 export const getCityTotalNumber = (params: getCanvasData) =>
@@ -16,4 +17,8 @@ export const getCityTotalNumber = (params: getCanvasData) =>
 
 export const createAccount = async (data: createAccountParams) =>
   await request.post<ActionResponse<LoginResponse>>(APIS.CREATE_ACCOUNT, data)
+
 export const login = async (data: signInParams) => await request.post<ActionResponse<LoginResponse>>(APIS.SIGN_IN, data)
+
+export const requestResetPassword = async (data: sendRequestResetPasswordParams) =>
+  await request.post<ActionResponse<null>>(APIS.REQUEST_RESET_PASSWORD, data)

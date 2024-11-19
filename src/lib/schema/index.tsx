@@ -21,3 +21,6 @@ export const formSignInSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8).max(20),
 })
+export const formEmailSchema = z.object({
+  email: z.string().email(),
+})

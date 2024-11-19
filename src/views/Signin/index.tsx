@@ -9,6 +9,7 @@ import AuthUI from '@/components/auth/AuthUI'
 import { Icons } from '@/components/Icons'
 import { buttonVariants } from '@/components/ui/button'
 import configs from '@/config'
+import { getOauthGoogleUrl } from '@/config/contants'
 import { cn } from '@/lib/utils'
 
 const SignIn = () => {
@@ -21,7 +22,7 @@ const SignIn = () => {
         <div className="flex flex-col md:flex-row">
           <div className="md:w-1/2 relative bg-blend-color-burn">
             <div className="absolute  top-4 right-4 bg-white px-2 py-1 rounded text-sm flex cursor-pointer">
-              Back to shopping <ChevronRight className="text-[#FFA07A]" />
+              Back to shopping <ChevronRight className="text-primary" />
             </div>
             <img
               src={Hero01}
@@ -35,7 +36,7 @@ const SignIn = () => {
             </div> */}
           </div>
           <div className="md:w-1/2 p-8">
-            <h2 className="text-2xl font-medium mb-2 text-center text-[#FFA07A]">{t('welcome')}</h2>
+            <h2 className="text-2xl font-medium mb-2 text-center text-primary">{t('welcome')}</h2>
             <p className="text-gray-500 mb-6 text-center">Unleash your inner beauty. Log in now.</p>
 
             {/* form sign in here  */}
@@ -47,6 +48,7 @@ const SignIn = () => {
                 <img src={OrVector02} alt="vector" />
               </div>
               <a
+                href={getOauthGoogleUrl()}
                 className={cn(
                   buttonVariants({ variant: 'outline' }),
                   'w-full mb-4 flex items-center justify-center cursor-pointer',
@@ -57,7 +59,7 @@ const SignIn = () => {
               </a>
               <p className="mt-4 text-sm text-gray-600">
                 Haven't an account yet?{' '}
-                <Link to={configs.routes.signUp} className="text-[#FFA07A] hover:underline">
+                <Link to={configs.routes.signUp} className="text-primary hover:underline">
                   Create an Account
                 </Link>
               </p>
