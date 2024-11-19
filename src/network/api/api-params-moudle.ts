@@ -28,3 +28,7 @@ export interface signInParams {
   email: string
   password: string
 }
+
+export interface ICommonResponse {
+  message?: string
+}

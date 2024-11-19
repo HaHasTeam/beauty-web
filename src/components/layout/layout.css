@@ -1,0 +1,10 @@
+.primary-layout {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.primary-layout footer {
+  margin-top: auto;
+}

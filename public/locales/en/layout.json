@@ -1,28 +1,242 @@
 {
   "welcome": "Welcome to Allure",
   "header": {
-    "login": "Đăng nhập",
-    "logout": "Thoát",
-    "profile": "Hồ sơ của tôi",
-    "allCategories": "Tất cả danh mục",
-    "loginGoogle": "Đăng nhập với Google"
+    "login": "Login",
+    "logout": "Logout",
+    "profile": "My Profile",
+    "allCategories": "All Categories",
+    "loginGoogle": "Login with Google",
+    "loginOrRegister": "Login/Register",
+    "shoppingCart": "Shopping Cart",
+    "notification": "Notifications"
   },
   "profile": {},
-
-  "error": {
-    "loginError": "Đăng nhập không thành công",
-    "logoutError": "Đăng xuất không thành công",
-    "noToken": "Bạn Chưa đăng nhập",
-    "errorLoading": "Đã xảy ra lỗi. Vui lòng thử lại sau",
-    "errorSubmit": "Nộp bài không thành công"
+  "home": {
+    "consultantTitle": "Beauty Consulting",
+    "standardConsultantTitle": "Standard Consultation",
+    "premiumConsultantTitle": "Premium Consultation",
+    "standardConsultantDescription": "Get a detailed beauty analysis based on your responses to a comprehensive beauty questionnaire.",
+    "premiumConsultantDescription": "Experience a live, one-on-one video consultation with an expert, tailored to address your specific beauty goals.",
+    "exclusiveBeautyOffersTitle": "Exclusive Beauty Offers",
+    "preOderCardTitle": "Pre-orders",
+    "groupBuyingDealsCardTitle": "Group-Buying Deals",
+    "recommendProductsTitle": "Recommend Products"
   },
-
-  "errorNotification": "Oops, có chút sự cố, bạn chờ một lát nha!",
-  "loginRcm": "Đăng nhập để cập nhật kỹ năng bạn nha!",
+  "productCard": {
+    "currentPrice": "{{price, currency}}",
+    "price": "{{price, currency}}",
+    "soldFlashSale": "Sold {{amount}}",
+    "soldInPastMonth": "{{amount}} bought in past month"
+  },
+  "productTag": {
+    "bestSeller": "Best Seller",
+    "limitedEdition": "Limited Edition",
+    "newArrival": "New Arrival",
+    "hotDeal": "Hot Deal",
+    "flashSale": "Flash Sale"
+  },
+  "flashSale": {
+    "title": "Flash Sale"
+  },
+  "footer": {
+    "contactTitle": "Discover nature's beauty with our natural care products."
+  },
+  "error": {
+    "loginError": "Login unsuccessful",
+    "logoutError": "Logout unsuccessful",
+    "noToken": "You are not logged in",
+    "errorLoading": "An error occurred. Please try again later",
+    "errorSubmit": "Submission unsuccessful"
+  },
+  "errorNotification": "Oops, there was a problem, please wait a moment!",
+  "loginRcm": "Log in to update your skills!",
   "facebook": "Facebook",
   "button": {
-    "goBack": "Quay lại"
+    "goBack": "Go Back",
+    "preOderAction": "Pre-Order Now",
+    "groupBuyingAction": "Explore Group-Buy Deals",
+    "addToCard": "Add to Cart",
+    "seeAll": "See All",
+    "viewAll": "View All"
   },
-
-  "noData": "Không tìm thấy dữ liệu phù hợp"
+  "noData": "No matching data found",
+  "sell": {
+    "action": "Sell now"
+  },
+  "professional": {
+    "action": "Become Beauty Professional"
+  },
+  "helpCenter": {
+    "name": "Help",
+    "title": "Help Center"
+  },
+  "language": {
+    "title": "Language",
+    "english": "EN",
+    "vietnamese": "VN"
+  },
+  "search": {
+    "result": "Search results for {{keyword}}: {{total}} data"
+  },
+  "filter": {
+    "title": "Filter",
+    "reset": "Reset",
+    "apply": "Apply",
+    "currency": "$",
+    "filterBy": "Filter by",
+    "newest": "Newest",
+    "hasImage": "Has image",
+    "numberOfStar": "{{count}} star"
+  },
+  "sort": {
+    "title": "Sort by",
+    "related": "Related",
+    "lasted": "Lasted",
+    "trend": "Trend",
+    "price": "Price",
+    "lowToHigh": "Low to High",
+    "highToLow": "High to Low"
+  },
+  "empty": {
+    "search": {
+      "title": "No results found",
+      "description": "Try adjusting your search to find what you are looking for",
+      "button": "Search again"
+    },
+    "image": {
+      "title": "No images",
+      "description": "Start uploading images",
+      "button": "Upload now"
+    },
+    "document": {
+      "title": "No documents",
+      "description": "Start creating your documents",
+      "button": "Create a new document"
+    },
+    "GPS": {
+      "title": "No GPS connection",
+      "description": "Please check for location permission",
+      "button": "Go to GPS settings"
+    },
+    "setupCompleted": {
+      "title": "Setup completed",
+      "description": "Congratulations! You are all set up!",
+      "button": "OK"
+    },
+    "inbox": {
+      "title": "Your inbox is empty",
+      "description": "All incoming requests will be listed in this folder",
+      "button": "OK"
+    },
+    "message": {
+      "title": "No messages",
+      "description": "You have no active chats",
+      "button": "Start a new chat"
+    },
+    "creditCard": {
+      "title": "No credit cards",
+      "description": "Please add some credit card to your account",
+      "button": "Add a credit card"
+    },
+    "cart": {
+      "title": "Your cart is empty",
+      "description": "Check out what's trending",
+      "button": "Discover Products"
+    },
+    "favorite": {
+      "title": "Favorites",
+      "description": "No favorites saved yet",
+      "button": "Discover Products"
+    },
+    "notification": {
+      "title": "No Notifications",
+      "description": "No notifications enabled",
+      "button": "OK"
+    },
+    "schedule": {
+      "title": "Your schedule is empty",
+      "description": "There are no appointments scheduled",
+      "button": "Book an appointment"
+    },
+    "wallet": {
+      "title": "Wallet",
+      "description": "Your wallet is empty. Please add payment methods first.",
+      "button": "Add payment method"
+    },
+    "caughtUp": {
+      "title": "You're all caught up!",
+      "description": "Check back later for new tasks",
+      "button": "OK"
+    }
+  },
+  "productDetail": {
+    "addToCart": "Add to Cart",
+    "buyNow": "Buy Now",
+    "quantity": "Quantity",
+    "total": "Total",
+    "priceDetail": "Price Detail",
+    "descriptionTitle": "Description",
+    "breadcrumbProductName": "{{name}}",
+    "brandDeal": "Brand Deal",
+    "classification": "Classifications"
+  },
+  "event": {
+    "finishIn": "Finish In"
+  },
+  "reviews": {
+    "title": "Reviews",
+    "writeReview": "Write a Review",
+    "rating": "Rating",
+    "yourRating": "Your Rating",
+    "addReview": "Add Review",
+    "averageRating": "Average Rating",
+    "viewAllReviews": "View All Reviews",
+    "reviewTitle": "Review Title",
+    "reviewContent": "Review Content",
+    "reviewBy": "Review By",
+    "reviewDate": "Review Date",
+    "customerReview": "Customer Reviews",
+    "overall": "Overall",
+    "reviewCount": "{{amount}} reviews"
+  },
+  "brand": {
+    "title": "HANGY",
+    "lastOnline": "Online {{time}} Ago",
+    "reviews": {
+      "title": "Reviews",
+      "count": "{{count}}k"
+    },
+    "responseRate": {
+      "title": "Response Rate",
+      "value": "{{rate}}%"
+    },
+    "responseTime": {
+      "title": "Response Time",
+      "value": "within {{time}}"
+    },
+    "joined": {
+      "title": "Joined",
+      "value": "{{time}} ago"
+    },
+    "products": {
+      "title": "Products",
+      "count": "{{count}}"
+    },
+    "followers": {
+      "title": "Followers",
+      "count": "{{count}}k"
+    },
+    "chatNow": "Chat Now",
+    "viewShop": "View Shop"
+  },
+  "breadcrumb": {
+    "home": "Home"
+  },
+  "date": {
+    "toLocaleDateString": "{{val, MM/DD/YYYY}}"
+  },
+  "notification": {
+    "viewAll": "View All",
+    "viewNotification": "View Notifications"
+  }
 }

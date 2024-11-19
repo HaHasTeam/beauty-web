@@ -1,5 +1,5 @@
 import { FC, PropsWithChildren } from 'react'
-import { Navigate } from 'react-router-dom'
+import { Navigate, Outlet } from 'react-router-dom'
 import { useShallow } from 'zustand/react/shallow'
 
 import LoadingIcon from '@/components/Loading'
@@ -19,8 +19,7 @@ const GuestGuard: FC<PropsWithChildren> = ({ children }) => {
   if (isLoading) return <LoadingIcon />
 
   if (isAuthenticated) return <Navigate to={configs.routes.home} replace />
-
-  return <>{children}</>
+  return <>{children || <Outlet />}</>
 }
 
 export default GuestGuard

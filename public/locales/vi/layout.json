@@ -1,28 +1,244 @@
 {
-  "welcome": "Chào mứng tới Allure",
+  "welcome": "Chào mừng đến với Allure",
   "header": {
     "login": "Đăng nhập",
-    "logout": "Thoát",
+    "logout": "Đăng xuất",
     "profile": "Hồ sơ của tôi",
     "allCategories": "Tất cả danh mục",
-    "loginGoogle": "Đăng nhập với Google"
+    "loginGoogle": "Đăng nhập với Google",
+    "loginOrRegister": "Login/Register",
+    "shoppingCart": "Shopping Cart",
+    "notification": "Notifications"
   },
   "profile": {},
-
+  "home": {
+    "consultantTitle": "Tư vấn sắc đẹp",
+    "standardConsultantTitle": "Tư vấn tiêu chuẩn",
+    "premiumConsultantTitle": "Tư vấn cao cấp",
+    "standardConsultantDescription": "Nhận phân tích sắc đẹp chi tiết dựa trên câu trả lời của bạn cho bảng câu hỏi toàn diện về sắc đẹp.",
+    "premiumConsultantDescription": "Trải nghiệm tư vấn trực tiếp một-một qua video với chuyên gia, được thiết kế để đáp ứng mục tiêu sắc đẹp cụ thể của bạn.",
+    "exclusiveBeautyOffersTitle": "Ưu đãi sắc đẹp độc quyền",
+    "preOderCardTitle": "Đơn đặt trước",
+    "groupBuyingDealsCardTitle": "Ưu đãi mua chung",
+    "recommendProductsTitle": "Gợi ý sản phẩm"
+  },
+  "productCard": {
+    "currentPrice": "{{price, currency}}",
+    "price": "{{price, currency}}",
+    "soldFlashSale": "Đã bán {{amount}}",
+    "soldInPastMonth": "Đã bán {{amount}} trong tháng qua"
+  },
+  "productTag": {
+    "bestSeller": "Bán chạy nhất",
+    "limitedEdition": "Phiên bản giới hạn",
+    "newArrival": "Hàng mới về",
+    "hotDeal": "Ưu đãi hấp dẫn",
+    "flashSale": "Flash sale"
+  },
+  "flashSale": {
+    "title": "Flash Sale"
+  },
+  "footer": {
+    "contactTitle": "Discover nature's beauty with our natural care products."
+  },
   "error": {
     "loginError": "Đăng nhập không thành công",
     "logoutError": "Đăng xuất không thành công",
-    "noToken": "Bạn Chưa đăng nhập",
+    "noToken": "Bạn chưa đăng nhập",
     "errorLoading": "Đã xảy ra lỗi. Vui lòng thử lại sau",
-    "errorSubmit": "Nộp bài không thành công"
+    "errorSubmit": "Nộp không thành công"
   },
-
-  "errorNotification": "Oops, có chút sự cố, bạn chờ một lát nha!",
-  "loginRcm": "Đăng nhập để cập nhật kỹ năng bạn nha!",
+  "errorNotification": "Rất tiếc, có sự cố xảy ra, vui lòng chờ một chút!",
+  "loginRcm": "Đăng nhập để cập nhật kỹ năng của bạn!",
   "facebook": "Facebook",
   "button": {
-    "goBack": "Quay lại"
+    "goBack": "Quay lại",
+    "preOderAction": "Đặt trước ngay",
+    "groupBuyingAction": "Khám phá ưu đãi mua chung",
+    "addToCard": "Thêm vào giỏ",
+    "seeAll": "Xem tất cả",
+    "viewAll": "Xem tất cả"
+  },
+  "noData": "Không tìm thấy dữ liệu phù hợp",
+  "sell": {
+    "action": "Sell now"
+  },
+  "professional": {
+    "action": "Become Beauty Professional"
+  },
+  "helpCenter": {
+    "name": "Help",
+    "title": "Help Center"
+  },
+  "language": {
+    "title": "Language",
+    "english": "EN",
+    "vietnamese": "VN"
   },
 
-  "noData": "Không tìm thấy dữ liệu phù hợp"
+  "search": {
+    "result": "Search results for {{keyword}}: {{total}} data"
+  },
+
+  "filter": {
+    "title": "Filter",
+    "reset": "Reset",
+    "apply": "Apply",
+    "currency": "đ",
+    "filterBy": "Lọc theo",
+    "newest": "Mới nhất",
+    "hasImage": "Có hình ảnh",
+    "numberOfStar": "{{count}} sao"
+  },
+  "sort": {
+    "title": "Sort by",
+    "related": "Related",
+    "lasted": "Lasted",
+    "trend": "Trend",
+    "price": "Price",
+    "lowToHigh": "Low to High",
+    "highToLow": "High to Low"
+  },
+  "empty": {
+    "search": {
+      "title": "No results found",
+      "description": "Try adjusting your search to find what you are looking for",
+      "button": "Search again"
+    },
+    "image": {
+      "title": "No images",
+      "description": "Start uploading images",
+      "button": "Upload now"
+    },
+    "document": {
+      "title": "No documents",
+      "description": "Start creating your documents",
+      "button": "Create a new document"
+    },
+    "GPS": {
+      "title": "No GPS connection",
+      "description": "Please check for location permission",
+      "button": "Go to GPS settings"
+    },
+    "setupCompleted": {
+      "title": "Setup completed",
+      "description": "Congratulations! You are all set up!",
+      "button": "OK"
+    },
+    "inbox": {
+      "title": "Your inbox is empty",
+      "description": "All incoming requests will be listed in this folder",
+      "button": "OK"
+    },
+    "message": {
+      "title": "No messages",
+      "description": "You have no active chats",
+      "button": "Start a new chat"
+    },
+    "creditCard": {
+      "title": "No credit cards",
+      "description": "Please add some credit card to your account",
+      "button": "Add a credit card"
+    },
+    "cart": {
+      "title": "Your cart is empty",
+      "description": "Check out what's trending",
+      "button": "Discover Products"
+    },
+    "favorite": {
+      "title": "Favorites",
+      "description": "No favorites saved yet",
+      "button": "Discover Products"
+    },
+    "notification": {
+      "title": "No Notifications",
+      "description": "No notifications enabled",
+      "button": "OK"
+    },
+    "schedule": {
+      "title": "Your schedule is empty",
+      "description": "There are no appointments scheduled",
+      "button": "Book an appointment"
+    },
+    "wallet": {
+      "title": "Wallet",
+      "description": "Your wallet is empty. Please add payment methods first.",
+      "button": "Add payment method"
+    },
+    "caughtUp": {
+      "title": "You're all caught up!",
+      "description": "Check back later for new tasks",
+      "button": "OK"
+    }
+  },
+  "productDetail": {
+    "addToCart": "Thêm vào giỏ",
+    "buyNow": "Mua ngay",
+    "quantity": "Số lượng",
+    "total": "Tạm tính",
+    "priceDetail": "Chi tiết giá",
+    "descriptionTitle": "Mô tả thêm",
+    "breadcrumbProductName": "{{name}}",
+    "brandDeal": "Brand Deal",
+    "classification": "Classifications"
+  },
+  "event": {
+    "finishIn": "Kết thúc trong"
+  },
+  "reviews": {
+    "title": "Reviews",
+    "writeReview": "Write a Review",
+    "rating": "Rating",
+    "yourRating": "Your Rating",
+    "addReview": "Add Review",
+    "averageRating": "Average Rating",
+    "viewAllReviews": "View All Reviews",
+    "reviewTitle": "Review Title",
+    "reviewContent": "Review Content",
+    "reviewBy": "Review By",
+    "reviewDate": "Review Date",
+    "customerReview": "Khách hàng đánh giá",
+    "overall": "Tổng quan",
+    "reviewCount": "{{amount}} reviews"
+  },
+  "brand": {
+    "title": "HANGY",
+    "lastOnline": "Online {{time}} Ago",
+    "reviews": {
+      "title": "Reviews",
+      "count": "{{count}}k"
+    },
+    "responseRate": {
+      "title": "Response Rate",
+      "value": "{{rate}}%"
+    },
+    "responseTime": {
+      "title": "Response Time",
+      "value": "within {{time}}"
+    },
+    "joined": {
+      "title": "Joined",
+      "value": "{{time}} ago"
+    },
+    "products": {
+      "title": "Products",
+      "count": "{{count}}"
+    },
+    "followers": {
+      "title": "Followers",
+      "count": "{{count}}k"
+    },
+    "chatNow": "Chat Now",
+    "viewShop": "View Shop"
+  },
+  "breadcrumb": {
+    "home": "Trang chủ"
+  },
+  "date": {
+    "toLocaleDateString": "{{val, DD/MM/YYYY}}"
+  },
+  "notification": {
+    "viewAll": "Xem tất cả",
+    "viewNotification": "Xem thông báo"
+  }
 }
