@@ -2,6 +2,7 @@ import AuthLayout from '@/components/layout/AuthLayout'
 import configs from '@/config'
 import ForgotPassword from '@/views/ForgotPassword'
 import Home from '@/views/Home'
+import ResetPassword from '@/views/ResetPassword'
 import SignIn from '@/views/Signin'
 import SignUp from '@/views/Signup'
 
@@ -23,6 +24,11 @@ const publicRoutes = [
         path: configs.routes.forgotPassword,
         // element: <ForgotPassword />,
         element: <ForgotPassword />,
+      },
+      {
+        path: configs.routes.resetPassword,
+        // element: <ForgotPassword />,
+        element: <ResetPassword />,
       },
       {
         path: configs.routes.checkEmail,

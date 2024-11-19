@@ -14,3 +14,8 @@ export interface GetCityTotalNumberModel {
 export type GetCityTotal = GetCityTotalNumberModel[]
 
 export type LoginResponse = IAccount
+export interface IToken {
+  accountId: string
+  iat: number
+  exp: number
+}

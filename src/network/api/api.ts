@@ -1,15 +1,22 @@
 import { request } from '@/network/axios'
 import { ActionResponse } from '@/types'
 
-import { createAccountParams, getCanvasData, sendRequestResetPasswordParams, signInParams } from './api-params-moudle'
+import {
+  createAccountParams,
+  getCanvasData,
+  resetPasswordParams,
+  sendRequestResetPasswordParams,
+  signInParams,
+} from './api-params-moudle'
 import { GetCityTotal, LoginResponse } from './api-res-model'
 
-enum APIS {
-  GET_CITY_TOTAL_NUMBER = '/xxxx/xxxx/xxxxx',
-  CREATE_ACCOUNT = '/accounts',
-  SIGN_IN = '/auth/login',
-  SIGN_UP = '/auth/regiset',
-  REQUEST_RESET_PASSWORD = '/accounts/request-reset-pass',
+const APIS = {
+  GET_CITY_TOTAL_NUMBER: '/xxxx/xxxx/xxxxx',
+  CREATE_ACCOUNT: '/accounts',
+  SIGN_IN: '/auth/login',
+  SIGN_UP: '/auth/register',
+  REQUEST_RESET_PASSWORD: '/accounts/request-reset-pass',
+  SET_PASSWORD: (accountId: string) => `/accounts/modify-password/${accountId}`,
 }
 
 export const getCityTotalNumber = (params: getCanvasData) =>
@@ -22,3 +29,6 @@ export const login = async (data: signInParams) => await request.post<ActionResp
 
 export const requestResetPassword = async (data: sendRequestResetPasswordParams) =>
   await request.post<ActionResponse<null>>(APIS.REQUEST_RESET_PASSWORD, data)
+
+export const setPassword = async (data: resetPasswordParams) =>
+  await request.put<ActionResponse<null>>(APIS.SET_PASSWORD(data.accountId), data)
