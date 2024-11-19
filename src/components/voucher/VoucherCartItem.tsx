@@ -2,7 +2,8 @@ import { AlertCircle } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
 import { Button } from '../ui/button'
-import { Card, CardContent } from '../ui/card'
+import { CardContent } from '../ui/card'
+import { RadioGroupItem } from '../ui/radio-group'
 
 interface VoucherCartItemProps {
   discount: string
@@ -11,11 +12,20 @@ interface VoucherCartItemProps {
   expiredDate: string
   tag: string | null
   brandLogo: string
+  voucherId: string
 }
-const VoucherCartItem = ({ discount, minimum, saved, expiredDate, tag, brandLogo }: VoucherCartItemProps) => {
+const VoucherCartItem = ({
+  discount,
+  minimum,
+  saved,
+  expiredDate,
+  tag,
+  brandLogo,
+  voucherId,
+}: VoucherCartItemProps) => {
   const { t } = useTranslation()
   return (
-    <Card className="border border-gray-200">
+    <div className="border border-gray-100 rounded-lg shadow-md">
       <CardContent className="p-2">
         <div className="flex gap-2 items-center">
           {/* Logo Section */}
@@ -23,33 +33,35 @@ const VoucherCartItem = ({ discount, minimum, saved, expiredDate, tag, brandLogo
             <img src={brandLogo} alt="Brand logo" className="w-full h-full object-contain" />
           </div>
           {/* Content Section */}
-          <div className="flex-1">
+          <div className="flex-1 items-center">
             <div className="flex justify-between items-start">
               <div>
                 <div className="text-lg font-medium">Giảm {discount}</div>
-                {minimum && <div className="text-sm text-muted-foreground"> Đơn Tối Thiểu {minimum}đ </div>}
+                {minimum && <div className="text-sm"> Đơn Tối Thiểu {minimum}đ </div>}
                 <span className="inline-block border border-red-500 text-red-500 text-xs px-2 py-0.5 rounded mt-1">
                   {tag}
                 </span>
               </div>
-              {saved && <Button className="bg-red-500 hover:bg-red-600">Lưu</Button>}
             </div>
-            <div className="mt-2 text-sm text-muted-foreground">
-              {t('date.expiredDate')} {t('date.toLocaleDateString', { val: expiredDate })}
-              <Button variant="link" className="text-blue-500 p-0 h-auto text-sm ml-2">
-                {t('voucher.condition')}
-              </Button>
+            <div className="mt-1 text-xs text-muted-foreground">
+              {t('date.expiredDate')}: {t('date.toLocaleDateString', { val: expiredDate })}
+              <span className="text-blue-500 p-0 h-auto text-sm ml-2">{t('voucher.condition')}</span>
             </div>
           </div>
+          {saved ? (
+            <RadioGroupItem value={voucherId} id={voucherId} />
+          ) : (
+            <Button className="bg-red-500 hover:bg-red-600">Lưu</Button>
+          )}
         </div>
 
         {/* Warning Message */}
-        <div className="mt-3 flex items-center gap-2 text-sm text-red-500 bg-red-50 p-2 rounded">
-          <AlertCircle className="w-4 h-4" />
-          Vui lòng chọn sản phẩm từ Shop để áp dụng Voucher này
-        </div>
       </CardContent>
-    </Card>
+      <div className="mt-1 flex items-center gap-2 text-sm text-red-500 bg-red-50 p-2 rounded">
+        <AlertCircle className="w-4 h-4" />
+        {t('voucher.chooseProductBrandAlert')}
+      </div>
+    </div>
   )
 }
 

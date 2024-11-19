@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import configs from '@/config'
+import { IProductCart } from '@/types/product.interface'
 
 import ProductCardLandscape from '../product/ProductCardLandscape'
 import { Button } from '../ui/button'
@@ -13,15 +14,30 @@ interface CartItemProps {
   brandName: string
   brandId: string
   cartItemId: string
+  selectedProducts: string[]
+  products: IProductCart[]
+  onSelectBrand: (productIds: string[], isSelected: boolean) => void
 }
-const CartItem = ({ brandName, brandId, cartItemId }: CartItemProps) => {
+const CartItem = ({ brandName, brandId, cartItemId, products, selectedProducts, onSelectBrand }: CartItemProps) => {
   const { t } = useTranslation()
-  const products = [{ id: '1' }, { id: '2' }]
+  const productIds = products.map((product) => product.id)
+  const isBrandSelected = products.every((product) => selectedProducts.includes(product.id))
+
+  // Handler for brand-level checkbox
+  const handleBrandSelect = () => {
+    onSelectBrand(productIds, !isBrandSelected)
+  }
+
+  // Handler for individual product selection
+  const handleSelectProduct = (productId: string, isSelected: boolean) => {
+    onSelectBrand([productId], isSelected)
+  }
   return (
     <div className="w-full bg-white p-4 rounded-lg space-y-2">
       {/* Brand Header */}
       <div className="flex items-center gap-2 mb-4">
-        <Checkbox id={cartItemId} />
+        {/* group product of brand checkbox */}
+        <Checkbox id={cartItemId} checked={isBrandSelected} onClick={handleBrandSelect} />
         <Store className="w-5 h-5 text-red-500" />
         <Link to={configs.routes.brands + `/${brandId}`}>
           <span className="font-medium">{brandName}</span>
@@ -33,16 +49,19 @@ const CartItem = ({ brandName, brandId, cartItemId }: CartItemProps) => {
       </div>
 
       {/* Product Cards */}
-      {products.map((product) => (
+      {products?.map((product) => (
         <ProductCardLandscape
-          key={product.id}
-          productImage={'https://i.pinimg.com/736x/c9/74/71/c97471cc7179e3164dfacba52cf957ea.jpg'}
-          productName={'Rom&nd Juicy lasting tint Lip Tint 5.5 g Nr. 09 - Litchi Coral'}
-          classification={'Rose'}
-          currentPrice={10000}
-          price={1190}
-          productId={''}
-          eventType={'LiveStream'}
+          key={product?.id}
+          productImage={product?.image}
+          productName={product?.name}
+          classifications={product?.classifications}
+          currentPrice={product?.currentPrice}
+          price={product?.price}
+          productId={product?.id}
+          eventType={product?.eventType}
+          isSelected={selectedProducts.includes(product?.id)}
+          onChooseProduct={() => handleSelectProduct(product?.id, !selectedProducts.includes(product?.id))}
+          productQuantity={product?.quantity}
         />
       ))}
 
@@ -50,7 +69,7 @@ const CartItem = ({ brandName, brandId, cartItemId }: CartItemProps) => {
       <div className="flex items-center gap-3 text-sm">
         <Tag className="w-4 h-4 text-red-500" />
         <span>Voucher giảm đến ₫21k</span>
-        <VoucherCartList triggerText={t('cart.viewMoreVoucher')} />
+        <VoucherCartList triggerText={t('cart.viewMoreVoucher')} brandName="Romand" />
       </div>
     </div>
   )

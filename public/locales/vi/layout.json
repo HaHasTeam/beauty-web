@@ -78,11 +78,9 @@
     "english": "EN",
     "vietnamese": "VN"
   },
-
   "search": {
     "result": "Search results for {{keyword}}: {{total}} data"
   },
-
   "filter": {
     "title": "Filter",
     "reset": "Reset",
@@ -239,7 +237,8 @@
   },
   "date": {
     "toLocaleDateString": "{{val, DD/MM/YYYY}}",
-    "expiredDate": "HSD"
+    "expiredDate": "Hạn sử dụng",
+    "exp": "HSD"
   },
   "notification": {
     "viewAll": "Xem tất cả",
@@ -256,7 +255,13 @@
     "price": "Price",
     "quantity": "Quantity",
     "totalPrice": "Total Price",
-    "viewMoreVoucher": "View More Voucher"
+    "viewMoreVoucher": "View More Voucher",
+    "deleteAll": "Delete All",
+    "products": "products",
+    "saved": "Saved",
+    "selectAll": "Select All",
+    "voucher": "Voucher",
+    "selectVoucher": "Select or Enter Voucher"
   },
   "address": {
     "title": "Address",
@@ -288,6 +293,20 @@
     "used": "Used",
     "expired": "Expired",
     "codePlaceholder": "Enter your voucher code here",
-    "input": "Enter your voucher code here"
+    "input": "Enter your voucher code here",
+    "condition": "Condition",
+    "chooseProductBrandAlert": "Vui lòng chọn sản phẩm từ Brand để áp dụng Voucher này",
+    "chooseProductAppAlert": "Vui lòng chọn sản phẩm để sử dụng ưu đãi.",
+    "description": "Enter or choose 1 voucher",
+    "help": "Help",
+    "chooseVoucher": "Choose voucher"
+  },
+  "dialog": {
+    "cancel": "Cancel",
+    "ok": "OK",
+    "confirmDelete": "Are you sure you want to delete this item?",
+    "confirm": "Confirm",
+    "prompt": "Prompt",
+    "inputPlaceholder": "Enter your input here"
   }
 }

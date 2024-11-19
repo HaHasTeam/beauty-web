@@ -1,6 +1,10 @@
 import { ChevronDown, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router-dom'
+
+import configs from '@/config'
+import { IClassification } from '@/types/classification.interface'
 
 import IncreaseDecreaseButton from '../IncreaseDecreaseButton'
 import { Button } from '../ui/button'
@@ -11,23 +15,29 @@ interface ProductCardLandscapeProps {
   productImage: string
   productId: string
   productName: string
-  classification: string
+  classifications: IClassification[]
   eventType: string
   currentPrice: number
   price: number
+  productQuantity: number
+  isSelected: boolean
+  onChooseProduct: (productId: string) => void
 }
 const ProductCardLandscape = ({
   productImage,
   productId,
   productName,
-  classification,
+  classifications,
   currentPrice,
   eventType,
   price,
+  isSelected,
+  onChooseProduct,
+  productQuantity,
 }: ProductCardLandscapeProps) => {
   const { t } = useTranslation()
-  const [quantity, setQuantity] = useState(1)
-  const [inputValue, setInputValue] = useState('1')
+  const [quantity, setQuantity] = useState(productQuantity ?? 1)
+  const [inputValue, setInputValue] = useState(productQuantity.toString() ?? '1')
 
   const decreaseQuantity = () => {
     if (quantity > 1) {
@@ -62,26 +72,34 @@ const ProductCardLandscape = ({
       }
     }
   }
+
   const totalPrice = currentPrice && currentPrice > 0 ? currentPrice * quantity : price * quantity
+  const selectedClassifications = classifications.filter((classification) => classification.selected)
   return (
     <div className="w-full p-4 border-b border-gray-200">
       <div className="w-full flex gap-2 items-center">
         <div className="flex gap-1 items-center w-[44%]">
-          <Checkbox id={productId} />
-          <div className="w-20 h-20">
-            <img src={productImage} alt={productName} className="object-cover w-full h-full" />
-          </div>
+          <Checkbox id={productId} checked={isSelected} onClick={() => onChooseProduct(productId)} />
+          <Link to={configs.routes.products + '/' + productId}>
+            <div className="w-20 h-20">
+              <img src={productImage} alt={productName} className="object-cover w-full h-full" />
+            </div>
+          </Link>
           <div className="flex flex-col gap-1">
-            <h3 className="font-semibold text-sm line-clamp-2">{productName}</h3>
+            <Link to={configs.routes.products + '/' + productId}>
+              <h3 className="font-semibold text-sm line-clamp-2">{productName}</h3>
+            </Link>
             <div>
               <ProductTag tag={eventType} size="small" />
             </div>
           </div>
         </div>
         <div className="flex items-center gap-2 w-[17%]">
-          <span className="text-muted-foreground text-sm">Phân Loại Hàng:</span>
+          <span className="text-muted-foreground text-sm">{t('productDetail.classification')}</span>
           <Button variant="outline" size="sm" className="h-7">
-            {classification}
+            {selectedClassifications.map((classification) => (
+              <span key={classification.id}>{classification.name}</span>
+            ))}
             <ChevronDown className="w-full h-full" />
           </Button>
         </div>
