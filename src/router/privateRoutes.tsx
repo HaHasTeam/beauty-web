@@ -1,7 +1,8 @@
-import { Navigate } from 'react-router-dom'
-
-import MainLayout from '@/components/layout/MainLayout'
+import PrimaryLayout from '@/components/layout/PrimaryLayout'
 import configs from '@/config'
+import Cart from '@/views/Cart'
+import Checkout from '@/views/Checkout'
+import Home from '@/views/Home'
 
 import AuthGuard from './guard/AuthGuard'
 
@@ -10,7 +11,8 @@ const privateRoutes = [
     element: (
       // <VerifiedEmailGuard>
       <AuthGuard>
-        <MainLayout />
+        {/* <MainLayout /> */}
+        <PrimaryLayout />
       </AuthGuard>
       // </VerifiedEmailGuard>
     ),
@@ -18,7 +20,15 @@ const privateRoutes = [
       {
         path: configs.routes.home,
         index: true,
-        element: <Navigate to={configs.routes.messages} />,
+        element: <Home />,
+      },
+      {
+        path: configs.routes.cart,
+        element: <Cart />,
+      },
+      {
+        path: configs.routes.checkout,
+        element: <Checkout />,
       },
       {
         path: configs.routes.messages,

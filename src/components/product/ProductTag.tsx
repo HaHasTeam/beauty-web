@@ -30,7 +30,7 @@ export default function ProductTag({ tag, text }: ProductTagProps) {
       tagText = t('productTag.hotDeal')
       break
     case 'DealPercent':
-      tagColorClass = 'bg-rose-500 text-white'
+      tagColorClass = 'bg-red-100 text-red-500'
       break
     case 'Flash Sale':
       tagColorClass = 'bg-orange-200 text-orange-800'

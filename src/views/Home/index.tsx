@@ -1,15 +1,19 @@
 import BeautyConsulting from '@/components/home/BeautyConsulting'
 import BeautyOffers from '@/components/home/BeautyOffers'
 import FlashSale from '@/components/home/FlashSale'
+import HomeBanner from '@/components/home/HomeBanner'
 import RecommendProduct from '@/components/home/RecommendProduct'
 
 function Home() {
   return (
-    <div className="w-[1200px] container mx-auto px-4 py-8 space-y-12">
-      <BeautyConsulting />
-      <BeautyOffers />
-      <FlashSale />
-      <RecommendProduct />
+    <div className="w-full container mx-auto px-4 py-8 ">
+      <div className="w-full lg:px-28 md:px-24 sm:px-16 px-10 space-y-12">
+        <HomeBanner />
+        <BeautyConsulting />
+        <BeautyOffers />
+        <FlashSale />
+        <RecommendProduct />
+      </div>
     </div>
   )
 }
