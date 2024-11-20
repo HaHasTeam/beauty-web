@@ -1,8 +1,10 @@
 import { Ticket, Trash2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router-dom'
 
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
+import configs from '@/config'
 import { ProjectInformationEnum } from '@/types/enum'
 
 import VoucherDialog from '../voucher/VoucherDialog'
@@ -33,7 +35,7 @@ export default function CartFooter({
 
   return (
     <div className="w-full sticky bottom-0 left-0 right-0 border-t bg-secondary rounded-tl-sm rounded-tr-sm">
-      <div className="w-full px-4 py-3 space-y-2">
+      <div className="w-full px-4 py-3 space-y-2 lg:text-base md:text-sm sm:text-xs text-xs">
         {/* Voucher Section */}
         <div className="flex items-center gap-4 justify-end border-b border-primary/20 py-1">
           <div className="flex items-center gap-2">
@@ -52,9 +54,9 @@ export default function CartFooter({
             selectedProducts={selectedProducts}
           />
         </div>
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col md:flex-row items-center justify-between space-y-2">
           {/* Left Section */}
-          <div className="flex items-center gap-6">
+          <div className="w-full md:w-1/3 justify-start flex items-center gap-6">
             <div className="flex items-center gap-2">
               <Checkbox checked={isAllSelected} onClick={onCheckAll} id="select-all" />
               <label htmlFor="select-all" className="text-sm">
@@ -68,9 +70,9 @@ export default function CartFooter({
           </div>
 
           {/* Right Section */}
-          <div className="flex items-center gap-6">
+          <div className="w-full md:w-2/3 flex items-center gap-6">
             {/* Total Section */}
-            <div className="flex items-center gap-4">
+            <div className="w-full justify-end flex items-center gap-4">
               <div>
                 <div className="flex items-center gap-2">
                   <span className="text-lg">
@@ -85,9 +87,12 @@ export default function CartFooter({
                   <span className="text-sm text-red-500"> {t('productCard.price', { price: savedPrice })}</span>
                 </div>
               </div>
-              <Button variant="destructive" className="px-8">
-                {t('cart.checkout')}
-              </Button>
+              <Link
+                to={configs.routes.checkout}
+                className="text-destructive-foreground px-8 py-2 rounded-lg bg-destructive hover:bg-destructive/80"
+              >
+                {t('cart.buy')}
+              </Link>
             </div>
           </div>
         </div>

@@ -1,4 +1,4 @@
-import { Bell, CircleUserRound, HelpCircle, Menu, ShoppingBag, X } from 'lucide-react'
+import { Bell, CircleUserRound, HelpCircle, Menu, ShoppingCart, X } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
@@ -82,7 +82,7 @@ export default function Header() {
             )}
 
             <Link to={configs.routes.cart}>
-              <ShoppingBag />
+              <ShoppingCart />
               <span className="sr-only">{t('header.shoppingCart')}</span>
             </Link>
           </div>
@@ -112,7 +112,7 @@ export default function Header() {
                   setMenuOpen(false)
                 }}
               >
-                <ShoppingBag className="h-5 w-5" />
+                <ShoppingCart className="h-5 w-5" />
                 <span>{t('header.shoppingCart')}</span>
               </Link>
             </div>

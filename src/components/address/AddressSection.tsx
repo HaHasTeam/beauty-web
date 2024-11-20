@@ -13,7 +13,7 @@ interface AddressSectionProps {
 export default function AddressSection({ fullName, phone, address, type }: AddressSectionProps) {
   const { t } = useTranslation()
   return (
-    <Card className="max-w-md mx-auto">
+    <Card className="w-full mx-auto">
       <CardContent className="p-6 space-y-6">
         {/* Delivery Section */}
         <div className="flex justify-between items-start">

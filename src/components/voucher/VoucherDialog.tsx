@@ -1,4 +1,4 @@
-import { AlertCircle, HelpCircle, Play, Video } from 'lucide-react'
+import { AlertCircle, Play, Video } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -16,6 +16,7 @@ import { Input } from '@/components/ui/input'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { ProjectInformationEnum } from '@/types/enum'
 
+import VoucherHelpPopOver from '../help/VoucherHelpDialog'
 import { ScrollArea } from '../ui/scroll-area'
 
 interface VoucherDialogProps {
@@ -67,10 +68,7 @@ export default function VoucherDialog({ triggerComponent, onConfirmVoucher, sele
         <DialogHeader>
           <div className="flex justify-between items-center">
             <DialogTitle>{t('voucher.chooseVoucher', { projectName: ProjectInformationEnum.name })}</DialogTitle>
-            <Button variant="ghost" size="sm" className="text-muted-foreground">
-              {t('voucher.help')}
-              <HelpCircle className="w-4 h-4 ml-1" />
-            </Button>
+            <VoucherHelpPopOver />
           </div>
           <DialogDescription> {t('voucher.description')}</DialogDescription>
         </DialogHeader>

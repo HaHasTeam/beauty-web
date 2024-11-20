@@ -18,9 +18,9 @@ const ProductSort = () => {
     console.log(sortOption)
   }
   return (
-    <div className="w-full bg-accent rounded-sm">
+    <div className="w-full bg-secondary/50 rounded-sm">
       <div className="w-full p-3 flex align-middle items-center gap-2">
-        <span className="text-gray-500 font-semibold">{t('sort.title')}</span>
+        <span className="text-secondary-foreground font-semibold">{t('sort.title')}</span>
         {sortButton.map((bt) => (
           <Button
             className={`${bt.id === sortOption && 'hover:bg-primary/80'}`}

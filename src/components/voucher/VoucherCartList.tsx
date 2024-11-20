@@ -20,22 +20,26 @@ const VoucherCartList = ({ triggerText, brandName }: VoucherCartListProps) => {
       <PopoverTrigger asChild>
         <span className="text-blue-700 hover:cursor-pointer">{triggerText}</span>
       </PopoverTrigger>
-      <PopoverContent className="w-[500px]">
-        <div className="w-full p-2">
-          <h2 className="text-xl font-medium mb-4">{brandName} Voucher</h2>
+      <PopoverContent className="md:w-[500px] w-[320px]">
+        <div className="w-full md:p-2 p-0">
+          <h2 className="text-xl font-medium mb-4">
+            {brandName} {t('voucher.title')}
+          </h2>
 
           {/* Voucher Input */}
-          <div className="flex gap-2 mb-6 bg-secondary/40 p-2 rounded-lg items-center">
+          <div className="md:flex-row flex-col flex gap-2 mb-6 bg-secondary/40 p-2 rounded-lg md:items-center items-start">
             <label
               htmlFor="voucherInput"
               className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
             >
               {t('voucher.title')}
             </label>
-            <Input id="voucherInput" placeholder={t('voucher.input')} className="flex-1 bg-white" />
-            <Button variant="outline" className="w-24">
-              {t('voucher.apply')}
-            </Button>
+            <div className="flex gap-2">
+              <Input id="voucherInput" placeholder={t('voucher.input')} className="flex-1 bg-white" />
+              <Button variant="outline" className="w-24">
+                {t('voucher.apply')}
+              </Button>
+            </div>
           </div>
           <ScrollArea className="h-52">
             <div className="py-2 space-y-2">

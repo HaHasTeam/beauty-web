@@ -258,10 +258,13 @@
     "viewMoreVoucher": "View More Voucher",
     "deleteAll": "Delete All",
     "products": "products",
+    "Products": "Products",
     "saved": "Saved",
     "selectAll": "Select All",
     "voucher": "Voucher",
-    "selectVoucher": "Select or Enter Voucher"
+    "selectVoucher": "Select or Enter Voucher",
+    "buy": "Buy",
+    "action": "Action"
   },
   "address": {
     "title": "Address",

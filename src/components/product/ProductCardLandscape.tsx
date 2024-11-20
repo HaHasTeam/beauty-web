@@ -76,40 +76,48 @@ const ProductCardLandscape = ({
   const totalPrice = currentPrice && currentPrice > 0 ? currentPrice * quantity : price * quantity
   const selectedClassifications = classifications.filter((classification) => classification.selected)
   return (
-    <div className="w-full p-4 border-b border-gray-200">
+    <div className="w-full py-4 border-b border-gray-200">
       <div className="w-full flex gap-2 items-center">
-        <div className="flex gap-1 items-center w-[44%]">
+        <div className="flex gap-1 items-center lg:w-[10%] md:w-[10%] w-[14%]">
           <Checkbox id={productId} checked={isSelected} onClick={() => onChooseProduct(productId)} />
           <Link to={configs.routes.products + '/' + productId}>
-            <div className="w-20 h-20">
+            <div className="lg:w-20 lg:h-20 md:w-14 md:h-14 h-8 w-8">
               <img src={productImage} alt={productName} className="object-cover w-full h-full" />
             </div>
           </Link>
-          <div className="flex flex-col gap-1">
-            <Link to={configs.routes.products + '/' + productId}>
-              <h3 className="font-semibold text-sm line-clamp-2">{productName}</h3>
-            </Link>
-            <div>
-              <ProductTag tag={eventType} size="small" />
+        </div>
+
+        <div className="flex md:flex-row flex-col lg:w-[65%] md:w-[65%] sm:w-[34%] w-[34%] gap-2">
+          <div className="order-1 flex gap-1 items-center lg:w-[50%] md:w-[35%] w-full">
+            <div className="flex flex-col gap-1">
+              <Link to={configs.routes.products + '/' + productId}>
+                <h3 className="font-semibold lg:text-sm text-xs line-clamp-2">{productName}</h3>
+              </Link>
+              <div>
+                <ProductTag tag={eventType} size="small" />
+              </div>
             </div>
           </div>
+          <div className="order-3 md:order-2 flex items-center gap-2 lg:w-[30%] md:w-[40%] w-full">
+            <span className="text-muted-foreground lg:text-sm text-xs">{t('productDetail.classification')}</span>
+            <Button variant="outline" size="sm" className="h-7">
+              {selectedClassifications.map((classification) => (
+                <span key={classification.id}>{classification.name}</span>
+              ))}
+              <ChevronDown className="w-full h-full" />
+            </Button>
+          </div>
+          <div className="order-2 md:order-3 w-full md:w-[25%] lg:w-[20%] flex gap-1 items-center">
+            <span className="text-red-500 lg:text-lg md:text-sm sm:text-xs text-xs font-medium">
+              {t('productCard.currentPrice', { price: currentPrice })}
+            </span>
+            <span className="text-gray-400 lg:text-sm text-xs line-through">
+              {t('productCard.price', { price: price })}
+            </span>
+          </div>
         </div>
-        <div className="flex items-center gap-2 w-[17%]">
-          <span className="text-muted-foreground text-sm">{t('productDetail.classification')}</span>
-          <Button variant="outline" size="sm" className="h-7">
-            {selectedClassifications.map((classification) => (
-              <span key={classification.id}>{classification.name}</span>
-            ))}
-            <ChevronDown className="w-full h-full" />
-          </Button>
-        </div>
-        <div className=" w-[14%] flex gap-1 items-center">
-          <span className="text-red-500 text-lg font-medium">
-            {t('productCard.currentPrice', { price: currentPrice })}
-          </span>
-          <span className="text-gray-400 text-sm line-through">{t('productCard.price', { price: price })}</span>
-        </div>
-        <div className=" w-[12%]">
+
+        <div className="w-[26%] md:w-[12%] sm:w-[20%]">
           <IncreaseDecreaseButton
             onIncrease={increaseQuantity}
             onDecrease={decreaseQuantity}
@@ -120,12 +128,13 @@ const ProductCardLandscape = ({
             size="small"
           />
         </div>
-        <span className="text-red-500 text-lg font-medium  w-[8%]">
+        <span className="text-red-500 lg:text-lg md:text-sm sm:text-xs text-xs font-medium w-[16%] md:w-[8%] sm:w-[12%] ">
           {t('productCard.currentPrice', { price: totalPrice })}
         </span>
 
-        <div className="w-[3%]"></div>
-        <Trash2 onClick={() => {}} className="text-red-500 hover:cursor-pointer hover:text-red-700" />
+        <div className="w-[7%] sm:w-[5%]">
+          <Trash2 onClick={() => {}} className="text-red-500 hover:cursor-pointer hover:text-red-700" />
+        </div>
       </div>
     </div>
   )

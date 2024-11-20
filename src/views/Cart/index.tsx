@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import CartFooter from '@/components/cart/CartFooter'
+import CartHeader from '@/components/cart/CartHeader'
 import CartItem from '@/components/cart/CartItem'
 import { ICart } from '@/types/cart'
 
@@ -98,9 +99,10 @@ const Cart = () => {
     }
   }, [selectedProducts])
   return (
-    <div className="relative w-full mx-auto px-4 py-5 ">
-      <div className="w-full lg:px-20 md:px-10 sm:px-8 px-3 space-y-3 ">
+    <div className="relative w-full mx-auto py-5 ">
+      <div className="w-full lg:px-12 sm:px-2 px-1 space-y-3 ">
         <h2 className="uppercase font-bold text-xl">{t('cart.title')}</h2>
+        <CartHeader onCheckAll={handleSelectAll} isAllSelected={isAllSelected} />
         {carts.map((cart) => (
           <CartItem
             key={cart.id}
