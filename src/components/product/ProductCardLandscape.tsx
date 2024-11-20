@@ -1,4 +1,4 @@
-import { ChevronDown, Trash2 } from 'lucide-react'
+import { Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
@@ -6,8 +6,8 @@ import { Link } from 'react-router-dom'
 import configs from '@/config'
 import { IClassification } from '@/types/classification.interface'
 
+import ClassificationPopover from '../classification/ClassificationPopover'
 import IncreaseDecreaseButton from '../IncreaseDecreaseButton'
-import { Button } from '../ui/button'
 import { Checkbox } from '../ui/checkbox'
 import ProductTag from './ProductTag'
 
@@ -74,7 +74,6 @@ const ProductCardLandscape = ({
   }
 
   const totalPrice = currentPrice && currentPrice > 0 ? currentPrice * quantity : price * quantity
-  const selectedClassifications = classifications.filter((classification) => classification.selected)
   return (
     <div className="w-full py-4 border-b border-gray-200">
       <div className="w-full flex gap-2 items-center">
@@ -99,13 +98,7 @@ const ProductCardLandscape = ({
             </div>
           </div>
           <div className="order-3 md:order-2 flex items-center gap-2 lg:w-[30%] md:w-[40%] w-full">
-            <span className="text-muted-foreground lg:text-sm text-xs">{t('productDetail.classification')}</span>
-            <Button variant="outline" size="sm" className="h-7">
-              {selectedClassifications.map((classification) => (
-                <span key={classification.id}>{classification.name}</span>
-              ))}
-              <ChevronDown className="w-full h-full" />
-            </Button>
+            <ClassificationPopover classifications={classifications} />
           </div>
           <div className="order-2 md:order-3 w-full md:w-[25%] lg:w-[20%] flex gap-1 items-center">
             <span className="text-red-500 lg:text-lg md:text-sm sm:text-xs text-xs font-medium">

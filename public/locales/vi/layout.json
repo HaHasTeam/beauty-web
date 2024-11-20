@@ -181,7 +181,8 @@
     "descriptionTitle": "Mô tả thêm",
     "breadcrumbProductName": "{{name}}",
     "brandDeal": "Brand Deal",
-    "classification": "Classifications"
+    "classification": "Classifications",
+    "selectOption": "Select Option"
   },
   "event": {
     "finishIn": "Kết thúc trong"

@@ -60,7 +60,10 @@
     "groupBuyingAction": "Explore Group-Buy Deals",
     "addToCard": "Add to Cart",
     "seeAll": "See All",
-    "viewAll": "View All"
+    "viewAll": "View All",
+    "cancel": "Cancel",
+    "ok": "OK",
+    "save": "Save"
   },
   "noData": "No matching data found",
   "sell": {
@@ -181,7 +184,8 @@
     "descriptionTitle": "Description",
     "breadcrumbProductName": "{{name}}",
     "brandDeal": "Brand Deal",
-    "classification": "Classifications"
+    "classification": "Classifications",
+    "selectOption": "Select Option"
   },
   "event": {
     "finishIn": "Finish In"
