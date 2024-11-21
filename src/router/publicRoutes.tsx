@@ -1,4 +1,4 @@
-import AuthLayout from '@/components/layout/AuthLayout'
+import PrimaryLayout from '@/components/layout/PrimaryLayout'
 import configs from '@/config'
 import ForgotPassword from '@/views/ForgotPassword'
 import Home from '@/views/Home'
@@ -45,7 +45,7 @@ const publicRoutes = [
   {
     element: (
       <GuestGuard>
-        <AuthLayout />
+        <PrimaryLayout />
       </GuestGuard>
     ),
     children: [

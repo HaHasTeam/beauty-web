@@ -9,7 +9,7 @@ const routes = {
   messages: '/messages',
   notification: '/notifications',
   explore: '/explore',
-  profile: '/profile',
+  profile: '/account/profile',
   settings: '/settings',
   forgotPassword: '/forgot-password',
   resetPassword: '/reset-pass',
