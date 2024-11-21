@@ -34,8 +34,8 @@ const VoucherCartList = ({ triggerText, brandName }: VoucherCartListProps) => {
             >
               {t('voucher.title')}
             </label>
-            <div className="flex gap-2">
-              <Input id="voucherInput" placeholder={t('voucher.input')} className="flex-1 bg-white" />
+            <div className="flex gap-2 w-full">
+              <Input id="voucherInput" placeholder={t('voucher.input')} className="bg-white" />
               <Button variant="outline" className="w-24">
                 {t('voucher.apply')}
               </Button>

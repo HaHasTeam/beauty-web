@@ -33,4 +33,5 @@ export type IProductCart = {
   id: string
   eventType: string
   quantity: number
+  totalPrice?: number
 }

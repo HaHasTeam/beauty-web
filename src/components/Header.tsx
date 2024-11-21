@@ -98,8 +98,8 @@ export default function Header() {
       {menuOpen && (
         <div className="md:hidden absolute z-20 top-full left-0 w-full bg-white shadow-md border-t">
           <div className="p-4">
-            <div className="flex gap-2">
-              <Link to={configs.routes.notification}>
+            <div className="flex gap-2 items-center">
+              <Link className="flex gap-2" to={configs.routes.notification}>
                 <Bell className="h-5 w-5" />
                 <span> {t('header.notification')}</span>
               </Link>
@@ -107,7 +107,7 @@ export default function Header() {
             <div className="flex gap-2">
               <Link
                 to={configs.routes.cart}
-                className="flex justify-start"
+                className="flex gap-2 items-center justify-start"
                 onClick={() => {
                   setMenuOpen(false)
                 }}
@@ -119,7 +119,7 @@ export default function Header() {
             {!isLoading && isAuthenticated ? (
               <Link
                 to={configs.routes.profile}
-                className="flex justify-start"
+                className="flex gap-2 items-center justify-start"
                 onClick={() => {
                   setMenuOpen(false)
                 }}

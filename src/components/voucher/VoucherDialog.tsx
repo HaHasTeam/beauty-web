@@ -22,7 +22,7 @@ import { ScrollArea } from '../ui/scroll-area'
 interface VoucherDialogProps {
   triggerComponent: React.ReactElement<unknown>
   onConfirmVoucher: (value: string) => void
-  selectedProducts: string[]
+  selectedProducts?: string[]
 }
 export default function VoucherDialog({ triggerComponent, onConfirmVoucher, selectedProducts }: VoucherDialogProps) {
   const { t } = useTranslation()

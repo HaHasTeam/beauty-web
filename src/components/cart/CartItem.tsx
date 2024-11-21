@@ -21,7 +21,7 @@ interface CartItemProps {
 const CartItem = ({ brandName, brandId, cartItemId, products, selectedProducts, onSelectBrand }: CartItemProps) => {
   const { t } = useTranslation()
   const productIds = products.map((product) => product.id)
-  const isBrandSelected = products.every((product) => selectedProducts.includes(product.id))
+  const isBrandSelected = products.every((product) => selectedProducts?.includes(product.id))
 
   // Handler for brand-level checkbox
   const handleBrandSelect = () => {
@@ -33,7 +33,7 @@ const CartItem = ({ brandName, brandId, cartItemId, products, selectedProducts, 
     onSelectBrand([productId], isSelected)
   }
   return (
-    <div className="w-full bg-white p-4 rounded-lg space-y-2">
+    <div className="w-full bg-white p-4 rounded-lg space-y-2 shadow-sm">
       {/* Brand Header */}
       <div className="flex items-center gap-2 mb-4">
         {/* group product of brand checkbox */}
@@ -59,8 +59,8 @@ const CartItem = ({ brandName, brandId, cartItemId, products, selectedProducts, 
           price={product?.price}
           productId={product?.id}
           eventType={product?.eventType}
-          isSelected={selectedProducts.includes(product?.id)}
-          onChooseProduct={() => handleSelectProduct(product?.id, !selectedProducts.includes(product?.id))}
+          isSelected={selectedProducts?.includes(product?.id)}
+          onChooseProduct={() => handleSelectProduct(product?.id, !selectedProducts?.includes(product?.id))}
           productQuantity={product?.quantity}
         />
       ))}

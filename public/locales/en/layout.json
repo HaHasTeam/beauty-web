@@ -63,7 +63,8 @@
     "viewAll": "View All",
     "cancel": "Cancel",
     "ok": "OK",
-    "save": "Save"
+    "save": "Save",
+    "submit": "Submit"
   },
   "noData": "No matching data found",
   "sell": {
@@ -315,5 +316,30 @@
     "confirm": "Confirm",
     "prompt": "Prompt",
     "inputPlaceholder": "Enter your input here"
+  },
+  "input": {
+    "message": "Message"
+  },
+  "wallet": {
+    "title": "Wallet",
+    "ATM": "Credit Card/Debit Card",
+    "COD": "Cash on Delivery",
+    "balance": "Balance",
+    "addPayment": "Add Payment Method",
+    "paymentMethod": "Payment Method",
+    "bankAccount": "Bank Account",
+    "cardNumber": "Card Number",
+    "expiryDate": "Expiry Date",
+    "cvv": "CVV",
+    "add": "Add",
+    "delete": "Delete",
+    "default": "Default",
+    "noPayment": "No Payment Method Found",
+    "addNewCard": "Add New Card",
+    "addOtherCard": "Add Other Card",
+    "addNewBankAccount": "Add New Bank Account",
+    "choosePaymentMethod": "Choose Payment Method",
+    "saveCard": "Chúng tôi hợp tác với các đơn vị cung cấp dịch vụ thanh toán uy tín để đảm bảo thông tin thẻ của bạn được an toàn và bảo mật tuyệt đối. Allure sẽ không có quyền truy cập vào thông tin thẻ của bạn.",
+    "addCard": "Add Credit/Debit Card"
   }
 }

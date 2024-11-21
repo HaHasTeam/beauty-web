@@ -12,7 +12,7 @@ export default function ProductTag({ tag, text, size = 'medium' }: ProductTagPro
   let tagColorClass = ''
   let tagText = ''
   const sizeClasses = {
-    small: 'p-1 text-xs',
+    small: 'px-1 text-xs',
     medium: 'px-2 py-1 text-sm sm:text-xs',
     large: 'p-3 lg:text-base md:text-sm sm:text-xs',
   }
