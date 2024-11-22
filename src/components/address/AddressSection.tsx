@@ -20,8 +20,8 @@ export default function AddressSection({ fullName, phone, address, isDefault }: 
             <MapPinCheckInside className="w-5 h-5" />
             <h2 className="text-lg text-muted-foreground">{t('address.deliveryTo')}</h2>
           </div>
-          <Button variant="ghost" size="sm" className="text-blue-500 h-auto p-0">
-            <Edit2 className="w-4 h-4 mr-1" />
+          <Button variant="link" size="sm" className="text-blue-500 h-auto p-0 no-underline hover:no-underline">
+            <Edit2 className="w-4 h-4" />
             {t('address.edit')}
           </Button>
         </div>

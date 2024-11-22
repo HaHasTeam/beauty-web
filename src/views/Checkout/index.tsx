@@ -1,3 +1,4 @@
+import { Pen, Ticket } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -99,13 +100,23 @@ const Checkout = () => {
             <AddressSection fullName={'Nguyen Van A'} phone={'0987654321'} address={'D1 Long Thanh My, Q9'} isDefault />
             {/* Voucher Section */}
             <div className="flex items-center gap-4 justify-between p-4 bg-white rounded-md shadow-sm">
-              <span className="text-lg font-semibold">
-                {ProjectInformationEnum.name} {t('cart.voucher')}
-              </span>
+              <div className="flex gap-2 items-center">
+                <Ticket className="text-red-500" />
+                <span className="text-lg font-semibold">
+                  {ProjectInformationEnum.name} {t('cart.voucher')}
+                </span>
+              </div>
               <VoucherDialog
                 triggerComponent={
                   <Button variant="link" className="text-blue-500 h-auto p-0 hover:no-underline">
-                    {chosenVoucher ? chosenVoucher : t('cart.selectVoucher')}
+                    {chosenVoucher ? (
+                      <div className="flex gap-2 items-center">
+                        <span>{chosenVoucher}</span>
+                        <Pen />
+                      </div>
+                    ) : (
+                      t('cart.selectVoucher')
+                    )}
                   </Button>
                 }
                 onConfirmVoucher={setChosenVoucher}
