@@ -53,23 +53,23 @@ const CheckoutItem = ({ brandName, brandId, products, totalPrice, numberOfProduc
       ))}
 
       {/* Message and brand voucher */}
-      <div className="flex md:justify-between justify-start md:flex-row flex-col gap-3 border-b border-gray-200 py-3">
-        <div className="order-2 md:order-1 flex items-center gap-3 text-sm">
+      <div className="w-full flex md:justify-between justify-start md:flex-row flex-col gap-3 border-b border-gray-200 py-3">
+        <div className="order-2 md:order-1 flex items-center gap-3 text-sm w-full">
           <Label>{t('input.message')}</Label>
-          <Input className="border border-secondary/60" placeholder={t('input.message')} />
+          <Input className="border border-secondary w-full" placeholder={t('input.message')} />
         </div>
         {/* Voucher */}
-        <div className="order-1 md:order-2 flex items-center gap-3 text-sm">
+        <div className="order-1 md:order-2 flex items-center gap-3 text-sm w-full justify-end">
           <Tag className="w-4 h-4 text-red-500" />
           <span>Voucher giảm đến ₫21k</span>
           <VoucherCartList triggerText={t('cart.viewMoreVoucher')} brandName="Romand" />
         </div>
       </div>
-      <div className="flex gap-2 justify-end items-center">
+      <div className="w-full flex gap-2 justify-end items-center">
         <span className="lg:text-lg md:text-sm sm:text-xs text-xs text-gray-600">
           {t('cart.total')} ({numberOfProducts} {t('cart.products')}):
         </span>
-        <span className="text-red-500 lg:text-lg md:text-sm sm:text-xs text-xs font-medium w-[20%] md:w-[14%] sm:w-[12%] text-end">
+        <span className="text-red-500 lg:text-lg md:text-sm sm:text-xs text-xs font-medium text-end">
           {t('productCard.currentPrice', { price: totalPrice })}
         </span>
       </div>

@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import AddressSection from '@/components/address/AddressSection'
 import CheckoutHeader from '@/components/checkout/CheckoutHeader'
 import CheckoutItem from '@/components/checkout/CheckoutItem'
+import CheckoutTotal from '@/components/checkout/CheckoutTotal'
 import PaymentSelection from '@/components/payment/PaymentSelection'
 import { Button } from '@/components/ui/button'
 import VoucherDialog from '@/components/voucher/VoucherDialog'
@@ -31,7 +32,7 @@ const Checkout = () => {
           ],
           currentPrice: 10000,
           price: 12000,
-          totalPrice: 123333000,
+          totalPrice: 1233000,
           eventType: 'LiveStream',
           quantity: 1000,
         },
@@ -78,42 +79,46 @@ const Checkout = () => {
   ]
   return (
     <div className="relative w-full mx-auto py-5 ">
-      <div className="w-full lg:px-12 sm:px-2 px-1 space-y-3">
+      <div className="w-full xl:px-12 lg:px-6 sm:px-2 px-1 space-y-3">
         <h2 className="uppercase font-bold text-xl">{t('cart.checkout')}</h2>
-        <AddressSection
-          fullName={'Nguyen Van A'}
-          phone={'0987654321'}
-          address={'D1 Long Thanh My, Q9'}
-          type={'Nha rieng'}
-        />
-        <CheckoutHeader />
-        {carts.map((cart) => (
-          <CheckoutItem
-            key={cart.id}
-            brandName={cart.brandName}
-            brandId={cart.id}
-            products={cart.products}
-            totalPrice={158998483}
-            numberOfProducts={20}
-          />
-        ))}
-        {/* Voucher Section */}
-        <div className="flex items-center gap-4 justify-end border-b border-primary/20 py-1">
-          <span>
-            {ProjectInformationEnum.name} {t('cart.voucher')}
-          </span>
-          <VoucherDialog
-            triggerComponent={
-              <Button variant="link" className="text-blue-500 h-auto p-0 hover:no-underline">
-                {chosenVoucher ? chosenVoucher : t('cart.selectVoucher')}
-              </Button>
-            }
-            onConfirmVoucher={setChosenVoucher}
-          />
-        </div>
-        {/* Payment Section */}
-        <div className="w-full">
-          <PaymentSelection />
+        <div className="w-full flex gap-3 lg:flex-row md:flex-col flex-col">
+          <div className="w-full md:w-full lg:w-[calc(65%-6px)] xl:w-[calc(70%-6px)] shadow-sm">
+            <CheckoutHeader />
+            {carts.map((cart) => (
+              <CheckoutItem
+                key={cart.id}
+                brandName={cart.brandName}
+                brandId={cart.id}
+                products={cart.products}
+                totalPrice={1598483}
+                numberOfProducts={20}
+              />
+            ))}
+          </div>
+          <div className="w-full md:full lg:w-[calc(35%-6px)] xl:w-[calc(30%-6px)] flex flex-col gap-3">
+            <AddressSection fullName={'Nguyen Van A'} phone={'0987654321'} address={'D1 Long Thanh My, Q9'} isDefault />
+            {/* Voucher Section */}
+            <div className="flex items-center gap-4 justify-between p-4 bg-white rounded-md shadow-sm">
+              <span className="text-lg font-semibold">
+                {ProjectInformationEnum.name} {t('cart.voucher')}
+              </span>
+              <VoucherDialog
+                triggerComponent={
+                  <Button variant="link" className="text-blue-500 h-auto p-0 hover:no-underline">
+                    {chosenVoucher ? chosenVoucher : t('cart.selectVoucher')}
+                  </Button>
+                }
+                onConfirmVoucher={setChosenVoucher}
+              />
+            </div>
+            {/* Payment Section */}
+            <div className="w-full">
+              <PaymentSelection />
+            </div>
+            <div>
+              <CheckoutTotal totalCost={158998483} totalDiscount={1234567} totalPayment={11111} savings={38478} />
+            </div>
+          </div>
         </div>
       </div>
     </div>

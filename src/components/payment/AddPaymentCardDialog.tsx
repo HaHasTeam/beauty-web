@@ -1,4 +1,4 @@
-import { Plus } from 'lucide-react'
+import { Plus, ShieldCheck } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -6,6 +6,8 @@ import paymentCards from '@/assets/images/paymentCard1.jpg'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
+
+import CVVHelpPopover from './CVVHelpPopover'
 
 interface AddPaymentCardDialogProps {
   textTrigger: string
@@ -22,7 +24,7 @@ export default function AddPaymentCardDialog({ textTrigger }: AddPaymentCardDial
           <Plus /> <span>{textTrigger}</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-lg">
+      <DialogContent className="max-w-xl">
         <DialogHeader>
           <DialogTitle>{t('wallet.addCard')}</DialogTitle>
         </DialogHeader>
@@ -32,24 +34,30 @@ export default function AddPaymentCardDialog({ textTrigger }: AddPaymentCardDial
           </div>
           <div className="space-y-2">
             <label className="block text-sm font-medium">{t('wallet.cardNumber')}:</label>
-            <Input className="border border-gray-300" placeholder="VD: 4123 4567 8901 2345" />
+            <Input className="border border-gray-300 focus:border-primary" placeholder={t('wallet.cardNumberEx')} />
           </div>
           <div className="space-y-2">
             <label className="block text-sm font-medium">{t('wallet.bankAccount')}:</label>
-            <Input className="border border-gray-300" placeholder="VD: NGUYEN VAN A" />
+            <Input className="border border-gray-300 focus:border-primary" placeholder={t('wallet.bankAccountEx')} />
           </div>
           <div className="flex gap-4">
             <div className="space-y-2">
               <label className="block text-sm font-medium">{t('date.expiredDate')}:</label>
-              <Input className="border border-gray-300" placeholder="MM/YY" />
+              <Input className="border border-gray-300 focus:border-primary" placeholder="MM/YY" />
             </div>
             <div className="space-y-2">
-              <label className="block text-sm font-medium">{t('wallet.cvv')}:</label>
-              <Input className="border border-gray-300" placeholder="VD: 123" />
+              <div className="flex gap-1 items-center">
+                <label className="block text-sm font-medium">{t('wallet.cvv')}:</label> <CVVHelpPopover />
+              </div>
+              <Input className="border border-gray-300 focus:border-primary" placeholder={t('wallet.cvvEx')} />
             </div>
           </div>
           <div className="text-sm text-muted-foreground p-4 rounded-lg bg-secondary border-primary">
-            {t('wallet.saveCard')}
+            <div className="flex gap-1 items-center">
+              <ShieldCheck className="text-green-700" size={20} />
+              <span className="font-semibold">{t('wallet.securityChecked')}</span>
+            </div>
+            <p className="px-6">{t('wallet.saveCard')}</p>
           </div>
         </div>
         <DialogFooter>

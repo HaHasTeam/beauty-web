@@ -64,18 +64,18 @@ export default function VoucherDialog({ triggerComponent, onConfirmVoucher, sele
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{triggerComponent}</DialogTrigger>
-      <DialogContent className="max-w-2xl">
+      <DialogContent className="max-w-2xl md:max-w-lg">
         <DialogHeader>
           <div className="flex justify-between items-center">
             <DialogTitle>{t('voucher.chooseVoucher', { projectName: ProjectInformationEnum.name })}</DialogTitle>
             <VoucherHelpPopOver />
           </div>
-          <DialogDescription> {t('voucher.description')}</DialogDescription>
+          <DialogDescription className="text-start"> {t('voucher.description')}</DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4">
           {/* Voucher Input */}
-          <div className="flex gap-2 bg-muted/50 p-4 rounded-lg items-center">
+          <div className="flex gap-2 bg-muted/50 p-2 md:p-4 rounded-lg items-center">
             <label className="text-sm font-medium mb-1.5 block"> {t('voucher.title')}</label>
             <Input placeholder={t('voucher.title')} className=" border border-gray-300 focus:border-primary/50" />
             <Button className="self-end uppercase"> {t('voucher.apply')}</Button>
@@ -88,7 +88,7 @@ export default function VoucherDialog({ triggerComponent, onConfirmVoucher, sele
                 <div className="space-y-4">
                   {vouchers.map((voucher) => (
                     <div key={voucher.id} className="relative">
-                      <div className="flex gap-4 p-4 border rounded-lg">
+                      <div className="flex gap-4 p-2 md:p-4 border rounded-lg">
                         {/* Left Section */}
                         <div
                           className={`w-32 ${voucher.bgColor} p-4 rounded-lg flex flex-col items-center justify-center text-center`}

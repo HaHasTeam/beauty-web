@@ -44,7 +44,7 @@ const ProductCheckoutLandscape = ({
         </div>
 
         <div className="flex sm:flex-row flex-col lg:w-[68%] md:w-[77%] sm:w-[66%] w-[54%] gap-2">
-          <div className="order-1 flex gap-1 items-center lg:w-[50%] md:w-[40%] w-full">
+          <div className="order-1 flex gap-1 items-center xl:w-[50%] lg:w-[45%] md:w-[40%] w-full">
             <div className="flex flex-col gap-1">
               <Link to={configs.routes.products + '/' + productId}>
                 <h3 className="font-semibold lg:text-sm text-xs line-clamp-2">{productName}</h3>
@@ -54,7 +54,7 @@ const ProductCheckoutLandscape = ({
               </div>
             </div>
           </div>
-          <div className="order-3 sm:order-2 flex items-center gap-2 lg:w-[30%] md:w-[30%] w-full">
+          <div className="order-3 sm:order-2 flex items-center gap-2 xl:w-[30%] lg:w-[30%] md:w-[30%] w-full">
             <Label>
               <span className="text-muted-foreground lg:text-sm text-xs overflow-ellipsis">
                 {t('productDetail.classification')}:
@@ -62,8 +62,8 @@ const ProductCheckoutLandscape = ({
             </Label>
             <span className="line-clamp-2 lg:text-base md:text-sm sm:text-xs text-xs">{selectedOptionName}</span>
           </div>
-          <div className="order-2 sm:order-3 w-full md:w-[25%] lg:w-[23%] flex gap-1 items-center justify-start sm:justify-end">
-            <span className="text-red-500 lg:text-lg md:text-sm sm:text-xs text-xs font-medium">
+          <div className="order-2 sm:order-3 w-full md:w-[25%] lg:w-[25%] xl:w-[20%] flex gap-1 items-center justify-start sm:justify-end">
+            <span className="text-red-500 xl:text-lg lg:text-base md:text-sm sm:text-xs text-xs font-medium">
               {t('productCard.currentPrice', { price: currentPrice })}
             </span>
             <span className="text-gray-400 lg:text-sm text-xs line-through">
