@@ -51,7 +51,7 @@ export default function AuthUI() {
         <EmailSignIn allowPassword={props.allowPassword} disableButton={props.disableButton} />
       )}
       {props.viewProp === 'forgot-password' && <ForgotPassword />}
-      {props.viewProp === 'reset-pass' && <UpdatePassword />}
+      {(props.viewProp === 'reset-pass' || props.viewProp === 'password') && <UpdatePassword />}
       {props.viewProp === 'sign-up' && <SignUp />}
     </div>
   )
