@@ -7,6 +7,8 @@ import PasswordSignIn from '@/components/auth-ui/PasswordSignIn'
 import SignUp from '@/components/auth-ui/Signup'
 import UpdatePassword from '@/components/auth-ui/UpdatePassword'
 
+import ChangePasswordProfile from '../auth-ui/ChangePasswordProfile'
+
 type Props = {
   viewProp: string
   allowEmail: boolean
@@ -51,7 +53,9 @@ export default function AuthUI() {
         <EmailSignIn allowPassword={props.allowPassword} disableButton={props.disableButton} />
       )}
       {props.viewProp === 'forgot-password' && <ForgotPassword />}
-      {(props.viewProp === 'reset-pass' || props.viewProp === 'password') && <UpdatePassword />}
+      {props.viewProp === 'reset-pass' && <UpdatePassword />}
+      {props.viewProp === 'password' && <ChangePasswordProfile />}
+
       {props.viewProp === 'sign-up' && <SignUp />}
     </div>
   )
