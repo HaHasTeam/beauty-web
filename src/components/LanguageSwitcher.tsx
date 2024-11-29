@@ -26,8 +26,8 @@ const LanguageSwitcher = () => {
               key={lng}
               className={`rounded-none ${
                 i18n.resolvedLanguage === lng
-                  ? 'font-bold bg-primary text-primary-foreground'
-                  : 'font-normal bg-accent text-accent-foreground'
+                  ? 'font-bold bg-primary text-primary-foreground hover:text-primary-foreground'
+                  : 'font-normal bg-accent text-accent-foreground  hover:text-primary-foreground'
               }`}
               type="button"
               onClick={() => handleChangeLanguage(lng)}

@@ -188,7 +188,7 @@ const SearchPage = () => {
     <LoadingIcon />
   ) : (
     <div className="w-full mx-auto pt-4 pb-8">
-      <div className="w-full lg:px-28 md:px-24 sm:px-16 px-10">
+      <div className="w-full lg:px-28 md:px-10 px-1">
         <div className="flex flex-col gap-2">
           <CustomBreadcrumb
             customSegments={{
@@ -196,13 +196,13 @@ const SearchPage = () => {
             }}
           />
           {searchedProducts?.length > 0 ? (
-            <div className="flex gap-3">
-              <div>
+            <div className="w-full flex gap-3">
+              <div className="md:w-[40%] lg:w-[35%] xl:w-1/4">
                 <ProductFilter />
               </div>
-              <div className="">
+              <div className="w-full md:w-[60%] lg:w-[65%] xl:w-3/4">
                 <ProductSort />
-                <div className="mt-2 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+                <div className="mt-2 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-2 md:gap-4">
                   {searchedProducts?.map((product) => <ProductCard key={product?.id} product={product} />)}
                 </div>
               </div>
