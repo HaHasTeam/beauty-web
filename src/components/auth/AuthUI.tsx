@@ -7,6 +7,9 @@ import PasswordSignIn from '@/components/auth-ui/PasswordSignIn'
 import SignUp from '@/components/auth-ui/Signup'
 import UpdatePassword from '@/components/auth-ui/UpdatePassword'
 
+import ChangePasswordProfile from '../auth-ui/ChangePasswordProfile'
+import EmailVerification from '../auth-ui/EmailVerification'
+
 type Props = {
   viewProp: string
   allowEmail: boolean
@@ -15,7 +18,7 @@ type Props = {
   disableButton: boolean
 }
 
-// const AuthPaths = ['email_signin', 'sign-in', 'signup', 'forgot_password', 'update_password']
+// const AuthPaths = ['email_signin', 'sign-in', 'signup', 'forgot-password', 'update_password']
 
 export default function AuthUI() {
   const viewProp = useLocation().pathname.split('/').pop()
@@ -27,14 +30,14 @@ export default function AuthUI() {
 
     return {
       viewProp,
-      allowEmail: viewProp === 'email_signin' || viewProp === 'signup' || viewProp === 'forgot_password',
-      allowPassword: viewProp === 'sign-in' || viewProp === 'signup' || viewProp === 'email_signin',
+      allowEmail: viewProp === 'email_signin' || viewProp === 'sign-up' || viewProp === 'forgot-password',
+      allowPassword: viewProp === 'sign-in' || viewProp === 'sign-up' || viewProp === 'email_signin',
       allowOauth:
         viewProp === 'email_signin' ||
         viewProp === 'signup' ||
-        viewProp === 'forgot_password' ||
+        viewProp === 'forgot-password' ||
         viewProp === 'sign-in',
-      disableButton: viewProp === 'email_signin' || viewProp === 'signup' || viewProp === 'forgot_password',
+      disableButton: viewProp === 'email_signin' || viewProp === 'sign-up' || viewProp === 'forgot-password',
     }
   }, [viewProp])
 
@@ -43,18 +46,20 @@ export default function AuthUI() {
   //     window.location.href = '/auth/signin/password_signin'
   //   }
   // })
-
+  if (viewProp === 'email-verification') {
+    return <EmailVerification />
+  }
   return (
-    <div className="my-auto mb-auto mt-8 flex flex-col md:mt-[70px] md:max-w-full lg:mt-[130px] lg:max-w-[420px]">
+    <div className="  lg:max-w-[520px]  md:max-w-full">
       {props.viewProp === 'sign-in' && <PasswordSignIn />}
       {props.viewProp === 'email_signin' && (
         <EmailSignIn allowPassword={props.allowPassword} disableButton={props.disableButton} />
       )}
-      {props.viewProp === 'forgot_password' && (
-        <ForgotPassword allowEmail={props.allowEmail} disableButton={props.disableButton} />
-      )}
-      {props.viewProp === 'update_password' && <UpdatePassword />}
-      {props.viewProp === 'signup' && <SignUp allowEmail={props.allowEmail} />}
+      {props.viewProp === 'forgot-password' && <ForgotPassword />}
+      {props.viewProp === 'reset-pass' && <UpdatePassword />}
+      {props.viewProp === 'password' && <ChangePasswordProfile />}
+
+      {props.viewProp === 'sign-up' && <SignUp />}
     </div>
   )
 }

@@ -26,10 +26,11 @@ export default function Header() {
   }
   const { t } = useTranslation()
   const [menuOpen, setMenuOpen] = useState(false)
-  const { isAuthenticated, isLoading } = useStore(
+  const { isAuthenticated, isLoading, authData } = useStore(
     useShallow((state) => ({
       isAuthenticated: state.isAuthenticated,
       isLoading: state.isLoading,
+      authData: state.authData,
     })),
   )
   return (
@@ -40,7 +41,14 @@ export default function Header() {
             <Link to={configs.routes.sellLanding} className="font-semibold">
               {t('sell.action')}
             </Link>
-            <Link to={configs.routes.professionalLanding} className="border-l border-secondary px-3 font-semibold">
+            <Link
+              to={
+                configs.externalLink.brandManagement +
+                `?accessToken=${authData.accessToken}&refreshToken=${authData.refreshToken}`
+              }
+              replace
+              className="border-l border-secondary px-3 font-semibold"
+            >
               {t('professional.action')}
             </Link>
           </div>

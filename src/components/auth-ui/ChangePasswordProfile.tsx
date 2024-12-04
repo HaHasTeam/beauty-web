@@ -1,33 +1,34 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
-import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
 import { z } from 'zod'
 
 import { Button } from '@/components/ui/button'
+import configs from '@/config'
 import { useToast } from '@/hooks/use-toast'
-import { formEmailSchema } from '@/lib/schema'
-import { requestResetPassword } from '@/network/api/api'
-import { sendRequestResetPasswordParams } from '@/network/api/api-params-moudle'
+import { formChangePasswordProfileSchema, formChangePasswordSchema } from '@/lib/schema'
+import { setPassword } from '@/network/api/api'
+import { resetPasswordParams } from '@/network/api/api-params-moudle'
 
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form'
-import { Input } from '../ui/input'
+import { PasswordInput } from '../ui/password-input'
 
-// Define prop type with allowEmail boolean
-
-export default function ForgotPassword() {
-  const [isSubmitting] = useState(false)
+export default function ChangePasswordProfile() {
+  const navigate = useNavigate()
   const { toast } = useToast()
-  const form = useForm<z.infer<typeof formEmailSchema>>({
-    resolver: zodResolver(formEmailSchema),
+  const form = useForm<z.infer<typeof formChangePasswordProfileSchema>>({
+    resolver: zodResolver(formChangePasswordProfileSchema),
     defaultValues: {
-      email: '',
+      currentPassword: '',
+      password: '',
+      passwordConfirm: '',
     },
   })
 
-  const { mutateAsync: sendRequestResetPassword } = useMutation({
-    mutationFn: async (data: sendRequestResetPasswordParams) => {
-      return requestResetPassword(data)
+  const { mutateAsync: setPasswordMutation, isPending } = useMutation({
+    mutationFn: async (data: resetPasswordParams) => {
+      return setPassword(data)
     },
     onSuccess: (data) => {
       // if (!data.ok) {
@@ -49,7 +50,7 @@ export default function ForgotPassword() {
       // }
       if (data.message) {
         form.reset()
-
+        navigate(configs.routes.signIn)
         return toast({
           variant: 'default',
           className: 'bg-green-600 text-white',
@@ -76,21 +77,14 @@ export default function ForgotPassword() {
       })
     },
   })
-  function onSubmit(values: z.infer<typeof formEmailSchema>) {
+  function onSubmit(values: z.infer<typeof formChangePasswordSchema>) {
     try {
-      // toast({
-      //   title: 'data onSubmit',
-      //   description: (
-      //     <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-      //       <code className="text-w  hite">{JSON.stringify(values, null, 2)}</code>
-      //     </pre>
-      //   ),
-      // })
-      console.log(values)
-      const formateData: sendRequestResetPasswordParams = {
-        email: values.email,
+      const formateData: resetPasswordParams = {
+        password: values.password,
+        accountId: 'fdsa',
       }
-      sendRequestResetPassword(formateData)
+      console.log(formateData)
+      setPasswordMutation(formateData)
     } catch (error) {
       console.error('Form submission error', error)
       toast({
@@ -107,12 +101,40 @@ export default function ForgotPassword() {
           <div className="grid gap-2">
             <FormField
               control={form.control}
-              name="email"
+              name="currentPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>Current Password</FormLabel>
                   <FormControl>
-                    <Input placeholder="Please enter your email" type="email" {...field} />
+                    <PasswordInput placeholder="Please Enter your current password." {...field} />
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <PasswordInput placeholder="Please Enter your password." {...field} />
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="passwordConfirm"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Confirm Password</FormLabel>
+                  <FormControl>
+                    <PasswordInput placeholder="Please Enter your confirm password." {...field} />
                   </FormControl>
 
                   <FormMessage />
@@ -122,9 +144,10 @@ export default function ForgotPassword() {
             <Button
               type="submit"
               size={'lg'}
+              disabled
               className="mt-2 flex w-full items-center justify-center rounded-lg text-sm font-medium"
             >
-              {isSubmitting ? (
+              {isPending ? (
                 <svg
                   aria-hidden="true"
                   role="status"
@@ -143,7 +166,7 @@ export default function ForgotPassword() {
                   ></path>
                 </svg>
               ) : (
-                'Send Email'
+                'change password đang đợi ghep api'
               )}
             </Button>
           </div>

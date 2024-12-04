@@ -1,6 +1,9 @@
-import AuthLayout from '@/components/layout/AuthLayout'
+import PrimaryLayout from '@/components/layout/PrimaryLayout'
 import configs from '@/config'
+import EmailVerification from '@/views/EmailVerifycation'
+import ForgotPassword from '@/views/ForgotPassword'
 import Home from '@/views/Home'
+import ResetPassword from '@/views/ResetPassword'
 import SignIn from '@/views/Signin'
 import SignUp from '@/views/Signup'
 
@@ -21,12 +24,16 @@ const publicRoutes = [
       {
         path: configs.routes.forgotPassword,
         // element: <ForgotPassword />,
-        element: <div className="">Forgot Password</div>,
+        element: <ForgotPassword />,
+      },
+      {
+        path: configs.routes.resetPassword,
+        // element: <ForgotPassword />,
+        element: <ResetPassword />,
       },
       {
         path: configs.routes.checkEmail,
-        // element: <CheckEmail />,
-        element: <div className="">Check mail</div>,
+        element: <EmailVerification />,
       },
       {
         path: configs.routes.notFound,
@@ -38,7 +45,7 @@ const publicRoutes = [
   {
     element: (
       <GuestGuard>
-        <AuthLayout />
+        <PrimaryLayout />
       </GuestGuard>
     ),
     children: [

@@ -21,3 +21,26 @@ export const formSignInSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8).max(20),
 })
+export const formEmailSchema = z.object({
+  email: z.string().email(),
+})
+export const formChangePasswordSchema = z
+  .object({
+    password: z.string().min(8).max(20),
+    passwordConfirm: z.string().min(8).max(20),
+  })
+  .refine((data) => data.password === data.passwordConfirm, {
+    message: 'Passwords do not match',
+    path: ['passwordConfirm'],
+  })
+
+export const formChangePasswordProfileSchema = z
+  .object({
+    currentPassword: z.string().min(8).max(20),
+    password: z.string().min(8).max(20),
+    passwordConfirm: z.string().min(8).max(20),
+  })
+  .refine((data) => data.password === data.passwordConfirm, {
+    message: 'Passwords do not match',
+    path: ['passwordConfirm'],
+  })

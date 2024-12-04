@@ -21,15 +21,15 @@ import { Input } from '../ui/input'
 import { PasswordInput } from '../ui/password-input'
 
 // Define prop type with allowEmail boolean
-interface PasswordSignInProps {
-  allowEmail?: boolean
-}
+// interface PasswordSignInProps {
+//   allowEmail?: boolean
+// }
 
-export default function PasswordSignIn({ allowEmail = false }: PasswordSignInProps) {
+export default function PasswordSignIn() {
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const { initialize } = useStore(
+  const { authenticate } = useStore(
     useShallow((state) => ({
-      initialize: state.initialize,
+      authenticate: state.setAuthState,
     })),
   )
   const { toast } = useToast()
@@ -70,7 +70,10 @@ export default function PasswordSignIn({ allowEmail = false }: PasswordSignInPro
       //   throw new Error(data.message || data.statusText)
       // }
       if (data.message && data.data) {
-        initialize(true, data.data)
+        authenticate({
+          isAuthenticated: true,
+          authData: data.data,
+        })
         setIsSubmitting(false)
         form.reset()
         navigate('/')
@@ -178,18 +181,6 @@ export default function PasswordSignIn({ allowEmail = false }: PasswordSignInPro
           Forgot your password?
         </Link>
       </p> */}
-      {allowEmail && (
-        <p>
-          <Link to="/auth/signin/email_signin" className="font-medium text-zinc-950 dark:text-white text-sm">
-            Sign in via magic link
-          </Link>
-        </p>
-      )}
-      <p>
-        <Link to="/auth/signup" className="font-medium text-zinc-950 dark:text-white text-sm">
-          Don't have an account? Sign up
-        </Link>
-      </p>
     </div>
   )
 }
