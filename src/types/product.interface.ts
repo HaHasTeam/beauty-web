@@ -23,3 +23,15 @@ export type IProduct = {
   description: string
   classifications: IClassification[]
 }
+
+export type IProductCart = {
+  image: string
+  name: string
+  classifications: IClassification[]
+  currentPrice: number
+  price: number
+  id: string
+  eventType: string
+  quantity: number
+  totalPrice?: number
+}

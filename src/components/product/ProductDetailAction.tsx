@@ -1,14 +1,13 @@
 import '@/components/product/Product.css'
 
-import { Minus, Plus } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { IClassification } from '@/types/classification.interface'
 import { IProduct } from '@/types/product.interface'
 
+import IncreaseDecreaseButton from '../IncreaseDecreaseButton'
 import { Button } from '../ui/button'
-import { Input } from '../ui/input'
 import PriceSection from './PriceSection'
 
 interface ProductDetailActionProps {
@@ -34,14 +33,6 @@ const ProductDetailAction = ({ product, chosenClassification }: ProductDetailAct
     }
   }
 
-  // const formatPrice = (price: number) => {
-  //   return (
-  //     new Intl.NumberFormat('vi-VN', {
-  //       style: 'decimal',
-  //       maximumFractionDigits: 0,
-  //     }).format(price) + 'đ'
-  //   )
-  // }
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
     // Allow clearing the input
@@ -79,33 +70,14 @@ const ProductDetailAction = ({ product, chosenClassification }: ProductDetailAct
       <div className="space-y-4">
         <div>
           <label className="text-sm font-medium mb-2 block">{t('productDetail.quantity')}</label>
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              disabled={quantity <= 1}
-              size="icon"
-              onClick={decreaseQuantity}
-              className={`h-10 w-10 border-gray-400 ${quantity <= 1 ? 'border-gray-300 text-gray-400' : ''}`}
-            >
-              <Minus />
-            </Button>
-            <Input
-              type="number"
-              value={inputValue}
-              onChange={handleInputChange}
-              min={1}
-              className="w-16 h-10 text-center border-gray-400 rounded-md"
-            />
-            <Button
-              variant="outline"
-              disabled={quantity >= 1000}
-              size="icon"
-              onClick={increaseQuantity}
-              className={`h-10 w-10 border-gray-400 ${quantity >= 1000 ? 'border-gray-300 text-gray-400' : ''}`}
-            >
-              <Plus />
-            </Button>
-          </div>
+          <IncreaseDecreaseButton
+            onIncrease={increaseQuantity}
+            onDecrease={decreaseQuantity}
+            isIncreaseDisabled={quantity >= 1000}
+            isDecreaseDisabled={quantity <= 1}
+            inputValue={inputValue}
+            handleInputChange={handleInputChange}
+          />
         </div>
 
         <div>

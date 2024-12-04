@@ -1,4 +1,4 @@
-import { Bell, CircleUserRound, HelpCircle, Menu, ShoppingBag, X } from 'lucide-react'
+import { Bell, CircleUserRound, HelpCircle, Menu, ShoppingCart, X } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
@@ -33,7 +33,7 @@ export default function Header() {
     })),
   )
   return (
-    <header className="w-full bg-white relative">
+    <header className="w-full bg-white relative shadow-lg">
       <div className="">
         <div className="px-4 flex items-center justify-between py-2 text-sm">
           <div className="flex space-x-4">
@@ -82,7 +82,7 @@ export default function Header() {
             )}
 
             <Link to={configs.routes.cart}>
-              <ShoppingBag />
+              <ShoppingCart />
               <span className="sr-only">{t('header.shoppingCart')}</span>
             </Link>
           </div>
@@ -98,8 +98,8 @@ export default function Header() {
       {menuOpen && (
         <div className="md:hidden absolute z-20 top-full left-0 w-full bg-white shadow-md border-t">
           <div className="p-4">
-            <div className="flex gap-2">
-              <Link to={configs.routes.notification}>
+            <div className="flex gap-2 items-center">
+              <Link className="flex gap-2" to={configs.routes.notification}>
                 <Bell className="h-5 w-5" />
                 <span> {t('header.notification')}</span>
               </Link>
@@ -107,19 +107,19 @@ export default function Header() {
             <div className="flex gap-2">
               <Link
                 to={configs.routes.cart}
-                className="flex justify-start"
+                className="flex gap-2 items-center justify-start"
                 onClick={() => {
                   setMenuOpen(false)
                 }}
               >
-                <ShoppingBag className="h-5 w-5" />
+                <ShoppingCart className="h-5 w-5" />
                 <span>{t('header.shoppingCart')}</span>
               </Link>
             </div>
             {!isLoading && isAuthenticated ? (
               <Link
                 to={configs.routes.profile}
-                className="flex justify-start"
+                className="flex gap-2 items-center justify-start"
                 onClick={() => {
                   setMenuOpen(false)
                 }}

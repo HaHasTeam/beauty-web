@@ -33,7 +33,10 @@
     "limitedEdition": "Limited Edition",
     "newArrival": "New Arrival",
     "hotDeal": "Hot Deal",
-    "flashSale": "Flash Sale"
+    "flashSale": "Flash Sale",
+    "liveStream": "Live Stream",
+    "preOrder": "Pre Order",
+    "groupBuying": "Group Buying"
   },
   "flashSale": {
     "title": "Flash Sale"
@@ -57,7 +60,11 @@
     "groupBuyingAction": "Explore Group-Buy Deals",
     "addToCard": "Add to Cart",
     "seeAll": "See All",
-    "viewAll": "View All"
+    "viewAll": "View All",
+    "cancel": "Cancel",
+    "ok": "OK",
+    "save": "Save",
+    "submit": "Submit"
   },
   "noData": "No matching data found",
   "sell": {
@@ -178,7 +185,8 @@
     "descriptionTitle": "Description",
     "breadcrumbProductName": "{{name}}",
     "brandDeal": "Brand Deal",
-    "classification": "Classifications"
+    "classification": "Classifications",
+    "selectOption": "Select Option"
   },
   "event": {
     "finishIn": "Finish In"
@@ -233,10 +241,118 @@
     "home": "Home"
   },
   "date": {
-    "toLocaleDateString": "{{val, MM/DD/YYYY}}"
+    "toLocaleDateString": "{{val, MM/DD/YYYY}}",
+    "expiredDate": "Expired Date",
+    "exp": "Exp"
   },
   "notification": {
     "viewAll": "View All",
     "viewNotification": "View Notifications"
+  },
+  "cart": {
+    "title": "Cart",
+    "total": "Total",
+    "remove": "Remove",
+    "checkout": "Checkout",
+    "continueShopping": "Continue Shopping",
+    "emptyCart": "Your cart is empty",
+    "product": "Product",
+    "price": "Price",
+    "quantity": "Quantity",
+    "totalPrice": "Total Price",
+    "viewMoreVoucher": "View More Voucher",
+    "deleteAll": "Delete All",
+    "products": "products",
+    "Products": "Products",
+    "saved": "Saved",
+    "selectAll": "Select All",
+    "voucher": "Voucher",
+    "selectVoucher": "Select or Enter Voucher",
+    "buy": "Buy",
+    "action": "Action",
+    "terms": "Our Terms and Conditions",
+    "checkoutDescription": "(Giá này đã bao gồm thuế GTGT, nhưng chưa bao gồm phí vận chuyển)",
+    "acceptCondition": "Nhấn \"Đặt hàng\" đồng nghĩa với việc bạn đồng ý tuân theo",
+    "savings": "Savings",
+    "totalCost": "Total Cost of Products",
+    "totalDiscount": "Total Discount from Vouchers",
+    "totalPayment": "Total Payment"
+  },
+  "address": {
+    "title": "Address",
+    "add": "Add Address",
+    "edit": "Edit Address",
+    "default": "Default",
+    "delete": "Delete Address",
+    "setDefault": "Set as Default",
+    "address": "Address",
+    "street": "Street",
+    "city": "City",
+    "state": "State",
+    "country": "Country",
+    "postalCode": "Postal Code",
+    "phoneNumber": "Phone Number",
+    "save": "Save",
+    "cancel": "Cancel",
+    "addressBook": "Address Book",
+    "noAddress": "No Address Found",
+    "addNewAddress": "Add New Address",
+    "deliveryTo": "Delivery to"
+  },
+  "voucher": {
+    "title": "Voucher",
+    "apply": "Apply",
+    "code": "Code",
+    "invalid": "Invalid code",
+    "applied": "Applied",
+    "used": "Used",
+    "expired": "Expired",
+    "codePlaceholder": "Enter your voucher code here",
+    "input": "Enter your voucher code here",
+    "condition": "Condition",
+    "chooseProductBrandAlert": "Vui lòng chọn sản phẩm từ Brand để áp dụng Voucher này",
+    "chooseProductAppAlert": "Vui lòng chọn sản phẩm để sử dụng ưu đãi.",
+    "description": "Enter or choose 1 voucher",
+    "help": "Help",
+    "chooseVoucher": "Choose voucher"
+  },
+  "dialog": {
+    "cancel": "Cancel",
+    "ok": "OK",
+    "confirmDelete": "Are you sure you want to delete this item?",
+    "confirm": "Confirm",
+    "prompt": "Prompt",
+    "inputPlaceholder": "Enter your input here"
+  },
+  "input": {
+    "message": "Message"
+  },
+  "wallet": {
+    "title": "Wallet",
+    "ATM": "Credit Card/Debit Card",
+    "COD": "Cash on Delivery",
+    "balance": "Balance",
+    "addPayment": "Add Payment Method",
+    "paymentMethod": "Payment Method",
+    "bankAccount": "Bank Account",
+    "cardNumber": "Card Number",
+    "expiryDate": "Expiry Date",
+    "cvv": "CVV",
+    "add": "Add",
+    "delete": "Delete",
+    "default": "Default",
+    "noPayment": "No Payment Method Found",
+    "addNewCard": "Add New Card",
+    "addOtherCard": "Add Other Card",
+    "addNewBankAccount": "Add New Bank Account",
+    "choosePaymentMethod": "Choose Payment Method",
+    "saveCard": "Chúng tôi hợp tác với các đơn vị cung cấp dịch vụ thanh toán uy tín để đảm bảo thông tin thẻ của bạn được an toàn và bảo mật tuyệt đối. Allure sẽ không có quyền truy cập vào thông tin thẻ của bạn.",
+    "addCard": "Add Credit/Debit Card",
+    "securityChecked": "Thông tin thẻ của bạn được bảo vệ.",
+    "cvvDescription": "CVV là mã xác thực gồm 3 chữ số được in trên mặt sau thẻ tín dụng.",
+    "cvvFull": "Card Verification Value",
+    "bankAccountEx": "EG: JOHN SMITH",
+    "cardNumberEx": "EG: 4123 4567 8901 2345",
+    "cvvEx": "EG: 123"
   }
 }
