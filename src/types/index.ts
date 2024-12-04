@@ -27,3 +27,10 @@ export type ConfigType = {
   routes: RouteConfigType
 }
 export type CartProduct = Product & { qty: number }
+export type TEmailDecoded = {
+  accountId: string
+}
+export type TAuth = {
+  accessToken: string
+  refreshToken: string
+}

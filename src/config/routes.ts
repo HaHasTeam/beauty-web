@@ -12,7 +12,7 @@ const routes = {
   settings: '/settings',
   forgotPassword: '/forgot-password',
   resetPassword: '/reset-pass',
-  checkEmail: '/check-email',
+  checkEmail: '/email-verification',
   notVerifyEmail: '/not-verify-email',
   about: '/about',
   contact: '/contact',

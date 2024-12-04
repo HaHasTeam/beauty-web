@@ -19,3 +19,5 @@ export const getOauthGoogleUrl = () => {
   const qs = new URLSearchParams(options)
   return `${OAUTH_GOOGLE_URL.ROOT_URL}?${qs.toString()}`
 }
+
+export const emailContact = 'allure.team@gmail.com'

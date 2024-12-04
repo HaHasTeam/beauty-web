@@ -1,4 +1,4 @@
-import { IAccount } from './model/account'
+import { TAuth } from '@/types'
 
 export interface resBaseInfo<DataModel> {
   rsCode: string
@@ -13,7 +13,7 @@ export interface GetCityTotalNumberModel {
 
 export type GetCityTotal = GetCityTotalNumberModel[]
 
-export type LoginResponse = IAccount
+export type LoginResponse = TAuth
 export interface IToken {
   accountId: string
   iat: number

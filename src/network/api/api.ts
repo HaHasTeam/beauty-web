@@ -7,6 +7,7 @@ import {
   resetPasswordParams,
   sendRequestResetPasswordParams,
   signInParams,
+  verifyEmailParams,
 } from './api-params-moudle'
 import { GetCityTotal, LoginResponse } from './api-res-model'
 
@@ -16,6 +17,7 @@ const APIS = {
   SIGN_IN: '/auth/login',
   SIGN_UP: '/auth/register',
   REQUEST_RESET_PASSWORD: '/accounts/request-reset-pass',
+  VERIFY_EMAIL: (accountId?: string) => `/accounts/verify-account/${accountId}`,
   SET_PASSWORD: (accountId: string) => `/accounts/modify-password/${accountId}`,
 }
 
@@ -24,6 +26,9 @@ export const getCityTotalNumber = (params: getCanvasData) =>
 
 export const createAccount = async (data: createAccountParams) =>
   await request.post<ActionResponse<LoginResponse>>(APIS.CREATE_ACCOUNT, data)
+
+export const activateAccountApi = async (data: verifyEmailParams) =>
+  await request.put<ActionResponse<null>>(APIS.VERIFY_EMAIL(data.accountId), data)
 
 export const login = async (data: signInParams) => await request.post<ActionResponse<LoginResponse>>(APIS.SIGN_IN, data)
 

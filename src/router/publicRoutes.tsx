@@ -1,5 +1,6 @@
 import PrimaryLayout from '@/components/layout/PrimaryLayout'
 import configs from '@/config'
+import EmailVerification from '@/views/EmailVerifycation'
 import ForgotPassword from '@/views/ForgotPassword'
 import Home from '@/views/Home'
 import ResetPassword from '@/views/ResetPassword'
@@ -32,8 +33,7 @@ const publicRoutes = [
       },
       {
         path: configs.routes.checkEmail,
-        // element: <CheckEmail />,
-        element: <div className="">Check mail</div>,
+        element: <EmailVerification />,
       },
       {
         path: configs.routes.notFound,

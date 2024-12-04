@@ -19,7 +19,7 @@ import { formRegisterSchema } from '@/lib/schema'
 import { cn } from '@/lib/utils'
 import { createAccount } from '@/network/api/api'
 import { createAccountParams } from '@/network/api/api-params-moudle'
-import { RoleEnum } from '@/types/enum'
+import { axiosBaseOptions } from '@/network/axios/axios-setup'
 
 import { Icons } from '../Icons'
 
@@ -104,7 +104,8 @@ export default function SignUp() {
       console.log(values)
       const formateData: createAccountParams = {
         ...values,
-        role: RoleEnum.CUSTOMER,
+        role: 'e016d06f-126e-4e67-8f6a-dfc63d25361c',
+        url: `${axiosBaseOptions.baseURL}${configs.routes.checkEmail}`,
         username: values.firstName + ' ' + values.lastName,
       }
       signUpCustomerMutate(formateData)

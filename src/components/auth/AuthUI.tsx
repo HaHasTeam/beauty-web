@@ -8,6 +8,7 @@ import SignUp from '@/components/auth-ui/Signup'
 import UpdatePassword from '@/components/auth-ui/UpdatePassword'
 
 import ChangePasswordProfile from '../auth-ui/ChangePasswordProfile'
+import EmailVerification from '../auth-ui/EmailVerification'
 
 type Props = {
   viewProp: string
@@ -45,7 +46,9 @@ export default function AuthUI() {
   //     window.location.href = '/auth/signin/password_signin'
   //   }
   // })
-
+  if (viewProp === 'email-verification') {
+    return <EmailVerification />
+  }
   return (
     <div className="  lg:max-w-[520px]  md:max-w-full">
       {props.viewProp === 'sign-in' && <PasswordSignIn />}
