@@ -19,7 +19,6 @@ import { formRegisterSchema } from '@/lib/schema'
 import { cn } from '@/lib/utils'
 import { createAccount } from '@/network/api/api'
 import { createAccountParams } from '@/network/api/api-params-moudle'
-import { axiosBaseOptions } from '@/network/axios/axios-setup'
 
 import { Icons } from '../Icons'
 
@@ -105,7 +104,7 @@ export default function SignUp() {
       const formateData: createAccountParams = {
         ...values,
         role: 'e016d06f-126e-4e67-8f6a-dfc63d25361c',
-        url: `${axiosBaseOptions.baseURL}${configs.routes.checkEmail}`,
+        url: `${configs.externalLink.appURL}${configs.routes.checkEmail}`,
         username: values.firstName + ' ' + values.lastName,
       }
       signUpCustomerMutate(formateData)

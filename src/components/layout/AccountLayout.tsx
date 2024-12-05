@@ -95,6 +95,17 @@ function AccountLayout() {
                 <Ticket className="mr-2 h-4 w-4" />
                 Kho Voucher
               </Button>
+
+              <Button
+                variant="ghost"
+                className="w-full justify-start"
+                onClick={() => {
+                  navigate(configs.routes.profileVoucher)
+                }}
+              >
+                <Ticket className="mr-2 h-4 w-4" />
+                Đăng xuất
+              </Button>
             </div>
           </div>
         </div>
