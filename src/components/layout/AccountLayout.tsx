@@ -1,10 +1,13 @@
 import { Bell, Heart, Home, Lock, LogOutIcon, Package, Ticket, User, Wallet } from 'lucide-react'
 import { Link, Outlet, useNavigate } from 'react-router-dom'
+import { useShallow } from 'zustand/react/shallow'
 
 import { Button } from '@/components/ui/button'
 import configs from '@/config'
+import { useStore } from '@/store/store'
 
 function AccountLayout() {
+  const { unAuthenticate } = useStore(useShallow((state) => ({ unAuthenticate: state.unAuthenticate })))
   const navigate = useNavigate()
   return (
     <div className="grid min-h-screen w-full lg:grid-cols-[280px_1fr] max-w-7xl mx-auto">
@@ -101,6 +104,7 @@ function AccountLayout() {
                 className="w-full justify-start"
                 onClick={() => {
                   console.log('đăng xuất')
+                  unAuthenticate()
                 }}
               >
                 <LogOutIcon className="mr-2 h-4 w-4" />

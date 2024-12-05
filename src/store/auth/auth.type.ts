@@ -5,7 +5,7 @@ export type AuthState = {
   isLoading: boolean
   isAuthenticated: boolean
   user?: IAccount | null
-  authData: TAuth
+  authData: TAuth | null
 }
 
 export type AuthActions = {

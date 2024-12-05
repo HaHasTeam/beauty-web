@@ -39,7 +39,7 @@ export default function SignUp() {
       phone: '',
     },
   })
-  const { mutateAsync: signUpCustomerMutate } = useMutation({
+  const { mutateAsync: signUpCustomerMutate, isPending: isSubmitting } = useMutation({
     mutationFn: async (data: createAccountParams) => {
       return createAccount(data)
     },
@@ -92,14 +92,6 @@ export default function SignUp() {
   })
   function onSubmit(values: z.infer<typeof formRegisterSchema>) {
     try {
-      // toast({
-      //   title: 'data onSubmit',
-      //   description: (
-      //     <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-      //       <code className="text-w  hite">{JSON.stringify(values, null, 2)}</code>
-      //     </pre>
-      //   ),
-      // })
       console.log(values)
       const formateData: createAccountParams = {
         ...values,
@@ -263,8 +255,8 @@ export default function SignUp() {
               </FormItem>
             )}
           />
-          <Button type="submit" className="w-full bg-primary hover:bg-[#FF8C5A] text-white">
-            Register
+          <Button type="submit" disabled={isSubmitting} className="w-full bg-primary hover:bg-[#FF8C5A] text-white">
+            {isSubmitting ? 'Submitting' : 'Register'}
           </Button>
         </form>
       </Form>

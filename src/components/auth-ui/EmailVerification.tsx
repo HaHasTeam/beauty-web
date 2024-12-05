@@ -45,7 +45,7 @@ const EmailVerification = () => {
 
   if (accountId) {
     return (
-      <div className="my-auto mb-auto mt-8 flex flex-col md:mt-[70px] md:max-w-full lg:mt-[130px] lg:max-w-[420px] items-center gap-4 an">
+      <div className="my-auto mb-auto  flex flex-col  md:max-w-full lg:max-w-[420px] items-center gap-4 ">
         {!isActivatingAccount ? (
           <LoaderCircle size={150} className="p-4 rounded-full bg-green-100 text-green-500 animate-spin" />
         ) : (
@@ -75,7 +75,7 @@ const EmailVerification = () => {
   }
   if (email) {
     return (
-      <div className="my-auto mb-auto mt-8 flex flex-col md:mt-[70px] md:max-w-full lg:mt-[130px] lg:max-w-[420px] items-center gap-4 an">
+      <div className="my-auto mb-auto  flex flex-col  md:max-w-full lg:max-w-[420px] items-center gap-4 ">
         <MdMarkEmailRead size={150} className="p-4 rounded-full bg-green-100 text-green-500 shadow-xl" />
         <a
           className="text-2xl flex items-center gap-2 font-thin py-2 bg-green-100 rounded-3xl px-8 cursor-pointer flex-col"

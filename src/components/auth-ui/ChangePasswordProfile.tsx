@@ -81,7 +81,7 @@ export default function ChangePasswordProfile() {
     try {
       const formateData: resetPasswordParams = {
         password: values.password,
-        accountId: 'fdsa',
+        accountId: '',
       }
       console.log(formateData)
       setPasswordMutation(formateData)

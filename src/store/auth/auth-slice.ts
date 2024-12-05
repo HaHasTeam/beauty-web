@@ -28,8 +28,10 @@ export const createAuthSlice: StateCreator<AuthSlice, [['zustand/immer', never]]
     }),
   unAuthenticate: () =>
     set((state) => {
+      state.isLoading = false
       state.isAuthenticated = false
       state.user = null
+      state.authData = null
     }),
   setAuthState: ({ user, authData, isAuthenticated, isLoading }) =>
     set((state) => {

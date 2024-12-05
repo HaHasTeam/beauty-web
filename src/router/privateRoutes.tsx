@@ -17,7 +17,6 @@ const privateRoutes = [
   {
     element: (
       <AuthGuard>
-        {/* <MainLayout /> */}
         <PrimaryLayout />
       </AuthGuard>
     ),
