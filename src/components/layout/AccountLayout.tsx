@@ -1,4 +1,4 @@
-import { Bell, Heart, Home, Lock, Package, Ticket, User, Wallet } from 'lucide-react'
+import { Bell, Heart, Home, Lock, LogOutIcon, Package, Ticket, User, Wallet } from 'lucide-react'
 import { Link, Outlet, useNavigate } from 'react-router-dom'
 
 import { Button } from '@/components/ui/button'
@@ -97,13 +97,13 @@ function AccountLayout() {
               </Button>
 
               <Button
-                variant="ghost"
+                variant="destructive"
                 className="w-full justify-start"
                 onClick={() => {
-                  navigate(configs.routes.profileVoucher)
+                  console.log('đăng xuất')
                 }}
               >
-                <Ticket className="mr-2 h-4 w-4" />
+                <LogOutIcon className="mr-2 h-4 w-4" />
                 Đăng xuất
               </Button>
             </div>
