@@ -1,10 +1,8 @@
 import { Fingerprint } from 'lucide-react'
-import { Link } from 'react-router-dom'
 
 import AuthUI from '@/components/auth/AuthUI'
-import { Button } from '@/components/ui/button'
 
-const ForgotPassword = () => {
+const ResetPassword = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-secondary/10 p-4">
       <div className="w-full max-w-sm space-y-6">
@@ -12,13 +10,13 @@ const ForgotPassword = () => {
           <div className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-primary">
             <Fingerprint className="h-8 w-8 text-primary-foreground" />
           </div>
-          <h1 className="text-2xl font-semibold tracking-tight">Forgot password?</h1>
-          <p className="text-sm text-muted-foreground">Enter your email for instructions.</p>
+          <h1 className="text-2xl font-semibold tracking-tight">Set New Password</h1>
+          <p className="text-sm text-muted-foreground">Must be at least 8 characters.</p>
         </div>
         <div className="space-y-4">
           <AuthUI />
         </div>
-        <div className="space-y-4">
+        {/* <div className="space-y-4">
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
               <span className="w-full border-t" />
@@ -36,10 +34,10 @@ const ForgotPassword = () => {
           <Link to="/signup" className="font-semibold text-primary hover:underline">
             Sign up
           </Link>
-        </div>
+        </div> */}
       </div>
     </div>
   )
 }
 
-export default ForgotPassword
+export default ResetPassword

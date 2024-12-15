@@ -1,10 +1,3 @@
-/** interface
- * @Description: Mẫu kahi báo parmas
- * @author kelvin
- * @Email phamm5687@gmail.com
- * @date new Date()
- */
-
 export interface getCanvasData {
   startTime: string
   endTime: string
@@ -18,6 +11,7 @@ export interface createAccountParams {
   lastName: string
   password: string
   role: string
+  url: string
   gender?: string
   phone?: string
   dob?: string
@@ -29,6 +23,16 @@ export interface signInParams {
   password: string
 }
 
+export interface resetPasswordParams {
+  accountId: string
+  password: string
+}
+export interface verifyEmailParams {
+  accountId?: string
+}
+export interface sendRequestResetPasswordParams {
+  email: string
+}
 export interface ICommonResponse {
   message?: string
 }
