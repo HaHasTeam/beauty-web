@@ -31,7 +31,7 @@ class MyAxios {
       },
       (error: AxiosError) => {
         throw error.response?.data
-      }
+      },
     )
   }
 
@@ -56,7 +56,7 @@ class MyAxios {
     return this.axiosInstance.post(url, formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
       onUploadProgress,
-      signal: controller ? controller.signal : undefined
+      signal: controller ? controller.signal : undefined,
     })
   }
 
@@ -73,7 +73,7 @@ class MyAxios {
     return this.axiosInstance.post(url, fileArrayBuffer, {
       headers: { 'Content-Type': 'application/octet-stream' },
       onUploadProgress,
-      signal: controller ? controller.signal : undefined
+      signal: controller ? controller.signal : undefined,
     })
   }
 
@@ -85,7 +85,7 @@ class MyAxios {
           params: data,
           responseType: 'blob',
           onDownloadProgress,
-          signal: controller ? controller.signal : undefined
+          signal: controller ? controller.signal : undefined,
         })
         .then((res) => {
           const blob = new Blob([res.data])

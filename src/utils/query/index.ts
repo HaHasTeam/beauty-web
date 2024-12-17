@@ -3,7 +3,7 @@ import { AxiosRequestConfig } from 'axios'
 export const toQueryFetcher = <TParams = unknown, TResponse = unknown>(
   key: string,
   fetcher: (params?: TParams, options?: Partial<AxiosRequestConfig<TParams>>) => Promise<TResponse>,
-  options?: Partial<AxiosRequestConfig<TParams>>
+  options?: Partial<AxiosRequestConfig<TParams>>,
 ) => {
   const fn = async ({ queryKey }: { queryKey: [string] | [string, TParams] }) => {
     const params = queryKey.length > 1 ? queryKey[1] : undefined
@@ -13,14 +13,14 @@ export const toQueryFetcher = <TParams = unknown, TResponse = unknown>(
   return {
     queryKey: key,
     fn: fn,
-    raw: fetcher
+    raw: fetcher,
   }
 }
 
 export const toMutationFetcher = <TParams = unknown, TResponse = unknown>(
   key: string,
   fetcher: (params: TParams, options?: Partial<AxiosRequestConfig<TParams>>) => Promise<TResponse>,
-  options?: Partial<AxiosRequestConfig<TParams>>
+  options?: Partial<AxiosRequestConfig<TParams>>,
 ) => {
   const fn = async (params: TParams) => {
     return fetcher(params, options)
@@ -29,6 +29,6 @@ export const toMutationFetcher = <TParams = unknown, TResponse = unknown>(
   return {
     mutationKey: key,
     fn: fn,
-    raw: fetcher
+    raw: fetcher,
   }
 }

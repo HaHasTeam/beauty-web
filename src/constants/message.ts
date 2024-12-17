@@ -22,11 +22,11 @@ export const productFormMessage = {
   successUpdateInactiveMessage:
     'Product updated successfully! It is currently inactive and will not be visible until activated.',
   successStatusMessage: 'Update product status successfully!',
-  categoryLastLevel: 'Please select the last-level category.'
+  categoryLastLevel: 'Please select the last-level category.',
 }
 
 export const productPageMessage = {
   emptyProductTitle: 'Product Not Found',
   emptyProductMessage:
-    'The product you are looking for does not exist. It may have been removed from the website or is currently unavailable.'
+    'The product you are looking for does not exist. It may have been removed from the website or is currently unavailable.',
 }

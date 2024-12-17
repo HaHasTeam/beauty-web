@@ -9,5 +9,5 @@ export const getProductByBrandIdApi = toQueryFetcher<TGetProductByBrandIdRequest
   'getProductByBrandIdApi',
   async (params) => {
     return privateRequest(`/products/get-by-brand/${params?.brandId}`)
-  }
+  },
 )

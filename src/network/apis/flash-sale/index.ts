@@ -10,9 +10,9 @@ export const addFlashSaleApi = toMutationFetcher<TAddFlashSaleRequestParams, TSe
   async (params) => {
     return privateRequest('/product-discount', {
       method: 'POST',
-      data: params
+      data: params,
     })
-  }
+  },
 )
 
 export const getAllFlashSaleListByBrandIdApi = toQueryFetcher<
@@ -21,7 +21,7 @@ export const getAllFlashSaleListByBrandIdApi = toQueryFetcher<
 >('getAllFlashSaleListByBrandIdApi', async (params) => {
   return privateRequest(`/product-discount/get-product-discount-of-brand/${params?.brandId}`, {
     method: 'GET',
-    params
+    params,
   })
 })
 
@@ -29,7 +29,7 @@ export const getAllFlashSaleApi = toQueryFetcher<void, TServerResponse<TFlashSal
   'getAllFlashSaleApi',
   async () => {
     return privateRequest('/product-discount', {
-      method: 'GET'
+      method: 'GET',
     })
-  }
+  },
 )

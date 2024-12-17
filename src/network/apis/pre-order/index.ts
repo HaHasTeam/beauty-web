@@ -10,27 +10,27 @@ export const addPreOderApi = toMutationFetcher<TAddPreOderRequestParams, TServer
   async (params) => {
     return privateRequest('/pre-order-product', {
       method: 'POST',
-      data: params
+      data: params,
     })
-  }
+  },
 )
 
 export const getPreOrderByIdApi = toQueryFetcher<TGetPreOrderByIdRequestParams, TServerResponse<TPreOrder>>(
   'getPreOrderByIdApi',
   async (params) => {
     return privateRequest(`/pre-order-product/get-pre-order-product-of-brand/${params?.id}`, {
-      method: 'GET'
+      method: 'GET',
     })
-  }
+  },
 )
 
 export const getAllPreOrderListApi = toQueryFetcher<void, TServerResponse<TPreOrder[]>>(
   'getPreOrderListApi',
   async () => {
     return privateRequest('/pre-order-product', {
-      method: 'GET'
+      method: 'GET',
     })
-  }
+  },
 )
 
 export const updatePreOrderApi = toMutationFetcher<TUpdatePreOrderRequestParams, TServerResponse<TPreOrder>>(
@@ -38,7 +38,7 @@ export const updatePreOrderApi = toMutationFetcher<TUpdatePreOrderRequestParams,
   async (params) => {
     return privateRequest(`/pre-order-product/${params.id}`, {
       method: 'PUT',
-      data: params
+      data: params,
     })
-  }
+  },
 )

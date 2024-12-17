@@ -10,9 +10,9 @@ export const createVoucherApi = toMutationFetcher<TRequestCreateVoucherParams, T
   async (params) => {
     return privateRequest('/vouchers/create', {
       method: 'POST',
-      data: params
+      data: params,
     })
-  }
+  },
 )
 export const updateStatusVoucherByIdApi = toMutationFetcher<
   TUpdateStatusVoucherRequestParams,
@@ -20,7 +20,7 @@ export const updateStatusVoucherByIdApi = toMutationFetcher<
 >('updateStatusVoucherById', async (params) => {
   return publicRequest(`/vouchers/update-status/${params?.voucherId}`, {
     method: 'PUT',
-    data: params
+    data: params,
   })
 })
 
@@ -29,18 +29,18 @@ export const updateVoucherByIdApi = toMutationFetcher<TUpdateVoucherRequestParam
   async (params) => {
     return privateRequest(`/vouchers/update-detail/${params?.id}`, {
       method: 'PUT',
-      data: params
+      data: params,
     })
-  }
+  },
 )
 
 export const getVoucherByIdApi = toQueryFetcher<string, TServerResponse<TVoucher>>('getVoucherById', async (params) => {
   return publicRequest(`/vouchers/get-by-id/${params}`, {
-    method: 'GET'
+    method: 'GET',
   })
 })
 export const getAllVouchersApi = toQueryFetcher<void, TServerResponse<TVoucher[]>>('getAllVouchers', async () => {
   return privateRequest(`/vouchers/`, {
-    method: 'GET'
+    method: 'GET',
   })
 })
