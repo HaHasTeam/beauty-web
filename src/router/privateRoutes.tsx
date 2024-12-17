@@ -17,7 +17,6 @@ const privateRoutes = [
   {
     element: (
       <AuthGuard>
-        {/* <MainLayout /> */}
         <PrimaryLayout />
       </AuthGuard>
     ),
@@ -34,10 +33,6 @@ const privateRoutes = [
       {
         path: configs.routes.checkout,
         element: <Checkout />,
-      },
-      {
-        path: configs.routes.messages,
-        element: <div>message page</div>,
       },
     ],
   },
@@ -81,18 +76,6 @@ const privateRoutes = [
         element: <ProfileWishlist />,
       },
     ],
-  },
-  {
-    path: configs.routes.notVerifyEmail,
-    element: (
-      <AuthGuard>
-        <div>Not verify email</div>
-      </AuthGuard>
-    ),
-  },
-  {
-    path: configs.routes.notFound,
-    element: <div className="">not found section</div>,
   },
 ]
 export default privateRoutes

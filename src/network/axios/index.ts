@@ -25,61 +25,13 @@ class MyAxios {
   }
 
   private initInterceptors() {
-    this.axiosInstance.interceptors.request.use(
-      (config) => {
-        //headers Bearer access-token
-        const token: string | null = localStorage.getItem('token')
-        if (token) {
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          config.headers['authorization'] = `Bearer ${token}`
-        }
-        console.log(`Check Config header：`, config)
-        return config
-      },
-      (error) => {
-        console.log(`axios error`, error)
-        return Promise.reject(error)
-      },
-    )
-
     this.axiosInstance.interceptors.response.use(
       (response) => {
-        // format Data
-        const { data } = response
-        // console.log('data', data)
-        // if (data.rsCode !== 0) {
-        //   // alert(`${data.rsCause}`)
-        //   return Promise.reject(data.data)
-        // }
-        if (data instanceof Blob) {
-          return response
-        } else {
-          return data
-        }
+        return response.data
       },
-      (error: AxiosError<{ data: { message: string } }>) => {
-        console.log('axios error', error)
-
-        //ElementUI   import { Message } from 'element-ui';
-        /*    if(error?.response){
-              switch (error.response.status){
-                  case 400:
-                      Message.error('Bad Request', error.response);
-                      break;
-                  case 401:
-                      Message.error('unauthorized', error.response);
-                      break;
-                  case 404:
-                      Message.error('not Found', error.response);
-                      break;
-                  default:
-                      Message.error('Other error message', error.response);
-              }
-          }*/
-
-        return Promise.reject(error)
-      },
+      (error: AxiosError) => {
+        throw error.response?.data
+      }
     )
   }
 
@@ -104,7 +56,7 @@ class MyAxios {
     return this.axiosInstance.post(url, formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
       onUploadProgress,
-      signal: controller ? controller.signal : undefined,
+      signal: controller ? controller.signal : undefined
     })
   }
 
@@ -121,7 +73,7 @@ class MyAxios {
     return this.axiosInstance.post(url, fileArrayBuffer, {
       headers: { 'Content-Type': 'application/octet-stream' },
       onUploadProgress,
-      signal: controller ? controller.signal : undefined,
+      signal: controller ? controller.signal : undefined
     })
   }
 
@@ -133,7 +85,7 @@ class MyAxios {
           params: data,
           responseType: 'blob',
           onDownloadProgress,
-          signal: controller ? controller.signal : undefined,
+          signal: controller ? controller.signal : undefined
         })
         .then((res) => {
           const blob = new Blob([res.data])
@@ -169,6 +121,12 @@ class MyAxios {
     URL.revokeObjectURL(a.href)
     document.body.removeChild(a)
   }
+
+  async axiosRequest<T>(options: AxiosRequestConfig): Promise<T> {
+    return this.axiosInstance.request(options)
+  }
 }
 
 export const request = new MyAxios(axiosBaseOptions)
+
+export const axiosRequest = request.axiosRequest.bind(request)

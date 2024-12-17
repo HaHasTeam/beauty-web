@@ -2,31 +2,32 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
-// Define prop type with allowEmail boolean
 import { z } from 'zod'
 
 import OrVector from '@/assets/images/orVector.png'
 import OrVector02 from '@/assets/images/orVector02.png'
-import { Button, buttonVariants } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/ui/password-input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import configs from '@/config'
-import { useToast } from '@/hooks/use-toast'
+import useHandleServerError from '@/hooks/useHandleServerError'
+import { useToast } from '@/hooks/useToast'
 import { formRegisterSchema } from '@/lib/schema'
 import { cn } from '@/lib/utils'
-import { createAccount } from '@/network/api/api'
-import { createAccountParams } from '@/network/api/api-params-moudle'
-import { axiosBaseOptions } from '@/network/axios/axios-setup'
+import { createUserApi } from '@/network/apis/user'
 
+import Button from '../button'
 import { Icons } from '../Icons'
 
 export default function SignUp() {
   // const [isSubmitting, setIsSubmitting] = useState(false)
-  const { toast } = useToast()
+  const handleServerError = useHandleServerError()
+
   const navigate = useNavigate()
+  const { successToast } = useToast()
   const form = useForm<z.infer<typeof formRegisterSchema>>({
     resolver: zodResolver(formRegisterSchema),
     defaultValues: {
@@ -34,87 +35,36 @@ export default function SignUp() {
       firstName: '',
       lastName: '',
       gender: '',
+      phone: '',
       password: '',
       passwordConfirm: '',
       acceptTerms: false,
-      phone: '',
     },
   })
-  const { mutateAsync: signUpCustomerMutate } = useMutation({
-    mutationFn: async (data: createAccountParams) => {
-      return createAccount(data)
-    },
-    onSuccess: (data) => {
-      // if (!data.ok) {
-      //   // if (data.error) {
-      //   //   const errs = data.error as { [key: string]: { message: string } }
-      //   //   Object.entries(errs).forEach(([key, value]) => {
-      //   //     form.setError(key as keyof createAccountParams, {
-      //   //       type: 'manual',
-      //   //       message: value.message,
-      //   //     })
-      //   //   })
-      //   // }
-      //   toast({
-      //     variant: 'destructive',
-      //     title: 'Uh oh! Something went wrong.',
-      //     description: data.message || data.statusText,
-      //   })
-      //   throw new Error(data.message || data.statusText)
-      // }
-      if (data.message) {
-        form.reset()
-        navigate(configs.routes.signIn)
-        return toast({
-          variant: 'default',
-          className: 'bg-green-600 text-white',
-          title: 'Message from system',
-          description: data.message,
-        })
-      }
 
-      return toast({
-        variant: 'default',
-        title: 'Submitted successfully',
-        description: (
-          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <code className="text-white">{JSON.stringify(data.message, null, 2)}</code>
-          </pre>
-        ),
-      })
-    },
-    onError(error) {
-      return toast({
-        variant: 'destructive',
-        title: 'Message from system',
-        description: error.message,
+  const { mutateAsync: createUserFn, isPending: isSubmitting } = useMutation({
+    mutationKey: [createUserApi.mutationKey],
+    mutationFn: createUserApi.fn,
+    onSuccess: () => {
+      navigate(configs.routes.signIn)
+      successToast({
+        message: `Sign In success`,
       })
     },
   })
-  function onSubmit(values: z.infer<typeof formRegisterSchema>) {
+
+  async function onSubmit(values: z.infer<typeof formRegisterSchema>) {
     try {
-      // toast({
-      //   title: 'data onSubmit',
-      //   description: (
-      //     <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-      //       <code className="text-w  hite">{JSON.stringify(values, null, 2)}</code>
-      //     </pre>
-      //   ),
-      // })
-      console.log(values)
-      const formateData: createAccountParams = {
+      const formateData = {
         ...values,
         role: 'e016d06f-126e-4e67-8f6a-dfc63d25361c',
-        url: `${axiosBaseOptions.baseURL}${configs.routes.checkEmail}`,
         username: values.firstName + ' ' + values.lastName,
       }
-      signUpCustomerMutate(formateData)
+      await createUserFn(formateData)
     } catch (error) {
       console.error('Form submission error', error)
-      toast({
-        variant: 'destructive',
-        title: 'Uh oh! Something went wrong.',
-        description: 'Failed to submit the form. Please try again.',
+      handleServerError({
+        error,
       })
     }
   }
@@ -264,8 +214,8 @@ export default function SignUp() {
               </FormItem>
             )}
           />
-          <Button type="submit" className="w-full bg-primary hover:bg-[#FF8C5A] text-white">
-            Register
+          <Button type="submit" loading={isSubmitting} disabled={isSubmitting} className="w-full  text-white">
+            Sign In
           </Button>
         </form>
       </Form>
