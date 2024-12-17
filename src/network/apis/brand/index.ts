@@ -11,9 +11,9 @@ export const requestCreateBrandApi = toMutationFetcher<TRequestCreateBrandParams
   async (params) => {
     return privateRequest('/brands/create', {
       method: 'POST',
-      data: params
+      data: params,
     })
-  }
+  },
 )
 export const updateStatusBrandByIdApi = toMutationFetcher<TUpdateStatusBrandRequestParams, TServerResponse<IBranch>>(
   'updateStatusBrandById',
@@ -23,10 +23,10 @@ export const updateStatusBrandByIdApi = toMutationFetcher<TUpdateStatusBrandRequ
       data: {
         reason: 'fdsaf',
         brandId: params?.brandId,
-        status: params.status
-      }
+        status: params.status,
+      },
     })
-  }
+  },
 )
 
 export const updateBrandByIdApi = toMutationFetcher<TUpdateBrandRequestParams, TServerResponse<IBranch>>(
@@ -34,17 +34,17 @@ export const updateBrandByIdApi = toMutationFetcher<TUpdateBrandRequestParams, T
   async (params) => {
     return privateRequest(`/brands/update-detail/${params?.brandId}`, {
       method: 'PUT',
-      data: params
+      data: params,
     })
-  }
+  },
 )
 export const getBrandByIdApi = toQueryFetcher<string, TServerResponse<IBranch>>('getBrandById', async (brandId) => {
   return publicRequest(`/brands/get-by-id/${brandId}`, {
-    method: 'GET'
+    method: 'GET',
   })
 })
 export const getAllBrandsApi = toQueryFetcher<void, TServerResponse<TBrand[]>>('getAllBrands', async () => {
   return publicRequest(`/brands/`, {
-    method: 'GET'
+    method: 'GET',
   })
 })

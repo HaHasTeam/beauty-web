@@ -5,14 +5,14 @@ export enum UserRoleEnum {
   STAFF = 'STAFF',
   KOL = 'KOL',
   ADMIN = 'ADMIN',
-  OPERATOR = 'OPERATOR'
+  OPERATOR = 'OPERATOR',
 }
 
 export enum RoleStatusEnum {
   PENDING = 'PENDING',
   ACTIVE = 'ACTIVE',
   INACTIVE = 'INACTIVE',
-  BANNED = 'BANNED'
+  BANNED = 'BANNED',
 }
 export type TRoleResponse = {
   id: string

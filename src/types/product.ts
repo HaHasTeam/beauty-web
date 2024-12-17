@@ -131,17 +131,17 @@ export enum ProductEnum {
   FLASH_SALE = 'FLASH_SALE',
   OFFICIAL = 'OFFICIAL',
   OUT_OF_STOCK = 'OUT_OF_STOCK',
-  INACTIVE = 'INACTIVE'
+  INACTIVE = 'INACTIVE',
 }
 export enum ProductClassificationTypeEnum {
   DEFAULT = 'DEFAULT',
-  CUSTOM = 'CUSTOM'
+  CUSTOM = 'CUSTOM',
 }
 export enum ProductStatusEnum {
   FLASH_SALE = 'FLASH_SALE',
   OFFICIAL = 'OFFICIAL',
   OUT_OF_STOCK = 'OUT_OF_STOCK',
   INACTIVE = 'INACTIVE',
-  BANNED = 'BANNED'
+  BANNED = 'BANNED',
 }
 // enum ends

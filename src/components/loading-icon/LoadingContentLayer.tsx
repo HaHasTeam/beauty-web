@@ -14,14 +14,14 @@ const LoadingContentLayer = ({ label, className }: Props) => {
     if (loadingRef.current) {
       loadingRef.current.scrollIntoView({
         block: 'center',
-        behavior: 'smooth'
+        behavior: 'smooth',
       })
     }
   }, [])
   return (
     <div className={cn('size-full flex justify-center items-center bg-primary/30 absolute', className)}>
       <div ref={loadingRef}>
-        <LoadingIcon label={label} color='black' />
+        <LoadingIcon label={label} color="black" />
       </div>
     </div>
   )

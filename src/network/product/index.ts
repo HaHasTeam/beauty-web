@@ -7,13 +7,13 @@ export const getAllProductApi = toQueryFetcher<void, TServerResponse<IResponsePr
   'getAllProductApi',
   async () => {
     return privateRequest('/products')
-  }
+  },
 )
 export const getProductApi = toQueryFetcher<string, TServerResponse<IResponseProduct[]>>(
   'getProductApi',
   async (productId) => {
     return privateRequest(`/products/get-by-id/${productId}`)
-  }
+  },
 )
 
 export const createProductApi = toMutationFetcher<IServerCreateProduct, TServerResponse<IServerCreateProduct>>(
@@ -21,9 +21,9 @@ export const createProductApi = toMutationFetcher<IServerCreateProduct, TServerR
   async (data) => {
     return privateRequest('/products', {
       method: 'POST',
-      data
+      data,
     })
-  }
+  },
 )
 
 type UpdateProductParams = { productId: string; data: IServerCreateProduct }
@@ -33,7 +33,7 @@ export const updateProductApi = toMutationFetcher<UpdateProductParams, TServerRe
   async ({ productId, data }: UpdateProductParams) => {
     return privateRequest(`/products/${productId}`, {
       method: 'PUT',
-      data
+      data,
     })
-  }
+  },
 )

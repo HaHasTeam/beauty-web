@@ -13,8 +13,8 @@ const getAccessToken = mem(
     return authData.accessToken
   },
   {
-    maxAge: GET_SESSION_CACHE_TIME
-  }
+    maxAge: GET_SESSION_CACHE_TIME,
+  },
 )
 
 export const privateRequest = async <R>(url: string, options?: AxiosRequestConfig): Promise<R> => {
@@ -24,8 +24,8 @@ export const privateRequest = async <R>(url: string, options?: AxiosRequestConfi
     url,
     headers: {
       Authorization: `Bearer ${accessToken}`,
-      ...options?.headers
-    }
+      ...options?.headers,
+    },
   })
 }
 
@@ -34,7 +34,7 @@ export const publicRequest = async <R>(url: string, options?: AxiosRequestConfig
     url,
     ...options,
     headers: {
-      ...options?.headers
-    }
+      ...options?.headers,
+    },
   })
 }
