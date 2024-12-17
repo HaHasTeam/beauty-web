@@ -4,40 +4,36 @@ import { CircleHelpIcon, LoaderCircle } from 'lucide-react'
 import { MdMarkEmailRead } from 'react-icons/md'
 import { SiMinutemailer } from 'react-icons/si'
 import { Navigate } from 'react-router-dom'
-import { useShallow } from 'zustand/react/shallow'
 
 import { emailContact } from '@/config/contants'
 import routes from '@/config/routes'
-import { activateAccountApi } from '@/network/api/api'
-import { useStore } from '@/store/store'
+import { activateAccountApi } from '@/network/apis/auth'
 import { TEmailDecoded } from '@/types'
 
 const EmailVerification = () => {
   const queryParams = new URLSearchParams(window.location.search)
   const email = queryParams.get('email')
   const code = queryParams.get('code')
-  const { authData } = useStore(
-    useShallow((state) => ({
-      authData: state.authData,
-    })),
-  )
+  // const { authData } = useStore(
+  //   useShallow((state) => ({
+  //     authData: state.authData,
+  //   })),
+  // )
   const accountId = code ? jwtDecode<TEmailDecoded>(code).accountId : undefined
 
   const { data: activateAccountData, isFetching: isActivatingAccount } = useQuery({
-    queryKey: ['activateAccount', accountId],
-    queryFn: async () => {
-      return activateAccountApi({ accountId })
-    },
+    queryKey: [activateAccountApi.queryKey, accountId as string],
+    queryFn: activateAccountApi.fn,
     enabled: !!accountId,
   })
-  console.log('activateAccountData', activateAccountData)
+  console.log('activateAccountData', activateAccountData, 'accountId', accountId)
 
-  if (!authData && !email && !code) {
-    return <Navigate to={routes.signIn} replace />
-  }
-  if (!authData) {
-    return <Navigate to={routes.signIn} replace />
-  }
+  // if (!authData && !email && !code) {
+  //   return <Navigate to={routes.signIn} replace />
+  // }
+  // if (!authData) {
+  //   return <Navigate to={routes.signIn} replace />
+  // }
 
   if (activateAccountData) {
     return <Navigate to={routes.home} replace />

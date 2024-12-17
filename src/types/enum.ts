@@ -5,7 +5,7 @@ export enum RoleEnum {
   STAFF = 'STAFF',
   KOL = 'KOL',
   ADMIN = 'ADMIN',
-  OPERATION = 'OPERATION',
+  OPERATOR = 'OPERATOR',
 }
 
 export enum GenderEnum {
@@ -19,6 +19,47 @@ export enum StatusEnum {
   ACTIVE = 'ACTIVE',
   INACTIVE = 'INACTIVE',
   BANNED = 'BANNED',
+  DENIED = 'DENIED',
+}
+export enum AddressEnum {
+  HOME = 'HOME',
+  OFFICE = 'OFFICE',
+  OTHER = 'OTHER',
+}
+
+export enum ProductEnum {
+  PRE_ORDER = 'PRE_ORDER',
+  OFFICIAL = 'OFFICIAL',
+  OUT_OF_STOCK = 'OUT_OF_STOCK',
+  INACTIVE = 'INACTIVE',
+}
+
+export enum FileEnum {
+  CERTIFICATE = 'CERTIFICATE',
+  AVATAR = 'AVATAR',
+  PRODUCT_IMAGE = 'PRODUCT_IMAGE',
+  POPUP_IMAGE = 'POPUP_IMAGE',
+  BRAND_IMAGE = 'BRAND_IMAGE',
+  BRAND_LOGO = 'BRAND_LOGO',
+  BRAND_DOCUMENT = 'BRAND_DOCUMENT',
+  SERVICE_IMAGE = 'SERVICE_IMAGE',
+}
+
+export enum VoucherEnum {
+  GROUP_BUYING = 'GROUP_BUYING',
+  NORMAL = 'NORMAL',
+}
+
+export enum DiscountTypeEnum {
+  PERCENTAGE = 'PERCENTAGE',
+  AMOUNT = 'AMOUNT',
+}
+
+export enum OrderEnum {
+  PRE_ORDER = 'PRE_ORDER',
+  NORMAL = 'NORMAL',
+  GROUP_BUYING = 'GROUP_BUYING',
+  FLASH_SALE = 'FLASH_SALE',
 }
 
 export enum ProjectInformationEnum {
