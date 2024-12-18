@@ -44,7 +44,7 @@ export default function Header() {
             <Link
               to={
                 configs.externalLink.brandManagement +
-                `?accessToken=${authData.accessToken}&refreshToken=${authData.refreshToken}`
+                `?accessToken=${authData?.accessToken}&refreshToken=${authData?.refreshToken}`
               }
               replace
               className="border-l border-secondary px-3 font-semibold"

@@ -32,3 +32,9 @@ export enum ProjectInformationEnum {
   facebook = 'https://www.facebook.com/allurebeauty',
   twitter = 'https://www.twitter.com/allurebeauty',
 }
+
+export enum PaymentMethod {
+  CASH = 'CASH',
+  CARD = 'CARD',
+  WALLET = 'WALLET',
+}
