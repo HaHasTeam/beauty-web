@@ -23,17 +23,11 @@ const publicRoutes = [
       },
       {
         path: configs.routes.forgotPassword,
-        // element: <ForgotPassword />,
         element: <ForgotPassword />,
       },
       {
         path: configs.routes.resetPassword,
-        // element: <ForgotPassword />,
         element: <ResetPassword />,
-      },
-      {
-        path: configs.routes.checkEmail,
-        element: <EmailVerification />,
       },
       {
         path: configs.routes.notFound,
@@ -41,7 +35,10 @@ const publicRoutes = [
       },
     ],
   },
-
+  {
+    path: configs.routes.checkEmail,
+    element: <EmailVerification />,
+  },
   {
     element: (
       <GuestGuard>

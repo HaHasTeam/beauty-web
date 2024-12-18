@@ -6,7 +6,6 @@ const routes = {
   signUp: '/sign-up',
   feed: '/feed',
   community: '/community',
-  messages: '/messages',
   notification: '/notifications',
   explore: '/explore',
   settings: '/settings',

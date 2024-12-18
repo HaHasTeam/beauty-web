@@ -4,40 +4,36 @@ import { CircleHelpIcon, LoaderCircle } from 'lucide-react'
 import { MdMarkEmailRead } from 'react-icons/md'
 import { SiMinutemailer } from 'react-icons/si'
 import { Navigate } from 'react-router-dom'
-import { useShallow } from 'zustand/react/shallow'
 
 import { emailContact } from '@/config/contants'
 import routes from '@/config/routes'
-import { activateAccountApi } from '@/network/api/api'
-import { useStore } from '@/store/store'
+import { activateAccountApi } from '@/network/apis/auth'
 import { TEmailDecoded } from '@/types'
 
 const EmailVerification = () => {
   const queryParams = new URLSearchParams(window.location.search)
   const email = queryParams.get('email')
   const code = queryParams.get('code')
-  const { authData } = useStore(
-    useShallow((state) => ({
-      authData: state.authData,
-    })),
-  )
+  // const { authData } = useStore(
+  //   useShallow((state) => ({
+  //     authData: state.authData,
+  //   })),
+  // )
   const accountId = code ? jwtDecode<TEmailDecoded>(code).accountId : undefined
 
   const { data: activateAccountData, isFetching: isActivatingAccount } = useQuery({
-    queryKey: ['activateAccount', accountId],
-    queryFn: async () => {
-      return activateAccountApi({ accountId })
-    },
+    queryKey: [activateAccountApi.queryKey, accountId as string],
+    queryFn: activateAccountApi.fn,
     enabled: !!accountId,
   })
-  console.log('activateAccountData', activateAccountData)
+  console.log('activateAccountData', activateAccountData, 'accountId', accountId)
 
-  if (!authData && !email && !code) {
-    return <Navigate to={routes.signIn} replace />
-  }
-  if (!authData) {
-    return <Navigate to={routes.signIn} replace />
-  }
+  // if (!authData && !email && !code) {
+  //   return <Navigate to={routes.signIn} replace />
+  // }
+  // if (!authData) {
+  //   return <Navigate to={routes.signIn} replace />
+  // }
 
   if (activateAccountData) {
     return <Navigate to={routes.home} replace />
@@ -45,7 +41,7 @@ const EmailVerification = () => {
 
   if (accountId) {
     return (
-      <div className="my-auto mb-auto mt-8 flex flex-col md:mt-[70px] md:max-w-full lg:mt-[130px] lg:max-w-[420px] items-center gap-4 an">
+      <div className="my-auto mb-auto  flex flex-col  md:max-w-full lg:max-w-[420px] items-center gap-4 ">
         {!isActivatingAccount ? (
           <LoaderCircle size={150} className="p-4 rounded-full bg-green-100 text-green-500 animate-spin" />
         ) : (
@@ -75,7 +71,7 @@ const EmailVerification = () => {
   }
   if (email) {
     return (
-      <div className="my-auto mb-auto mt-8 flex flex-col md:mt-[70px] md:max-w-full lg:mt-[130px] lg:max-w-[420px] items-center gap-4 an">
+      <div className="my-auto mb-auto  flex flex-col  md:max-w-full lg:max-w-[420px] items-center gap-4 ">
         <MdMarkEmailRead size={150} className="p-4 rounded-full bg-green-100 text-green-500 shadow-xl" />
         <a
           className="text-2xl flex items-center gap-2 font-thin py-2 bg-green-100 rounded-3xl px-8 cursor-pointer flex-col"

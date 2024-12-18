@@ -1,22 +1,19 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
-import { AxiosError } from 'axios'
-import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
 import { z } from 'zod'
 import { useShallow } from 'zustand/react/shallow'
 
-import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
-import { useToast } from '@/hooks/use-toast'
+import configs from '@/config'
+import useHandleServerError from '@/hooks/useHandleServerError'
+import { useToast } from '@/hooks/useToast'
 import { formSignInSchema } from '@/lib/schema'
-import { login } from '@/network/api/api'
-import { signInParams } from '@/network/api/api-params-moudle'
-import { LoginResponse } from '@/network/api/api-res-model'
+import { signInWithPasswordApi } from '@/network/apis/user'
 import { useStore } from '@/store/store'
-import { ActionResponse } from '@/types'
 
+import Button from '../button'
 import { Input } from '../ui/input'
 import { PasswordInput } from '../ui/password-input'
 
@@ -26,13 +23,13 @@ import { PasswordInput } from '../ui/password-input'
 // }
 
 export default function PasswordSignIn() {
-  const [isSubmitting, setIsSubmitting] = useState(false)
   const { authenticate } = useStore(
     useShallow((state) => ({
       authenticate: state.setAuthState,
     })),
   )
-  const { toast } = useToast()
+  const { successToast } = useToast()
+  const handleServerError = useHandleServerError()
   const navigate = useNavigate()
   const form = useForm<z.infer<typeof formSignInSchema>>({
     resolver: zodResolver(formSignInSchema),
@@ -41,96 +38,36 @@ export default function PasswordSignIn() {
       password: '',
     },
   })
-  const { mutateAsync: signInCustomerMutate } = useMutation<
-    ActionResponse<LoginResponse>,
-    AxiosError<{ message: string }>,
-    signInParams
-  >({
-    mutationFn: async (data: signInParams) => {
-      return login(data)
-    },
-    onSuccess: (data) => {
-      console.log('data', data)
 
-      // if (!data.ok) {
-      //   // if (data.error) {
-      //   //   const errs = data.error as { [key: string]: { message: string } }
-      //   //   Object.entries(errs).forEach(([key, value]) => {
-      //   //     form.setError(key as keyof createAccountParams, {
-      //   //       type: 'manual',
-      //   //       message: value.message,
-      //   //     })
-      //   //   })
-      //   // }
-      //   toast({
-      //     variant: 'destructive',
-      //     title: 'Uh oh! Something went wrong.',
-      //     description: data.message || data.statusText,
-      //   })
-      //   throw new Error(data.message || data.statusText)
-      // }
-      if (data.message && data.data) {
-        authenticate({
-          isAuthenticated: true,
-          authData: data.data,
-        })
-        setIsSubmitting(false)
-        form.reset()
-        navigate('/')
-
-        return toast({
-          variant: 'default',
-          className: 'bg-green-600 text-white',
-          title: 'Message from system',
-          description: data.message,
-        })
-      }
-
-      return toast({
-        title: 'Submitted successfully',
-        description: (
-          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <code className="text-white">{data.message}</code>
-          </pre>
-        ),
+  const { mutateAsync: signInWithPasswordFn, isPending: isSignInWithPasswordLoading } = useMutation({
+    mutationKey: [signInWithPasswordApi.mutationKey],
+    mutationFn: signInWithPasswordApi.fn,
+    onSuccess: () => {
+      successToast({
+        message: `Welcome back!, ${form.getValues('email')}`,
       })
     },
-    onError(error) {
-      console.log('error', error)
-      setIsSubmitting(false)
-      if (error.response) {
-        return toast({
-          variant: 'destructive',
-          title: 'Message from system',
-          description: error.response.data.message,
-        })
-      }
-    },
   })
-  async function onSubmit(values: z.infer<typeof formSignInSchema>) {
-    // try {
-    // toast({
-    //   title: 'data onSubmit',
-    //   description: (
-    //     <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-    //       <code className="text-white">{JSON.stringify(values, null, 2)}</code>
-    //     </pre>
-    //   ),
-    // })
-    console.log(values)
-    const formateData: signInParams = {
-      ...values,
+
+  const handleLogin = async (email: string, password: string) => {
+    try {
+      const { data } = await signInWithPasswordFn({
+        email,
+        password,
+      })
+      authenticate({
+        isAuthenticated: true,
+        authData: data,
+      })
+      navigate(configs.routes.home)
+    } catch (error) {
+      handleServerError({
+        error,
+      })
     }
-    setIsSubmitting(true)
-    await signInCustomerMutate(formateData)
-    // } catch (error) {
-    //   console.error('Form submission error', error)
-    //   toast({
-    //     variant: 'destructive',
-    //     title: 'Uh oh! Something went wrong.',
-    //     description: error.response.data.message,
-    //   })
-    // }
+  }
+  async function onSubmit(values: z.infer<typeof formSignInSchema>) {
+    await handleLogin(values.email, values.password)
   }
 
   return (
@@ -171,8 +108,8 @@ export default function PasswordSignIn() {
           >
             Forgot your password?
           </Link>
-          <Button disabled={isSubmitting} className="w-full bg-[#FFA07A] hover:bg-[#FF8C5A] text-white">
-            {isSubmitting ? 'Submitting' : 'Log in'}
+          <Button disabled={isSignInWithPasswordLoading} className="w-full">
+            Log in
           </Button>
         </form>
       </Form>

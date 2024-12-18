@@ -1,22 +1,28 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
 import { z } from 'zod'
 
 import { Button } from '@/components/ui/button'
-import configs from '@/config'
-import { useToast } from '@/hooks/use-toast'
+import useHandleServerError from '@/hooks/useHandleServerError'
+import { useToast } from '@/hooks/useToast'
 import { formChangePasswordProfileSchema, formChangePasswordSchema } from '@/lib/schema'
-import { setPassword } from '@/network/api/api'
-import { resetPasswordParams } from '@/network/api/api-params-moudle'
+import { changePasswordApi } from '@/network/apis/auth'
+import { getUserProfileApi } from '@/network/apis/user'
 
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form'
 import { PasswordInput } from '../ui/password-input'
 
 export default function ChangePasswordProfile() {
-  const navigate = useNavigate()
-  const { toast } = useToast()
+  const queryClient = useQueryClient()
+  const { successToast } = useToast()
+  const handleServerError = useHandleServerError()
+  const { data: userProfileData } = useQuery({
+    queryKey: [getUserProfileApi.queryKey],
+    queryFn: getUserProfileApi.fn,
+  })
+  console.log('userProfileData', userProfileData)
+
   const form = useForm<z.infer<typeof formChangePasswordProfileSchema>>({
     resolver: zodResolver(formChangePasswordProfileSchema),
     defaultValues: {
@@ -25,72 +31,28 @@ export default function ChangePasswordProfile() {
       passwordConfirm: '',
     },
   })
-
   const { mutateAsync: setPasswordMutation, isPending } = useMutation({
-    mutationFn: async (data: resetPasswordParams) => {
-      return setPassword(data)
-    },
-    onSuccess: (data) => {
-      // if (!data.ok) {
-      //   // if (data.error) {
-      //   //   const errs = data.error as { [key: string]: { message: string } }
-      //   //   Object.entries(errs).forEach(([key, value]) => {
-      //   //     form.setError(key as keyof createAccountParams, {
-      //   //       type: 'manual',
-      //   //       message: value.message,
-      //   //     })
-      //   //   })
-      //   // }
-      //   toast({
-      //     variant: 'destructive',
-      //     title: 'Uh oh! Something went wrong.',
-      //     description: data.message || data.statusText,
-      //   })
-      //   throw new Error(data.message || data.statusText)
-      // }
-      if (data.message) {
-        form.reset()
-        navigate(configs.routes.signIn)
-        return toast({
-          variant: 'default',
-          className: 'bg-green-600 text-white',
-          title: 'Message from system',
-          description: data.message,
-        })
-      }
-
-      return toast({
-        variant: 'default',
-        title: 'Submitted successfully',
-        description: (
-          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <code className="text-white">{JSON.stringify(data.message, null, 2)}</code>
-          </pre>
-        ),
-      })
-    },
-    onError(error) {
-      return toast({
-        variant: 'destructive',
-        title: 'Message from system',
-        description: error.message,
+    mutationKey: [changePasswordApi.mutationKey],
+    mutationFn: changePasswordApi.fn,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [getUserProfileApi.queryKey] })
+      successToast({
+        message: `Change password successfully`,
       })
     },
   })
-  function onSubmit(values: z.infer<typeof formChangePasswordSchema>) {
+
+  async function onSubmit(values: z.infer<typeof formChangePasswordSchema>) {
     try {
-      const formateData: resetPasswordParams = {
+      const formateData = {
         password: values.password,
-        accountId: 'fdsa',
+        accountId: userProfileData?.data.id || '',
       }
-      console.log(formateData)
-      setPasswordMutation(formateData)
+      console.log('sign up', formateData)
+      await setPasswordMutation(formateData)
     } catch (error) {
-      console.error('Form submission error', error)
-      toast({
-        variant: 'destructive',
-        title: 'Uh oh! Something went wrong.',
-        description: 'Failed to submit the form. Please try again.',
+      handleServerError({
+        error,
       })
     }
   }

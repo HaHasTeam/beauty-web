@@ -1,16 +1,16 @@
-import { IAccount } from '@/network/api/model/account'
 import { TAuth } from '@/types'
+import { TUserPa } from '@/types/user'
 
 export type AuthState = {
   isLoading: boolean
   isAuthenticated: boolean
-  user?: IAccount | null
-  authData: TAuth
+  user?: TUserPa | null
+  authData: TAuth | null
 }
 
 export type AuthActions = {
-  initialize: (isAuthenticated: boolean, user?: IAccount) => void
-  authenticate: (user: IAccount) => void
+  initialize: (isAuthenticated: boolean, user?: TUserPa) => void
+  authenticate: (user: TUserPa) => void
   unAuthenticate: () => void
   resetAuth: () => void
   setAuthState: (params: Partial<AuthState>) => void
