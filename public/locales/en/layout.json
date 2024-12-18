@@ -271,8 +271,8 @@
     "buy": "Buy",
     "action": "Action",
     "terms": "Our Terms and Conditions",
-    "checkoutDescription": "(Giá này đã bao gồm thuế GTGT, nhưng chưa bao gồm phí vận chuyển)",
-    "acceptCondition": "Nhấn \"Đặt hàng\" đồng nghĩa với việc bạn đồng ý tuân theo",
+    "checkoutDescription": "(This price includes VAT, but does not include shipping fees)",
+    "acceptCondition": "By clicking \"Place Order\", you agree to comply with the ",
     "savings": "Savings",
     "totalCost": "Total Cost of Products",
     "totalDiscount": "Total Discount from Vouchers",
@@ -310,8 +310,8 @@
     "codePlaceholder": "Enter your voucher code here",
     "input": "Enter your voucher code here",
     "condition": "Condition",
-    "chooseProductBrandAlert": "Vui lòng chọn sản phẩm từ Brand để áp dụng Voucher này",
-    "chooseProductAppAlert": "Vui lòng chọn sản phẩm để sử dụng ưu đãi.",
+    "chooseProductBrandAlert": "Please choose a product from the brand to apply this voucher.",
+    "chooseProductAppAlert": "Please choose a product to use this offer.",
     "description": "Enter or choose 1 voucher",
     "help": "Help",
     "chooseVoucher": "Choose voucher"
@@ -346,13 +346,18 @@
     "addOtherCard": "Add Other Card",
     "addNewBankAccount": "Add New Bank Account",
     "choosePaymentMethod": "Choose Payment Method",
-    "saveCard": "Chúng tôi hợp tác với các đơn vị cung cấp dịch vụ thanh toán uy tín để đảm bảo thông tin thẻ của bạn được an toàn và bảo mật tuyệt đối. Allure sẽ không có quyền truy cập vào thông tin thẻ của bạn.",
+    "saveCard": "We partner with reputable payment service providers to ensure that your card information is safe and secure. Allure will not have access to your card details.",
     "addCard": "Add Credit/Debit Card",
-    "securityChecked": "Thông tin thẻ của bạn được bảo vệ.",
-    "cvvDescription": "CVV là mã xác thực gồm 3 chữ số được in trên mặt sau thẻ tín dụng.",
+    "securityChecked": "Your card information is protected.",
+    "cvvDescription": "CVV is a 3-digit verification code printed on the back of your credit card.",
     "cvvFull": "Card Verification Value",
     "bankAccountEx": "EG: JOHN SMITH",
     "cardNumberEx": "EG: 4123 4567 8901 2345",
     "cvvEx": "EG: 123"
+  },
+  "order": {
+    "success": "Create order successfully!",
+    "failed": "Create order failed!",
+    "loading": "Loading order..."
   }
 }

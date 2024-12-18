@@ -1,4 +1,4 @@
-import { IBranch } from '@/types/Branch'
+import { IBranch } from '@/types/brand'
 
 export type TRequestCreateBrandParams = IBranch
 

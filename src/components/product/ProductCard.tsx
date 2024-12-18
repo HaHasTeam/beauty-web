@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import productImage from '@/assets/images/product_sample_img.png'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import configs from '@/config'
-import { IProductCard } from '@/types/product-card.interface'
+import { IProductCard } from '@/types/product'
 
 import ProductStar from './ProductStar'
 import ProductTag from './ProductTag'

@@ -6,10 +6,10 @@ import { Button as ShadcnButton, ButtonProps as ShadcnButtonProps } from '../ui/
 type ButtonProps = ShadcnButtonProps & {
   loading?: boolean
 }
-const Button = forwardRef<HTMLButtonElement, ButtonProps>(({ children, className, ...props }, ref) => {
+const Button = forwardRef<HTMLButtonElement, ButtonProps>(({ children, className, loading, ...props }, ref) => {
   return (
-    <ShadcnButton ref={ref} className={className} {...props} disabled={props.disabled || props.loading}>
-      {props.loading ? <LoadingIcon /> : children}
+    <ShadcnButton ref={ref} className={className} {...props} disabled={props.disabled || loading}>
+      {loading ? <LoadingIcon /> : children}
     </ShadcnButton>
   )
 })

@@ -1,4 +1,4 @@
-import { IProductCart } from './product.interface'
+import { IProductCart } from './product'
 
 export type ICart = {
   id: string

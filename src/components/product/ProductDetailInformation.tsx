@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 
-import { IProduct } from '@/types/product.interface'
+import { IProduct } from '@/types/product'
 
 import { Button } from '../ui/button'
 import PriceSection from './PriceSection'

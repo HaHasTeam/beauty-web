@@ -79,3 +79,12 @@ export enum PaymentMethod {
   CARD = 'CARD',
   WALLET = 'WALLET',
 }
+
+export enum ShippingStatusEnum {
+  TO_PAY = 'TO_PAY',
+  TO_SHIP = 'TO_SHIP',
+  TO_RECEIVED = 'TO_RECEIVED',
+  RETURN_REFUND = 'RETURN_REFUND',
+  COMPLETED = 'COMPLETED',
+  CANCELLED = 'CANCELLED',
+}

@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { Pen, Ticket } from 'lucide-react'
-import { useId, useState } from 'react'
+import { useEffect, useId, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { z } from 'zod'
@@ -13,6 +14,10 @@ import PaymentSelection from '@/components/payment/PaymentSelection'
 import { Button } from '@/components/ui/button'
 import { Form } from '@/components/ui/form'
 import VoucherDialog from '@/components/voucher/VoucherDialog'
+import { useToast } from '@/hooks/useToast'
+import { getAllAddressesApi } from '@/network/apis/address'
+import { createOderApi } from '@/network/apis/order'
+import { getUserProfileApi } from '@/network/apis/user'
 import CreateOrderSchema from '@/schemas/order.schema'
 import { ICart } from '@/types/cart'
 import { PaymentMethod, ProjectInformationEnum } from '@/types/enum'
@@ -20,6 +25,7 @@ import { PaymentMethod, ProjectInformationEnum } from '@/types/enum'
 const Checkout = () => {
   const { t } = useTranslation()
   const formId = useId()
+  const { successToast } = useToast()
   const [isLoading, setIsLoading] = useState(false)
   const [chosenVoucher, setChosenVoucher] = useState('')
   const defaultOrderValues = {
@@ -41,6 +47,28 @@ const Checkout = () => {
   const form = useForm<z.infer<typeof CreateOrderSchema>>({
     resolver: zodResolver(CreateOrderSchema),
     defaultValues: defaultOrderValues,
+  })
+  const { data: useProfileData } = useQuery({
+    queryKey: [getUserProfileApi.queryKey],
+    queryFn: getUserProfileApi.fn,
+  })
+  const { data: useAllAddressData } = useQuery({
+    queryKey: [getAllAddressesApi.queryKey],
+    queryFn: getAllAddressesApi.fn,
+  })
+
+  const handleReset = () => {
+    form.reset()
+  }
+  const { mutateAsync: createOrderFn } = useMutation({
+    mutationKey: [createOderApi.mutationKey],
+    mutationFn: createOderApi.fn,
+    onSuccess: () => {
+      successToast({
+        message: t('order.success'),
+      })
+      handleReset()
+    },
   })
   const carts: ICart[] = [
     {
@@ -108,7 +136,7 @@ const Checkout = () => {
   async function onSubmit(values: z.infer<typeof CreateOrderSchema>) {
     try {
       setIsLoading(true)
-      console.log(values)
+      console.log(values, useAllAddressData, createOrderFn)
       // await createProductFn(values)
       setIsLoading(false)
     } catch (error) {
@@ -120,13 +148,17 @@ const Checkout = () => {
       // })
     }
   }
+
+  useEffect(() => {
+    console.log(useProfileData?.data)
+  }, [useProfileData])
   return (
     <div className="relative w-full mx-auto py-5 ">
       <div className="w-full xl:px-12 lg:px-6 sm:px-2 px-1 space-y-3">
         <Form {...form}>
           <form
             noValidate
-            onSubmit={form.handleSubmit(onSubmit)}
+            onSubmit={form.handleSubmit(onSubmit, (e) => console.log(form.getValues(), e))}
             className="w-full grid gap-4 mb-8"
             id={`form-${formId}`}
           >

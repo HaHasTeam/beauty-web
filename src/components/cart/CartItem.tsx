@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import configs from '@/config'
-import { IProductCart } from '@/types/product.interface'
+import { IProductCart } from '@/types/product'
 
 import ProductCardLandscape from '../product/ProductCardLandscape'
 import { Button } from '../ui/button'

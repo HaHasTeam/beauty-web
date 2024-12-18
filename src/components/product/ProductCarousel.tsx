@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import { IProduct } from '@/types/product.interface'
+import { IProduct } from '@/types/product'
 
 import { Button } from '../ui/button'
 import { Carousel, CarouselApi, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '../ui/carousel'

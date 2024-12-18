@@ -10,7 +10,7 @@ import LoadingIcon from '@/components/Loading'
 import APIPagination from '@/components/pagination/Pagination'
 import ProductCard from '@/components/product/ProductCard'
 import ProductSort from '@/components/sort/ProductSort'
-import { IProductCard } from '@/types/product-card.interface'
+import { IProductCard } from '@/types/product'
 
 const SearchPage = () => {
   const [currentPage, setCurrentPage] = useState(0)

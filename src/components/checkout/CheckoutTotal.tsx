@@ -51,7 +51,7 @@ export default function CheckoutTotal({
             {t('cart.terms')}
           </Link>
         </p>
-        <Button className="w-full bg-destructive hover:bg-destructive/80" loading={isLoading}>
+        <Button type="submit" className="w-full bg-destructive hover:bg-destructive/80 mt-2" loading={isLoading}>
           {t('cart.checkout')}
         </Button>
       </div>

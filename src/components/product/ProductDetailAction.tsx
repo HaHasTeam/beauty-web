@@ -3,8 +3,8 @@ import '@/components/product/Product.css'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { IClassification } from '@/types/classification.interface'
-import { IProduct } from '@/types/product.interface'
+import { IClassification } from '@/types/classification'
+import { IProduct } from '@/types/product'
 
 import IncreaseDecreaseButton from '../IncreaseDecreaseButton'
 import { Button } from '../ui/button'

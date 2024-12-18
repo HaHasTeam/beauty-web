@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import configs from '@/config'
-import { IClassification } from '@/types/classification.interface'
+import { IClassification } from '@/types/classification'
 
 import ClassificationPopover from '../classification/ClassificationPopover'
 import IncreaseDecreaseButton from '../IncreaseDecreaseButton'

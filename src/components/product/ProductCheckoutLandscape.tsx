@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import configs from '@/config'
-import { IClassification } from '@/types/classification.interface'
+import { IClassification } from '@/types/classification'
 
 import { Label } from '../ui/label'
 import ProductTag from './ProductTag'
