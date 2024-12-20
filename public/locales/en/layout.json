@@ -182,6 +182,11 @@
       "title": "You're all caught up!",
       "description": "Check back later for new tasks",
       "button": "Confirm"
+    },
+    "classification": {
+      "title": "No product classifications",
+      "description": "Product classifications are no longer available!",
+      "button": "Confirm"
     }
   },
   "productDetail": {

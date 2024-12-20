@@ -182,6 +182,11 @@
       "title": "Bạn đã hoàn tất tất cả!",
       "description": "Hãy quay lại sau để xem các nhiệm vụ mới.",
       "button": "Đồng ý"
+    },
+    "classification": {
+      "title": "Phân loại sản phẩm trống",
+      "description": "Phân loại sản phẩm hiện tại không khả dụng!",
+      "button": "Đồng ý"
     }
   },
   "productDetail": {
@@ -273,7 +278,7 @@
     "deleteAll": "Xóa tất cả",
     "products": "sản phẩm",
     "Products": "Sản phẩm",
-    "saved": "Đã lưu",
+    "saved": "Đã tiết kiệm",
     "selectAll": "Chọn tất cả",
     "voucher": "Voucher",
     "selectVoucher": "Chọn hoặc nhập voucher",

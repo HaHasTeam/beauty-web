@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { IClassification } from '@/types/classification'
+import Empty from '../empty/Empty'
 
 interface ClassificationPopoverProps {
   classifications: IClassification[]
@@ -58,18 +59,22 @@ export default function ClassificationPopover({ classifications }: Classificatio
                 <Label> {t('productDetail.classification')}</Label>
               </div>
               <div className="p-2">
-                {classifications.map((option) => (
-                  <Button
-                    key={option?.id}
-                    variant="ghost"
-                    className={`w-full justify-start px-2 py-1.5 text-sm ${
-                      currentSelection === option?.id ? 'bg-accent text-accent-foreground' : ''
-                    }`}
-                    onClick={() => handleSelect(option?.id)}
-                  >
-                    {option?.name}
-                  </Button>
-                ))}
+                {classifications && classifications?.length > 0 ? (
+                  classifications.map((option) => (
+                    <Button
+                      key={option?.id}
+                      variant="ghost"
+                      className={`w-full justify-start px-2 py-1.5 text-sm ${
+                        currentSelection === option?.id ? 'bg-accent text-accent-foreground' : ''
+                      }`}
+                      onClick={() => handleSelect(option?.id)}
+                    >
+                      {option?.name}
+                    </Button>
+                  ))
+                ) : (
+                  <Empty title={t('empty.classification.title')} description={t('empty.classification.description')} />
+                )}
               </div>
               <div className="flex items-center justify-end gap-2 p-4 border-t">
                 <Button variant="outline" size="sm" onClick={handleCancel}>
