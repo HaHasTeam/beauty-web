@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useId, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -7,7 +7,7 @@ import { z } from 'zod'
 
 import useHandleServerError from '@/hooks/useHandleServerError'
 import { useToast } from '@/hooks/useToast'
-import { createAddressApi } from '@/network/apis/address'
+import { createAddressApi, getMyAddressesApi } from '@/network/apis/address'
 import CreateAddressSchema from '@/schemas/address.schema'
 import { AddressEnum } from '@/types/enum'
 
@@ -28,6 +28,7 @@ const AddAddressDialog = ({ triggerComponent }: AddAddressDialogProps) => {
   const id = useId()
   const { successToast } = useToast()
   const handleServerError = useHandleServerError()
+  const queryClient = useQueryClient()
 
   const defaultValues = {
     fullName: '',
@@ -54,6 +55,9 @@ const AddAddressDialog = ({ triggerComponent }: AddAddressDialogProps) => {
     onSuccess: () => {
       successToast({
         message: `${t('address.addSuccess')}`,
+      })
+      queryClient.invalidateQueries({
+        queryKey: [getMyAddressesApi.queryKey],
       })
       handleReset()
     },
@@ -105,7 +109,7 @@ const AddAddressDialog = ({ triggerComponent }: AddAddressDialogProps) => {
               </div>
               <DialogFooter>
                 <div className="flex justify-end gap-2 w-full">
-                  <Button variant="outline" onClick={() => setOpen(false)}>
+                  <Button type="button" variant="outline" onClick={() => setOpen(false)}>
                     {t('dialog.cancel')}
                   </Button>
                   <Button type="submit" loading={isLoading}>

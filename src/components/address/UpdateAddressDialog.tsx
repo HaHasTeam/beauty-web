@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useId, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -7,7 +7,7 @@ import { z } from 'zod'
 
 import useHandleServerError from '@/hooks/useHandleServerError'
 import { useToast } from '@/hooks/useToast'
-import { updateAddressApi } from '@/network/apis/address'
+import { getAddressByIdApi, getMyAddressesApi, updateAddressApi } from '@/network/apis/address'
 import CreateAddressSchema from '@/schemas/address.schema'
 import { IAddress } from '@/types/address'
 import { AddressEnum } from '@/types/enum'
@@ -30,6 +30,7 @@ const UpdateAddressDialog = ({ address, triggerComponent }: UpdateAddressDialogP
   const id = useId()
   const { successToast } = useToast()
   const handleServerError = useHandleServerError()
+  const queryClient = useQueryClient()
 
   const defaultValues = {
     fullName: address?.fullName ?? '',
@@ -56,6 +57,12 @@ const UpdateAddressDialog = ({ address, triggerComponent }: UpdateAddressDialogP
     onSuccess: () => {
       successToast({
         message: `${t('address.updateSuccess')}`,
+      })
+      queryClient.invalidateQueries({
+        queryKey: [getAddressByIdApi.queryKey, address?.id as string],
+      })
+      queryClient.invalidateQueries({
+        queryKey: [getMyAddressesApi.queryKey],
       })
       handleReset()
     },
@@ -107,7 +114,7 @@ const UpdateAddressDialog = ({ address, triggerComponent }: UpdateAddressDialogP
               </div>
               <DialogFooter>
                 <div className="flex justify-end gap-2 w-full">
-                  <Button variant="outline" onClick={() => setOpen(false)}>
+                  <Button type="button" variant="outline" onClick={() => setOpen(false)}>
                     {t('dialog.cancel')}
                   </Button>
                   <Button type="submit" loading={isLoading}>

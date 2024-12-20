@@ -18,9 +18,13 @@ interface AddressSectionProps {
 }
 export default function AddressSection({ form, addresses }: AddressSectionProps) {
   const { t } = useTranslation()
-  const [chosenAddress, setChosenAddress] = useState<IAddress | null>(
-    addresses?.find((address) => address.isDefault === true) ?? null,
-  )
+  const defaultAddress = addresses?.find((address) => address.isDefault === true) ?? null
+
+  const [chosenAddress, setChosenAddress] = useState<IAddress | null>(null)
+
+  console.log(chosenAddress)
+  console.log(addresses)
+  console.log(addresses?.find((address) => address.isDefault === true))
   return (
     <div className="w-full mx-auto shadow-sm bg-white rounded-md">
       <div className="w-full space-y-1">
@@ -40,6 +44,7 @@ export default function AddressSection({ form, addresses }: AddressSectionProps)
                   {t('address.edit')}
                 </Button>
               }
+              defaultAddress={defaultAddress}
               setChosenAddress={setChosenAddress}
             />
           </div>
