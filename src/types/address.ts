@@ -1,17 +1,17 @@
+import { AddressEnum } from './enum'
+
 export interface IAddress {
-  id: string
+  id?: string
   createdAt?: string
   updatedAt?: string
-  phone: string
-  number?: string
-  building?: string
-  street?: string
+  fullName: string
+  phoneNumber: string
+  detailAddress: string
   ward?: string
-  city?: string
+  district?: string
   province?: string
   fullAddress?: string
-  notes?: string
-  type?: string
+  type?: AddressEnum.HOME | AddressEnum.OFFICE | AddressEnum.OTHER
   status?: string
   isDefault?: boolean
 }

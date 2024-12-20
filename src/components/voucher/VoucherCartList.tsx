@@ -20,7 +20,7 @@ const VoucherCartList = ({ triggerText, brandName }: VoucherCartListProps) => {
       <PopoverTrigger asChild>
         <span className="text-blue-700 hover:cursor-pointer">{triggerText}</span>
       </PopoverTrigger>
-      <PopoverContent className="md:w-[500px] w-[320px]">
+      <PopoverContent className="md:w-[500px] w-[320px] bg-white">
         <div className="w-full md:p-2 p-0">
           <h2 className="text-xl font-medium mb-4">
             {brandName} {t('voucher.title')}
@@ -41,7 +41,7 @@ const VoucherCartList = ({ triggerText, brandName }: VoucherCartListProps) => {
               </Button>
             </div>
           </div>
-          <ScrollArea className="h-52">
+          <ScrollArea className="h-52 px-2">
             <div className="py-2 space-y-2">
               <RadioGroup>
                 {[

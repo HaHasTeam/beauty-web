@@ -60,5 +60,9 @@ export default function ProductTag({ tag, text, size = 'medium' }: ProductTagPro
       break
   }
 
-  return <span className={`${sizeClasses[size]} rounded-md font-medium ${tagColorClass}`}>{text ? text : tagText}</span>
+  return (
+    <span className={`${sizeClasses[size]} cursor-default rounded-md font-medium ${tagColorClass}`}>
+      {text ? text : tagText}
+    </span>
+  )
 }

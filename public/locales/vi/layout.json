@@ -38,6 +38,9 @@
     "preOrder": "Đặt trước",
     "groupBuying": "Mua nhóm"
   },
+  "statusTag": {
+    "default": "Mặc định"
+  },
   "flashSale": {
     "title": "Flash Sale"
   },
@@ -149,6 +152,11 @@
       "title": "Giỏ hàng của bạn trống",
       "description": "Khám phá những sản phẩm đang thịnh hành.",
       "button": "Khám phá sản phẩm"
+    },
+    "address": {
+      "title": "Không có địa chỉ nào được tìm thấy",
+      "description": "Có vẻ như bạn chưa thêm bất kỳ địa chỉ nào. Hãy thêm một địa chỉ ngay để trải nghiệm mua sắm thuận tiện hơn!",
+      "button": "Thêm Địa Chỉ"
     },
     "favorite": {
       "title": "Danh sách yêu thích trống",
@@ -297,7 +305,31 @@
     "addressBook": "Sổ địa chỉ",
     "noAddress": "Không tìm thấy địa chỉ",
     "addNewAddress": "Thêm địa chỉ mới",
-    "deliveryTo": "Giao tới"
+    "deliveryTo": "Giao tới",
+    "chooseAddress": "Chọn địa chỉ",
+    "editAddress": "Thay đổi địa chỉ",
+    "chooseOne": "Chọn 1 địa chỉ",
+    "update": "Cập nhật",
+    "updateAddress": "Cập nhật địa chỉ",
+    "fullName": "Họ và tên",
+    "enterFullName": "Nhập họ và tên của bạn",
+    "phone": "Số điện thoại",
+    "enterPhone": "Nhập số điện thoại của bạn",
+    "provinceOrCity": "Tỉnh/Thành phố",
+    "chooseProvinceOrCity": "Chọn Tỉnh/Thành phố",
+    "district": "Quận/Huyện",
+    "chooseDistrict": "Chọn Quận/Huyện",
+    "ward": "Phường/Xã",
+    "chooseWard": "Chọn Phường/Xã",
+    "detailAddress": "Địa chỉ chi tiết",
+    "enterDetailAddress": "Nhập địa chỉ chi tiết của bạn",
+    "addressType": "Loại địa chỉ",
+    "addressTypeValueHome": "Nhà Riêng",
+    "addressTypeValueOffice": "Văn Phòng",
+    "addressTypeValueOther": "Khác",
+    "setAsDefault": "Đặt làm địa chỉ mặc định",
+    "addSuccess": "Thêm địa chỉ mới thành công!",
+    "alertMessage": "Please add new address before {{action}}!"
   },
   "voucher": {
     "title": "Voucher",
@@ -314,7 +346,11 @@
     "chooseProductAppAlert": "Vui lòng chọn sản phẩm để sử dụng ưu đãi.",
     "description": "Nhập hoặc chọn 1 voucher",
     "help": "Trợ giúp",
-    "chooseVoucher": "Chọn voucher"
+    "chooseVoucher": "Chọn voucher",
+    "howToUse": "Cách Sử Dụng Voucher",
+    "howToFind": "Cách Tìm Voucher",
+    "howToUseDescription": "Để có thể áp dụng mã Allure Voucher, bạn hãy chọn nút \"Lưu\" để lấy voucher và mục ví voucher của bạn nhé.",
+    "howToFindDescription": "Bạn có thể tìm thấy Allure Voucher xuyên suốt trang web và ứng dụng. Mẹo riêng cho bạn nè, hãy bắt đầu với những trang chương trình khuyến mãi và trang chủ của thương hiệu nhé!"
   },
   "dialog": {
     "cancel": "Hủy",

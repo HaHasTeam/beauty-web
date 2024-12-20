@@ -15,10 +15,11 @@ import { Button } from '@/components/ui/button'
 import { Form } from '@/components/ui/form'
 import VoucherDialog from '@/components/voucher/VoucherDialog'
 import { useToast } from '@/hooks/useToast'
-import { getAllAddressesApi } from '@/network/apis/address'
+import { getMyAddressesApi } from '@/network/apis/address'
 import { createOderApi } from '@/network/apis/order'
 import { getUserProfileApi } from '@/network/apis/user'
 import CreateOrderSchema from '@/schemas/order.schema'
+import { IAddress } from '@/types/address'
 import { ICart } from '@/types/cart'
 import { PaymentMethod, ProjectInformationEnum } from '@/types/enum'
 
@@ -28,6 +29,7 @@ const Checkout = () => {
   const { successToast } = useToast()
   const [isLoading, setIsLoading] = useState(false)
   const [chosenVoucher, setChosenVoucher] = useState('')
+  const [myAddresses, setMyAddresses] = useState<IAddress[]>([])
   const defaultOrderValues = {
     orders: [
       {
@@ -52,11 +54,11 @@ const Checkout = () => {
     queryKey: [getUserProfileApi.queryKey],
     queryFn: getUserProfileApi.fn,
   })
-  const { data: useAllAddressData } = useQuery({
-    queryKey: [getAllAddressesApi.queryKey],
-    queryFn: getAllAddressesApi.fn,
-  })
 
+  const { data: useMyAddressesData } = useQuery({
+    queryKey: [getMyAddressesApi.queryKey],
+    queryFn: getMyAddressesApi.fn,
+  })
   const handleReset = () => {
     form.reset()
   }
@@ -136,7 +138,7 @@ const Checkout = () => {
   async function onSubmit(values: z.infer<typeof CreateOrderSchema>) {
     try {
       setIsLoading(true)
-      console.log(values, useAllAddressData, createOrderFn)
+      console.log(values, useMyAddressesData, createOrderFn)
       // await createProductFn(values)
       setIsLoading(false)
     } catch (error) {
@@ -151,7 +153,10 @@ const Checkout = () => {
 
   useEffect(() => {
     console.log(useProfileData?.data)
-  }, [useProfileData])
+    if (useProfileData?.data && useMyAddressesData?.data) {
+      setMyAddresses(useMyAddressesData?.data)
+    }
+  }, [useProfileData, useMyAddressesData])
   return (
     <div className="relative w-full mx-auto py-5 ">
       <div className="w-full xl:px-12 lg:px-6 sm:px-2 px-1 space-y-3">
@@ -164,7 +169,7 @@ const Checkout = () => {
           >
             <h2 className="uppercase font-bold text-xl">{t('cart.checkout')}</h2>
             <div className="w-full flex gap-3 lg:flex-row md:flex-col flex-col">
-              <div className="w-full md:w-full lg:w-[calc(65%-6px)] xl:w-[calc(70%-6px)] shadow-sm">
+              <div className="w-full md:w-full lg:w-[calc(65%-6px)] xl:w-[calc(70%-6px)]">
                 <CheckoutHeader />
                 {carts.map((cart) => (
                   <CheckoutItem
@@ -178,12 +183,7 @@ const Checkout = () => {
                 ))}
               </div>
               <div className="w-full md:full lg:w-[calc(35%-6px)] xl:w-[calc(30%-6px)] flex flex-col gap-3">
-                <AddressSection
-                  fullName={'Nguyen Van A'}
-                  phone={'0987654321'}
-                  address={'D1 Long Thanh My, Q9'}
-                  isDefault
-                />
+                <AddressSection form={form} addresses={myAddresses} />
                 {/* Voucher Section */}
                 <div className="flex items-center gap-4 justify-between p-4 bg-white rounded-md shadow-sm">
                   <div className="flex gap-2 items-center">
