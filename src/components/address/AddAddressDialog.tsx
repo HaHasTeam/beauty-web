@@ -37,7 +37,7 @@ const AddAddressDialog = ({ triggerComponent }: AddAddressDialogProps) => {
     district: '',
     province: '',
     fullAddress: '',
-    type: AddressEnum?.HOME,
+    type: AddressEnum.HOME,
   }
 
   const form = useForm<z.infer<typeof CreateAddressSchema>>({
@@ -62,7 +62,7 @@ const AddAddressDialog = ({ triggerComponent }: AddAddressDialogProps) => {
       setIsLoading(true)
       const transformedValues = {
         ...values,
-        isDefault: values.isDefault === 'true',
+        fullAddress: `${values.detailAddress}, ${values.ward}, ${values.district}, ${values.province}`,
       }
 
       console.log(transformedValues)

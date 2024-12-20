@@ -395,5 +395,10 @@
     "success": "Create order successfully!",
     "failed": "Create order failed!",
     "loading": "Loading order..."
+  },
+  "toast": {
+    "success": "Your request has been successfully processed, continue with your work.",
+    "error": "An error occurred while processing your request, please try again later. If the problem persists, please contact the support team.",
+    "info": "This is a message to provide important additional information related to your work."
   }
 }

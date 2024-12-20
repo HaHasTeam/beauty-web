@@ -12,7 +12,7 @@ const CreateAddressSchema = z.object({
   province: z.string().regex(defaultRequiredRegex.pattern, defaultRequiredRegex.message),
   fullAddress: z.string().optional(),
   type: z.enum([AddressEnum?.HOME, AddressEnum?.OFFICE, AddressEnum.OTHER]).optional(),
-  isDefault: z.string().optional(),
+  isDefault: z.boolean().optional(),
 })
 
 export default CreateAddressSchema

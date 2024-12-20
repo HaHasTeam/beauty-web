@@ -395,5 +395,10 @@
     "success": "Đặt hàng thành công!",
     "failed": "Đặt hàng thất bại!",
     "loading": "Đang tải đơn hàng..."
+  },
+  "toast": {
+    "success": "Yêu cầu của bạn đã được xử lý thành công, tiếp tục công việc của bạn.",
+    "error": "Đã xảy ra lỗi khi xử lý yêu cầu của bạn, vui lòng thử lại sau. Nếu vấn đề vẫn tiếp diễn, vui lòng liên hệ với đội ngũ hỗ trợ.",
+    "info": "Đây là một thông báo để cung cấp thêm thông tin quan trọng liên quan đến công việc của bạn."
   }
 }

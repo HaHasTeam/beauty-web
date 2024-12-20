@@ -67,13 +67,6 @@ export default function FormAddressContent({ form }: FormAddressContentProps) {
                   <div className="w-full space-y-1">
                     <FormControl>
                       <PhoneInputWithCountries {...field} isShowCountry={false} />
-                      {/* <Input
-                        id="phoneNumber"
-                        placeholder={t('address.enterPhone')}
-                        className="border-primary/40"
-                        {...field}
-                        value={field.value ?? ''}
-                      /> */}
                     </FormControl>
                     <FormMessage />
                   </div>
@@ -95,7 +88,7 @@ export default function FormAddressContent({ form }: FormAddressContentProps) {
                   </div>
                   <div className="w-full space-y-1">
                     <FormControl>
-                      <Select>
+                      <Select onValueChange={(value) => field?.onChange(value)} value={field?.value || ''}>
                         <SelectTrigger>
                           <SelectValue {...field} placeholder={t('address.chooseProvinceOrCity')} />
                         </SelectTrigger>
@@ -111,27 +104,26 @@ export default function FormAddressContent({ form }: FormAddressContentProps) {
               </FormItem>
             )}
           />
-          {/* <FormField
+          <FormField
             control={form.control}
             name="district"
             render={({ field }) => (
               <FormItem className="w-full">
                 <div className="w-full flex gap-2">
-                  <div className="w-[15%] flex items-center">
+                  <div className="w-1/5 flex items-center">
                     <Label htmlFor="district" required>
                       {t('address.district')}
                     </Label>
                   </div>
                   <div className="w-full space-y-1">
                     <FormControl>
-                      <Select>
+                      <Select onValueChange={(value) => field?.onChange(value)} value={field?.value || ''}>
                         <SelectTrigger>
-                          <SelectValue placeholder={t('address.chooseDistrict')} />
+                          <SelectValue {...field} placeholder={t('address.chooseDistrict')} />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem {...field} value={field.value ?? ''}>
-                            {field?.value}
-                          </SelectItem>
+                          <SelectItem value="hcm">Thu Duc</SelectItem>
+                          <SelectItem value="hn">Q1</SelectItem>
                         </SelectContent>
                       </Select>
                     </FormControl>
@@ -147,21 +139,20 @@ export default function FormAddressContent({ form }: FormAddressContentProps) {
             render={({ field }) => (
               <FormItem className="w-full">
                 <div className="w-full flex gap-2">
-                  <div className="w-[15%] flex items-center">
+                  <div className="w-1/5 flex items-center">
                     <Label htmlFor="ward" required>
                       {t('address.ward')}
                     </Label>
                   </div>
                   <div className="w-full space-y-1">
                     <FormControl>
-                      <Select>
+                      <Select onValueChange={(value) => field?.onChange(value)} value={field?.value || ''}>
                         <SelectTrigger>
-                          <SelectValue placeholder={t('address.chooseWard')} />
+                          <SelectValue {...field} placeholder={t('address.chooseWard')} />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem {...field} value={field.value ?? ''}>
-                            {field?.value}
-                          </SelectItem>
+                          <SelectItem value="hcm">Truong Thanh</SelectItem>
+                          <SelectItem value="hn">My Tho</SelectItem>
                         </SelectContent>
                       </Select>
                     </FormControl>
@@ -170,7 +161,8 @@ export default function FormAddressContent({ form }: FormAddressContentProps) {
                 </div>
               </FormItem>
             )}
-          /> */}
+          />
+
           <FormField
             control={form.control}
             name="detailAddress"
@@ -203,7 +195,7 @@ export default function FormAddressContent({ form }: FormAddressContentProps) {
         <div className="space-y-2">
           <FormField
             control={form.control}
-            name="detailAddress"
+            name="type"
             render={({ field }) => (
               <FormItem className="w-full">
                 <div className="w-full flex gap-2">
@@ -212,7 +204,10 @@ export default function FormAddressContent({ form }: FormAddressContentProps) {
                   </div>
                   <div className="w-full space-y-1">
                     <FormControl className="flex gap-3">
-                      <RadioGroup>
+                      <RadioGroup
+                        value={field.value} // Bind the selected value
+                        onValueChange={field.onChange} // Update the form value
+                      >
                         <div className="flex items-center space-x-2">
                           <RadioGroupItem value={AddressEnum.HOME} id={AddressEnum.HOME} />
                           <Label
@@ -264,7 +259,7 @@ export default function FormAddressContent({ form }: FormAddressContentProps) {
                 <div className="w-full space-y-1">
                   <FormControl className="flex gap-3">
                     <div className="flex items-center space-x-2">
-                      <Checkbox id="default" {...field} value={field?.value ?? ''} />
+                      <Checkbox id="default" checked={field?.value || false} onCheckedChange={field?.onChange} />
                       <Label
                         htmlFor="default"
                         className="cursor-pointer text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
