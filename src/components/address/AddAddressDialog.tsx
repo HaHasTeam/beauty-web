@@ -46,6 +46,7 @@ const AddAddressDialog = ({ triggerComponent }: AddAddressDialogProps) => {
   })
   const handleReset = () => {
     form.reset()
+    setOpen(false)
   }
   const { mutateAsync: createAddressFn } = useMutation({
     mutationKey: [createAddressApi.mutationKey],
