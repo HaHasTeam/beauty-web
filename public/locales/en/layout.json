@@ -194,7 +194,8 @@
     "breadcrumbProductName": "{{name}}",
     "brandDeal": "Brand Deal",
     "classification": "Classifications",
-    "selectOption": "Select Option"
+    "selectOption": "Select Option",
+    "selectClassification": "Select Classification"
   },
   "event": {
     "finishIn": "Finish In"

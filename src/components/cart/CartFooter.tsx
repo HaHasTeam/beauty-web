@@ -17,7 +17,7 @@ interface CartFooterProps {
   totalPrice: number
   savedPrice: number
   chosenVoucher: string
-  selectedProducts: string[]
+  selectedCartItems: string[]
   setChosenVoucher: (value: string) => void
 }
 export default function CartFooter({
@@ -29,7 +29,7 @@ export default function CartFooter({
   savedPrice,
   chosenVoucher,
   setChosenVoucher,
-  selectedProducts,
+  selectedCartItems,
 }: CartFooterProps) {
   const { t } = useTranslation()
 
@@ -51,7 +51,7 @@ export default function CartFooter({
               </Button>
             }
             onConfirmVoucher={setChosenVoucher}
-            selectedProducts={selectedProducts}
+            selectedCartItems={selectedCartItems}
           />
         </div>
         <div className="flex flex-col md:flex-row items-center justify-between space-y-2">

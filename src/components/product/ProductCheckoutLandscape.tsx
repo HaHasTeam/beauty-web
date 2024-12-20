@@ -31,7 +31,8 @@ const ProductCheckoutLandscape = ({
 }: ProductCheckoutLandscapeProps) => {
   const { t } = useTranslation()
   const selectedOptionName =
-    classifications.find((classification) => classification.selected === true)?.name || t('productDetail.selectOption')
+    classifications.find((classification) => classification.selected === true)?.name ||
+    t('productDetail.selectClassification')
   return (
     <div className="w-full py-4 border-b border-gray-200">
       <div className="w-full flex gap-2 items-center">

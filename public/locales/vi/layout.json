@@ -194,7 +194,8 @@
     "breadcrumbProductName": "{{name}}",
     "brandDeal": "Deal của thương hiệu",
     "classification": "Phân loại",
-    "selectOption": "Chọn tùy chọn"
+    "selectOption": "Chọn tùy chọn",
+    "selectClassification": "Chọn phân loại"
   },
   "event": {
     "finishIn": "Kết thúc trong"

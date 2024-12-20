@@ -13,19 +13,20 @@ import ProductTag from './ProductTag'
 
 interface ProductCardLandscapeProps {
   productImage: string
-  productId: string
+  cartItemId: string
   productName: string
   classifications: IClassification[]
   eventType: string
+  selectedClassification: string
   currentPrice: number
   price: number
   productQuantity: number
   isSelected: boolean
-  onChooseProduct: (productId: string) => void
+  onChooseProduct: (cartItemId: string) => void
 }
 const ProductCardLandscape = ({
   productImage,
-  productId,
+  cartItemId,
   productName,
   classifications,
   currentPrice,
@@ -78,8 +79,8 @@ const ProductCardLandscape = ({
     <div className="w-full py-4 border-b border-gray-200">
       <div className="w-full flex gap-2 items-center">
         <div className="flex gap-1 items-center lg:w-[10%] md:w-[10%] w-[14%]">
-          <Checkbox id={productId} checked={isSelected} onClick={() => onChooseProduct(productId)} />
-          <Link to={configs.routes.products + '/' + productId}>
+          <Checkbox id={cartItemId} checked={isSelected} onClick={() => onChooseProduct(cartItemId)} />
+          <Link to={configs.routes.products + '/' + cartItemId}>
             <div className="lg:w-20 lg:h-20 md:w-14 md:h-14 h-8 w-8">
               <img src={productImage} alt={productName} className="object-cover w-full h-full" />
             </div>
@@ -89,12 +90,10 @@ const ProductCardLandscape = ({
         <div className="flex md:flex-row flex-col lg:w-[65%] md:w-[65%] sm:w-[34%] w-[34%] gap-2">
           <div className="order-1 flex gap-1 items-center lg:w-[50%] md:w-[35%] w-full">
             <div className="flex flex-col gap-1">
-              <Link to={configs.routes.products + '/' + productId}>
+              <Link to={configs.routes.products + '/' + cartItemId}>
                 <h3 className="font-semibold lg:text-sm text-xs line-clamp-2">{productName}</h3>
               </Link>
-              <div>
-                <ProductTag tag={eventType} size="small" />
-              </div>
+              <div>{eventType && eventType !== '' && <ProductTag tag={eventType} size="small" />}</div>
             </div>
           </div>
           <div className="order-3 md:order-2 flex items-center gap-2 lg:w-[30%] md:w-[40%] w-full">

@@ -26,7 +26,7 @@ export default function ClassificationPopover({ classifications }: Classificatio
   }
   const selectedOptionName =
     classifications.find((classification) => classification.id === selectedOption)?.name ||
-    t('productDetail.selectOption')
+    t('productDetail.selectClassification')
 
   const handleSave = () => {
     setSelectedOption(currentSelection)

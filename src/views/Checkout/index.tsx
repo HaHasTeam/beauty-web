@@ -160,7 +160,7 @@ const Checkout = () => {
   console.log(useMyAddressesData?.data)
   return (
     <div className="relative w-full mx-auto py-5 ">
-      <div className="w-full xl:px-12 lg:px-6 sm:px-2 px-1 space-y-3">
+      <div className="w-full xl:px-28 lg:px-12 sm:px-2 px-1 space-y-3">
         <Form {...form}>
           <form
             noValidate
