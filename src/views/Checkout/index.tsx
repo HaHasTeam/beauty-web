@@ -48,6 +48,7 @@ const Checkout = () => {
     paymentMethod: PaymentMethod?.CASH,
     platformVoucherId: '', // Optional field, default to an empty string
   }
+
   const form = useForm<z.infer<typeof CreateOrderSchema>>({
     resolver: zodResolver(CreateOrderSchema),
     defaultValues: defaultOrderValues,
@@ -107,6 +108,7 @@ const Checkout = () => {
       setCartByBrand(useMyCartData?.data)
     }
   }, [useMyCartData])
+
   return (
     <div className="relative w-full mx-auto py-5 ">
       <div className="w-full xl:px-28 lg:px-12 sm:px-2 px-1 space-y-3">
@@ -160,7 +162,7 @@ const Checkout = () => {
                 </div>
                 {/* Payment Section */}
                 <div className="w-full">
-                  <PaymentSelection />
+                  <PaymentSelection form={form} />
                 </div>
                 <div>
                   <CheckoutTotal

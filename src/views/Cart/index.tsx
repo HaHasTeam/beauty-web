@@ -16,6 +16,8 @@ const Cart = () => {
   const [chosenVoucher, setChosenVoucher] = useState('')
   const [isAllSelected, setIsAllSelected] = useState<boolean>(false)
   const [cartByBrand, setCartByBrand] = useState<ICartByBrand | undefined>(undefined)
+  const totalPrice = getTotalPrice(selectedCartItems, cartByBrand)
+
   const { data: useMyCartData } = useQuery({
     queryKey: [getMyCartApi.queryKey],
     queryFn: getMyCartApi.fn,
@@ -61,7 +63,6 @@ const Cart = () => {
     }
   }, [selectedCartItems, useMyCartData])
 
-  const totalPrice = getTotalPrice(selectedCartItems, cartByBrand)
   return (
     <div className="relative w-full mx-auto py-5 ">
       <div className="w-full xl:px-28 lg:px-12 sm:px-2 px-1 space-y-3 ">
