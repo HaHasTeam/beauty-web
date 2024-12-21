@@ -49,7 +49,6 @@ export default function PaymentSelection({ form }: PaymentSelectionProps) {
             <div className="w-full space-y-1">
               <FormControl>
                 <RadioGroup value={field.value} onValueChange={field.onChange}>
-                  {/* <RadioGroup value={selectedPayment} onValueChange={handleChoosePaymentMethod} className="space-y-4"> */}
                   {paymentMethods.map((method) => (
                     <div
                       key={method.id}

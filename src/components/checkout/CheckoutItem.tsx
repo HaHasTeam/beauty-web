@@ -38,9 +38,15 @@ const CheckoutItem = ({ brandName, cartBrandItem, totalPrice, numberOfProducts }
 
       {/* Product Cards */}
       {cartBrandItem?.map((cartItem) => {
-        const productImage = cartItem?.productClassification?.images?.[0]?.fileUrl ?? ''
-        const productName = cartItem?.productClassification?.product?.name ?? ''
-        const productId = cartItem?.productClassification?.product?.id ?? ''
+        const product =
+          cartItem?.productClassification?.preOrderProduct !== null
+            ? cartItem?.productClassification?.preOrderProduct?.product
+            : cartItem?.productClassification?.productDiscount !== null
+              ? cartItem?.productClassification?.productDiscount?.product
+              : cartItem?.productClassification?.product
+        const productImage = product?.images?.[0]?.fileUrl ?? ''
+        const productName = product?.name ?? ''
+        const productId = product?.id ?? ''
         const selectedClassification = cartItem?.classification ?? ''
         const productPrice = cartItem?.productClassification?.price ?? 0
         const productQuantity = cartItem?.quantity ?? 0
