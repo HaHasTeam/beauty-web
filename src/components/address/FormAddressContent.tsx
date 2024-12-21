@@ -55,12 +55,12 @@ export default function FormAddressContent({ form }: FormAddressContentProps) {
 
           <FormField
             control={form.control}
-            name="phoneNumber"
+            name="phone"
             render={({ field }) => (
               <FormItem className="w-full">
                 <div className="w-full flex items-center gap-2">
                   <div className="w-1/5 flex items-center">
-                    <Label htmlFor="phoneNumber" required>
+                    <Label htmlFor="phone" required>
                       {t('address.phone')}
                     </Label>
                   </div>

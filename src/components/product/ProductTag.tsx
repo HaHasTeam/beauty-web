@@ -1,5 +1,7 @@
 import { useTranslation } from 'react-i18next'
 
+import { OrderEnum } from '@/types/enum'
+
 interface ProductTagProps {
   tag: string
   text?: string
@@ -38,7 +40,7 @@ export default function ProductTag({ tag, text, size = 'medium' }: ProductTagPro
     case 'DealPercent':
       tagColorClass = 'bg-red-100 text-red-500'
       break
-    case 'Flash Sale':
+    case OrderEnum.FLASH_SALE:
       tagColorClass = 'bg-orange-200 text-orange-800'
       tagText = t('productTag.flashSale')
       break
@@ -46,11 +48,11 @@ export default function ProductTag({ tag, text, size = 'medium' }: ProductTagPro
       tagColorClass = 'bg-white text-red-500 border border-red-500'
       tagText = t('productTag.liveStream')
       break
-    case 'GroupBuying':
+    case OrderEnum.GROUP_BUYING:
       tagColorClass = 'bg-white text-orange-500 border border-orange-500'
       tagText = t('productTag.groupBuying')
       break
-    case 'PreOrder':
+    case OrderEnum.PRE_ORDER:
       tagColorClass = 'bg-white text-yellow-500 border border-yellow-500'
       tagText = t('productTag.preOrder')
       break

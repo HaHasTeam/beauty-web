@@ -16,11 +16,12 @@ import { Form } from '@/components/ui/form'
 import VoucherDialog from '@/components/voucher/VoucherDialog'
 import { useToast } from '@/hooks/useToast'
 import { getMyAddressesApi } from '@/network/apis/address'
+import { getMyCartApi } from '@/network/apis/cart'
 import { createOderApi } from '@/network/apis/order'
 import { getUserProfileApi } from '@/network/apis/user'
 import CreateOrderSchema from '@/schemas/order.schema'
 import { IAddress } from '@/types/address'
-import { ICart } from '@/types/cart'
+import { ICartByBrand } from '@/types/cart'
 import { PaymentMethod, ProjectInformationEnum } from '@/types/enum'
 
 const Checkout = () => {
@@ -30,6 +31,7 @@ const Checkout = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [chosenVoucher, setChosenVoucher] = useState('')
   const [myAddresses, setMyAddresses] = useState<IAddress[]>([])
+  const [cartByBrand, setCartByBrand] = useState<ICartByBrand | undefined>(undefined)
   const defaultOrderValues = {
     orders: [
       {
@@ -59,6 +61,10 @@ const Checkout = () => {
     queryKey: [getMyAddressesApi.queryKey],
     queryFn: getMyAddressesApi.fn,
   })
+  const { data: useMyCartData } = useQuery({
+    queryKey: [getMyCartApi.queryKey],
+    queryFn: getMyCartApi.fn,
+  })
   const handleReset = () => {
     form.reset()
   }
@@ -72,69 +78,7 @@ const Checkout = () => {
       handleReset()
     },
   })
-  const carts: ICart[] = [
-    {
-      id: '1',
-      brandName: 'Romand',
-      products: [
-        {
-          id: '1',
-          image: 'https://i.pinimg.com/736x/c9/74/71/c97471cc7179e3164dfacba52cf957ea.jpg',
-          name: 'Romand Lip Tint',
-          classifications: [
-            { id: '0', name: 'Rose', image: 'https://example.com/color1.jpg', selected: true },
-            { id: '1', name: 'Black', image: 'https://example.com/color1.jpg', selected: false },
-            { id: '2', name: 'White', image: 'https://example.com/color1.jpg', selected: false },
-            { id: '3', name: 'Green', image: 'https://example.com/color1.jpg', selected: false },
-            { id: '4', name: 'Blue', image: 'https://example.com/color1.jpg', selected: false },
-          ],
-          currentPrice: 10000,
-          price: 12000,
-          totalPrice: 1233000,
-          eventType: 'LiveStream',
-          quantity: 1000,
-        },
-        {
-          id: '2',
-          image: 'https://i.pinimg.com/736x/c9/74/71/c97471cc7179e3164dfacba52cf957ea.jpg',
-          name: 'Romand Lip Gloss',
-          classifications: [{ id: '2', name: 'Shine', image: 'https://example.com/shine2.jpg', selected: true }],
-          currentPrice: 9500,
-          price: 11000,
-          eventType: 'LiveStream',
-          quantity: 3,
-        },
-      ],
-    },
-    {
-      id: '2',
-      brandName: 'Another Brand',
-      products: [
-        {
-          id: '3',
-          image: 'https://i.pinimg.com/736x/c9/74/71/c97471cc7179e3164dfacba52cf957ea.jpg',
-          name: 'Another Brand Lipstick',
-          classifications: [{ id: '3', name: 'Matte', image: 'https://example.com/matte3.jpg', selected: true }],
-          currentPrice: 8000,
-          price: 10000,
-          eventType: 'PreOrder',
-          quantity: 1,
-        },
-        {
-          id: '4',
-          image: 'https://i.pinimg.com/736x/c9/74/71/c97471cc7179e3164dfacba52cf957ea.jpg',
-          name: 'Another Brand Lip Balm',
-          classifications: [
-            { id: '4', name: 'Hydrating', image: 'https://example.com/hydrating4.jpg', selected: true },
-          ],
-          currentPrice: 5000,
-          price: 6000,
-          eventType: 'GroupBuying',
-          quantity: 5,
-        },
-      ],
-    },
-  ]
+
   async function onSubmit(values: z.infer<typeof CreateOrderSchema>) {
     try {
       setIsLoading(true)
@@ -158,6 +102,11 @@ const Checkout = () => {
     }
   }, [useProfileData, useMyAddressesData])
   console.log(useMyAddressesData?.data)
+  useEffect(() => {
+    if (useMyCartData && useMyCartData?.data) {
+      setCartByBrand(useMyCartData?.data)
+    }
+  }, [useMyCartData])
   return (
     <div className="relative w-full mx-auto py-5 ">
       <div className="w-full xl:px-28 lg:px-12 sm:px-2 px-1 space-y-3">
@@ -172,16 +121,16 @@ const Checkout = () => {
             <div className="w-full flex gap-3 lg:flex-row md:flex-col flex-col">
               <div className="w-full md:w-full lg:w-[calc(65%-6px)] xl:w-[calc(70%-6px)]">
                 <CheckoutHeader />
-                {carts.map((cart) => (
-                  <CheckoutItem
-                    key={cart.id}
-                    brandName={cart.brandName}
-                    brandId={cart.id}
-                    products={cart.products}
-                    totalPrice={1598483}
-                    numberOfProducts={20}
-                  />
-                ))}
+                {cartByBrand &&
+                  Object.keys(cartByBrand).map((brandName, index) => (
+                    <CheckoutItem
+                      key={`${brandName}_${index}`}
+                      brandName={brandName}
+                      cartBrandItem={cartByBrand[brandName]}
+                      totalPrice={1598483}
+                      numberOfProducts={20}
+                    />
+                  ))}
               </div>
               <div className="w-full md:full lg:w-[calc(35%-6px)] xl:w-[calc(30%-6px)] flex flex-col gap-3">
                 <AddressSection form={form} addresses={myAddresses} />

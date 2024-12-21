@@ -10,6 +10,9 @@ import { useToast } from '@/hooks/useToast'
 import { deleteCartItemApi, getCartByIdApi, getMyCartApi, updateCartItemApi } from '@/network/apis/cart'
 import { ICartItem } from '@/types/cart'
 import { IClassification } from '@/types/classification'
+import { DiscountTypeEnum } from '@/types/enum'
+import { DiscountType } from '@/types/product-discount'
+import { calculateDiscountPrice, calculateTotalPrice } from '@/utils/price'
 
 import ClassificationPopover from '../classification/ClassificationPopover'
 import DeleteConfirmationDialog from '../dialog/DeleteConfirmationDialog'
@@ -25,7 +28,8 @@ interface ProductCardLandscapeProps {
   classifications: IClassification[]
   eventType: string
   selectedClassification: string
-  currentPrice: number
+  discountType?: DiscountType | null
+  discount?: number | null
   price: number
   productQuantity: number
   isSelected: boolean
@@ -37,7 +41,8 @@ const ProductCardLandscape = ({
   cartItemId,
   productName,
   classifications,
-  currentPrice,
+  discount,
+  discountType,
   eventType,
   price,
   isSelected,
@@ -157,7 +162,8 @@ const ProductCardLandscape = ({
     }
   }
 
-  const totalPrice = currentPrice && currentPrice > 0 ? currentPrice * quantity : price * quantity
+  const totalPrice = calculateTotalPrice(price, productQuantity, discount, discountType)
+  const discountPrice = calculateDiscountPrice(price, discount, discountType)
   return (
     <div className="w-full py-4 border-b border-gray-200">
       <div className="w-full flex gap-2 items-center">
@@ -182,14 +188,24 @@ const ProductCardLandscape = ({
           <div className="order-3 md:order-2 flex items-center gap-2 lg:w-[30%] md:w-[40%] w-full">
             <ClassificationPopover classifications={classifications} />
           </div>
-          <div className="order-2 md:order-3 w-full md:w-[25%] lg:w-[20%] flex gap-1 items-center">
-            <span className="text-red-500 lg:text-lg md:text-sm sm:text-xs text-xs font-medium">
-              {t('productCard.currentPrice', { price: currentPrice })}
-            </span>
-            <span className="text-gray-400 lg:text-sm text-xs line-through">
-              {t('productCard.price', { price: price })}
-            </span>
-          </div>
+          {discount &&
+          discount > 0 &&
+          (discountType === DiscountTypeEnum.AMOUNT || discountType === DiscountTypeEnum.PERCENTAGE) ? (
+            <div className="order-2 md:order-3 w-full md:w-[25%] lg:w-[20%] flex gap-1 items-center">
+              <span className="text-red-500 lg:text-lg md:text-sm sm:text-xs text-xs font-medium">
+                {t('productCard.currentPrice', { price: discountPrice })}
+              </span>
+              <span className="text-gray-400 lg:text-sm text-xs line-through">
+                {t('productCard.price', { price: price })}
+              </span>
+            </div>
+          ) : (
+            <div className="order-2 md:order-3 w-full md:w-[25%] lg:w-[20%] flex gap-1 items-center">
+              <span className="lg:text-lg md:text-sm sm:text-xs text-xs font-medium">
+                {t('productCard.price', { price: price })}
+              </span>
+            </div>
+          )}
         </div>
 
         <div className="w-[26%] md:w-[12%] sm:w-[20%]">

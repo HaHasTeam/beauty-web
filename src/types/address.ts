@@ -5,7 +5,7 @@ export interface IAddress {
   createdAt?: string
   updatedAt?: string
   fullName: string
-  phoneNumber: string
+  phone: string
   detailAddress: string
   ward?: string
   district?: string

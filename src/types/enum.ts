@@ -88,3 +88,11 @@ export enum ShippingStatusEnum {
   COMPLETED = 'COMPLETED',
   CANCELLED = 'CANCELLED',
 }
+
+export enum ProductDiscountEnum {
+  ACTIVE = 'ACTIVE',
+  SOLD_OUT = 'SOLD_OUT',
+  WAITING = 'WAITING',
+  INACTIVE = 'INACTIVE',
+  CANCELLED = 'CANCELLED',
+}

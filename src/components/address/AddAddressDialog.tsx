@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useId, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -8,6 +8,7 @@ import { z } from 'zod'
 import useHandleServerError from '@/hooks/useHandleServerError'
 import { useToast } from '@/hooks/useToast'
 import { createAddressApi, getMyAddressesApi } from '@/network/apis/address'
+import { getUserProfileApi } from '@/network/apis/user'
 import CreateAddressSchema from '@/schemas/address.schema'
 import { AddressEnum } from '@/types/enum'
 
@@ -49,6 +50,10 @@ const AddAddressDialog = ({ triggerComponent }: AddAddressDialogProps) => {
     form.reset()
     setOpen(false)
   }
+  const { data: useProfileData } = useQuery({
+    queryKey: [getUserProfileApi.queryKey],
+    queryFn: getUserProfileApi.fn,
+  })
   const { mutateAsync: createAddressFn } = useMutation({
     mutationKey: [createAddressApi.mutationKey],
     mutationFn: createAddressApi.fn,
@@ -65,13 +70,17 @@ const AddAddressDialog = ({ triggerComponent }: AddAddressDialogProps) => {
   async function onSubmit(values: z.infer<typeof CreateAddressSchema>) {
     try {
       setIsLoading(true)
-      const transformedValues = {
-        ...values,
-        fullAddress: `${values.detailAddress}, ${values.ward}, ${values.district}, ${values.province}`,
+      if (useProfileData && useProfileData?.data) {
+        const transformedValues = {
+          ...values,
+          account: useProfileData?.data?.id,
+          fullAddress: `${values.detailAddress}, ${values.ward}, ${values.district}, ${values.province}`,
+        }
+
+        console.log(transformedValues)
+        await createAddressFn(transformedValues)
       }
 
-      console.log(transformedValues)
-      await createAddressFn(transformedValues)
       setIsLoading(false)
     } catch (error) {
       setIsLoading(false)

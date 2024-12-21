@@ -52,9 +52,15 @@ const CartItem = ({ brandName, cartBrandItem, selectedCartItems, onSelectBrand }
       </div>
 
       {/* Product Cards */}
-      {cartBrandItem?.map((cartItem) => {
-        const productImage = cartItem?.productClassification?.images?.[0]?.fileUrl ?? ''
-        const productName = cartItem?.productClassification?.product?.name ?? ''
+      {cartBrandItem?.map((cartItem: ICartItem) => {
+        const product =
+          cartItem?.productClassification?.preOrderProduct !== null
+            ? cartItem?.productClassification?.preOrderProduct?.product
+            : cartItem?.productClassification?.productDiscount !== null
+              ? cartItem?.productClassification?.productDiscount?.product
+              : cartItem?.productClassification?.product
+        const productImage = product?.images?.[0]?.fileUrl ?? ''
+        const productName = product?.name ?? ''
         const allClassificationsOfProduct: IClassification[] = []
         const productPrice = cartItem?.productClassification?.price ?? 0
         const productQuantity = cartItem?.quantity ?? 0
@@ -64,6 +70,10 @@ const CartItem = ({ brandName, cartBrandItem, selectedCartItems, onSelectBrand }
           : cartItem?.productClassification?.productDiscount
             ? OrderEnum.FLASH_SALE
             : ''
+        const discount =
+          eventType === OrderEnum.FLASH_SALE ? cartItem?.productClassification?.productDiscount?.discount : null
+        const discountType =
+          eventType === OrderEnum.FLASH_SALE ? cartItem?.productClassification?.productDiscount?.discountType : null
 
         return (
           <ProductCardLandscape
@@ -73,7 +83,8 @@ const CartItem = ({ brandName, cartBrandItem, selectedCartItems, onSelectBrand }
             productName={productName}
             classifications={allClassificationsOfProduct}
             selectedClassification={selectedClassification}
-            currentPrice={productPrice}
+            discount={discount}
+            discountType={discountType}
             price={productPrice}
             cartItemId={cartItem?.id}
             eventType={eventType}
@@ -88,7 +99,7 @@ const CartItem = ({ brandName, cartBrandItem, selectedCartItems, onSelectBrand }
       <div className="flex items-center gap-3 text-sm">
         <Tag className="w-4 h-4 text-red-500" />
         <span>Voucher giảm đến ₫21k</span>
-        <VoucherCartList triggerText={t('cart.viewMoreVoucher')} brandName="Romand" />
+        <VoucherCartList triggerText={t('cart.viewMoreVoucher')} brandName={brand?.name ?? ''} />
       </div>
     </div>
   )

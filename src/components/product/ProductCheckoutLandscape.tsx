@@ -2,7 +2,9 @@ import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import configs from '@/config'
-import { IClassification } from '@/types/classification'
+import { DiscountTypeEnum } from '@/types/enum'
+import { DiscountType } from '@/types/product-discount'
+import { calculateDiscountPrice, calculateTotalPrice } from '@/utils/price'
 
 import { Label } from '../ui/label'
 import ProductTag from './ProductTag'
@@ -11,28 +13,27 @@ interface ProductCheckoutLandscapeProps {
   productImage: string
   productId: string
   productName: string
-  classifications: IClassification[]
+  selectedClassification: string
   eventType: string
-  currentPrice: number
+  discountType?: DiscountType | null
+  discount?: number | null
   price: number
-  totalPrice: number
   productQuantity: number
 }
 const ProductCheckoutLandscape = ({
   productImage,
   productId,
   productName,
-  currentPrice,
+  discountType,
+  discount,
   eventType,
   productQuantity,
-  totalPrice,
-  classifications,
+  selectedClassification,
   price,
 }: ProductCheckoutLandscapeProps) => {
   const { t } = useTranslation()
-  const selectedOptionName =
-    classifications.find((classification) => classification.selected === true)?.name ||
-    t('productDetail.selectClassification')
+  const totalPrice = calculateTotalPrice(price, productQuantity, discount, discountType)
+  const discountPrice = calculateDiscountPrice(price, discount, discountType)
   return (
     <div className="w-full py-4 border-b border-gray-200">
       <div className="w-full flex gap-2 items-center">
@@ -50,9 +51,7 @@ const ProductCheckoutLandscape = ({
               <Link to={configs.routes.products + '/' + productId}>
                 <h3 className="font-semibold lg:text-sm text-xs line-clamp-2">{productName}</h3>
               </Link>
-              <div>
-                <ProductTag tag={eventType} size="small" />
-              </div>
+              <div>{eventType && eventType !== '' && <ProductTag tag={eventType} size="small" />}</div>
             </div>
           </div>
           <div className="order-3 sm:order-2 flex items-center gap-2 xl:w-[30%] lg:w-[30%] md:w-[30%] w-full">
@@ -61,16 +60,26 @@ const ProductCheckoutLandscape = ({
                 {t('productDetail.classification')}:
               </span>
             </Label>
-            <span className="line-clamp-2 lg:text-base md:text-sm sm:text-xs text-xs">{selectedOptionName}</span>
+            <span className="line-clamp-2 lg:text-base md:text-sm sm:text-xs text-xs">{selectedClassification}</span>
           </div>
-          <div className="order-2 sm:order-3 w-full md:w-[25%] lg:w-[25%] xl:w-[20%] flex gap-1 items-center justify-start sm:justify-end">
-            <span className="text-red-500 xl:text-lg lg:text-base md:text-sm sm:text-xs text-xs font-medium">
-              {t('productCard.currentPrice', { price: currentPrice })}
-            </span>
-            <span className="text-gray-400 lg:text-sm text-xs line-through">
-              {t('productCard.price', { price: price })}
-            </span>
-          </div>
+          {discount &&
+          discount > 0 &&
+          (discountType === DiscountTypeEnum.AMOUNT || discountType === DiscountTypeEnum.PERCENTAGE) ? (
+            <div className="order-2 sm:order-3 w-full md:w-[25%] lg:w-[25%] xl:w-[20%] flex gap-1 items-center justify-start sm:justify-end">
+              <span className="text-red-500 xl:text-lg lg:text-base md:text-sm sm:text-xs text-xs font-medium">
+                {t('productCard.currentPrice', { price: discountPrice })}
+              </span>
+              <span className="text-gray-400 lg:text-sm text-xs line-through">
+                {t('productCard.price', { price: price })}
+              </span>
+            </div>
+          ) : (
+            <div className="order-2 sm:order-3 w-full md:w-[25%] lg:w-[25%] xl:w-[20%] flex gap-1 items-center justify-start sm:justify-end">
+              <span className="xl:text-lg lg:text-base md:text-sm sm:text-xs text-xs font-medium">
+                {t('productCard.price', { price: price })}
+              </span>
+            </div>
+          )}
         </div>
 
         <div className="w-[10%] md:w-[9%] sm:w-[8%] text-end">

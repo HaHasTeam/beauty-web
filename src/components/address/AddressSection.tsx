@@ -52,7 +52,7 @@ export default function AddressSection({ form, addresses }: AddressSectionProps)
             <div className="space-y-2">
               <div className="flex gap-2">
                 <div className="font-medium pr-2 border-r border-gray-300">{chosenAddress?.fullName}</div>
-                <div className="font-medium">{chosenAddress?.phoneNumber}</div>
+                <div className="font-medium">{chosenAddress?.phone}</div>
               </div>
               <div className="text-muted-foreground">
                 {chosenAddress?.type && (

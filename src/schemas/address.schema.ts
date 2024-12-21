@@ -5,7 +5,8 @@ import { AddressEnum } from '@/types/enum'
 
 const CreateAddressSchema = z.object({
   fullName: z.string().regex(defaultRequiredRegex.pattern, defaultRequiredRegex.message),
-  phoneNumber: z.string().refine(phoneRegex.pattern, phoneRegex.message),
+  account: z.string().optional(),
+  phone: z.string().refine(phoneRegex.pattern, phoneRegex.message),
   detailAddress: z.string().regex(defaultRequiredRegex.pattern, defaultRequiredRegex.message),
   ward: z.string().regex(defaultRequiredRegex.pattern, defaultRequiredRegex.message),
   district: z.string().regex(defaultRequiredRegex.pattern, defaultRequiredRegex.message),

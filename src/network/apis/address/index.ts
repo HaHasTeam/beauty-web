@@ -19,7 +19,7 @@ export const createAddressApi = toMutationFetcher<IAddress, TServerResponse<IAdd
   },
 )
 export const getMyAddressesApi = toQueryFetcher<void, TServerResponse<IAddress[]>>('getMyAddressesApi', async () => {
-  return privateRequest('/address', {
+  return privateRequest('/address/get-my-address', {
     method: 'GET',
   })
 })

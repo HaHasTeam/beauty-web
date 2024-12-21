@@ -46,7 +46,7 @@ const AddressItem = ({ address, selectedAddressId }: AddressItemProps) => {
                     size="small"
                   />
 
-                  <span>{address?.phoneNumber ?? ''}</span>
+                  <span>{address?.phone ?? ''}</span>
                 </div>
               </div>
 

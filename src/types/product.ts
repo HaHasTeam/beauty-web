@@ -127,6 +127,7 @@ export interface ProductTableProps {
 type IProductImage = {
   id: string
   image: string
+  fileUrl?: string
 }
 
 export type IProduct = {
