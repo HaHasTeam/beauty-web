@@ -407,5 +407,14 @@
     "success": "Your request has been successfully processed, continue with your work.",
     "error": "An error occurred while processing your request, please try again later. If the problem persists, please contact the support team.",
     "info": "This is a message to provide important additional information related to your work."
+  },
+  "delete": {
+    "productCart": {
+      "title": "Remove product",
+      "description": "Are you sure you want to remove this product from your cart?",
+      "confirm": "Confirm",
+      "cancel": "Cancel",
+      "success": "Item has been successfully removed from your cart."
+    }
   }
 }

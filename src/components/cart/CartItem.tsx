@@ -54,11 +54,11 @@ const CartItem = ({ brandName, cartBrandItem, selectedCartItems, onSelectBrand }
       {/* Product Cards */}
       {cartBrandItem?.map((cartItem) => {
         const productImage = cartItem?.productClassification?.images?.[0]?.fileUrl ?? ''
-        const productName = cartItem?.productClassification?.product?.name
+        const productName = cartItem?.productClassification?.product?.name ?? ''
         const allClassificationsOfProduct: IClassification[] = []
-        const productPrice = cartItem?.productClassification?.price
-        const productQuantity = cartItem?.quantity
-        const selectedClassification = cartItem?.classification
+        const productPrice = cartItem?.productClassification?.price ?? 0
+        const productQuantity = cartItem?.quantity ?? 0
+        const selectedClassification = cartItem?.classification ?? ''
         const eventType = cartItem?.productClassification?.preOrderProduct
           ? OrderEnum.PRE_ORDER
           : cartItem?.productClassification?.productDiscount
@@ -68,6 +68,7 @@ const CartItem = ({ brandName, cartBrandItem, selectedCartItems, onSelectBrand }
         return (
           <ProductCardLandscape
             key={cartItem?.id}
+            cartItem={cartItem}
             productImage={productImage}
             productName={productName}
             classifications={allClassificationsOfProduct}

@@ -407,5 +407,14 @@
     "success": "Yêu cầu của bạn đã được xử lý thành công, tiếp tục công việc của bạn.",
     "error": "Đã xảy ra lỗi khi xử lý yêu cầu của bạn, vui lòng thử lại sau. Nếu vấn đề vẫn tiếp diễn, vui lòng liên hệ với đội ngũ hỗ trợ.",
     "info": "Đây là một thông báo để cung cấp thêm thông tin quan trọng liên quan đến công việc của bạn."
+  },
+  "delete": {
+    "productCart": {
+      "title": "Xóa sản phẩm",
+      "description": "Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng?",
+      "confirm": "Xác Nhận",
+      "cancel": "Hủy",
+      "success": "Sản phẩm đã được xóa khỏi giỏ hàng thành công."
+    }
   }
 }

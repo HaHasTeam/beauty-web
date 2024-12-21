@@ -60,6 +60,26 @@ const Cart = () => {
     }
   }, [selectedCartItems, useMyCartData])
   console.log(cartByBrand)
+  console.log(selectedCartItems)
+  const getTotalPrice = () => {
+    if (!cartByBrand) return 0
+
+    let total = 0
+    selectedCartItems.forEach((itemId) => {
+      // Loop through brands to find the item
+      Object.values(cartByBrand).forEach((cartBrand) => {
+        const cartItem = cartBrand.find((item) => item.id === itemId)
+        const productPrice = cartItem?.productClassification?.price ?? 0
+        const cartItemQuantity = cartItem?.quantity ?? 0
+        if (cartItem) {
+          total += productPrice * cartItemQuantity
+        }
+      })
+    })
+    return total
+  }
+
+  const totalPrice = getTotalPrice()
   return (
     <div className="relative w-full mx-auto py-5 ">
       <div className="w-full xl:px-28 lg:px-12 sm:px-2 px-1 space-y-3 ">
@@ -77,11 +97,11 @@ const Cart = () => {
           ))}
 
         <CartFooter
-          cartItemCountAll={allCartItemIds.length}
+          cartItemCountAll={allCartItemIds?.length}
           cartItemCount={selectedCartItems?.length}
           onCheckAll={handleSelectAll}
           isAllSelected={isAllSelected}
-          totalPrice={10000}
+          totalPrice={totalPrice}
           savedPrice={20000}
           chosenVoucher={chosenVoucher}
           setChosenVoucher={setChosenVoucher}

@@ -1,4 +1,5 @@
 import { IClassification } from './classification'
+import { StatusEnum } from './enum'
 import { IProductCart } from './product'
 
 export type ICart = {
@@ -9,12 +10,12 @@ export type ICart = {
 
 export interface ICartItem {
   id: string
-  createdAt: string
-  updatedAt: string
-  quantity: number
-  classification: string
-  status: 'ACTIVE' | 'INACTIVE'
-  productClassification: IClassification
+  createdAt?: string
+  updatedAt?: string
+  quantity?: number
+  classification?: string
+  status?: StatusEnum.ACTIVE | StatusEnum.INACTIVE
+  productClassification?: IClassification
 }
 
 export interface ICartByBrand {

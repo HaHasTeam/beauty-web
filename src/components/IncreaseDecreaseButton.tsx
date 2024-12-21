@@ -10,6 +10,8 @@ interface IncreaseDecreaseButtonProps {
   isDecreaseDisabled: boolean
   inputValue: string
   handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+  onBlur: (event: React.FocusEvent<HTMLInputElement>) => void
+  onKeyDown: (event: React.KeyboardEvent<HTMLInputElement>) => void
   size?: 'small' | 'medium' | 'large'
 }
 
@@ -20,6 +22,8 @@ const IncreaseDecreaseButton = ({
   onDecrease,
   isIncreaseDisabled,
   isDecreaseDisabled,
+  onBlur,
+  onKeyDown,
   size = 'medium',
 }: IncreaseDecreaseButtonProps) => {
   const buttonSize = {
@@ -46,10 +50,12 @@ const IncreaseDecreaseButton = ({
         </Button>
         <Input
           type="number"
+          onBlur={onBlur}
+          onKeyDown={onKeyDown}
           value={inputValue}
           onChange={handleInputChange}
           min={1}
-          className={`${inputSize[size]} focus:border-primary/20 text-center border-gray-400 rounded-md`}
+          className={`${inputSize[size]} w-14 focus:border-primary/20 text-center border-gray-400 rounded-md`}
         />
         <Button
           variant="outline"

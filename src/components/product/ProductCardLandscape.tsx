@@ -1,17 +1,25 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Trash2 } from 'lucide-react'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import configs from '@/config'
+import useHandleServerError from '@/hooks/useHandleServerError'
+import { useToast } from '@/hooks/useToast'
+import { deleteCartItemApi, getCartByIdApi, getMyCartApi, updateCartItemApi } from '@/network/apis/cart'
+import { ICartItem } from '@/types/cart'
 import { IClassification } from '@/types/classification'
 
 import ClassificationPopover from '../classification/ClassificationPopover'
+import DeleteConfirmationDialog from '../dialog/DeleteConfirmationDialog'
 import IncreaseDecreaseButton from '../IncreaseDecreaseButton'
+import LoadingIcon from '../loading-icon'
 import { Checkbox } from '../ui/checkbox'
 import ProductTag from './ProductTag'
 
 interface ProductCardLandscapeProps {
+  cartItem: ICartItem
   productImage: string
   cartItemId: string
   productName: string
@@ -25,6 +33,7 @@ interface ProductCardLandscapeProps {
   onChooseProduct: (cartItemId: string) => void
 }
 const ProductCardLandscape = ({
+  cartItem,
   productImage,
   cartItemId,
   productName,
@@ -39,11 +48,75 @@ const ProductCardLandscape = ({
   const { t } = useTranslation()
   const [quantity, setQuantity] = useState(productQuantity ?? 1)
   const [inputValue, setInputValue] = useState(productQuantity.toString() ?? '1')
+  const [openConfirmDelete, setOpenConfirmDelete] = useState(false)
+  const { successToast } = useToast()
+  const handleServerError = useHandleServerError()
+  const queryClient = useQueryClient()
+  const [isProcessing, setIsProcessing] = useState(false)
+
+  const { mutateAsync: deleteCartItemFn } = useMutation({
+    mutationKey: [deleteCartItemApi.mutationKey, cartItemId as string],
+    mutationFn: deleteCartItemApi.fn,
+    onSuccess: () => {
+      successToast({
+        message: t('delete.productCart.success'),
+      })
+      queryClient.invalidateQueries({
+        queryKey: [getMyCartApi.queryKey],
+      })
+      queryClient.invalidateQueries({
+        queryKey: [getCartByIdApi.queryKey, cartItemId as string],
+      })
+    },
+  })
+
+  const { mutateAsync: updateCartItemFn } = useMutation({
+    mutationKey: [updateCartItemApi.mutationKey],
+    mutationFn: updateCartItemApi.fn,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [getMyCartApi.queryKey],
+      })
+      queryClient.invalidateQueries({
+        queryKey: [getCartByIdApi.queryKey, cartItemId as string],
+      })
+    },
+  })
+
+  const handleQuantityUpdate = useCallback(
+    async (newQuantity: number) => {
+      if (isProcessing) return
+      setIsProcessing(true)
+
+      try {
+        await updateCartItemFn({ id: cartItem?.id ?? '', quantity: newQuantity })
+        setQuantity(newQuantity)
+        setInputValue(newQuantity.toString())
+      } catch (error) {
+        handleServerError({ error })
+      } finally {
+        setIsProcessing(false)
+      }
+    },
+    [isProcessing, updateCartItemFn, cartItem?.id, handleServerError],
+  )
+
+  const handleDeleteCartItem = async () => {
+    try {
+      await deleteCartItemFn(cartItemId)
+    } catch (error) {
+      handleServerError({ error })
+    }
+  }
 
   const decreaseQuantity = () => {
+    if (quantity === 1) {
+      setOpenConfirmDelete(true)
+    }
     if (quantity > 1) {
       setInputValue(`${quantity - 1}`)
       setQuantity(quantity - 1)
+      handleQuantityUpdate(quantity - 1)
     }
   }
 
@@ -51,6 +124,7 @@ const ProductCardLandscape = ({
     if (quantity < 1000) {
       setInputValue(`${quantity + 1}`)
       setQuantity(quantity + 1)
+      handleQuantityUpdate(quantity + 1)
     }
   }
 
@@ -59,7 +133,7 @@ const ProductCardLandscape = ({
     // Allow clearing the input
     if (value === '') {
       setInputValue('')
-      setQuantity(1)
+      // setQuantity(1)
       return
     }
 
@@ -68,9 +142,19 @@ const ProductCardLandscape = ({
       const parsedValue = parseInt(value, 10)
 
       if (parsedValue > 0 && parsedValue <= 1000) {
-        setInputValue(value) // Update input with valid value
-        setQuantity(parsedValue) // Update quantity
+        setInputValue(value)
+        setQuantity(parsedValue)
       }
+    }
+  }
+
+  const handleBlur = () => {
+    handleQuantityUpdate(quantity)
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleQuantityUpdate(quantity)
     }
   }
 
@@ -110,24 +194,44 @@ const ProductCardLandscape = ({
         </div>
 
         <div className="w-[26%] md:w-[12%] sm:w-[20%]">
-          <IncreaseDecreaseButton
-            onIncrease={increaseQuantity}
-            onDecrease={decreaseQuantity}
-            isIncreaseDisabled={quantity >= 1000}
-            isDecreaseDisabled={quantity <= 1}
-            inputValue={inputValue}
-            handleInputChange={handleInputChange}
-            size="small"
-          />
+          {isProcessing ? (
+            <LoadingIcon />
+          ) : (
+            <IncreaseDecreaseButton
+              onIncrease={increaseQuantity}
+              onDecrease={decreaseQuantity}
+              isIncreaseDisabled={quantity >= 1000}
+              isDecreaseDisabled={false}
+              inputValue={inputValue}
+              handleInputChange={handleInputChange}
+              onBlur={handleBlur}
+              onKeyDown={handleKeyDown}
+              size="small"
+            />
+          )}
         </div>
         <span className="text-red-500 lg:text-lg md:text-sm sm:text-xs text-xs font-medium w-[16%] md:w-[8%] sm:w-[12%] ">
           {t('productCard.currentPrice', { price: totalPrice })}
         </span>
 
         <div className="w-[7%] sm:w-[5%]">
-          <Trash2 onClick={() => {}} className="text-red-500 hover:cursor-pointer hover:text-red-700" />
+          <Trash2
+            onClick={() => {
+              setOpenConfirmDelete(true)
+            }}
+            className="text-red-500 hover:cursor-pointer hover:text-red-700"
+          />
         </div>
       </div>
+      <DeleteConfirmationDialog
+        open={openConfirmDelete}
+        onOpenChange={setOpenConfirmDelete}
+        onConfirm={() => {
+          // Handle delete confirmation
+          handleDeleteCartItem()
+          setOpenConfirmDelete(false)
+        }}
+      />
     </div>
   )
 }
