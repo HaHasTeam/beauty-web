@@ -14,7 +14,6 @@ import { IClassification } from '@/types/classification'
 import ClassificationPopover from '../classification/ClassificationPopover'
 import DeleteConfirmationDialog from '../dialog/DeleteConfirmationDialog'
 import IncreaseDecreaseButton from '../IncreaseDecreaseButton'
-import LoadingIcon from '../loading-icon'
 import { Checkbox } from '../ui/checkbox'
 import ProductTag from './ProductTag'
 
@@ -194,21 +193,18 @@ const ProductCardLandscape = ({
         </div>
 
         <div className="w-[26%] md:w-[12%] sm:w-[20%]">
-          {isProcessing ? (
-            <LoadingIcon />
-          ) : (
-            <IncreaseDecreaseButton
-              onIncrease={increaseQuantity}
-              onDecrease={decreaseQuantity}
-              isIncreaseDisabled={quantity >= 1000}
-              isDecreaseDisabled={false}
-              inputValue={inputValue}
-              handleInputChange={handleInputChange}
-              onBlur={handleBlur}
-              onKeyDown={handleKeyDown}
-              size="small"
-            />
-          )}
+          <IncreaseDecreaseButton
+            onIncrease={increaseQuantity}
+            onDecrease={decreaseQuantity}
+            isIncreaseDisabled={quantity >= 1000}
+            isDecreaseDisabled={false}
+            inputValue={inputValue}
+            handleInputChange={handleInputChange}
+            onBlur={handleBlur}
+            onKeyDown={handleKeyDown}
+            isProcessing={isProcessing}
+            size="small"
+          />
         </div>
         <span className="text-red-500 lg:text-lg md:text-sm sm:text-xs text-xs font-medium w-[16%] md:w-[8%] sm:w-[12%] ">
           {t('productCard.currentPrice', { price: totalPrice })}
