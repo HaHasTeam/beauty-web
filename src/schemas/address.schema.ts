@@ -12,6 +12,7 @@ const CreateAddressSchema = z.object({
   district: z.string().regex(defaultRequiredRegex.pattern, defaultRequiredRegex.message),
   province: z.string().regex(defaultRequiredRegex.pattern, defaultRequiredRegex.message),
   fullAddress: z.string().optional(),
+  notes: z.string().optional(),
   type: z.enum([AddressEnum?.HOME, AddressEnum?.OFFICE, AddressEnum.OTHER]).optional(),
   isDefault: z.boolean().optional(),
 })

@@ -170,14 +170,37 @@ export default function FormAddressContent({ form }: FormAddressContentProps) {
               <FormItem className="w-full">
                 <div className="w-full flex items-start gap-2">
                   <div className="w-1/5 flex items-center">
-                    <Label htmlFor="detailAddress" required>
-                      {t('address.detailAddress')}
-                    </Label>
+                    <Label htmlFor="detailAddress">{t('address.detailAddress')}</Label>
                   </div>
                   <div className="w-full space-y-1">
                     <FormControl>
                       <Textarea
                         id="detailAddress"
+                        placeholder={t('address.enterDetailAddress')}
+                        className="border-primary/40"
+                        {...field}
+                        value={field.value ?? ''}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </div>
+                </div>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="notes"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <div className="w-full flex items-start gap-2">
+                  <div className="w-1/5 flex items-center">
+                    <Label htmlFor="notes">{t('address.notes')}</Label>
+                  </div>
+                  <div className="w-full space-y-1">
+                    <FormControl>
+                      <Textarea
+                        id="notes"
                         placeholder={t('address.enterDetailAddress')}
                         className="border-primary/40"
                         {...field}

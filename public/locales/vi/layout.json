@@ -342,7 +342,8 @@
     "setAsDefault": "Đặt làm địa chỉ mặc định",
     "addSuccess": "Thêm địa chỉ mới thành công!",
     "updateSuccess": "Địa chỉ của bạn đã được cập nhật thành công.",
-    "alertMessage": "Please add new address before {{action}}!"
+    "alertMessage": "Please add new address before {{action}}!",
+    "notes": "Ghi chú"
   },
   "voucher": {
     "title": "Voucher",

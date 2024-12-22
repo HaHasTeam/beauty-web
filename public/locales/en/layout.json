@@ -342,7 +342,8 @@
     "setAsDefault": "Set as Default Address",
     "addSuccess": "Add new address successfully!",
     "updateSuccess": "Your address has been successfully updated!",
-    "alertMessage": "Please add new address before {{action}}!"
+    "alertMessage": "Please add new address before {{action}}!",
+    "notes": "Notes"
   },
   "voucher": {
     "title": "Voucher",
