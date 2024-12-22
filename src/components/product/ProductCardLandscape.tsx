@@ -13,13 +13,13 @@ import { IClassification } from '@/types/classification'
 import { DiscountTypeEnum, ProductCartStatusEnum } from '@/types/enum'
 import { DiscountType } from '@/types/product-discount'
 import { calculateDiscountPrice, calculateTotalPrice } from '@/utils/price'
+import { checkCurrentProductClassificationActive, checkCurrentProductClassificationHide } from '@/utils/product'
 
 import ClassificationPopover from '../classification/ClassificationPopover'
 import DeleteConfirmationDialog from '../dialog/DeleteConfirmationDialog'
 import IncreaseDecreaseButton from '../IncreaseDecreaseButton'
 import { Checkbox } from '../ui/checkbox'
 import ProductTag from './ProductTag'
-import { checkCurrentProductClassificationActive, checkCurrentProductClassificationHide } from '@/utils/product'
 
 interface ProductCardLandscapeProps {
   cartItem: ICartItem
