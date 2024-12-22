@@ -6,28 +6,32 @@ import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { IClassification } from '@/types/classification'
+import { checkCurrentProductClassificationActive } from '@/utils/product'
 
 import Empty from '../empty/Empty'
 
 interface ClassificationPopoverProps {
   classifications: IClassification[]
+  selectedClassification: string
+  productClassification: IClassification | null
 }
-export default function ClassificationPopover({ classifications }: ClassificationPopoverProps) {
+export default function ClassificationPopover({
+  classifications,
+  selectedClassification,
+  productClassification,
+}: ClassificationPopoverProps) {
   const { t } = useTranslation()
-  const [selectedOption, setSelectedOption] = useState(
-    classifications
-      .filter((classification) => classification.selected)
-      .map((s) => s.id)
-      .toString(),
-  )
+  const [selectedOption, setSelectedOption] = useState(selectedClassification)
+  console.log(selectedClassification)
   const [currentSelection, setCurrentSelection] = useState(selectedOption)
   const [isOpen, setIsOpen] = useState(false)
+  const isProductClassificationActive = checkCurrentProductClassificationActive(productClassification, classifications)
 
   const handleSelect = (option: string) => {
     setCurrentSelection(option)
   }
   const selectedOptionName =
-    classifications.find((classification) => classification.id === selectedOption)?.name ||
+    classifications.find((classification) => classification.title === selectedOption)?.title ||
     t('productDetail.selectClassification')
 
   const handleSave = () => {
@@ -61,16 +65,17 @@ export default function ClassificationPopover({ classifications }: Classificatio
               </div>
               <div className="p-2">
                 {classifications && classifications?.length > 0 ? (
-                  classifications.map((option) => (
+                  classifications?.map((option) => (
                     <Button
                       key={option?.id}
                       variant="ghost"
+                      disabled={!isProductClassificationActive}
                       className={`w-full justify-start px-2 py-1.5 text-sm ${
                         currentSelection === option?.id ? 'bg-accent text-accent-foreground' : ''
                       }`}
                       onClick={() => handleSelect(option?.id)}
                     >
-                      {option?.name}
+                      {option?.title}
                     </Button>
                   ))
                 ) : (

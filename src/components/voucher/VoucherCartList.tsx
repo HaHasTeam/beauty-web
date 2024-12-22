@@ -1,9 +1,14 @@
+import { useQuery } from '@tanstack/react-query'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import { getBrandVouchersApi } from '@/network/apis/voucher'
+import { TVoucher } from '@/types/voucher'
 
+import Empty from '../empty/Empty'
 import { RadioGroup } from '../ui/radio-group'
 import { ScrollArea } from '../ui/scroll-area'
 import VoucherCartItem from './VoucherCartItem'
@@ -11,9 +16,23 @@ import VoucherCartItem from './VoucherCartItem'
 interface VoucherCartListProps {
   triggerText: string
   brandName: string
+  brandId: string
+  brandLogo: string
 }
-const VoucherCartList = ({ triggerText, brandName }: VoucherCartListProps) => {
+const VoucherCartList = ({ triggerText, brandName, brandId, brandLogo }: VoucherCartListProps) => {
   const { t } = useTranslation()
+  const [brandVouchers, setBrandVouchers] = useState<TVoucher[] | null>(null)
+
+  const { data: useBrandVouchersData } = useQuery({
+    queryKey: [getBrandVouchersApi.queryKey, brandId],
+    queryFn: getBrandVouchersApi.fn,
+  })
+
+  useEffect(() => {
+    if (useBrandVouchersData && useBrandVouchersData?.data) {
+      setBrandVouchers(useBrandVouchersData?.data)
+    }
+  }, [useBrandVouchersData])
 
   return (
     <Popover>
@@ -41,28 +60,22 @@ const VoucherCartList = ({ triggerText, brandName }: VoucherCartListProps) => {
               </Button>
             </div>
           </div>
-          <ScrollArea className="h-52 px-2">
-            <div className="py-2 space-y-2">
-              <RadioGroup>
-                {[
-                  { id: '0', discount: '21k', minimum: '239k', saved: false },
-                  { id: '1', discount: '20k', minimum: '900k', saved: true },
-                  { id: '2', discount: '16k', minimum: '450k', saved: true },
-                ].map((voucher) => (
-                  <VoucherCartItem
-                    key={voucher.id}
-                    discount={'15000đ'}
-                    minimum={15000}
-                    saved={voucher.saved}
-                    expiredDate={'2024-11-18 14:47:13'}
-                    tag={'Sản phẩm nhất định'}
-                    brandLogo="https://i.pinimg.com/736x/44/5b/54/445b54cf93d6399ea99944c5cb904402.jpg"
-                    voucherId={voucher.id}
-                  />
-                ))}
-              </RadioGroup>
+
+          {brandVouchers && brandVouchers?.length > 0 ? (
+            <ScrollArea className="h-52 px-2">
+              <div className="py-2 space-y-2">
+                <RadioGroup>
+                  {brandVouchers?.map((voucher) => (
+                    <VoucherCartItem key={voucher.id} voucher={voucher} brandLogo={brandLogo} brandName={brandName} />
+                  ))}
+                </RadioGroup>
+              </div>
+            </ScrollArea>
+          ) : (
+            <div className="flex flex-col justify-center items-center">
+              <Empty title={t('empty.brandVoucher.title')} description={t('empty.brandVoucher.description')} />
             </div>
-          </ScrollArea>
+          )}
         </div>
       </PopoverContent>
     </Popover>

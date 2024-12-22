@@ -1,55 +1,69 @@
 import { AlertCircle } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
+import { DiscountTypeEnum, VoucherApplyTypeEnum, VoucherStatusEnum } from '@/types/enum'
+import { TVoucher } from '@/types/voucher'
+
 import { Button } from '../ui/button'
 import { CardContent } from '../ui/card'
 import { RadioGroupItem } from '../ui/radio-group'
+import VoucherInformationPopup from './VoucherInformationPopUp'
 
 interface VoucherCartItemProps {
-  discount: string
-  minimum?: number
-  saved: boolean
-  expiredDate: string
-  tag: string | null
+  voucher: TVoucher
   brandLogo: string
-  voucherId: string
+  brandName: string
 }
-const VoucherCartItem = ({
-  discount,
-  minimum,
-  saved,
-  expiredDate,
-  tag,
-  brandLogo,
-  voucherId,
-}: VoucherCartItemProps) => {
+const VoucherCartItem = ({ voucher, brandLogo, brandName }: VoucherCartItemProps) => {
   const { t } = useTranslation()
   return (
     <div className="border border-gray-100 rounded-lg shadow-md">
       <CardContent className="p-2">
         <div className="flex gap-2 items-center">
           {/* Logo Section */}
-          <div className="w-14 h-14">
-            <img src={brandLogo} alt="Brand logo" className="w-full h-full object-contain" />
-          </div>
+
+          {brandLogo && brandLogo !== '' ? (
+            <div className="w-14 h-14">
+              <img src={brandLogo} alt="Brand logo" className="w-full h-full object-contain" />
+            </div>
+          ) : (
+            <div className="flex justify-center items-center">
+              <span className="text-lg font-bold uppercase">{brandName}</span>
+            </div>
+          )}
+
           {/* Content Section */}
           <div className="flex-1 items-center">
             <div className="flex justify-between items-start">
-              <div>
-                <div className="text-lg font-medium">Giảm {discount}</div>
-                {minimum && <div className="text-sm"> Đơn Tối Thiểu {minimum}đ </div>}
-                <span className="inline-block border border-red-500 text-red-500 text-xs px-2 py-0.5 rounded mt-1">
-                  {tag}
-                </span>
+              <div className="w-full">
+                <div className="flex gap-2">
+                  <div className="text-lg font-medium flex">
+                    {voucher?.discountType === DiscountTypeEnum.PERCENTAGE
+                      ? t('voucher.off.percentage', { amount: voucher?.discountValue })
+                      : t('voucher.off.amount', { amount: voucher?.discountValue })}
+                    {voucher?.maxDiscount && (
+                      <div className="text-lg">. {t('voucher.off.maxDiscount', { amount: voucher?.maxDiscount })}</div>
+                    )}
+                  </div>
+                  <VoucherInformationPopup voucher={voucher} />
+                </div>
+                {voucher?.minOrderValue && (
+                  <div className="text-base">{t('voucher.off.minOrder', { amount: voucher?.minOrderValue })}</div>
+                )}
+
+                {voucher?.applyType === VoucherApplyTypeEnum.SPECIFIC && (
+                  <span className="inline-block border border-red-500 text-red-500 text-xs px-2 py-0.5 rounded mt-1">
+                    {t('voucher.off.specific')}
+                  </span>
+                )}
               </div>
             </div>
             <div className="mt-1 text-xs text-muted-foreground">
-              {t('date.expiredDate')}: {t('date.toLocaleDateString', { val: expiredDate })}
-              <span className="text-blue-500 p-0 h-auto text-sm ml-2">{t('voucher.condition')}</span>
+              {t('date.exp')}: {t('date.toLocaleDateTimeString', { val: new Date(voucher?.endTime) })}
             </div>
           </div>
-          {saved ? (
-            <RadioGroupItem value={voucherId} id={voucherId} />
+          {voucher?.status !== VoucherStatusEnum.AVAILABLE || voucher?.status !== VoucherStatusEnum.UNAVAILABLE ? (
+            <RadioGroupItem value={voucher?.id} id={voucher?.id} />
           ) : (
             <Button className="bg-red-500 hover:bg-red-600">Lưu</Button>
           )}

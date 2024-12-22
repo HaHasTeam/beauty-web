@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import configs from '@/config'
 import { ICartItem } from '@/types/cart'
 import { IClassification } from '@/types/classification'
-import { OrderEnum } from '@/types/enum'
+import { DiscountTypeEnum, OrderEnum } from '@/types/enum'
 
 import ProductCardLandscape from '../product/ProductCardLandscape'
 import { Button } from '../ui/button'
@@ -54,34 +54,46 @@ const CartItem = ({ brandName, cartBrandItem, selectedCartItems, onSelectBrand }
       {/* Product Cards */}
       {cartBrandItem?.map((cartItem: ICartItem) => {
         const product =
-          cartItem?.productClassification?.preOrderProduct !== null
-            ? cartItem?.productClassification?.preOrderProduct?.product
-            : cartItem?.productClassification?.productDiscount !== null
-              ? cartItem?.productClassification?.productDiscount?.product
-              : cartItem?.productClassification?.product
-        const productImage = product?.images?.[0]?.fileUrl ?? ''
+          cartItem?.productClassification?.preOrderProduct?.product ??
+          cartItem?.productClassification?.productDiscount?.product ??
+          cartItem?.productClassification?.product
+        const allProductClassifications: IClassification[] =
+          (product?.productDiscounts ?? [])[0]?.productClassifications ?? product?.productClassifications ?? []
+
+        const productClassification = cartItem?.productClassification ?? null
+        // const isProductClassificationActive = isCurrentProductClassificationActive(
+        //   productClassification,
+        //   allProductClassifications,
+        // )
+        const productClassificationQuantity = cartItem?.productClassification?.quantity ?? 0
+        const productImage = cartItem?.productClassification?.images?.[0]?.fileUrl ?? ''
         const productName = product?.name ?? ''
-        const allClassificationsOfProduct: IClassification[] = []
+        const productId = product?.id ?? ''
         const productPrice = cartItem?.productClassification?.price ?? 0
         const productQuantity = cartItem?.quantity ?? 0
         const selectedClassification = cartItem?.classification ?? ''
+
         const eventType = cartItem?.productClassification?.preOrderProduct
           ? OrderEnum.PRE_ORDER
           : cartItem?.productClassification?.productDiscount
             ? OrderEnum.FLASH_SALE
             : ''
         const discount =
-          eventType === OrderEnum.FLASH_SALE ? cartItem?.productClassification?.productDiscount?.discount : null
-        const discountType =
-          eventType === OrderEnum.FLASH_SALE ? cartItem?.productClassification?.productDiscount?.discountType : null
+          eventType === OrderEnum.FLASH_SALE
+            ? cartItem?.productClassification?.productDiscount?.discount
+            : ((product?.productDiscounts ?? [])[0]?.discount ?? null)
+
+        const discountType = eventType === OrderEnum.FLASH_SALE ? DiscountTypeEnum.PERCENTAGE : null
 
         return (
           <ProductCardLandscape
             key={cartItem?.id}
             cartItem={cartItem}
             productImage={productImage}
+            productId={productId}
             productName={productName}
-            classifications={allClassificationsOfProduct}
+            classifications={allProductClassifications}
+            productClassification={productClassification}
             selectedClassification={selectedClassification}
             discount={discount}
             discountType={discountType}
@@ -91,6 +103,7 @@ const CartItem = ({ brandName, cartBrandItem, selectedCartItems, onSelectBrand }
             isSelected={selectedCartItems?.includes(cartItem?.id)}
             onChooseProduct={() => handleSelectCartItem(cartItem?.id, !selectedCartItems?.includes(cartItem?.id))}
             productQuantity={productQuantity}
+            productClassificationQuantity={productClassificationQuantity}
           />
         )
       })}
@@ -99,7 +112,12 @@ const CartItem = ({ brandName, cartBrandItem, selectedCartItems, onSelectBrand }
       <div className="flex items-center gap-3 text-sm">
         <Tag className="w-4 h-4 text-red-500" />
         <span>Voucher giảm đến ₫21k</span>
-        <VoucherCartList triggerText={t('cart.viewMoreVoucher')} brandName={brand?.name ?? ''} />
+        <VoucherCartList
+          triggerText={t('cart.viewMoreVoucher')}
+          brandName={brand?.name ?? ''}
+          brandId={brand?.id ?? ''}
+          brandLogo={brand?.logo ?? ''}
+        />
       </div>
     </div>
   )

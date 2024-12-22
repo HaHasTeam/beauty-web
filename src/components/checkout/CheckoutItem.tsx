@@ -86,7 +86,12 @@ const CheckoutItem = ({ brandName, cartBrandItem, totalPrice, numberOfProducts }
         <div className="order-1 md:order-2 flex items-center gap-3 text-sm w-full justify-end">
           <Tag className="w-4 h-4 text-red-500" />
           <span>Voucher giảm đến ₫21k</span>
-          <VoucherCartList triggerText={t('cart.viewMoreVoucher')} brandName="Romand" />
+          <VoucherCartList
+            triggerText={t('cart.viewMoreVoucher')}
+            brandName={brand?.name ?? ''}
+            brandLogo={brand?.logo ?? ''}
+            brandId={brand?.id ?? ''}
+          />
         </div>
       </div>
       <div className="w-full flex gap-2 justify-end items-center">

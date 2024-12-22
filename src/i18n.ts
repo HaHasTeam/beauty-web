@@ -25,7 +25,8 @@ i18n
       escapeValue: false,
       format: (value, format, lng) => {
         if (value instanceof Date) {
-          return moment(value).format(format || 'DD/MM/YYYY') // Use 'DD/MM/YYYY' as default format
+          const dateValue = value instanceof Date ? value : new Date(value)
+          return moment(dateValue).format(format || 'DD/MM/YYYY')
         }
 
         if (format === 'currency') {

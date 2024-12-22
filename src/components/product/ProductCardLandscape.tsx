@@ -10,7 +10,7 @@ import { useToast } from '@/hooks/useToast'
 import { deleteCartItemApi, getCartByIdApi, getMyCartApi, updateCartItemApi } from '@/network/apis/cart'
 import { ICartItem } from '@/types/cart'
 import { IClassification } from '@/types/classification'
-import { DiscountTypeEnum } from '@/types/enum'
+import { DiscountTypeEnum, ProductCartStatusEnum } from '@/types/enum'
 import { DiscountType } from '@/types/product-discount'
 import { calculateDiscountPrice, calculateTotalPrice } from '@/utils/price'
 
@@ -19,19 +19,23 @@ import DeleteConfirmationDialog from '../dialog/DeleteConfirmationDialog'
 import IncreaseDecreaseButton from '../IncreaseDecreaseButton'
 import { Checkbox } from '../ui/checkbox'
 import ProductTag from './ProductTag'
+import { checkCurrentProductClassificationActive, checkCurrentProductClassificationHide } from '@/utils/product'
 
 interface ProductCardLandscapeProps {
   cartItem: ICartItem
   productImage: string
   cartItemId: string
+  productId: string
   productName: string
   classifications: IClassification[]
+  productClassification: IClassification | null
   eventType: string
   selectedClassification: string
   discountType?: DiscountType | null
   discount?: number | null
   price: number
   productQuantity: number
+  productClassificationQuantity: number
   isSelected: boolean
   onChooseProduct: (cartItemId: string) => void
 }
@@ -39,8 +43,10 @@ const ProductCardLandscape = ({
   cartItem,
   productImage,
   cartItemId,
+  productId,
   productName,
   classifications,
+  selectedClassification,
   discount,
   discountType,
   eventType,
@@ -48,15 +54,21 @@ const ProductCardLandscape = ({
   isSelected,
   onChooseProduct,
   productQuantity,
+  productClassification,
+  productClassificationQuantity,
 }: ProductCardLandscapeProps) => {
   const { t } = useTranslation()
   const [quantity, setQuantity] = useState(productQuantity ?? 1)
   const [inputValue, setInputValue] = useState(productQuantity.toString() ?? '1')
   const [openConfirmDelete, setOpenConfirmDelete] = useState(false)
+  const [isProcessing, setIsProcessing] = useState(false)
   const { successToast } = useToast()
   const handleServerError = useHandleServerError()
   const queryClient = useQueryClient()
-  const [isProcessing, setIsProcessing] = useState(false)
+  const MAX_QUANTITY_IN_CART = productClassificationQuantity
+  const OUT_OF_STOCK = (productClassification?.quantity ?? 0) <= 0
+  const HIDDEN = checkCurrentProductClassificationHide(productClassification, classifications)
+  const IS_ACTIVE = checkCurrentProductClassificationActive(productClassification, classifications)
 
   const { mutateAsync: deleteCartItemFn } = useMutation({
     mutationKey: [deleteCartItemApi.mutationKey, cartItemId as string],
@@ -125,7 +137,7 @@ const ProductCardLandscape = ({
   }
 
   const increaseQuantity = () => {
-    if (quantity < 1000) {
+    if (quantity < MAX_QUANTITY_IN_CART) {
       setInputValue(`${quantity + 1}`)
       setQuantity(quantity + 1)
       handleQuantityUpdate(quantity + 1)
@@ -145,7 +157,7 @@ const ProductCardLandscape = ({
     if (/^\d+$/.test(value)) {
       const parsedValue = parseInt(value, 10)
 
-      if (parsedValue > 0 && parsedValue <= 1000) {
+      if (parsedValue > 0 && parsedValue <= MAX_QUANTITY_IN_CART) {
         setInputValue(value)
         setQuantity(parsedValue)
       }
@@ -168,8 +180,14 @@ const ProductCardLandscape = ({
     <div className="w-full py-4 border-b border-gray-200">
       <div className="w-full flex gap-2 items-center">
         <div className="flex gap-1 items-center lg:w-[10%] md:w-[10%] w-[14%]">
-          <Checkbox id={cartItemId} checked={isSelected} onClick={() => onChooseProduct(cartItemId)} />
-          <Link to={configs.routes.products + '/' + cartItemId}>
+          {IS_ACTIVE ? (
+            <Checkbox id={cartItemId} checked={isSelected} onClick={() => onChooseProduct(cartItemId)} />
+          ) : (
+            ((HIDDEN && <ProductTag tag={ProductCartStatusEnum.HIDDEN} />) ??
+            (OUT_OF_STOCK && <ProductTag tag={ProductCartStatusEnum.SOLD_OUT} />))
+          )}
+
+          <Link to={configs.routes.products + '/' + productId}>
             <div className="lg:w-20 lg:h-20 md:w-14 md:h-14 h-8 w-8">
               <img src={productImage} alt={productName} className="object-cover w-full h-full" />
             </div>
@@ -179,25 +197,36 @@ const ProductCardLandscape = ({
         <div className="flex md:flex-row flex-col lg:w-[65%] md:w-[65%] sm:w-[34%] w-[34%] gap-2">
           <div className="order-1 flex gap-1 items-center lg:w-[50%] md:w-[35%] w-full">
             <div className="flex flex-col gap-1">
-              <Link to={configs.routes.products + '/' + cartItemId}>
+              <Link to={configs.routes.products + '/' + productId}>
                 <h3 className="font-semibold lg:text-sm text-xs line-clamp-2">{productName}</h3>
               </Link>
               <div>{eventType && eventType !== '' && <ProductTag tag={eventType} size="small" />}</div>
             </div>
           </div>
           <div className="order-3 md:order-2 flex items-center gap-2 lg:w-[30%] md:w-[40%] w-full">
-            <ClassificationPopover classifications={classifications} />
+            <ClassificationPopover
+              classifications={classifications}
+              selectedClassification={selectedClassification}
+              productClassification={productClassification}
+            />
           </div>
           {discount &&
           discount > 0 &&
           (discountType === DiscountTypeEnum.AMOUNT || discountType === DiscountTypeEnum.PERCENTAGE) ? (
-            <div className="order-2 md:order-3 w-full md:w-[25%] lg:w-[20%] flex gap-1 items-center">
-              <span className="text-red-500 lg:text-lg md:text-sm sm:text-xs text-xs font-medium">
-                {t('productCard.currentPrice', { price: discountPrice })}
-              </span>
-              <span className="text-gray-400 lg:text-sm text-xs line-through">
-                {t('productCard.price', { price: price })}
-              </span>
+            <div className="order-2 md:order-3 w-full md:w-[25%] lg:w-[20%] flex-col">
+              <div className="flex gap-1 items-center">
+                <span className="text-red-500 lg:text-lg md:text-sm sm:text-xs text-xs font-medium">
+                  {t('productCard.currentPrice', { price: discountPrice })}
+                </span>
+                <span className="text-gray-400 lg:text-sm text-xs line-through">
+                  {t('productCard.price', { price: price })}
+                </span>
+              </div>
+              <div>
+                <span className="text-red-500 lg:text-sm md:text-xs sm:text-xs text-xs">
+                  {t('voucher.off.numberPercentage', { percentage: discount })}
+                </span>
+              </div>
             </div>
           ) : (
             <div className="order-2 md:order-3 w-full md:w-[25%] lg:w-[20%] flex gap-1 items-center">
@@ -212,7 +241,7 @@ const ProductCardLandscape = ({
           <IncreaseDecreaseButton
             onIncrease={increaseQuantity}
             onDecrease={decreaseQuantity}
-            isIncreaseDisabled={quantity >= 1000}
+            isIncreaseDisabled={quantity >= MAX_QUANTITY_IN_CART}
             isDecreaseDisabled={false}
             inputValue={inputValue}
             handleInputChange={handleInputChange}

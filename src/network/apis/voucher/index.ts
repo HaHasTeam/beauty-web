@@ -44,3 +44,28 @@ export const getAllVouchersApi = toQueryFetcher<void, TServerResponse<TVoucher[]
     method: 'GET',
   })
 })
+export const getPlatformVouchersApi = toQueryFetcher<void, TServerResponse<TVoucher[]>>(
+  'getPlatformVouchersApi',
+  async () => {
+    return privateRequest(`/vouchers/get-platform-vouchers`, {
+      method: 'GET',
+    })
+  },
+)
+export const getBrandVouchersApi = toQueryFetcher<string, TServerResponse<TVoucher[]>>(
+  'getBrandVouchersApi',
+  async (params) => {
+    return privateRequest(`/vouchers/get-by-brand/${params}`, {
+      method: 'GET',
+    })
+  },
+)
+export const collectVoucherApi = toMutationFetcher<TUpdateVoucherRequestParams, TServerResponse<TVoucher>>(
+  'collectVoucher',
+  async (params) => {
+    return privateRequest(`/vouchers/collect-voucher/${params?.id}`, {
+      method: 'PUT',
+      data: params,
+    })
+  },
+)

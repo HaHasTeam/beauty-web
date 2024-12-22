@@ -96,3 +96,18 @@ export enum ProductDiscountEnum {
   INACTIVE = 'INACTIVE',
   CANCELLED = 'CANCELLED',
 }
+
+export enum VoucherApplyTypeEnum {
+  ALL = 'ALL',
+  SPECIFIC = 'SPECIFIC',
+}
+
+export enum VoucherStatusEnum {
+  AVAILABLE = 'AVAILABLE',
+  UNAVAILABLE = 'UNAVAILABLE',
+}
+
+export enum ProductCartStatusEnum {
+  HIDDEN = 'HIDDEN',
+  SOLD_OUT = 'SOLD_OUT',
+}

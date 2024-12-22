@@ -1,6 +1,7 @@
 import { IBrand, TBrand } from './brand'
 import { ICategory } from './category'
 import { IClassification } from './classification'
+import { IProductDiscount } from './product-discount'
 import { IImage } from './productImage'
 import { TMetaData } from './request'
 
@@ -153,6 +154,8 @@ export type IProduct = {
   sku?: string
   status?: string
   brand?: IBrand
+  productClassifications?: IClassification[] // use for cart
+  productDiscounts?: IProductDiscount[] | null // use for cart
 }
 
 export type IProductCart = {

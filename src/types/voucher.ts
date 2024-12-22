@@ -28,4 +28,5 @@ export type TVoucher = TMetaData & {
   endTime: string
 
   brand?: TBrand | string
+  applyType?: string
 }

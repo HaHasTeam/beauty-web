@@ -187,6 +187,11 @@
       "title": "No product classifications",
       "description": "Product classifications are no longer available!",
       "button": "Confirm"
+    },
+    "brandVoucher": {
+      "title": "No Vouchers Available",
+      "description": "There are no vouchers from this Shop. Enter a valid voucher code in the bar above.",
+      "button": "Explore Brand"
     }
   },
   "productDetail": {
@@ -256,6 +261,7 @@
   },
   "date": {
     "toLocaleDateString": "{{val, MM/DD/YYYY}}",
+    "toLocaleDateTimeString": "{{val, MM/DD/YYYY HH:mm:ss}}",
     "expiredDate": "Expired Date",
     "exp": "Exp"
   },
@@ -357,7 +363,23 @@
     "howToUse": "How To Use Voucher",
     "howToFind": "How To Find Voucher",
     "howToUseDescription": "To apply an Allure Voucher code, click the \"Save\" button to claim the voucher and check it in your voucher wallet.",
-    "howToFindDescription": "You can find Allure Vouchers throughout the website and app. Here's a tip: start with the promotion pages and the brand's homepage!"
+    "howToFindDescription": "You can find Allure Vouchers throughout the website and app. Here's a tip: start with the promotion pages and the brand's homepage!",
+    "off": {
+      "amount": "Discount of {{amount, currency}}",
+      "percentage": "Discount of {{percentage}}%",
+      "numberPercentage": "Off {{percentage}}%",
+      "minOrder": "Minimum order of {{amount, currency}}",
+      "maxDiscount": "Maximum discount of {{amount, currency}}",
+      "specific": "Specific products",
+      "specificDescription": "Applicable for certain specific products of {{val}} in the promotion.",
+      "all": "All products",
+      "allDescription": "Applicable for all products of {{val}}."
+    },
+    "informationTitle": "Voucher Information",
+    "discount": "Discount",
+    "nameTitle": "Name",
+    "descriptionTitle": "Description",
+    "applicableProducts": "Applicable Products"
   },
   "dialog": {
     "cancel": "Cancel",

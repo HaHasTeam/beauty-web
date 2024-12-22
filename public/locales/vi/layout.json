@@ -187,6 +187,11 @@
       "title": "Phân loại sản phẩm trống",
       "description": "Phân loại sản phẩm hiện tại không khả dụng!",
       "button": "Đồng ý"
+    },
+    "brandVoucher": {
+      "title": "Không có voucher",
+      "description": "Chưa có mã giảm giá nào của Shop. Nhập mã giảm giá có thể sử dụng vào thanh bên trên.",
+      "button": "Khám phá thương hiệu"
     }
   },
   "productDetail": {
@@ -256,6 +261,7 @@
   },
   "date": {
     "toLocaleDateString": "{{val, DD/MM/YYYY}}",
+    "toLocaleDateTimeString": "{{val, DD/MM/YYYY HH:mm:ss}}",
     "expiredDate": "Hạn sử dụng",
     "exp": "HSD"
   },
@@ -357,7 +363,23 @@
     "howToUse": "Cách Sử Dụng Voucher",
     "howToFind": "Cách Tìm Voucher",
     "howToUseDescription": "Để có thể áp dụng mã Allure Voucher, bạn hãy chọn nút \"Lưu\" để lấy voucher và mục ví voucher của bạn nhé.",
-    "howToFindDescription": "Bạn có thể tìm thấy Allure Voucher xuyên suốt trang web và ứng dụng. Mẹo riêng cho bạn nè, hãy bắt đầu với những trang chương trình khuyến mãi và trang chủ của thương hiệu nhé!"
+    "howToFindDescription": "Bạn có thể tìm thấy Allure Voucher xuyên suốt trang web và ứng dụng. Mẹo riêng cho bạn nè, hãy bắt đầu với những trang chương trình khuyến mãi và trang chủ của thương hiệu nhé!",
+    "off": {
+      "amount": "Giảm {{amount, currency}}",
+      "percentage": "Giảm {{percentage}}%",
+      "numberPercentage": "Giảm {{percentage}}%",
+      "minOrder": "Đơn tối thiểu {{amount, currency}}",
+      "maxDiscount": "Giảm tối đa {{amount, currency}}",
+      "specific": "Sản phẩm nhất định",
+      "specificDescription": "Áp dụng cho một số sản phẩm nhất định của {{val}} trong chương trình giảm giá.",
+      "all": "Tất cả sản phẩm",
+      "allDescription": "Áp dụng cho tất cả sản phẩm của {{val}}."
+    },
+    "informationTitle": "Thông tin mã giảm giá",
+    "discount": "Ưu đãi",
+    "nameTitle": "Tên mã giảm giá",
+    "descriptionTitle": "Mô tả",
+    "applicableProducts": "Sản phẩm áp dụng"
   },
   "dialog": {
     "cancel": "Hủy",

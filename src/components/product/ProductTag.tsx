@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 
-import { OrderEnum } from '@/types/enum'
+import { OrderEnum, ProductCartStatusEnum } from '@/types/enum'
 
 interface ProductTagProps {
   tag: string
@@ -39,6 +39,14 @@ export default function ProductTag({ tag, text, size = 'medium' }: ProductTagPro
       break
     case 'DealPercent':
       tagColorClass = 'bg-red-100 text-red-500'
+      break
+    case ProductCartStatusEnum.HIDDEN: // use for product in cart
+      tagColorClass = 'bg-gray-200 text-gray-800'
+      tagText = t('productTag.hidden')
+      break
+    case ProductCartStatusEnum.SOLD_OUT: // use for product in cart
+      tagColorClass = 'bg-red-100 text-red-500'
+      tagText = t('productTag.outOfStock')
       break
     case OrderEnum.FLASH_SALE:
       tagColorClass = 'bg-orange-200 text-orange-800'

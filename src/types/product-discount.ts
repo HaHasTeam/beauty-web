@@ -1,3 +1,4 @@
+import { IClassification } from './classification'
 import { DiscountTypeEnum, ProductDiscountEnum } from './enum'
 import { IProduct } from './product'
 import { TMetaData } from './request'
@@ -11,4 +12,5 @@ export type IProductDiscount = TMetaData & {
   discountType: DiscountType
   status: ProductDiscountEnum
   product: IProduct
+  productClassifications?: IClassification[]
 }
