@@ -36,7 +36,9 @@
     "flashSale": "Flash Sale",
     "liveStream": "Live Stream",
     "preOrder": "Pre Order",
-    "groupBuying": "Group Buying"
+    "groupBuying": "Group Buying",
+    "hidden": "Hidden",
+    "outOfStock": "Sold old"
   },
   "statusTag": {
     "default": "Default"
@@ -150,8 +152,13 @@
     },
     "cart": {
       "title": "Your cart is empty",
-      "description": "Check out what's trending",
+      "description": "Discover what's trending",
       "button": "Discover Products"
+    },
+    "checkout": {
+      "title": "Your checkout list is empty",
+      "description": "Discover what's trending",
+      "button": "Shopping"
     },
     "address": {
       "title": "No Address Found",
@@ -296,7 +303,11 @@
     "savings": "Savings",
     "totalCost": "Total Cost of Products",
     "totalDiscount": "Total Discount from Vouchers",
-    "totalPayment": "Total Payment"
+    "totalPayment": "Total Payment",
+    "productLeft": "{{count}} products left",
+    "updateClassificationSuccess": "Update product classification successfully!",
+    "soldOutMessage": "This product classification is sold out, please choose another.",
+    "hiddenMessage": "This product classification is hidden, please choose another."
   },
   "address": {
     "title": "Address",

@@ -71,7 +71,7 @@ export default function ProductTag({ tag, text, size = 'medium' }: ProductTagPro
   }
 
   return (
-    <span className={`${sizeClasses[size]} cursor-default rounded-md font-medium ${tagColorClass}`}>
+    <span className={`${sizeClasses[size]} min-w-fit cursor-default rounded-md font-medium ${tagColorClass}`}>
       {text ? text : tagText}
     </span>
   )

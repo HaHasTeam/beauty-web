@@ -10,10 +10,13 @@ import AddressSection from '@/components/address/AddressSection'
 import CheckoutHeader from '@/components/checkout/CheckoutHeader'
 import CheckoutItem from '@/components/checkout/CheckoutItem'
 import CheckoutTotal from '@/components/checkout/CheckoutTotal'
+import Empty from '@/components/empty/Empty'
+import LoadingContentLayer from '@/components/loading-icon/LoadingContentLayer'
 import PaymentSelection from '@/components/payment/PaymentSelection'
 import { Button } from '@/components/ui/button'
 import { Form } from '@/components/ui/form'
 import VoucherDialog from '@/components/voucher/VoucherDialog'
+import configs from '@/config'
 import { useToast } from '@/hooks/useToast'
 import { getMyAddressesApi } from '@/network/apis/address'
 import { getMyCartApi } from '@/network/apis/cart'
@@ -53,16 +56,16 @@ const Checkout = () => {
     resolver: zodResolver(CreateOrderSchema),
     defaultValues: defaultOrderValues,
   })
-  const { data: useProfileData } = useQuery({
+  const { data: useProfileData, isFetching: isGettingProfile } = useQuery({
     queryKey: [getUserProfileApi.queryKey],
     queryFn: getUserProfileApi.fn,
   })
 
-  const { data: useMyAddressesData } = useQuery({
+  const { data: useMyAddressesData, isFetching: isGettingAddress } = useQuery({
     queryKey: [getMyAddressesApi.queryKey],
     queryFn: getMyAddressesApi.fn,
   })
-  const { data: useMyCartData } = useQuery({
+  const { data: useMyCartData, isFetching: isGettingCart } = useQuery({
     queryKey: [getMyCartApi.queryKey],
     queryFn: getMyCartApi.fn,
   })
@@ -109,7 +112,9 @@ const Checkout = () => {
     }
   }, [useMyCartData])
 
-  return (
+  return isGettingProfile || isGettingCart || isGettingAddress ? (
+    <LoadingContentLayer />
+  ) : cartByBrand && Object.keys(cartByBrand)?.length > 0 ? (
     <div className="relative w-full mx-auto py-5 ">
       <div className="w-full xl:px-28 lg:px-12 sm:px-2 px-1 space-y-3">
         <Form {...form}>
@@ -179,6 +184,13 @@ const Checkout = () => {
         </Form>
       </div>
     </div>
+  ) : (
+    <Empty
+      title={t('empty.checkout.title')}
+      description={t('empty.checkout.description')}
+      link={configs.routes.home}
+      linkText={t('empty.checkout.button')}
+    />
   )
 }
 

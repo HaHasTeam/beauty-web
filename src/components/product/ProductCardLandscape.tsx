@@ -15,6 +15,7 @@ import { DiscountType } from '@/types/product-discount'
 import { calculateDiscountPrice, calculateTotalPrice } from '@/utils/price'
 import { checkCurrentProductClassificationActive, checkCurrentProductClassificationHide } from '@/utils/product'
 
+import AlertMessage from '../alert/AlertMessage'
 import ClassificationPopover from '../classification/ClassificationPopover'
 import DeleteConfirmationDialog from '../dialog/DeleteConfirmationDialog'
 import IncreaseDecreaseButton from '../IncreaseDecreaseButton'
@@ -30,7 +31,6 @@ interface ProductCardLandscapeProps {
   classifications: IClassification[]
   productClassification: IClassification | null
   eventType: string
-  selectedClassification: string
   discountType?: DiscountType | null
   discount?: number | null
   price: number
@@ -46,7 +46,6 @@ const ProductCardLandscape = ({
   productId,
   productName,
   classifications,
-  selectedClassification,
   discount,
   discountType,
   eventType,
@@ -65,10 +64,23 @@ const ProductCardLandscape = ({
   const { successToast } = useToast()
   const handleServerError = useHandleServerError()
   const queryClient = useQueryClient()
+  const PRODUCT_STOCK_COUNT = productClassification?.quantity ?? 0
   const MAX_QUANTITY_IN_CART = productClassificationQuantity
-  const OUT_OF_STOCK = (productClassification?.quantity ?? 0) <= 0
+  const OUT_OF_STOCK = PRODUCT_STOCK_COUNT <= 0
   const HIDDEN = checkCurrentProductClassificationHide(productClassification, classifications)
   const IS_ACTIVE = checkCurrentProductClassificationActive(productClassification, classifications)
+
+  console.log(
+    'info',
+    classifications,
+    productClassification,
+    productClassificationQuantity,
+    'hidden' + HIDDEN,
+    'active' + IS_ACTIVE,
+    'sold out' + OUT_OF_STOCK,
+    MAX_QUANTITY_IN_CART,
+    PRODUCT_STOCK_COUNT,
+  )
 
   const { mutateAsync: deleteCartItemFn } = useMutation({
     mutationKey: [deleteCartItemApi.mutationKey, cartItemId as string],
@@ -182,10 +194,11 @@ const ProductCardLandscape = ({
         <div className="flex gap-1 items-center lg:w-[10%] md:w-[10%] w-[14%]">
           {IS_ACTIVE ? (
             <Checkbox id={cartItemId} checked={isSelected} onClick={() => onChooseProduct(cartItemId)} />
-          ) : (
-            ((HIDDEN && <ProductTag tag={ProductCartStatusEnum.HIDDEN} />) ??
-            (OUT_OF_STOCK && <ProductTag tag={ProductCartStatusEnum.SOLD_OUT} />))
-          )}
+          ) : HIDDEN ? (
+            <ProductTag tag={ProductCartStatusEnum.HIDDEN} />
+          ) : OUT_OF_STOCK ? (
+            <ProductTag tag={ProductCartStatusEnum.SOLD_OUT} />
+          ) : null}
 
           <Link to={configs.routes.products + '/' + productId}>
             <div className="lg:w-20 lg:h-20 md:w-14 md:h-14 h-8 w-8">
@@ -194,20 +207,39 @@ const ProductCardLandscape = ({
           </Link>
         </div>
 
-        <div className="flex md:flex-row flex-col lg:w-[65%] md:w-[65%] sm:w-[34%] w-[34%] gap-2">
+        <div className="flex md:flex-row flex-col lg:w-[65%] md:w-[65%] sm:w-[34%] w-[34%] gap-2 px-2">
           <div className="order-1 flex gap-1 items-center lg:w-[50%] md:w-[35%] w-full">
             <div className="flex flex-col gap-1">
               <Link to={configs.routes.products + '/' + productId}>
                 <h3 className="font-semibold lg:text-sm text-xs line-clamp-2">{productName}</h3>
               </Link>
               <div>{eventType && eventType !== '' && <ProductTag tag={eventType} size="small" />}</div>
+              {HIDDEN ? (
+                <AlertMessage
+                  className="ml-1 w-fit border-0 outline-none rounded-md p-1 px-2 bg-gray-200"
+                  textSize="small"
+                  color="black"
+                  message={t('cart.hiddenMessage')}
+                />
+              ) : OUT_OF_STOCK ? (
+                <div>
+                  <AlertMessage
+                    className="ml-1 w-fit border-0 outline-none rounded-md p-1 px-2 bg-red-50"
+                    textSize="small"
+                    color="danger"
+                    text="danger"
+                    message={t('cart.soldOutMessage')}
+                  />
+                </div>
+              ) : null}
             </div>
           </div>
           <div className="order-3 md:order-2 flex items-center gap-2 lg:w-[30%] md:w-[40%] w-full">
             <ClassificationPopover
               classifications={classifications}
-              selectedClassification={selectedClassification}
               productClassification={productClassification}
+              cartItemId={cartItemId}
+              cartItemQuantity={quantity}
             />
           </div>
           {discount &&
@@ -238,18 +270,26 @@ const ProductCardLandscape = ({
         </div>
 
         <div className="w-[26%] md:w-[12%] sm:w-[20%]">
-          <IncreaseDecreaseButton
-            onIncrease={increaseQuantity}
-            onDecrease={decreaseQuantity}
-            isIncreaseDisabled={quantity >= MAX_QUANTITY_IN_CART}
-            isDecreaseDisabled={false}
-            inputValue={inputValue}
-            handleInputChange={handleInputChange}
-            onBlur={handleBlur}
-            onKeyDown={handleKeyDown}
-            isProcessing={isProcessing}
-            size="small"
-          />
+          {IS_ACTIVE && (
+            <IncreaseDecreaseButton
+              onIncrease={increaseQuantity}
+              onDecrease={decreaseQuantity}
+              isIncreaseDisabled={quantity >= MAX_QUANTITY_IN_CART}
+              isDecreaseDisabled={false}
+              inputValue={inputValue}
+              handleInputChange={handleInputChange}
+              onBlur={handleBlur}
+              onKeyDown={handleKeyDown}
+              isProcessing={isProcessing}
+              size="small"
+            />
+          )}
+
+          {(PRODUCT_STOCK_COUNT < quantity || PRODUCT_STOCK_COUNT <= 0) && (
+            <span className={`text-sm ${PRODUCT_STOCK_COUNT <= 0 ? 'text-red-500' : 'text-orange-500'}`}>
+              {t('cart.productLeft', { count: PRODUCT_STOCK_COUNT })}
+            </span>
+          )}
         </div>
         <span className="text-red-500 lg:text-lg md:text-sm sm:text-xs text-xs font-medium w-[16%] md:w-[8%] sm:w-[12%] ">
           {t('productCard.currentPrice', { price: totalPrice })}

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 
 import configs from '@/config'
 import { ICartItem } from '@/types/cart'
-import { OrderEnum } from '@/types/enum'
+import { DiscountTypeEnum, OrderEnum } from '@/types/enum'
 
 import ProductCheckoutLandscape from '../product/ProductCheckoutLandscape'
 import { Button } from '../ui/button'
@@ -39,12 +39,10 @@ const CheckoutItem = ({ brandName, cartBrandItem, totalPrice, numberOfProducts }
       {/* Product Cards */}
       {cartBrandItem?.map((cartItem) => {
         const product =
-          cartItem?.productClassification?.preOrderProduct !== null
-            ? cartItem?.productClassification?.preOrderProduct?.product
-            : cartItem?.productClassification?.productDiscount !== null
-              ? cartItem?.productClassification?.productDiscount?.product
-              : cartItem?.productClassification?.product
-        const productImage = product?.images?.[0]?.fileUrl ?? ''
+          cartItem?.productClassification?.preOrderProduct?.product ??
+          cartItem?.productClassification?.productDiscount?.product ??
+          cartItem?.productClassification?.product
+        const productImage = cartItem?.productClassification?.images?.[0]?.fileUrl ?? ''
         const productName = product?.name ?? ''
         const productId = product?.id ?? ''
         const selectedClassification = cartItem?.classification ?? ''
@@ -52,13 +50,18 @@ const CheckoutItem = ({ brandName, cartBrandItem, totalPrice, numberOfProducts }
         const productQuantity = cartItem?.quantity ?? 0
         const eventType = cartItem?.productClassification?.preOrderProduct
           ? OrderEnum.PRE_ORDER
-          : cartItem?.productClassification?.productDiscount
+          : cartItem?.productClassification?.productDiscount || (product?.productDiscounts ?? [])[0]?.discount
             ? OrderEnum.FLASH_SALE
             : ''
         const discount =
-          eventType === OrderEnum.FLASH_SALE ? cartItem?.productClassification?.productDiscount?.discount : null
+          eventType === OrderEnum.FLASH_SALE
+            ? cartItem?.productClassification?.productDiscount?.discount
+            : ((product?.productDiscounts ?? [])[0]?.discount ?? null)
+
         const discountType =
-          eventType === OrderEnum.FLASH_SALE ? cartItem?.productClassification?.productDiscount?.discountType : null
+          eventType === OrderEnum.FLASH_SALE || (product?.productDiscounts ?? [])[0]?.discount
+            ? DiscountTypeEnum.PERCENTAGE
+            : null
 
         return (
           <ProductCheckoutLandscape

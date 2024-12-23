@@ -1,9 +1,9 @@
-import { ICart, ICartByBrand, ICartItem } from '@/types/cart'
+import { ICart, ICartByBrand, ICartItem, ICreateCartItem } from '@/types/cart'
 import { TServerResponse } from '@/types/request'
 import { toMutationFetcher, toQueryFetcher } from '@/utils/query'
 import { privateRequest } from '@/utils/request'
 
-export const createCartItemApi = toMutationFetcher<ICartItem, TServerResponse<ICartItem>>(
+export const createCartItemApi = toMutationFetcher<ICreateCartItem, TServerResponse<ICartItem>>(
   'createCartItemApi',
   async (data) => {
     return privateRequest('/cart', {
@@ -34,7 +34,7 @@ export const getAllCartListApi = toQueryFetcher<void, TServerResponse<ICart[]>>(
   })
 })
 
-export const updateCartItemApi = toMutationFetcher<ICartItem, TServerResponse<ICartItem>>(
+export const updateCartItemApi = toMutationFetcher<ICreateCartItem, TServerResponse<ICartItem>>(
   'updateCartItemApi',
   async (data) => {
     return privateRequest(`/cart/${data.id}`, {

@@ -36,7 +36,9 @@
     "flashSale": "Flash sale",
     "liveStream": "Livestream",
     "preOrder": "Đặt trước",
-    "groupBuying": "Mua nhóm"
+    "groupBuying": "Mua nhóm",
+    "hidden": "Đã ẩn",
+    "outOfStock": "Hết hàng"
   },
   "statusTag": {
     "default": "Mặc định"
@@ -152,6 +154,11 @@
       "title": "Giỏ hàng của bạn trống",
       "description": "Khám phá những sản phẩm đang thịnh hành.",
       "button": "Khám phá sản phẩm"
+    },
+    "checkout": {
+      "title": "Danh sách mua hàng trống",
+      "description": "Khám phá những sản phẩm đang thịnh hành.",
+      "button": "Mua sắm"
     },
     "address": {
       "title": "Không có địa chỉ nào được tìm thấy",
@@ -296,7 +303,11 @@
     "savings": "Tiết kiệm",
     "totalCost": "Tổng chi phí sản phẩm",
     "totalDiscount": "Tổng giảm giá từ voucher",
-    "totalPayment": "Tổng thanh toán"
+    "totalPayment": "Tổng thanh toán",
+    "productLeft": "Còn {{count}} sản phẩm",
+    "updateClassificationSuccess": "Thay đổi phân loại sản phẩm thành công!",
+    "soldOutMessage": "Phân loại hàng này đã bán hết, vui lòng chọn phân loại khác.",
+    "hiddenMessage": "Phân loại hàng này đã bị ẩn, vui lòng chọn phân loại khác."
   },
   "address": {
     "title": "Địa chỉ",

@@ -57,25 +57,25 @@ const CartItem = ({ brandName, cartBrandItem, selectedCartItems, onSelectBrand }
           cartItem?.productClassification?.preOrderProduct?.product ??
           cartItem?.productClassification?.productDiscount?.product ??
           cartItem?.productClassification?.product
-        const allProductClassifications: IClassification[] =
-          (product?.productDiscounts ?? [])[0]?.productClassifications ?? product?.productClassifications ?? []
 
         const productClassification = cartItem?.productClassification ?? null
-        // const isProductClassificationActive = isCurrentProductClassificationActive(
-        //   productClassification,
-        //   allProductClassifications,
-        // )
+        const allProductClassifications: IClassification[] =
+          (product?.productDiscounts ?? [])[0]?.productClassifications ??
+          productClassification?.preOrderProduct?.productClassifications ??
+          productClassification?.productDiscount?.productClassifications ??
+          productClassification?.product?.productClassifications ??
+          []
         const productClassificationQuantity = cartItem?.productClassification?.quantity ?? 0
         const productImage = cartItem?.productClassification?.images?.[0]?.fileUrl ?? ''
         const productName = product?.name ?? ''
         const productId = product?.id ?? ''
         const productPrice = cartItem?.productClassification?.price ?? 0
         const productQuantity = cartItem?.quantity ?? 0
-        const selectedClassification = cartItem?.classification ?? ''
+        // const selectedClassification = cartItem?.classification ?? ''
 
         const eventType = cartItem?.productClassification?.preOrderProduct
           ? OrderEnum.PRE_ORDER
-          : cartItem?.productClassification?.productDiscount
+          : cartItem?.productClassification?.productDiscount || (product?.productDiscounts ?? [])[0]?.discount
             ? OrderEnum.FLASH_SALE
             : ''
         const discount =
@@ -83,7 +83,10 @@ const CartItem = ({ brandName, cartBrandItem, selectedCartItems, onSelectBrand }
             ? cartItem?.productClassification?.productDiscount?.discount
             : ((product?.productDiscounts ?? [])[0]?.discount ?? null)
 
-        const discountType = eventType === OrderEnum.FLASH_SALE ? DiscountTypeEnum.PERCENTAGE : null
+        const discountType =
+          eventType === OrderEnum.FLASH_SALE || (product?.productDiscounts ?? [])[0]?.discount
+            ? DiscountTypeEnum.PERCENTAGE
+            : null
 
         return (
           <ProductCardLandscape
@@ -94,7 +97,6 @@ const CartItem = ({ brandName, cartBrandItem, selectedCartItems, onSelectBrand }
             productName={productName}
             classifications={allProductClassifications}
             productClassification={productClassification}
-            selectedClassification={selectedClassification}
             discount={discount}
             discountType={discountType}
             price={productPrice}

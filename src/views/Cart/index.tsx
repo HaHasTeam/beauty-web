@@ -5,6 +5,9 @@ import { useTranslation } from 'react-i18next'
 import CartFooter from '@/components/cart/CartFooter'
 import CartHeader from '@/components/cart/CartHeader'
 import CartItem from '@/components/cart/CartItem'
+import Empty from '@/components/empty/Empty'
+import LoadingContentLayer from '@/components/loading-icon/LoadingContentLayer'
+import configs from '@/config'
 import { getMyCartApi } from '@/network/apis/cart'
 import { ICartByBrand } from '@/types/cart'
 import { getTotalPrice } from '@/utils/price'
@@ -18,7 +21,7 @@ const Cart = () => {
   const [cartByBrand, setCartByBrand] = useState<ICartByBrand | undefined>(undefined)
   const totalPrice = getTotalPrice(selectedCartItems, cartByBrand)
 
-  const { data: useMyCartData } = useQuery({
+  const { data: useMyCartData, isFetching } = useQuery({
     queryKey: [getMyCartApi.queryKey],
     queryFn: getMyCartApi.fn,
   })
@@ -63,7 +66,9 @@ const Cart = () => {
     }
   }, [selectedCartItems, useMyCartData])
 
-  return (
+  return isFetching ? (
+    <LoadingContentLayer />
+  ) : cartByBrand && Object.keys(cartByBrand)?.length > 0 ? (
     <div className="relative w-full mx-auto py-5 ">
       <div className="w-full xl:px-28 lg:px-12 sm:px-2 px-1 space-y-3 ">
         <h2 className="uppercase font-bold text-xl">{t('cart.title')}</h2>
@@ -92,6 +97,13 @@ const Cart = () => {
         />
       </div>
     </div>
+  ) : (
+    <Empty
+      title={t('empty.cart.title')}
+      description={t('empty.cart.description')}
+      link={configs.routes.home}
+      linkText={t('empty.cart.button')}
+    />
   )
 }
 
