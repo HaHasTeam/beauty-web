@@ -13,7 +13,12 @@ import { IClassification } from '@/types/classification'
 import { DiscountTypeEnum, ProductCartStatusEnum } from '@/types/enum'
 import { DiscountType } from '@/types/product-discount'
 import { calculateDiscountPrice, calculateTotalPrice } from '@/utils/price'
-import { checkCurrentProductClassificationActive, checkCurrentProductClassificationHide } from '@/utils/product'
+import {
+  checkCurrentProductClassificationActive,
+  checkCurrentProductClassificationHide,
+  hasActiveClassification,
+  hasClassificationWithQuantity,
+} from '@/utils/product'
 
 import AlertMessage from '../alert/AlertMessage'
 import ClassificationPopover from '../classification/ClassificationPopover'
@@ -188,10 +193,14 @@ const ProductCardLandscape = ({
 
   const totalPrice = calculateTotalPrice(price, productQuantity, discount, discountType)
   const discountPrice = calculateDiscountPrice(price, discount, discountType)
+  const HAS_ACTIVE_CLASSIFICATION = hasActiveClassification(classifications)
+  const IN_STOCK_CLASSIFICATION = hasClassificationWithQuantity(classifications)
+  const PREVENT_ACTION = !HAS_ACTIVE_CLASSIFICATION || !IN_STOCK_CLASSIFICATION
+
   return (
-    <div className="w-full py-4 border-b border-gray-200">
-      <div className="w-full flex gap-2 items-center">
-        <div className="flex gap-1 items-center lg:w-[10%] md:w-[10%] w-[14%]">
+    <div className={`w-full py-4 border-b border-gray-200`}>
+      <div className={`w-full flex gap-2 items-center`}>
+        <div className={`flex gap-1 items-center lg:w-[10%] md:w-[10%] w-[14%] ${PREVENT_ACTION ? 'opacity-40' : ''}`}>
           {IS_ACTIVE ? (
             <Checkbox id={cartItemId} checked={isSelected} onClick={() => onChooseProduct(cartItemId)} />
           ) : HIDDEN ? (
@@ -207,7 +216,9 @@ const ProductCardLandscape = ({
           </Link>
         </div>
 
-        <div className="flex md:flex-row flex-col lg:w-[65%] md:w-[65%] sm:w-[34%] w-[34%] gap-2 px-2">
+        <div
+          className={`flex md:flex-row flex-col lg:w-[65%] md:w-[65%] sm:w-[34%] w-[34%] gap-2 px-2 ${PREVENT_ACTION ? 'opacity-40' : ''}`}
+        >
           <div className="order-1 flex gap-1 items-center lg:w-[50%] md:w-[35%] w-full">
             <div className="flex flex-col gap-1">
               <Link to={configs.routes.products + '/' + productId}>
@@ -240,6 +251,7 @@ const ProductCardLandscape = ({
               productClassification={productClassification}
               cartItemId={cartItemId}
               cartItemQuantity={quantity}
+              preventAction={PREVENT_ACTION}
             />
           </div>
           {discount &&
@@ -269,7 +281,7 @@ const ProductCardLandscape = ({
           )}
         </div>
 
-        <div className="w-[26%] md:w-[12%] sm:w-[20%]">
+        <div className={`w-[26%] md:w-[12%] sm:w-[20%] ${PREVENT_ACTION ? 'opacity-40' : ''}`}>
           {IS_ACTIVE && (
             <IncreaseDecreaseButton
               onIncrease={increaseQuantity}
@@ -291,7 +303,9 @@ const ProductCardLandscape = ({
             </span>
           )}
         </div>
-        <span className="text-red-500 lg:text-lg md:text-sm sm:text-xs text-xs font-medium w-[16%] md:w-[8%] sm:w-[12%] ">
+        <span
+          className={`text-red-500 lg:text-lg md:text-sm sm:text-xs text-xs font-medium w-[16%] md:w-[8%] sm:w-[12%] ${PREVENT_ACTION ? 'opacity-40' : ''}`}
+        >
           {t('productCard.currentPrice', { price: totalPrice })}
         </span>
 

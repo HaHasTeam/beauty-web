@@ -20,12 +20,14 @@ interface ClassificationPopoverProps {
   productClassification: IClassification | null
   cartItemId: string
   cartItemQuantity?: number
+  preventAction?: boolean
 }
 export default function ClassificationPopover({
   classifications,
   productClassification,
   cartItemId,
   cartItemQuantity,
+  preventAction,
 }: ClassificationPopoverProps) {
   const { t } = useTranslation()
   const [currentSelectClassification, setCurrentSelectClassification] = useState<IClassification | null>(
@@ -123,7 +125,7 @@ export default function ClassificationPopover({
           </Label>
           <Popover open={isOpen} onOpenChange={setIsOpen}>
             <PopoverTrigger asChild>
-              <Button variant="outline" size="sm" className="w-fit h-7 overflow-ellipsis">
+              <Button variant="outline" size="sm" className="w-fit h-7 overflow-ellipsis" disabled={preventAction}>
                 <span className="line-clamp-2">{titleShown}</span>
                 <ChevronDown className="w-4 h-4 ml-2 opacity-50" />
               </Button>
