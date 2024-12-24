@@ -141,11 +141,14 @@ export default function ClassificationPopover({
                       key={option?.id}
                       variant="outline"
                       disabled={!isProductClassificationActive}
-                      className={`w-fit justify-start px-2 py-1.5 text-sm ${
+                      className={`w-fit h-fit justify-start px-2 py-2 text-sm ${
                         currentSelectClassification?.id === option?.id ? 'bg-accent text-accent-foreground' : ''
                       }`}
                       onClick={() => handleSelect(option)}
                     >
+                      <div className="w-10 h-10 rounded-md">
+                        <img src={option?.images[0]?.fileUrl} className="w-full h-full object-contain rounded-md" />
+                      </div>
                       {option?.title}
                     </Button>
                   ))

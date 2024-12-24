@@ -367,7 +367,7 @@
     "codePlaceholder": "Nhập mã voucher của bạn vào đây",
     "input": "Nhập mã voucher của bạn vào đây",
     "condition": "Điều kiện",
-    "chooseProductBrandAlert": "Vui lòng chọn sản phẩm từ Brand để áp dụng Voucher này",
+    "chooseProductBrandAlert": "Vui lòng chọn sản phẩm từ thương hiệu để áp dụng voucher này",
     "chooseProductAppAlert": "Vui lòng chọn sản phẩm để sử dụng ưu đãi.",
     "description": "Nhập hoặc chọn 1 voucher",
     "help": "Trợ giúp",
@@ -391,7 +391,9 @@
     "discount": "Ưu đãi",
     "nameTitle": "Tên mã giảm giá",
     "descriptionTitle": "Mô tả",
-    "applicableProducts": "Sản phẩm áp dụng"
+    "applicableProducts": "Sản phẩm áp dụng",
+    "discountAmount": "Đã giảm {{amount, currency}}",
+    "discountPercentage": "Đã giảm {{percentage}}%"
   },
   "dialog": {
     "cancel": "Hủy",

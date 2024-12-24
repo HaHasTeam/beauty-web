@@ -30,8 +30,8 @@ i18n
         }
 
         if (format === 'currency') {
-          const currency = lng === 'vi' ? 'VND' : 'USD' // Change currency per language
-          return Intl.NumberFormat(lng, { style: 'currency', currency }).format(value)
+          const currency = lng === 'vi' ? 'VND' : 'VND' // Don't change currency per language
+          return Intl.NumberFormat('vi', { style: 'currency', currency }).format(value)
         }
         return value
       },

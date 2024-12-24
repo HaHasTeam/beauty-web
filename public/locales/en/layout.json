@@ -391,7 +391,9 @@
     "discount": "Discount",
     "nameTitle": "Name",
     "descriptionTitle": "Description",
-    "applicableProducts": "Applicable Products"
+    "applicableProducts": "Applicable Products",
+    "discountAmount": "Discount of {{amount, currency}}",
+    "discountPercentage": "Discount of {{percentage}}%"
   },
   "dialog": {
     "cancel": "Cancel",

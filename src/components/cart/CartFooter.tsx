@@ -63,10 +63,15 @@ export default function CartFooter({
                 {t('cart.selectAll')} ({cartItemCountAll})
               </label>
             </div>
-            <Button variant="destructive" className="">
-              <Trash2 className="w-4 h-4 mr-1" />
-              <span>{t('cart.deleteAll')}</span>
-            </Button>
+            <div className="flex items-center gap-3">
+              <Button variant="destructive" className="">
+                <Trash2 className="w-4 h-4 mr-1" />
+                <span>{t('cart.deleteAll')}</span>
+              </Button>
+              {selectedCartItems && selectedCartItems?.length > 0 && (
+                <Trash2 className="text-destructive w-7 h-7 cursor-pointer transition-colors hover:text-red-500" />
+              )}
+            </div>
           </div>
 
           {/* Right Section */}

@@ -1,4 +1,5 @@
 import { MessageCircle, Store, Tag } from 'lucide-react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
@@ -6,6 +7,7 @@ import configs from '@/config'
 import { ICartItem } from '@/types/cart'
 import { IClassification } from '@/types/classification'
 import { DiscountTypeEnum, OrderEnum } from '@/types/enum'
+import { TVoucher } from '@/types/voucher'
 
 import ProductCardLandscape from '../product/ProductCardLandscape'
 import { Button } from '../ui/button'
@@ -20,9 +22,13 @@ interface CartItemProps {
 }
 const CartItem = ({ brandName, cartBrandItem, selectedCartItems, onSelectBrand }: CartItemProps) => {
   const { t } = useTranslation()
+  const [chosenVoucher, setChosenVoucher] = useState<TVoucher | null>(null)
   const brand = cartBrandItem[0]?.productClassification?.product?.brand
   const cartItemIds = cartBrandItem?.map((cartItem) => cartItem.id)
   const isBrandSelected = cartBrandItem.every((productClassification) =>
+    selectedCartItems?.includes(productClassification.id),
+  )
+  const hasBrandProductSelected = cartBrandItem.some((productClassification) =>
     selectedCartItems?.includes(productClassification.id),
   )
 
@@ -113,12 +119,20 @@ const CartItem = ({ brandName, cartBrandItem, selectedCartItems, onSelectBrand }
       {/* Voucher */}
       <div className="flex items-center gap-3 text-sm">
         <Tag className="w-4 h-4 text-red-500" />
-        <span>Voucher giảm đến ₫21k</span>
+        <span>
+          {chosenVoucher &&
+            hasBrandProductSelected &&
+            (chosenVoucher?.discountType === DiscountTypeEnum.AMOUNT && chosenVoucher?.discountValue
+              ? t('voucher.discountAmount', { amount: chosenVoucher?.discountValue })
+              : t('voucher.discountPercentage', { amount: chosenVoucher?.discountValue }))}
+        </span>
         <VoucherCartList
           triggerText={t('cart.viewMoreVoucher')}
           brandName={brand?.name ?? ''}
           brandId={brand?.id ?? ''}
           brandLogo={brand?.logo ?? ''}
+          hasBrandProductSelected={hasBrandProductSelected}
+          setChosenVoucher={setChosenVoucher}
         />
       </div>
     </div>

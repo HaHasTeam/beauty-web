@@ -13,8 +13,16 @@ interface VoucherCartItemProps {
   voucher: TVoucher
   brandLogo: string
   brandName: string
+  hasBrandProductSelected: boolean
+  selectedVoucher: string
 }
-const VoucherCartItem = ({ voucher, brandLogo, brandName }: VoucherCartItemProps) => {
+const VoucherCartItem = ({
+  voucher,
+  brandLogo,
+  brandName,
+  hasBrandProductSelected,
+  selectedVoucher,
+}: VoucherCartItemProps) => {
   const { t } = useTranslation()
   return (
     <div className="border border-gray-100 rounded-lg shadow-md">
@@ -37,14 +45,18 @@ const VoucherCartItem = ({ voucher, brandLogo, brandName }: VoucherCartItemProps
             <div className="flex justify-between items-start">
               <div className="w-full">
                 <div className="flex gap-2">
-                  <div className="text-lg font-medium flex">
-                    {voucher?.discountType === DiscountTypeEnum.PERCENTAGE
-                      ? t('voucher.off.percentage', { amount: voucher?.discountValue })
-                      : t('voucher.off.amount', { amount: voucher?.discountValue })}
+                  <p className="text-lg font-medium flex flex-wrap gap-1">
+                    <span className="w-fit">
+                      {voucher?.discountType === DiscountTypeEnum.PERCENTAGE
+                        ? t('voucher.off.percentage', { amount: voucher?.discountValue }) + '. '
+                        : t('voucher.off.amount', { amount: voucher?.discountValue }) + '. '}
+                    </span>
                     {voucher?.maxDiscount && (
-                      <div className="text-lg">. {t('voucher.off.maxDiscount', { amount: voucher?.maxDiscount })}</div>
+                      <span className="text-lg w-fit">
+                        {t('voucher.off.maxDiscount', { amount: voucher?.maxDiscount }) + '. '}
+                      </span>
                     )}
-                  </div>
+                  </p>
                   <VoucherInformationPopup voucher={voucher} />
                 </div>
                 {voucher?.minOrderValue && (
@@ -63,18 +75,25 @@ const VoucherCartItem = ({ voucher, brandLogo, brandName }: VoucherCartItemProps
             </div>
           </div>
           {voucher?.status !== VoucherStatusEnum.AVAILABLE || voucher?.status !== VoucherStatusEnum.UNAVAILABLE ? (
-            <RadioGroupItem value={voucher?.id} id={voucher?.id} />
+            <RadioGroupItem
+              value={voucher?.id}
+              id={voucher?.id}
+              checked={voucher?.id === selectedVoucher}
+              disabled={!hasBrandProductSelected}
+            />
           ) : (
-            <Button className="bg-red-500 hover:bg-red-600">Lưu</Button>
+            <Button className="bg-red-500 hover:bg-red-600">{t('button.save')}</Button>
           )}
         </div>
 
         {/* Warning Message */}
       </CardContent>
-      <div className="mt-1 flex items-center gap-2 text-sm text-red-500 bg-red-50 p-2 rounded">
-        <AlertCircle className="w-4 h-4" />
-        {t('voucher.chooseProductBrandAlert')}
-      </div>
+      {!hasBrandProductSelected && (
+        <div className="mt-1 flex items-center gap-2 text-sm text-red-500 bg-red-50 p-2 rounded">
+          <AlertCircle className="w-4 h-4" />
+          {t('voucher.chooseProductBrandAlert')}
+        </div>
+      )}
     </div>
   )
 }

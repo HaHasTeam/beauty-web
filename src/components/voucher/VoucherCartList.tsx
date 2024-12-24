@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { useEffect, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Button } from '@/components/ui/button'
@@ -18,15 +18,31 @@ interface VoucherCartListProps {
   brandName: string
   brandId: string
   brandLogo: string
+  hasBrandProductSelected: boolean
+  setChosenVoucher: Dispatch<SetStateAction<TVoucher | null>>
 }
-const VoucherCartList = ({ triggerText, brandName, brandId, brandLogo }: VoucherCartListProps) => {
+const VoucherCartList = ({
+  triggerText,
+  brandName,
+  brandId,
+  brandLogo,
+  hasBrandProductSelected,
+  setChosenVoucher,
+}: VoucherCartListProps) => {
   const { t } = useTranslation()
   const [brandVouchers, setBrandVouchers] = useState<TVoucher[] | null>(null)
+  const [open, setOpen] = useState<boolean>(false)
+  const [selectedVoucher, setSelectedVoucher] = useState<string>('')
 
   const { data: useBrandVouchersData } = useQuery({
     queryKey: [getBrandVouchersApi.queryKey, brandId],
     queryFn: getBrandVouchersApi.fn,
   })
+
+  const handleConfirm = () => {
+    setChosenVoucher(brandVouchers?.find((voucher) => voucher?.id === selectedVoucher) ?? null)
+    setOpen(false)
+  }
 
   useEffect(() => {
     if (useBrandVouchersData && useBrandVouchersData?.data) {
@@ -35,7 +51,7 @@ const VoucherCartList = ({ triggerText, brandName, brandId, brandLogo }: Voucher
   }, [useBrandVouchersData])
 
   return (
-    <Popover>
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <span className="text-blue-700 hover:cursor-pointer">{triggerText}</span>
       </PopoverTrigger>
@@ -62,16 +78,33 @@ const VoucherCartList = ({ triggerText, brandName, brandId, brandLogo }: Voucher
           </div>
 
           {brandVouchers && brandVouchers?.length > 0 ? (
-            <ScrollArea className="h-52 px-2">
-              <div className="py-2 space-y-2">
-                <RadioGroup>
+            // <ScrollArea className="h-52 px-2">
+            <div className="space-y-2">
+              <ScrollArea className="h-56">
+                <RadioGroup value={selectedVoucher} onValueChange={setSelectedVoucher}>
                   {brandVouchers?.map((voucher) => (
-                    <VoucherCartItem key={voucher.id} voucher={voucher} brandLogo={brandLogo} brandName={brandName} />
+                    <VoucherCartItem
+                      key={voucher.id}
+                      voucher={voucher}
+                      brandLogo={brandLogo}
+                      brandName={brandName}
+                      hasBrandProductSelected={hasBrandProductSelected}
+                      selectedVoucher={selectedVoucher}
+                    />
                   ))}
                 </RadioGroup>
+              </ScrollArea>
+              <div className="flex justify-end gap-2 w-full shadow-inner pt-4">
+                <Button variant="outline" onClick={() => setOpen(false)}>
+                  {t('dialog.cancel')}
+                </Button>
+                <Button onClick={handleConfirm} disabled={!hasBrandProductSelected}>
+                  {t('dialog.ok')}
+                </Button>
               </div>
-            </ScrollArea>
+            </div>
           ) : (
+            // </ScrollArea>
             <div className="flex flex-col justify-center items-center">
               <Empty title={t('empty.brandVoucher.title')} description={t('empty.brandVoucher.description')} />
             </div>
