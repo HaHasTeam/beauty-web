@@ -10,7 +10,7 @@ import { useToast } from '@/hooks/useToast'
 import { deleteCartItemApi, getCartByIdApi, getMyCartApi, updateCartItemApi } from '@/network/apis/cart'
 import { ICartItem } from '@/types/cart'
 import { IClassification } from '@/types/classification'
-import { DiscountTypeEnum, ProductCartStatusEnum } from '@/types/enum'
+import { ClassificationTypeEnum, DiscountTypeEnum, ProductCartStatusEnum } from '@/types/enum'
 import { DiscountType } from '@/types/product-discount'
 import { calculateDiscountPrice, calculateTotalPrice } from '@/utils/price'
 import {
@@ -113,6 +113,7 @@ const ProductCardLandscape = ({
       queryClient.invalidateQueries({
         queryKey: [getCartByIdApi.queryKey, cartItemId as string],
       })
+      console.log(productQuantity, quantity, inputValue)
     },
   })
 
@@ -120,12 +121,13 @@ const ProductCardLandscape = ({
     async (newQuantity: number) => {
       if (isProcessing) return
       setIsProcessing(true)
-
+      setQuantity(newQuantity)
+      setInputValue(newQuantity.toString())
       try {
         await updateCartItemFn({ id: cartItem?.id ?? '', quantity: newQuantity })
-        setQuantity(newQuantity)
-        setInputValue(newQuantity.toString())
       } catch (error) {
+        // setQuantity(newQuantity)
+        // setInputValue(newQuantity.toString())
         handleServerError({ error })
       } finally {
         setIsProcessing(false)
@@ -147,17 +149,19 @@ const ProductCardLandscape = ({
       setOpenConfirmDelete(true)
     }
     if (quantity > 1) {
-      setInputValue(`${quantity - 1}`)
-      setQuantity(quantity - 1)
-      handleQuantityUpdate(quantity - 1)
+      const newQuantity = quantity - 1
+      setQuantity(newQuantity)
+      setInputValue(newQuantity.toString())
+      handleQuantityUpdate(newQuantity)
     }
   }
 
   const increaseQuantity = () => {
     if (quantity < MAX_QUANTITY_IN_CART) {
-      setInputValue(`${quantity + 1}`)
-      setQuantity(quantity + 1)
-      handleQuantityUpdate(quantity + 1)
+      const newQuantity = quantity + 1
+      setQuantity(newQuantity)
+      setInputValue(newQuantity.toString())
+      handleQuantityUpdate(newQuantity)
     }
   }
 
@@ -182,12 +186,15 @@ const ProductCardLandscape = ({
   }
 
   const handleBlur = () => {
-    handleQuantityUpdate(quantity)
+    const newQuantity = parseInt(inputValue, 10) || productQuantity
+    setQuantity(newQuantity)
+    handleQuantityUpdate(newQuantity)
   }
-
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      handleQuantityUpdate(quantity)
+      const newQuantity = parseInt(inputValue, 10) || productQuantity
+      setQuantity(newQuantity)
+      handleQuantityUpdate(newQuantity)
     }
   }
 
@@ -246,13 +253,15 @@ const ProductCardLandscape = ({
             </div>
           </div>
           <div className="order-3 md:order-2 flex items-center gap-2 lg:w-[30%] md:w-[40%] w-full">
-            <ClassificationPopover
-              classifications={classifications}
-              productClassification={productClassification}
-              cartItemId={cartItemId}
-              cartItemQuantity={quantity}
-              preventAction={PREVENT_ACTION}
-            />
+            {productClassification?.type === ClassificationTypeEnum?.CUSTOM && (
+              <ClassificationPopover
+                classifications={classifications}
+                productClassification={productClassification}
+                cartItemId={cartItemId}
+                cartItemQuantity={quantity}
+                preventAction={PREVENT_ACTION}
+              />
+            )}
           </div>
           {discount &&
           discount > 0 &&

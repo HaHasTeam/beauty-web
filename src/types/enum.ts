@@ -112,3 +112,7 @@ export enum ProductCartStatusEnum {
   HIDDEN = 'HIDDEN',
   SOLD_OUT = 'SOLD_OUT',
 }
+export enum ClassificationTypeEnum {
+  DEFAULT = 'DEFAULT',
+  CUSTOM = 'CUSTOM',
+}
