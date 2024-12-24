@@ -1,8 +1,8 @@
-import { IClassification, TClassification } from './classification'
+import { IClassification } from './classification'
 import { TUser } from './user'
 import { TVoucher } from './voucher'
 
-interface OrderDetail {
+export interface IOrderDetail {
   platformVoucherDiscount: number
   shopVoucherDiscount: number
   id: string
@@ -13,11 +13,11 @@ interface OrderDetail {
   quantity: number
   type: string | null
   isFeedback: boolean
-  productClassification: TClassification
+  productClassification: IClassification
   productClassificationPreOrder: null | IClassification
 }
 
-export interface OrderItem {
+export interface IOrderItem {
   platformVoucherDiscount: number
   shopVoucherDiscount: number
   id: string
@@ -31,7 +31,7 @@ export interface OrderItem {
   notes: string
   type: string
   status: string
-  orderDetails: OrderDetail[]
+  orderDetails: IOrderDetail[]
   voucher: null | TVoucher
 }
 
@@ -50,5 +50,10 @@ export type IOrder = {
   type: string
   status: string
   account: TUser
-  children: OrderItem[]
+  children: IOrderItem[]
+}
+
+export type IOrderFilter = {
+  search?: string
+  status?: string
 }

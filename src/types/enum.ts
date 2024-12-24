@@ -87,6 +87,7 @@ export enum ShippingStatusEnum {
   RETURN_REFUND = 'RETURN_REFUND',
   COMPLETED = 'COMPLETED',
   CANCELLED = 'CANCELLED',
+  CANCELLED_BY_SHOP = 'CANCELLED_BY_SHOP',
 }
 
 export enum ProductDiscountEnum {

@@ -155,6 +155,12 @@
       "description": "Khám phá những sản phẩm đang thịnh hành.",
       "button": "Khám phá sản phẩm"
     },
+    "order": {
+      "title": "Danh sách đơn hàng của bạn đang trống",
+      "description": "Bạn chưa đặt bất kỳ đơn hàng nào. Hãy bắt đầu khám phá sản phẩm của chúng tôi và tận hưởng các ưu đãi hấp dẫn!",
+      "statusDescription": "Hiện không có đơn hàng nào đang ở trạng thái này.",
+      "button": "Bắt đầu mua sắm"
+    },
     "checkout": {
       "title": "Danh sách mua hàng trống",
       "description": "Khám phá những sản phẩm đang thịnh hành.",
@@ -437,7 +443,17 @@
   "order": {
     "success": "Đặt hàng thành công!",
     "failed": "Đặt hàng thất bại!",
-    "loading": "Đang tải đơn hàng..."
+    "loading": "Đang tải đơn hàng...",
+    "viewDetail": "Xem chi tiết",
+    "buyAgain": "Mua lại",
+    "classification": "Phân loại",
+    "all": "Tất cả",
+    "pending": "Chờ thanh toán",
+    "shipping": "Vận chuyển",
+    "delivering": "Chờ giao hàng",
+    "cancelled": "Đã hủy",
+    "completed": "Hoàn thành",
+    "return": "Trả hàng/Hoàn tiền"
   },
   "toast": {
     "success": "Yêu cầu của bạn đã được xử lý thành công, tiếp tục công việc của bạn.",

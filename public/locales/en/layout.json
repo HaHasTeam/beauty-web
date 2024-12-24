@@ -155,10 +155,16 @@
       "description": "Discover what's trending",
       "button": "Discover Products"
     },
+    "order": {
+      "title": "Your order history is empty",
+      "description": "You haven't placed any orders yet. Start exploring our products and enjoy amazing deals!",
+      "statusDescription": "There are currently no orders in this status.",
+      "button": "Start Shopping"
+    },
     "checkout": {
       "title": "Your checkout list is empty",
       "description": "Discover what's trending",
-      "button": "Shopping"
+      "button": "Start Shopping"
     },
     "address": {
       "title": "No Address Found",
@@ -437,7 +443,17 @@
   "order": {
     "success": "Create order successfully!",
     "failed": "Create order failed!",
-    "loading": "Loading order..."
+    "loading": "Loading order...",
+    "viewDetail": "View details",
+    "buyAgain": "Buy Again",
+    "classification": "Classification",
+    "all": "All",
+    "pending": "Pending",
+    "shipping": "Shipping",
+    "delivering": "Delivering",
+    "cancelled": "Cancelled",
+    "completed": "Completed",
+    "return": "Return/Refund"
   },
   "toast": {
     "success": "Your request has been successfully processed, continue with your work.",
