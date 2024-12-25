@@ -30,3 +30,13 @@ export type TVoucher = TMetaData & {
   brand?: TBrand | string
   applyType?: string
 }
+
+export interface ICheckoutItem {
+  classificationId: string
+  quantity: number
+}
+export interface ICategoryVoucher {
+  checkoutItems?: ICheckoutItem[]
+  brandItems?: ICheckoutItem[]
+  brandId?: string
+}

@@ -1,14 +1,16 @@
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { getBrandVouchersApi } from '@/network/apis/voucher'
-import { TVoucher } from '@/types/voucher'
+import useHandleServerError from '@/hooks/useHandleServerError'
+import { getBrandVouchersApi, getCheckoutListBrandVouchersApi } from '@/network/apis/voucher'
+import { ICheckoutItem, TVoucher } from '@/types/voucher'
 
 import Empty from '../empty/Empty'
+import LoadingIcon from '../loading-icon'
 import { RadioGroup } from '../ui/radio-group'
 import { ScrollArea } from '../ui/scroll-area'
 import VoucherCartItem from './VoucherCartItem'
@@ -19,6 +21,7 @@ interface VoucherCartListProps {
   brandId: string
   brandLogo: string
   hasBrandProductSelected: boolean
+  checkoutItems: ICheckoutItem[]
   setChosenVoucher: Dispatch<SetStateAction<TVoucher | null>>
 }
 const VoucherCartList = ({
@@ -28,15 +31,26 @@ const VoucherCartList = ({
   brandLogo,
   hasBrandProductSelected,
   setChosenVoucher,
+  checkoutItems,
 }: VoucherCartListProps) => {
   const { t } = useTranslation()
+  const handleServerError = useHandleServerError()
   const [brandVouchers, setBrandVouchers] = useState<TVoucher[] | null>(null)
   const [open, setOpen] = useState<boolean>(false)
   const [selectedVoucher, setSelectedVoucher] = useState<string>('')
 
-  const { data: useBrandVouchersData } = useQuery({
-    queryKey: [getBrandVouchersApi.queryKey, brandId],
+  const { data: useBrandVoucher, isFetching: isGettingBrandVoucher } = useQuery({
+    queryKey: [getBrandVouchersApi.queryKey],
     queryFn: getBrandVouchersApi.fn,
+  })
+
+  const { mutateAsync: callBrandVouchersFn } = useMutation({
+    mutationKey: [getCheckoutListBrandVouchersApi.mutationKey],
+    mutationFn: getCheckoutListBrandVouchersApi.fn,
+    onSuccess: (data) => {
+      console.log(data)
+      setBrandVouchers(data?.data)
+    },
   })
 
   const handleConfirm = () => {
@@ -44,16 +58,32 @@ const VoucherCartList = ({
     setOpen(false)
   }
 
-  useEffect(() => {
-    if (useBrandVouchersData && useBrandVouchersData?.data) {
-      setBrandVouchers(useBrandVouchersData?.data)
+  async function handleCallBrandVouchers() {
+    try {
+      if (checkoutItems && checkoutItems?.length > 0) {
+        await callBrandVouchersFn({
+          checkoutItems: checkoutItems,
+          brandItems: checkoutItems,
+          brandId: brandId,
+        })
+      }
+    } catch (error) {
+      handleServerError({ error })
     }
-  }, [useBrandVouchersData])
+  }
+
+  useEffect(() => {
+    if (useBrandVoucher && useBrandVoucher?.data?.length > 0) {
+      setBrandVouchers(useBrandVoucher?.data)
+    }
+  }, [useBrandVoucher])
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <span className="text-blue-700 hover:cursor-pointer">{triggerText}</span>
+        <span className="text-blue-700 hover:cursor-pointer" onClick={() => handleCallBrandVouchers()}>
+          {triggerText}
+        </span>
       </PopoverTrigger>
       <PopoverContent className="md:w-[500px] w-[320px] bg-white">
         <div className="w-full md:p-2 p-0">
@@ -77,7 +107,11 @@ const VoucherCartList = ({
             </div>
           </div>
 
-          {brandVouchers && brandVouchers?.length > 0 ? (
+          {isGettingBrandVoucher ? (
+            <div className="h-36 flex justify-center items-center">
+              <LoadingIcon color="primaryBackground" />
+            </div>
+          ) : brandVouchers && brandVouchers?.length > 0 ? (
             // <ScrollArea className="h-52 px-2">
             <div className="space-y-2">
               <ScrollArea className="h-56">

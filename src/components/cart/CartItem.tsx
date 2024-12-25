@@ -7,7 +7,7 @@ import configs from '@/config'
 import { ICartItem } from '@/types/cart'
 import { IClassification } from '@/types/classification'
 import { DiscountTypeEnum, OrderEnum } from '@/types/enum'
-import { TVoucher } from '@/types/voucher'
+import { ICheckoutItem, TVoucher } from '@/types/voucher'
 
 import ProductCardLandscape from '../product/ProductCardLandscape'
 import { Button } from '../ui/button'
@@ -23,7 +23,10 @@ interface CartItemProps {
 const CartItem = ({ brandName, cartBrandItem, selectedCartItems, onSelectBrand }: CartItemProps) => {
   const { t } = useTranslation()
   const [chosenVoucher, setChosenVoucher] = useState<TVoucher | null>(null)
-  const brand = cartBrandItem[0]?.productClassification?.product?.brand
+  const brand =
+    cartBrandItem[0]?.productClassification?.productDiscount?.product?.brand ??
+    cartBrandItem[0]?.productClassification?.preOrderProduct?.product?.brand ??
+    cartBrandItem[0]?.productClassification?.product?.brand
   const cartItemIds = cartBrandItem?.map((cartItem) => cartItem.id)
   const isBrandSelected = cartBrandItem.every((productClassification) =>
     selectedCartItems?.includes(productClassification.id),
@@ -31,7 +34,16 @@ const CartItem = ({ brandName, cartBrandItem, selectedCartItems, onSelectBrand }
   const hasBrandProductSelected = cartBrandItem.some((productClassification) =>
     selectedCartItems?.includes(productClassification.id),
   )
+  const checkoutItems: ICheckoutItem[] = cartBrandItem
+    .filter((cartItem) => selectedCartItems?.includes(cartItem.id))
+    .map((cartItem) => ({
+      classificationId: cartItem.productClassification?.id ?? '',
+      quantity: cartItem.quantity ?? 0,
+    }))
+    .filter((item) => item.classificationId !== null) // Remove items without a classificationId
 
+  console.log(checkoutItems)
+  console.log(brand)
   // Handler for brand-level checkbox
   const handleBrandSelect = () => {
     onSelectBrand(cartItemIds, !isBrandSelected)
@@ -133,6 +145,7 @@ const CartItem = ({ brandName, cartBrandItem, selectedCartItems, onSelectBrand }
           brandLogo={brand?.logo ?? ''}
           hasBrandProductSelected={hasBrandProductSelected}
           setChosenVoucher={setChosenVoucher}
+          checkoutItems={checkoutItems}
         />
       </div>
     </div>
