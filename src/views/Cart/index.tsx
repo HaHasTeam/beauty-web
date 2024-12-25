@@ -87,6 +87,7 @@ const Cart = () => {
         <CartFooter
           cartItemCountAll={allCartItemIds?.length}
           cartItemCount={selectedCartItems?.length}
+          setSelectedCartItems={setSelectedCartItems}
           onCheckAll={handleSelectAll}
           isAllSelected={isAllSelected}
           totalPrice={totalPrice}

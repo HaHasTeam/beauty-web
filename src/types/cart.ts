@@ -27,3 +27,7 @@ export interface ICreateCartItem {
 export interface ICartByBrand {
   [brandName: string]: ICartItem[]
 }
+
+export interface IRemoveCartItem {
+  itemIds: string[]
+}

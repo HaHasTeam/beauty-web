@@ -300,6 +300,7 @@
     "Products": "Products",
     "saved": "Saved",
     "selectAll": "Select All",
+    "removeAll": "Remove All",
     "voucher": "Voucher",
     "selectVoucher": "Select or Enter Voucher",
     "buy": "Buy",
@@ -467,11 +468,20 @@
   },
   "delete": {
     "productCart": {
-      "title": "Remove product",
-      "description": "Are you sure you want to remove this product from your cart?",
+      "title": "Remove item",
+      "description": "Are you sure you want to remove this item from your cart?",
       "confirm": "Confirm",
       "cancel": "Cancel",
       "success": "Item has been successfully removed from your cart."
+    },
+    "cart": {
+      "title": "Remove {{amount}} items",
+      "description": "Are you sure you want to remove {{amount}} items from your cart? This action cannot be undone.",
+      "confirm": "Confirm",
+      "cancel": "Cancel",
+      "success": "{{amount}} items have been removed from your cart. You can continue shopping to add new items.",
+      "all": "all",
+      "All": "All"
     }
   }
 }

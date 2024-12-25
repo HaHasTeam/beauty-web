@@ -1,4 +1,4 @@
-import { ICart, ICartByBrand, ICartItem, ICreateCartItem } from '@/types/cart'
+import { ICart, ICartByBrand, ICartItem, ICreateCartItem, IRemoveCartItem } from '@/types/cart'
 import { TServerResponse } from '@/types/request'
 import { toMutationFetcher, toQueryFetcher } from '@/utils/query'
 import { privateRequest } from '@/utils/request'
@@ -9,6 +9,23 @@ export const createCartItemApi = toMutationFetcher<ICreateCartItem, TServerRespo
     return privateRequest('/cart', {
       method: 'POST',
       data,
+    })
+  },
+)
+export const removeMultipleCartItemApi = toMutationFetcher<IRemoveCartItem, TServerResponse<ICartItem>>(
+  'removeMultipleCartItemApi',
+  async (data) => {
+    return privateRequest('/cart/remove-multiple', {
+      method: 'POST',
+      data,
+    })
+  },
+)
+export const removeAllCartItemApi = toMutationFetcher<void, TServerResponse<ICartItem>>(
+  'removeAllCartItemApi',
+  async () => {
+    return privateRequest('/cart/remove-all', {
+      method: 'POST',
     })
   },
 )

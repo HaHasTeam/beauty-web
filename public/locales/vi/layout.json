@@ -300,6 +300,7 @@
     "Products": "Sản phẩm",
     "saved": "Đã tiết kiệm",
     "selectAll": "Chọn tất cả",
+    "removeAll": "Xóa tất cả",
     "voucher": "Voucher",
     "selectVoucher": "Chọn hoặc nhập voucher",
     "buy": "Mua hàng",
@@ -468,10 +469,19 @@
   "delete": {
     "productCart": {
       "title": "Xóa sản phẩm",
-      "description": "Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng?",
+      "description": "Bạn có chắc chắn muốn bỏ sản phẩm này khỏi giỏ hàng không? Hành động này không thể hoàn tác.",
       "confirm": "Xác Nhận",
       "cancel": "Hủy",
-      "success": "Sản phẩm đã được xóa khỏi giỏ hàng thành công."
+      "success": "Sản phẩm đã được bỏ khỏi giỏ hàng thành công."
+    },
+    "cart": {
+      "title": "Xóa {{amount}} sản phẩm",
+      "description": "Bạn có chắc chắn muốn bỏ {{amount}} sản phẩm khỏi giỏ hàng không? Hành động này không thể hoàn tác.",
+      "confirm": "Xác Nhận",
+      "cancel": "Hủy",
+      "success": "{{amount}} sản phẩm đã được bỏ khỏi giỏ hàng thành công.",
+      "all": "tất cả",
+      "All": "Tất cả"
     }
   }
 }
