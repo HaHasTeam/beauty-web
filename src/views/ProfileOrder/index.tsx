@@ -60,7 +60,7 @@ export default function ProfileOrder() {
     return (
       <div className="space-y-4">
         {orders?.map((orderItem) => (
-          <div key={orderItem?.id} className="p-4 border rounded-lg">
+          <div key={orderItem?.id} className="bg-white border rounded-md">
             <OrderItem
               brand={orderItem?.orderDetails[0]?.productClassification?.product?.brand ?? null}
               orderItem={orderItem}

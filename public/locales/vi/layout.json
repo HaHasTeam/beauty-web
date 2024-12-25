@@ -267,6 +267,7 @@
       "count": "{{count}}k"
     },
     "chatNow": "Nhắn tin ngay",
+    "chat": "Nhắn tin",
     "viewShop": "Xem thương hiệu"
   },
   "breadcrumb": {
@@ -453,7 +454,9 @@
     "delivering": "Chờ giao hàng",
     "cancelled": "Đã hủy",
     "completed": "Hoàn thành",
-    "return": "Trả hàng/Hoàn tiền"
+    "return": "Trả hàng/Hoàn tiền",
+    "returnOrder": "Trả hàng",
+    "lastUpdated": "Cập nhật lần cuối"
   },
   "toast": {
     "success": "Yêu cầu của bạn đã được xử lý thành công, tiếp tục công việc của bạn.",

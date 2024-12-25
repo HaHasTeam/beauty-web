@@ -29,6 +29,7 @@ const routes = {
   profile: '/profile',
   profileAddress: '/profile/address',
   profileOrder: '/profile/order',
+  profileOrderDetail: '/profile/order/:orderId',
   profilePassword: '/profile/password',
   profileNotification: '/profile/notification',
   profileVoucher: '/profile/voucher',
@@ -41,7 +42,7 @@ const routes = {
   professionalLanding: '/landing/professional',
   search: '/search',
   brands: '/brands',
-  brandDetail: '/brands/brandId',
+  brandDetail: '/brands/:brandId',
   notFound: '*',
 }
 

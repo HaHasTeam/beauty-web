@@ -267,6 +267,7 @@
       "count": "{{count}}k"
     },
     "chatNow": "Chat Now",
+    "chat": "Chat",
     "viewShop": "View Shop"
   },
   "breadcrumb": {
@@ -453,7 +454,9 @@
     "delivering": "Delivering",
     "cancelled": "Cancelled",
     "completed": "Completed",
-    "return": "Return/Refund"
+    "return": "Return/Refund",
+    "returnOrder": "Return",
+    "lastUpdated": "Last updated"
   },
   "toast": {
     "success": "Your request has been successfully processed, continue with your work.",
