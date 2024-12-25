@@ -7,6 +7,7 @@ type ToastOptions = {
   description?: string
   duration?: number
   onClose?: () => void
+  isShowDescription?: boolean
 }
 
 export const useToast = () => {
@@ -20,9 +21,11 @@ export const useToast = () => {
     })
   }
 
-  const errorToast = ({ message, description, duration, onClose }: ToastOptions) => {
+  const errorToast = ({ message, description, duration, onClose, isShowDescription = true }: ToastOptions) => {
     toast.error(message, {
-      description: <span className="text-red-500 text-xs">{description || t('toast.error')}</span>,
+      description: (
+        <span className="text-red-500 text-xs">{isShowDescription && (description || t('toast.error'))}</span>
+      ),
       duration,
       onDismiss: onClose,
       icon: <ShieldXIcon size={20} />,

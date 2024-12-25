@@ -314,7 +314,9 @@
     "productLeft": "Còn {{count}} sản phẩm",
     "updateClassificationSuccess": "Thay đổi phân loại sản phẩm thành công!",
     "soldOutMessage": "Phân loại hàng này đã bán hết, vui lòng chọn phân loại khác.",
-    "hiddenMessage": "Phân loại hàng này đã bị ẩn, vui lòng chọn phân loại khác."
+    "hiddenMessage": "Phân loại hàng này đã bị ẩn, vui lòng chọn phân loại khác.",
+    "maxQuantityError": "Số lượng còn lại của sản phẩm này là {{maxQuantity}}.",
+    "negativeQuantityError": "Số lượng sản phẩm không thể bé hơn 1."
   },
   "address": {
     "title": "Địa chỉ",

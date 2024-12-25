@@ -62,11 +62,11 @@ const ProductCardLandscape = ({
   productClassificationQuantity,
 }: ProductCardLandscapeProps) => {
   const { t } = useTranslation()
-  const [quantity, setQuantity] = useState(productQuantity ?? 1)
-  const [inputValue, setInputValue] = useState(productQuantity.toString() ?? '1')
+  const [quantity, setQuantity] = useState(productQuantity)
+  const [inputValue, setInputValue] = useState(productQuantity.toString() ?? '')
   const [openConfirmDelete, setOpenConfirmDelete] = useState(false)
   const [isProcessing, setIsProcessing] = useState(false)
-  const { successToast } = useToast()
+  const { successToast, errorToast } = useToast()
   const handleServerError = useHandleServerError()
   const queryClient = useQueryClient()
   const PRODUCT_STOCK_COUNT = productClassification?.quantity ?? 0
@@ -75,17 +75,17 @@ const ProductCardLandscape = ({
   const HIDDEN = checkCurrentProductClassificationHide(productClassification, classifications)
   const IS_ACTIVE = checkCurrentProductClassificationActive(productClassification, classifications)
 
-  console.log(
-    'info',
-    classifications,
-    productClassification,
-    productClassificationQuantity,
-    'hidden' + HIDDEN,
-    'active' + IS_ACTIVE,
-    'sold out' + OUT_OF_STOCK,
-    MAX_QUANTITY_IN_CART,
-    PRODUCT_STOCK_COUNT,
-  )
+  // console.log(
+  //   'info',
+  //   classifications,
+  //   productClassification,
+  //   productClassificationQuantity,
+  //   'hidden' + HIDDEN,
+  //   'active' + IS_ACTIVE,
+  //   'sold out' + OUT_OF_STOCK,
+  //   MAX_QUANTITY_IN_CART,
+  //   PRODUCT_STOCK_COUNT,
+  // )
 
   const { mutateAsync: deleteCartItemFn } = useMutation({
     mutationKey: [deleteCartItemApi.mutationKey, cartItemId as string],
@@ -107,12 +107,12 @@ const ProductCardLandscape = ({
     mutationKey: [updateCartItemApi.mutationKey],
     mutationFn: updateCartItemApi.fn,
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: [getMyCartApi.queryKey],
-      })
-      queryClient.invalidateQueries({
-        queryKey: [getCartByIdApi.queryKey, cartItemId as string],
-      })
+      // queryClient.invalidateQueries({
+      //   queryKey: [getMyCartApi.queryKey],
+      // })
+      // queryClient.invalidateQueries({
+      //   queryKey: [getCartByIdApi.queryKey, cartItemId as string],
+      // })
       console.log(productQuantity, quantity, inputValue)
     },
   })
@@ -126,8 +126,6 @@ const ProductCardLandscape = ({
       try {
         await updateCartItemFn({ id: cartItem?.id ?? '', quantity: newQuantity })
       } catch (error) {
-        // setQuantity(newQuantity)
-        // setInputValue(newQuantity.toString())
         handleServerError({ error })
       } finally {
         setIsProcessing(false)
@@ -170,7 +168,7 @@ const ProductCardLandscape = ({
     // Allow clearing the input
     if (value === '') {
       setInputValue('')
-      // setQuantity(1)
+      setQuantity(1)
       return
     }
 
@@ -181,6 +179,13 @@ const ProductCardLandscape = ({
       if (parsedValue > 0 && parsedValue <= MAX_QUANTITY_IN_CART) {
         setInputValue(value)
         setQuantity(parsedValue)
+      } else if (parsedValue > MAX_QUANTITY_IN_CART) {
+        errorToast({
+          message: t('cart.maxQuantityError', { maxQuantity: MAX_QUANTITY_IN_CART }),
+          isShowDescription: false,
+        })
+      } else if (parsedValue <= 0) {
+        errorToast({ message: t('cart.negativeQuantityError'), isShowDescription: false })
       }
     }
   }
@@ -198,12 +203,16 @@ const ProductCardLandscape = ({
     }
   }
 
-  const totalPrice = calculateTotalPrice(price, productQuantity, discount, discountType)
+  const totalPrice = calculateTotalPrice(price, quantity, discount, discountType)
   const discountPrice = calculateDiscountPrice(price, discount, discountType)
   const HAS_ACTIVE_CLASSIFICATION = hasActiveClassification(classifications)
   const IN_STOCK_CLASSIFICATION = hasClassificationWithQuantity(classifications)
   const PREVENT_ACTION = !HAS_ACTIVE_CLASSIFICATION || !IN_STOCK_CLASSIFICATION
 
+  // useEffect(() => {
+  //   setQuantity(productQuantity ?? 1)
+  //   setInputValue(productQuantity.toString() ?? '1')
+  // }, [productQuantity])
   return (
     <div className={`w-full py-4 border-b border-gray-200`}>
       <div className={`w-full flex gap-2 items-center`}>

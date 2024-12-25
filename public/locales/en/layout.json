@@ -314,7 +314,9 @@
     "productLeft": "{{count}} products left",
     "updateClassificationSuccess": "Update product classification successfully!",
     "soldOutMessage": "This product classification is sold out, please choose another.",
-    "hiddenMessage": "This product classification is hidden, please choose another."
+    "hiddenMessage": "This product classification is hidden, please choose another.",
+    "maxQuantityError": "The remaining quantity of this product is {{maxQuantity}}.",
+    "negativeQuantityError": "The quantity cannot be less than 1."
   },
   "address": {
     "title": "Address",
