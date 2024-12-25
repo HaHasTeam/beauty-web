@@ -344,7 +344,7 @@ const ProductCardLandscape = ({
           handleDeleteCartItem()
           setOpenConfirmDelete(false)
         }}
-        item="productCard"
+        item="productCart"
       />
     </div>
   )
