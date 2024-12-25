@@ -19,9 +19,9 @@ const LoadingContentLayer = ({ label, className }: Props) => {
     }
   }, [])
   return (
-    <div className={cn('size-full flex justify-center items-center bg-primary/30 absolute', className)}>
+    <div className={cn('fixed inset-0 flex justify-center items-center bg-primary/20', className)}>
       <div ref={loadingRef}>
-        <LoadingIcon label={label} color="black" />
+        <LoadingIcon label={label} color="primaryBackground" />
       </div>
     </div>
   )

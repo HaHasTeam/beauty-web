@@ -185,12 +185,14 @@ const Checkout = () => {
       </div>
     </div>
   ) : (
-    <Empty
-      title={t('empty.checkout.title')}
-      description={t('empty.checkout.description')}
-      link={configs.routes.home}
-      linkText={t('empty.checkout.button')}
-    />
+    <div className="my-10 w-full h-full flex flex-col justify-center">
+      <Empty
+        title={t('empty.checkout.title')}
+        description={t('empty.checkout.description')}
+        link={configs.routes.home}
+        linkText={t('empty.checkout.button')}
+      />
+    </div>
   )
 }
 
