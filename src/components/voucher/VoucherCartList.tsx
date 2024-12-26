@@ -1,12 +1,13 @@
-import { useMutation, useQuery } from '@tanstack/react-query'
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { useMutation } from '@tanstack/react-query'
+import { Dispatch, SetStateAction, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import useHandleServerError from '@/hooks/useHandleServerError'
-import { getBrandVouchersApi, getCheckoutListBrandVouchersApi } from '@/network/apis/voucher'
+import { getCheckoutListBrandVouchersApi } from '@/network/apis/voucher'
+import { VoucherUsedStatusEnum } from '@/types/enum'
 import { ICheckoutItem, TVoucher } from '@/types/voucher'
 
 import Empty from '../empty/Empty'
@@ -35,32 +36,40 @@ const VoucherCartList = ({
 }: VoucherCartListProps) => {
   const { t } = useTranslation()
   const handleServerError = useHandleServerError()
-  const [brandVouchers, setBrandVouchers] = useState<TVoucher[] | null>(null)
+  // const [brandVouchers, setBrandVouchers] = useState<TVoucher[] | null>([])
   const [open, setOpen] = useState<boolean>(false)
   const [selectedVoucher, setSelectedVoucher] = useState<string>('')
+  const [unclaimedVouchers, setUnclaimedVouchers] = useState<TVoucher[]>([])
+  const [availableVouchers, setAvailableVouchers] = useState<TVoucher[]>([])
+  const [unAvailableVouchers, setUnAvailableVouchers] = useState<TVoucher[]>([])
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
-  const { data: useBrandVoucher, isFetching: isGettingBrandVoucher } = useQuery({
-    queryKey: [getBrandVouchersApi.queryKey],
-    queryFn: getBrandVouchersApi.fn,
-  })
+  // const { data: useBrandVoucher } = useQuery({
+  //   queryKey: [getBrandVouchersApi.queryKey, brandId as string],
+  //   queryFn: getBrandVouchersApi.fn,
+  // })
 
   const { mutateAsync: callBrandVouchersFn } = useMutation({
     mutationKey: [getCheckoutListBrandVouchersApi.mutationKey],
     mutationFn: getCheckoutListBrandVouchersApi.fn,
     onSuccess: (data) => {
       console.log(data)
-      setBrandVouchers(data?.data)
+      setUnclaimedVouchers(data?.data?.unclaimedVouchers)
+      setAvailableVouchers(data?.data?.availableVouchers)
+      setUnAvailableVouchers(data?.data?.unAvailableVouchers)
+      setIsLoading(false)
     },
   })
 
   const handleConfirm = () => {
-    setChosenVoucher(brandVouchers?.find((voucher) => voucher?.id === selectedVoucher) ?? null)
+    setChosenVoucher(availableVouchers?.find((voucher) => voucher?.id === selectedVoucher) ?? null)
     setOpen(false)
   }
 
   async function handleCallBrandVouchers() {
     try {
       if (checkoutItems && checkoutItems?.length > 0) {
+        setIsLoading(true)
         await callBrandVouchersFn({
           checkoutItems: checkoutItems,
           brandItems: checkoutItems,
@@ -69,23 +78,30 @@ const VoucherCartList = ({
       }
     } catch (error) {
       handleServerError({ error })
+      setIsLoading(false)
     }
   }
 
-  useEffect(() => {
-    if (useBrandVoucher && useBrandVoucher?.data?.length > 0) {
-      setBrandVouchers(useBrandVoucher?.data)
-    }
-  }, [useBrandVoucher])
+  // useEffect(() => {
+  //   if (useBrandVoucher && useBrandVoucher?.data?.length > 0) {
+  //     console.log(useBrandVoucher?.data)
+  //     setBrandVouchers(useBrandVoucher?.data)
+  //   }
+  // }, [useBrandVoucher])
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <span className="text-blue-700 hover:cursor-pointer" onClick={() => handleCallBrandVouchers()}>
+        <span
+          className="text-blue-700 hover:cursor-pointer"
+          onClick={() => {
+            handleCallBrandVouchers()
+          }}
+        >
           {triggerText}
         </span>
       </PopoverTrigger>
-      <PopoverContent className="md:w-[500px] w-[320px] bg-white">
+      <PopoverContent className="md:w-[550px] w-[320px] bg-white">
         <div className="w-full md:p-2 p-0">
           <h2 className="text-xl font-medium mb-4">
             {brandName} {t('voucher.title')}
@@ -107,16 +123,18 @@ const VoucherCartList = ({
             </div>
           </div>
 
-          {isGettingBrandVoucher ? (
+          {isLoading ? (
             <div className="h-36 flex justify-center items-center">
               <LoadingIcon color="primaryBackground" />
             </div>
-          ) : brandVouchers && brandVouchers?.length > 0 ? (
+          ) : (availableVouchers && availableVouchers?.length > 0) ||
+            (unAvailableVouchers && unAvailableVouchers?.length > 0) ||
+            (unclaimedVouchers && unclaimedVouchers?.length > 0) ? (
             // <ScrollArea className="h-52 px-2">
             <div className="space-y-2">
               <ScrollArea className="h-56">
                 <RadioGroup value={selectedVoucher} onValueChange={setSelectedVoucher}>
-                  {brandVouchers?.map((voucher) => (
+                  {availableVouchers?.map((voucher) => (
                     <VoucherCartItem
                       key={voucher.id}
                       voucher={voucher}
@@ -124,6 +142,29 @@ const VoucherCartList = ({
                       brandName={brandName}
                       hasBrandProductSelected={hasBrandProductSelected}
                       selectedVoucher={selectedVoucher}
+                      status={VoucherUsedStatusEnum?.AVAILABLE}
+                    />
+                  ))}
+                  {unAvailableVouchers?.map((voucher) => (
+                    <VoucherCartItem
+                      key={voucher.id}
+                      voucher={voucher}
+                      brandLogo={brandLogo}
+                      brandName={brandName}
+                      hasBrandProductSelected={hasBrandProductSelected}
+                      selectedVoucher={selectedVoucher}
+                      status={VoucherUsedStatusEnum?.UNAVAILABLE}
+                    />
+                  ))}
+                  {unclaimedVouchers?.map((voucher) => (
+                    <VoucherCartItem
+                      key={voucher.id}
+                      voucher={voucher}
+                      brandLogo={brandLogo}
+                      brandName={brandName}
+                      hasBrandProductSelected={hasBrandProductSelected}
+                      selectedVoucher={selectedVoucher}
+                      status={VoucherUsedStatusEnum?.UNCLAIMED}
                     />
                   ))}
                 </RadioGroup>

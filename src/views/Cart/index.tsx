@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -8,8 +8,12 @@ import CartItem from '@/components/cart/CartItem'
 import Empty from '@/components/empty/Empty'
 import LoadingContentLayer from '@/components/loading-icon/LoadingContentLayer'
 import configs from '@/config'
+import useHandleServerError from '@/hooks/useHandleServerError'
 import { getMyCartApi } from '@/network/apis/cart'
+import { getBestShopVouchersApi } from '@/network/apis/voucher'
 import { ICartByBrand } from '@/types/cart'
+import { IBrandBestVoucher } from '@/types/voucher'
+import { createCheckoutItems } from '@/utils/cart'
 import { getTotalPrice } from '@/utils/price'
 
 const Cart = () => {
@@ -19,11 +23,26 @@ const Cart = () => {
   const [chosenVoucher, setChosenVoucher] = useState('')
   const [isAllSelected, setIsAllSelected] = useState<boolean>(false)
   const [cartByBrand, setCartByBrand] = useState<ICartByBrand | undefined>(undefined)
+  const [bestBrandVouchers, setBestBrandVouchers] = useState<IBrandBestVoucher[]>([])
   const totalPrice = getTotalPrice(selectedCartItems, cartByBrand)
+  const handleServerError = useHandleServerError()
+  const voucherMap = bestBrandVouchers.reduce<{ [key: string]: IBrandBestVoucher }>((acc, voucher) => {
+    acc[voucher.brandId] = voucher
+    return acc
+  }, {})
 
   const { data: useMyCartData, isFetching } = useQuery({
     queryKey: [getMyCartApi.queryKey],
     queryFn: getMyCartApi.fn,
+  })
+
+  const { mutateAsync: callBestBrandVouchersFn } = useMutation({
+    mutationKey: [getBestShopVouchersApi.mutationKey],
+    mutationFn: getBestShopVouchersApi.fn,
+    onSuccess: (data) => {
+      console.log(data)
+      setBestBrandVouchers(data?.data)
+    },
   })
 
   // Handler for "Select All" checkbox
@@ -61,10 +80,29 @@ const Cart = () => {
       const tmpAllCartItemIds = Object.values(useMyCartData?.data).flatMap((cartBrand) =>
         cartBrand.map((cartItem) => cartItem.id),
       )
+
       setAllCartItemIds(tmpAllCartItemIds)
       setIsAllSelected(tmpAllCartItemIds.every((id) => selectedCartItems.includes(id)))
     }
   }, [selectedCartItems, useMyCartData])
+
+  useEffect(() => {
+    async function handleShowBestBrandVoucher() {
+      try {
+        if (useMyCartData && useMyCartData?.data) {
+          const checkoutItems = createCheckoutItems(useMyCartData?.data)
+          await callBestBrandVouchersFn({
+            checkoutItems: checkoutItems,
+          })
+        }
+      } catch (error) {
+        handleServerError({ error })
+      }
+    }
+
+    handleShowBestBrandVoucher()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [useMyCartData])
 
   return isFetching ? (
     <LoadingContentLayer />
@@ -74,15 +112,20 @@ const Cart = () => {
         <h2 className="uppercase font-bold text-xl">{t('cart.title')}</h2>
         <CartHeader onCheckAll={handleSelectAll} isAllSelected={isAllSelected} />
         {cartByBrand &&
-          Object.keys(cartByBrand).map((brandName, index) => (
-            <CartItem
-              key={`${brandName}_${index}`}
-              brandName={brandName}
-              cartBrandItem={cartByBrand[brandName]}
-              selectedCartItems={selectedCartItems}
-              onSelectBrand={handleSelectBrand}
-            />
-          ))}
+          Object.keys(cartByBrand).map((brandName, index) => {
+            const brandId = cartByBrand[brandName]?.[0]?.productClassification?.product?.brand?.id || ''
+            const bestVoucherForBrand = voucherMap[brandId] || null
+            return (
+              <CartItem
+                key={`${brandName}_${index}`}
+                brandName={brandName}
+                cartBrandItem={cartByBrand[brandName]}
+                selectedCartItems={selectedCartItems}
+                onSelectBrand={handleSelectBrand}
+                bestVoucherForBrand={bestVoucherForBrand}
+              />
+            )
+          })}
 
         <CartFooter
           cartItemCountAll={allCartItemIds?.length}

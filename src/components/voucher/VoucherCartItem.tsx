@@ -1,7 +1,8 @@
 import { AlertCircle } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
-import { DiscountTypeEnum, VoucherApplyTypeEnum, VoucherStatusEnum } from '@/types/enum'
+import { cn } from '@/lib/utils'
+import { DiscountTypeEnum, VoucherApplyTypeEnum, VoucherUsedStatusEnum } from '@/types/enum'
 import { TVoucher } from '@/types/voucher'
 
 import { Button } from '../ui/button'
@@ -15,6 +16,7 @@ interface VoucherCartItemProps {
   brandName: string
   hasBrandProductSelected: boolean
   selectedVoucher: string
+  status?: VoucherUsedStatusEnum.AVAILABLE | VoucherUsedStatusEnum.UNAVAILABLE | VoucherUsedStatusEnum.UNCLAIMED
 }
 const VoucherCartItem = ({
   voucher,
@@ -22,11 +24,14 @@ const VoucherCartItem = ({
   brandName,
   hasBrandProductSelected,
   selectedVoucher,
+  status,
 }: VoucherCartItemProps) => {
   const { t } = useTranslation()
   return (
     <div className="border border-gray-100 rounded-lg shadow-md">
-      <CardContent className="p-2">
+      <CardContent
+        className={cn('p-2 relative', status === VoucherUsedStatusEnum.UNAVAILABLE ? 'opacity-50 cursor-default' : '')}
+      >
         <div className="flex gap-2 items-center">
           {/* Logo Section */}
 
@@ -45,19 +50,19 @@ const VoucherCartItem = ({
             <div className="flex justify-between items-start">
               <div className="w-full">
                 <div className="flex gap-2">
-                  <p className="text-lg font-medium flex flex-wrap gap-1">
+                  <p className="text-base font-medium flex items-start flex-wrap gap-1">
                     <span className="w-fit">
                       {voucher?.discountType === DiscountTypeEnum.PERCENTAGE
                         ? t('voucher.off.percentage', { amount: voucher?.discountValue }) + '. '
                         : t('voucher.off.amount', { amount: voucher?.discountValue }) + '. '}
                     </span>
                     {voucher?.maxDiscount && (
-                      <span className="text-lg w-fit">
+                      <span className="w-fit">
                         {t('voucher.off.maxDiscount', { amount: voucher?.maxDiscount }) + '. '}
                       </span>
                     )}
                   </p>
-                  <VoucherInformationPopup voucher={voucher} />
+                  <VoucherInformationPopup voucher={voucher} className="flex items-start" />
                 </div>
                 {voucher?.minOrderValue && (
                   <div className="text-base">{t('voucher.off.minOrder', { amount: voucher?.minOrderValue })}</div>
@@ -74,15 +79,20 @@ const VoucherCartItem = ({
               {t('date.exp')}: {t('date.toLocaleDateTimeString', { val: new Date(voucher?.endTime) })}
             </div>
           </div>
-          {voucher?.status !== VoucherStatusEnum.AVAILABLE || voucher?.status !== VoucherStatusEnum.UNAVAILABLE ? (
-            <RadioGroupItem
-              value={voucher?.id}
-              id={voucher?.id}
-              checked={voucher?.id === selectedVoucher}
-              disabled={!hasBrandProductSelected}
-            />
+
+          {status === VoucherUsedStatusEnum?.UNCLAIMED ? (
+            <Button className="bg-red-500 hover:bg-red-600" onClick={() => {}}>
+              {t('button.save')}
+            </Button>
           ) : (
-            <Button className="bg-red-500 hover:bg-red-600">{t('button.save')}</Button>
+            (status === VoucherUsedStatusEnum?.UNAVAILABLE || status === VoucherUsedStatusEnum?.AVAILABLE) && (
+              <RadioGroupItem
+                value={voucher?.id}
+                id={voucher?.id}
+                checked={voucher?.id === selectedVoucher}
+                disabled={!hasBrandProductSelected || status === VoucherUsedStatusEnum?.UNAVAILABLE}
+              />
+            )
           )}
         </div>
 

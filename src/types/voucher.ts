@@ -1,5 +1,5 @@
 import { TBrand } from './brand'
-import { StatusEnum } from './enum'
+import { StatusEnum, VoucherUsedStatusEnum } from './enum'
 import { TMetaData } from './request'
 
 export type TVoucher = TMetaData & {
@@ -19,7 +19,7 @@ export type TVoucher = TMetaData & {
 
   description?: string
 
-  status: StatusEnum
+  status: StatusEnum | VoucherUsedStatusEnum
 
   amount?: number
 
@@ -39,4 +39,24 @@ export interface ICategoryVoucher {
   checkoutItems?: ICheckoutItem[]
   brandItems?: ICheckoutItem[]
   brandId?: string
+}
+
+// for api requests best voucher
+export interface IBestVoucher {
+  checkoutItems?: ICategoryVoucher[]
+  brandItems?: ICheckoutItem[]
+  brandId?: string
+}
+
+// for api response best voucher
+export interface IBrandBestVoucher {
+  brandId: string
+  bestVoucher: TVoucher
+  bestDiscount: number
+}
+
+export interface ICategoryVoucherResponse {
+  unclaimedVouchers: TVoucher[]
+  availableVouchers: TVoucher[]
+  unAvailableVouchers: TVoucher[]
 }

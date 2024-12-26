@@ -116,3 +116,9 @@ export enum ClassificationTypeEnum {
   DEFAULT = 'DEFAULT',
   CUSTOM = 'CUSTOM',
 }
+
+export enum VoucherUsedStatusEnum {
+  AVAILABLE = 'AVAILABLE',
+  UNAVAILABLE = 'UNAVAILABLE',
+  UNCLAIMED = 'UNCLAIMED',
+}

@@ -7,7 +7,7 @@ import configs from '@/config'
 import { ICartItem } from '@/types/cart'
 import { IClassification } from '@/types/classification'
 import { DiscountTypeEnum, OrderEnum } from '@/types/enum'
-import { ICheckoutItem, TVoucher } from '@/types/voucher'
+import { IBrandBestVoucher, ICheckoutItem, TVoucher } from '@/types/voucher'
 
 import ProductCardLandscape from '../product/ProductCardLandscape'
 import { Button } from '../ui/button'
@@ -19,8 +19,15 @@ interface CartItemProps {
   cartBrandItem: ICartItem[]
   selectedCartItems: string[]
   onSelectBrand: (productIds: string[], isSelected: boolean) => void
+  bestVoucherForBrand: IBrandBestVoucher
 }
-const CartItem = ({ brandName, cartBrandItem, selectedCartItems, onSelectBrand }: CartItemProps) => {
+const CartItem = ({
+  brandName,
+  cartBrandItem,
+  selectedCartItems,
+  onSelectBrand,
+  bestVoucherForBrand,
+}: CartItemProps) => {
   const { t } = useTranslation()
   const [chosenVoucher, setChosenVoucher] = useState<TVoucher | null>(null)
   const brand =
@@ -35,15 +42,12 @@ const CartItem = ({ brandName, cartBrandItem, selectedCartItems, onSelectBrand }
     selectedCartItems?.includes(productClassification.id),
   )
   const checkoutItems: ICheckoutItem[] = cartBrandItem
-    .filter((cartItem) => selectedCartItems?.includes(cartItem.id))
-    .map((cartItem) => ({
+    ?.map((cartItem) => ({
       classificationId: cartItem.productClassification?.id ?? '',
       quantity: cartItem.quantity ?? 0,
     }))
-    .filter((item) => item.classificationId !== null) // Remove items without a classificationId
+    ?.filter((item) => item.classificationId !== null) // Remove items without a classificationId
 
-  console.log(checkoutItems)
-  console.log(brand)
   // Handler for brand-level checkbox
   const handleBrandSelect = () => {
     onSelectBrand(cartItemIds, !isBrandSelected)
@@ -53,6 +57,8 @@ const CartItem = ({ brandName, cartBrandItem, selectedCartItems, onSelectBrand }
   const handleSelectCartItem = (cartItemId: string, isSelected: boolean) => {
     onSelectBrand([cartItemId], isSelected)
   }
+  console.log(bestVoucherForBrand)
+
   return (
     <div className="w-full bg-white p-4 rounded-lg space-y-2 shadow-sm">
       {/* Brand Header */}
