@@ -22,9 +22,9 @@ import { ScrollArea } from '../ui/scroll-area'
 interface VoucherDialogProps {
   triggerComponent: React.ReactElement<unknown>
   onConfirmVoucher: (value: string) => void
-  selectedProducts?: string[]
+  selectedCartItems?: string[]
 }
-export default function VoucherDialog({ triggerComponent, onConfirmVoucher, selectedProducts }: VoucherDialogProps) {
+export default function VoucherDialog({ triggerComponent, onConfirmVoucher, selectedCartItems }: VoucherDialogProps) {
   const { t } = useTranslation()
   const [open, setOpen] = useState(false)
   const [selectedVoucher, setSelectedVoucher] = useState('')
@@ -126,7 +126,7 @@ export default function VoucherDialog({ triggerComponent, onConfirmVoucher, sele
                       </div>
 
                       {/* Warning Message */}
-                      {selectedProducts?.length === 0 && (
+                      {selectedCartItems?.length === 0 && (
                         <div className="mt-2 flex items-center gap-2 text-sm text-red-500">
                           <AlertCircle className="w-4 h-4" />
                           {t('voucher.chooseProductAppAlert')}
@@ -145,7 +145,7 @@ export default function VoucherDialog({ triggerComponent, onConfirmVoucher, sele
             <Button variant="outline" onClick={() => setOpen(false)}>
               {t('dialog.cancel')}
             </Button>
-            <Button onClick={handleConfirm} disabled={selectedProducts?.length === 0}>
+            <Button onClick={handleConfirm} disabled={selectedCartItems?.length === 0}>
               {t('dialog.ok')}
             </Button>
           </div>

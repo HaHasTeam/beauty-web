@@ -1,55 +1,132 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { ChevronDown } from 'lucide-react'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { IClassification } from '@/types/classification.interface'
+import useHandleServerError from '@/hooks/useHandleServerError'
+import { useToast } from '@/hooks/useToast'
+import { createCartItemApi, deleteCartItemApi, getCartByIdApi, getMyCartApi } from '@/network/apis/cart'
+import { IClassification } from '@/types/classification'
+import { checkCurrentProductClassificationActive } from '@/utils/product'
+
+import Empty from '../empty/Empty'
+import LoadingContentLayer from '../loading-icon/LoadingContentLayer'
 
 interface ClassificationPopoverProps {
   classifications: IClassification[]
+  productClassification: IClassification | null
+  cartItemId: string
+  cartItemQuantity?: number
+  preventAction?: boolean
 }
-export default function ClassificationPopover({ classifications }: ClassificationPopoverProps) {
+export default function ClassificationPopover({
+  classifications,
+  productClassification,
+  cartItemId,
+  cartItemQuantity,
+  preventAction,
+}: ClassificationPopoverProps) {
   const { t } = useTranslation()
-  const [selectedOption, setSelectedOption] = useState(
-    classifications
-      .filter((classification) => classification.selected)
-      .map((s) => s.id)
-      .toString(),
+  const [currentSelectClassification, setCurrentSelectClassification] = useState<IClassification | null>(
+    productClassification,
   )
-  const [currentSelection, setCurrentSelection] = useState(selectedOption)
+  const [chosenClassification, setChosenClassification] = useState<IClassification | null>(productClassification)
   const [isOpen, setIsOpen] = useState(false)
+  const [isProcessing, setIsProcessing] = useState(false)
+  const isProductClassificationActive = checkCurrentProductClassificationActive(productClassification, classifications)
+  const titleShown = chosenClassification?.title || t('productDetail.selectClassification')
+  const { successToast } = useToast()
+  const handleServerError = useHandleServerError()
+  const queryClient = useQueryClient()
 
-  const handleSelect = (option: string) => {
-    setCurrentSelection(option)
+  const { mutateAsync: deleteCartItemFn } = useMutation({
+    mutationKey: [deleteCartItemApi.mutationKey, cartItemId as string],
+    mutationFn: deleteCartItemApi.fn,
+    onSuccess: () => {
+      successToast({
+        message: t('cart.updateClassificationSuccess'),
+      })
+      queryClient.invalidateQueries({
+        queryKey: [getMyCartApi.queryKey],
+      })
+      queryClient.invalidateQueries({
+        queryKey: [getCartByIdApi.queryKey, cartItemId as string],
+      })
+    },
+  })
+
+  const { mutateAsync: createCartItemFn } = useMutation({
+    mutationKey: [createCartItemApi.mutationKey],
+    mutationFn: createCartItemApi.fn,
+    onSuccess: () => {
+      handleDeleteCartItem()
+    },
+  })
+  const handleClassificationUpdate = useCallback(
+    async (updateClassification: IClassification | null) => {
+      if (isProcessing) return
+      setIsProcessing(true)
+
+      try {
+        await createCartItemFn({
+          quantity: cartItemQuantity,
+          classification: updateClassification?.title,
+          productClassification: updateClassification?.id,
+        })
+      } catch (error) {
+        handleServerError({ error })
+      } finally {
+        setChosenClassification(currentSelectClassification)
+        setIsProcessing(false)
+      }
+    },
+    [cartItemQuantity, createCartItemFn, currentSelectClassification, handleServerError, isProcessing],
+  )
+
+  const handleDeleteCartItem = async () => {
+    try {
+      await deleteCartItemFn(cartItemId)
+    } catch (error) {
+      handleServerError({ error })
+    }
   }
-  const selectedOptionName =
-    classifications.find((classification) => classification.id === selectedOption)?.name ||
-    t('productDetail.selectOption')
+  const handleSelect = (option: IClassification) => {
+    setCurrentSelectClassification(option)
+  }
 
   const handleSave = () => {
-    setSelectedOption(currentSelection)
+    if (
+      currentSelectClassification?.id !== productClassification?.id ||
+      currentSelectClassification?.title !== productClassification?.title
+    ) {
+      handleClassificationUpdate(currentSelectClassification)
+    }
+
     setIsOpen(false)
   }
 
   const handleCancel = () => {
-    setCurrentSelection(selectedOption)
+    setCurrentSelectClassification(chosenClassification)
     setIsOpen(false)
   }
-  return (
+  return isProcessing ? (
+    <LoadingContentLayer />
+  ) : (
     <div className="w-full">
       <div className="w-full space-y-2">
-        <div className="w-full flex items-center justify-between">
-          <Label className="lg:w-3/5 xl:w-1/2 md:w-1/2 w-1/2">
+        <div className="w-full flex items-center gap-2">
+          <Label className="w-fit">
             <span className="text-muted-foreground lg:text-sm text-xs overflow-ellipsis">
               {t('productDetail.classification')}
             </span>
           </Label>
           <Popover open={isOpen} onOpenChange={setIsOpen}>
             <PopoverTrigger asChild>
-              <Button variant="outline" size="sm" className="lg:w-2/5 xl:w-1/2 md:w-1/2 w-1/2 h-7 overflow-ellipsis">
-                <span className="line-clamp-2">{selectedOptionName}</span>
+              <Button variant="outline" size="sm" className="w-fit h-7 overflow-ellipsis" disabled={preventAction}>
+                <span className="line-clamp-2">{titleShown}</span>
                 <ChevronDown className="w-4 h-4 ml-2 opacity-50" />
               </Button>
             </PopoverTrigger>
@@ -57,19 +134,27 @@ export default function ClassificationPopover({ classifications }: Classificatio
               <div className="p-4 border-b">
                 <Label> {t('productDetail.classification')}</Label>
               </div>
-              <div className="p-2">
-                {classifications.map((option) => (
-                  <Button
-                    key={option?.id}
-                    variant="ghost"
-                    className={`w-full justify-start px-2 py-1.5 text-sm ${
-                      currentSelection === option?.id ? 'bg-accent text-accent-foreground' : ''
-                    }`}
-                    onClick={() => handleSelect(option?.id)}
-                  >
-                    {option?.name}
-                  </Button>
-                ))}
+              <div className="p-2 flex flex-wrap gap-1">
+                {classifications && classifications?.length > 0 ? (
+                  classifications?.map((option) => (
+                    <Button
+                      key={option?.id}
+                      variant="outline"
+                      disabled={!isProductClassificationActive}
+                      className={`w-fit h-fit justify-start px-2 py-2 text-sm ${
+                        currentSelectClassification?.id === option?.id ? 'bg-accent text-accent-foreground' : ''
+                      }`}
+                      onClick={() => handleSelect(option)}
+                    >
+                      <div className="w-10 h-10 rounded-md">
+                        <img src={option?.images[0]?.fileUrl} className="w-full h-full object-contain rounded-md" />
+                      </div>
+                      {option?.title}
+                    </Button>
+                  ))
+                ) : (
+                  <Empty title={t('empty.classification.title')} description={t('empty.classification.description')} />
+                )}
               </div>
               <div className="flex items-center justify-end gap-2 p-4 border-t">
                 <Button variant="outline" size="sm" onClick={handleCancel}>

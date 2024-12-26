@@ -3,8 +3,8 @@ import '@/components/product/Product.css'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { IClassification } from '@/types/classification.interface'
-import { IProduct } from '@/types/product.interface'
+import { IClassification } from '@/types/classification'
+import { IProduct } from '@/types/product'
 
 import IncreaseDecreaseButton from '../IncreaseDecreaseButton'
 import { Button } from '../ui/button'
@@ -19,6 +19,7 @@ const ProductDetailAction = ({ product, chosenClassification }: ProductDetailAct
   const { t } = useTranslation()
   const [quantity, setQuantity] = useState(1)
   const [inputValue, setInputValue] = useState('1')
+  const MAX_QUANTITY_IN_CART = 1000 // change to max quantity of products
   const decreaseQuantity = () => {
     if (quantity > 1) {
       setInputValue(`${quantity - 1}`)
@@ -27,7 +28,7 @@ const ProductDetailAction = ({ product, chosenClassification }: ProductDetailAct
   }
 
   const increaseQuantity = () => {
-    if (quantity < 1000) {
+    if (quantity < MAX_QUANTITY_IN_CART) {
       setInputValue(`${quantity + 1}`)
       setQuantity(quantity + 1)
     }
@@ -46,7 +47,7 @@ const ProductDetailAction = ({ product, chosenClassification }: ProductDetailAct
     if (/^\d+$/.test(value)) {
       const parsedValue = parseInt(value, 10)
 
-      if (parsedValue > 0 && parsedValue <= 1000) {
+      if (parsedValue > 0 && parsedValue <= MAX_QUANTITY_IN_CART) {
         setInputValue(value) // Update input with valid value
         setQuantity(parsedValue) // Update quantity
       }
@@ -73,7 +74,7 @@ const ProductDetailAction = ({ product, chosenClassification }: ProductDetailAct
           <IncreaseDecreaseButton
             onIncrease={increaseQuantity}
             onDecrease={decreaseQuantity}
-            isIncreaseDisabled={quantity >= 1000}
+            isIncreaseDisabled={quantity >= MAX_QUANTITY_IN_CART}
             isDecreaseDisabled={quantity <= 1}
             inputValue={inputValue}
             handleInputChange={handleInputChange}

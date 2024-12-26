@@ -1,16 +1,24 @@
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
-import { Button } from '@/components/ui/button'
 import configs from '@/config'
+
+import Button from '../button'
 
 interface CheckoutTotalProps {
   totalCost: number
   totalDiscount: number
   totalPayment: number
   savings: number
+  isLoading: boolean
 }
-export default function CheckoutTotal({ totalCost, totalDiscount, totalPayment, savings }: CheckoutTotalProps) {
+export default function CheckoutTotal({
+  totalCost,
+  totalDiscount,
+  totalPayment,
+  savings,
+  isLoading,
+}: CheckoutTotalProps) {
   const { t } = useTranslation()
   return (
     <div className="w-full bg-white rounded-md shadow-sm p-4">
@@ -40,11 +48,12 @@ export default function CheckoutTotal({ totalCost, totalDiscount, totalPayment, 
         <p className="text-sm text-muted-foreground my-1">
           {t('cart.acceptCondition')}
           <Link to={configs.routes.termsAndConditions} className="text-sm text-blue-500 hover:underline font-medium">
-            {' '}
             {t('cart.terms')}
           </Link>
         </p>
-        <Button className="w-full bg-destructive hover:bg-destructive/80"> {t('cart.checkout')}</Button>
+        <Button type="submit" className="w-full bg-destructive hover:bg-destructive/80 mt-2" loading={isLoading}>
+          {t('cart.checkout')}
+        </Button>
       </div>
     </div>
   )

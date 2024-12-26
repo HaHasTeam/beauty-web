@@ -30,3 +30,12 @@ export const productPageMessage = {
   emptyProductMessage:
     'The product you are looking for does not exist. It may have been removed from the website or is currently unavailable.',
 }
+export const normalOrderFormMessage = {
+  success: '',
+  failed: '',
+  loading: '',
+  required: 'Required',
+  min: 'Must be at least {min}',
+  max: 'Must be at most {max}',
+  pattern: 'Must match the pattern {pattern}',
+}

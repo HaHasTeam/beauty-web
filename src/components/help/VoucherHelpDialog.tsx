@@ -23,21 +23,15 @@ export default function VoucherHelpPopOver() {
           <div className="space-y-3 pr-4">
             <h3 className="font-semibold text-center">{t('voucher.help')}</h3>
             <div className="space-y-2">
-              <h3 className="font-medium">Cách Sử Dụng Voucher</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Để có thể áp dụng mã Allure voucher, bạn hãy chọn nút "Lưu" để lấy voucher và mục ví voucher của bạn
-                nhé.
-              </p>
+              <h3 className="font-medium">{t('voucher.howToUse')}</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">{t('voucher.howToUseDescription')}</p>
             </div>
 
             <Separator />
 
             <div className="space-y-2">
-              <h3 className="font-medium">Cách Tìm Voucher</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Bạn có thể tìm thấy Allure Voucher xuyên suốt trang web và ứng dụng. Mẹo riêng cho bạn nè, hãy bắt đầu
-                với những trang chương trình khuyến mãi và trang chủ của brand nhé!
-              </p>
+              <h3 className="font-medium">{t('voucher.howToFind')}</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">{t('voucher.howToFindDescription')}</p>
             </div>
           </div>
         </ScrollArea>

@@ -1,5 +1,6 @@
-import { TClassification } from './classification'
-import { TProduct } from './product'
+import { IClassification, TClassification } from './classification'
+import { IImage } from './image'
+import { IProduct, TProduct } from './product'
 import { TMetaData } from './request'
 
 export type TPreOrder = TMetaData & {
@@ -9,6 +10,15 @@ export type TPreOrder = TMetaData & {
   product: TProduct
   productClassifications: TClassification[]
   images?: string[]
+}
+
+export type IPreOrder = TMetaData & {
+  startTime: string
+  endTime: string
+  status: PreOrderStatusEnum
+  product: IProduct
+  productClassifications: IClassification[]
+  images?: IImage[]
 }
 
 export enum PreOrderStatusEnum {

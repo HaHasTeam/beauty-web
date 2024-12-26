@@ -76,7 +76,7 @@ function AccountLayout() {
                 }}
               >
                 <Package className="mr-2 h-4 w-4" />
-                Đơn Mua
+                Đơn Hàng Của Tôi
               </Button>
               <Button
                 variant="ghost"

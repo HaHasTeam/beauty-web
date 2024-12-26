@@ -5,6 +5,7 @@ import Cart from '@/views/Cart'
 import ChangePassword from '@/views/ChangePassword'
 import Checkout from '@/views/Checkout'
 import Home from '@/views/Home'
+import OrderDetail from '@/views/OrderDetail'
 import Profile from '@/views/Profile'
 import ProfileAddress from '@/views/ProfileAddress'
 import ProfileOrder from '@/views/ProfileOrder'
@@ -59,10 +60,13 @@ const privateRoutes = [
         element: <div className=""> profileNotification</div>,
       },
       {
-        path: configs.routes.profileOrder,
+        path: configs.routes.profileOrder, // user order history
         element: <ProfileOrder />,
       },
-
+      {
+        path: configs.routes.profileOrderDetail, // user order history detail
+        element: <OrderDetail />,
+      },
       {
         path: configs.routes.profilePassword,
         element: <ChangePassword />,

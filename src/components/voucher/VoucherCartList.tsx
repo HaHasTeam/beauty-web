@@ -1,9 +1,16 @@
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import useHandleServerError from '@/hooks/useHandleServerError'
+import { getBrandVouchersApi, getCheckoutListBrandVouchersApi } from '@/network/apis/voucher'
+import { ICheckoutItem, TVoucher } from '@/types/voucher'
 
+import Empty from '../empty/Empty'
+import LoadingIcon from '../loading-icon'
 import { RadioGroup } from '../ui/radio-group'
 import { ScrollArea } from '../ui/scroll-area'
 import VoucherCartItem from './VoucherCartItem'
@@ -11,16 +18,74 @@ import VoucherCartItem from './VoucherCartItem'
 interface VoucherCartListProps {
   triggerText: string
   brandName: string
+  brandId: string
+  brandLogo: string
+  hasBrandProductSelected: boolean
+  checkoutItems: ICheckoutItem[]
+  setChosenVoucher: Dispatch<SetStateAction<TVoucher | null>>
 }
-const VoucherCartList = ({ triggerText, brandName }: VoucherCartListProps) => {
+const VoucherCartList = ({
+  triggerText,
+  brandName,
+  brandId,
+  brandLogo,
+  hasBrandProductSelected,
+  setChosenVoucher,
+  checkoutItems,
+}: VoucherCartListProps) => {
   const { t } = useTranslation()
+  const handleServerError = useHandleServerError()
+  const [brandVouchers, setBrandVouchers] = useState<TVoucher[] | null>(null)
+  const [open, setOpen] = useState<boolean>(false)
+  const [selectedVoucher, setSelectedVoucher] = useState<string>('')
+
+  const { data: useBrandVoucher, isFetching: isGettingBrandVoucher } = useQuery({
+    queryKey: [getBrandVouchersApi.queryKey],
+    queryFn: getBrandVouchersApi.fn,
+  })
+
+  const { mutateAsync: callBrandVouchersFn } = useMutation({
+    mutationKey: [getCheckoutListBrandVouchersApi.mutationKey],
+    mutationFn: getCheckoutListBrandVouchersApi.fn,
+    onSuccess: (data) => {
+      console.log(data)
+      setBrandVouchers(data?.data)
+    },
+  })
+
+  const handleConfirm = () => {
+    setChosenVoucher(brandVouchers?.find((voucher) => voucher?.id === selectedVoucher) ?? null)
+    setOpen(false)
+  }
+
+  async function handleCallBrandVouchers() {
+    try {
+      if (checkoutItems && checkoutItems?.length > 0) {
+        await callBrandVouchersFn({
+          checkoutItems: checkoutItems,
+          brandItems: checkoutItems,
+          brandId: brandId,
+        })
+      }
+    } catch (error) {
+      handleServerError({ error })
+    }
+  }
+
+  useEffect(() => {
+    if (useBrandVoucher && useBrandVoucher?.data?.length > 0) {
+      setBrandVouchers(useBrandVoucher?.data)
+    }
+  }, [useBrandVoucher])
 
   return (
-    <Popover>
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <span className="text-blue-700 hover:cursor-pointer">{triggerText}</span>
+        <span className="text-blue-700 hover:cursor-pointer" onClick={() => handleCallBrandVouchers()}>
+          {triggerText}
+        </span>
       </PopoverTrigger>
-      <PopoverContent className="md:w-[500px] w-[320px]">
+      <PopoverContent className="md:w-[500px] w-[320px] bg-white">
         <div className="w-full md:p-2 p-0">
           <h2 className="text-xl font-medium mb-4">
             {brandName} {t('voucher.title')}
@@ -41,28 +106,43 @@ const VoucherCartList = ({ triggerText, brandName }: VoucherCartListProps) => {
               </Button>
             </div>
           </div>
-          <ScrollArea className="h-52">
-            <div className="py-2 space-y-2">
-              <RadioGroup>
-                {[
-                  { id: '0', discount: '21k', minimum: '239k', saved: false },
-                  { id: '1', discount: '20k', minimum: '900k', saved: true },
-                  { id: '2', discount: '16k', minimum: '450k', saved: true },
-                ].map((voucher) => (
-                  <VoucherCartItem
-                    key={voucher.id}
-                    discount={'15000đ'}
-                    minimum={15000}
-                    saved={voucher.saved}
-                    expiredDate={'2024-11-18 14:47:13'}
-                    tag={'Sản phẩm nhất định'}
-                    brandLogo="https://i.pinimg.com/736x/44/5b/54/445b54cf93d6399ea99944c5cb904402.jpg"
-                    voucherId={voucher.id}
-                  />
-                ))}
-              </RadioGroup>
+
+          {isGettingBrandVoucher ? (
+            <div className="h-36 flex justify-center items-center">
+              <LoadingIcon color="primaryBackground" />
             </div>
-          </ScrollArea>
+          ) : brandVouchers && brandVouchers?.length > 0 ? (
+            // <ScrollArea className="h-52 px-2">
+            <div className="space-y-2">
+              <ScrollArea className="h-56">
+                <RadioGroup value={selectedVoucher} onValueChange={setSelectedVoucher}>
+                  {brandVouchers?.map((voucher) => (
+                    <VoucherCartItem
+                      key={voucher.id}
+                      voucher={voucher}
+                      brandLogo={brandLogo}
+                      brandName={brandName}
+                      hasBrandProductSelected={hasBrandProductSelected}
+                      selectedVoucher={selectedVoucher}
+                    />
+                  ))}
+                </RadioGroup>
+              </ScrollArea>
+              <div className="flex justify-end gap-2 w-full shadow-inner pt-4">
+                <Button variant="outline" onClick={() => setOpen(false)}>
+                  {t('dialog.cancel')}
+                </Button>
+                <Button onClick={handleConfirm} disabled={!hasBrandProductSelected}>
+                  {t('dialog.ok')}
+                </Button>
+              </div>
+            </div>
+          ) : (
+            // </ScrollArea>
+            <div className="flex flex-col justify-center items-center">
+              <Empty title={t('empty.brandVoucher.title')} description={t('empty.brandVoucher.description')} />
+            </div>
+          )}
         </div>
       </PopoverContent>
     </Popover>

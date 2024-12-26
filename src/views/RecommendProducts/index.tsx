@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import APIPagination from '@/components/pagination/Pagination'
 import ProductCard from '@/components/product/ProductCard'
-import { IProductCard } from '@/types/product-card.interface'
+import { IProductCard } from '@/types/product'
 
 const RecommendProducts = () => {
   const [currentPage, setCurrentPage] = useState(0)

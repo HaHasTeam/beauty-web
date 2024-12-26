@@ -45,3 +45,18 @@ export type IBrand = {
     | BrandStatusEnum.PENDING
     | BrandStatusEnum.DENIED
 }
+
+export type IBranch = {
+  id?: string
+  name: string
+  logo?: string
+  document: string
+  description?: string
+  email: string
+  phone?: string
+  address?: string
+  status?: StatusEnum
+  createdAt?: string
+  updatedAt?: string
+  star?: number
+}

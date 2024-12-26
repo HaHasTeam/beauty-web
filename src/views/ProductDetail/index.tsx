@@ -10,8 +10,8 @@ import ProductDetailAction from '@/components/product/ProductDetailAction'
 import ProductDetailInformation from '@/components/product/ProductDetailInformation'
 import ReviewOverall from '@/components/reviews/ReviewOverall'
 import ReviewSection from '@/components/reviews/ReviewSection'
-import { IClassification } from '@/types/classification.interface'
-import { IProduct } from '@/types/product.interface'
+import { IClassification } from '@/types/classification'
+import { IProduct } from '@/types/product'
 
 const ProductDetail = () => {
   const { productId } = useParams()

@@ -1,5 +1,4 @@
-import { IBranch } from '@/types/Branch'
-import { TBrand } from '@/types/brand'
+import { IBranch, TBrand } from '@/types/brand'
 import { TServerResponse } from '@/types/request'
 import { toMutationFetcher, toQueryFetcher } from '@/utils/query'
 import { privateRequest, publicRequest } from '@/utils/request'
