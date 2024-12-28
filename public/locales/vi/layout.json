@@ -406,7 +406,8 @@
     "discountPercentage": "Đã giảm {{percentage}}%",
     "brand": "thương hiệu",
     "platform": "nền tảng",
-    "collectSuccess": "Thu thập voucher thành công!"
+    "collectSuccess": "Thu thập voucher thành công!",
+    "bestChoice": "Lựa chọn tốt nhất"
   },
   "dialog": {
     "cancel": "Hủy",

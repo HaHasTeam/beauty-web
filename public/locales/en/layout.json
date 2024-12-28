@@ -203,8 +203,13 @@
     },
     "brandVoucher": {
       "title": "No Vouchers Available",
-      "description": "There are no vouchers from this Shop. Enter a valid voucher code in the bar above.",
+      "description": "There are no vouchers from this brand. Enter a valid voucher code in the bar above.",
       "button": "Explore Brand"
+    },
+    "platformVoucher": {
+      "title": "No Vouchers Available",
+      "description": "There are no vouchers from {{platformName}}. Enter a valid voucher code in the bar above.",
+      "button": "Explore {{platformName}} Vouchers"
     }
   },
   "productDetail": {
@@ -406,7 +411,8 @@
     "discountPercentage": "Discount of {{percentage}}%",
     "brand": "brand",
     "platform": "platform",
-    "collectSuccess": "Collect voucher success!"
+    "collectSuccess": "Collect voucher success!",
+    "bestChoice": "Best choice"
   },
   "dialog": {
     "cancel": "Cancel",

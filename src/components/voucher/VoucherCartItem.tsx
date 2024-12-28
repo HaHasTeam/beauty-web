@@ -8,9 +8,10 @@ import { useToast } from '@/hooks/useToast'
 import { cn } from '@/lib/utils'
 import { collectVoucherApi } from '@/network/apis/voucher'
 import { DiscountTypeEnum, VoucherApplyTypeEnum, VoucherUsedStatusEnum } from '@/types/enum'
-import { TVoucher } from '@/types/voucher'
+import { IBrandBestVoucher, TVoucher } from '@/types/voucher'
 
 import Button from '../button'
+import StatusTag from '../status-tag/StatusTag'
 import { CardContent } from '../ui/card'
 import { RadioGroupItem } from '../ui/radio-group'
 import VoucherInformationPopup from './VoucherInformationPopUp'
@@ -23,6 +24,7 @@ interface VoucherCartItemProps {
   selectedVoucher: string
   onCollectSuccess?: () => void
   status?: VoucherUsedStatusEnum.AVAILABLE | VoucherUsedStatusEnum.UNAVAILABLE | VoucherUsedStatusEnum.UNCLAIMED
+  bestVoucherForBrand: IBrandBestVoucher
 }
 const VoucherCartItem = ({
   voucher,
@@ -32,6 +34,7 @@ const VoucherCartItem = ({
   selectedVoucher,
   status,
   onCollectSuccess,
+  bestVoucherForBrand,
 }: VoucherCartItemProps) => {
   const { t } = useTranslation()
   const [isCollecting, setIsCollecting] = useState(false)
@@ -70,9 +73,17 @@ const VoucherCartItem = ({
     }
   }
   return (
-    <div className="border border-gray-100 rounded-lg shadow-md">
+    <div className="my-2 border border-gray-100 rounded-lg shadow-md relative">
+      {bestVoucherForBrand?.bestVoucher?.id === voucher?.id && (
+        <div className="absolute left-0 -top-2">
+          <StatusTag tag="BestVoucher" />
+        </div>
+      )}
       <CardContent
-        className={cn('p-2 relative', status === VoucherUsedStatusEnum.UNAVAILABLE ? 'opacity-50 cursor-default' : '')}
+        className={cn(
+          'px-2 py-4 relative',
+          status === VoucherUsedStatusEnum.UNAVAILABLE ? 'opacity-50 cursor-default' : '',
+        )}
       >
         <div className="flex gap-2 items-center">
           {/* Logo Section */}
@@ -95,7 +106,7 @@ const VoucherCartItem = ({
                   <p className="text-base font-medium flex items-start flex-wrap gap-1">
                     <span className="w-fit">
                       {voucher?.discountType === DiscountTypeEnum.PERCENTAGE
-                        ? t('voucher.off.percentage', { amount: voucher?.discountValue }) + '. '
+                        ? t('voucher.off.percentage', { percentage: voucher?.discountValue * 100 }) + '. '
                         : t('voucher.off.amount', { amount: voucher?.discountValue }) + '. '}
                     </span>
                     {voucher?.maxDiscount && (

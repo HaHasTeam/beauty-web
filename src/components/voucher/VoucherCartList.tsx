@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Button } from '@/components/ui/button'
@@ -8,7 +8,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import useHandleServerError from '@/hooks/useHandleServerError'
 import { getCheckoutListBrandVouchersApi } from '@/network/apis/voucher'
 import { VoucherUsedStatusEnum } from '@/types/enum'
-import { ICheckoutItem, TVoucher } from '@/types/voucher'
+import { IBrandBestVoucher, ICheckoutItem, TVoucher } from '@/types/voucher'
 
 import Empty from '../empty/Empty'
 import LoadingIcon from '../loading-icon'
@@ -23,7 +23,8 @@ interface VoucherCartListProps {
   brandLogo: string
   hasBrandProductSelected: boolean
   checkoutItems: ICheckoutItem[]
-  setChosenVoucher: Dispatch<SetStateAction<TVoucher | null>>
+  handleVoucherChange: (voucher: TVoucher | null) => void
+  bestVoucherForBrand: IBrandBestVoucher
 }
 const VoucherCartList = ({
   triggerText,
@@ -31,8 +32,9 @@ const VoucherCartList = ({
   brandId,
   brandLogo,
   hasBrandProductSelected,
-  setChosenVoucher,
+  handleVoucherChange,
   checkoutItems,
+  bestVoucherForBrand,
 }: VoucherCartListProps) => {
   const { t } = useTranslation()
   const handleServerError = useHandleServerError()
@@ -62,7 +64,7 @@ const VoucherCartList = ({
   })
 
   const handleConfirm = () => {
-    setChosenVoucher(availableVouchers?.find((voucher) => voucher?.id === selectedVoucher) ?? null)
+    handleVoucherChange(availableVouchers?.find((voucher) => voucher?.id === selectedVoucher) ?? null)
     setOpen(false)
   }
 
@@ -144,6 +146,7 @@ const VoucherCartList = ({
                       selectedVoucher={selectedVoucher}
                       status={VoucherUsedStatusEnum?.AVAILABLE}
                       onCollectSuccess={handleCallBrandVouchers}
+                      bestVoucherForBrand={bestVoucherForBrand}
                     />
                   ))}
                   {unAvailableVouchers?.map((voucher) => (
@@ -156,6 +159,7 @@ const VoucherCartList = ({
                       selectedVoucher={selectedVoucher}
                       status={VoucherUsedStatusEnum?.UNAVAILABLE}
                       onCollectSuccess={handleCallBrandVouchers}
+                      bestVoucherForBrand={bestVoucherForBrand}
                     />
                   ))}
                   {unclaimedVouchers?.map((voucher) => (
@@ -168,6 +172,7 @@ const VoucherCartList = ({
                       selectedVoucher={selectedVoucher}
                       status={VoucherUsedStatusEnum?.UNCLAIMED}
                       onCollectSuccess={handleCallBrandVouchers}
+                      bestVoucherForBrand={bestVoucherForBrand}
                     />
                   ))}
                 </RadioGroup>

@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Ticket, Trash2 } from 'lucide-react'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { Pen, Ticket, Trash2 } from 'lucide-react'
+import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
@@ -10,7 +10,8 @@ import configs from '@/config'
 import useHandleServerError from '@/hooks/useHandleServerError'
 import { useToast } from '@/hooks/useToast'
 import { getMyCartApi, removeAllCartItemApi, removeMultipleCartItemApi } from '@/network/apis/cart'
-import { ProjectInformationEnum } from '@/types/enum'
+import { DiscountTypeEnum, ProjectInformationEnum } from '@/types/enum'
+import { TVoucher } from '@/types/voucher'
 
 import DeleteConfirmationDialog from '../dialog/DeleteConfirmationDialog'
 import VoucherDialog from '../voucher/VoucherDialog'
@@ -21,11 +22,10 @@ interface CartFooterProps {
   onCheckAll: () => void
   isAllSelected: boolean
   totalPrice: number
-  savedPrice: number
-  chosenVoucher: string
   selectedCartItems: string[]
-  setChosenVoucher: (value: string) => void
   setSelectedCartItems: Dispatch<SetStateAction<string[]>>
+  totalProductDiscount: number
+  totalVoucherDiscount: number
 }
 export default function CartFooter({
   cartItemCountAll,
@@ -33,11 +33,10 @@ export default function CartFooter({
   onCheckAll,
   isAllSelected,
   totalPrice,
-  savedPrice,
-  chosenVoucher,
-  setChosenVoucher,
   selectedCartItems,
   setSelectedCartItems,
+  totalProductDiscount,
+  totalVoucherDiscount,
 }: CartFooterProps) {
   const { t } = useTranslation()
   const handleServerError = useHandleServerError()
@@ -45,7 +44,9 @@ export default function CartFooter({
   const queryClient = useQueryClient()
   const [openConfirmDeleteAllCartDialog, setOpenConfirmDeleteAllCartDialog] = useState(false)
   const [openConfirmDeleteMultipleCartDialog, setOpenConfirmDeleteMultipleCartDialog] = useState(false)
+  const [platformChosenVoucher, setPlatformChosenVoucher] = useState<TVoucher | null>(null)
 
+  // handle remove cart items api starts
   const { mutateAsync: removeAllCartItemFn } = useMutation({
     mutationKey: [removeAllCartItemApi.mutationKey],
     mutationFn: removeAllCartItemApi.fn,
@@ -73,7 +74,8 @@ export default function CartFooter({
       })
     },
   })
-
+  // handle remove cart items api ends
+  // handle remove cart items function starts
   async function handleRemoveAllCartItem() {
     try {
       await removeAllCartItemFn()
@@ -96,7 +98,24 @@ export default function CartFooter({
       })
     }
   }
-  console.log(selectedCartItems)
+  // handle remove cart items function ends
+
+  // Calculate platform voucher discount
+  const platformVoucherDiscount = useMemo(() => {
+    if (!platformChosenVoucher) return 0
+
+    const { discountType, discountValue } = platformChosenVoucher
+    return discountType === DiscountTypeEnum.PERCENTAGE ? (totalPrice * discountValue) / 100 : discountValue
+  }, [platformChosenVoucher, totalPrice])
+
+  // Total saved price (product discounts + brand vouchers + platform voucher)
+  const savedPrice = totalProductDiscount + totalVoucherDiscount + platformVoucherDiscount
+
+  useEffect(() => {
+    if (selectedCartItems.length === 0) {
+      setPlatformChosenVoucher(null)
+    }
+  }, [selectedCartItems])
   return (
     <>
       <div className="w-full sticky bottom-0 left-0 right-0 border-t bg-secondary rounded-tl-sm rounded-tr-sm">
@@ -112,10 +131,25 @@ export default function CartFooter({
             <VoucherDialog
               triggerComponent={
                 <Button variant="link" className="text-blue-500 h-auto p-0 hover:no-underline">
-                  {chosenVoucher ? chosenVoucher : t('cart.selectVoucher')}
+                  {platformChosenVoucher ? (
+                    platformChosenVoucher?.discountType === DiscountTypeEnum.AMOUNT &&
+                    platformChosenVoucher?.discountValue ? (
+                      <div className="flex gap-2 items-center">
+                        {t('voucher.discountAmount', { amount: platformChosenVoucher?.discountValue })}
+                        <Pen />
+                      </div>
+                    ) : (
+                      <div className="flex gap-2 items-center">
+                        {t('voucher.discountPercentage', { amount: platformChosenVoucher?.discountValue })}
+                        <Pen />
+                      </div>
+                    )
+                  ) : (
+                    t('cart.selectVoucher')
+                  )}
                 </Button>
               }
-              onConfirmVoucher={setChosenVoucher}
+              onConfirmVoucher={setPlatformChosenVoucher}
               selectedCartItems={selectedCartItems}
             />
           </div>
@@ -171,6 +205,7 @@ export default function CartFooter({
           </div>
         </div>
       </div>
+      {/* delete cart items modals */}
       <DeleteConfirmationDialog
         open={openConfirmDeleteAllCartDialog}
         onOpenChange={setOpenConfirmDeleteAllCartDialog}

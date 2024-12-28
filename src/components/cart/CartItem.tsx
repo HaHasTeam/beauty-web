@@ -1,5 +1,5 @@
 import { MessageCircle, Store, Tag } from 'lucide-react'
-import { useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
@@ -20,6 +20,8 @@ interface CartItemProps {
   selectedCartItems: string[]
   onSelectBrand: (productIds: string[], isSelected: boolean) => void
   bestVoucherForBrand: IBrandBestVoucher
+  setIsTriggerTotal: Dispatch<SetStateAction<boolean>>
+  onVoucherSelect: (brandName: string, voucher: TVoucher | null) => void
 }
 const CartItem = ({
   brandName,
@@ -27,9 +29,11 @@ const CartItem = ({
   selectedCartItems,
   onSelectBrand,
   bestVoucherForBrand,
+  setIsTriggerTotal,
+  onVoucherSelect,
 }: CartItemProps) => {
   const { t } = useTranslation()
-  const [chosenVoucher, setChosenVoucher] = useState<TVoucher | null>(null)
+  const [chosenVoucher, setChosenVoucher] = useState<TVoucher | null>(bestVoucherForBrand?.bestVoucher || null)
   const brand =
     cartBrandItem[0]?.productClassification?.productDiscount?.product?.brand ??
     cartBrandItem[0]?.productClassification?.preOrderProduct?.product?.brand ??
@@ -57,8 +61,15 @@ const CartItem = ({
   const handleSelectCartItem = (cartItemId: string, isSelected: boolean) => {
     onSelectBrand([cartItemId], isSelected)
   }
-  console.log(bestVoucherForBrand)
-
+  const handleVoucherChange = (voucher: TVoucher | null) => {
+    setChosenVoucher(voucher)
+    onVoucherSelect(brand?.id ?? '', voucher)
+  }
+  useEffect(() => {
+    if (selectedCartItems.length === 0) {
+      setChosenVoucher(null)
+    }
+  }, [selectedCartItems])
   return (
     <div className="w-full bg-white p-4 rounded-lg space-y-2 shadow-sm">
       {/* Brand Header */}
@@ -130,6 +141,7 @@ const CartItem = ({
             onChooseProduct={() => handleSelectCartItem(cartItem?.id, !selectedCartItems?.includes(cartItem?.id))}
             productQuantity={productQuantity}
             productClassificationQuantity={productClassificationQuantity}
+            setIsTriggerTotal={setIsTriggerTotal}
           />
         )
       })}
@@ -138,11 +150,16 @@ const CartItem = ({
       <div className="flex items-center gap-3 text-sm">
         <Tag className="w-4 h-4 text-red-500" />
         <span>
-          {chosenVoucher &&
-            hasBrandProductSelected &&
-            (chosenVoucher?.discountType === DiscountTypeEnum.AMOUNT && chosenVoucher?.discountValue
+          {chosenVoucher && hasBrandProductSelected
+            ? chosenVoucher?.discountType === DiscountTypeEnum.AMOUNT && chosenVoucher?.discountValue
               ? t('voucher.discountAmount', { amount: chosenVoucher?.discountValue })
-              : t('voucher.discountPercentage', { amount: chosenVoucher?.discountValue }))}
+              : t('voucher.discountPercentage', { amount: chosenVoucher?.discountValue })
+            : bestVoucherForBrand?.bestVoucher
+              ? bestVoucherForBrand?.bestVoucher?.discountType === DiscountTypeEnum.AMOUNT &&
+                bestVoucherForBrand?.bestVoucher?.discountValue
+                ? t('voucher.discountAmount', { amount: bestVoucherForBrand?.bestVoucher?.discountValue })
+                : t('voucher.discountPercentage', { amount: bestVoucherForBrand?.bestVoucher?.discountValue })
+              : null}
         </span>
         <VoucherCartList
           triggerText={t('cart.viewMoreVoucher')}
@@ -150,8 +167,9 @@ const CartItem = ({
           brandId={brand?.id ?? ''}
           brandLogo={brand?.logo ?? ''}
           hasBrandProductSelected={hasBrandProductSelected}
-          setChosenVoucher={setChosenVoucher}
+          handleVoucherChange={handleVoucherChange}
           checkoutItems={checkoutItems}
+          bestVoucherForBrand={bestVoucherForBrand}
         />
       </div>
     </div>
