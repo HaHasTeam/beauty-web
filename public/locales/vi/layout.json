@@ -403,7 +403,10 @@
     "descriptionTitle": "Mô tả",
     "applicableProducts": "Sản phẩm áp dụng",
     "discountAmount": "Đã giảm {{amount, currency}}",
-    "discountPercentage": "Đã giảm {{percentage}}%"
+    "discountPercentage": "Đã giảm {{percentage}}%",
+    "brand": "thương hiệu",
+    "platform": "nền tảng",
+    "collectSuccess": "Thu thập voucher thành công!"
   },
   "dialog": {
     "cancel": "Hủy",

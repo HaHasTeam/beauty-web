@@ -143,6 +143,7 @@ const VoucherCartList = ({
                       hasBrandProductSelected={hasBrandProductSelected}
                       selectedVoucher={selectedVoucher}
                       status={VoucherUsedStatusEnum?.AVAILABLE}
+                      onCollectSuccess={handleCallBrandVouchers}
                     />
                   ))}
                   {unAvailableVouchers?.map((voucher) => (
@@ -154,6 +155,7 @@ const VoucherCartList = ({
                       hasBrandProductSelected={hasBrandProductSelected}
                       selectedVoucher={selectedVoucher}
                       status={VoucherUsedStatusEnum?.UNAVAILABLE}
+                      onCollectSuccess={handleCallBrandVouchers}
                     />
                   ))}
                   {unclaimedVouchers?.map((voucher) => (
@@ -165,6 +167,7 @@ const VoucherCartList = ({
                       hasBrandProductSelected={hasBrandProductSelected}
                       selectedVoucher={selectedVoucher}
                       status={VoucherUsedStatusEnum?.UNCLAIMED}
+                      onCollectSuccess={handleCallBrandVouchers}
                     />
                   ))}
                 </RadioGroup>

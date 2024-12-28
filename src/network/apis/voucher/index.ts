@@ -96,11 +96,11 @@ export const getCheckoutListPlatformVouchersApi = toMutationFetcher<ICategoryVou
     })
   },
 )
-export const collectVoucherApi = toMutationFetcher<TUpdateVoucherRequestParams, TServerResponse<TVoucher>>(
+export const collectVoucherApi = toMutationFetcher<TVoucher, TServerResponse<TVoucher>>(
   'collectVoucher',
   async (params) => {
     return privateRequest(`/vouchers/collect-voucher/${params?.id}`, {
-      method: 'PUT',
+      method: 'POST',
       data: params,
     })
   },

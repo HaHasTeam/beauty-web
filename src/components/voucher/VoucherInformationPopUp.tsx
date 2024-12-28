@@ -63,8 +63,8 @@ export default function VoucherInformationPopup({ voucher, className }: VoucherI
               <span className="font-medium">{t('voucher.applicableProducts')}</span>
               <p>
                 {voucher?.applyType === VoucherApplyTypeEnum.SPECIFIC
-                  ? t('voucher.off.specificDescription')
-                  : t('voucher.off.allDescription')}
+                  ? t('voucher.off.specificDescription', { val: t('voucher.brand') })
+                  : t('voucher.off.allDescription', { val: t('voucher.brand') })}
               </p>
             </div>
           </div>

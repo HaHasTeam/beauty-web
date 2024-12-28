@@ -1,11 +1,16 @@
+import { useMutation } from '@tanstack/react-query'
 import { AlertCircle } from 'lucide-react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import useHandleServerError from '@/hooks/useHandleServerError'
+import { useToast } from '@/hooks/useToast'
 import { cn } from '@/lib/utils'
+import { collectVoucherApi } from '@/network/apis/voucher'
 import { DiscountTypeEnum, VoucherApplyTypeEnum, VoucherUsedStatusEnum } from '@/types/enum'
 import { TVoucher } from '@/types/voucher'
 
-import { Button } from '../ui/button'
+import Button from '../button'
 import { CardContent } from '../ui/card'
 import { RadioGroupItem } from '../ui/radio-group'
 import VoucherInformationPopup from './VoucherInformationPopUp'
@@ -16,6 +21,7 @@ interface VoucherCartItemProps {
   brandName: string
   hasBrandProductSelected: boolean
   selectedVoucher: string
+  onCollectSuccess?: () => void
   status?: VoucherUsedStatusEnum.AVAILABLE | VoucherUsedStatusEnum.UNAVAILABLE | VoucherUsedStatusEnum.UNCLAIMED
 }
 const VoucherCartItem = ({
@@ -25,8 +31,44 @@ const VoucherCartItem = ({
   hasBrandProductSelected,
   selectedVoucher,
   status,
+  onCollectSuccess,
 }: VoucherCartItemProps) => {
   const { t } = useTranslation()
+  const [isCollecting, setIsCollecting] = useState(false)
+  const handleServerError = useHandleServerError()
+  const { successToast } = useToast()
+
+  const { mutateAsync: collectVoucherFn } = useMutation({
+    mutationKey: [collectVoucherApi.mutationKey],
+    mutationFn: collectVoucherApi.fn,
+    onSuccess: async (data) => {
+      console.log(data)
+      setIsCollecting(false)
+      try {
+        successToast({
+          message: t('voucher.collectSuccess'),
+        })
+        if (onCollectSuccess) {
+          onCollectSuccess() // Trigger the parent callback
+        }
+      } catch (error) {
+        handleServerError({ error })
+      }
+    },
+    onError: (error) => {
+      setIsCollecting(false)
+      handleServerError({ error })
+    },
+  })
+  async function handleCollectVoucher() {
+    try {
+      setIsCollecting(true)
+      await collectVoucherFn(voucher)
+    } catch (error) {
+      setIsCollecting(false)
+      handleServerError({ error })
+    }
+  }
   return (
     <div className="border border-gray-100 rounded-lg shadow-md">
       <CardContent
@@ -81,7 +123,13 @@ const VoucherCartItem = ({
           </div>
 
           {status === VoucherUsedStatusEnum?.UNCLAIMED ? (
-            <Button className="bg-red-500 hover:bg-red-600" onClick={() => {}}>
+            <Button
+              className="bg-red-500 hover:bg-red-600"
+              onClick={() => {
+                handleCollectVoucher()
+              }}
+              loading={isCollecting}
+            >
               {t('button.save')}
             </Button>
           ) : (

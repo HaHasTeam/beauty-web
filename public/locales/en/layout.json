@@ -403,7 +403,10 @@
     "descriptionTitle": "Description",
     "applicableProducts": "Applicable Products",
     "discountAmount": "Discount of {{amount, currency}}",
-    "discountPercentage": "Discount of {{percentage}}%"
+    "discountPercentage": "Discount of {{percentage}}%",
+    "brand": "brand",
+    "platform": "platform",
+    "collectSuccess": "Collect voucher success!"
   },
   "dialog": {
     "cancel": "Cancel",
