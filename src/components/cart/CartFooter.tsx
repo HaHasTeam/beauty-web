@@ -107,8 +107,10 @@ export default function CartFooter({
   const platformVoucherDiscount = useMemo(() => {
     if (!platformChosenVoucher) return 0
 
-    const { discountType, discountValue } = platformChosenVoucher
-    return discountType === DiscountTypeEnum.PERCENTAGE ? (totalPrice * discountValue) / 100 : discountValue
+    const { discountType, discountValue, maxDiscount } = platformChosenVoucher
+    const voucherValue =
+      discountType === DiscountTypeEnum.PERCENTAGE ? (totalPrice * discountValue) / 100 : discountValue
+    return maxDiscount && maxDiscount > 0 ? (voucherValue > maxDiscount ? maxDiscount : voucherValue) : voucherValue
   }, [platformChosenVoucher, totalPrice])
 
   // Total saved price (product discounts + brand vouchers + platform voucher)

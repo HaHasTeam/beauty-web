@@ -36,16 +36,18 @@ const Cart = () => {
     return acc
   }, {})
 
-  // Calculate total product discount
-
   // Calculate total voucher discount
   const totalVoucherDiscount = useMemo(() => {
     return Object.values(chosenVouchersByBrand).reduce((total, voucher) => {
       if (!voucher) return total
-      const { discountType, discountValue } = voucher
-      const voucherDiscount =
-        discountType === DiscountTypeEnum.PERCENTAGE ? (totalPrice * discountValue) / 100 : discountValue
-      return total + voucherDiscount
+      const { discountType, discountValue, maxDiscount } = voucher
+      const voucherDiscount = discountType === DiscountTypeEnum.PERCENTAGE ? totalPrice * discountValue : discountValue
+      console.log(voucher)
+      return maxDiscount && maxDiscount > 0
+        ? total + voucherDiscount > maxDiscount
+          ? maxDiscount
+          : total + voucherDiscount
+        : total + voucherDiscount
     }, 0)
   }, [chosenVouchersByBrand, totalPrice])
 
@@ -106,7 +108,7 @@ const Cart = () => {
       async function handleShowBestBrandVoucher() {
         try {
           if (useMyCartData && useMyCartData?.data) {
-            const checkoutItems = createCheckoutItems(useMyCartData?.data)
+            const checkoutItems = createCheckoutItems(useMyCartData?.data, selectedCartItems)
             await callBestBrandVouchersFn({
               checkoutItems: checkoutItems,
             })
@@ -122,9 +124,16 @@ const Cart = () => {
   }, [selectedCartItems, useMyCartData])
 
   useEffect(() => {
-    setTotalPrice(calculateCartTotals(selectedCartItems, cartByBrand).totalPrice)
-    setTotalOriginalPrice(calculateCartTotals(selectedCartItems, cartByBrand).totalProductCost)
-    setTotalDirectProductsDiscount(calculateCartTotals(selectedCartItems, cartByBrand).totalProductDiscount)
+    if (selectedCartItems?.length > 0) {
+      setTotalPrice(calculateCartTotals(selectedCartItems, cartByBrand).totalPrice)
+      setTotalOriginalPrice(calculateCartTotals(selectedCartItems, cartByBrand).totalProductCost)
+      setTotalDirectProductsDiscount(calculateCartTotals(selectedCartItems, cartByBrand).totalProductDiscount)
+    } else {
+      setTotalPrice(0)
+      setTotalOriginalPrice(0)
+      setTotalDirectProductsDiscount(0)
+      setChosenVouchersByBrand({})
+    }
   }, [cartByBrand, selectedCartItems, isTriggerTotal])
 
   console.log(chosenVouchersByBrand)

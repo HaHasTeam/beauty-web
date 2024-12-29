@@ -53,6 +53,14 @@ const CartItem = ({
     }))
     ?.filter((item) => item.classificationId !== null) // Remove items without a classificationId
 
+  const selectedCheckoutItems: ICheckoutItem[] = cartBrandItem
+    ?.filter((cart) => selectedCartItems?.includes(cart?.id))
+    ?.map((cartItem) => ({
+      classificationId: cartItem.productClassification?.id ?? '',
+      quantity: cartItem.quantity ?? 0,
+    }))
+    ?.filter((item) => item.classificationId !== null)
+
   // Handler for brand-level checkbox
   const handleBrandSelect = () => {
     onSelectBrand(cartItemIds, !isBrandSelected)
@@ -154,13 +162,13 @@ const CartItem = ({
           {chosenVoucher && hasBrandProductSelected
             ? chosenVoucher?.discountType === DiscountTypeEnum.AMOUNT && chosenVoucher?.discountValue
               ? t('voucher.discountAmount', { amount: chosenVoucher?.discountValue })
-              : t('voucher.discountPercentage', { amount: chosenVoucher?.discountValue })
+              : t('voucher.discountPercentage', { percentage: chosenVoucher?.discountValue * 100 })
             : bestVoucherForBrand?.bestVoucher
               ? bestVoucherForBrand?.bestVoucher?.discountType === DiscountTypeEnum.AMOUNT &&
                 bestVoucherForBrand?.bestVoucher?.discountValue
                 ? t('voucher.bestDiscountAmountDisplay', { amount: bestVoucherForBrand?.bestVoucher?.discountValue })
                 : t('voucher.bestDiscountPercentageDisplay', {
-                    amount: bestVoucherForBrand?.bestVoucher?.discountValue,
+                    percentage: bestVoucherForBrand?.bestVoucher?.discountValue * 100,
                   })
               : null}
         </span>
@@ -172,6 +180,7 @@ const CartItem = ({
           hasBrandProductSelected={hasBrandProductSelected}
           handleVoucherChange={handleVoucherChange}
           checkoutItems={checkoutItems}
+          selectedCheckoutItems={selectedCheckoutItems}
           bestVoucherForBrand={bestVoucherForBrand}
         />
       </div>

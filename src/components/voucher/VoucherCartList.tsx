@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Button } from '@/components/ui/button'
@@ -23,6 +23,7 @@ interface VoucherCartListProps {
   brandLogo: string
   hasBrandProductSelected: boolean
   checkoutItems: ICheckoutItem[]
+  selectedCheckoutItems: ICheckoutItem[]
   handleVoucherChange: (voucher: TVoucher | null) => void
   bestVoucherForBrand: IBrandBestVoucher
 }
@@ -35,6 +36,7 @@ const VoucherCartList = ({
   handleVoucherChange,
   checkoutItems,
   bestVoucherForBrand,
+  selectedCheckoutItems,
 }: VoucherCartListProps) => {
   const { t } = useTranslation()
   const handleServerError = useHandleServerError()
@@ -73,8 +75,10 @@ const VoucherCartList = ({
       if (checkoutItems && checkoutItems?.length > 0) {
         setIsLoading(true)
         await callBrandVouchersFn({
-          checkoutItems: checkoutItems,
-          brandItems: checkoutItems,
+          checkoutItems:
+            selectedCheckoutItems && selectedCheckoutItems?.length > 0 ? selectedCheckoutItems : checkoutItems,
+          brandItems:
+            selectedCheckoutItems && selectedCheckoutItems?.length > 0 ? selectedCheckoutItems : checkoutItems,
           brandId: brandId,
         })
       }
@@ -90,6 +94,12 @@ const VoucherCartList = ({
   //     setBrandVouchers(useBrandVoucher?.data)
   //   }
   // }, [useBrandVoucher])
+
+  useEffect(() => {
+    if (!hasBrandProductSelected) {
+      setSelectedVoucher('')
+    }
+  }, [hasBrandProductSelected])
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
