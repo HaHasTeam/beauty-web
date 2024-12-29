@@ -11,8 +11,13 @@ import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
 interface VoucherInformationPopupProps {
   voucher: TVoucher
   className?: string
+  applyFor?: string
 }
-export default function VoucherInformationPopup({ voucher, className }: VoucherInformationPopupProps) {
+export default function VoucherInformationPopup({
+  voucher,
+  className,
+  applyFor = 'brand',
+}: VoucherInformationPopupProps) {
   const { t } = useTranslation()
 
   return (
@@ -63,8 +68,8 @@ export default function VoucherInformationPopup({ voucher, className }: VoucherI
               <span className="font-medium">{t('voucher.applicableProducts')}</span>
               <p>
                 {voucher?.applyType === VoucherApplyTypeEnum.SPECIFIC
-                  ? t('voucher.off.specificDescription', { val: t('voucher.brand') })
-                  : t('voucher.off.allDescription', { val: t('voucher.brand') })}
+                  ? t('voucher.off.specificDescription', { val: t(`voucher.${applyFor}`) })
+                  : t('voucher.off.allDescription', { val: t(`voucher.${applyFor}`) })}
               </p>
             </div>
           </div>

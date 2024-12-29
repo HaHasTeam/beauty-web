@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Pen, Ticket, Trash2 } from 'lucide-react'
+import { ChevronDown, Pen, Ticket, Trash2 } from 'lucide-react'
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
@@ -14,6 +14,7 @@ import { DiscountTypeEnum, ProjectInformationEnum } from '@/types/enum'
 import { TVoucher } from '@/types/voucher'
 
 import DeleteConfirmationDialog from '../dialog/DeleteConfirmationDialog'
+import TotalPriceDetail from '../price/TotalPriceDetail'
 import VoucherDialog from '../voucher/VoucherDialog'
 
 interface CartFooterProps {
@@ -26,6 +27,7 @@ interface CartFooterProps {
   setSelectedCartItems: Dispatch<SetStateAction<string[]>>
   totalProductDiscount: number
   totalVoucherDiscount: number
+  totalOriginalPrice: number
 }
 export default function CartFooter({
   cartItemCountAll,
@@ -33,6 +35,7 @@ export default function CartFooter({
   onCheckAll,
   isAllSelected,
   totalPrice,
+  totalOriginalPrice,
   selectedCartItems,
   setSelectedCartItems,
   totalProductDiscount,
@@ -110,6 +113,7 @@ export default function CartFooter({
 
   // Total saved price (product discounts + brand vouchers + platform voucher)
   const savedPrice = totalProductDiscount + totalVoucherDiscount + platformVoucherDiscount
+  const totalFinalPrice = totalPrice - totalVoucherDiscount - platformVoucherDiscount
 
   useEffect(() => {
     if (selectedCartItems.length === 0) {
@@ -140,7 +144,7 @@ export default function CartFooter({
                       </div>
                     ) : (
                       <div className="flex gap-2 items-center">
-                        {t('voucher.discountPercentage', { amount: platformChosenVoucher?.discountValue })}
+                        {t('voucher.discountPercentage', { percentage: platformChosenVoucher?.discountValue * 100 })}
                         <Pen />
                       </div>
                     )
@@ -185,14 +189,29 @@ export default function CartFooter({
                     <span className="text-lg">
                       {t('cart.total')} ({cartItemCount} {t('cart.products')} ):
                     </span>
-                    <span className="text-xl font-medium text-red-500">
-                      {t('productCard.price', { price: totalPrice })}
-                    </span>
+                    <div className="flex items-end">
+                      <span className="text-xl font-medium text-red-500">
+                        {t('productCard.price', { price: totalFinalPrice })}
+                      </span>
+                      {savedPrice && savedPrice > 0 ? (
+                        <TotalPriceDetail
+                          triggerComponent={<ChevronDown size={16} />}
+                          totalProductDiscount={totalProductDiscount}
+                          totalBrandDiscount={totalVoucherDiscount}
+                          totalPlatformDiscount={platformVoucherDiscount}
+                          totalPayment={totalFinalPrice}
+                          totalSavings={savedPrice}
+                          totalProductCost={totalOriginalPrice}
+                        />
+                      ) : null}
+                    </div>
                   </div>
-                  <div className="text-sm text-end">
-                    {t('cart.saved')}:
-                    <span className="text-sm text-red-500"> {t('productCard.price', { price: savedPrice })}</span>
-                  </div>
+                  {savedPrice && savedPrice > 0 ? (
+                    <div className="text-sm text-end">
+                      {t('cart.saved')}:
+                      <span className="text-sm text-red-500"> {t('productCard.price', { price: savedPrice })}</span>
+                    </div>
+                  ) : null}
                 </div>
                 <Link
                   to={configs.routes.checkout}

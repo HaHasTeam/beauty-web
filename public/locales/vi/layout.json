@@ -309,9 +309,13 @@
     "checkoutDescription": "(Giá này đã bao gồm thuế GTGT, nhưng chưa bao gồm phí vận chuyển)",
     "acceptCondition": "Nhấn \"Đặt hàng\" đồng nghĩa với việc bạn đồng ý tuân theo ",
     "savings": "Tiết kiệm",
-    "totalCost": "Tổng chi phí sản phẩm",
+    "directDiscount": "Giảm giá trực tiếp từ sản phẩm",
+    "discountBrand": "Mã khuyến mãi từ thương hiệu",
+    "discountPlatform": "Mã khuyến mãi từ nền tảng",
+    "totalCost": "Tổng tiền hàng",
     "totalDiscount": "Tổng giảm giá từ voucher",
-    "totalPayment": "Tổng thanh toán",
+    "totalPayment": "Tổng tiền thanh toán",
+    "discountDetails": "Chi tiết khuyến mãi",
     "productLeft": "Còn {{count}} sản phẩm",
     "updateClassificationSuccess": "Thay đổi phân loại sản phẩm thành công!",
     "soldOutMessage": "Phân loại hàng này đã bán hết, vui lòng chọn phân loại khác.",
@@ -407,7 +411,9 @@
     "brand": "thương hiệu",
     "platform": "nền tảng",
     "collectSuccess": "Thu thập voucher thành công!",
-    "bestChoice": "Lựa chọn tốt nhất"
+    "bestChoice": "Lựa chọn tốt nhất",
+    "bestDiscountPercentageDisplay": "Voucher giảm đến {{percentage}}%",
+    "bestDiscountAmountDisplay": "Voucher giảm đến {{amount, currency}}"
   },
   "dialog": {
     "cancel": "Hủy",

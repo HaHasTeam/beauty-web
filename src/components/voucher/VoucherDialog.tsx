@@ -22,6 +22,7 @@ import { TVoucher } from '@/types/voucher'
 import Empty from '../empty/Empty'
 import VoucherHelpPopOver from '../help/VoucherHelpDialog'
 import LoadingIcon from '../loading-icon'
+import StatusTag from '../status-tag/StatusTag'
 import { ScrollArea } from '../ui/scroll-area'
 import VoucherInformationPopup from './VoucherInformationPopUp'
 
@@ -72,12 +73,12 @@ export default function VoucherDialog({ triggerComponent, onConfirmVoucher, sele
             </div>
           ) : platformVouchersData && platformVouchersData?.data && platformVouchersData?.data?.length > 0 ? (
             <ScrollArea className="h-72">
-              <div className="px-3 py-2">
+              <div className="px-3 py-2 my-2">
                 <RadioGroup value={selectedVoucher} onValueChange={setSelectedVoucher}>
                   <div className="space-y-4">
                     {platformVouchersData?.data?.map((voucher) => (
                       <div key={voucher.id} className="relative">
-                        <div className="flex gap-4 p-2 md:p-4 border rounded-lg">
+                        <div className="flex gap-4 p-2 md:p-4 border rounded-lg min-h-44">
                           {/* Left Section */}
                           <div
                             className={`w-32 bg-primary p-4 rounded-lg flex flex-col items-center justify-center text-center`}
@@ -89,23 +90,28 @@ export default function VoucherDialog({ triggerComponent, onConfirmVoucher, sele
 
                           {/* Content Section */}
                           <div className="flex-1">
-                            <div className="flex justify-between items-start">
+                            <div className="flex justify-between items-center">
                               <div>
-                                <div className="text-lg font-medium">
+                                <div className="flex text-lg font-medium gap-2">
                                   <span className="w-fit">
                                     {voucher?.discountType === DiscountTypeEnum.PERCENTAGE
-                                      ? t('voucher.off.percentage', { percentage: voucher?.discountValue * 100 }) + '. '
-                                      : t('voucher.off.amount', { amount: voucher?.discountValue }) + '. '}
+                                      ? t('voucher.off.percentage', { percentage: voucher?.discountValue * 100 })
+                                      : t('voucher.off.amount', { amount: voucher?.discountValue })}
                                   </span>
+
+                                  <VoucherInformationPopup
+                                    voucher={voucher}
+                                    applyFor="platform"
+                                    className="flex items-start"
+                                  />
                                 </div>
                                 {voucher?.maxDiscount && (
-                                  <div className="text-sm text-muted-foreground">
-                                    {t('voucher.off.maxDiscount', { amount: voucher?.maxDiscount }) + '. '}
+                                  <div className="w-fit text-base">
+                                    {t('voucher.off.maxDiscount', { amount: voucher?.maxDiscount })}
                                   </div>
                                 )}
-                                <VoucherInformationPopup voucher={voucher} className="flex items-start" />
                                 {voucher?.minOrderValue && (
-                                  <div className="text-base">
+                                  <div className="w-fit text-base">
                                     {t('voucher.off.minOrder', { amount: voucher?.minOrderValue })}
                                   </div>
                                 )}
@@ -116,23 +122,27 @@ export default function VoucherDialog({ triggerComponent, onConfirmVoucher, sele
                                   </span>
                                 )}
                               </div>
-                              <div className="flex items-center gap-2">
-                                <span className="text-red-500">×usesageCount</span>
-                                <RadioGroupItem value={voucher.id} id={voucher.id} />
+                              <div className="absolute -top-3 -right-1">
+                                <StatusTag tag="numberCount" text="x100" />
                               </div>
                             </div>
-                            <div className="mt-2 text-sm text-muted-foreground">
-                              Đã dùng xx%,
+                            <div className="flex gap-1 mt-2 text-sm text-muted-foreground">
+                              Đã dùng x%,
                               <div className="mt-1 text-xs text-muted-foreground">
                                 {t('date.exp')}: {t('date.toLocaleDateTimeString', { val: new Date(voucher?.endTime) })}
                               </div>
                             </div>
                           </div>
+
+                          {/* Radio Item */}
+                          <div className="flex items-center gap-2">
+                            <RadioGroupItem value={voucher.id} id={voucher.id} />
+                          </div>
                         </div>
 
                         {/* Warning Message */}
                         {selectedCartItems?.length === 0 && (
-                          <div className="mt-2 flex items-center gap-2 text-sm text-red-500">
+                          <div className="mt-1 flex items-center gap-2 text-sm text-red-500 bg-red-50 p-2 rounded">
                             <AlertCircle className="w-4 h-4" />
                             {t('voucher.chooseProductAppAlert')}
                           </div>

@@ -15,7 +15,7 @@ import { ICartByBrand } from '@/types/cart'
 import { DiscountTypeEnum } from '@/types/enum'
 import { IBrandBestVoucher, TVoucher } from '@/types/voucher'
 import { createCheckoutItems } from '@/utils/cart'
-import { getTotalPrice } from '@/utils/price'
+import { calculateCartTotals } from '@/utils/price'
 
 const Cart = () => {
   const { t } = useTranslation()
@@ -25,6 +25,8 @@ const Cart = () => {
   const [cartByBrand, setCartByBrand] = useState<ICartByBrand | undefined>(undefined)
   const [bestBrandVouchers, setBestBrandVouchers] = useState<IBrandBestVoucher[]>([])
   const [totalPrice, setTotalPrice] = useState<number>(0)
+  const [totalOriginalPrice, setTotalOriginalPrice] = useState<number>(0)
+  const [totalDirectProductsDiscount, setTotalDirectProductsDiscount] = useState<number>(0)
   const [isTriggerTotal, setIsTriggerTotal] = useState<boolean>(false)
   const [chosenVouchersByBrand, setChosenVouchersByBrand] = useState<{ [brandId: string]: TVoucher | null }>({})
 
@@ -35,37 +37,6 @@ const Cart = () => {
   }, {})
 
   // Calculate total product discount
-  const totalProductDiscount = useMemo(() => {
-    if (!cartByBrand) return 0
-
-    return Object.values(cartByBrand).reduce((totalDiscount, cartItems) => {
-      return (
-        totalDiscount +
-        cartItems.reduce((brandDiscount, cartItem) => {
-          const isSelected = selectedCartItems.includes(cartItem.id)
-          if (!isSelected) return brandDiscount
-
-          const product =
-            cartItem?.productClassification?.preOrderProduct?.product ??
-            cartItem?.productClassification?.productDiscount?.product ??
-            cartItem?.productClassification?.product
-
-          const discount =
-            cartItem?.productClassification?.productDiscount?.discount ??
-            (product?.productDiscounts ?? [])[0]?.discount ??
-            null
-          const price = cartItem.productClassification?.price ?? 0
-          const quantity = cartItem.quantity ?? 0
-
-          if (!discount || discount <= 0) return brandDiscount
-
-          const discountValue = (price * discount) / 100
-
-          return brandDiscount + discountValue * quantity
-        }, 0)
-      )
-    }, 0)
-  }, [cartByBrand, selectedCartItems])
 
   // Calculate total voucher discount
   const totalVoucherDiscount = useMemo(() => {
@@ -151,7 +122,9 @@ const Cart = () => {
   }, [selectedCartItems, useMyCartData])
 
   useEffect(() => {
-    setTotalPrice(getTotalPrice(selectedCartItems, cartByBrand))
+    setTotalPrice(calculateCartTotals(selectedCartItems, cartByBrand).totalPrice)
+    setTotalOriginalPrice(calculateCartTotals(selectedCartItems, cartByBrand).totalProductCost)
+    setTotalDirectProductsDiscount(calculateCartTotals(selectedCartItems, cartByBrand).totalProductDiscount)
   }, [cartByBrand, selectedCartItems, isTriggerTotal])
 
   console.log(chosenVouchersByBrand)
@@ -165,8 +138,13 @@ const Cart = () => {
             <CartHeader onCheckAll={handleSelectAll} isAllSelected={isAllSelected} />
             {cartByBrand &&
               Object.keys(cartByBrand).map((brandName, index) => {
-                const brandId = cartByBrand[brandName]?.[0]?.productClassification?.product?.brand?.id || ''
+                const brand =
+                  cartByBrand[brandName]?.[0]?.productClassification?.productDiscount?.product?.brand ??
+                  cartByBrand[brandName]?.[0]?.productClassification?.preOrderProduct?.product?.brand ??
+                  cartByBrand[brandName]?.[0]?.productClassification?.product?.brand
+                const brandId = brand?.id ?? ''
                 const bestVoucherForBrand = voucherMap[brandId] || null
+                console.log(brandId)
                 return (
                   <CartItem
                     key={`${brandName}_${index}`}
@@ -188,8 +166,9 @@ const Cart = () => {
               onCheckAll={handleSelectAll}
               isAllSelected={isAllSelected}
               totalPrice={totalPrice}
+              totalOriginalPrice={totalOriginalPrice}
               selectedCartItems={selectedCartItems}
-              totalProductDiscount={totalProductDiscount}
+              totalProductDiscount={totalDirectProductsDiscount}
               totalVoucherDiscount={totalVoucherDiscount}
             />
           </div>

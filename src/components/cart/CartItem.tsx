@@ -38,6 +38,7 @@ const CartItem = ({
     cartBrandItem[0]?.productClassification?.productDiscount?.product?.brand ??
     cartBrandItem[0]?.productClassification?.preOrderProduct?.product?.brand ??
     cartBrandItem[0]?.productClassification?.product?.brand
+
   const cartItemIds = cartBrandItem?.map((cartItem) => cartItem.id)
   const isBrandSelected = cartBrandItem.every((productClassification) =>
     selectedCartItems?.includes(productClassification.id),
@@ -157,8 +158,10 @@ const CartItem = ({
             : bestVoucherForBrand?.bestVoucher
               ? bestVoucherForBrand?.bestVoucher?.discountType === DiscountTypeEnum.AMOUNT &&
                 bestVoucherForBrand?.bestVoucher?.discountValue
-                ? t('voucher.discountAmount', { amount: bestVoucherForBrand?.bestVoucher?.discountValue })
-                : t('voucher.discountPercentage', { amount: bestVoucherForBrand?.bestVoucher?.discountValue })
+                ? t('voucher.bestDiscountAmountDisplay', { amount: bestVoucherForBrand?.bestVoucher?.discountValue })
+                : t('voucher.bestDiscountPercentageDisplay', {
+                    amount: bestVoucherForBrand?.bestVoucher?.discountValue,
+                  })
               : null}
         </span>
         <VoucherCartList

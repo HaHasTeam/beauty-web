@@ -289,7 +289,7 @@ const ProductCardLandscape = ({
               </div>
               <div>
                 <span className="text-red-500 lg:text-sm md:text-xs sm:text-xs text-xs">
-                  {t('voucher.off.numberPercentage', { percentage: discount })}
+                  {t('voucher.off.numberPercentage', { percentage: discount * 100 })}
                 </span>
               </div>
             </div>
