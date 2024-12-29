@@ -178,6 +178,7 @@ const Checkout = () => {
     }
 
     handleShowBestBrandVoucher()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCartItem, selectedCartItems])
 
   return (
