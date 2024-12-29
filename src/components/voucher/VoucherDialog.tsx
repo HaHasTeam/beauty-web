@@ -30,11 +30,17 @@ interface VoucherDialogProps {
   triggerComponent: React.ReactElement<unknown>
   onConfirmVoucher: (voucher: TVoucher | null) => void
   selectedCartItems?: string[]
+  chosenPlatformVoucher: TVoucher | null
 }
-export default function VoucherDialog({ triggerComponent, onConfirmVoucher, selectedCartItems }: VoucherDialogProps) {
+export default function VoucherDialog({
+  triggerComponent,
+  onConfirmVoucher,
+  selectedCartItems,
+  chosenPlatformVoucher,
+}: VoucherDialogProps) {
   const { t } = useTranslation()
   const [open, setOpen] = useState(false)
-  const [selectedVoucher, setSelectedVoucher] = useState<string>('')
+  const [selectedVoucher, setSelectedVoucher] = useState<string>(chosenPlatformVoucher?.id ?? '')
 
   const { data: platformVouchersData, isFetching } = useQuery({
     queryKey: [getPlatformVouchersApi.queryKey],

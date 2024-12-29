@@ -11,11 +11,11 @@ import configs from '@/config'
 import useHandleServerError from '@/hooks/useHandleServerError'
 import { getMyCartApi } from '@/network/apis/cart'
 import { getBestShopVouchersApi } from '@/network/apis/voucher'
+import useCartStore from '@/store/cart'
 import { ICartByBrand } from '@/types/cart'
-import { DiscountTypeEnum } from '@/types/enum'
 import { IBrandBestVoucher, TVoucher } from '@/types/voucher'
 import { createCheckoutItems } from '@/utils/cart'
-import { calculateCartTotals } from '@/utils/price'
+import { calculateCartTotals, calculatePlatformVoucherDiscount, calculateTotalVoucherDiscount } from '@/utils/price'
 
 const Cart = () => {
   const { t } = useTranslation()
@@ -29,8 +29,10 @@ const Cart = () => {
   const [totalDirectProductsDiscount, setTotalDirectProductsDiscount] = useState<number>(0)
   const [isTriggerTotal, setIsTriggerTotal] = useState<boolean>(false)
   const [chosenVouchersByBrand, setChosenVouchersByBrand] = useState<{ [brandId: string]: TVoucher | null }>({})
-
+  const [platformChosenVoucher, setPlatformChosenVoucher] = useState<TVoucher | null>(null)
   const handleServerError = useHandleServerError()
+  const { setChosenBrandVouchers, setChosenPlatformVoucher, setSelectedCartItem, resetCart } = useCartStore()
+
   const voucherMap = bestBrandVouchers.reduce<{ [key: string]: IBrandBestVoucher }>((acc, voucher) => {
     acc[voucher.brandId] = voucher
     return acc
@@ -38,18 +40,17 @@ const Cart = () => {
 
   // Calculate total voucher discount
   const totalVoucherDiscount = useMemo(() => {
-    return Object.values(chosenVouchersByBrand).reduce((total, voucher) => {
-      if (!voucher) return total
-      const { discountType, discountValue, maxDiscount } = voucher
-      const voucherDiscount = discountType === DiscountTypeEnum.PERCENTAGE ? totalPrice * discountValue : discountValue
-      console.log(voucher)
-      return maxDiscount && maxDiscount > 0
-        ? total + voucherDiscount > maxDiscount
-          ? maxDiscount
-          : total + voucherDiscount
-        : total + voucherDiscount
-    }, 0)
+    return calculateTotalVoucherDiscount(chosenVouchersByBrand, totalPrice)
   }, [chosenVouchersByBrand, totalPrice])
+
+  // Calculate platform voucher discount
+  const platformVoucherDiscount = useMemo(() => {
+    return calculatePlatformVoucherDiscount(platformChosenVoucher, totalPrice)
+  }, [platformChosenVoucher, totalPrice])
+
+  // Total saved price (product discounts + brand vouchers + platform voucher)
+  const savedPrice = totalDirectProductsDiscount + totalVoucherDiscount + platformVoucherDiscount
+  const totalFinalPrice = totalPrice - totalVoucherDiscount - platformVoucherDiscount
 
   const { data: useMyCartData, isFetching } = useQuery({
     queryKey: [getMyCartApi.queryKey],
@@ -86,16 +87,30 @@ const Cart = () => {
       }
     })
   }
-  const handleVoucherSelection = (brandName: string, voucher: TVoucher | null) => {
+  const handleVoucherSelection = (brandId: string, voucher: TVoucher | null) => {
     setChosenVouchersByBrand((prev) => ({
       ...prev,
-      [brandName]: voucher,
+      [brandId]: voucher,
     }))
+    setChosenBrandVouchers({ ...chosenVouchersByBrand, [brandId]: voucher })
   }
 
   useEffect(() => {
     if (useMyCartData && useMyCartData?.data) {
       setCartByBrand(useMyCartData?.data)
+
+      const selectedCartItemsMap = Object.keys(useMyCartData.data).reduce((acc, brandName) => {
+        const brandCartItems = useMyCartData.data[brandName]
+        const selectedItems = brandCartItems.filter((cartItem) => selectedCartItems.includes(cartItem.id))
+
+        if (selectedItems.length > 0) {
+          acc[brandName] = selectedItems
+        }
+
+        return acc
+      }, {} as ICartByBrand)
+
+      setSelectedCartItem(selectedCartItemsMap)
 
       // handle set selected checkbox cart items
       const tmpAllCartItemIds = Object.values(useMyCartData?.data).flatMap((cartBrand) =>
@@ -120,6 +135,11 @@ const Cart = () => {
 
       handleShowBestBrandVoucher()
     }
+    if (selectedCartItems.length === 0) {
+      setPlatformChosenVoucher(null)
+      setChosenPlatformVoucher(null)
+      resetCart()
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCartItems, useMyCartData])
 
@@ -136,7 +156,9 @@ const Cart = () => {
     }
   }, [cartByBrand, selectedCartItems, isTriggerTotal])
 
-  console.log(chosenVouchersByBrand)
+  useEffect(() => {
+    setChosenPlatformVoucher(platformChosenVoucher)
+  }, [platformChosenVoucher, setChosenPlatformVoucher])
   return (
     <>
       {isFetching && <LoadingContentLayer />}
@@ -153,7 +175,7 @@ const Cart = () => {
                   cartByBrand[brandName]?.[0]?.productClassification?.product?.brand
                 const brandId = brand?.id ?? ''
                 const bestVoucherForBrand = voucherMap[brandId] || null
-                console.log(brandId)
+
                 return (
                   <CartItem
                     key={`${brandName}_${index}`}
@@ -164,6 +186,7 @@ const Cart = () => {
                     bestVoucherForBrand={bestVoucherForBrand}
                     setIsTriggerTotal={setIsTriggerTotal}
                     onVoucherSelect={handleVoucherSelection}
+                    brand={brand}
                   />
                 )
               })}
@@ -174,11 +197,15 @@ const Cart = () => {
               setSelectedCartItems={setSelectedCartItems}
               onCheckAll={handleSelectAll}
               isAllSelected={isAllSelected}
-              totalPrice={totalPrice}
               totalOriginalPrice={totalOriginalPrice}
               selectedCartItems={selectedCartItems}
               totalProductDiscount={totalDirectProductsDiscount}
               totalVoucherDiscount={totalVoucherDiscount}
+              savedPrice={savedPrice}
+              totalFinalPrice={totalFinalPrice}
+              platformChosenVoucher={platformChosenVoucher}
+              setPlatformChosenVoucher={setPlatformChosenVoucher}
+              platformVoucherDiscount={platformVoucherDiscount}
             />
           </div>
         </div>

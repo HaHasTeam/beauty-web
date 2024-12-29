@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { ChevronDown, Pen, Ticket, Trash2 } from 'lucide-react'
-import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
@@ -22,24 +22,32 @@ interface CartFooterProps {
   cartItemCount: number
   onCheckAll: () => void
   isAllSelected: boolean
-  totalPrice: number
   selectedCartItems: string[]
   setSelectedCartItems: Dispatch<SetStateAction<string[]>>
   totalProductDiscount: number
   totalVoucherDiscount: number
   totalOriginalPrice: number
+  totalFinalPrice: number
+  savedPrice: number
+  platformChosenVoucher: TVoucher | null
+  setPlatformChosenVoucher: Dispatch<SetStateAction<TVoucher | null>>
+  platformVoucherDiscount: number
 }
 export default function CartFooter({
   cartItemCountAll,
   cartItemCount,
   onCheckAll,
   isAllSelected,
-  totalPrice,
   totalOriginalPrice,
   selectedCartItems,
   setSelectedCartItems,
   totalProductDiscount,
   totalVoucherDiscount,
+  savedPrice,
+  platformChosenVoucher,
+  setPlatformChosenVoucher,
+  totalFinalPrice,
+  platformVoucherDiscount,
 }: CartFooterProps) {
   const { t } = useTranslation()
   const handleServerError = useHandleServerError()
@@ -47,7 +55,6 @@ export default function CartFooter({
   const queryClient = useQueryClient()
   const [openConfirmDeleteAllCartDialog, setOpenConfirmDeleteAllCartDialog] = useState(false)
   const [openConfirmDeleteMultipleCartDialog, setOpenConfirmDeleteMultipleCartDialog] = useState(false)
-  const [platformChosenVoucher, setPlatformChosenVoucher] = useState<TVoucher | null>(null)
 
   // handle remove cart items api starts
   const { mutateAsync: removeAllCartItemFn } = useMutation({
@@ -103,25 +110,6 @@ export default function CartFooter({
   }
   // handle remove cart items function ends
 
-  // Calculate platform voucher discount
-  const platformVoucherDiscount = useMemo(() => {
-    if (!platformChosenVoucher) return 0
-
-    const { discountType, discountValue, maxDiscount } = platformChosenVoucher
-    const voucherValue =
-      discountType === DiscountTypeEnum.PERCENTAGE ? (totalPrice * discountValue) / 100 : discountValue
-    return maxDiscount && maxDiscount > 0 ? (voucherValue > maxDiscount ? maxDiscount : voucherValue) : voucherValue
-  }, [platformChosenVoucher, totalPrice])
-
-  // Total saved price (product discounts + brand vouchers + platform voucher)
-  const savedPrice = totalProductDiscount + totalVoucherDiscount + platformVoucherDiscount
-  const totalFinalPrice = totalPrice - totalVoucherDiscount - platformVoucherDiscount
-
-  useEffect(() => {
-    if (selectedCartItems.length === 0) {
-      setPlatformChosenVoucher(null)
-    }
-  }, [selectedCartItems])
   return (
     <>
       <div className="w-full sticky bottom-0 left-0 right-0 border-t bg-secondary rounded-tl-sm rounded-tr-sm">
@@ -157,6 +145,7 @@ export default function CartFooter({
               }
               onConfirmVoucher={setPlatformChosenVoucher}
               selectedCartItems={selectedCartItems}
+              chosenPlatformVoucher={platformChosenVoucher}
             />
           </div>
           <div className="flex flex-col md:flex-row items-center justify-between space-y-2">

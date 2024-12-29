@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import configs from '@/config'
+import { IBrand } from '@/types/brand'
 import { ICartItem } from '@/types/cart'
 import { IClassification } from '@/types/classification'
 import { DiscountTypeEnum, OrderEnum } from '@/types/enum'
@@ -21,7 +22,8 @@ interface CartItemProps {
   onSelectBrand: (productIds: string[], isSelected: boolean) => void
   bestVoucherForBrand: IBrandBestVoucher
   setIsTriggerTotal: Dispatch<SetStateAction<boolean>>
-  onVoucherSelect: (brandName: string, voucher: TVoucher | null) => void
+  onVoucherSelect: (brandId: string, voucher: TVoucher | null) => void
+  brand?: IBrand
 }
 const CartItem = ({
   brandName,
@@ -31,13 +33,10 @@ const CartItem = ({
   bestVoucherForBrand,
   setIsTriggerTotal,
   onVoucherSelect,
+  brand,
 }: CartItemProps) => {
   const { t } = useTranslation()
   const [chosenVoucher, setChosenVoucher] = useState<TVoucher | null>(bestVoucherForBrand?.bestVoucher || null)
-  const brand =
-    cartBrandItem[0]?.productClassification?.productDiscount?.product?.brand ??
-    cartBrandItem[0]?.productClassification?.preOrderProduct?.product?.brand ??
-    cartBrandItem[0]?.productClassification?.product?.brand
 
   const cartItemIds = cartBrandItem?.map((cartItem) => cartItem.id)
   const isBrandSelected = cartBrandItem.every((productClassification) =>
@@ -51,7 +50,7 @@ const CartItem = ({
       classificationId: cartItem.productClassification?.id ?? '',
       quantity: cartItem.quantity ?? 0,
     }))
-    ?.filter((item) => item.classificationId !== null) // Remove items without a classificationId
+    ?.filter((item) => item.classificationId !== null)
 
   const selectedCheckoutItems: ICheckoutItem[] = cartBrandItem
     ?.filter((cart) => selectedCartItems?.includes(cart?.id))
