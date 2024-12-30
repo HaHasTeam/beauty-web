@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { ChevronDown, Pen, Ticket, Trash2 } from 'lucide-react'
 import { Dispatch, SetStateAction, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -14,9 +14,9 @@ import { DiscountTypeEnum, ProjectInformationEnum } from '@/types/enum'
 import { TVoucher } from '@/types/voucher'
 
 import DeleteConfirmationDialog from '../dialog/DeleteConfirmationDialog'
+import WarningDialog from '../dialog/WarningDialog'
 import TotalPriceDetail from '../price/TotalPriceDetail'
 import VoucherDialog from '../voucher/VoucherDialog'
-import WarningDialog from '../dialog/WarningDialog'
 
 interface CartFooterProps {
   cartItemCountAll: number
@@ -115,7 +115,9 @@ export default function CartFooter({
 
   // handle checkout button
   const handleCheckout = () => {
-    selectedCartItems && selectedCartItems?.length > 0 ? navigate(configs.routes.checkout) : setOpenWarningDialog(true)
+    if (selectedCartItems && selectedCartItems?.length > 0) {
+      navigate(configs.routes.checkout)
+    } else setOpenWarningDialog(true)
   }
   return (
     <>
@@ -252,7 +254,7 @@ export default function CartFooter({
         open={openWarningDialog}
         onOpenChange={setOpenWarningDialog}
         onConfirm={() => {
-          navigate(configs.routes.checkout)
+          setOpenWarningDialog(false)
         }}
         item="cart"
         title={t('warning.cart.title')}
