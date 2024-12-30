@@ -233,7 +233,7 @@ export const calculateTotalVoucherDiscount = (
     if (!voucher) return total
     const { discountType, discountValue, maxDiscount } = voucher
     const voucherDiscount = discountType === DiscountTypeEnum.PERCENTAGE ? totalPrice * discountValue : discountValue
-    console.log(voucher)
+
     return maxDiscount && maxDiscount > 0
       ? total + voucherDiscount > maxDiscount
         ? maxDiscount
@@ -243,17 +243,17 @@ export const calculateTotalVoucherDiscount = (
 }
 
 /**
- * Calculates total voucher discount by brand.
+ * Calculates total voucher discount by platform.
  *
  * @param platformChosenVoucher - voucher that user selected from platform voucher list.
  * @param totalPrice - price of product after direct discount in that product.
- * @returns An object show total brands voucher discount of selected products.
+ * @returns An object show total platform voucher discount of selected products.
  */
 export const calculatePlatformVoucherDiscount = (platformChosenVoucher: TVoucher | null, totalPrice: number) => {
   if (!platformChosenVoucher) return 0
 
   const { discountType, discountValue, maxDiscount } = platformChosenVoucher
-  const voucherValue = discountType === DiscountTypeEnum.PERCENTAGE ? (totalPrice * discountValue) / 100 : discountValue
+  const voucherValue = discountType === DiscountTypeEnum.PERCENTAGE ? totalPrice * discountValue : discountValue
   return maxDiscount && maxDiscount > 0 ? (voucherValue > maxDiscount ? maxDiscount : voucherValue) : voucherValue
 }
 

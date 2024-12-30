@@ -10,6 +10,7 @@ import AddressSection from '@/components/address/AddressSection'
 import CheckoutHeader from '@/components/checkout/CheckoutHeader'
 import CheckoutItem from '@/components/checkout/CheckoutItem'
 import CheckoutTotal from '@/components/checkout/CheckoutTotal'
+import { OrderItemCreation } from '@/components/checkout/OrderItemsCreation'
 import Empty from '@/components/empty/Empty'
 import LoadingContentLayer from '@/components/loading-icon/LoadingContentLayer'
 import PaymentSelection from '@/components/payment/PaymentSelection'
@@ -27,6 +28,7 @@ import CreateOrderSchema from '@/schemas/order.schema'
 import useCartStore from '@/store/cart'
 import { IAddress } from '@/types/address'
 import { DiscountTypeEnum, PaymentMethod, ProjectInformationEnum } from '@/types/enum'
+import { ICreateOrder } from '@/types/order'
 import { IBrandBestVoucher, TVoucher } from '@/types/voucher'
 import { createCheckoutItems } from '@/utils/cart'
 import { calculateCartTotals, calculatePlatformVoucherDiscount, calculateTotalVoucherDiscount } from '@/utils/price'
@@ -82,17 +84,7 @@ const Checkout = () => {
   const totalPayment = totalPrice - totalBrandDiscount - totalPlatformDiscount
 
   const defaultOrderValues = {
-    orders: [
-      {
-        shopVoucherId: '', // Optional field
-        items: [
-          {
-            productClassificationId: '',
-            quantity: 0,
-          },
-        ],
-      },
-    ],
+    orders: [],
     addressId: '',
     paymentMethod: PaymentMethod?.CASH,
     platformVoucherId: '', // Optional field, default to an empty string
@@ -140,8 +132,13 @@ const Checkout = () => {
   async function onSubmit(values: z.infer<typeof CreateOrderSchema>) {
     try {
       setIsLoading(true)
-      console.log(values, useMyAddressesData, createOrderFn)
-      // await createProductFn(values)
+      const orders = OrderItemCreation({ values, selectedCartItem, chosenBrandVouchers })
+      const formData: ICreateOrder = {
+        ...values,
+        orders,
+        platformVoucherId: chosenPlatformVoucher?.id ?? '', // Optional
+      }
+      await createOrderFn(formData)
       setIsLoading(false)
     } catch (error) {
       setIsLoading(false)
@@ -190,7 +187,7 @@ const Checkout = () => {
             <Form {...form}>
               <form
                 noValidate
-                onSubmit={form.handleSubmit(onSubmit, (e) => console.log(form.getValues(), e))}
+                onSubmit={form.handleSubmit(onSubmit, (e) => console.log(e))}
                 className="w-full grid gap-4 mb-8"
                 id={`form-${formId}`}
               >
@@ -217,6 +214,9 @@ const Checkout = () => {
                             onVoucherSelect={handleVoucherSelection}
                             bestVoucherForBrand={bestVoucherForBrand}
                             chosenBrandVoucher={chosenVoucherForBrand}
+                            totalBrandDiscount={totalBrandDiscount}
+                            index={index}
+                            form={form}
                           />
                         )
                       })}
@@ -257,6 +257,7 @@ const Checkout = () => {
                         onConfirmVoucher={setChosenPlatformVoucher}
                         selectedCartItems={selectedCartItems}
                         chosenPlatformVoucher={chosenPlatformVoucher}
+                        cartByBrand={selectedCartItem}
                       />
                     </div>
                     {/* Payment Section */}
@@ -272,6 +273,7 @@ const Checkout = () => {
                         totalPlatformDiscount={totalPlatformDiscount}
                         totalSavings={totalSavings}
                         totalPayment={totalPayment}
+                        formId={`form-${formId}`}
                       />
                     </div>
                   </div>

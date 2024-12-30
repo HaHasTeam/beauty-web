@@ -1,5 +1,6 @@
 import { TBrand } from './brand'
 import { StatusEnum, VoucherUsedStatusEnum } from './enum'
+import { IProduct } from './product'
 import { TMetaData } from './request'
 
 export type TVoucher = TMetaData & {
@@ -28,7 +29,10 @@ export type TVoucher = TMetaData & {
   endTime: string
 
   brand?: TBrand | string
+
   applyType?: string
+
+  applyProducts?: IProduct[]
 }
 
 export interface ICheckoutItem {

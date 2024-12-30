@@ -13,7 +13,7 @@ import { getMyCartApi } from '@/network/apis/cart'
 import { getBestShopVouchersApi } from '@/network/apis/voucher'
 import useCartStore from '@/store/cart'
 import { ICartByBrand } from '@/types/cart'
-import { IBrandBestVoucher, TVoucher } from '@/types/voucher'
+import { IBrandBestVoucher, ICheckoutItem, TVoucher } from '@/types/voucher'
 import { createCheckoutItems } from '@/utils/cart'
 import { calculateCartTotals, calculatePlatformVoucherDiscount, calculateTotalVoucherDiscount } from '@/utils/price'
 
@@ -175,18 +175,34 @@ const Cart = () => {
                   cartByBrand[brandName]?.[0]?.productClassification?.product?.brand
                 const brandId = brand?.id ?? ''
                 const bestVoucherForBrand = voucherMap[brandId] || null
+                const cartBrandItem = cartByBrand[brandName]
+                const checkoutItems: ICheckoutItem[] = cartBrandItem
+                  ?.map((cartItem) => ({
+                    classificationId: cartItem.productClassification?.id ?? '',
+                    quantity: cartItem.quantity ?? 0,
+                  }))
+                  ?.filter((item) => item.classificationId !== null)
 
+                const selectedCheckoutItems: ICheckoutItem[] = cartBrandItem
+                  ?.filter((cart) => selectedCartItems?.includes(cart?.id))
+                  ?.map((cartItem) => ({
+                    classificationId: cartItem.productClassification?.id ?? '',
+                    quantity: cartItem.quantity ?? 0,
+                  }))
+                  ?.filter((item) => item.classificationId !== null)
                 return (
                   <CartItem
                     key={`${brandName}_${index}`}
                     brandName={brandName}
-                    cartBrandItem={cartByBrand[brandName]}
+                    cartBrandItem={cartBrandItem}
                     selectedCartItems={selectedCartItems}
                     onSelectBrand={handleSelectBrand}
                     bestVoucherForBrand={bestVoucherForBrand}
                     setIsTriggerTotal={setIsTriggerTotal}
                     onVoucherSelect={handleVoucherSelection}
                     brand={brand}
+                    checkoutItems={checkoutItems}
+                    selectedCheckoutItems={selectedCheckoutItems}
                   />
                 )
               })}
@@ -206,6 +222,7 @@ const Cart = () => {
               platformChosenVoucher={platformChosenVoucher}
               setPlatformChosenVoucher={setPlatformChosenVoucher}
               platformVoucherDiscount={platformVoucherDiscount}
+              cartByBrand={cartByBrand}
             />
           </div>
         </div>

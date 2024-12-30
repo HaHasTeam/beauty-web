@@ -24,6 +24,8 @@ interface CartItemProps {
   setIsTriggerTotal: Dispatch<SetStateAction<boolean>>
   onVoucherSelect: (brandId: string, voucher: TVoucher | null) => void
   brand?: IBrand
+  checkoutItems: ICheckoutItem[]
+  selectedCheckoutItems: ICheckoutItem[]
 }
 const CartItem = ({
   brandName,
@@ -34,6 +36,8 @@ const CartItem = ({
   setIsTriggerTotal,
   onVoucherSelect,
   brand,
+  checkoutItems,
+  selectedCheckoutItems,
 }: CartItemProps) => {
   const { t } = useTranslation()
   const [chosenVoucher, setChosenVoucher] = useState<TVoucher | null>(bestVoucherForBrand?.bestVoucher || null)
@@ -45,20 +49,6 @@ const CartItem = ({
   const hasBrandProductSelected = cartBrandItem.some((productClassification) =>
     selectedCartItems?.includes(productClassification.id),
   )
-  const checkoutItems: ICheckoutItem[] = cartBrandItem
-    ?.map((cartItem) => ({
-      classificationId: cartItem.productClassification?.id ?? '',
-      quantity: cartItem.quantity ?? 0,
-    }))
-    ?.filter((item) => item.classificationId !== null)
-
-  const selectedCheckoutItems: ICheckoutItem[] = cartBrandItem
-    ?.filter((cart) => selectedCartItems?.includes(cart?.id))
-    ?.map((cartItem) => ({
-      classificationId: cartItem.productClassification?.id ?? '',
-      quantity: cartItem.quantity ?? 0,
-    }))
-    ?.filter((item) => item.classificationId !== null)
 
   // Handler for brand-level checkbox
   const handleBrandSelect = () => {
@@ -181,6 +171,7 @@ const CartItem = ({
           checkoutItems={checkoutItems}
           selectedCheckoutItems={selectedCheckoutItems}
           bestVoucherForBrand={bestVoucherForBrand}
+          chosenBrandVoucher={chosenVoucher}
         />
       </div>
     </div>

@@ -121,7 +121,7 @@ const AddAddressDialog = ({ triggerComponent }: AddAddressDialogProps) => {
                   <Button type="button" variant="outline" onClick={() => setOpen(false)}>
                     {t('dialog.cancel')}
                   </Button>
-                  <Button type="submit" loading={isLoading}>
+                  <Button form={`form-${id}`} type="submit" loading={isLoading}>
                     {t('dialog.ok')}
                   </Button>
                 </div>

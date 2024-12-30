@@ -13,6 +13,7 @@ interface CheckoutTotalProps {
   totalSavings: number
   totalPayment: number
   isLoading: boolean
+  formId: string
 }
 export default function CheckoutTotal({
   totalProductDiscount,
@@ -22,6 +23,7 @@ export default function CheckoutTotal({
   totalSavings,
   isLoading,
   totalPayment,
+  formId,
 }: CheckoutTotalProps) {
   const { t } = useTranslation()
   return (
@@ -78,7 +80,12 @@ export default function CheckoutTotal({
             {t('cart.terms')}
           </Link>
         </p>
-        <Button type="submit" className="w-full bg-destructive hover:bg-destructive/80 mt-2" loading={isLoading}>
+        <Button
+          form={formId}
+          type="submit"
+          className="w-full bg-destructive hover:bg-destructive/80 mt-2"
+          loading={isLoading}
+        >
           {t('cart.checkout')}
         </Button>
       </div>

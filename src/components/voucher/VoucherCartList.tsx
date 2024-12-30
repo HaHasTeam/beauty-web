@@ -26,6 +26,7 @@ interface VoucherCartListProps {
   selectedCheckoutItems: ICheckoutItem[]
   handleVoucherChange: (voucher: TVoucher | null) => void
   bestVoucherForBrand: IBrandBestVoucher
+  chosenBrandVoucher: TVoucher | null
 }
 const VoucherCartList = ({
   triggerText,
@@ -37,12 +38,13 @@ const VoucherCartList = ({
   checkoutItems,
   bestVoucherForBrand,
   selectedCheckoutItems,
+  chosenBrandVoucher,
 }: VoucherCartListProps) => {
   const { t } = useTranslation()
   const handleServerError = useHandleServerError()
   // const [brandVouchers, setBrandVouchers] = useState<TVoucher[] | null>([])
   const [open, setOpen] = useState<boolean>(false)
-  const [selectedVoucher, setSelectedVoucher] = useState<string>('')
+  const [selectedVoucher, setSelectedVoucher] = useState<string>(chosenBrandVoucher?.id ?? '')
   const [unclaimedVouchers, setUnclaimedVouchers] = useState<TVoucher[]>([])
   const [availableVouchers, setAvailableVouchers] = useState<TVoucher[]>([])
   const [unAvailableVouchers, setUnAvailableVouchers] = useState<TVoucher[]>([])

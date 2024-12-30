@@ -241,7 +241,7 @@ const ProductCardLandscape = ({
           <div className="order-1 flex gap-1 items-center lg:w-[50%] md:w-[35%] w-full">
             <div className="flex flex-col gap-1">
               <Link to={configs.routes.products + '/' + productId}>
-                <h3 className="font-semibold lg:text-sm text-xs line-clamp-2">{productName}</h3>
+                <span className="lg:text-sm text-xs line-clamp-2">{productName}</span>
               </Link>
               <div>{eventType && eventType !== '' && <ProductTag tag={eventType} size="small" />}</div>
               {HIDDEN ? (
@@ -280,7 +280,7 @@ const ProductCardLandscape = ({
           (discountType === DiscountTypeEnum.AMOUNT || discountType === DiscountTypeEnum.PERCENTAGE) ? (
             <div className="order-2 md:order-3 w-full md:w-[25%] lg:w-[20%] flex-col">
               <div className="flex gap-1 items-center">
-                <span className="text-red-500 lg:text-lg md:text-sm sm:text-xs text-xs font-medium">
+                <span className="text-red-500 lg:text-base md:text-sm sm:text-xs text-xs">
                   {t('productCard.currentPrice', { price: discountPrice })}
                 </span>
                 <span className="text-gray-400 lg:text-sm text-xs line-through">
@@ -295,7 +295,7 @@ const ProductCardLandscape = ({
             </div>
           ) : (
             <div className="order-2 md:order-3 w-full md:w-[25%] lg:w-[20%] flex gap-1 items-center">
-              <span className="lg:text-lg md:text-sm sm:text-xs text-xs font-medium">
+              <span className="lg:text-base md:text-sm sm:text-xs text-xs">
                 {t('productCard.price', { price: price })}
               </span>
             </div>
@@ -325,7 +325,7 @@ const ProductCardLandscape = ({
           )}
         </div>
         <span
-          className={`text-red-500 lg:text-lg md:text-sm sm:text-xs text-xs font-medium w-[16%] md:w-[8%] sm:w-[12%] ${PREVENT_ACTION ? 'opacity-40' : ''}`}
+          className={`text-red-500 lg:text-base md:text-sm sm:text-xs text-xs w-[16%] md:w-[8%] sm:w-[12%] ${PREVENT_ACTION ? 'opacity-40' : ''}`}
         >
           {t('productCard.currentPrice', { price: totalPrice })}
         </span>

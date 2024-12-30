@@ -1,9 +1,12 @@
 import { MessageCircle, Store, Tag } from 'lucide-react'
 import { useMemo } from 'react'
+import { UseFormReturn } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
+import { z } from 'zod'
 
 import configs from '@/config'
+import CreateOrderSchema from '@/schemas/order.schema'
 import { IBrand } from '@/types/brand'
 import { ICartItem } from '@/types/cart'
 import { DiscountTypeEnum, OrderEnum } from '@/types/enum'
@@ -12,6 +15,7 @@ import { getTotalBrandProductsPrice } from '@/utils/price'
 
 import ProductCheckoutLandscape from '../product/ProductCheckoutLandscape'
 import { Button } from '../ui/button'
+import { FormControl, FormField, FormItem, FormMessage } from '../ui/form'
 import { Input } from '../ui/input'
 import { Label } from '../ui/label'
 import VoucherCartList from '../voucher/VoucherCartList'
@@ -23,6 +27,9 @@ interface CheckoutItemProps {
   chosenBrandVoucher: TVoucher | null
   bestVoucherForBrand: IBrandBestVoucher
   brand?: IBrand
+  totalBrandDiscount: number
+  index: number
+  form: UseFormReturn<z.infer<typeof CreateOrderSchema>>
 }
 const CheckoutItem = ({
   brandName,
@@ -31,6 +38,9 @@ const CheckoutItem = ({
   bestVoucherForBrand,
   chosenBrandVoucher,
   brand,
+  totalBrandDiscount,
+  index,
+  form,
 }: CheckoutItemProps) => {
   const { t } = useTranslation()
 
@@ -110,8 +120,30 @@ const CheckoutItem = ({
       {/* Message and brand voucher */}
       <div className="w-full flex md:justify-between justify-start md:flex-row flex-col gap-3 border-b border-gray-200 py-3">
         <div className="order-2 md:order-1 flex items-center gap-3 text-sm w-full">
-          <Label>{t('input.message')}</Label>
-          <Input className="border border-secondary w-full" placeholder={t('input.message')} />
+          <FormField
+            control={form.control}
+            name={`orders.${index}.message`}
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <div className="w-full flex gap-2">
+                  <div className="w-1/5 flex items-center">
+                    <Label>{t('input.message')}</Label>
+                  </div>
+                  <div className="w-full space-y-1">
+                    <FormControl>
+                      <Input
+                        {...field}
+                        value={field.value ?? ''}
+                        className="border border-secondary w-full"
+                        placeholder={t('input.message')}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </div>
+                </div>
+              </FormItem>
+            )}
+          />
         </div>
         {/* Voucher */}
         <div className="order-1 md:order-2 flex items-center gap-3 text-sm w-full justify-end">
@@ -120,7 +152,7 @@ const CheckoutItem = ({
             {chosenBrandVoucher
               ? chosenBrandVoucher?.discountType === DiscountTypeEnum.AMOUNT && chosenBrandVoucher?.discountValue
                 ? t('voucher.discountAmount', { amount: chosenBrandVoucher?.discountValue })
-                : t('voucher.discountPercentage', { percentage: chosenBrandVoucher?.discountValue * 100 })
+                : t('voucher.discountAmount', { amount: totalBrandDiscount })
               : bestVoucherForBrand?.bestVoucher
                 ? bestVoucherForBrand?.bestVoucher?.discountType === DiscountTypeEnum.AMOUNT &&
                   bestVoucherForBrand?.bestVoucher?.discountValue
@@ -140,6 +172,7 @@ const CheckoutItem = ({
             selectedCheckoutItems={checkoutItems}
             handleVoucherChange={handleVoucherChange}
             bestVoucherForBrand={bestVoucherForBrand}
+            chosenBrandVoucher={chosenBrandVoucher}
           />
         </div>
       </div>
@@ -148,7 +181,7 @@ const CheckoutItem = ({
           {t('cart.total')} ({cartBrandItem?.length} {t('cart.products')}):
         </span>
         <span className="text-red-500 lg:text-lg md:text-sm sm:text-xs text-xs font-medium text-end">
-          {t('productCard.currentPrice', { price: totalBrandPrice })}
+          {t('productCard.currentPrice', { price: totalBrandPrice - totalBrandDiscount })}
         </span>
       </div>
     </div>

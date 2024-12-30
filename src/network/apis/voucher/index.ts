@@ -87,15 +87,15 @@ export const getBestPlatformVouchersApi = toMutationFetcher<ICategoryVoucher, TS
     })
   },
 )
-export const getCheckoutListPlatformVouchersApi = toMutationFetcher<ICategoryVoucher, TServerResponse<TVoucher[]>>(
-  'getCheckoutListPlatformVouchersApi',
-  async (data) => {
-    return privateRequest(`/vouchers/categorize-platform-vouchers-when-checkout`, {
-      method: 'POST',
-      data,
-    })
-  },
-)
+export const getCheckoutListPlatformVouchersApi = toMutationFetcher<
+  ICategoryVoucher,
+  TServerResponse<ICategoryVoucherResponse>
+>('getCheckoutListPlatformVouchersApi', async (data) => {
+  return privateRequest(`/vouchers/categorize-platform-vouchers-when-checkout`, {
+    method: 'POST',
+    data,
+  })
+})
 export const collectVoucherApi = toMutationFetcher<TVoucher, TServerResponse<TVoucher>>(
   'collectVoucher',
   async (params) => {

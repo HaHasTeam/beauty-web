@@ -10,6 +10,7 @@ import configs from '@/config'
 import useHandleServerError from '@/hooks/useHandleServerError'
 import { useToast } from '@/hooks/useToast'
 import { getMyCartApi, removeAllCartItemApi, removeMultipleCartItemApi } from '@/network/apis/cart'
+import { ICartByBrand } from '@/types/cart'
 import { DiscountTypeEnum, ProjectInformationEnum } from '@/types/enum'
 import { TVoucher } from '@/types/voucher'
 
@@ -33,6 +34,7 @@ interface CartFooterProps {
   platformChosenVoucher: TVoucher | null
   setPlatformChosenVoucher: Dispatch<SetStateAction<TVoucher | null>>
   platformVoucherDiscount: number
+  cartByBrand: ICartByBrand
 }
 export default function CartFooter({
   cartItemCountAll,
@@ -49,6 +51,7 @@ export default function CartFooter({
   setPlatformChosenVoucher,
   totalFinalPrice,
   platformVoucherDiscount,
+  cartByBrand,
 }: CartFooterProps) {
   const { t } = useTranslation()
   const handleServerError = useHandleServerError()
@@ -155,6 +158,7 @@ export default function CartFooter({
               onConfirmVoucher={setPlatformChosenVoucher}
               selectedCartItems={selectedCartItems}
               chosenPlatformVoucher={platformChosenVoucher}
+              cartByBrand={cartByBrand}
             />
           </div>
           <div className="flex flex-col md:flex-row items-center justify-between space-y-2">
