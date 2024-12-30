@@ -183,8 +183,8 @@ const Checkout = () => {
 
   return (
     <>
-      {isGettingProfile || (isGettingAddress && <LoadingContentLayer />)}
-      {selectedCartItem && Object.keys(selectedCartItem)?.length > 0 ? (
+      {(isGettingProfile || isGettingAddress) && <LoadingContentLayer />}
+      {selectedCartItem && Object.keys(selectedCartItem)?.length > 0 && (
         <div className="relative w-full mx-auto py-5 ">
           <div className="w-full xl:px-28 lg:px-12 sm:px-2 px-1 space-y-3">
             <Form {...form}>
@@ -280,7 +280,8 @@ const Checkout = () => {
             </Form>
           </div>
         </div>
-      ) : (
+      )}
+      {(!selectedCartItem || Object.keys(selectedCartItem)?.length === 0) && (
         <div className="my-10 w-full h-full flex flex-col justify-center">
           <Empty
             title={t('empty.checkout.title')}

@@ -493,5 +493,12 @@
       "all": "tất cả",
       "All": "Tất cả"
     }
+  },
+  "warning": {
+    "cart": {
+      "title": "Chưa chọn sản phẩm",
+      "description": "Bạn chưa chọn sản phẩm nào trong giỏ hàng để thanh toán. Vui lòng chọn ít nhất một sản phẩm để tiếp tục.",
+      "confirm": "Đồng ý"
+    }
   }
 }

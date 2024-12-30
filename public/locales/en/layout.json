@@ -498,5 +498,12 @@
       "all": "all",
       "All": "All"
     }
+  },
+  "warning": {
+    "cart": {
+      "title": "No Items Selected",
+      "description": "You have not selected any items in your cart for checkout. Please select at least one item to proceed.",
+      "confirm": "Okay"
+    }
   }
 }

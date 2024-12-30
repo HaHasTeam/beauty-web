@@ -162,7 +162,7 @@ const Cart = () => {
   return (
     <>
       {isFetching && <LoadingContentLayer />}
-      {cartByBrand && Object.keys(cartByBrand)?.length > 0 ? (
+      {!isFetching && cartByBrand && Object.keys(cartByBrand)?.length > 0 && (
         <div className="relative w-full mx-auto py-5">
           <div className="w-full xl:px-28 lg:px-12 sm:px-2 px-1 space-y-3 ">
             <h2 className="uppercase font-bold text-xl">{t('cart.title')}</h2>
@@ -209,7 +209,8 @@ const Cart = () => {
             />
           </div>
         </div>
-      ) : (
+      )}
+      {!isFetching && (!cartByBrand || Object.keys(cartByBrand)?.length === 0) && (
         <div className="my-10 w-full h-full flex flex-col justify-center">
           <Empty
             title={t('empty.cart.title')}

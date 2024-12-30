@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { ChevronDown, Pen, Ticket, Trash2 } from 'lucide-react'
 import { Dispatch, SetStateAction, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -16,6 +16,7 @@ import { TVoucher } from '@/types/voucher'
 import DeleteConfirmationDialog from '../dialog/DeleteConfirmationDialog'
 import TotalPriceDetail from '../price/TotalPriceDetail'
 import VoucherDialog from '../voucher/VoucherDialog'
+import WarningDialog from '../dialog/WarningDialog'
 
 interface CartFooterProps {
   cartItemCountAll: number
@@ -53,8 +54,10 @@ export default function CartFooter({
   const handleServerError = useHandleServerError()
   const { successToast } = useToast()
   const queryClient = useQueryClient()
+  const navigate = useNavigate()
   const [openConfirmDeleteAllCartDialog, setOpenConfirmDeleteAllCartDialog] = useState(false)
   const [openConfirmDeleteMultipleCartDialog, setOpenConfirmDeleteMultipleCartDialog] = useState(false)
+  const [openWarningDialog, setOpenWarningDialog] = useState(false)
 
   // handle remove cart items api starts
   const { mutateAsync: removeAllCartItemFn } = useMutation({
@@ -110,6 +113,10 @@ export default function CartFooter({
   }
   // handle remove cart items function ends
 
+  // handle checkout button
+  const handleCheckout = () => {
+    selectedCartItems && selectedCartItems?.length > 0 ? navigate(configs.routes.checkout) : setOpenWarningDialog(true)
+  }
   return (
     <>
       <div className="w-full sticky bottom-0 left-0 right-0 border-t bg-secondary rounded-tl-sm rounded-tr-sm">
@@ -204,12 +211,12 @@ export default function CartFooter({
                     </div>
                   ) : null}
                 </div>
-                <Link
-                  to={configs.routes.checkout}
+                <Button
+                  onClick={() => handleCheckout()}
                   className="text-destructive-foreground px-8 py-2 rounded-lg bg-destructive hover:bg-destructive/80"
                 >
                   {t('cart.buy')}
-                </Link>
+                </Button>
               </div>
             </div>
           </div>
@@ -239,6 +246,17 @@ export default function CartFooter({
         item="cart"
         title={t('delete.cart.title', { amount: selectedCartItems?.length })}
         description={t('delete.cart.description', { amount: selectedCartItems?.length })}
+      />
+      {/* checkout warning dialog */}
+      <WarningDialog
+        open={openWarningDialog}
+        onOpenChange={setOpenWarningDialog}
+        onConfirm={() => {
+          navigate(configs.routes.checkout)
+        }}
+        item="cart"
+        title={t('warning.cart.title')}
+        description={t('warning.cart.description')}
       />
     </>
   )

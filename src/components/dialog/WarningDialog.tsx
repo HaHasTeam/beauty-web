@@ -1,10 +1,10 @@
-import { AlertTriangle } from 'lucide-react'
+import { Info } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 
-interface DeleteConfirmationDialogProps {
+interface WarningDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
   onConfirm: () => void
@@ -13,32 +13,22 @@ interface DeleteConfirmationDialogProps {
   description?: string
 }
 
-export default function DeleteConfirmationDialog({
-  open,
-  onOpenChange,
-  onConfirm,
-  item,
-  title,
-  description,
-}: DeleteConfirmationDialogProps) {
+export default function WarningDialog({ open, onOpenChange, onConfirm, item, title, description }: WarningDialogProps) {
   const { t } = useTranslation()
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader className="flex flex-row items-start gap-4">
-          <AlertTriangle className="mt-2 h-6 w-6 text-orange-500" />
+          <Info className="mt-2 h-6 w-6 text-orange-500" />
           <div className="flex-1 gap-2 items-start">
-            <DialogTitle className="text-lg">{title ?? t(`delete.${item}.title`)}</DialogTitle>
+            <DialogTitle className="text-lg">{title ?? t(`warning.${item}.title`)}</DialogTitle>
             <DialogDescription className="text-base">
-              {description ?? t(`delete.${item}.description`)}
+              {description ?? t(`warning.${item}.description`)}
             </DialogDescription>
           </div>
         </DialogHeader>
         <div className="flex justify-end gap-2 mt-4">
-          <Button variant="outline" onClick={() => onOpenChange(false)}>
-            {t(`delete.${item}.cancel`)}
-          </Button>
-          <Button onClick={() => onConfirm()}>{t(`delete.${item}.confirm`)}</Button>
+          <Button onClick={() => onConfirm()}>{t(`warning.${item}.confirm`)}</Button>
         </div>
       </DialogContent>
     </Dialog>
