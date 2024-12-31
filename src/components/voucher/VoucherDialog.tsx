@@ -1,4 +1,5 @@
 import { useMutation } from '@tanstack/react-query'
+import { AlertCircle } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -17,8 +18,8 @@ import { RadioGroup } from '@/components/ui/radio-group'
 import useHandleServerError from '@/hooks/useHandleServerError'
 import { getCheckoutListPlatformVouchersApi } from '@/network/apis/voucher'
 import { ICartByBrand } from '@/types/cart'
-import { ProjectInformationEnum } from '@/types/enum'
-import { ICheckoutItem, TVoucher } from '@/types/voucher'
+import { ProjectInformationEnum, VoucherUsedStatusEnum } from '@/types/enum'
+import { ICheckoutItem, IPlatformBestVoucher, TVoucher } from '@/types/voucher'
 
 import Empty from '../empty/Empty'
 import VoucherHelpPopOver from '../help/VoucherHelpDialog'
@@ -32,6 +33,7 @@ interface VoucherDialogProps {
   selectedCartItems?: string[]
   chosenPlatformVoucher: TVoucher | null
   cartByBrand: ICartByBrand
+  bestPlatFormVoucher: IPlatformBestVoucher | null
 }
 export default function VoucherDialog({
   triggerComponent,
@@ -39,6 +41,7 @@ export default function VoucherDialog({
   selectedCartItems,
   chosenPlatformVoucher,
   cartByBrand,
+  bestPlatFormVoucher,
 }: VoucherDialogProps) {
   const { t } = useTranslation()
   const handleServerError = useHandleServerError()
@@ -47,6 +50,7 @@ export default function VoucherDialog({
   const [unclaimedVouchers, setUnclaimedVouchers] = useState<TVoucher[]>([])
   const [availableVouchers, setAvailableVouchers] = useState<TVoucher[]>([])
   const [unAvailableVouchers, setUnAvailableVouchers] = useState<TVoucher[]>([])
+
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const checkoutItems: ICheckoutItem[] = Object.values(cartByBrand)
@@ -121,11 +125,20 @@ export default function VoucherDialog({
         </DialogHeader>
 
         <div className="space-y-4">
-          {/* Voucher Input */}
-          <div className="flex gap-2 bg-muted/50 p-2 md:p-4 rounded-lg items-center">
-            <label className="text-sm font-medium mb-1.5 block"> {t('voucher.title')}</label>
-            <Input placeholder={t('voucher.title')} className=" border border-gray-300 focus:border-primary/50" />
-            <Button className="self-end uppercase"> {t('voucher.apply')}</Button>
+          <div>
+            {/* Warning Message */}
+            {selectedCartItems?.length === 0 && (
+              <div className="mb-1 flex items-center gap-2 text-sm text-red-500 bg-red-100 p-2 rounded">
+                <AlertCircle className="w-4 h-4" />
+                {t('voucher.chooseProductAppAlert')}
+              </div>
+            )}
+            {/* Voucher Input */}
+            <div className="flex gap-2 bg-muted/50 p-2 md:p-4 rounded-lg items-center">
+              <label className="text-sm font-medium mb-1.5 block"> {t('voucher.title')}</label>
+              <Input placeholder={t('voucher.title')} className=" border border-gray-300 focus:border-primary/50" />
+              <Button className="self-end uppercase"> {t('voucher.apply')}</Button>
+            </div>
           </div>
 
           {/* Voucher List */}
@@ -142,13 +155,37 @@ export default function VoucherDialog({
                 <RadioGroup value={selectedVoucher} onValueChange={setSelectedVoucher}>
                   <div className="space-y-4">
                     {availableVouchers?.map((voucher) => (
-                      <VoucherPlatformItem voucher={voucher} selectedCartItems={selectedCartItems} key={voucher?.id} />
+                      <VoucherPlatformItem
+                        voucher={voucher}
+                        selectedCartItems={selectedCartItems}
+                        key={voucher?.id}
+                        bestVoucherForPlatform={bestPlatFormVoucher}
+                        selectedVoucher={chosenPlatformVoucher?.id ?? ''}
+                        onCollectSuccess={handleCallPlatformVouchers}
+                        status={VoucherUsedStatusEnum.AVAILABLE}
+                      />
                     ))}
                     {unAvailableVouchers?.map((voucher) => (
-                      <VoucherPlatformItem voucher={voucher} selectedCartItems={selectedCartItems} key={voucher?.id} />
+                      <VoucherPlatformItem
+                        voucher={voucher}
+                        selectedCartItems={selectedCartItems}
+                        key={voucher?.id}
+                        bestVoucherForPlatform={bestPlatFormVoucher}
+                        selectedVoucher={chosenPlatformVoucher?.id ?? ''}
+                        onCollectSuccess={handleCallPlatformVouchers}
+                        status={VoucherUsedStatusEnum.UNAVAILABLE}
+                      />
                     ))}
                     {unclaimedVouchers?.map((voucher) => (
-                      <VoucherPlatformItem voucher={voucher} selectedCartItems={selectedCartItems} key={voucher?.id} />
+                      <VoucherPlatformItem
+                        voucher={voucher}
+                        selectedCartItems={selectedCartItems}
+                        key={voucher?.id}
+                        bestVoucherForPlatform={bestPlatFormVoucher}
+                        selectedVoucher={chosenPlatformVoucher?.id ?? ''}
+                        onCollectSuccess={handleCallPlatformVouchers}
+                        status={VoucherUsedStatusEnum.UNCLAIMED}
+                      />
                     ))}
                   </div>
                 </RadioGroup>

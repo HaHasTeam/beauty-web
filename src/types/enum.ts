@@ -122,3 +122,10 @@ export enum VoucherUsedStatusEnum {
   UNAVAILABLE = 'UNAVAILABLE',
   UNCLAIMED = 'UNCLAIMED',
 }
+
+export enum VoucherUnavailableReasonEnum {
+  MINIMUM_ORDER_NOT_MET = 'MINIMUM_ORDER_NOT_MET',
+  OUT_OF_STOCK = 'OUT_OF_STOCK',
+  NOT_START_YET = 'NOT_START_YET',
+  NOT_APPLICABLE = 'NOT_APPLICABLE',
+}

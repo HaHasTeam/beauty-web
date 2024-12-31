@@ -23,14 +23,14 @@ import { useToast } from '@/hooks/useToast'
 import { getMyAddressesApi } from '@/network/apis/address'
 import { createOderApi } from '@/network/apis/order'
 import { getUserProfileApi } from '@/network/apis/user'
-import { getBestShopVouchersApi } from '@/network/apis/voucher'
+import { getBestPlatformVouchersApi, getBestShopVouchersApi } from '@/network/apis/voucher'
 import CreateOrderSchema from '@/schemas/order.schema'
 import useCartStore from '@/store/cart'
 import { IAddress } from '@/types/address'
 import { DiscountTypeEnum, PaymentMethod, ProjectInformationEnum } from '@/types/enum'
 import { ICreateOrder } from '@/types/order'
-import { IBrandBestVoucher, TVoucher } from '@/types/voucher'
-import { createCheckoutItems } from '@/utils/cart'
+import { IBrandBestVoucher, ICheckoutItem, IPlatformBestVoucher, TVoucher } from '@/types/voucher'
+import { createCheckoutItem, createCheckoutItems } from '@/utils/cart'
 import { calculateCartTotals, calculatePlatformVoucherDiscount, calculateTotalVoucherDiscount } from '@/utils/price'
 
 const Checkout = () => {
@@ -42,12 +42,14 @@ const Checkout = () => {
     setChosenPlatformVoucher,
     setChosenBrandVouchers,
     chosenBrandVouchers,
+    resetCart,
   } = useCartStore()
   const { successToast } = useToast()
   const handleServerError = useHandleServerError()
   const [isLoading, setIsLoading] = useState(false)
   const [myAddresses, setMyAddresses] = useState<IAddress[]>([])
   const [bestBrandVouchers, setBestBrandVouchers] = useState<IBrandBestVoucher[]>([])
+  const [bestPlatformVoucher, setBestPlatformVoucher] = useState<IPlatformBestVoucher | null>(null)
 
   const selectedCartItems = useMemo(() => {
     return selectedCartItem
@@ -117,6 +119,14 @@ const Checkout = () => {
       setBestBrandVouchers(data?.data)
     },
   })
+  const { mutateAsync: callBestPlatformVouchersFn } = useMutation({
+    mutationKey: [getBestPlatformVouchersApi.mutationKey],
+    mutationFn: getBestPlatformVouchersApi.fn,
+    onSuccess: (data) => {
+      console.log(data)
+      setBestPlatformVoucher(data?.data)
+    },
+  })
 
   const { mutateAsync: createOrderFn } = useMutation({
     mutationKey: [createOderApi.mutationKey],
@@ -125,6 +135,7 @@ const Checkout = () => {
       successToast({
         message: t('order.success'),
       })
+      resetCart()
       handleReset()
     },
   })
@@ -173,8 +184,27 @@ const Checkout = () => {
         handleServerError({ error })
       }
     }
+    async function handleShowBestPlatformVoucher() {
+      try {
+        let checkoutItems: ICheckoutItem[] = []
+        if (selectedCartItem) {
+          checkoutItems = Object.entries(selectedCartItem)
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            .map(([_brandName, cartItems]) => createCheckoutItem(cartItems, selectedCartItems))
+            .flat()
+        }
+        console.log(checkoutItems)
+
+        await callBestPlatformVouchersFn({
+          checkoutItems: checkoutItems,
+        })
+      } catch (error) {
+        handleServerError({ error })
+      }
+    }
 
     handleShowBestBrandVoucher()
+    handleShowBestPlatformVoucher()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCartItem, selectedCartItems])
 
@@ -258,6 +288,7 @@ const Checkout = () => {
                         selectedCartItems={selectedCartItems}
                         chosenPlatformVoucher={chosenPlatformVoucher}
                         cartByBrand={selectedCartItem}
+                        bestPlatFormVoucher={bestPlatformVoucher}
                       />
                     </div>
                     {/* Payment Section */}

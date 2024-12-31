@@ -386,8 +386,8 @@
     "codePlaceholder": "Enter your voucher code here",
     "input": "Enter your voucher code here",
     "condition": "Condition",
-    "chooseProductBrandAlert": "Please choose a product from the brand to apply this voucher.",
-    "chooseProductAppAlert": "Please choose a product to use this offer.",
+    "chooseProductBrandAlert": "Please choose at least one product from the brand to apply vouchers.",
+    "chooseProductAppAlert": "Please choose at least one product to use vouchers.",
     "description": "Enter or choose 1 voucher",
     "help": "Help",
     "chooseVoucher": "Choose voucher",
@@ -418,7 +418,13 @@
     "brand": "brand",
     "platform": "platform",
     "collectSuccess": "Collect voucher success!",
-    "bestChoice": "Best choice"
+    "bestChoice": "Best choice",
+    "reason": {
+      "notApplicable": "This voucher is not applicable to the selected items or does not meet the usage conditions.",
+      "soldOut": "This voucher is no longer valid because the applicable products are out of stock.",
+      "notStart": "This voucher is not yet valid. Please check the start date and try again later.",
+      "minOrder": "This voucher requires a minimum order of {{amount, currency}} to be used."
+    }
   },
   "dialog": {
     "cancel": "Cancel",
@@ -501,9 +507,13 @@
   },
   "warning": {
     "cart": {
-      "title": "No Items Selected",
+      "title": "No items selected",
       "description": "You have not selected any items in your cart for checkout. Please select at least one item to proceed.",
-      "confirm": "Okay"
+      "confirm": "Okay",
+      "insufficientStockTitle": "Insufficient stock",
+      "insufficientStockDescription": "Some items you selected in your cart have insufficient stock: {{products}}. Please update your cart to continue.",
+      "soldOutTitle": "Items sold out",
+      "soldOutDescription": "Some items you selected in your cart are sold out: {{products}}. Please deselect these items to proceed."
     }
   }
 }

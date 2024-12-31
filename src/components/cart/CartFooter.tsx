@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { ChevronDown, Pen, Ticket, Trash2 } from 'lucide-react'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { Dispatch, SetStateAction, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
@@ -12,7 +12,7 @@ import { useToast } from '@/hooks/useToast'
 import { getMyCartApi, removeAllCartItemApi, removeMultipleCartItemApi } from '@/network/apis/cart'
 import { ICartByBrand } from '@/types/cart'
 import { DiscountTypeEnum, ProjectInformationEnum } from '@/types/enum'
-import { TVoucher } from '@/types/voucher'
+import { IPlatformBestVoucher, TVoucher } from '@/types/voucher'
 
 import DeleteConfirmationDialog from '../dialog/DeleteConfirmationDialog'
 import WarningDialog from '../dialog/WarningDialog'
@@ -35,6 +35,7 @@ interface CartFooterProps {
   setPlatformChosenVoucher: Dispatch<SetStateAction<TVoucher | null>>
   platformVoucherDiscount: number
   cartByBrand: ICartByBrand
+  bestPlatformVoucher: IPlatformBestVoucher | null
 }
 export default function CartFooter({
   cartItemCountAll,
@@ -52,6 +53,7 @@ export default function CartFooter({
   totalFinalPrice,
   platformVoucherDiscount,
   cartByBrand,
+  bestPlatformVoucher,
 }: CartFooterProps) {
   const { t } = useTranslation()
   const handleServerError = useHandleServerError()
@@ -61,7 +63,29 @@ export default function CartFooter({
   const [openConfirmDeleteAllCartDialog, setOpenConfirmDeleteAllCartDialog] = useState(false)
   const [openConfirmDeleteMultipleCartDialog, setOpenConfirmDeleteMultipleCartDialog] = useState(false)
   const [openWarningDialog, setOpenWarningDialog] = useState(false)
-
+  const insufficientStockItems = useMemo(() => {
+    return Object.values(cartByBrand)
+      .flat()
+      .filter(
+        (cartItem) =>
+          selectedCartItems.includes(cartItem.id) &&
+          cartItem.quantity &&
+          cartItem.productClassification?.quantity !== undefined &&
+          cartItem.quantity > cartItem.productClassification.quantity,
+      )
+  }, [cartByBrand, selectedCartItems])
+  console.log(insufficientStockItems)
+  const soldOutItems = useMemo(() => {
+    return Object.values(cartByBrand)
+      .flat()
+      .filter(
+        (cartItem) =>
+          selectedCartItems.includes(cartItem.id) &&
+          cartItem.quantity &&
+          cartItem.productClassification?.quantity !== undefined &&
+          cartItem.productClassification.quantity === 0,
+      )
+  }, [cartByBrand, selectedCartItems])
   // handle remove cart items api starts
   const { mutateAsync: removeAllCartItemFn } = useMutation({
     mutationKey: [removeAllCartItemApi.mutationKey],
@@ -119,7 +143,11 @@ export default function CartFooter({
   // handle checkout button
   const handleCheckout = () => {
     if (selectedCartItems && selectedCartItems?.length > 0) {
-      navigate(configs.routes.checkout)
+      if (insufficientStockItems?.length > 0 || soldOutItems?.length > 0) {
+        setOpenWarningDialog(true)
+      } else {
+        navigate(configs.routes.checkout)
+      }
     } else setOpenWarningDialog(true)
   }
   return (
@@ -150,11 +178,23 @@ export default function CartFooter({
                         <Pen />
                       </div>
                     )
+                  ) : bestPlatformVoucher?.bestVoucher ? (
+                    bestPlatformVoucher?.bestVoucher?.discountType === DiscountTypeEnum.AMOUNT &&
+                    bestPlatformVoucher?.bestVoucher?.discountValue ? (
+                      t('voucher.bestDiscountAmountDisplay', {
+                        amount: bestPlatformVoucher?.bestVoucher?.discountValue,
+                      })
+                    ) : (
+                      t('voucher.bestDiscountPercentageDisplay', {
+                        percentage: bestPlatformVoucher?.bestVoucher?.discountValue * 100,
+                      })
+                    )
                   ) : (
                     t('cart.selectVoucher')
                   )}
                 </Button>
               }
+              bestPlatFormVoucher={bestPlatformVoucher}
               onConfirmVoucher={setPlatformChosenVoucher}
               selectedCartItems={selectedCartItems}
               chosenPlatformVoucher={platformChosenVoucher}
@@ -173,7 +213,9 @@ export default function CartFooter({
               <div className="flex items-center gap-3">
                 <Button variant="destructive" onClick={() => setOpenConfirmDeleteAllCartDialog(true)}>
                   <Trash2 className="w-4 h-4 mr-1" />
-                  <span>{t('cart.removeAll')}</span>
+                  <span>
+                    {t('cart.removeAll')} ({cartItemCountAll})
+                  </span>
                 </Button>
                 {selectedCartItems && selectedCartItems?.length > 0 && (
                   <Trash2
@@ -261,8 +303,38 @@ export default function CartFooter({
           setOpenWarningDialog(false)
         }}
         item="cart"
-        title={t('warning.cart.title')}
-        description={t('warning.cart.description')}
+        title={
+          insufficientStockItems.length > 0
+            ? t('warning.cart.insufficientStockTitle')
+            : soldOutItems?.length > 0
+              ? t('warning.cart.insufficientStockTitle')
+              : t('warning.cart.title')
+        }
+        description={
+          insufficientStockItems.length > 0
+            ? t('warning.cart.insufficientStockDescription', {
+                products: insufficientStockItems
+                  .map(
+                    (item) =>
+                      item.productClassification?.preOrderProduct?.product?.name ??
+                      item.productClassification?.productDiscount?.product?.name ??
+                      item.productClassification?.product?.name,
+                  )
+                  .join(', '),
+              })
+            : soldOutItems?.length > 0
+              ? t('warning.cart.insufficientStockDescription', {
+                  products: insufficientStockItems
+                    .map(
+                      (item) =>
+                        item.productClassification?.preOrderProduct?.product?.name ??
+                        item.productClassification?.productDiscount?.product?.name ??
+                        item.productClassification?.product?.name,
+                    )
+                    .join(', '),
+                })
+              : t('warning.cart.description')
+        }
       />
     </>
   )

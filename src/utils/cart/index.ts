@@ -1,4 +1,21 @@
-import { ICartByBrand } from '@/types/cart'
+import { ICartByBrand, ICartItem } from '@/types/cart'
+
+export const createCheckoutItem = (cartItems: ICartItem[], selectedCartItems: string[]) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  if (selectedCartItems?.length > 0) {
+    const filteredItems = cartItems?.filter((cart) => selectedCartItems?.includes(cart?.id))
+    if (filteredItems?.length > 0) {
+      return filteredItems.map((item) => ({
+        classificationId: item?.productClassification?.id || '',
+        quantity: item?.quantity || 0,
+      }))
+    }
+  }
+  return cartItems?.map((item) => ({
+    classificationId: item?.productClassification?.id || '',
+    quantity: item?.quantity || 0,
+  }))
+}
 
 export const createCheckoutItems = (cartData: ICartByBrand, selectedCartItems: string[]) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -8,22 +25,6 @@ export const createCheckoutItems = (cartData: ICartByBrand, selectedCartItems: s
       cartItems[0]?.productClassification?.preOrderProduct?.product?.brand?.id ??
       cartItems[0]?.productClassification?.product?.brand?.id ??
       '',
-    brandItems:
-      selectedCartItems?.length > 0
-        ? cartItems?.filter((cart) => selectedCartItems?.includes(cart?.id))?.length > 0
-          ? cartItems
-              ?.filter((cart) => selectedCartItems?.includes(cart?.id))
-              ?.map((item) => ({
-                classificationId: item?.productClassification?.id || '',
-                quantity: item?.quantity || 0,
-              }))
-          : cartItems?.map((item) => ({
-              classificationId: item?.productClassification?.id || '',
-              quantity: item?.quantity || 0,
-            }))
-        : cartItems?.map((item) => ({
-            classificationId: item?.productClassification?.id || '',
-            quantity: item?.quantity || 0,
-          })),
+    brandItems: createCheckoutItem(cartItems, selectedCartItems),
   }))
 }

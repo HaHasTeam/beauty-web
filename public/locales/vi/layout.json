@@ -381,7 +381,7 @@
     "codePlaceholder": "Nhập mã voucher của bạn vào đây",
     "input": "Nhập mã voucher của bạn vào đây",
     "condition": "Điều kiện",
-    "chooseProductBrandAlert": "Vui lòng chọn sản phẩm từ thương hiệu để áp dụng voucher này",
+    "chooseProductBrandAlert": "Vui lòng chọn sản phẩm từ thương hiệu để áp dụng voucher.",
     "chooseProductAppAlert": "Vui lòng chọn sản phẩm để sử dụng ưu đãi.",
     "description": "Nhập hoặc chọn 1 voucher",
     "help": "Trợ giúp",
@@ -413,7 +413,13 @@
     "collectSuccess": "Thu thập voucher thành công!",
     "bestChoice": "Lựa chọn tốt nhất",
     "bestDiscountPercentageDisplay": "Voucher giảm đến {{percentage}}%",
-    "bestDiscountAmountDisplay": "Voucher giảm đến {{amount, currency}}"
+    "bestDiscountAmountDisplay": "Voucher giảm đến {{amount, currency}}",
+    "reason": {
+      "notApplicable": "Voucher này không áp dụng cho các sản phẩm đã chọn hoặc không đáp ứng điều kiện sử dụng.",
+      "soldOut": "Voucher này không còn hiệu lực do các sản phẩm áp dụng đã hết hàng.",
+      "notStart": "Voucher này chưa có hiệu lực. Vui lòng kiểm tra ngày bắt đầu và thử lại sau.",
+      "minOrder": "Voucher này yêu cầu đơn hàng tối thiểu {{amount, currency}} để sử dụng."
+    }
   },
   "dialog": {
     "cancel": "Hủy",
@@ -498,7 +504,11 @@
     "cart": {
       "title": "Chưa chọn sản phẩm",
       "description": "Bạn chưa chọn sản phẩm nào trong giỏ hàng để thanh toán. Vui lòng chọn ít nhất một sản phẩm để tiếp tục.",
-      "confirm": "Đồng ý"
+      "confirm": "Đồng ý",
+      "insufficientStockTitle": "Hàng không đủ",
+      "insufficientStockDescription": "Một số sản phẩm bạn chọn không đủ hàng: {{products}}. Vui lòng cập nhật giỏ hàng để tiếp tục.",
+      "soldOutTitle": "Hết hàng",
+      "soldOutDescription": "Một số sản phẩm bạn chọn đã hết hàng: {{products}}. Vui lòng bỏ chọn các sản phẩm này để tiếp tục."
     }
   }
 }

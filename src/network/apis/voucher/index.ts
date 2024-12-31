@@ -1,5 +1,12 @@
 import { TServerResponse } from '@/types/request'
-import { IBestVoucher, IBrandBestVoucher, ICategoryVoucher, ICategoryVoucherResponse, TVoucher } from '@/types/voucher'
+import {
+  IBestVoucher,
+  IBrandBestVoucher,
+  ICategoryVoucher,
+  ICategoryVoucherResponse,
+  IPlatformBestVoucher,
+  TVoucher,
+} from '@/types/voucher'
 import { toMutationFetcher, toQueryFetcher } from '@/utils/query'
 import { privateRequest, publicRequest } from '@/utils/request'
 
@@ -78,7 +85,7 @@ export const getBestShopVouchersApi = toMutationFetcher<IBestVoucher, TServerRes
     })
   },
 )
-export const getBestPlatformVouchersApi = toMutationFetcher<ICategoryVoucher, TServerResponse<TVoucher[]>>(
+export const getBestPlatformVouchersApi = toMutationFetcher<ICategoryVoucher, TServerResponse<IPlatformBestVoucher>>(
   'getBestPlatformVouchersApi',
   async (data) => {
     return privateRequest(`/vouchers/get-best-platform-vouchers-for-products`, {

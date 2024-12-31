@@ -1,4 +1,5 @@
 import { useMutation } from '@tanstack/react-query'
+import { AlertCircle } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -42,7 +43,6 @@ const VoucherCartList = ({
 }: VoucherCartListProps) => {
   const { t } = useTranslation()
   const handleServerError = useHandleServerError()
-  // const [brandVouchers, setBrandVouchers] = useState<TVoucher[] | null>([])
   const [open, setOpen] = useState<boolean>(false)
   const [selectedVoucher, setSelectedVoucher] = useState<string>(chosenBrandVoucher?.id ?? '')
   const [unclaimedVouchers, setUnclaimedVouchers] = useState<TVoucher[]>([])
@@ -120,7 +120,12 @@ const VoucherCartList = ({
           <h2 className="text-xl font-medium mb-4">
             {brandName} {t('voucher.title')}
           </h2>
-
+          {!hasBrandProductSelected && (
+            <div className="mb-1 flex items-center gap-2 text-sm text-red-500 bg-red-100 p-2 rounded">
+              <AlertCircle className="w-4 h-4" />
+              {t('voucher.chooseProductBrandAlert')}
+            </div>
+          )}
           {/* Voucher Input */}
           <div className="md:flex-row flex-col flex gap-2 mb-6 bg-secondary/40 p-2 rounded-lg md:items-center items-start">
             <label
@@ -148,45 +153,47 @@ const VoucherCartList = ({
             <div className="space-y-2">
               <ScrollArea className="h-56">
                 <RadioGroup value={selectedVoucher} onValueChange={setSelectedVoucher}>
-                  {availableVouchers?.map((voucher) => (
-                    <VoucherCartItem
-                      key={voucher.id}
-                      voucher={voucher}
-                      brandLogo={brandLogo}
-                      brandName={brandName}
-                      hasBrandProductSelected={hasBrandProductSelected}
-                      selectedVoucher={selectedVoucher}
-                      status={VoucherUsedStatusEnum?.AVAILABLE}
-                      onCollectSuccess={handleCallBrandVouchers}
-                      bestVoucherForBrand={bestVoucherForBrand}
-                    />
-                  ))}
-                  {unAvailableVouchers?.map((voucher) => (
-                    <VoucherCartItem
-                      key={voucher.id}
-                      voucher={voucher}
-                      brandLogo={brandLogo}
-                      brandName={brandName}
-                      hasBrandProductSelected={hasBrandProductSelected}
-                      selectedVoucher={selectedVoucher}
-                      status={VoucherUsedStatusEnum?.UNAVAILABLE}
-                      onCollectSuccess={handleCallBrandVouchers}
-                      bestVoucherForBrand={bestVoucherForBrand}
-                    />
-                  ))}
-                  {unclaimedVouchers?.map((voucher) => (
-                    <VoucherCartItem
-                      key={voucher.id}
-                      voucher={voucher}
-                      brandLogo={brandLogo}
-                      brandName={brandName}
-                      hasBrandProductSelected={hasBrandProductSelected}
-                      selectedVoucher={selectedVoucher}
-                      status={VoucherUsedStatusEnum?.UNCLAIMED}
-                      onCollectSuccess={handleCallBrandVouchers}
-                      bestVoucherForBrand={bestVoucherForBrand}
-                    />
-                  ))}
+                  <div className="my-2 space-y-3">
+                    {availableVouchers?.map((voucher) => (
+                      <VoucherCartItem
+                        key={voucher.id}
+                        voucher={voucher}
+                        brandLogo={brandLogo}
+                        brandName={brandName}
+                        hasBrandProductSelected={hasBrandProductSelected}
+                        selectedVoucher={selectedVoucher}
+                        status={VoucherUsedStatusEnum?.AVAILABLE}
+                        onCollectSuccess={handleCallBrandVouchers}
+                        bestVoucherForBrand={bestVoucherForBrand}
+                      />
+                    ))}
+                    {unAvailableVouchers?.map((voucher) => (
+                      <VoucherCartItem
+                        key={voucher.id}
+                        voucher={voucher}
+                        brandLogo={brandLogo}
+                        brandName={brandName}
+                        hasBrandProductSelected={hasBrandProductSelected}
+                        selectedVoucher={selectedVoucher}
+                        status={VoucherUsedStatusEnum?.UNAVAILABLE}
+                        onCollectSuccess={handleCallBrandVouchers}
+                        bestVoucherForBrand={bestVoucherForBrand}
+                      />
+                    ))}
+                    {unclaimedVouchers?.map((voucher) => (
+                      <VoucherCartItem
+                        key={voucher.id}
+                        voucher={voucher}
+                        brandLogo={brandLogo}
+                        brandName={brandName}
+                        hasBrandProductSelected={hasBrandProductSelected}
+                        selectedVoucher={selectedVoucher}
+                        status={VoucherUsedStatusEnum?.UNCLAIMED}
+                        onCollectSuccess={handleCallBrandVouchers}
+                        bestVoucherForBrand={bestVoucherForBrand}
+                      />
+                    ))}
+                  </div>
                 </RadioGroup>
               </ScrollArea>
               <div className="flex justify-end gap-2 w-full shadow-inner pt-4">

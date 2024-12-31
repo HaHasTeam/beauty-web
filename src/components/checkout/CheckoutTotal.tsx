@@ -26,6 +26,7 @@ export default function CheckoutTotal({
   formId,
 }: CheckoutTotalProps) {
   const { t } = useTranslation()
+
   return (
     <div className="w-full bg-white rounded-md shadow-sm p-4">
       <div>

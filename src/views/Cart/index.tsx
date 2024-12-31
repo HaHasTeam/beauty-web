@@ -10,11 +10,11 @@ import LoadingContentLayer from '@/components/loading-icon/LoadingContentLayer'
 import configs from '@/config'
 import useHandleServerError from '@/hooks/useHandleServerError'
 import { getMyCartApi } from '@/network/apis/cart'
-import { getBestShopVouchersApi } from '@/network/apis/voucher'
+import { getBestPlatformVouchersApi, getBestShopVouchersApi } from '@/network/apis/voucher'
 import useCartStore from '@/store/cart'
 import { ICartByBrand } from '@/types/cart'
-import { IBrandBestVoucher, ICheckoutItem, TVoucher } from '@/types/voucher'
-import { createCheckoutItems } from '@/utils/cart'
+import { IBrandBestVoucher, ICheckoutItem, IPlatformBestVoucher, TVoucher } from '@/types/voucher'
+import { createCheckoutItem, createCheckoutItems } from '@/utils/cart'
 import { calculateCartTotals, calculatePlatformVoucherDiscount, calculateTotalVoucherDiscount } from '@/utils/price'
 
 const Cart = () => {
@@ -32,9 +32,10 @@ const Cart = () => {
   const [platformChosenVoucher, setPlatformChosenVoucher] = useState<TVoucher | null>(null)
   const handleServerError = useHandleServerError()
   const { setChosenBrandVouchers, setChosenPlatformVoucher, setSelectedCartItem, resetCart } = useCartStore()
+  const [bestPlatformVoucher, setBestPlatformVoucher] = useState<IPlatformBestVoucher | null>(null)
 
-  const voucherMap = bestBrandVouchers.reduce<{ [key: string]: IBrandBestVoucher }>((acc, voucher) => {
-    acc[voucher.brandId] = voucher
+  const voucherMap = bestBrandVouchers?.reduce<{ [key: string]: IBrandBestVoucher }>((acc, voucher) => {
+    acc[voucher?.brandId] = voucher
     return acc
   }, {})
 
@@ -63,6 +64,14 @@ const Cart = () => {
     onSuccess: (data) => {
       console.log(data)
       setBestBrandVouchers(data?.data)
+    },
+  })
+  const { mutateAsync: callBestPlatformVouchersFn } = useMutation({
+    mutationKey: [getBestPlatformVouchersApi.mutationKey],
+    mutationFn: getBestPlatformVouchersApi.fn,
+    onSuccess: (data) => {
+      console.log(data)
+      setBestPlatformVoucher(data?.data)
     },
   })
 
@@ -132,7 +141,27 @@ const Cart = () => {
           handleServerError({ error })
         }
       }
+      async function handleShowBestPlatformVoucher() {
+        try {
+          let checkoutItems: ICheckoutItem[] = []
+          if (useMyCartData?.data) {
+            checkoutItems = Object.entries(useMyCartData?.data)
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
+              .map(([_brandName, cartItems]) => createCheckoutItem(cartItems, selectedCartItems))
+              .flat()
+          }
+          console.log(checkoutItems)
 
+          await callBestPlatformVouchersFn({
+            checkoutItems: checkoutItems,
+          })
+        } catch (error) {
+          handleServerError({ error })
+        }
+      }
+
+      handleShowBestBrandVoucher()
+      handleShowBestPlatformVoucher()
       handleShowBestBrandVoucher()
     }
     if (selectedCartItems.length === 0) {
@@ -223,6 +252,7 @@ const Cart = () => {
               setPlatformChosenVoucher={setPlatformChosenVoucher}
               platformVoucherDiscount={platformVoucherDiscount}
               cartByBrand={cartByBrand}
+              bestPlatformVoucher={bestPlatformVoucher}
             />
           </div>
         </div>

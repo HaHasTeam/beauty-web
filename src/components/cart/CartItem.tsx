@@ -40,7 +40,7 @@ const CartItem = ({
   selectedCheckoutItems,
 }: CartItemProps) => {
   const { t } = useTranslation()
-  const [chosenVoucher, setChosenVoucher] = useState<TVoucher | null>(bestVoucherForBrand?.bestVoucher || null)
+  const [chosenVoucher, setChosenVoucher] = useState<TVoucher | null>(null)
 
   const cartItemIds = cartBrandItem?.map((cartItem) => cartItem.id)
   const isBrandSelected = cartBrandItem.every((productClassification) =>
