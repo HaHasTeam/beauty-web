@@ -69,7 +69,8 @@
     "cancel": "Cancel",
     "ok": "Confirm",
     "save": "Save",
-    "submit": "Submit"
+    "submit": "Submit",
+    "backToHome": "Back to Home"
   },
   "noData": "No matching data found",
   "sell": {
@@ -324,6 +325,7 @@
     "productLeft": "{{count}} products left",
     "updateClassificationSuccess": "Update product classification successfully!",
     "soldOutMessage": "This product classification is sold out, please choose another.",
+    "soldOutAllMessage": "This product is sold out.",
     "hiddenMessage": "This product classification is hidden, please choose another.",
     "maxQuantityError": "The remaining quantity of this product is {{maxQuantity}}.",
     "negativeQuantityError": "The quantity cannot be less than 1."
@@ -466,8 +468,6 @@
     "cvvEx": "EG: 123"
   },
   "order": {
-    "success": "Create order successfully!",
-    "failed": "Create order failed!",
     "loading": "Loading order...",
     "viewDetail": "View details",
     "buyAgain": "Buy Again",
@@ -480,7 +480,17 @@
     "completed": "Completed",
     "return": "Return/Refund",
     "returnOrder": "Return",
-    "lastUpdated": "Last updated"
+    "lastUpdated": "Last updated",
+    "success": "Order placed successfully!",
+    "prepareCash": "Prepare cash",
+    "failure": "Order placement failed!",
+    "retry": "Please try again later",
+    "orderId": "Order ID",
+    "viewOrder": "View order",
+    "continueShopping": "Continue Shopping",
+    "tryAgain": "Try Again",
+    "successDescription": "We will receive an order confirmation email with details of your order and a link to track it's progress.",
+    "failureDescription": "Unfortunately, we were unable to process your order. Please try again later or contact support for assistance."
   },
   "toast": {
     "success": "Your request has been successfully processed, continue with your work.",
@@ -514,6 +524,13 @@
       "insufficientStockDescription": "Some items you selected in your cart have insufficient stock: {{products}}. Please update your cart to continue.",
       "soldOutTitle": "Items sold out",
       "soldOutDescription": "Some items you selected in your cart are sold out: {{products}}. Please deselect these items to proceed."
+    }
+  },
+  "paymentMethod": {
+    "tag": {
+      "cash": "Cash",
+      "card": "Credit/Debit Card",
+      "wallet": "Digital Wallet"
     }
   }
 }

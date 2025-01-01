@@ -4,6 +4,7 @@ import { Pen, Ticket } from 'lucide-react'
 import { useEffect, useId, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 import { z } from 'zod'
 
 import AddressSection from '@/components/address/AddressSection'
@@ -27,7 +28,7 @@ import { getBestPlatformVouchersApi, getBestShopVouchersApi } from '@/network/ap
 import CreateOrderSchema from '@/schemas/order.schema'
 import useCartStore from '@/store/cart'
 import { IAddress } from '@/types/address'
-import { DiscountTypeEnum, PaymentMethod, ProjectInformationEnum } from '@/types/enum'
+import { DiscountTypeEnum, PaymentMethod, ProjectInformationEnum, ResultEnum } from '@/types/enum'
 import { ICreateOrder } from '@/types/order'
 import { IBrandBestVoucher, ICheckoutItem, IPlatformBestVoucher, TVoucher } from '@/types/voucher'
 import { createCheckoutItem, createCheckoutItems } from '@/utils/cart'
@@ -46,6 +47,7 @@ const Checkout = () => {
   } = useCartStore()
   const { successToast } = useToast()
   const handleServerError = useHandleServerError()
+  const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false)
   const [myAddresses, setMyAddresses] = useState<IAddress[]>([])
   const [bestBrandVouchers, setBestBrandVouchers] = useState<IBrandBestVoucher[]>([])
@@ -123,7 +125,6 @@ const Checkout = () => {
     mutationKey: [getBestPlatformVouchersApi.mutationKey],
     mutationFn: getBestPlatformVouchersApi.fn,
     onSuccess: (data) => {
-      console.log(data)
       setBestPlatformVoucher(data?.data)
     },
   })
@@ -131,12 +132,13 @@ const Checkout = () => {
   const { mutateAsync: createOrderFn } = useMutation({
     mutationKey: [createOderApi.mutationKey],
     mutationFn: createOderApi.fn,
-    onSuccess: () => {
+    onSuccess: (orderData) => {
       successToast({
         message: t('order.success'),
       })
       resetCart()
       handleReset()
+      navigate(configs.routes.checkoutResult, { state: { orderData, status: ResultEnum.SUCCESS } })
     },
   })
 
@@ -153,7 +155,6 @@ const Checkout = () => {
       setIsLoading(false)
     } catch (error) {
       setIsLoading(false)
-      console.log(error)
       handleServerError({
         error,
         form,
@@ -181,7 +182,7 @@ const Checkout = () => {
           })
         }
       } catch (error) {
-        handleServerError({ error })
+        console.error(error)
       }
     }
     async function handleShowBestPlatformVoucher() {
@@ -193,13 +194,12 @@ const Checkout = () => {
             .map(([_brandName, cartItems]) => createCheckoutItem(cartItems, selectedCartItems))
             .flat()
         }
-        console.log(checkoutItems)
 
         await callBestPlatformVouchersFn({
           checkoutItems: checkoutItems,
         })
       } catch (error) {
-        handleServerError({ error })
+        console.error(error)
       }
     }
 

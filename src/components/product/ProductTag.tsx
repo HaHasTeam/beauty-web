@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 
-import { OrderEnum, ProductCartStatusEnum } from '@/types/enum'
+import { OrderEnum, PaymentMethod, ProductCartStatusEnum } from '@/types/enum'
 
 interface ProductTagProps {
   tag: string
@@ -63,6 +63,20 @@ export default function ProductTag({ tag, text, size = 'medium' }: ProductTagPro
     case OrderEnum.PRE_ORDER:
       tagColorClass = 'bg-white text-yellow-500 border border-yellow-500'
       tagText = t('productTag.preOrder')
+      break
+
+    // for payment methods
+    case PaymentMethod.CARD:
+      tagColorClass = 'bg-white text-yellow-500 border border-yellow-500'
+      tagText = t('paymentMethod.tag.cash')
+      break
+    case PaymentMethod.CASH:
+      tagColorClass = 'bg-white text-orange-500 border border-orange-500'
+      tagText = t('paymentMethod.tag.card')
+      break
+    case PaymentMethod.WALLET:
+      tagColorClass = 'bg-white text-purple-500 border border-purple-500'
+      tagText = t('paymentMethod.tag.wallet')
       break
     default:
       tagColorClass = 'bg-gray-200 text-gray-800' // Default color

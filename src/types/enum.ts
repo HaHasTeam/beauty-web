@@ -129,3 +129,10 @@ export enum VoucherUnavailableReasonEnum {
   NOT_START_YET = 'NOT_START_YET',
   NOT_APPLICABLE = 'NOT_APPLICABLE',
 }
+
+export enum ResultEnum {
+  SUCCESS = 'SUCCESS',
+  ERROR = 'ERROR',
+  WARNING = 'WARNING',
+  FAILURE = 'FAILURE',
+}

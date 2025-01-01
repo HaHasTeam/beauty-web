@@ -8,7 +8,6 @@ import CartItem from '@/components/cart/CartItem'
 import Empty from '@/components/empty/Empty'
 import LoadingContentLayer from '@/components/loading-icon/LoadingContentLayer'
 import configs from '@/config'
-import useHandleServerError from '@/hooks/useHandleServerError'
 import { getMyCartApi } from '@/network/apis/cart'
 import { getBestPlatformVouchersApi, getBestShopVouchersApi } from '@/network/apis/voucher'
 import useCartStore from '@/store/cart'
@@ -30,7 +29,6 @@ const Cart = () => {
   const [isTriggerTotal, setIsTriggerTotal] = useState<boolean>(false)
   const [chosenVouchersByBrand, setChosenVouchersByBrand] = useState<{ [brandId: string]: TVoucher | null }>({})
   const [platformChosenVoucher, setPlatformChosenVoucher] = useState<TVoucher | null>(null)
-  const handleServerError = useHandleServerError()
   const { setChosenBrandVouchers, setChosenPlatformVoucher, setSelectedCartItem, resetCart } = useCartStore()
   const [bestPlatformVoucher, setBestPlatformVoucher] = useState<IPlatformBestVoucher | null>(null)
 
@@ -138,7 +136,7 @@ const Cart = () => {
             })
           }
         } catch (error) {
-          handleServerError({ error })
+          console.error(error)
         }
       }
       async function handleShowBestPlatformVoucher() {
@@ -150,19 +148,17 @@ const Cart = () => {
               .map(([_brandName, cartItems]) => createCheckoutItem(cartItems, selectedCartItems))
               .flat()
           }
-          console.log(checkoutItems)
 
           await callBestPlatformVouchersFn({
             checkoutItems: checkoutItems,
           })
         } catch (error) {
-          handleServerError({ error })
+          console.error(error)
         }
       }
 
       handleShowBestBrandVoucher()
       handleShowBestPlatformVoucher()
-      handleShowBestBrandVoucher()
     }
     if (selectedCartItems.length === 0) {
       setPlatformChosenVoucher(null)

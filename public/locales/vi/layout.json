@@ -69,7 +69,8 @@
     "cancel": "Hủy",
     "ok": "Đồng ý",
     "save": "Lưu",
-    "submit": "Gửi"
+    "submit": "Gửi",
+    "backToHome": "Quay lại Trang chủ"
   },
   "noData": "Không tìm thấy dữ liệu phù hợp",
   "sell": {
@@ -319,6 +320,7 @@
     "productLeft": "Còn {{count}} sản phẩm",
     "updateClassificationSuccess": "Thay đổi phân loại sản phẩm thành công!",
     "soldOutMessage": "Phân loại hàng này đã bán hết, vui lòng chọn phân loại khác.",
+    "soldOutAllMessage": "Sản phẩm này đã hết hàng.",
     "hiddenMessage": "Phân loại hàng này đã bị ẩn, vui lòng chọn phân loại khác.",
     "maxQuantityError": "Số lượng còn lại của sản phẩm này là {{maxQuantity}}.",
     "negativeQuantityError": "Số lượng sản phẩm không thể bé hơn 1."
@@ -461,8 +463,6 @@
     "cvvEx": "VD: 123"
   },
   "order": {
-    "success": "Đặt hàng thành công!",
-    "failed": "Đặt hàng thất bại!",
     "loading": "Đang tải đơn hàng...",
     "viewDetail": "Xem chi tiết",
     "buyAgain": "Mua lại",
@@ -475,7 +475,17 @@
     "completed": "Hoàn thành",
     "return": "Trả hàng/Hoàn tiền",
     "returnOrder": "Trả hàng",
-    "lastUpdated": "Cập nhật lần cuối"
+    "lastUpdated": "Cập nhật lần cuối",
+    "success": "Đặt hàng thành công!",
+    "prepareCash": "Chuẩn bị tiền mặt",
+    "failure": "Đặt hàng thất bại!",
+    "retry": "Vui lòng thử lại sau",
+    "orderId": "Mã đơn hàng",
+    "viewOrder": "Xem đơn hàng",
+    "continueShopping": "Tiếp tục mua sắm",
+    "tryAgain": "Thử lại",
+    "successDescription": "Chúng tôi sẽ gửi email xác nhận đơn hàng với thông tin chi tiết về đơn hàng của bạn và một liên kết để theo dõi tiến trình của nó.",
+    "failureDescription": "Rất tiếc, chúng tôi không thể xử lý đơn hàng của bạn. Vui lòng thử lại sau hoặc liên hệ bộ phận hỗ trợ để được trợ giúp."
   },
   "toast": {
     "success": "Yêu cầu của bạn đã được xử lý thành công, tiếp tục công việc của bạn.",
@@ -509,6 +519,13 @@
       "insufficientStockDescription": "Một số sản phẩm bạn chọn không đủ hàng: {{products}}. Vui lòng cập nhật giỏ hàng để tiếp tục.",
       "soldOutTitle": "Hết hàng",
       "soldOutDescription": "Một số sản phẩm bạn chọn đã hết hàng: {{products}}. Vui lòng bỏ chọn các sản phẩm này để tiếp tục."
+    }
+  },
+  "paymentMethod": {
+    "tag": {
+      "cash": "Tiền mặt",
+      "card": "Thẻ tín dụng/Ghi nợ",
+      "wallet": "Ví điện tử"
     }
   }
 }
