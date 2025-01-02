@@ -1,5 +1,9 @@
+import { useParams } from 'react-router-dom'
+
 const OrderDetail = () => {
-  return <div>OrderDetail</div>
+  const { orderId } = useParams()
+
+  return <div>{orderId}</div>
 }
 
 export default OrderDetail

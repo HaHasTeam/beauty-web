@@ -91,7 +91,7 @@
   "search": {
     "result": "Kết quả tìm kiếm cho từ khóa {{keyword}}: {{total}} dữ liệu",
     "reset": "Đặt lại",
-    "orderPlaceholder": "Tìm đơn hàng theo Mã đơn hàng, Nhà bán hoặc Tên sản phẩm",
+    "orderPlaceholder": "Tìm đơn hàng theo Mã đơn hàng hoặc Tên sản phẩm",
     "orderButton": "Tìm đơn hàng"
   },
   "filter": {

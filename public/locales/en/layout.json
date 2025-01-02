@@ -91,7 +91,7 @@
   "search": {
     "result": "Search results for {{keyword}}: {{total}} data",
     "reset": "Reset",
-    "orderPlaceholder": "Search for orders by Order ID, Brand, or Product Name",
+    "orderPlaceholder": "Search for orders by Order ID or Product Name",
     "orderButton": "Search Order"
   },
   "filter": {

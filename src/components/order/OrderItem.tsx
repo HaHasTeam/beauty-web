@@ -58,11 +58,16 @@ const OrderItem = ({ brand, orderItem }: OrderItemProps) => {
             </Link>
           ))
         : null}
+      {/* total price */}
+      <div className="w-full ml-auto flex justify-end gap-1 text-lg">
+        <span className="text-muted-foreground font-medium">{t('cart.totalPrice')}: </span>
+        <span className="text-red-500 font-semibold">{t('productCard.price', { price: orderItem?.totalPrice })}</span>
+      </div>
 
       {/* Action button */}
       <div className="flex justify-between gap-2 pt-4 items-center">
         <div>
-          <span className="text-gray-700">
+          <span className="text-gray-700 text-base">
             {t('order.lastUpdated')}: {t('date.toLocaleDateTimeString', { val: new Date(orderItem?.updatedAt) })}
           </span>
         </div>

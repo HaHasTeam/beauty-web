@@ -87,7 +87,7 @@ export default function ProfileOrder() {
               {triggers?.map((trigger) => (
                 <TabsTrigger
                   key={trigger.value}
-                  className={`h-14 my-auto rounded-none data-[state=active]:text-primary hover:text-secondary-foreground/80 data-[state=active]:border-b-2 data-[state=active]:border-primary `}
+                  className={`h-14 w-full my-auto rounded-none data-[state=active]:text-primary hover:text-secondary-foreground/80 data-[state=active]:border-b-2 data-[state=active]:border-primary `}
                   value={trigger.value}
                 >
                   {trigger.text}

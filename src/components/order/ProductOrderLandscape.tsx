@@ -1,8 +1,11 @@
 import { useTranslation } from 'react-i18next'
 
 import { IClassification } from '@/types/classification'
+import { ClassificationTypeEnum, OrderEnum } from '@/types/enum'
 import { IOrderDetail } from '@/types/order'
 import { IProduct } from '@/types/product'
+
+import ProductTag from '../product/ProductTag'
 
 interface ProductOrderLandscapeProps {
   product: IProduct
@@ -13,17 +16,28 @@ const ProductOrderLandscape = ({ product, productClassification, orderDetail }: 
   const { t } = useTranslation()
   return (
     <div className="flex gap-4 mb-4">
-      <img src="/placeholder.svg" alt="Product" className="h-20 w-20 object-cover rounded" />
+      <div className="lg:w-22 lg:h-22 md:w-16 md:h-16 h-10 w-10 my-auto">
+        <img
+          src={productClassification?.product?.images[0]?.fileUrl}
+          alt={productClassification?.product?.name}
+          className="object-cover w-full h-full"
+        />
+      </div>
       <div className="flex-1">
         <h3 className="font-medium">{product?.name}</h3>
-        <p className="text-sm text-muted-foreground">
-          {t('order.classification')}: <span className="text-primary font-medium">{productClassification?.title}</span>
-        </p>
+        {productClassification?.type === ClassificationTypeEnum.CUSTOM && (
+          <p className="text-sm text-muted-foreground">
+            {t('order.classification')}:{' '}
+            <span className="text-primary font-medium">{productClassification?.title}</span>
+          </p>
+        )}
+
         <p className="text-sm">x{orderDetail?.quantity}</p>
+        {orderDetail?.type && orderDetail?.type !== OrderEnum.NORMAL && <ProductTag tag={orderDetail?.type} />}
       </div>
       <div className="text-right flex items-center">
         <span className="line-through text-sm text-muted-foreground">₫460.300</span>
-        <span className="text-red-500">₫460.300</span>
+        <span className="text-red-500">{t('productCard.price', { price: productClassification?.price })}</span>
       </div>
     </div>
   )
