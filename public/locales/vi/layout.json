@@ -209,6 +209,16 @@
       "title": "Không có voucher",
       "description": "Chưa có mã giảm giá nào của Shop. Nhập mã giảm giá có thể sử dụng vào thanh bên trên.",
       "button": "Khám phá thương hiệu"
+    },
+    "product": {
+      "title": "Không tìm thấy sản phẩm",
+      "description": "Chúng tôi không tìm thấy sản phẩm nào phù hợp với tiêu chí của bạn. Vui lòng thử điều chỉnh bộ lọc hoặc tìm kiếm sản phẩm khác.",
+      "button": "Duyệt sản phẩm"
+    },
+    "productDetail": {
+      "title": "Không tìm thấy sản phẩm",
+      "description": "Sản phẩm bạn đang tìm kiếm không tồn tại, đã bị xoá hoặc hiện không khả dụng.",
+      "button": "Xem các sản phẩm khác"
     }
   },
   "productDetail": {
@@ -222,7 +232,8 @@
     "brandDeal": "Deal của thương hiệu",
     "classification": "Phân loại",
     "selectOption": "Chọn tùy chọn",
-    "selectClassification": "Chọn phân loại"
+    "selectClassification": "Chọn phân loại",
+    "title": "Chi tiết sản phẩm"
   },
   "event": {
     "finishIn": "Kết thúc trong"
@@ -325,8 +336,9 @@
     "soldOutMessage": "Phân loại hàng này đã bán hết, vui lòng chọn phân loại khác.",
     "soldOutAllMessage": "Sản phẩm này đã hết hàng.",
     "hiddenMessage": "Phân loại hàng này đã bị ẩn, vui lòng chọn phân loại khác.",
-    "maxQuantityError": "Số lượng còn lại của sản phẩm này là {{maxQuantity}}.",
-    "negativeQuantityError": "Số lượng sản phẩm không thể bé hơn 1."
+    "maxQuantityError": "Số lượng còn lại của phân loại sản phẩm này là {{maxQuantity}}.",
+    "negativeQuantityError": "Số lượng sản phẩm không thể bé hơn 1.",
+    "addToCartSuccess": "Sản phẩm đã được thêm vào giỏ hàng."
   },
   "address": {
     "title": "Địa chỉ",
