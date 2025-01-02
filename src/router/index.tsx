@@ -68,3 +68,6 @@ export default function RouterProvider() {
     },
   ])
 }
+export const buildResource = (root: string, route: string) => `/${root}/${route}`
+
+export const buildOneWayResource = (root: string) => `/${root}`

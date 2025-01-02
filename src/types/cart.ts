@@ -12,10 +12,10 @@ export interface ICartItem {
   id: string
   createdAt?: string
   updatedAt?: string
-  quantity?: number
+  quantity: number
   classification?: string
   status?: StatusEnum.ACTIVE | StatusEnum.INACTIVE
-  productClassification?: IClassification
+  productClassification: IClassification
 }
 export interface ICreateCartItem {
   id?: string

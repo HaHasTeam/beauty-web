@@ -87,20 +87,20 @@ export type IServerCreateProduct = {
   sku?: string
 }
 export type IResponseProduct = {
-  id?: string
+  id: string
   name: string
-  brand?: IBrand
+  brand: IBrand
   category?: ICategory
   images: IImage[]
   description: string
-  status?: string
-  detail?: string
-  productClassifications?: IServerProductClassification[]
-  price?: number
-  quantity?: number
+  status: string
+  detail: string
+  productClassifications: IServerProductClassification[]
+  price: number
+  quantity: number
   sku?: string
   menu?: string
-  updatedAt?: string
+  updatedAt: string
 }
 
 export type IProductTable = {
@@ -175,7 +175,7 @@ export type IProductCard = {
   tag?: string
   price?: number
   currentPrice?: number
-  images: IProductImage[]
+  images: IImage[]
   deal?: number
   flashSale?: {
     productAmount: number
@@ -184,6 +184,7 @@ export type IProductCard = {
   rating: number
   ratingAmount: number
   soldInPastMonth: number
+  classifications?: IServerProductClassification[]
 }
 
 // components interface ends

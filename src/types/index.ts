@@ -1,3 +1,5 @@
+import { ICartItem } from './cart'
+import { IClassification } from './classification'
 import { RouteConfigType } from './routes'
 
 export enum ActionResponseErrorCodeEnum {
@@ -26,7 +28,7 @@ export interface ActionResponse<T> {
 export type ConfigType = {
   routes: RouteConfigType
 }
-export type CartProduct = Product & { qty: number }
+export type CartItems = ICartItem
 export type TEmailDecoded = {
   accountId: string
 }
