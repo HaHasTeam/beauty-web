@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import Empty from '@/components/empty/Empty'
 import LoadingContentLayer from '@/components/loading-icon/LoadingContentLayer'
 import OrderItem from '@/components/order/OrderItem'
+import SearchOrders from '@/components/order/SearchOrders'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { getMyOrdersApi } from '@/network/apis/order'
 import { ShippingStatusEnum } from '@/types/enum'
@@ -15,6 +16,7 @@ export default function ProfileOrder() {
   const [orders, setOrders] = useState<IOrderItem[]>([])
   const [activeTab, setActiveTab] = useState<string>('all')
   const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [searchQuery, setSearchQuery] = useState<string>('')
 
   const triggers = [
     { value: 'all', text: `${t('order.all')}` },
@@ -29,23 +31,26 @@ export default function ProfileOrder() {
     mutationKey: [getMyOrdersApi.mutationKey],
     mutationFn: getMyOrdersApi.fn,
     onSuccess: (data) => {
-      // successToast({
-      //   message: t('order.success'),
-      // })
-      // handleReset()
       setOrders(data?.data)
       setIsLoading(false)
     },
   })
-  console.log(orders)
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query)
+  }
+
   useEffect(() => {
     const fetchOrders = async () => {
       setIsLoading(true)
-      const filters: IOrderFilter = activeTab !== 'all' ? { status: activeTab.toUpperCase() } : {}
+      const filters: IOrderFilter = {
+        status: activeTab !== 'all' ? activeTab.toUpperCase() : undefined,
+        search: searchQuery || undefined,
+      }
       await getMyOrderFn(filters)
     }
     fetchOrders()
-  }, [activeTab, getMyOrderFn])
+  }, [activeTab, getMyOrderFn, searchQuery])
   const renderOrders = () => {
     if (orders && orders?.length === 0) {
       return (
@@ -70,36 +75,35 @@ export default function ProfileOrder() {
       </div>
     )
   }
-  return isLoading ? (
-    <LoadingContentLayer />
-  ) : (
-    // orders && orders?.length > 0 ? (
-    <div className="w-full max-w-4xl mx-auto p-4">
-      <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value)} className="w-full">
-        <TabsList className="sticky top-0 z-10 h-14 w-full justify-start overflow-x-auto p-0 bg-white">
-          {triggers?.map((trigger) => (
-            <TabsTrigger
-              key={trigger.value}
-              className={`h-14 my-auto rounded-none  data-[state=active]:text-primary hover:text-secondary-foreground/80 data-[state=active]:border-b-2 data-[state=active]:border-primary `}
-              value={trigger.value}
-            >
-              {trigger.text}
-            </TabsTrigger>
-          ))}
-        </TabsList>
 
-        <TabsContent value={activeTab}>{renderOrders()}</TabsContent>
-      </Tabs>
-    </div>
+  return (
+    <>
+      {isLoading && <LoadingContentLayer />}
+
+      <div className="w-full flex justify-center">
+        <div className="w-full p-4 max-w-sm sm:max-w-[838px] md:max-w-[1060px] lg:max-w-[1820px] xl:max-w-[2180px] 2xl:max-w-[2830px]">
+          <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value)} className="w-full">
+            <TabsList className="sticky top-0 z-10 h-14 w-full justify-start overflow-x-auto p-0 bg-white">
+              {triggers?.map((trigger) => (
+                <TabsTrigger
+                  key={trigger.value}
+                  className={`h-14 my-auto rounded-none data-[state=active]:text-primary hover:text-secondary-foreground/80 data-[state=active]:border-b-2 data-[state=active]:border-primary `}
+                  value={trigger.value}
+                >
+                  {trigger.text}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+
+            <TabsContent value={activeTab}>
+              <div className="space-y-2">
+                <SearchOrders onSearch={handleSearch} />
+                {renderOrders()}
+              </div>
+            </TabsContent>
+          </Tabs>
+        </div>
+      </div>
+    </>
   )
-  // ) : (
-  //   <div className="my-auto">
-  //     <Empty
-  //       title={t('empty.order.title')}
-  //       description={t('empty.order.description')}
-  //       link={configs?.routes?.home}
-  //       linkText={t('empty.order.button')}
-  //     />
-  //   </div>
-  // )
 }
