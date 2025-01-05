@@ -1,13 +1,14 @@
 import { MessageCircle, Store, Tag } from 'lucide-react'
-import { useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import configs from '@/config'
+import { IBrand } from '@/types/brand'
 import { ICartItem } from '@/types/cart'
 import { IClassification } from '@/types/classification'
 import { DiscountTypeEnum, OrderEnum } from '@/types/enum'
-import { ICheckoutItem, TVoucher } from '@/types/voucher'
+import { IBrandBestVoucher, ICheckoutItem, TVoucher } from '@/types/voucher'
 
 import ProductCardLandscape from '../product/ProductCardLandscape'
 import { Button } from '../ui/button'
@@ -19,14 +20,28 @@ interface CartItemProps {
   cartBrandItem: ICartItem[]
   selectedCartItems: string[]
   onSelectBrand: (productIds: string[], isSelected: boolean) => void
+  bestVoucherForBrand: IBrandBestVoucher
+  setIsTriggerTotal: Dispatch<SetStateAction<boolean>>
+  onVoucherSelect: (brandId: string, voucher: TVoucher | null) => void
+  brand?: IBrand
+  checkoutItems: ICheckoutItem[]
+  selectedCheckoutItems: ICheckoutItem[]
 }
-const CartItem = ({ brandName, cartBrandItem, selectedCartItems, onSelectBrand }: CartItemProps) => {
+const CartItem = ({
+  brandName,
+  cartBrandItem,
+  selectedCartItems,
+  onSelectBrand,
+  bestVoucherForBrand,
+  setIsTriggerTotal,
+  onVoucherSelect,
+  brand,
+  checkoutItems,
+  selectedCheckoutItems,
+}: CartItemProps) => {
   const { t } = useTranslation()
   const [chosenVoucher, setChosenVoucher] = useState<TVoucher | null>(null)
-  const brand =
-    cartBrandItem[0]?.productClassification?.productDiscount?.product?.brand ??
-    cartBrandItem[0]?.productClassification?.preOrderProduct?.product?.brand ??
-    cartBrandItem[0]?.productClassification?.product?.brand
+
   const cartItemIds = cartBrandItem?.map((cartItem) => cartItem.id)
   const isBrandSelected = cartBrandItem.every((productClassification) =>
     selectedCartItems?.includes(productClassification.id),
@@ -34,16 +49,7 @@ const CartItem = ({ brandName, cartBrandItem, selectedCartItems, onSelectBrand }
   const hasBrandProductSelected = cartBrandItem.some((productClassification) =>
     selectedCartItems?.includes(productClassification.id),
   )
-  const checkoutItems: ICheckoutItem[] = cartBrandItem
-    .filter((cartItem) => selectedCartItems?.includes(cartItem.id))
-    .map((cartItem) => ({
-      classificationId: cartItem.productClassification?.id ?? '',
-      quantity: cartItem.quantity ?? 0,
-    }))
-    .filter((item) => item.classificationId !== null) // Remove items without a classificationId
 
-  console.log(checkoutItems)
-  console.log(brand)
   // Handler for brand-level checkbox
   const handleBrandSelect = () => {
     onSelectBrand(cartItemIds, !isBrandSelected)
@@ -53,6 +59,15 @@ const CartItem = ({ brandName, cartBrandItem, selectedCartItems, onSelectBrand }
   const handleSelectCartItem = (cartItemId: string, isSelected: boolean) => {
     onSelectBrand([cartItemId], isSelected)
   }
+  const handleVoucherChange = (voucher: TVoucher | null) => {
+    setChosenVoucher(voucher)
+    onVoucherSelect(brand?.id ?? '', voucher)
+  }
+  useEffect(() => {
+    if (selectedCartItems.length === 0) {
+      setChosenVoucher(null)
+    }
+  }, [selectedCartItems])
   return (
     <div className="w-full bg-white p-4 rounded-lg space-y-2 shadow-sm">
       {/* Brand Header */}
@@ -124,6 +139,7 @@ const CartItem = ({ brandName, cartBrandItem, selectedCartItems, onSelectBrand }
             onChooseProduct={() => handleSelectCartItem(cartItem?.id, !selectedCartItems?.includes(cartItem?.id))}
             productQuantity={productQuantity}
             productClassificationQuantity={productClassificationQuantity}
+            setIsTriggerTotal={setIsTriggerTotal}
           />
         )
       })}
@@ -132,11 +148,18 @@ const CartItem = ({ brandName, cartBrandItem, selectedCartItems, onSelectBrand }
       <div className="flex items-center gap-3 text-sm">
         <Tag className="w-4 h-4 text-red-500" />
         <span>
-          {chosenVoucher &&
-            hasBrandProductSelected &&
-            (chosenVoucher?.discountType === DiscountTypeEnum.AMOUNT && chosenVoucher?.discountValue
+          {chosenVoucher && hasBrandProductSelected
+            ? chosenVoucher?.discountType === DiscountTypeEnum.AMOUNT && chosenVoucher?.discountValue
               ? t('voucher.discountAmount', { amount: chosenVoucher?.discountValue })
-              : t('voucher.discountPercentage', { amount: chosenVoucher?.discountValue }))}
+              : t('voucher.discountPercentage', { percentage: chosenVoucher?.discountValue * 100 })
+            : bestVoucherForBrand?.bestVoucher
+              ? bestVoucherForBrand?.bestVoucher?.discountType === DiscountTypeEnum.AMOUNT &&
+                bestVoucherForBrand?.bestVoucher?.discountValue
+                ? t('voucher.bestDiscountAmountDisplay', { amount: bestVoucherForBrand?.bestVoucher?.discountValue })
+                : t('voucher.bestDiscountPercentageDisplay', {
+                    percentage: bestVoucherForBrand?.bestVoucher?.discountValue * 100,
+                  })
+              : null}
         </span>
         <VoucherCartList
           triggerText={t('cart.viewMoreVoucher')}
@@ -144,8 +167,11 @@ const CartItem = ({ brandName, cartBrandItem, selectedCartItems, onSelectBrand }
           brandId={brand?.id ?? ''}
           brandLogo={brand?.logo ?? ''}
           hasBrandProductSelected={hasBrandProductSelected}
-          setChosenVoucher={setChosenVoucher}
+          handleVoucherChange={handleVoucherChange}
           checkoutItems={checkoutItems}
+          selectedCheckoutItems={selectedCheckoutItems}
+          bestVoucherForBrand={bestVoucherForBrand}
+          chosenBrandVoucher={chosenVoucher}
         />
       </div>
     </div>

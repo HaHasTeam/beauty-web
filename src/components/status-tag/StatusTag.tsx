@@ -23,6 +23,13 @@ export default function StatusTag({ tag, text, size = 'medium' }: StatusTagProps
       tagColorClass = 'text-primary bg-white border border-primary rounded-xs'
       tagText = t('statusTag.default')
       break
+    case 'BestVoucher':
+      tagColorClass = 'text-white bg-green-500 rounded-full'
+      tagText = t('voucher.bestChoice')
+      break
+    case 'numberCount':
+      tagColorClass = 'text-white bg-orange-400 rounded-full'
+      break
     default:
       tagColorClass = 'bg-gray-200 text-gray-800' // Default color
       tagText = tag // Default to the tag string if no match is found

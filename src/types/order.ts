@@ -1,4 +1,5 @@
 import { IClassification } from './classification'
+import { PaymentMethod } from './enum'
 import { TUser } from './user'
 import { TVoucher } from './voucher'
 
@@ -56,4 +57,22 @@ export type IOrder = {
 export type IOrderFilter = {
   search?: string
   status?: string
+}
+
+export type IOrderCheckoutItem = {
+  productClassificationId: string
+  quantity?: number
+}
+
+export type ICreateOrderItem = {
+  shopVoucherId?: string
+  items: IOrderCheckoutItem[]
+  message?: string
+}
+
+export type ICreateOrder = {
+  orders: ICreateOrderItem[]
+  addressId: string
+  paymentMethod: PaymentMethod.CARD | PaymentMethod.CASH | PaymentMethod.WALLET
+  platformVoucherId?: string
 }

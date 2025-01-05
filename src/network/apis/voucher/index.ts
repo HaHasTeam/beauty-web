@@ -1,5 +1,12 @@
 import { TServerResponse } from '@/types/request'
-import { ICategoryVoucher, TVoucher } from '@/types/voucher'
+import {
+  IBestVoucher,
+  IBrandBestVoucher,
+  ICategoryVoucher,
+  ICategoryVoucherResponse,
+  IPlatformBestVoucher,
+  TVoucher,
+} from '@/types/voucher'
 import { toMutationFetcher, toQueryFetcher } from '@/utils/query'
 import { privateRequest, publicRequest } from '@/utils/request'
 
@@ -60,16 +67,16 @@ export const getBrandVouchersApi = toQueryFetcher<string, TServerResponse<TVouch
     })
   },
 )
-export const getCheckoutListBrandVouchersApi = toMutationFetcher<ICategoryVoucher, TServerResponse<TVoucher[]>>(
-  'getCheckoutListBrandVouchersApi',
-  async (data) => {
-    return privateRequest(`/vouchers/categorize-shop-vouchers-when-checkout`, {
-      method: 'POST',
-      data,
-    })
-  },
-)
-export const getBestShopVouchersApi = toMutationFetcher<ICategoryVoucher, TServerResponse<TVoucher[]>>(
+export const getCheckoutListBrandVouchersApi = toMutationFetcher<
+  ICategoryVoucher,
+  TServerResponse<ICategoryVoucherResponse>
+>('getCheckoutListBrandVouchersApi', async (data) => {
+  return privateRequest(`/vouchers/categorize-shop-vouchers-when-checkout`, {
+    method: 'POST',
+    data,
+  })
+})
+export const getBestShopVouchersApi = toMutationFetcher<IBestVoucher, TServerResponse<IBrandBestVoucher[]>>(
   'getBestShopVouchersApi',
   async (data) => {
     return privateRequest(`/vouchers/get-best-shop-vouchers-for-products`, {
@@ -78,7 +85,7 @@ export const getBestShopVouchersApi = toMutationFetcher<ICategoryVoucher, TServe
     })
   },
 )
-export const getBestPlatformVouchersApi = toMutationFetcher<ICategoryVoucher, TServerResponse<TVoucher[]>>(
+export const getBestPlatformVouchersApi = toMutationFetcher<ICategoryVoucher, TServerResponse<IPlatformBestVoucher>>(
   'getBestPlatformVouchersApi',
   async (data) => {
     return privateRequest(`/vouchers/get-best-platform-vouchers-for-products`, {
@@ -87,20 +94,20 @@ export const getBestPlatformVouchersApi = toMutationFetcher<ICategoryVoucher, TS
     })
   },
 )
-export const getCheckoutListPlatformVouchersApi = toMutationFetcher<ICategoryVoucher, TServerResponse<TVoucher[]>>(
-  'getCheckoutListPlatformVouchersApi',
-  async (data) => {
-    return privateRequest(`/vouchers/categorize-platform-vouchers-when-checkout`, {
-      method: 'POST',
-      data,
-    })
-  },
-)
-export const collectVoucherApi = toMutationFetcher<TUpdateVoucherRequestParams, TServerResponse<TVoucher>>(
+export const getCheckoutListPlatformVouchersApi = toMutationFetcher<
+  ICategoryVoucher,
+  TServerResponse<ICategoryVoucherResponse>
+>('getCheckoutListPlatformVouchersApi', async (data) => {
+  return privateRequest(`/vouchers/categorize-platform-vouchers-when-checkout`, {
+    method: 'POST',
+    data,
+  })
+})
+export const collectVoucherApi = toMutationFetcher<TVoucher, TServerResponse<TVoucher>>(
   'collectVoucher',
   async (params) => {
     return privateRequest(`/vouchers/collect-voucher/${params?.id}`, {
-      method: 'PUT',
+      method: 'POST',
       data: params,
     })
   },

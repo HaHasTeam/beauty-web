@@ -1,5 +1,6 @@
-import { AlertCircle, Play, Video } from 'lucide-react'
-import { useState } from 'react'
+import { useMutation } from '@tanstack/react-query'
+import { AlertCircle } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Button } from '@/components/ui/button'
@@ -13,58 +14,108 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import { ProjectInformationEnum } from '@/types/enum'
+import { RadioGroup } from '@/components/ui/radio-group'
+import useHandleServerError from '@/hooks/useHandleServerError'
+import { getCheckoutListPlatformVouchersApi } from '@/network/apis/voucher'
+import { ICartByBrand } from '@/types/cart'
+import { ProjectInformationEnum, VoucherUsedStatusEnum } from '@/types/enum'
+import { ICheckoutItem, IPlatformBestVoucher, TVoucher } from '@/types/voucher'
 
+import Empty from '../empty/Empty'
 import VoucherHelpPopOver from '../help/VoucherHelpDialog'
+import LoadingIcon from '../loading-icon'
 import { ScrollArea } from '../ui/scroll-area'
+import VoucherPlatformItem from './VoucherPlatformItem'
 
 interface VoucherDialogProps {
   triggerComponent: React.ReactElement<unknown>
-  onConfirmVoucher: (value: string) => void
+  onConfirmVoucher: (voucher: TVoucher | null) => void
   selectedCartItems?: string[]
+  chosenPlatformVoucher: TVoucher | null
+  cartByBrand: ICartByBrand
+  bestPlatFormVoucher: IPlatformBestVoucher | null
 }
-export default function VoucherDialog({ triggerComponent, onConfirmVoucher, selectedCartItems }: VoucherDialogProps) {
+export default function VoucherDialog({
+  triggerComponent,
+  onConfirmVoucher,
+  selectedCartItems,
+  chosenPlatformVoucher,
+  cartByBrand,
+  bestPlatFormVoucher,
+}: VoucherDialogProps) {
   const { t } = useTranslation()
+  const handleServerError = useHandleServerError()
   const [open, setOpen] = useState(false)
-  const [selectedVoucher, setSelectedVoucher] = useState('')
+  const [selectedVoucher, setSelectedVoucher] = useState<string>(chosenPlatformVoucher?.id ?? '')
+  const [unclaimedVouchers, setUnclaimedVouchers] = useState<TVoucher[]>([])
+  const [availableVouchers, setAvailableVouchers] = useState<TVoucher[]>([])
+  const [unAvailableVouchers, setUnAvailableVouchers] = useState<TVoucher[]>([])
 
-  const vouchers = [
-    {
-      id: 'video',
-      type: 'Video Only',
-      icon: <Video className="w-6 h-6" />,
-      discount: '50%',
-      maxDiscount: '25k',
-      minSpend: '0',
-      usageCount: 3,
-      used: '81%',
-      expiry: '28.11.2024',
-      bgColor: 'bg-red-200',
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+
+  const checkoutItems: ICheckoutItem[] = Object.values(cartByBrand)
+    .flat()
+    .map((cartItem) => ({
+      classificationId: cartItem.productClassification?.id ?? '',
+      quantity: cartItem.quantity ?? 0,
+    }))
+    .filter((item) => item.classificationId !== '')
+
+  const selectedCheckoutItems: ICheckoutItem[] = Object.values(cartByBrand)
+    .flat()
+    .filter((cartItem) => selectedCartItems?.includes(cartItem?.id)) // Filter selected cart items
+    .map((cartItem) => ({
+      classificationId: cartItem.productClassification?.id ?? '',
+      quantity: cartItem.quantity ?? 0,
+    }))
+    .filter((item) => item.classificationId !== '')
+
+  const { mutateAsync: callPlatformVouchersFn } = useMutation({
+    mutationKey: [getCheckoutListPlatformVouchersApi.mutationKey],
+    mutationFn: getCheckoutListPlatformVouchersApi.fn,
+    onSuccess: (data) => {
+      console.log(data)
+      setUnclaimedVouchers(data?.data?.unclaimedVouchers)
+      setAvailableVouchers(data?.data?.availableVouchers)
+      setUnAvailableVouchers(data?.data?.unAvailableVouchers)
+      setIsLoading(false)
     },
-    {
-      id: 'live',
-      type: 'Chỉ có trên Live',
-      icon: <Play className="w-6 h-6" />,
-      discount: '50%',
-      maxDiscount: '35k',
-      minSpend: '0',
-      usageCount: 3,
-      used: '84%',
-      expiry: '28.11.2024',
-      bgColor: 'bg-red-200',
-    },
-  ]
+  })
+
   const handleConfirm = () => {
     if (selectedVoucher) {
-      onConfirmVoucher(selectedVoucher) // Confirm the selected voucher
+      onConfirmVoucher(availableVouchers?.find((voucher) => voucher?.id === selectedVoucher) ?? null)
     }
     setOpen(false) // Close the dialog
   }
+  async function handleCallPlatformVouchers() {
+    try {
+      if (checkoutItems && checkoutItems?.length > 0) {
+        setIsLoading(true)
+        await callPlatformVouchersFn({
+          checkoutItems:
+            selectedCheckoutItems && selectedCheckoutItems?.length > 0 ? selectedCheckoutItems : checkoutItems,
+          brandItems:
+            selectedCheckoutItems && selectedCheckoutItems?.length > 0 ? selectedCheckoutItems : checkoutItems,
+        })
+      }
+    } catch (error) {
+      handleServerError({ error })
+      setIsLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    if (!selectedCartItems || selectedCartItems?.length === 0) {
+      setSelectedVoucher('')
+    }
+  }, [selectedCartItems])
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>{triggerComponent}</DialogTrigger>
-      <DialogContent className="max-w-2xl md:max-w-lg">
+      <DialogTrigger asChild onClick={() => handleCallPlatformVouchers()}>
+        {triggerComponent}
+      </DialogTrigger>
+      <DialogContent className="max-w-3xl md:max-w-xl xs:max-w-lg">
         <DialogHeader>
           <div className="flex justify-between items-center">
             <DialogTitle>{t('voucher.chooseVoucher', { projectName: ProjectInformationEnum.name })}</DialogTitle>
@@ -74,70 +125,80 @@ export default function VoucherDialog({ triggerComponent, onConfirmVoucher, sele
         </DialogHeader>
 
         <div className="space-y-4">
-          {/* Voucher Input */}
-          <div className="flex gap-2 bg-muted/50 p-2 md:p-4 rounded-lg items-center">
-            <label className="text-sm font-medium mb-1.5 block"> {t('voucher.title')}</label>
-            <Input placeholder={t('voucher.title')} className=" border border-gray-300 focus:border-primary/50" />
-            <Button className="self-end uppercase"> {t('voucher.apply')}</Button>
+          <div>
+            {/* Warning Message */}
+            {selectedCartItems?.length === 0 && (
+              <div className="mb-1 flex items-center gap-2 text-sm text-red-500 bg-red-100 p-2 rounded">
+                <AlertCircle className="w-4 h-4" />
+                {t('voucher.chooseProductAppAlert')}
+              </div>
+            )}
+            {/* Voucher Input */}
+            <div className="flex gap-2 bg-muted/50 p-2 md:p-4 rounded-lg items-center">
+              <label className="text-sm font-medium mb-1.5 block"> {t('voucher.title')}</label>
+              <Input placeholder={t('voucher.title')} className=" border border-gray-300 focus:border-primary/50" />
+              <Button className="self-end uppercase"> {t('voucher.apply')}</Button>
+            </div>
           </div>
 
           {/* Voucher List */}
-          <ScrollArea className="h-72">
-            <div className="px-3 py-2">
-              <RadioGroup value={selectedVoucher} onValueChange={setSelectedVoucher}>
-                <div className="space-y-4">
-                  {vouchers.map((voucher) => (
-                    <div key={voucher.id} className="relative">
-                      <div className="flex gap-4 p-2 md:p-4 border rounded-lg">
-                        {/* Left Section */}
-                        <div
-                          className={`w-32 ${voucher.bgColor} p-4 rounded-lg flex flex-col items-center justify-center text-center`}
-                        >
-                          {voucher.icon}
-                          <div className="mt-2 text-sm font-medium uppercase">
-                            {ProjectInformationEnum.name} {voucher.id.toUpperCase()}
-                          </div>
-                        </div>
 
-                        {/* Content Section */}
-                        <div className="flex-1">
-                          <div className="flex justify-between items-start">
-                            <div>
-                              <div className="text-lg font-medium">
-                                Giảm {voucher.discount} Giảm tối đa ₫{voucher.maxDiscount}
-                              </div>
-                              <div className="text-sm text-muted-foreground">Đơn Tối Thiểu ₫{voucher.minSpend}</div>
-                              <span className="inline-block border border-red-500 text-red-500 text-xs px-2 py-0.5 rounded mt-1">
-                                {voucher.type}
-                              </span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <span className="text-red-500">×{voucher.usageCount}</span>
-                              <RadioGroupItem value={voucher.id} id={voucher.id} />
-                            </div>
-                          </div>
-                          <div className="mt-2 text-sm text-muted-foreground">
-                            Đã dùng {voucher.used}, {t('date.exp')} {voucher.expiry}
-                            <Button variant="link" className="text-blue-500 p-0 h-auto text-sm ml-2">
-                              {t('voucher.condition')}
-                            </Button>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Warning Message */}
-                      {selectedCartItems?.length === 0 && (
-                        <div className="mt-2 flex items-center gap-2 text-sm text-red-500">
-                          <AlertCircle className="w-4 h-4" />
-                          {t('voucher.chooseProductAppAlert')}
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </RadioGroup>
+          {isLoading ? (
+            <div className="h-36 flex justify-center items-center">
+              <LoadingIcon color="primaryBackground" />
             </div>
-          </ScrollArea>
+          ) : (availableVouchers && availableVouchers?.length > 0) ||
+            (unAvailableVouchers && unAvailableVouchers?.length > 0) ||
+            (unclaimedVouchers && unclaimedVouchers?.length > 0) ? (
+            <ScrollArea className="h-72">
+              <div className="px-3 py-2 my-2">
+                <RadioGroup value={selectedVoucher} onValueChange={setSelectedVoucher}>
+                  <div className="space-y-4">
+                    {availableVouchers?.map((voucher) => (
+                      <VoucherPlatformItem
+                        voucher={voucher}
+                        selectedCartItems={selectedCartItems}
+                        key={voucher?.id}
+                        bestVoucherForPlatform={bestPlatFormVoucher}
+                        selectedVoucher={chosenPlatformVoucher?.id ?? ''}
+                        onCollectSuccess={handleCallPlatformVouchers}
+                        status={VoucherUsedStatusEnum.AVAILABLE}
+                      />
+                    ))}
+                    {unAvailableVouchers?.map((voucher) => (
+                      <VoucherPlatformItem
+                        voucher={voucher}
+                        selectedCartItems={selectedCartItems}
+                        key={voucher?.id}
+                        bestVoucherForPlatform={bestPlatFormVoucher}
+                        selectedVoucher={chosenPlatformVoucher?.id ?? ''}
+                        onCollectSuccess={handleCallPlatformVouchers}
+                        status={VoucherUsedStatusEnum.UNAVAILABLE}
+                      />
+                    ))}
+                    {unclaimedVouchers?.map((voucher) => (
+                      <VoucherPlatformItem
+                        voucher={voucher}
+                        selectedCartItems={selectedCartItems}
+                        key={voucher?.id}
+                        bestVoucherForPlatform={bestPlatFormVoucher}
+                        selectedVoucher={chosenPlatformVoucher?.id ?? ''}
+                        onCollectSuccess={handleCallPlatformVouchers}
+                        status={VoucherUsedStatusEnum.UNCLAIMED}
+                      />
+                    ))}
+                  </div>
+                </RadioGroup>
+              </div>
+            </ScrollArea>
+          ) : (
+            <div className="flex flex-col justify-center items-center">
+              <Empty
+                title={t('empty.platformVoucher.title')}
+                description={t('empty.platformVoucher.description', { platformName: ProjectInformationEnum.name })}
+              />
+            </div>
+          )}
         </div>
 
         <DialogFooter>

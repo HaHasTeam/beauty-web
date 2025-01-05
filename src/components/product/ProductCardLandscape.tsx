@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Trash2 } from 'lucide-react'
-import { useCallback, useState } from 'react'
+import { Dispatch, SetStateAction, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
@@ -43,6 +43,7 @@ interface ProductCardLandscapeProps {
   productClassificationQuantity: number
   isSelected: boolean
   onChooseProduct: (cartItemId: string) => void
+  setIsTriggerTotal: Dispatch<SetStateAction<boolean>>
 }
 const ProductCardLandscape = ({
   cartItem,
@@ -60,6 +61,7 @@ const ProductCardLandscape = ({
   productQuantity,
   productClassification,
   productClassificationQuantity,
+  setIsTriggerTotal,
 }: ProductCardLandscapeProps) => {
   const { t } = useTranslation()
   const [quantity, setQuantity] = useState(productQuantity)
@@ -107,13 +109,14 @@ const ProductCardLandscape = ({
     mutationKey: [updateCartItemApi.mutationKey],
     mutationFn: updateCartItemApi.fn,
     onSuccess: () => {
-      // queryClient.invalidateQueries({
-      //   queryKey: [getMyCartApi.queryKey],
-      // })
-      // queryClient.invalidateQueries({
-      //   queryKey: [getCartByIdApi.queryKey, cartItemId as string],
-      // })
+      queryClient.invalidateQueries({
+        queryKey: [getMyCartApi.queryKey],
+      })
+      queryClient.invalidateQueries({
+        queryKey: [getCartByIdApi.queryKey, cartItemId as string],
+      })
       console.log(productQuantity, quantity, inputValue)
+      setIsTriggerTotal((prev) => !prev)
     },
   })
 
@@ -216,7 +219,7 @@ const ProductCardLandscape = ({
   return (
     <div className={`w-full py-4 border-b border-gray-200`}>
       <div className={`w-full flex gap-2 items-center`}>
-        <div className={`flex gap-1 items-center lg:w-[10%] md:w-[10%] w-[14%] ${PREVENT_ACTION ? 'opacity-40' : ''}`}>
+        <div className={`ư-fit flex gap-1 items-center  ${PREVENT_ACTION ? 'opacity-40' : ''}`}>
           {IS_ACTIVE ? (
             <Checkbox id={cartItemId} checked={isSelected} onClick={() => onChooseProduct(cartItemId)} />
           ) : HIDDEN ? (
@@ -236,22 +239,32 @@ const ProductCardLandscape = ({
           className={`flex md:flex-row flex-col lg:w-[65%] md:w-[65%] sm:w-[34%] w-[34%] gap-2 px-2 ${PREVENT_ACTION ? 'opacity-40' : ''}`}
         >
           <div className="order-1 flex gap-1 items-center lg:w-[50%] md:w-[35%] w-full">
-            <div className="flex flex-col gap-1">
+            <div className="ml-1 flex flex-col gap-1">
               <Link to={configs.routes.products + '/' + productId}>
-                <h3 className="font-semibold lg:text-sm text-xs line-clamp-2">{productName}</h3>
+                <span className="lg:text-sm text-xs line-clamp-2">{productName}</span>
               </Link>
               <div>{eventType && eventType !== '' && <ProductTag tag={eventType} size="small" />}</div>
               {HIDDEN ? (
                 <AlertMessage
-                  className="ml-1 w-fit border-0 outline-none rounded-md p-1 px-2 bg-gray-200"
+                  className="w-fit border-0 outline-none rounded-md p-1 px-2 bg-gray-200"
                   textSize="small"
                   color="black"
                   message={t('cart.hiddenMessage')}
                 />
+              ) : !IN_STOCK_CLASSIFICATION ? (
+                <div>
+                  <AlertMessage
+                    className="w-fit border-0 outline-none rounded-md p-1 px-2 bg-red-50"
+                    textSize="small"
+                    color="danger"
+                    text="danger"
+                    message={t('cart.soldOutAllMessage')}
+                  />
+                </div>
               ) : OUT_OF_STOCK ? (
                 <div>
                   <AlertMessage
-                    className="ml-1 w-fit border-0 outline-none rounded-md p-1 px-2 bg-red-50"
+                    className="w-fit border-0 outline-none rounded-md p-1 px-2 bg-red-50"
                     textSize="small"
                     color="danger"
                     text="danger"
@@ -277,7 +290,7 @@ const ProductCardLandscape = ({
           (discountType === DiscountTypeEnum.AMOUNT || discountType === DiscountTypeEnum.PERCENTAGE) ? (
             <div className="order-2 md:order-3 w-full md:w-[25%] lg:w-[20%] flex-col">
               <div className="flex gap-1 items-center">
-                <span className="text-red-500 lg:text-lg md:text-sm sm:text-xs text-xs font-medium">
+                <span className="text-red-500 lg:text-base md:text-sm sm:text-xs text-xs">
                   {t('productCard.currentPrice', { price: discountPrice })}
                 </span>
                 <span className="text-gray-400 lg:text-sm text-xs line-through">
@@ -286,13 +299,13 @@ const ProductCardLandscape = ({
               </div>
               <div>
                 <span className="text-red-500 lg:text-sm md:text-xs sm:text-xs text-xs">
-                  {t('voucher.off.numberPercentage', { percentage: discount })}
+                  {t('voucher.off.numberPercentage', { percentage: discount * 100 })}
                 </span>
               </div>
             </div>
           ) : (
             <div className="order-2 md:order-3 w-full md:w-[25%] lg:w-[20%] flex gap-1 items-center">
-              <span className="lg:text-lg md:text-sm sm:text-xs text-xs font-medium">
+              <span className="lg:text-base md:text-sm sm:text-xs text-xs">
                 {t('productCard.price', { price: price })}
               </span>
             </div>
@@ -322,7 +335,7 @@ const ProductCardLandscape = ({
           )}
         </div>
         <span
-          className={`text-red-500 lg:text-lg md:text-sm sm:text-xs text-xs font-medium w-[16%] md:w-[8%] sm:w-[12%] ${PREVENT_ACTION ? 'opacity-40' : ''}`}
+          className={`text-red-500 lg:text-base md:text-sm sm:text-xs text-xs w-[16%] md:w-[8%] sm:w-[12%] ${PREVENT_ACTION ? 'opacity-40' : ''}`}
         >
           {t('productCard.currentPrice', { price: totalPrice })}
         </span>
