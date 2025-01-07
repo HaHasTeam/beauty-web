@@ -1,11 +1,9 @@
 import AccountLayout from '@/components/layout/AccountLayout'
 import PrimaryLayout from '@/components/layout/PrimaryLayout'
 import configs from '@/config'
-import Cart from '@/views/Cart'
 import ChangePassword from '@/views/ChangePassword'
 import Checkout from '@/views/Checkout'
 import CheckoutResult from '@/views/CheckoutResult'
-import Home from '@/views/Home'
 import OrderDetail from '@/views/OrderDetail'
 import Profile from '@/views/Profile'
 import ProfileAddress from '@/views/ProfileAddress'
@@ -23,15 +21,12 @@ const privateRoutes = [
       </AuthGuard>
     ),
     children: [
-      {
-        path: configs.routes.home,
-        index: true,
-        element: <Home />,
-      },
-      {
-        path: configs.routes.cart,
-        element: <Cart />,
-      },
+      // {
+      //   path: configs.routes.home,
+      //   index: true,
+      //   element: <Home />,
+      // },
+
       {
         path: configs.routes.checkout,
         element: <Checkout />,

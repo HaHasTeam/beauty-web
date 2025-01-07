@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 
 import configs from '@/config'
 import { getAllProductApi } from '@/network/apis/product'
+import { buildOneWayResource } from '@/router'
 
 import ProductCard from '../product/ProductCard'
 
@@ -173,7 +174,7 @@ const RecommendProduct = () => {
           </h2>
         </div>
         <Link
-          to={configs.routes.recommendProducts}
+          to={buildOneWayResource(configs.routes.recommendProducts)}
           className="text-[#FF6B35] hover:opacity-80 transition-opacity flex items-center gap-1"
         >
           {t('button.seeAll')}
@@ -195,6 +196,8 @@ const RecommendProduct = () => {
               productAmount: 100,
               soldAmount: 65,
             },
+            description: product.description,
+            detail: product.detail,
             rating: 4.5,
             ratingAmount: 250,
             soldInPastMonth: 300,

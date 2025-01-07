@@ -6,15 +6,14 @@ import productImage from '@/assets/images/product_sample_img.png'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import configs from '@/config'
 import { useCart } from '@/hooks/useCarts'
-import { buildResource } from '@/router'
-import { IProductCard } from '@/types/product'
+import { IProduct } from '@/types/product'
 
 import Button from '../button'
 import ProductStar from './ProductStar'
 import ProductTag from './ProductTag'
 
 interface ProductCardProps {
-  product: IProductCard
+  product: IProduct
 }
 export default function ProductCard({ product }: ProductCardProps) {
   const navigate = useNavigate()
@@ -24,7 +23,10 @@ export default function ProductCard({ product }: ProductCardProps) {
     <Card className="relative">
       <CardContent
         className="p-0 relative cursor-pointer"
-        onClick={() => navigate(buildResource(configs.routes.products, product.id))}
+        onClick={() => {
+          console.log('onCLick', product.id)
+          navigate(`${configs.routes.products}/${product.id}`)
+        }}
       >
         <div className="absolute top-3 left-3 z-10">{product?.tag && <ProductTag tag={product?.tag} />}</div>
         <button className="absolute top-3 right-3 z-10 bg-gray-300 bg-opacity-30 rounded-full p-2 flex items-center justify-center hover:opacity-70">
@@ -69,7 +71,6 @@ export default function ProductCard({ product }: ProductCardProps) {
           onClick={() => {
             console.log('clicked product', product.name)
             addToCart({
-              id: product.id,
               quantity: 1,
               classification: product.classifications[0].title,
               productClassification: product?.classifications[0].id,

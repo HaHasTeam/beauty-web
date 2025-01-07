@@ -1,64 +1,75 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useShallow } from 'zustand/react/shallow'
 
 import {
   createCartItemApi,
   deleteCartItemApi,
+  getMyCartApi,
   removeAllCartItemApi,
   removeMultipleCartItemApi,
   updateCartItemApi,
 } from '@/network/apis/cart'
 import { useStore } from '@/store/store'
-import { ICreateCartItem } from '@/types/cart'
+import { ICreateCartItem, IUpdateCartItem } from '@/types/cart'
 
 // Custom Hook
 export const useCart = () => {
   const queryClient = useQueryClient()
 
   // Zustand store methods
-  const { addProduct, removeProduct, incQty, decQty, setTotal, reset, authData, isAuthenticated } = useStore(
+  const { authData, isAuthenticated } = useStore(
     useShallow((state) => ({
-      addProduct: state.addProduct,
-      removeProduct: state.removeProduct,
-      incQty: state.incQty,
-      decQty: state.decQty,
-      setTotal: state.setTotal,
-      reset: state.reset,
+      // addProduct: state.addProduct,
+      // removeProduct: state.removeProduct,
+      // incQty: state.incQty,
+      // decQty: state.decQty,
+      // setTotal: state.setTotal,
+      // reset: state.reset,
       authData: state.authData,
       isAuthenticated: state.isAuthenticated,
     })),
   )
-
+  // Fetch current cart
+  const { data: myCart, isFetching } = useQuery({
+    queryKey: [getMyCartApi.queryKey],
+    queryFn: getMyCartApi.fn,
+    enabled: isAuthenticated,
+  })
   // Mutations
   const addCartItemsMutation = useMutation({
     mutationKey: [createCartItemApi.mutationKey],
     mutationFn: createCartItemApi.fn,
     onSuccess(data) {
-      addProduct(data.data)
+      console.log('addCartItemsMutation res:', data)
+
+      // addProduct(data.data)
+      queryClient.invalidateQueries({
+        queryKey: [getMyCartApi.queryKey],
+      })
     },
   })
 
   const removeCartItemMutation = useMutation({
     mutationKey: [deleteCartItemApi.mutationKey],
     mutationFn: deleteCartItemApi.fn,
-    onSuccess(_, variables) {
-      removeProduct(variables)
+    onSuccess() {
+      // removeProduct(variables)
     },
   })
 
   const incQtyMutation = useMutation({
     mutationKey: [updateCartItemApi.mutationKey],
     mutationFn: updateCartItemApi.fn,
-    onSuccess(_, variables) {
-      incQty(variables.id)
+    onSuccess() {
+      // incQty(variables.id)
     },
   })
 
   const decQtyMutation = useMutation({
     mutationKey: [updateCartItemApi.mutationKey],
     mutationFn: updateCartItemApi.fn,
-    onSuccess(_, variables) {
-      decQty(variables.id)
+    onSuccess() {
+      // decQty(variables.id)
     },
   })
 
@@ -66,15 +77,15 @@ export const useCart = () => {
     mutationKey: [removeAllCartItemApi.mutationKey],
     mutationFn: removeAllCartItemApi.fn,
     onSuccess() {
-      reset()
+      // reset()
     },
   })
 
   const removeMultipleCartItemMutation = useMutation({
     mutationKey: [removeMultipleCartItemApi.mutationKey],
     mutationFn: removeMultipleCartItemApi.fn,
-    onSuccess(_, variables) {
-      variables.itemIds.forEach((id) => removeProduct(id))
+    onSuccess() {
+      // variables.itemIds.forEach((id) => removeProduct(id))
     },
   })
 
@@ -83,7 +94,7 @@ export const useCart = () => {
     if (authData && isAuthenticated) {
       addCartItemsMutation.mutate(product)
     } else {
-      addProduct(product)
+      // addProduct(product)
     }
   }
 
@@ -91,23 +102,23 @@ export const useCart = () => {
     if (authData && isAuthenticated) {
       removeCartItemMutation.mutate(id)
     } else {
-      removeProduct(id)
+      // removeProduct(id)
     }
   }
 
-  const incrementQty = (cartItem: ICreateCartItem) => {
+  const incrementQty = (cartItem: IUpdateCartItem) => {
     if (authData && isAuthenticated) {
       incQtyMutation.mutate(cartItem)
     } else {
-      incQty(cartItem.id)
+      // incQty(cartItem.id)
     }
   }
 
-  const decrementQty = (cartItem: ICreateCartItem) => {
+  const decrementQty = (cartItem: IUpdateCartItem) => {
     if (authData && isAuthenticated) {
       decQtyMutation.mutate(cartItem)
     } else {
-      decQty(cartItem.id)
+      // decQty(cartItem.id)
     }
   }
 
@@ -115,25 +126,28 @@ export const useCart = () => {
     if (authData && isAuthenticated) {
       resetCartMutation.mutate()
     } else {
-      reset()
+      // reset()
     }
   }
 
-  const removeMultipleCartItems = (ids) => {
-    if (authData && isAuthenticated) {
-      removeMultipleCartItemMutation.mutate({ ids })
-    } else {
-      ids.forEach((id) => removeProduct(id))
-    }
-  }
+  // const removeMultipleCartItems = (ids) => {
+  //   if (authData && isAuthenticated) {
+  //     removeMultipleCartItemMutation.mutate({ ids })
+  //   } else {
+  //     ids.forEach((id) => removeProduct(id))
+  //   }
+  // }
 
   return {
+    myCart,
+    isAuthenticated,
+    isMyCartFetching: isFetching,
     addToCart,
     removeFromCart,
     incQty: incrementQty,
     decQty: decrementQty,
     resetCart,
-    removeMultipleCartItems,
+    // removeMultipleCartItems,
     addCartItemsIsLoading: addCartItemsMutation.isPending,
     removeCartItemsIsLoading: removeCartItemMutation.isPending,
     incQtyIsLoading: incQtyMutation.isPending,

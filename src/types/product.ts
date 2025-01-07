@@ -95,7 +95,7 @@ export type IResponseProduct = {
   description: string
   status: string
   detail: string
-  productClassifications: IServerProductClassification[]
+  productClassifications: IClassification[]
   price: number
   quantity: number
   sku?: string
@@ -125,11 +125,11 @@ export type IProductTable = {
 export interface ProductTableProps {
   tableData: TProduct[]
 }
-type IProductImage = {
-  id: string
-  image: string
-  fileUrl?: string
-}
+// type IProductImage = {
+//   id: string
+//   image: string
+//   fileUrl?: string
+// }
 
 export type IProduct = {
   id: string
@@ -137,7 +137,7 @@ export type IProduct = {
   tag?: string
   price: number
   currentPrice?: number
-  images: IProductImage[]
+  images: IImage[]
   deal?: number
   flashSale?: {
     productAmount: number

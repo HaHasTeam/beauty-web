@@ -1,7 +1,7 @@
 import { IResponseProduct, IServerCreateProduct, TProduct } from '@/types/product'
 import { TServerResponse } from '@/types/request'
 import { toMutationFetcher, toQueryFetcher } from '@/utils/query'
-import { privateRequest } from '@/utils/request'
+import { privateRequest, publicRequest } from '@/utils/request'
 
 import { TGetProductByBrandIdRequestParams } from './type'
 
@@ -15,7 +15,7 @@ export const getProductByBrandIdApi = toQueryFetcher<TGetProductByBrandIdRequest
 export const getAllProductApi = toQueryFetcher<void, TServerResponse<IResponseProduct[]>>(
   'getAllProductApi',
   async () => {
-    return privateRequest('/products')
+    return publicRequest('/products')
   },
 )
 export const getProductApi = toQueryFetcher<string, TServerResponse<IResponseProduct[]>>(

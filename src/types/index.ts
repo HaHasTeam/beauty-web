@@ -1,5 +1,4 @@
 import { ICartItem } from './cart'
-import { IClassification } from './classification'
 import { RouteConfigType } from './routes'
 
 export enum ActionResponseErrorCodeEnum {

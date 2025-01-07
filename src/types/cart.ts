@@ -10,19 +10,26 @@ export type ICart = {
 
 export interface ICartItem {
   id: string
-  createdAt?: string
-  updatedAt?: string
+  createdAt: string
+  updatedAt: string
   quantity: number
-  classification?: string
-  status?: StatusEnum.ACTIVE | StatusEnum.INACTIVE
+  classification: string
+  status: StatusEnum.ACTIVE | StatusEnum.INACTIVE
   productClassification: IClassification
 }
-export interface ICreateCartItem {
-  id: string
-  classification?: string
-  productClassification?: string
-  quantity?: number
+
+export type ICreateCartItem = Omit<ICartItem, 'createdAt' | 'updatedAt' | 'status' | 'id' | 'productClassification'> & {
+  productClassification: string
 }
+export type IUpdateCartItem = Omit<ICartItem, 'createdAt' | 'updatedAt' | 'status' | 'productClassification'> & {
+  productClassification: string
+}
+// export interface ICreateCartItem {
+//   id: string
+//   classification?: string
+//   productClassification?: string
+//   quantity?: number
+// }
 
 export interface ICartByBrand {
   [brandName: string]: ICartItem[]
