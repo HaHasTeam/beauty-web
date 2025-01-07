@@ -26,6 +26,7 @@ const initialState: CartState = {
   cartItems: [],
   total: 0,
 }
+
 export const createCartSlice: StateCreator<CartSlice, [['zustand/immer', never]]> = (set, get) => ({
   ...initialState,
   incQty: (productId) =>

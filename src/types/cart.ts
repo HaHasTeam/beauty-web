@@ -18,7 +18,7 @@ export interface ICartItem {
   productClassification: IClassification
 }
 export interface ICreateCartItem {
-  id?: string
+  id: string
   classification?: string
   productClassification?: string
   quantity?: number
