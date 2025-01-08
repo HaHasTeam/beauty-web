@@ -88,6 +88,9 @@ const ProductDetailInformation = ({
           currentPrice={discountedPrice}
           deal={product?.productDiscounts?.[0]?.discount ?? 0}
           price={chosenClassification ? (chosenClassification?.price ?? 0) : (cheapestClassification?.price ?? 0)}
+          minOrder={0}
+          discountValue={0}
+          discountType={DiscountTypeEnum.PERCENTAGE}
         />
         {/* brand deals */}
         <div className="flex gap-2">

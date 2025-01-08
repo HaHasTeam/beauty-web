@@ -219,7 +219,7 @@ const ProductDetail = () => {
             </div>
 
             {/* product brand */}
-            <BrandSection />
+            {useProductData?.data?.brand && <BrandSection brand={useProductData?.data?.brand} />}
 
             {/* product reviews */}
             <div className="flex gap-2 bg-white rounded-lg" id="customerReviews" ref={reviewSectionRef}>

@@ -160,7 +160,18 @@ const ProductDetailAction = ({ product, chosenClassification, discount, discount
 
       {chosenClassification ? (
         <div>
-          <Button className="font-semibold" key={chosenClassification?.id} variant="outline">
+          <Button
+            key={chosenClassification?.id}
+            variant="outline"
+            className={`w-fit h-fit justify-start px-2 py-2 text-sm`}
+          >
+            <div className="w-10 h-10 rounded-md">
+              <img
+                alt="option"
+                src={chosenClassification?.images[0]?.fileUrl}
+                className="w-full h-full object-contain rounded-md"
+              />
+            </div>
             {chosenClassification?.title}
           </Button>
         </div>

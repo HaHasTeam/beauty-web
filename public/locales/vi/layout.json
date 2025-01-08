@@ -231,11 +231,12 @@
     "descriptionTitle": "Mô tả",
     "detailTitle": "Thông tin chi tiết",
     "breadcrumbProductName": "{{name}}",
-    "brandDeal": "Deal của thương hiệu",
+    "brandDeal": "Ưu đãi của thương hiệu",
     "classification": "Phân loại",
     "selectOption": "Chọn tùy chọn",
     "selectClassification": "Chọn phân loại",
-    "title": "Chi tiết sản phẩm"
+    "title": "Chi tiết sản phẩm",
+    "originalPrice": "Giá gốc"
   },
   "event": {
     "finishIn": "Kết thúc trong"
@@ -273,7 +274,8 @@
     },
     "joined": {
       "title": "Tham gia vào",
-      "value": "{{time}} trước"
+      "value": "{{time}} trước",
+      "time": "{{time}}"
     },
     "products": {
       "title": "Sản phẩm",
@@ -341,7 +343,11 @@
     "maxQuantityError": "Số lượng còn lại của phân loại sản phẩm này là {{maxQuantity}}.",
     "negativeQuantityError": "Số lượng sản phẩm không thể bé hơn 1.",
     "addToCartSuccess": "Sản phẩm đã được thêm vào giỏ hàng.",
-    "chooseClassification": "Chọn phân loại sản phẩm để mua."
+    "chooseClassification": "Chọn phân loại sản phẩm để mua.",
+    "tmpTotalProductPrice": "Giá tạm tính (khi áp dụng các voucher trên)",
+    "voucherNote": "*Vui lòng thêm Vvoucher khi đặt hàng ở bước thanh toán để được giá như trên",
+    "buyToDiscountCurrency": "Mua từ {{minOrder, currency}} để được giảm {{discount, currency}}. Số lượng Voucher có hạn",
+    "buyToDiscountPercentage": "Mua từ {{minOrder, currency}} để được giảm {{discount}}%. Số lượng Voucher có hạn"
   },
   "address": {
     "title": "Địa chỉ",
