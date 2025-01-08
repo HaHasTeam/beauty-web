@@ -88,20 +88,20 @@ export type IServerCreateProduct = {
   sku?: string
 }
 export type IResponseProduct = {
-  id?: string
+  id: string
   name: string
-  brand?: IBrand
+  brand: IBrand
   category?: ICategory
   images: IImage[]
   description: string
-  status?: string
-  detail?: string
-  productClassifications?: IServerProductClassification[]
-  price?: number
-  quantity?: number
+  status: string
+  detail: string
+  productClassifications: IClassification[]
+  price: number
+  quantity: number
   sku?: string
   menu?: string
-  updatedAt?: string
+  updatedAt: string
 }
 
 export type IProductTable = {
@@ -126,6 +126,11 @@ export type IProductTable = {
 export interface ProductTableProps {
   tableData: TProduct[]
 }
+// type IProductImage = {
+//   id: string
+//   image: string
+//   fileUrl?: string
+// }
 
 export type IProduct = {
   id: string
@@ -181,6 +186,7 @@ export type IProductCard = {
   rating: number
   ratingAmount: number
   soldInPastMonth: number
+  classifications?: IServerProductClassification[]
 }
 
 // components interface ends

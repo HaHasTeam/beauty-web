@@ -72,9 +72,9 @@ export default function ClassificationPopover({
 
       try {
         await createCartItemFn({
-          quantity: cartItemQuantity,
-          classification: updateClassification?.title,
-          productClassification: updateClassification?.id,
+          quantity: cartItemQuantity ?? 1,
+          classification: updateClassification?.title ?? '',
+          productClassification: updateClassification?.id ?? '',
         })
       } catch (error) {
         handleServerError({ error })
@@ -147,7 +147,11 @@ export default function ClassificationPopover({
                       onClick={() => handleSelect(option)}
                     >
                       <div className="w-10 h-10 rounded-md">
-                        <img src={option?.images[0]?.fileUrl} className="w-full h-full object-contain rounded-md" />
+                        <img
+                          alt="option"
+                          src={option?.images[0]?.fileUrl}
+                          className="w-full h-full object-contain rounded-md"
+                        />
                       </div>
                       {option?.title}
                     </Button>

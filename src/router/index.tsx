@@ -2,6 +2,7 @@ import { useRoutes } from 'react-router-dom'
 
 import PrimaryLayout from '@/components/layout/PrimaryLayout'
 import configs from '@/config'
+import externalLink from '@/config/externalLink'
 import About from '@/views/About'
 import Contact from '@/views/Contact'
 import Forbidden from '@/views/Forbidden'
@@ -68,3 +69,6 @@ export default function RouterProvider() {
     },
   ])
 }
+export const buildResource = (root: string, route: string) => `${externalLink.appURL}/${root}/${route}`
+
+export const buildOneWayResource = (root: string) => `window.location.pathname/${root}`

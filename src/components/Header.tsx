@@ -66,7 +66,7 @@ export default function Header() {
           </Link>
           <SearchBar />
           {/* desktop menu */}
-          <div className="md:flex gap-3 hidden">
+          <div className="md:flex gap-3 hidden items-center justify-center">
             <WebNotification
               notifications={notifications}
               notificationCount={notifications.length}
@@ -84,7 +84,7 @@ export default function Header() {
                 <span>{t('header.profile')}</span>
               </Link>
             ) : (
-              <Link to={configs.routes.signIn} className="p-2 rounded-md text-primary-foreground">
+              <Link to={configs.routes.signIn} className="p-2 rounded-md text-background-foreground">
                 {t('header.loginOrRegister')}
               </Link>
             )}
@@ -138,7 +138,7 @@ export default function Header() {
             ) : (
               <Link
                 to={configs.routes.signIn}
-                className="w-full text-primary-foreground"
+                className="w-full text-background-foreground"
                 onClick={() => {
                   setMenuOpen(false)
                 }}
