@@ -35,6 +35,10 @@ export type TVoucher = TMetaData & {
   applyProducts?: IProduct[]
 
   reason?: VoucherUnavailableReasonEnum
+
+  discount?: number
+
+  used?: number
 }
 
 export interface ICheckoutItem {

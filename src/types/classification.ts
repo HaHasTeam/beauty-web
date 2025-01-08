@@ -1,3 +1,4 @@
+import { StatusEnum } from './enum'
 import { IImage } from './image'
 import { IPreOrder } from './pre-order'
 import { IProduct } from './product'
@@ -21,7 +22,7 @@ export type IClassification = {
   quantity: number
   sku: string
   type: string
-  status: string
+  status?: StatusEnum.ACTIVE | StatusEnum.INACTIVE
   images: IImage[]
   product: IProduct
   preOrderProduct?: IPreOrder | null

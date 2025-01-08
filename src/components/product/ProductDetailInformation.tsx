@@ -31,7 +31,7 @@ const ProductDetailInformation = ({ product, scrollToReviews }: ProductDetailInf
         <div className="flex gap-2 align-middle items-center">
           <div className="flex gap-2 align-middle items-center hover:cursor-pointer" onClick={scrollToReviews}>
             <span className="font-semibold">{product?.rating}</span>
-            <ProductStar rating={product?.rating} ratingAmount={product?.ratingAmount} />
+            <ProductStar rating={product?.rating ?? 0} ratingAmount={product?.ratingAmount} />
           </div>
           <div className="border-l border-gray-300 px-2">
             <span className="text-gray-500 text-sm">
@@ -61,7 +61,7 @@ const ProductDetailInformation = ({ product, scrollToReviews }: ProductDetailInf
                 key={classification?.id}
                 variant="outline"
               >
-                {classification?.name}
+                {classification?.title}
               </Button>
             ))}
           </div>

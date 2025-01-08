@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Trash2 } from 'lucide-react'
-import { Dispatch, SetStateAction, useCallback, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
@@ -43,7 +43,6 @@ interface ProductCardLandscapeProps {
   productClassificationQuantity: number
   isSelected: boolean
   onChooseProduct: (cartItemId: string) => void
-  setIsTriggerTotal: Dispatch<SetStateAction<boolean>>
 }
 const ProductCardLandscape = ({
   cartItem,
@@ -61,7 +60,6 @@ const ProductCardLandscape = ({
   productQuantity,
   productClassification,
   productClassificationQuantity,
-  setIsTriggerTotal,
 }: ProductCardLandscapeProps) => {
   const { t } = useTranslation()
   const [quantity, setQuantity] = useState(productQuantity)
@@ -109,14 +107,14 @@ const ProductCardLandscape = ({
     mutationKey: [updateCartItemApi.mutationKey],
     mutationFn: updateCartItemApi.fn,
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: [getMyCartApi.queryKey],
-      })
-      queryClient.invalidateQueries({
-        queryKey: [getCartByIdApi.queryKey, cartItemId as string],
-      })
-      console.log(productQuantity, quantity, inputValue)
-      setIsTriggerTotal((prev) => !prev)
+      // queryClient.invalidateQueries({
+      //   queryKey: [getMyCartApi.queryKey],
+      // })
+      // queryClient.invalidateQueries({
+      //   queryKey: [getCartByIdApi.queryKey, cartItemId as string],
+      // })
+      // console.log(productQuantity, quantity, inputValue)
+      // setIsQuantityUpdate((prev) => !prev)
     },
   })
 

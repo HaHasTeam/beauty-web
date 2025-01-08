@@ -1,5 +1,5 @@
 import { MessageCircle, Store, Tag } from 'lucide-react'
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
@@ -21,7 +21,6 @@ interface CartItemProps {
   selectedCartItems: string[]
   onSelectBrand: (productIds: string[], isSelected: boolean) => void
   bestVoucherForBrand: IBrandBestVoucher
-  setIsTriggerTotal: Dispatch<SetStateAction<boolean>>
   onVoucherSelect: (brandId: string, voucher: TVoucher | null) => void
   brand?: IBrand
   checkoutItems: ICheckoutItem[]
@@ -33,7 +32,6 @@ const CartItem = ({
   selectedCartItems,
   onSelectBrand,
   bestVoucherForBrand,
-  setIsTriggerTotal,
   onVoucherSelect,
   brand,
   checkoutItems,
@@ -139,7 +137,6 @@ const CartItem = ({
             onChooseProduct={() => handleSelectCartItem(cartItem?.id, !selectedCartItems?.includes(cartItem?.id))}
             productQuantity={productQuantity}
             productClassificationQuantity={productClassificationQuantity}
-            setIsTriggerTotal={setIsTriggerTotal}
           />
         )
       })}
@@ -151,7 +148,7 @@ const CartItem = ({
           {chosenVoucher && hasBrandProductSelected
             ? chosenVoucher?.discountType === DiscountTypeEnum.AMOUNT && chosenVoucher?.discountValue
               ? t('voucher.discountAmount', { amount: chosenVoucher?.discountValue })
-              : t('voucher.discountPercentage', { percentage: chosenVoucher?.discountValue * 100 })
+              : t('voucher.discountAmount', { amount: chosenVoucher?.discount })
             : bestVoucherForBrand?.bestVoucher
               ? bestVoucherForBrand?.bestVoucher?.discountType === DiscountTypeEnum.AMOUNT &&
                 bestVoucherForBrand?.bestVoucher?.discountValue

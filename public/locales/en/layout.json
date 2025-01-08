@@ -89,7 +89,10 @@
     "vietnamese": "VN"
   },
   "search": {
-    "result": "Search results for {{keyword}}: {{total}} data"
+    "result": "Search results for {{keyword}}: {{total}} data",
+    "reset": "Reset",
+    "orderPlaceholder": "Search for orders by Order ID or Product Name",
+    "orderButton": "Search Order"
   },
   "filter": {
     "title": "Filter",
@@ -211,6 +214,16 @@
       "title": "No Vouchers Available",
       "description": "There are no vouchers from {{platformName}}. Enter a valid voucher code in the bar above.",
       "button": "Explore {{platformName}} Vouchers"
+    },
+    "product": {
+      "title": "No Products Found",
+      "description": "We couldn't find any products matching your criteria. Please try adjusting your filters or search for something else.",
+      "button": "Browse Products"
+    },
+    "productDetail": {
+      "title": "Product Not Found",
+      "description": "The product you're looking for either does not exist, has been removed, or is currently unavailable.",
+      "button": "Browse Other Products"
     }
   },
   "productDetail": {
@@ -224,7 +237,8 @@
     "brandDeal": "Brand Deal",
     "classification": "Classifications",
     "selectOption": "Select Option",
-    "selectClassification": "Select Classification"
+    "selectClassification": "Select Classification",
+    "title": "Product details"
   },
   "event": {
     "finishIn": "Finish In"
@@ -327,8 +341,9 @@
     "soldOutMessage": "This product classification is sold out, please choose another.",
     "soldOutAllMessage": "This product is sold out.",
     "hiddenMessage": "This product classification is hidden, please choose another.",
-    "maxQuantityError": "The remaining quantity of this product is {{maxQuantity}}.",
-    "negativeQuantityError": "The quantity cannot be less than 1."
+    "maxQuantityError": "The remaining quantity of this product classification is {{maxQuantity}}.",
+    "negativeQuantityError": "The quantity cannot be less than 1.",
+    "addToCartSuccess": "The product has been added to your cart."
   },
   "address": {
     "title": "Address",

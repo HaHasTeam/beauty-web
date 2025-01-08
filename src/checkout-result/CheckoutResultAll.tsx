@@ -30,7 +30,6 @@ export default function CheckoutResultAll({ status, orderId }: CheckoutResultAll
       }
       leftButtonText={status === ResultEnum.SUCCESS ? t('order.viewOrder') : t('order.continueShopping')}
       rightButtonText={status === ResultEnum.SUCCESS ? t('order.continueShopping') : t('order.tryAgain')}
-      color={status === ResultEnum.SUCCESS ? 'success' : 'failure'}
     />
   )
 }

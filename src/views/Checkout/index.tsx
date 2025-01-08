@@ -208,6 +208,7 @@ const Checkout = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCartItem, selectedCartItems])
 
+  console.log(selectedCartItem)
   return (
     <>
       {(isGettingProfile || isGettingAddress) && <LoadingContentLayer />}
