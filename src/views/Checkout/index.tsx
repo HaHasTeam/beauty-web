@@ -71,13 +71,13 @@ const Checkout = () => {
   }, [selectedCartItem, selectedCartItems])
   // Calculate total voucher discount
   const totalBrandDiscount = useMemo(() => {
-    return calculateTotalVoucherDiscount(chosenBrandVouchers, totalPrice)
-  }, [chosenBrandVouchers, totalPrice])
+    return calculateTotalVoucherDiscount(chosenBrandVouchers)
+  }, [chosenBrandVouchers])
 
   // Calculate platform voucher discount
   const totalPlatformDiscount = useMemo(() => {
-    return calculatePlatformVoucherDiscount(chosenPlatformVoucher, totalPrice)
-  }, [chosenPlatformVoucher, totalPrice])
+    return calculatePlatformVoucherDiscount(chosenPlatformVoucher)
+  }, [chosenPlatformVoucher])
 
   const totalProductDiscount = useMemo(() => {
     return calculateCartTotals(selectedCartItems, selectedCartItem).totalProductDiscount

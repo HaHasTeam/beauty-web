@@ -225,14 +225,11 @@ export const calculateCartTotals = (
  * @param totalPrice - price of product after direct discount in that product.
  * @returns An object show total brands voucher discount of selected products.
  */
-export const calculateTotalVoucherDiscount = (
-  chosenVouchersByBrand: { [brandId: string]: TVoucher | null },
-  totalPrice: number,
-) => {
+export const calculateTotalVoucherDiscount = (chosenVouchersByBrand: { [brandId: string]: TVoucher | null }) => {
   return Object.values(chosenVouchersByBrand).reduce((total, voucher) => {
     if (!voucher) return total
-    const { discountType, discountValue, maxDiscount } = voucher
-    const voucherDiscount = discountType === DiscountTypeEnum.PERCENTAGE ? totalPrice * discountValue : discountValue
+    const { discountType, discountValue, maxDiscount, discount } = voucher
+    const voucherDiscount = discountType === DiscountTypeEnum.PERCENTAGE ? (discount ?? 0) : discountValue
 
     return maxDiscount && maxDiscount > 0
       ? total + voucherDiscount > maxDiscount
@@ -249,11 +246,11 @@ export const calculateTotalVoucherDiscount = (
  * @param totalPrice - price of product after direct discount in that product.
  * @returns An object show total platform voucher discount of selected products.
  */
-export const calculatePlatformVoucherDiscount = (platformChosenVoucher: TVoucher | null, totalPrice: number) => {
+export const calculatePlatformVoucherDiscount = (platformChosenVoucher: TVoucher | null) => {
   if (!platformChosenVoucher) return 0
 
-  const { discountType, discountValue, maxDiscount } = platformChosenVoucher
-  const voucherValue = discountType === DiscountTypeEnum.PERCENTAGE ? totalPrice * discountValue : discountValue
+  const { discountType, discountValue, maxDiscount, discount } = platformChosenVoucher
+  const voucherValue = discountType === DiscountTypeEnum.PERCENTAGE ? (discount ?? 0) : discountValue
   return maxDiscount && maxDiscount > 0 ? (voucherValue > maxDiscount ? maxDiscount : voucherValue) : voucherValue
 }
 
