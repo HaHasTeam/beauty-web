@@ -1,6 +1,5 @@
 import { IClassification } from '@/types/classification'
 import { StatusEnum } from '@/types/enum'
-import { IProductClassification } from '@/types/product'
 
 /**
  * Checks if the product classification is active.
@@ -67,7 +66,7 @@ export function hasClassificationWithQuantity(classifications: IClassification[]
  * @param {Array} classifications - List of product classifications.
  * @returns {Object|null} The classification with the minimum price, or null if the list is empty.
  */
-export const getCheapestClassification = (classifications: IProductClassification[]) => {
+export const getCheapestClassification = (classifications: IClassification[]) => {
   if (!classifications || classifications.length === 0) return null
 
   return classifications.reduce(
@@ -78,6 +77,6 @@ export const getCheapestClassification = (classifications: IProductClassificatio
       }
       return cheapest
     },
-    null as IProductClassification | null,
+    null as IClassification | null,
   )
 }

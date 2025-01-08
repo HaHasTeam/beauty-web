@@ -1,5 +1,5 @@
 import { ICartByBrand, ICartItem } from '@/types/cart'
-import { DiscountTypeEnum } from '@/types/enum'
+import { DiscountTypeEnum, ProductDiscountEnum } from '@/types/enum'
 import { DiscountType } from '@/types/product-discount'
 import { TVoucher } from '@/types/voucher'
 
@@ -189,7 +189,11 @@ export const calculateCartTotals = (
       if (cartItem) {
         const productPrice = cartItem?.productClassification?.price ?? 0
         const cartItemQuantity = cartItem?.quantity ?? 0
-        const discount = cartItem?.productClassification?.productDiscount?.discount ?? 0
+        const discount =
+          cartItem?.productClassification?.productDiscount &&
+          cartItem?.productClassification?.productDiscount?.status === ProductDiscountEnum.ACTIVE
+            ? cartItem?.productClassification?.productDiscount?.discount
+            : 0
         const discountType = DiscountTypeEnum.PERCENTAGE
 
         // Calculate total product cost (price without discount)

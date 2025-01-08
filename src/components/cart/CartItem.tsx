@@ -7,7 +7,8 @@ import configs from '@/config'
 import { IBrand } from '@/types/brand'
 import { ICartItem } from '@/types/cart'
 import { IClassification } from '@/types/classification'
-import { DiscountTypeEnum, OrderEnum } from '@/types/enum'
+import { DiscountTypeEnum, OrderEnum, ProductDiscountEnum } from '@/types/enum'
+import { PreOrderStatusEnum } from '@/types/pre-order'
 import { IBrandBestVoucher, ICheckoutItem, TVoucher } from '@/types/voucher'
 
 import ProductCardLandscape from '../product/ProductCardLandscape'
@@ -104,11 +105,16 @@ const CartItem = ({
         const productQuantity = cartItem?.quantity ?? 0
         // const selectedClassification = cartItem?.classification ?? ''
 
-        const eventType = cartItem?.productClassification?.preOrderProduct
-          ? OrderEnum.PRE_ORDER
-          : cartItem?.productClassification?.productDiscount || (product?.productDiscounts ?? [])[0]?.discount
-            ? OrderEnum.FLASH_SALE
-            : ''
+        const eventType =
+          cartItem?.productClassification?.preOrderProduct &&
+          cartItem?.productClassification?.preOrderProduct?.status === PreOrderStatusEnum.ACTIVE
+            ? OrderEnum.PRE_ORDER
+            : (cartItem?.productClassification?.productDiscount &&
+                  cartItem?.productClassification?.productDiscount?.status === ProductDiscountEnum.ACTIVE) ||
+                ((product?.productDiscounts ?? [])[0]?.status === ProductDiscountEnum.ACTIVE &&
+                  (product?.productDiscounts ?? [])[0]?.discount)
+              ? OrderEnum.FLASH_SALE
+              : ''
         const discount =
           eventType === OrderEnum.FLASH_SALE
             ? cartItem?.productClassification?.productDiscount?.discount

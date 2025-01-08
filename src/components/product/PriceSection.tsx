@@ -17,8 +17,10 @@ const PriceSection = ({ price, currentPrice, deal }: PriceSectionProps) => {
         <span className="text-red-500 text-2xl font-medium">
           {t('productCard.currentPrice', { price: currentPrice })}
         </span>
-        <ProductTag tag="DealPercent" text={deal * 100 + '%'} />
-        <span className="text-gray-400 text-sm line-through">{t('productCard.price', { price: price })}</span>
+        {deal && deal > 0 ? <ProductTag tag="DealPercent" text={deal * 100 + '%'} /> : null}
+        {deal && deal > 0 ? (
+          <span className="text-gray-400 text-sm line-through">{t('productCard.price', { price: price })}</span>
+        ) : null}
       </div>
       <HoverCard>
         <HoverCardTrigger asChild>

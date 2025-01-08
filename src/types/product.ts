@@ -158,6 +158,7 @@ export type IProduct = {
   productClassifications?: IClassification[] // use for cart
   productDiscounts?: IProductDiscount[] | null // use for cart
   preOrderProducts?: IPreOrder[] | null // use for cart
+  category?: ICategory // use for product details
 }
 
 export type IProductCart = {

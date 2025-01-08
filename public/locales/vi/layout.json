@@ -44,7 +44,8 @@
     "default": "Mặc định"
   },
   "flashSale": {
-    "title": "Flash Sale"
+    "title": "Flash Sale",
+    "waiting": "Flash Sale sẽ diễn ra vào ngày {{val, MM/DD/YYYY HH:mm:ss}}"
   },
   "footer": {
     "contactTitle": "Khám phá vẻ đẹp thiên nhiên với các sản phẩm chăm sóc tự nhiên của chúng tôi."
@@ -227,7 +228,8 @@
     "quantity": "Số lượng",
     "total": "Tạm tính",
     "priceDetail": "Chi tiết giá",
-    "descriptionTitle": "Mô tả thêm",
+    "descriptionTitle": "Mô tả",
+    "detailTitle": "Thông tin chi tiết",
     "breadcrumbProductName": "{{name}}",
     "brandDeal": "Deal của thương hiệu",
     "classification": "Phân loại",
@@ -338,7 +340,8 @@
     "hiddenMessage": "Phân loại hàng này đã bị ẩn, vui lòng chọn phân loại khác.",
     "maxQuantityError": "Số lượng còn lại của phân loại sản phẩm này là {{maxQuantity}}.",
     "negativeQuantityError": "Số lượng sản phẩm không thể bé hơn 1.",
-    "addToCartSuccess": "Sản phẩm đã được thêm vào giỏ hàng."
+    "addToCartSuccess": "Sản phẩm đã được thêm vào giỏ hàng.",
+    "chooseClassification": "Chọn phân loại sản phẩm để mua."
   },
   "address": {
     "title": "Địa chỉ",

@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { useRef, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 
@@ -16,15 +16,54 @@ import ReviewOverall from '@/components/reviews/ReviewOverall'
 import ReviewSection from '@/components/reviews/ReviewSection'
 import { getProductApi } from '@/network/apis/product'
 import { IClassification } from '@/types/classification'
+import { DiscountTypeEnum, OrderEnum, ProductDiscountEnum, StatusEnum } from '@/types/enum'
+import { PreOrderStatusEnum } from '@/types/pre-order'
+import { ProductClassificationTypeEnum } from '@/types/product'
+import { getCheapestClassification } from '@/utils/product'
 
 const ProductDetail = () => {
   const { productId } = useParams()
   const { t } = useTranslation()
-  console.log(productId)
   const { data: useProductData, isFetching } = useQuery({
     queryKey: [getProductApi.queryKey, productId as string],
     queryFn: getProductApi.fn,
   })
+  const event = useMemo(
+    () =>
+      (useProductData?.data?.productDiscounts ?? [])?.length > 0 &&
+      (useProductData?.data?.productDiscounts ?? [])[0]?.status === ProductDiscountEnum.ACTIVE
+        ? OrderEnum.FLASH_SALE
+        : (useProductData?.data?.preOrderProducts ?? [])?.length > 0 &&
+            (useProductData?.data?.preOrderProducts ?? [])[0]?.status === PreOrderStatusEnum.ACTIVE
+          ? OrderEnum.PRE_ORDER
+          : OrderEnum.NORMAL,
+    [useProductData?.data?.preOrderProducts, useProductData?.data?.productDiscounts],
+  )
+
+  const productClassifications = useMemo(() => {
+    return event === OrderEnum.FLASH_SALE
+      ? useProductData?.data?.productDiscounts?.[0]?.productClassifications
+      : event === OrderEnum.PRE_ORDER
+        ? useProductData?.data?.preOrderProducts?.[0]?.productClassifications
+        : useProductData?.data?.productClassifications
+  }, [event, useProductData?.data])
+
+  const cheapestClassification = useMemo(
+    () => getCheapestClassification(productClassifications ?? []),
+    [productClassifications],
+  )
+  const hasCustomType = useMemo(
+    () =>
+      productClassifications?.some(
+        (classification) =>
+          classification?.type === ProductClassificationTypeEnum.CUSTOM && classification.status === StatusEnum.ACTIVE,
+      ),
+    [productClassifications],
+  )
+
+  const [chosenClassification, setChosenClassification] = useState<IClassification | null>(
+    !hasCustomType && productClassifications ? productClassifications?.[0] : null,
+  )
 
   const reviews = [
     {
@@ -136,10 +175,8 @@ const ProductDetail = () => {
   const scrollToReviews = () => {
     reviewSectionRef.current?.scrollIntoView({ behavior: 'smooth' })
   }
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [classification, setClassification] = useState<IClassification>(
-    (useProductData?.data?.productClassifications ?? [])[0],
-  )
+
+  console.log(productClassifications)
 
   return (
     <div className="w-full mx-auto px-4 py-5 ">
@@ -151,17 +188,33 @@ const ProductDetail = () => {
           <>
             <div className="flex gap-2 w-full">
               {/* product image carousel */}
-              <div className="shadow-sm p-3 bg-white rounded-lg w-[calc(30%-8px)]">
+              <div className="shadow-sm p-3 bg-white rounded-lg w-[calc(30%-8px)] sticky top-0 max-h-fit">
                 <ProductCarousel product={useProductData?.data} />
               </div>
 
               {/* product detail information */}
               <div className="w-[calc(50%-8px)]">
-                <ProductDetailInformation product={useProductData?.data} scrollToReviews={scrollToReviews} />
+                <ProductDetailInformation
+                  product={useProductData?.data}
+                  scrollToReviews={scrollToReviews}
+                  productClassifications={productClassifications}
+                  cheapestClassification={cheapestClassification}
+                  event={event}
+                  chosenClassification={chosenClassification}
+                  setChosenClassification={setChosenClassification}
+                  hasCustomType={hasCustomType ?? false}
+                />
               </div>
               {/* call to action */}
-              <div className="shadow-sm p-3 bg-white rounded-lg w-[calc(20%-8px)]">
-                <ProductDetailAction product={useProductData?.data} chosenClassification={classification} />
+              <div className="shadow-sm p-3 bg-white rounded-lg w-[calc(20%-8px)] sticky top-0 max-h-fit">
+                <ProductDetailAction
+                  product={useProductData?.data}
+                  chosenClassification={chosenClassification}
+                  discount={
+                    event === OrderEnum.FLASH_SALE ? useProductData?.data?.productDiscounts?.[0]?.discount : undefined
+                  }
+                  discountType={DiscountTypeEnum.PERCENTAGE}
+                />
               </div>
             </div>
 
