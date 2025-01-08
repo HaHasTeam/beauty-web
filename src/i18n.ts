@@ -27,7 +27,7 @@ i18n
         if (value instanceof Date) {
           const dateValue = value instanceof Date ? value : new Date(value)
           // eslint-disable-next-line import/no-named-as-default-member
-          return moment.utc(dateValue).format(format || 'DD/MM/YYYY HH:mm:ss')
+          return moment(dateValue).format(format || 'DD/MM/YYYY HH:mm:ss')
         }
 
         if (format === 'currency') {

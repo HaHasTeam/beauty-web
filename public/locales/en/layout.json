@@ -44,7 +44,8 @@
     "default": "Default"
   },
   "flashSale": {
-    "title": "Flash Sale"
+    "title": "Flash Sale",
+    "waiting": "Flash Sale will take place on {{val, MM/DD/YYYY HH:mm:ss}}"
   },
   "footer": {
     "contactTitle": "Discover nature's beauty with our natural care products."
@@ -233,12 +234,14 @@
     "total": "Total",
     "priceDetail": "Price Detail",
     "descriptionTitle": "Description",
+    "detailTitle": "Detail",
     "breadcrumbProductName": "{{name}}",
     "brandDeal": "Brand Deal",
     "classification": "Classifications",
     "selectOption": "Select Option",
     "selectClassification": "Select Classification",
-    "title": "Product details"
+    "title": "Product details",
+    "originalPrice": "Original Price"
   },
   "event": {
     "finishIn": "Finish In"
@@ -276,7 +279,8 @@
     },
     "joined": {
       "title": "Joined",
-      "value": "{{time}} ago"
+      "value": "{{time}} ago",
+      "time": "{{time}}"
     },
     "products": {
       "title": "Products",
@@ -343,7 +347,12 @@
     "hiddenMessage": "This product classification is hidden, please choose another.",
     "maxQuantityError": "The remaining quantity of this product classification is {{maxQuantity}}.",
     "negativeQuantityError": "The quantity cannot be less than 1.",
-    "addToCartSuccess": "The product has been added to your cart."
+    "addToCartSuccess": "The product has been added to your cart.",
+    "chooseClassification": "To buy, choose a classification.",
+    "tmpTotalProductPrice": "Estimated price (when applying the vouchers above)",
+    "voucherNote": "*Please add vouchers at the checkout step to receive the price mentioned above",
+    "buyToDiscountCurrency": "Spend {{minOrder, currency}} to get a discount of {{discount, currency}}. Limited number of vouchers available",
+    "buyToDiscountPercentage": "Spend {{minOrder, currency}} to get a discount of {{discount}}%. Limited number of vouchers available"
   },
   "address": {
     "title": "Address",

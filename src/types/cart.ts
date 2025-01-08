@@ -13,7 +13,7 @@ export interface ICartItem {
   createdAt: string
   updatedAt: string
   quantity: number
-  classification: string
+  classification?: string
   status: StatusEnum.ACTIVE | StatusEnum.INACTIVE
   productClassification: IClassification
 }
@@ -22,7 +22,7 @@ export type ICreateCartItem = Omit<ICartItem, 'createdAt' | 'updatedAt' | 'statu
   productClassification: string
 }
 export type IUpdateCartItem = Omit<ICartItem, 'createdAt' | 'updatedAt' | 'status' | 'productClassification'> & {
-  productClassification: string
+  productClassification?: string
 }
 // export interface ICreateCartItem {
 //   id: string

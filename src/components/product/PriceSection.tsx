@@ -1,6 +1,9 @@
 import { CircleAlert } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
+import { DiscountTypeEnum } from '@/types/enum'
+import { calculateDiscountPrice } from '@/utils/price'
+
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '../ui/hover-card'
 import ProductTag from './ProductTag'
 
@@ -8,8 +11,20 @@ interface PriceSectionProps {
   price: number
   currentPrice: number
   deal: number
+  minOrder?: number
+  discountValue?: number
+  discountType?: DiscountTypeEnum
+  discountVoucher?: number
 }
-const PriceSection = ({ price, currentPrice, deal }: PriceSectionProps) => {
+const PriceSection = ({
+  price,
+  currentPrice,
+  deal,
+  discountType,
+  discountValue,
+  minOrder,
+  discountVoucher,
+}: PriceSectionProps) => {
   const { t } = useTranslation()
   return (
     <div className="flex gap-1">
@@ -17,8 +32,10 @@ const PriceSection = ({ price, currentPrice, deal }: PriceSectionProps) => {
         <span className="text-red-500 text-2xl font-medium">
           {t('productCard.currentPrice', { price: currentPrice })}
         </span>
-        <ProductTag tag="DealPercent" text={deal * 100 + '%'} />
-        <span className="text-gray-400 text-sm line-through">{t('productCard.price', { price: price })}</span>
+        {deal && deal > 0 ? <ProductTag tag="DealPercent" text={deal * 100 + '%'} /> : null}
+        {deal && deal > 0 ? (
+          <span className="text-gray-400 text-sm line-through">{t('productCard.price', { price: price })}</span>
+        ) : null}
       </div>
       <HoverCard>
         <HoverCardTrigger asChild>
@@ -31,34 +48,42 @@ const PriceSection = ({ price, currentPrice, deal }: PriceSectionProps) => {
 
               <div className="space-y-3">
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Giá gốc</span>
+                  <span className="text-gray-600">{t('productDetail.originalPrice')}</span>
                   <span className="text-red-500">{t('productCard.price', { price: price })}</span>
                 </div>
 
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Giảm giá sản phẩm</span>
-                  <span className="text-red-500">-đ801.000</span>
-                </div>
-
-                <div className="border-t pt-3">
+                {deal && (
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Voucher của Shop</span>
-                    <span className="text-red-500">-đ50.000</span>
+                    <span className="text-gray-600">{t('cart.directDiscount')}</span>
+                    <span className="text-red-500">{t('productCard.price', { price: price * deal })}</span>
                   </div>
-                  <p className="text-gray-500 text-sm mt-1">
-                    Mua từ đ399.000 để được giảm đ50.000. Số lượng Voucher có hạn
-                  </p>
-                </div>
+                )}
+
+                {(discountValue ?? 0) > 0 ? (
+                  <div className="border-t pt-3">
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">{t('cart.discountBrand')}</span>
+                      <span className="text-red-500">-{t('productCard.price', { price: discountValue })}</span>
+                    </div>
+                    <p className="text-gray-500 text-sm mt-1">
+                      {discountType === DiscountTypeEnum.PERCENTAGE
+                        ? t('cart.buyToDiscountPercentage', { minOrder: minOrder, discount: discountValue })
+                        : t('cart.buyToDiscountCurrency', { minOrder: minOrder, discount: discountVoucher })}
+                    </p>
+                  </div>
+                ) : null}
               </div>
 
               <div className="border-t pt-4">
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-900">Giá tạm tính (khi áp dụng các Voucher trên)</span>
-                  <span className="text-red-500 font-medium">{currentPrice}đ</span>
+                  <span className="text-gray-900">{t('cart.tmpTotalProductPrice')}</span>
+                  <span className="text-red-500 font-medium">
+                    {t('productCard.price', {
+                      price: calculateDiscountPrice(price, deal, DiscountTypeEnum.PERCENTAGE),
+                    })}
+                  </span>
                 </div>
-                <p className="text-gray-500 text-sm mt-2 italic">
-                  *Vui lòng thêm Voucher khi đặt hàng ở bước thanh toán để được giá như trên
-                </p>
+                <p className="text-gray-500 text-sm mt-2 italic">{t('cart.voucherNote')}</p>
               </div>
             </div>
           </div>

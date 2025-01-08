@@ -174,7 +174,7 @@ export default function CartFooter({
                       </div>
                     ) : (
                       <div className="flex gap-2 items-center">
-                        {t('voucher.discountPercentage', { percentage: platformChosenVoucher?.discountValue * 100 })}
+                        {t('voucher.discountAmount', { amount: platformChosenVoucher?.discount })}
                         <Pen />
                       </div>
                     )

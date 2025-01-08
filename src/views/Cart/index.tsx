@@ -44,13 +44,13 @@ const Cart = () => {
 
   // Calculate total voucher discount
   const totalVoucherDiscount = useMemo(() => {
-    return calculateTotalVoucherDiscount(chosenVouchersByBrand, totalPrice)
-  }, [chosenVouchersByBrand, totalPrice])
+    return calculateTotalVoucherDiscount(chosenVouchersByBrand)
+  }, [chosenVouchersByBrand])
 
   // Calculate platform voucher discount
   const platformVoucherDiscount = useMemo(() => {
-    return calculatePlatformVoucherDiscount(platformChosenVoucher, totalPrice)
-  }, [platformChosenVoucher, totalPrice])
+    return calculatePlatformVoucherDiscount(platformChosenVoucher)
+  }, [platformChosenVoucher])
 
   // Total saved price (product discounts + brand vouchers + platform voucher)
   const savedPrice = totalDirectProductsDiscount + totalVoucherDiscount + platformVoucherDiscount

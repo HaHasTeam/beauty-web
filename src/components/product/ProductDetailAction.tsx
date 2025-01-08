@@ -11,8 +11,10 @@ import { useToast } from '@/hooks/useToast'
 import { createCartItemApi, getMyCartApi } from '@/network/apis/cart'
 import useCartStore from '@/store/cart'
 import { IClassification } from '@/types/classification'
+import { DiscountTypeEnum, ProductDiscountEnum } from '@/types/enum'
 import { IProduct } from '@/types/product'
 import { createCartFromProduct } from '@/utils/cart'
+import { calculateDiscountPrice, calculateTotalPrice } from '@/utils/price'
 
 import IncreaseDecreaseButton from '../IncreaseDecreaseButton'
 import { Button } from '../ui/button'
@@ -20,15 +22,17 @@ import PriceSection from './PriceSection'
 
 interface ProductDetailActionProps {
   product: IProduct
-  chosenClassification: IClassification
+  chosenClassification: IClassification | null
+  discount?: number
+  discountType?: DiscountTypeEnum | null
 }
 
-const ProductDetailAction = ({ product, chosenClassification }: ProductDetailActionProps) => {
+const ProductDetailAction = ({ product, chosenClassification, discount, discountType }: ProductDetailActionProps) => {
   const { t } = useTranslation()
   const { setSelectedCartItem } = useCartStore()
   const [quantity, setQuantity] = useState(1)
   const [inputValue, setInputValue] = useState('1')
-  const MAX_QUANTITY_IN_CART = chosenClassification?.quantity // change to max quantity of products
+  const MAX_QUANTITY_IN_CART = chosenClassification ? chosenClassification?.quantity : 0 // change to max quantity of products
   const [isProcessing, setIsProcessing] = useState(false)
   const { successToast, errorToast } = useToast()
   const handleServerError = useHandleServerError()
@@ -55,24 +59,19 @@ const ProductDetailAction = ({ product, chosenClassification }: ProductDetailAct
     setQuantity(quantity)
     setInputValue(quantity.toString())
     try {
-      await createCartItemFn({
-        classification: chosenClassification?.title,
-        productClassification: chosenClassification?.id,
-        quantity: quantity,
-      })
+      if (chosenClassification) {
+        await createCartItemFn({
+          classification: chosenClassification?.title,
+          productClassification: chosenClassification?.id,
+          quantity: quantity,
+        })
+      }
     } catch (error) {
       handleServerError({ error })
     } finally {
       setIsProcessing(false)
     }
-  }, [
-    isProcessing,
-    quantity,
-    createCartItemFn,
-    chosenClassification?.title,
-    chosenClassification?.id,
-    handleServerError,
-  ])
+  }, [isProcessing, quantity, chosenClassification, createCartItemFn, handleServerError])
 
   const decreaseQuantity = () => {
     if (quantity > 1) {
@@ -117,8 +116,7 @@ const ProductDetailAction = ({ product, chosenClassification }: ProductDetailAct
     }
   }
 
-  const total =
-    product.currentPrice && product.currentPrice > 0 ? product.currentPrice * quantity : product?.price * quantity
+  const total = calculateTotalPrice(chosenClassification?.price ?? 0, quantity, discount, discountType)
 
   const handleBlur = () => {
     const newQuantity = parseInt(inputValue, 10)
@@ -132,22 +130,52 @@ const ProductDetailAction = ({ product, chosenClassification }: ProductDetailAct
   }
 
   const handleCheckout = () => {
-    setSelectedCartItem(createCartFromProduct(product, quantity, chosenClassification))
-    navigate(configs.routes.checkout)
+    if (chosenClassification) {
+      setSelectedCartItem(createCartFromProduct(product, quantity, chosenClassification))
+      navigate(configs.routes.checkout)
+    }
   }
+
+  const chosenPrice = chosenClassification ? chosenClassification?.price : 0
+
+  const discountedPrice =
+    (product?.productDiscounts ?? [])?.length > 0 &&
+    (product?.productDiscounts ?? [])[0]?.status === ProductDiscountEnum.ACTIVE
+      ? calculateDiscountPrice(chosenPrice, product?.productDiscounts?.[0]?.discount, DiscountTypeEnum.PERCENTAGE)
+      : chosenClassification
+        ? (chosenClassification?.price ?? 0)
+        : 0
 
   return (
     <div className="flex flex-col gap-3">
       <div>
-        <PriceSection price={product?.price} currentPrice={product?.currentPrice ?? 0} deal={product?.deal ?? 0} />
+        {chosenClassification ? (
+          <PriceSection
+            currentPrice={discountedPrice}
+            deal={product?.productDiscounts?.[0]?.discount ?? 0}
+            price={chosenClassification ? (chosenClassification?.price ?? 0) : 0}
+          />
+        ) : null}
       </div>
 
-      <div>
-        <Button className="font-semibold" key={chosenClassification?.id} variant="outline">
-          {chosenClassification?.title}
-        </Button>
-      </div>
-
+      {chosenClassification ? (
+        <div>
+          <Button
+            key={chosenClassification?.id}
+            variant="outline"
+            className={`w-fit h-fit justify-start px-2 py-2 text-sm`}
+          >
+            <div className="w-10 h-10 rounded-md">
+              <img
+                alt="option"
+                src={chosenClassification?.images[0]?.fileUrl}
+                className="w-full h-full object-contain rounded-md"
+              />
+            </div>
+            {chosenClassification?.title}
+          </Button>
+        </div>
+      ) : null}
       <div className="space-y-4">
         <div>
           <label className="text-sm font-medium mb-2 block">{t('productDetail.quantity')}</label>
@@ -165,19 +193,29 @@ const ProductDetailAction = ({ product, chosenClassification }: ProductDetailAct
           />
         </div>
 
-        <div>
-          <div className="text-sm font-medium mb-1">{t('productDetail.total')}</div>
-          <div className="text-2xl font-bold">{total}</div>
-        </div>
+        {!chosenClassification ? (
+          <span className="text-yellow-500 text-sm">{t('cart.chooseClassification')}</span>
+        ) : null}
 
+        {chosenClassification ? (
+          <div>
+            <div className="text-sm font-medium mb-1">{t('productDetail.total')}</div>
+            <div className="text-2xl font-bold">{t('productCard.price', { price: total })}</div>
+          </div>
+        ) : null}
         <div className="space-y-2">
-          <Button className="w-full bg-primary hover:bg-primary/80 text-white" onClick={() => handleCheckout()}>
+          <Button
+            disabled={!chosenClassification}
+            className="w-full bg-primary hover:bg-primary/80 text-white"
+            onClick={() => handleCheckout()}
+          >
             {t('productDetail.buyNow')}
           </Button>
           <Button
             variant="outline"
             className="w-full border-primary text-primary hover:text-primary hover:bg-primary/10"
             onClick={() => handleCreateCartItem()}
+            disabled={!chosenClassification}
           >
             {t('productDetail.addToCart')}
           </Button>

@@ -1,6 +1,5 @@
-import { IClassification } from '@/types/classification'
+import { IClassification, IClassificationWithSecondLevel } from '@/types/classification'
 import { StatusEnum } from '@/types/enum'
-import { IProductClassification } from '@/types/product'
 
 /**
  * Checks if the product classification is active.
@@ -67,7 +66,7 @@ export function hasClassificationWithQuantity(classifications: IClassification[]
  * @param {Array} classifications - List of product classifications.
  * @returns {Object|null} The classification with the minimum price, or null if the list is empty.
  */
-export const getCheapestClassification = (classifications: IProductClassification[]) => {
+export const getCheapestClassification = (classifications: IClassification[]) => {
   if (!classifications || classifications.length === 0) return null
 
   return classifications.reduce(
@@ -78,6 +77,86 @@ export const getCheapestClassification = (classifications: IProductClassificatio
       }
       return cheapest
     },
-    null as IProductClassification | null,
+    null as IClassification | null,
   )
+}
+
+/**
+ * Utility to validate the structure of a classification object.
+ * @param {IClassification} classification - The classification object to validate.
+ * @returns {boolean} - True if the object is valid, false otherwise.
+ */
+export const isValidClassification = (classification: IClassification) => {
+  return typeof classification === 'object' && classification !== null && typeof classification.title === 'string'
+}
+
+/**
+ * Utility to filter classifications based on a predicate.
+ * @param {IClassification[]} classifications - Array of classification objects.
+ * @param {(classification: IClassification) => boolean} predicate - Filter predicate function.
+ * @returns {IClassification[]} - Filtered classifications.
+ */
+export const filterClassifications = (
+  classifications: IClassification[],
+  predicate: (classification: IClassification) => boolean,
+) => {
+  return classifications.filter(predicate)
+}
+
+/**
+ * Utility to extract unique first-level categories from classifications.
+ * @param {IClassification[]} classifications - Array of classification objects.
+ * @returns {string[]} - Array of unique first-level categories.
+ */
+export const getUniqueFirstLevels = (classifications: IClassification[]) => {
+  const firstLevels = classifications.map((classification) => {
+    const [firstLevel] = classification.title.split('-')
+    return firstLevel
+  })
+  return [...new Set(firstLevels)]
+}
+
+/**
+ * Utility to get all classifications under a specific first-level category.
+ * @param {Record<string, IClassification[]>} grouped - Grouped classifications object.
+ * @param {string} firstLevel - The first-level category to filter by.
+ * @returns {IClassification[]} - Classifications under the given first-level category.
+ */
+export const getClassificationsByFirstLevel = (grouped: Record<string, IClassification[]>, firstLevel: string) => {
+  return grouped[firstLevel] || []
+}
+
+/**
+ * Utility to count classifications within each first-level category.
+ * @param {Record<string, IClassification[]>} grouped - Grouped classifications object.
+ * @returns {Record<string, number>} - Object with counts per first-level category.
+ */
+export const countClassificationsByFirstLevel = (grouped: Record<string, IClassification[]>) => {
+  const counts: Record<string, number> = {}
+  for (const [key, classifications] of Object.entries(grouped)) {
+    counts[key] = classifications.length
+  }
+  return counts
+}
+
+/**
+ * Main parse function to group classifications by first-level category.
+ * @param {IClassification[]} classifications - Array of classification objects.
+ * @returns {Record<string, IClassification[]>} - Grouped classifications.
+ */
+export const parseClassifications = (
+  classifications: IClassification[],
+): Record<string, IClassificationWithSecondLevel[]> => {
+  const grouped: Record<string, IClassificationWithSecondLevel[]> = {}
+  classifications.forEach((classification) => {
+    if (!isValidClassification(classification)) {
+      throw new Error(`Invalid classification object: ${JSON.stringify(classification)}`)
+    }
+    const [firstLevel, secondLevel] = classification.title.split('-')
+    if (!grouped[firstLevel]) {
+      grouped[firstLevel] = []
+    }
+    grouped[firstLevel].push({ ...classification, secondLevel })
+  })
+  return grouped
 }

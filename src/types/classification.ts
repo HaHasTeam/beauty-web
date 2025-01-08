@@ -29,6 +29,10 @@ export type IClassification = {
   productDiscount?: IProductDiscount | null
 }
 
+export interface IClassificationWithSecondLevel extends IClassification {
+  secondLevel: string | undefined
+}
+
 export enum ClassificationStatusEnum {
   PENDING = 'PENDING',
   ACTIVE = 'ACTIVE',
