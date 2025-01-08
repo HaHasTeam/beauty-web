@@ -137,7 +137,9 @@ const ProductDetail = () => {
     reviewSectionRef.current?.scrollIntoView({ behavior: 'smooth' })
   }
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [classification, setClassification] = useState<IClassification>(useProductData?.data?.productClassifications[0])
+  const [classification, setClassification] = useState<IClassification>(
+    (useProductData?.data?.productClassifications ?? [])[0],
+  )
 
   return (
     <div className="w-full mx-auto px-4 py-5 ">
