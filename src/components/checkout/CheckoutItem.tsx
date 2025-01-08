@@ -1,13 +1,21 @@
 import { MessageCircle, Store, Tag } from 'lucide-react'
+import { useMemo } from 'react'
+import { UseFormReturn } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
+import { z } from 'zod'
 
 import configs from '@/config'
+import CreateOrderSchema from '@/schemas/order.schema'
+import { IBrand } from '@/types/brand'
 import { ICartItem } from '@/types/cart'
 import { DiscountTypeEnum, OrderEnum } from '@/types/enum'
+import { IBrandBestVoucher, ICheckoutItem, TVoucher } from '@/types/voucher'
+import { getTotalBrandProductsPrice } from '@/utils/price'
 
 import ProductCheckoutLandscape from '../product/ProductCheckoutLandscape'
 import { Button } from '../ui/button'
+import { FormControl, FormField, FormItem, FormMessage } from '../ui/form'
 import { Input } from '../ui/input'
 import { Label } from '../ui/label'
 import VoucherCartList from '../voucher/VoucherCartList'
@@ -15,12 +23,40 @@ import VoucherCartList from '../voucher/VoucherCartList'
 interface CheckoutItemProps {
   brandName: string
   cartBrandItem: ICartItem[]
-  totalPrice: number
-  numberOfProducts: number
+  onVoucherSelect: (brandId: string, voucher: TVoucher | null) => void
+  chosenBrandVoucher: TVoucher | null
+  bestVoucherForBrand: IBrandBestVoucher
+  brand?: IBrand
+  totalBrandDiscount: number
+  index: number
+  form: UseFormReturn<z.infer<typeof CreateOrderSchema>>
 }
-const CheckoutItem = ({ brandName, cartBrandItem, totalPrice, numberOfProducts }: CheckoutItemProps) => {
+const CheckoutItem = ({
+  brandName,
+  cartBrandItem,
+  onVoucherSelect,
+  bestVoucherForBrand,
+  chosenBrandVoucher,
+  brand,
+  totalBrandDiscount,
+  index,
+  form,
+}: CheckoutItemProps) => {
   const { t } = useTranslation()
-  const brand = cartBrandItem[0]?.productClassification?.product?.brand
+
+  const totalBrandPrice = useMemo(() => {
+    return getTotalBrandProductsPrice(cartBrandItem)
+  }, [cartBrandItem])
+  const checkoutItems: ICheckoutItem[] = cartBrandItem
+    ?.map((cartItem) => ({
+      classificationId: cartItem.productClassification?.id ?? '',
+      quantity: cartItem.quantity ?? 0,
+    }))
+    ?.filter((item) => item.classificationId !== null)
+  const handleVoucherChange = (voucher: TVoucher | null) => {
+    onVoucherSelect(brand?.id ?? '', voucher)
+  }
+
   return (
     <div className="w-full bg-white sm:p-4 p-2 rounded-lg space-y-2 shadow-sm">
       {/* Brand Header */}
@@ -42,6 +78,7 @@ const CheckoutItem = ({ brandName, cartBrandItem, totalPrice, numberOfProducts }
           cartItem?.productClassification?.preOrderProduct?.product ??
           cartItem?.productClassification?.productDiscount?.product ??
           cartItem?.productClassification?.product
+        const productClassification = cartItem?.productClassification ?? null
         const productImage = cartItem?.productClassification?.images?.[0]?.fileUrl ?? ''
         const productName = product?.name ?? ''
         const productId = product?.id ?? ''
@@ -75,6 +112,7 @@ const CheckoutItem = ({ brandName, cartBrandItem, totalPrice, numberOfProducts }
             productId={productId}
             eventType={eventType}
             productQuantity={productQuantity}
+            productClassification={productClassification}
           />
         )
       })}
@@ -82,27 +120,68 @@ const CheckoutItem = ({ brandName, cartBrandItem, totalPrice, numberOfProducts }
       {/* Message and brand voucher */}
       <div className="w-full flex md:justify-between justify-start md:flex-row flex-col gap-3 border-b border-gray-200 py-3">
         <div className="order-2 md:order-1 flex items-center gap-3 text-sm w-full">
-          <Label>{t('input.message')}</Label>
-          <Input className="border border-secondary w-full" placeholder={t('input.message')} />
+          <FormField
+            control={form.control}
+            name={`orders.${index}.message`}
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <div className="w-full flex gap-2">
+                  <div className="w-1/5 flex items-center">
+                    <Label>{t('input.message')}</Label>
+                  </div>
+                  <div className="w-full space-y-1">
+                    <FormControl>
+                      <Input
+                        {...field}
+                        value={field.value ?? ''}
+                        className="border border-secondary w-full"
+                        placeholder={t('input.message')}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </div>
+                </div>
+              </FormItem>
+            )}
+          />
         </div>
         {/* Voucher */}
         <div className="order-1 md:order-2 flex items-center gap-3 text-sm w-full justify-end">
           <Tag className="w-4 h-4 text-red-500" />
-          <span>Voucher giảm đến ₫21k</span>
+          <span>
+            {chosenBrandVoucher
+              ? chosenBrandVoucher?.discountType === DiscountTypeEnum.AMOUNT && chosenBrandVoucher?.discountValue
+                ? t('voucher.discountAmount', { amount: chosenBrandVoucher?.discountValue })
+                : t('voucher.discountAmount', { amount: totalBrandDiscount })
+              : bestVoucherForBrand?.bestVoucher
+                ? bestVoucherForBrand?.bestVoucher?.discountType === DiscountTypeEnum.AMOUNT &&
+                  bestVoucherForBrand?.bestVoucher?.discountValue
+                  ? t('voucher.bestDiscountAmountDisplay', { amount: bestVoucherForBrand?.bestVoucher?.discountValue })
+                  : t('voucher.bestDiscountPercentageDisplay', {
+                      percentage: bestVoucherForBrand?.bestVoucher?.discountValue * 100,
+                    })
+                : null}
+          </span>
           <VoucherCartList
             triggerText={t('cart.viewMoreVoucher')}
             brandName={brand?.name ?? ''}
             brandLogo={brand?.logo ?? ''}
             brandId={brand?.id ?? ''}
+            hasBrandProductSelected={true}
+            checkoutItems={checkoutItems}
+            selectedCheckoutItems={checkoutItems}
+            handleVoucherChange={handleVoucherChange}
+            bestVoucherForBrand={bestVoucherForBrand}
+            chosenBrandVoucher={chosenBrandVoucher}
           />
         </div>
       </div>
       <div className="w-full flex gap-2 justify-end items-center">
         <span className="lg:text-lg md:text-sm sm:text-xs text-xs text-gray-600">
-          {t('cart.total')} ({numberOfProducts} {t('cart.products')}):
+          {t('cart.total')} ({cartBrandItem?.length} {t('cart.products')}):
         </span>
         <span className="text-red-500 lg:text-lg md:text-sm sm:text-xs text-xs font-medium text-end">
-          {t('productCard.currentPrice', { price: totalPrice })}
+          {t('productCard.currentPrice', { price: totalBrandPrice - totalBrandDiscount })}
         </span>
       </div>
     </div>

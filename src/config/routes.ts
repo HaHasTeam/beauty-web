@@ -38,6 +38,7 @@ const routes = {
   termsAndConditions: '/terms-and-condition',
   cart: '/cart',
   checkout: '/checkout',
+  checkoutResult: '/checkout/result',
   sellLanding: '/landing/sell',
   professionalLanding: '/landing/professional',
   search: '/search',

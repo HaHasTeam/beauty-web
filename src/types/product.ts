@@ -1,6 +1,7 @@
 import { IBrand, TBrand } from './brand'
 import { ICategory } from './category'
 import { IClassification } from './classification'
+import { IPreOrder } from './pre-order'
 import { IProductDiscount } from './product-discount'
 import { IImage } from './productImage'
 import { TMetaData } from './request'
@@ -125,11 +126,6 @@ export type IProductTable = {
 export interface ProductTableProps {
   tableData: TProduct[]
 }
-type IProductImage = {
-  id: string
-  image: string
-  fileUrl?: string
-}
 
 export type IProduct = {
   id: string
@@ -137,7 +133,7 @@ export type IProduct = {
   tag?: string
   price: number
   currentPrice?: number
-  images: IProductImage[]
+  images: IImage[]
   deal?: number
   flashSale?: {
     productAmount: number
@@ -156,6 +152,7 @@ export type IProduct = {
   brand?: IBrand
   productClassifications?: IClassification[] // use for cart
   productDiscounts?: IProductDiscount[] | null // use for cart
+  preOrderProducts?: IPreOrder[] | null // use for cart
 }
 
 export type IProductCart = {
@@ -175,7 +172,7 @@ export type IProductCard = {
   tag?: string
   price?: number
   currentPrice?: number
-  images: IProductImage[]
+  images: IImage[]
   deal?: number
   flashSale?: {
     productAmount: number

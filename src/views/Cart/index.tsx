@@ -1,5 +1,5 @@
-import { useQuery } from '@tanstack/react-query'
-import { useEffect, useState } from 'react'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import CartFooter from '@/components/cart/CartFooter'
@@ -9,21 +9,67 @@ import Empty from '@/components/empty/Empty'
 import LoadingContentLayer from '@/components/loading-icon/LoadingContentLayer'
 import configs from '@/config'
 import { getMyCartApi } from '@/network/apis/cart'
+import { getBestPlatformVouchersApi, getBestShopVouchersApi } from '@/network/apis/voucher'
+import useCartStore from '@/store/cart'
 import { ICartByBrand } from '@/types/cart'
-import { getTotalPrice } from '@/utils/price'
+import { IBrandBestVoucher, ICheckoutItem, IPlatformBestVoucher, TVoucher } from '@/types/voucher'
+import { createCheckoutItem, createCheckoutItems } from '@/utils/cart'
+import { calculateCartTotals, calculatePlatformVoucherDiscount, calculateTotalVoucherDiscount } from '@/utils/price'
 
 const Cart = () => {
   const { t } = useTranslation()
   const [selectedCartItems, setSelectedCartItems] = useState<string[]>([])
   const [allCartItemIds, setAllCartItemIds] = useState<string[]>([])
-  const [chosenVoucher, setChosenVoucher] = useState('')
   const [isAllSelected, setIsAllSelected] = useState<boolean>(false)
   const [cartByBrand, setCartByBrand] = useState<ICartByBrand | undefined>(undefined)
-  const totalPrice = getTotalPrice(selectedCartItems, cartByBrand)
+  const [bestBrandVouchers, setBestBrandVouchers] = useState<IBrandBestVoucher[]>([])
+  const [totalPrice, setTotalPrice] = useState<number>(0)
+  const [totalOriginalPrice, setTotalOriginalPrice] = useState<number>(0)
+  const [totalDirectProductsDiscount, setTotalDirectProductsDiscount] = useState<number>(0)
+  const [chosenVouchersByBrand, setChosenVouchersByBrand] = useState<{ [brandId: string]: TVoucher | null }>({})
+  const [platformChosenVoucher, setPlatformChosenVoucher] = useState<TVoucher | null>(null)
+  const { setChosenBrandVouchers, setChosenPlatformVoucher, setSelectedCartItem, resetCart } = useCartStore()
+  const [bestPlatformVoucher, setBestPlatformVoucher] = useState<IPlatformBestVoucher | null>(null)
+
+  const voucherMap = bestBrandVouchers?.reduce<{ [key: string]: IBrandBestVoucher }>((acc, voucher) => {
+    acc[voucher?.brandId] = voucher
+    return acc
+  }, {})
+
+  // Calculate total voucher discount
+  const totalVoucherDiscount = useMemo(() => {
+    return calculateTotalVoucherDiscount(chosenVouchersByBrand, totalPrice)
+  }, [chosenVouchersByBrand, totalPrice])
+
+  // Calculate platform voucher discount
+  const platformVoucherDiscount = useMemo(() => {
+    return calculatePlatformVoucherDiscount(platformChosenVoucher, totalPrice)
+  }, [platformChosenVoucher, totalPrice])
+
+  // Total saved price (product discounts + brand vouchers + platform voucher)
+  const savedPrice = totalDirectProductsDiscount + totalVoucherDiscount + platformVoucherDiscount
+  const totalFinalPrice = totalPrice - totalVoucherDiscount - platformVoucherDiscount
 
   const { data: useMyCartData, isFetching } = useQuery({
     queryKey: [getMyCartApi.queryKey],
     queryFn: getMyCartApi.fn,
+  })
+
+  const { mutateAsync: callBestBrandVouchersFn } = useMutation({
+    mutationKey: [getBestShopVouchersApi.mutationKey],
+    mutationFn: getBestShopVouchersApi.fn,
+    onSuccess: (data) => {
+      console.log(data)
+      setBestBrandVouchers(data?.data)
+    },
+  })
+  const { mutateAsync: callBestPlatformVouchersFn } = useMutation({
+    mutationKey: [getBestPlatformVouchersApi.mutationKey],
+    mutationFn: getBestPlatformVouchersApi.fn,
+    onSuccess: (data) => {
+      console.log(data)
+      setBestPlatformVoucher(data?.data)
+    },
   })
 
   // Handler for "Select All" checkbox
@@ -47,66 +93,175 @@ const Cart = () => {
       }
     })
   }
-
-  useEffect(() => {
-    if (selectedCartItems.length === 0) {
-      setChosenVoucher('')
-    }
-  }, [selectedCartItems])
+  const handleVoucherSelection = (brandId: string, voucher: TVoucher | null) => {
+    setChosenVouchersByBrand((prev) => ({
+      ...prev,
+      [brandId]: voucher,
+    }))
+    setChosenBrandVouchers({ ...chosenVouchersByBrand, [brandId]: voucher })
+  }
 
   useEffect(() => {
     if (useMyCartData && useMyCartData?.data) {
       setCartByBrand(useMyCartData?.data)
 
+      const selectedCartItemsMap = Object.keys(useMyCartData.data).reduce((acc, brandName) => {
+        const brandCartItems = useMyCartData.data[brandName]
+        const selectedItems = brandCartItems.filter((cartItem) => selectedCartItems.includes(cartItem.id))
+
+        if (selectedItems.length > 0) {
+          acc[brandName] = selectedItems
+        }
+
+        return acc
+      }, {} as ICartByBrand)
+
+      setSelectedCartItem(selectedCartItemsMap)
+
+      // handle set selected checkbox cart items
       const tmpAllCartItemIds = Object.values(useMyCartData?.data).flatMap((cartBrand) =>
         cartBrand.map((cartItem) => cartItem.id),
       )
       setAllCartItemIds(tmpAllCartItemIds)
       setIsAllSelected(tmpAllCartItemIds.every((id) => selectedCartItems.includes(id)))
+
+      // handle show best voucher for each brand
+      async function handleShowBestBrandVoucher() {
+        try {
+          if (useMyCartData && useMyCartData?.data) {
+            const checkoutItems = createCheckoutItems(useMyCartData?.data, selectedCartItems)
+            await callBestBrandVouchersFn({
+              checkoutItems: checkoutItems,
+            })
+          }
+        } catch (error) {
+          console.error(error)
+        }
+      }
+      async function handleShowBestPlatformVoucher() {
+        try {
+          let checkoutItems: ICheckoutItem[] = []
+          if (useMyCartData?.data) {
+            checkoutItems = Object.entries(useMyCartData?.data)
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
+              .map(([_brandName, cartItems]) => createCheckoutItem(cartItems, selectedCartItems))
+              .flat()
+          }
+
+          await callBestPlatformVouchersFn({
+            checkoutItems: checkoutItems,
+          })
+        } catch (error) {
+          console.error(error)
+        }
+      }
+
+      handleShowBestBrandVoucher()
+      handleShowBestPlatformVoucher()
     }
+    if (selectedCartItems.length === 0) {
+      setPlatformChosenVoucher(null)
+      setChosenPlatformVoucher(null)
+      resetCart()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCartItems, useMyCartData])
 
-  return isFetching ? (
-    <LoadingContentLayer />
-  ) : cartByBrand && Object.keys(cartByBrand)?.length > 0 ? (
-    <div className="relative w-full mx-auto py-5">
-      <div className="w-full xl:px-28 lg:px-12 sm:px-2 px-1 space-y-3 ">
-        <h2 className="uppercase font-bold text-xl">{t('cart.title')}</h2>
-        <CartHeader onCheckAll={handleSelectAll} isAllSelected={isAllSelected} />
-        {cartByBrand &&
-          Object.keys(cartByBrand).map((brandName, index) => (
-            <CartItem
-              key={`${brandName}_${index}`}
-              brandName={brandName}
-              cartBrandItem={cartByBrand[brandName]}
-              selectedCartItems={selectedCartItems}
-              onSelectBrand={handleSelectBrand}
-            />
-          ))}
+  useEffect(() => {
+    if (selectedCartItems?.length > 0) {
+      setTotalPrice(calculateCartTotals(selectedCartItems, cartByBrand).totalPrice)
+      setTotalOriginalPrice(calculateCartTotals(selectedCartItems, cartByBrand).totalProductCost)
+      setTotalDirectProductsDiscount(calculateCartTotals(selectedCartItems, cartByBrand).totalProductDiscount)
+    } else {
+      setTotalPrice(0)
+      setTotalOriginalPrice(0)
+      setTotalDirectProductsDiscount(0)
+      setChosenVouchersByBrand({})
+    }
+  }, [cartByBrand, selectedCartItems])
 
-        <CartFooter
-          cartItemCountAll={allCartItemIds?.length}
-          cartItemCount={selectedCartItems?.length}
-          setSelectedCartItems={setSelectedCartItems}
-          onCheckAll={handleSelectAll}
-          isAllSelected={isAllSelected}
-          totalPrice={totalPrice}
-          savedPrice={20000}
-          chosenVoucher={chosenVoucher}
-          setChosenVoucher={setChosenVoucher}
-          selectedCartItems={selectedCartItems}
-        />
-      </div>
-    </div>
-  ) : (
-    <div className="my-10 w-full h-full flex flex-col justify-center">
-      <Empty
-        title={t('empty.cart.title')}
-        description={t('empty.cart.description')}
-        link={configs.routes.home}
-        linkText={t('empty.cart.button')}
-      />
-    </div>
+  useEffect(() => {
+    setChosenPlatformVoucher(platformChosenVoucher)
+  }, [platformChosenVoucher, setChosenPlatformVoucher])
+  return (
+    <>
+      {isFetching && <LoadingContentLayer />}
+      {!isFetching && cartByBrand && Object.keys(cartByBrand)?.length > 0 && (
+        <div className="relative w-full mx-auto py-5">
+          <div className="w-full xl:px-28 lg:px-12 sm:px-2 px-1 space-y-3 ">
+            <h2 className="uppercase font-bold text-xl">{t('cart.title')}</h2>
+            <CartHeader onCheckAll={handleSelectAll} isAllSelected={isAllSelected} />
+            {cartByBrand &&
+              Object.keys(cartByBrand).map((brandName, index) => {
+                const brand =
+                  cartByBrand[brandName]?.[0]?.productClassification?.productDiscount?.product?.brand ??
+                  cartByBrand[brandName]?.[0]?.productClassification?.preOrderProduct?.product?.brand ??
+                  cartByBrand[brandName]?.[0]?.productClassification?.product?.brand
+                const brandId = brand?.id ?? ''
+                const bestVoucherForBrand = voucherMap[brandId] || null
+                const cartBrandItem = cartByBrand[brandName]
+                const checkoutItems: ICheckoutItem[] = cartBrandItem
+                  ?.map((cartItem) => ({
+                    classificationId: cartItem.productClassification?.id ?? '',
+                    quantity: cartItem.quantity ?? 0,
+                  }))
+                  ?.filter((item) => item.classificationId !== null)
+
+                const selectedCheckoutItems: ICheckoutItem[] = cartBrandItem
+                  ?.filter((cart) => selectedCartItems?.includes(cart?.id))
+                  ?.map((cartItem) => ({
+                    classificationId: cartItem.productClassification?.id ?? '',
+                    quantity: cartItem.quantity ?? 0,
+                  }))
+                  ?.filter((item) => item.classificationId !== null)
+                return (
+                  <CartItem
+                    key={`${brandName}_${index}`}
+                    brandName={brandName}
+                    cartBrandItem={cartBrandItem}
+                    selectedCartItems={selectedCartItems}
+                    onSelectBrand={handleSelectBrand}
+                    bestVoucherForBrand={bestVoucherForBrand}
+                    onVoucherSelect={handleVoucherSelection}
+                    brand={brand}
+                    checkoutItems={checkoutItems}
+                    selectedCheckoutItems={selectedCheckoutItems}
+                  />
+                )
+              })}
+
+            <CartFooter
+              cartItemCountAll={allCartItemIds?.length}
+              cartItemCount={selectedCartItems?.length}
+              setSelectedCartItems={setSelectedCartItems}
+              onCheckAll={handleSelectAll}
+              isAllSelected={isAllSelected}
+              totalOriginalPrice={totalOriginalPrice}
+              selectedCartItems={selectedCartItems}
+              totalProductDiscount={totalDirectProductsDiscount}
+              totalVoucherDiscount={totalVoucherDiscount}
+              savedPrice={savedPrice}
+              totalFinalPrice={totalFinalPrice}
+              platformChosenVoucher={platformChosenVoucher}
+              setPlatformChosenVoucher={setPlatformChosenVoucher}
+              platformVoucherDiscount={platformVoucherDiscount}
+              cartByBrand={cartByBrand}
+              bestPlatformVoucher={bestPlatformVoucher}
+            />
+          </div>
+        </div>
+      )}
+      {!isFetching && (!cartByBrand || Object.keys(cartByBrand)?.length === 0) && (
+        <div className="my-10 w-full h-full flex flex-col justify-center">
+          <Empty
+            title={t('empty.cart.title')}
+            description={t('empty.cart.description')}
+            link={configs.routes.home}
+            linkText={t('empty.cart.button')}
+          />
+        </div>
+      )}
+    </>
   )
 }
 

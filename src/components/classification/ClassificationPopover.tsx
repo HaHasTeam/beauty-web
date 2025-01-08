@@ -36,7 +36,7 @@ export default function ClassificationPopover({
   const [chosenClassification, setChosenClassification] = useState<IClassification | null>(productClassification)
   const [isOpen, setIsOpen] = useState(false)
   const [isProcessing, setIsProcessing] = useState(false)
-  const isProductClassificationActive = checkCurrentProductClassificationActive(productClassification, classifications)
+  // const isProductClassificationActive = checkCurrentProductClassificationActive(productClassification, classifications)
   const titleShown = chosenClassification?.title || t('productDetail.selectClassification')
   const { successToast } = useToast()
   const handleServerError = useHandleServerError()
@@ -140,7 +140,7 @@ export default function ClassificationPopover({
                     <Button
                       key={option?.id}
                       variant="outline"
-                      disabled={!isProductClassificationActive}
+                      disabled={!checkCurrentProductClassificationActive(option, classifications)}
                       className={`w-fit h-fit justify-start px-2 py-2 text-sm ${
                         currentSelectClassification?.id === option?.id ? 'bg-accent text-accent-foreground' : ''
                       }`}

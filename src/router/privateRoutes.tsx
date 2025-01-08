@@ -4,6 +4,7 @@ import configs from '@/config'
 import Cart from '@/views/Cart'
 import ChangePassword from '@/views/ChangePassword'
 import Checkout from '@/views/Checkout'
+import CheckoutResult from '@/views/CheckoutResult'
 import Home from '@/views/Home'
 import OrderDetail from '@/views/OrderDetail'
 import Profile from '@/views/Profile'
@@ -34,6 +35,10 @@ const privateRoutes = [
       {
         path: configs.routes.checkout,
         element: <Checkout />,
+      },
+      {
+        path: configs.routes.checkoutResult,
+        element: <CheckoutResult />,
       },
     ],
   },

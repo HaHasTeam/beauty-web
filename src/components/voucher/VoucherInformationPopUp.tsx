@@ -10,8 +10,14 @@ import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
 
 interface VoucherInformationPopupProps {
   voucher: TVoucher
+  className?: string
+  applyFor?: string
 }
-export default function VoucherInformationPopup({ voucher }: VoucherInformationPopupProps) {
+export default function VoucherInformationPopup({
+  voucher,
+  className,
+  applyFor = 'brand',
+}: VoucherInformationPopupProps) {
   const { t } = useTranslation()
 
   return (
@@ -20,7 +26,7 @@ export default function VoucherInformationPopup({ voucher }: VoucherInformationP
         <Button
           variant="ghost"
           size="sm"
-          className="bg-transparent hover:bg-transparent text-muted-foreground p-0 m-0 hover:text-gray-300"
+          className={`bg-transparent hover:bg-transparent text-muted-foreground p-0 m-0 hover:text-gray-300 ${className}`}
         >
           <AlertCircle className="w-4 h-4 text-gray-600" />
         </Button>
@@ -62,8 +68,8 @@ export default function VoucherInformationPopup({ voucher }: VoucherInformationP
               <span className="font-medium">{t('voucher.applicableProducts')}</span>
               <p>
                 {voucher?.applyType === VoucherApplyTypeEnum.SPECIFIC
-                  ? t('voucher.off.specificDescription')
-                  : t('voucher.off.allDescription')}
+                  ? t('voucher.off.specificDescription', { val: t(`voucher.${applyFor}`) })
+                  : t('voucher.off.allDescription', { val: t(`voucher.${applyFor}`) })}
               </p>
             </div>
           </div>

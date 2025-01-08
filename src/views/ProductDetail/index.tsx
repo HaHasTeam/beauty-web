@@ -1,21 +1,32 @@
+import { useQuery } from '@tanstack/react-query'
 import { useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 
 import BrandSection from '@/components/brand/BrandSection'
 import CustomBreadcrumb from '@/components/breadcrumb/CustomBreadcrumb'
+import Empty from '@/components/empty/Empty'
 import ReviewFilter from '@/components/filter/ReviewFilter'
+import LoadingContentLayer from '@/components/loading-icon/LoadingContentLayer'
 import APIPagination from '@/components/pagination/Pagination'
 import ProductCarousel from '@/components/product/ProductCarousel'
 import ProductDetailAction from '@/components/product/ProductDetailAction'
 import ProductDetailInformation from '@/components/product/ProductDetailInformation'
 import ReviewOverall from '@/components/reviews/ReviewOverall'
 import ReviewSection from '@/components/reviews/ReviewSection'
+import { getProductApi } from '@/network/apis/product'
 import { IClassification } from '@/types/classification'
 import { IProduct } from '@/types/product'
 
 const ProductDetail = () => {
   const { productId } = useParams()
+  const { t } = useTranslation()
   console.log(productId)
+  const { data: useProductData, isFetching } = useQuery({
+    queryKey: [getProductApi.queryKey, productId as string],
+    queryFn: getProductApi.fn,
+  })
+
   const product: IProduct = {
     id: '10',
     name: 'Cherry Blossom Serum',
@@ -174,62 +185,70 @@ const ProductDetail = () => {
     reviewSectionRef.current?.scrollIntoView({ behavior: 'smooth' })
   }
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [classification, setClassification] = useState<IClassification>(product.classifications[0])
+  const [classification, setClassification] = useState<IClassification>(useProductData?.data?.productClassifications[0])
+
   return (
     <div className="w-full mx-auto px-4 py-5 ">
+      {isFetching && <LoadingContentLayer />}
       {/* product information */}
       <div className="w-full lg:px-20 md:px-10 sm:px-8 px-3 space-y-3 ">
-        <CustomBreadcrumb dynamicSegments={[{ segment: product.name ?? '' }]} />
-        <div className="flex gap-2 w-full">
-          {/* product image carousel */}
-          <div className="shadow-sm p-3 bg-white rounded-lg w-[calc(30%-8px)]">
-            <ProductCarousel product={product} />
-          </div>
+        <CustomBreadcrumb dynamicSegments={[{ segment: useProductData?.data?.name ?? t('productDetail.title') }]} />
+        {!isFetching && useProductData && useProductData?.data ? (
+          <>
+            <div className="flex gap-2 w-full">
+              {/* product image carousel */}
+              <div className="shadow-sm p-3 bg-white rounded-lg w-[calc(30%-8px)]">
+                <ProductCarousel product={useProductData?.data} />
+              </div>
 
-          {/* product detail information */}
-          <div className="w-[calc(50%-8px)]">
-            <ProductDetailInformation product={product} scrollToReviews={scrollToReviews} />
-          </div>
-          {/* call to action */}
-          <div className="shadow-sm p-3 bg-white rounded-lg w-[calc(20%-8px)]">
-            <ProductDetailAction product={product} chosenClassification={classification} />
-          </div>
-        </div>
-
-        {/* product brand */}
-        <BrandSection />
-
-        {/* product reviews */}
-        <div className="flex gap-2 bg-white rounded-lg" id="customerReviews" ref={reviewSectionRef}>
-          <ReviewOverall />
-          <div>
-            <div className="border-b border-gray-200">
-              <ReviewFilter />
+              {/* product detail information */}
+              <div className="w-[calc(50%-8px)]">
+                <ProductDetailInformation product={useProductData?.data} scrollToReviews={scrollToReviews} />
+              </div>
+              {/* call to action */}
+              <div className="shadow-sm p-3 bg-white rounded-lg w-[calc(20%-8px)]">
+                <ProductDetailAction product={useProductData?.data} chosenClassification={classification} />
+              </div>
             </div>
-            <div className="p-4">
-              {reviews.map((review) => (
-                <ReviewSection
-                  key={review.id}
-                  author={review.author}
-                  reviewUpdatedAt={review.reviewUpdatedAt}
-                  classification={review.classification}
-                  numberOfItem={review.numberOfItem}
-                  title={review.title}
-                  reviewDescription={review.reviewDescription}
-                  images={review.images}
-                  rating={review.rating}
-                  brandName={review.brandName}
-                  updatedAt={review.updatedAt}
-                  description={review.description}
-                  brandLogo={review.brandLogo}
-                />
-              ))}
-            </div>
-            <APIPagination currentPage={1} onPageChange={() => {}} totalPages={5} />
-          </div>
-        </div>
 
-        {/* other product in same brand */}
+            {/* product brand */}
+            <BrandSection />
+
+            {/* product reviews */}
+            <div className="flex gap-2 bg-white rounded-lg" id="customerReviews" ref={reviewSectionRef}>
+              <ReviewOverall />
+              <div>
+                <div className="border-b border-gray-200">
+                  <ReviewFilter />
+                </div>
+                <div className="p-4">
+                  {reviews.map((review) => (
+                    <ReviewSection
+                      key={review.id}
+                      author={review.author}
+                      reviewUpdatedAt={review.reviewUpdatedAt}
+                      classification={review.classification}
+                      numberOfItem={review.numberOfItem}
+                      title={review.title}
+                      reviewDescription={review.reviewDescription}
+                      images={review.images}
+                      rating={review.rating}
+                      brandName={review.brandName}
+                      updatedAt={review.updatedAt}
+                      description={review.description}
+                      brandLogo={review.brandLogo}
+                    />
+                  ))}
+                </div>
+                <APIPagination currentPage={1} onPageChange={() => {}} totalPages={5} />
+              </div>
+            </div>
+
+            {/* other product in same brand */}
+          </>
+        ) : (
+          <Empty title={t('empty.productDetail.title')} description={t('empty.productDetail.description')} />
+        )}
       </div>
     </div>
   )
