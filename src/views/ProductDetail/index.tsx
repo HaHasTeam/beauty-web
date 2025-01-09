@@ -214,6 +214,7 @@ const ProductDetail = () => {
                     event === OrderEnum.FLASH_SALE ? useProductData?.data?.productDiscounts?.[0]?.discount : undefined
                   }
                   discountType={DiscountTypeEnum.PERCENTAGE}
+                  hasCustomType={hasCustomType ?? false}
                 />
               </div>
             </div>

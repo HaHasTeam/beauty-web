@@ -25,14 +25,23 @@ interface ProductDetailActionProps {
   chosenClassification: IClassification | null
   discount?: number
   discountType?: DiscountTypeEnum | null
+  hasCustomType?: boolean
 }
 
-const ProductDetailAction = ({ product, chosenClassification, discount, discountType }: ProductDetailActionProps) => {
+const ProductDetailAction = ({
+  product,
+  chosenClassification,
+  discount,
+  discountType,
+  hasCustomType,
+}: ProductDetailActionProps) => {
   const { t } = useTranslation()
   const { setSelectedCartItem } = useCartStore()
   const [quantity, setQuantity] = useState(1)
   const [inputValue, setInputValue] = useState('1')
-  const MAX_QUANTITY_IN_CART = chosenClassification ? chosenClassification?.quantity : 0 // change to max quantity of products
+  const MAX_QUANTITY_IN_CART = chosenClassification
+    ? chosenClassification?.quantity
+    : (product?.productClassifications ?? [])[0]?.quantity // change to max quantity of products
   const [isProcessing, setIsProcessing] = useState(false)
   const { successToast, errorToast } = useToast()
   const handleServerError = useHandleServerError()
@@ -59,10 +68,18 @@ const ProductDetailAction = ({ product, chosenClassification, discount, discount
     setQuantity(quantity)
     setInputValue(quantity.toString())
     try {
-      if (chosenClassification) {
+      if (hasCustomType) {
+        if (chosenClassification) {
+          await createCartItemFn({
+            classification: chosenClassification?.title,
+            productClassification: chosenClassification?.id,
+            quantity: quantity,
+          })
+        }
+      } else {
         await createCartItemFn({
           classification: chosenClassification?.title,
-          productClassification: chosenClassification?.id,
+          productClassification: (product?.productClassifications ?? [])[0]?.id,
           quantity: quantity,
         })
       }
@@ -71,7 +88,15 @@ const ProductDetailAction = ({ product, chosenClassification, discount, discount
     } finally {
       setIsProcessing(false)
     }
-  }, [isProcessing, quantity, chosenClassification, createCartItemFn, handleServerError])
+  }, [
+    isProcessing,
+    quantity,
+    hasCustomType,
+    chosenClassification,
+    createCartItemFn,
+    product?.productClassifications,
+    handleServerError,
+  ])
 
   const decreaseQuantity = () => {
     if (quantity > 1) {
@@ -130,8 +155,13 @@ const ProductDetailAction = ({ product, chosenClassification, discount, discount
   }
 
   const handleCheckout = () => {
-    if (chosenClassification) {
-      setSelectedCartItem(createCartFromProduct(product, quantity, chosenClassification))
+    if (hasCustomType) {
+      if (chosenClassification) {
+        setSelectedCartItem(createCartFromProduct(product, quantity, chosenClassification))
+        navigate(configs.routes.checkout)
+      }
+    } else {
+      setSelectedCartItem(createCartFromProduct(product, quantity, (product?.productClassifications ?? [])[0]))
       navigate(configs.routes.checkout)
     }
   }
@@ -158,7 +188,7 @@ const ProductDetailAction = ({ product, chosenClassification, discount, discount
         ) : null}
       </div>
 
-      {chosenClassification ? (
+      {chosenClassification && hasCustomType ? (
         <div>
           <Button
             key={chosenClassification?.id}
@@ -193,7 +223,7 @@ const ProductDetailAction = ({ product, chosenClassification, discount, discount
           />
         </div>
 
-        {!chosenClassification ? (
+        {!chosenClassification && hasCustomType ? (
           <span className="text-yellow-500 text-sm">{t('cart.chooseClassification')}</span>
         ) : null}
 
@@ -205,7 +235,7 @@ const ProductDetailAction = ({ product, chosenClassification, discount, discount
         ) : null}
         <div className="space-y-2">
           <Button
-            disabled={!chosenClassification}
+            disabled={!chosenClassification && hasCustomType}
             className="w-full bg-primary hover:bg-primary/80 text-white"
             onClick={() => handleCheckout()}
           >
@@ -215,7 +245,7 @@ const ProductDetailAction = ({ product, chosenClassification, discount, discount
             variant="outline"
             className="w-full border-primary text-primary hover:text-primary hover:bg-primary/10"
             onClick={() => handleCreateCartItem()}
-            disabled={!chosenClassification}
+            disabled={!chosenClassification && hasCustomType}
           >
             {t('productDetail.addToCart')}
           </Button>
