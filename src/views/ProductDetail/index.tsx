@@ -179,12 +179,12 @@ const ProductDetail = () => {
   console.log(productClassifications)
 
   return (
-    <div className="w-full mx-auto px-4 py-5 ">
+    <div className="w-full mx-auto px-4 py-5">
       {isFetching && <LoadingContentLayer />}
       {/* product information */}
       <div className="w-full lg:px-20 md:px-10 sm:px-8 px-3 space-y-3 ">
         <CustomBreadcrumb dynamicSegments={[{ segment: useProductData?.data?.name ?? t('productDetail.title') }]} />
-        {!isFetching && useProductData && useProductData?.data ? (
+        {!isFetching && useProductData && useProductData?.data && (
           <>
             <div className="flex gap-2 w-full">
               {/* product image carousel */}
@@ -253,7 +253,8 @@ const ProductDetail = () => {
 
             {/* other product in same brand */}
           </>
-        ) : (
+        )}
+        {!isFetching && (!useProductData || !useProductData?.data) && (
           <Empty title={t('empty.productDetail.title')} description={t('empty.productDetail.description')} />
         )}
       </div>

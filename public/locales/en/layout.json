@@ -561,5 +561,8 @@
       "card": "Credit/Debit Card",
       "wallet": "Digital Wallet"
     }
+  },
+  "orderDetail": {
+    "title": "Order Detail"
   }
 }

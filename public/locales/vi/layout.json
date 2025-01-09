@@ -556,5 +556,8 @@
       "card": "Thẻ tín dụng/Ghi nợ",
       "wallet": "Ví điện tử"
     }
+  },
+  "orderDetail": {
+    "title": "Chi tiết đơn hàng"
   }
 }

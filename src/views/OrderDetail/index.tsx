@@ -19,13 +19,14 @@ const OrderDetail = () => {
   return (
     <div>
       {isFetching && <LoadingContentLayer />}
-      <div className="w-full lg:px-20 md:px-10 sm:px-8 px-3 space-y-3 ">
-        <CustomBreadcrumb dynamicSegments={[{ segment: useOrderData?.data?.id ?? t('productDetail.title') }]} />
-        {!isFetching && useOrderData && useOrderData?.data ? (
+      <div className="w-full lg:px-5 md:px-4 sm:px-3 px-3 space-y-3 my-5">
+        <CustomBreadcrumb dynamicSegments={[{ segment: useOrderData?.data?.id ?? t('orderDetail.title') }]} />
+        {!isFetching && useOrderData && useOrderData?.data && (
           <>
             <div className="flex gap-2 w-full"></div>
           </>
-        ) : (
+        )}
+        {!isFetching && (!useOrderData || !useOrderData?.data) && (
           <Empty
             title={t('empty.orderDetail.title')}
             description={t('empty.orderDetail.description')}
