@@ -16,6 +16,8 @@ export interface IOrderDetail {
   isFeedback: boolean
   productClassification: IClassification
   productClassificationPreOrder: null | IClassification
+  unitPriceAfterDiscount: number
+  unitPriceBeforeDiscount: number
 }
 
 export interface IOrderItem {

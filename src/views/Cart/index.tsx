@@ -131,6 +131,11 @@ const Cart = () => {
       setAllCartItemIds(tmpAllCartItemIds)
       setIsAllSelected(tmpAllCartItemIds.every((id) => selectedCartItems.includes(id)))
 
+      const validSelectedCartItems = selectedCartItems.filter((id) => tmpAllCartItemIds.includes(id))
+      if (validSelectedCartItems.length !== selectedCartItems.length) {
+        setSelectedCartItems(validSelectedCartItems)
+      }
+
       // handle show best voucher for each brand
       async function handleShowBestBrandVoucher() {
         try {
@@ -165,13 +170,7 @@ const Cart = () => {
       handleShowBestBrandVoucher()
       handleShowBestPlatformVoucher()
     }
-    if (selectedCartItems.length === 0) {
-      setPlatformChosenVoucher(null)
-      setChosenPlatformVoucher(null)
-      resetSelectedCartItem()
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedCartItems, cartItems])
+  }, [callBestBrandVouchersFn, callBestPlatformVouchersFn, cartItems, selectedCartItems, setSelectedCartItem])
 
   useEffect(() => {
     if (selectedCartItems?.length > 0) {
@@ -183,8 +182,12 @@ const Cart = () => {
       setTotalOriginalPrice(0)
       setTotalDirectProductsDiscount(0)
       setChosenVouchersByBrand({})
+
+      setPlatformChosenVoucher(null)
+      setChosenPlatformVoucher(null)
+      resetSelectedCartItem()
     }
-  }, [cartItems, selectedCartItems])
+  }, [cartItems, resetSelectedCartItem, selectedCartItems, setChosenPlatformVoucher])
 
   useEffect(() => {
     setChosenPlatformVoucher(platformChosenVoucher)

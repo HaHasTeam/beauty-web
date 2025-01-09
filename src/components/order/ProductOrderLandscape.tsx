@@ -36,7 +36,13 @@ const ProductOrderLandscape = ({ product, productClassification, orderDetail }: 
         {orderDetail?.type && orderDetail?.type !== OrderEnum.NORMAL && <ProductTag tag={orderDetail?.type} />}
       </div>
       <div className="text-right flex items-center">
-        <span className="line-through text-sm text-muted-foreground">₫460.300</span>
+        {orderDetail?.unitPriceBeforeDiscount - orderDetail?.unitPriceAfterDiscount === 0 ? null : (
+          <span className="line-through text-sm text-muted-foreground">
+            {t('productCard.price', {
+              price: orderDetail?.unitPriceAfterDiscount,
+            })}
+          </span>
+        )}
         <span className="text-red-500">{t('productCard.price', { price: productClassification?.price })}</span>
       </div>
     </div>

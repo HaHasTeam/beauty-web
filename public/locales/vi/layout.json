@@ -92,7 +92,7 @@
   "search": {
     "result": "Kết quả tìm kiếm cho từ khóa {{keyword}}: {{total}} dữ liệu",
     "reset": "Đặt lại",
-    "orderPlaceholder": "Tìm đơn hàng theo Mã đơn hàng hoặc Tên sản phẩm",
+    "orderPlaceholder": "Tìm đơn hàng theo Mã đơn hàng, Tên sản phẩm hoặc Tên thương hiệu",
     "orderButton": "Tìm đơn hàng"
   },
   "filter": {
@@ -165,6 +165,11 @@
       "description": "Bạn chưa đặt bất kỳ đơn hàng nào. Hãy bắt đầu khám phá sản phẩm của chúng tôi và tận hưởng các ưu đãi hấp dẫn!",
       "statusDescription": "Hiện không có đơn hàng nào đang ở trạng thái này.",
       "button": "Bắt đầu mua sắm"
+    },
+    "orderDetail": {
+      "title": "Không tìm thấy chi tiết đơn hàng",
+      "description": "Hiện không có chi tiết nào cho đơn hàng này. Vui lòng kiểm tra lịch sử đơn hàng hoặc liên hệ bộ phận hỗ trợ khách hàng để được trợ giúp.",
+      "button": "Quay lại danh sách đơn hàng"
     },
     "checkout": {
       "title": "Danh sách mua hàng trống",

@@ -92,7 +92,7 @@
   "search": {
     "result": "Search results for {{keyword}}: {{total}} data",
     "reset": "Reset",
-    "orderPlaceholder": "Search for orders by Order ID or Product Name",
+    "orderPlaceholder": "Search for orders by Order ID, Product Name, or Brand Name",
     "orderButton": "Search Order"
   },
   "filter": {
@@ -165,6 +165,11 @@
       "description": "You haven't placed any orders yet. Start exploring our products and enjoy amazing deals!",
       "statusDescription": "There are currently no orders in this status.",
       "button": "Start Shopping"
+    },
+    "orderDetail": {
+      "title": "No Order Details Found",
+      "description": "There are no details available for this order. Please check your order history or contact customer support for assistance.",
+      "button": "Back to Order List"
     },
     "checkout": {
       "title": "Your checkout list is empty",
