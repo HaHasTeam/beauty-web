@@ -116,7 +116,7 @@ const ProductFilter = () => {
   }
 
   return (
-    <div className="w-full h-full shadow-sm">
+    <div className="">
       <CardHeader className="text-primary pb-2 flex flex-row gap-2 items-center align-middle">
         <Filter className="h-5 w-5" />
         <span className="uppercase font-bold">{t('filter.title')}</span>

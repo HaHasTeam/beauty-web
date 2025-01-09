@@ -11,7 +11,7 @@ type EmptyProps = {
 }
 const Empty = ({ title, description, icon, linkText, link }: EmptyProps) => {
   return (
-    <div className="w-full flex flex-col space-y-4 justify-center align-middle">
+    <div className="w-full h-1/2 flex flex-col space-y-4 justify-center align-middle">
       <div className="flex justify-center align-middle">
         <img src={icon ? icon : emptyInbox} className="object-contain" alt="empty" />
       </div>

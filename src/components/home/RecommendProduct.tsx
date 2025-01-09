@@ -163,7 +163,6 @@ const RecommendProduct = () => {
     queryFn: getAllProductApi.fn,
     select: (data) => data.data,
   })
-  console.log('allProducts', allProducts)
 
   return (
     <div>
