@@ -230,7 +230,7 @@ const ProductDetailAction = ({
         {chosenClassification ? (
           <div>
             <div className="text-sm font-medium mb-1">{t('productDetail.total')}</div>
-            <div className="text-2xl font-bold">{t('productCard.price', { price: total })}</div>
+            <div className="text-2xl font-bold text-red-500">{t('productCard.price', { price: total })}</div>
           </div>
         ) : null}
         <div className="space-y-2">

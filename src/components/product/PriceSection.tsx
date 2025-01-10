@@ -15,6 +15,7 @@ interface PriceSectionProps {
   discountValue?: number
   discountType?: DiscountTypeEnum
   discountVoucher?: number
+  isHighlight?: boolean
 }
 const PriceSection = ({
   price,
@@ -24,12 +25,13 @@ const PriceSection = ({
   discountValue,
   minOrder,
   discountVoucher,
+  isHighlight = true,
 }: PriceSectionProps) => {
   const { t } = useTranslation()
   return (
     <div className="flex gap-1">
       <div className="flex items-center gap-2">
-        <span className="text-red-500 text-2xl font-medium">
+        <span className={`${isHighlight ? 'text-red-500' : ''} text-2xl font-medium`}>
           {t('productCard.currentPrice', { price: currentPrice })}
         </span>
         {deal && deal > 0 ? <ProductTag tag="DealPercent" text={deal * 100 + '%'} /> : null}
