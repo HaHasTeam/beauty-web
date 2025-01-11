@@ -38,6 +38,7 @@ export default function ProductCard({ product, isProductDiscount = false }: Prod
           <ImageWithFallback
             src={product?.images[0]?.fileUrl}
             fallback={placeholderImage}
+            alt={product.name}
             className="object-cover w-full h-full rounded-tl-xl rounded-tr-xl"
           />
         </div>

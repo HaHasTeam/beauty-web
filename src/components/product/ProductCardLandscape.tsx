@@ -8,7 +8,8 @@ import configs from '@/config'
 import useHandleServerError from '@/hooks/useHandleServerError'
 import { useToast } from '@/hooks/useToast'
 import { deleteCartItemApi, getCartByIdApi, getMyCartApi, updateCartItemApi } from '@/network/apis/cart'
-import { ICartItem } from '@/types/cart'
+import useCartStore from '@/store/cart'
+import { ICartByBrand, ICartItem } from '@/types/cart'
 import { IClassification } from '@/types/classification'
 import { ClassificationTypeEnum, DiscountTypeEnum, ProductCartStatusEnum } from '@/types/enum'
 import { DiscountType } from '@/types/product-discount'
@@ -67,6 +68,7 @@ const ProductCardLandscape = ({
   const [openConfirmDelete, setOpenConfirmDelete] = useState(false)
   const [isProcessing, setIsProcessing] = useState(false)
   const { successToast, errorToast } = useToast()
+  const { selectedCartItem, setSelectedCartItem } = useCartStore()
   const handleServerError = useHandleServerError()
   const queryClient = useQueryClient()
   const PRODUCT_STOCK_COUNT = productClassification?.quantity ?? 0
@@ -126,15 +128,30 @@ const ProductCardLandscape = ({
       setInputValue(newQuantity.toString())
       try {
         await updateCartItemFn({ id: cartItem?.id ?? '', quantity: newQuantity })
+        // Update Zustand store
+        const updatedCartItems: ICartByBrand = { ...selectedCartItem }
+
+        for (const brandId in updatedCartItems) {
+          if (updatedCartItems[brandId]) {
+            updatedCartItems[brandId] = updatedCartItems[brandId].map((item) => {
+              if (item.id === cartItem?.id) {
+                return { ...item, quantity: newQuantity }
+              }
+              return item
+            })
+          }
+        }
+
+        setSelectedCartItem(updatedCartItems)
       } catch (error) {
         handleServerError({ error })
       } finally {
         setIsProcessing(false)
       }
     },
-    [isProcessing, updateCartItemFn, cartItem?.id, handleServerError],
+    [isProcessing, updateCartItemFn, cartItem?.id, selectedCartItem, setSelectedCartItem, handleServerError],
   )
-
+  console.log(selectedCartItem)
   const handleDeleteCartItem = async () => {
     try {
       await deleteCartItemFn(cartItemId)

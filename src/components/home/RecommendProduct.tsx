@@ -182,7 +182,7 @@ const RecommendProduct = () => {
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
         {allProducts?.map((product) => {
-          const productImages = product.images ?? [{ id: '1', image: 'path/to/image1.png' }]
+          const productImages = product?.images ?? [{ id: '1', image: 'path/to/image1.png' }]
           const mockProduct = {
             id: product.id,
             name: product.name,
