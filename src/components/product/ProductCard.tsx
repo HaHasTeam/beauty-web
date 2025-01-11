@@ -2,7 +2,6 @@ import { Heart } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
-import productImage from '@/assets/images/product_sample_img.png'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import configs from '@/config'
 import { useCart } from '@/hooks/useCarts'
@@ -35,8 +34,8 @@ export default function ProductCard({ product }: ProductCardProps) {
         </button>
         <div className="relative aspect-square">
           <img
-            src={productImage}
-            alt="Pink serum bottle with cherry blossoms"
+            src={product?.images[0]?.fileUrl}
+            alt={product?.images[0]?.id}
             className="object-cover w-full h-full rounded-tl-xl rounded-tr-xl"
           />
         </div>

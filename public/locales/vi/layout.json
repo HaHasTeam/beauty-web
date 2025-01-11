@@ -92,7 +92,7 @@
   "search": {
     "result": "Kết quả tìm kiếm cho từ khóa {{keyword}}: {{total}} dữ liệu",
     "reset": "Đặt lại",
-    "orderPlaceholder": "Tìm đơn hàng theo Mã đơn hàng hoặc Tên sản phẩm",
+    "orderPlaceholder": "Tìm đơn hàng theo Mã đơn hàng, Tên sản phẩm hoặc Tên thương hiệu",
     "orderButton": "Tìm đơn hàng"
   },
   "filter": {
@@ -166,6 +166,11 @@
       "statusDescription": "Hiện không có đơn hàng nào đang ở trạng thái này.",
       "button": "Bắt đầu mua sắm"
     },
+    "orderDetail": {
+      "title": "Không tìm thấy chi tiết đơn hàng",
+      "description": "Hiện không có chi tiết nào cho đơn hàng này. Vui lòng kiểm tra lịch sử đơn hàng hoặc liên hệ bộ phận hỗ trợ khách hàng để được trợ giúp.",
+      "button": "Quay lại danh sách đơn hàng"
+    },
     "checkout": {
       "title": "Danh sách mua hàng trống",
       "description": "Khám phá những sản phẩm đang thịnh hành.",
@@ -233,6 +238,8 @@
     "breadcrumbProductName": "{{name}}",
     "brandDeal": "Ưu đãi của thương hiệu",
     "classification": "Phân loại",
+    "classification1": "Phân loại 1",
+    "classification2": "Phân loại 2",
     "selectOption": "Chọn tùy chọn",
     "selectClassification": "Chọn phân loại",
     "title": "Chi tiết sản phẩm",
@@ -343,7 +350,7 @@
     "maxQuantityError": "Số lượng còn lại của phân loại sản phẩm này là {{maxQuantity}}.",
     "negativeQuantityError": "Số lượng sản phẩm không thể bé hơn 1.",
     "addToCartSuccess": "Sản phẩm đã được thêm vào giỏ hàng.",
-    "chooseClassification": "Chọn phân loại sản phẩm để mua.",
+    "chooseClassification": "Vui lòng chọn phân loại sản phẩm để mua.",
     "tmpTotalProductPrice": "Giá tạm tính (khi áp dụng các voucher trên)",
     "voucherNote": "*Vui lòng thêm Vvoucher khi đặt hàng ở bước thanh toán để được giá như trên",
     "buyToDiscountCurrency": "Mua từ {{minOrder, currency}} để được giảm {{discount, currency}}. Số lượng Voucher có hạn",
@@ -551,5 +558,8 @@
       "card": "Thẻ tín dụng/Ghi nợ",
       "wallet": "Ví điện tử"
     }
+  },
+  "orderDetail": {
+    "title": "Chi tiết đơn hàng"
   }
 }
