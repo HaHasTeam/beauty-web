@@ -1,5 +1,4 @@
 import { IClassification, TClassification } from './classification'
-import { IImage } from './image'
 import { IProduct, TProduct } from './product'
 import { TMetaData } from './request'
 
@@ -18,7 +17,7 @@ export type IPreOrder = TMetaData & {
   status: PreOrderStatusEnum
   product: IProduct
   productClassifications: IClassification[]
-  images?: IImage[]
+  // images?: IImage[]
 }
 
 export enum PreOrderStatusEnum {

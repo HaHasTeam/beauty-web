@@ -13,10 +13,9 @@ import ProductTag from './ProductTag'
 
 interface ProductCardProps {
   product: IProduct
-  isPreOrderProduct?: boolean
   isProductDiscount?: boolean
 }
-export default function ProductCard({ product }: ProductCardProps) {
+export default function ProductCard({ product, isProductDiscount = false }: ProductCardProps) {
   const navigate = useNavigate()
   const { t } = useTranslation()
 
@@ -43,7 +42,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           />
         </div>
         <div className="w-full h-lg-[130px] h-[150px]  p-2 p-md-3">
-          {product?.deal && product?.deal > 0 && (
+          {isProductDiscount && product?.deal && product?.deal > 0 && (
             <ProductTag tag="DealPercent" text={`-${(product?.deal * 100).toFixed(0)}%`} />
           )}
           <span className="text-semibold line-clamp-2">{product?.name}</span>
