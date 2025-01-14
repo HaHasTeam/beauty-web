@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom'
 import CustomBreadcrumb from '@/components/breadcrumb/CustomBreadcrumb'
 import Empty from '@/components/empty/Empty'
 import LoadingContentLayer from '@/components/loading-icon/LoadingContentLayer'
+import OrderStatusTracking from '@/components/order-detail/OrderStatusTracking'
 import configs from '@/config'
 import { getOrderByIdApi } from '@/network/apis/order'
 
@@ -23,7 +24,9 @@ const OrderDetail = () => {
         <CustomBreadcrumb dynamicSegments={[{ segment: useOrderData?.data?.id ?? t('orderDetail.title') }]} />
         {!isFetching && useOrderData && useOrderData?.data && (
           <>
-            <div className="flex gap-2 w-full"></div>
+            <div className="flex gap-2 w-full">
+              <OrderStatusTracking currentStatus={useOrderData?.data?.status} />
+            </div>
           </>
         )}
         {!isFetching && (!useOrderData || !useOrderData?.data) && (

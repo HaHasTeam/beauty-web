@@ -21,6 +21,7 @@ export default function ProfileOrder() {
   const triggers = [
     { value: 'all', text: `${t('order.all')}` },
     { value: ShippingStatusEnum?.TO_PAY, text: `${t('order.pending')}` },
+    { value: ShippingStatusEnum?.WAIT_FOR_SHOP_CONFIRM, text: `${t('order.waitConfirm')}` },
     { value: ShippingStatusEnum?.TO_SHIP, text: `${t('order.shipping')}` },
     { value: ShippingStatusEnum?.TO_RECEIVED, text: `${t('order.delivering')}` },
     { value: ShippingStatusEnum?.COMPLETED, text: `${t('order.completed')}` },

@@ -83,6 +83,7 @@ export enum PaymentMethod {
 export enum ShippingStatusEnum {
   TO_PAY = 'TO_PAY',
   TO_SHIP = 'TO_SHIP',
+  WAIT_FOR_SHOP_CONFIRM = 'WAIT_FOR_SHOP_CONFIRM',
   TO_RECEIVED = 'TO_RECEIVED',
   RETURN_REFUND = 'RETURN_REFUND',
   COMPLETED = 'COMPLETED',
