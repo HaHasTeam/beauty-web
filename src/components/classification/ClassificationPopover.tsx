@@ -125,9 +125,14 @@ export default function ClassificationPopover({
           </Label>
           <Popover open={isOpen} onOpenChange={setIsOpen}>
             <PopoverTrigger asChild>
-              <Button variant="outline" size="sm" className="w-fit h-7 overflow-ellipsis" disabled={preventAction}>
+              <Button
+                variant="outline"
+                size="sm"
+                className="max-w-fit sm:w-fit sm:h-7 h-6 overflow-ellipsis"
+                disabled={preventAction}
+              >
                 <span className="line-clamp-2">{titleShown}</span>
-                <ChevronDown className="w-4 h-4 ml-2 opacity-50" />
+                <ChevronDown className="sm:w-4 sm:h-4 h-2 w-2 ml-1 sm:ml-2 opacity-50" />
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-[280px] p-0" align="end">

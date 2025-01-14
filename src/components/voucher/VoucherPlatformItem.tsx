@@ -111,9 +111,10 @@ const VoucherPlatformItem = ({
                   </span>
                 )}
               </div>
-              <div className="absolute -top-3 -right-1">
+              {/* User only use voucher 1 time */}
+              {/* <div className="absolute -top-3 -right-1">
                 <StatusTag tag="numberCount" text="x100" />
-              </div>
+              </div> */}
             </div>
             <div className="flex gap-1 mt-2 text-sm text-muted-foreground">
               {t('voucher.used')} {voucher.used}%,

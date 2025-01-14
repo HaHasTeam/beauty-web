@@ -201,7 +201,11 @@ const Cart = () => {
         <div className="relative w-full mx-auto py-5">
           <div className="w-full xl:px-28 lg:px-12 sm:px-2 px-1 space-y-3 ">
             <h2 className="uppercase font-bold text-xl">{t('cart.title')}</h2>
-            <CartHeader onCheckAll={handleSelectAll} isAllSelected={isAllSelected} />
+            <CartHeader
+              onCheckAll={handleSelectAll}
+              isAllSelected={isAllSelected}
+              totalCartItems={allCartItemIds?.length}
+            />
             {cartItems &&
               Object.keys(cartItems).map((brandName, index) => {
                 const brand =

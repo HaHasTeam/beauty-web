@@ -232,7 +232,7 @@ export default function CartFooter({
               <div className="w-full justify-end flex items-center gap-4">
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="text-lg">
+                    <span className="text-base sm:text-lg">
                       {t('cart.total')} ({cartItemCount} {t('cart.products')} ):
                     </span>
                     <div className="flex items-end">
