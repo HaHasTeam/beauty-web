@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Trash2 } from 'lucide-react'
-import { useCallback, useState } from 'react'
+import { Dispatch, SetStateAction, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
@@ -44,6 +44,7 @@ interface ProductCardLandscapeProps {
   productClassificationQuantity: number
   isSelected: boolean
   onChooseProduct: (cartItemId: string) => void
+  setIsTriggerTotal: Dispatch<SetStateAction<boolean>>
 }
 const ProductCardLandscape = ({
   cartItem,
@@ -61,6 +62,7 @@ const ProductCardLandscape = ({
   productQuantity,
   productClassification,
   productClassificationQuantity,
+  setIsTriggerTotal,
 }: ProductCardLandscapeProps) => {
   const { t } = useTranslation()
   const [quantity, setQuantity] = useState(productQuantity)
@@ -68,7 +70,7 @@ const ProductCardLandscape = ({
   const [openConfirmDelete, setOpenConfirmDelete] = useState(false)
   const [isProcessing, setIsProcessing] = useState(false)
   const { successToast, errorToast } = useToast()
-  const { selectedCartItem, setSelectedCartItem } = useCartStore()
+  const { cartItems, setCartItems, selectedCartItem, setSelectedCartItem } = useCartStore()
   const handleServerError = useHandleServerError()
   const queryClient = useQueryClient()
   const PRODUCT_STOCK_COUNT = productClassification?.quantity ?? 0
@@ -116,7 +118,8 @@ const ProductCardLandscape = ({
       //   queryKey: [getCartByIdApi.queryKey, cartItemId as string],
       // })
       // console.log(productQuantity, quantity, inputValue)
-      // setIsQuantityUpdate((prev) => !prev)
+
+      setIsTriggerTotal((prev) => !prev)
     },
   })
 
@@ -142,14 +145,35 @@ const ProductCardLandscape = ({
           }
         }
 
+        const newCartItems: ICartByBrand = { ...cartItems }
+        for (const brandId in newCartItems) {
+          if (newCartItems[brandId]) {
+            newCartItems[brandId] = newCartItems[brandId].map((item) => {
+              if (item.id === cartItem?.id) {
+                return { ...item, quantity: newQuantity }
+              }
+              return item
+            })
+          }
+        }
         setSelectedCartItem(updatedCartItems)
+        setCartItems(newCartItems)
       } catch (error) {
         handleServerError({ error })
       } finally {
         setIsProcessing(false)
       }
     },
-    [isProcessing, updateCartItemFn, cartItem?.id, selectedCartItem, setSelectedCartItem, handleServerError],
+    [
+      isProcessing,
+      updateCartItemFn,
+      cartItem?.id,
+      selectedCartItem,
+      cartItems,
+      setSelectedCartItem,
+      setCartItems,
+      handleServerError,
+    ],
   )
   console.log(selectedCartItem)
   const handleDeleteCartItem = async () => {

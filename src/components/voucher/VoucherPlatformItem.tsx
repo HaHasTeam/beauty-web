@@ -116,7 +116,7 @@ const VoucherPlatformItem = ({
               </div>
             </div>
             <div className="flex gap-1 mt-2 text-sm text-muted-foreground">
-              Đã dùng x%,
+              {t('voucher.used')} {voucher.used}%,
               <div className="mt-1 text-xs text-muted-foreground">
                 {t('date.exp')}: {t('date.toLocaleDateTimeString', { val: new Date(voucher?.endTime) })}
               </div>
@@ -140,7 +140,7 @@ const VoucherPlatformItem = ({
                 className="my-auto"
                 value={voucher?.id}
                 id={voucher?.id}
-                checked={voucher?.id === selectedVoucher}
+                checked={selectedVoucher !== '' && voucher?.id === selectedVoucher}
                 disabled={selectedCartItems?.length === 0 || status === VoucherUsedStatusEnum?.UNAVAILABLE}
               />
             )

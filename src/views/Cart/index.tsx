@@ -29,6 +29,7 @@ const Cart = () => {
 
   const [bestBrandVouchers, setBestBrandVouchers] = useState<IBrandBestVoucher[]>([])
   const [totalPrice, setTotalPrice] = useState<number>(0)
+  const [isTriggerTotal, setIsTriggerTotal] = useState<boolean>(false)
   const [totalOriginalPrice, setTotalOriginalPrice] = useState<number>(0)
   const [totalDirectProductsDiscount, setTotalDirectProductsDiscount] = useState<number>(0)
   const [chosenVouchersByBrand, setChosenVouchersByBrand] = useState<{ [brandId: string]: TVoucher | null }>({})
@@ -177,6 +178,7 @@ const Cart = () => {
       setTotalPrice(calculateCartTotals(selectedCartItems, cartItems).totalPrice)
       setTotalOriginalPrice(calculateCartTotals(selectedCartItems, cartItems).totalProductCost)
       setTotalDirectProductsDiscount(calculateCartTotals(selectedCartItems, cartItems).totalProductDiscount)
+      console.log(calculateCartTotals(selectedCartItems, cartItems).totalPrice, cartItems)
     } else {
       setTotalPrice(0)
       setTotalOriginalPrice(0)
@@ -187,7 +189,7 @@ const Cart = () => {
       setChosenPlatformVoucher(null)
       resetSelectedCartItem()
     }
-  }, [cartItems, resetSelectedCartItem, selectedCartItems, setChosenPlatformVoucher])
+  }, [cartItems, resetSelectedCartItem, selectedCartItems, setChosenPlatformVoucher, isTriggerTotal])
 
   useEffect(() => {
     setChosenPlatformVoucher(platformChosenVoucher)
@@ -235,6 +237,7 @@ const Cart = () => {
                     brand={brand}
                     checkoutItems={checkoutItems}
                     selectedCheckoutItems={selectedCheckoutItems}
+                    setIsTriggerTotal={setIsTriggerTotal}
                   />
                 )
               })}
