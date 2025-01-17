@@ -184,6 +184,7 @@ const ProductDetailAction = ({
             currentPrice={discountedPrice}
             deal={product?.productDiscounts?.[0]?.discount ?? 0}
             price={chosenClassification ? (chosenClassification?.price ?? 0) : 0}
+            isHighlight={false}
           />
         ) : null}
       </div>
@@ -202,7 +203,13 @@ const ProductDetailAction = ({
                 className="w-full h-full object-contain rounded-md"
               />
             </div>
-            {chosenClassification?.title}
+            {[
+              chosenClassification?.color && `${chosenClassification.color}`,
+              chosenClassification?.size && `${chosenClassification.size}`,
+              chosenClassification?.other && `${chosenClassification.other}`,
+            ]
+              .filter(Boolean)
+              .join(', ')}
           </Button>
         </div>
       ) : null}

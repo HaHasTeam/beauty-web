@@ -72,7 +72,7 @@ const ProductCheckoutLandscape = ({
           {discount &&
           discount > 0 &&
           (discountType === DiscountTypeEnum.AMOUNT || discountType === DiscountTypeEnum.PERCENTAGE) ? (
-            <div className="order-2 sm:order-3 w-full md:w-[25%] lg:w-[25%] xl:w-[20%] flex gap-1 items-center justify-start sm:justify-end">
+            <div className="order-2 sm:order-3 w-full md:w-[25%] lg:w-[25%] xl:w-[20%] flex gap-1 items-center justify-start sm:justify-center">
               <span className="text-red-500 xl:text-base lg:text-sm md:text-sm sm:text-xs text-xs">
                 {t('productCard.currentPrice', { price: discountPrice })}
               </span>
@@ -81,7 +81,7 @@ const ProductCheckoutLandscape = ({
               </span>
             </div>
           ) : (
-            <div className="order-2 sm:order-3 w-full md:w-[25%] lg:w-[25%] xl:w-[20%] flex gap-1 items-center justify-start sm:justify-end">
+            <div className="order-2 sm:order-3 w-full md:w-[25%] lg:w-[25%] xl:w-[20%] flex gap-1 items-center justify-start sm:justify-center">
               <span className="xl:text-base lg:text-sm md:text-sm sm:text-xs text-xs">
                 {t('productCard.price', { price: price })}
               </span>
@@ -89,10 +89,10 @@ const ProductCheckoutLandscape = ({
           )}
         </div>
 
-        <div className="w-[10%] md:w-[9%] sm:w-[8%] text-end">
+        <div className="w-[10%] md:w-[9%] sm:w-[8%] text-center">
           <span className="lg:text-sm md:text-sm sm:text-xs text-xs">{productQuantity}</span>
         </div>
-        <span className="font-medium text-red-500 lg:text-base md:text-sm sm:text-xs text-xs w-[20%] md:w-[14%] sm:w-[12%] text-end">
+        <span className="font-medium text-red-500 lg:text-base md:text-sm sm:text-xs text-xs w-[20%] md:w-[14%] sm:w-[12%] text-center">
           {t('productCard.currentPrice', { price: totalPrice })}
         </span>
       </div>

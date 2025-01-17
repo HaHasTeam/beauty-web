@@ -160,7 +160,7 @@ export default function VoucherDialog({
                         selectedCartItems={selectedCartItems}
                         key={voucher?.id}
                         bestVoucherForPlatform={bestPlatFormVoucher}
-                        selectedVoucher={chosenPlatformVoucher?.id ?? ''}
+                        selectedVoucher={selectedVoucher}
                         onCollectSuccess={handleCallPlatformVouchers}
                         status={VoucherUsedStatusEnum.AVAILABLE}
                       />
@@ -171,7 +171,7 @@ export default function VoucherDialog({
                         selectedCartItems={selectedCartItems}
                         key={voucher?.id}
                         bestVoucherForPlatform={bestPlatFormVoucher}
-                        selectedVoucher={chosenPlatformVoucher?.id ?? ''}
+                        selectedVoucher={selectedVoucher}
                         onCollectSuccess={handleCallPlatformVouchers}
                         status={VoucherUsedStatusEnum.UNAVAILABLE}
                       />
@@ -182,7 +182,7 @@ export default function VoucherDialog({
                         selectedCartItems={selectedCartItems}
                         key={voucher?.id}
                         bestVoucherForPlatform={bestPlatFormVoucher}
-                        selectedVoucher={chosenPlatformVoucher?.id ?? ''}
+                        selectedVoucher={selectedVoucher}
                         onCollectSuccess={handleCallPlatformVouchers}
                         status={VoucherUsedStatusEnum.UNCLAIMED}
                       />

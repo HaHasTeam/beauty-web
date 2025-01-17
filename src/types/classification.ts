@@ -13,7 +13,15 @@ export type TClassification = TMetaData & {
   status: ClassificationStatusEnum
 }
 
-export type IClassification = {
+export interface IClassificationSelection {
+  color: string | null
+  size: string | null
+  other: string | null
+}
+
+export type IClassificationKey = keyof IClassificationSelection
+
+export type IClassification = IClassificationSelection & {
   id: string
   createdAt: string
   updatedAt: string

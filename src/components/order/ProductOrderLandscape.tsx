@@ -11,17 +11,19 @@ interface ProductOrderLandscapeProps {
   product: IProduct
   productClassification: IClassification
   orderDetail: IOrderDetail
+  productType: string
 }
-const ProductOrderLandscape = ({ product, productClassification, orderDetail }: ProductOrderLandscapeProps) => {
+const ProductOrderLandscape = ({
+  product,
+  productClassification,
+  orderDetail,
+  productType,
+}: ProductOrderLandscapeProps) => {
   const { t } = useTranslation()
   return (
     <div className="flex gap-4 mb-4">
       <div className="lg:w-22 lg:h-22 md:w-16 md:h-16 h-10 w-10 my-auto">
-        <img
-          src={productClassification?.product?.images[0]?.fileUrl}
-          alt={productClassification?.product?.name}
-          className="object-cover w-full h-full"
-        />
+        <img src={product?.images[0]?.fileUrl} alt={product?.name} className="object-cover w-full h-full" />
       </div>
       <div className="flex-1">
         <h3 className="font-medium">{product?.name}</h3>
@@ -33,9 +35,9 @@ const ProductOrderLandscape = ({ product, productClassification, orderDetail }: 
         )}
 
         <p className="text-sm">x{orderDetail?.quantity}</p>
-        {orderDetail?.type && orderDetail?.type !== OrderEnum.NORMAL && <ProductTag tag={orderDetail?.type} />}
+        {productType && productType !== OrderEnum.NORMAL && <ProductTag tag={productType} />}
       </div>
-      <div className="text-right flex items-center">
+      <div className="text-right flex items-center gap-1">
         {orderDetail?.unitPriceBeforeDiscount - orderDetail?.unitPriceAfterDiscount === 0 ? null : (
           <span className="line-through text-sm text-muted-foreground">
             {t('productCard.price', { price: productClassification?.price })}
@@ -50,7 +52,7 @@ const ProductOrderLandscape = ({ product, productClassification, orderDetail }: 
         ) : (
           <span className="text-red-500">
             {t('productCard.price', {
-              price: orderDetail?.unitPriceBeforeDiscount - orderDetail?.unitPriceAfterDiscount,
+              price: orderDetail?.unitPriceAfterDiscount,
             })}
           </span>
         )}
