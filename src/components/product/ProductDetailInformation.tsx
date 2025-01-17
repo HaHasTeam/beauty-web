@@ -200,8 +200,8 @@ const ProductDetailInformation = ({
           <span className="text-gray-600">{t('productDetail.brandDeal')}</span>
           {product?.deal && product?.deal > 0 && <ProductTag tag="DealPercent" text={product?.deal * 100 + '%'} />}
         </div>
-        {/* classification */}
 
+        {/* classification */}
         {hasCustomType && allOptions.color.length > 0 && renderOptions('color', allOptions.color)}
         {hasCustomType && allOptions.size.length > 0 && renderOptions('size', allOptions.size)}
         {hasCustomType && allOptions.other.length > 0 && renderOptions('other', allOptions.other)}
