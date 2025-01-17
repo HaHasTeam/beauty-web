@@ -36,7 +36,7 @@ export const getAllPreOrderListApi = toQueryFetcher<void, TServerResponse<TPreOr
 export const getPreOrderProductFilterApi = toQueryFetcher<
   TBaseFilterRequestParams,
   TServerResponse<{ total: string }, IPreOrder[]>
->('getProductFilterApi', async (params) => {
+>('getPreOrderProductFilterApi', async (params) => {
   return publicRequest(`/pre-order-product/filter-pre-order-product`, {
     method: 'GET',
     params: params,

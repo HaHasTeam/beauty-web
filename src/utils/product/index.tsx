@@ -64,7 +64,7 @@ export function hasClassificationWithQuantity(classifications: IClassification[]
 /**
  * Finds the product classification with the minimum price.
  * @param {Array} classifications - List of product classifications.
- * @returns {Object|null} The classification with the minimum price, or null if the list is empty.
+ * @returns {Object|null|IClassification} The classification with the minimum price, or null if the list is empty.
  */
 export const getCheapestClassification = (classifications: IClassification[]) => {
   if (!classifications || classifications.length === 0) return null

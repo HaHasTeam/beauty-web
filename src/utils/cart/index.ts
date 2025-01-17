@@ -1,7 +1,7 @@
 import { ICartByBrand, ICartItem } from '@/types/cart'
 import { IClassification } from '@/types/classification'
 import { ProductDiscountEnum, StatusEnum } from '@/types/enum'
-import { IPreOrder, PreOrderStatusEnum } from '@/types/pre-order'
+import { IPreOrder, PreOrderProductEnum } from '@/types/pre-order'
 import { IProduct } from '@/types/product'
 import { IProductDiscount } from '@/types/product-discount'
 
@@ -46,7 +46,7 @@ export const createCartFromProduct = (
       const startTime = new Date(item.startTime)
       const endTime = new Date(item.endTime)
 
-      return currentTime >= startTime && currentTime <= endTime && item.status === PreOrderStatusEnum.ACTIVE
+      return currentTime >= startTime && currentTime <= endTime && item.status === PreOrderProductEnum.ACTIVE
     }) ?? null
   const productDiscount: IProductDiscount | null =
     product?.productDiscounts?.find((item) => {

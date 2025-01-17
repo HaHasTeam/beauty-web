@@ -8,7 +8,7 @@ import { IBrand } from '@/types/brand'
 import { ICartItem } from '@/types/cart'
 import { IClassification } from '@/types/classification'
 import { DiscountTypeEnum, OrderEnum, ProductDiscountEnum } from '@/types/enum'
-import { PreOrderStatusEnum } from '@/types/pre-order'
+import { PreOrderProductEnum } from '@/types/pre-order'
 import { IBrandBestVoucher, ICheckoutItem, TVoucher } from '@/types/voucher'
 
 import ProductCardLandscape from '../product/ProductCardLandscape'
@@ -107,7 +107,7 @@ const CartItem = ({
 
         const eventType =
           cartItem?.productClassification?.preOrderProduct &&
-          cartItem?.productClassification?.preOrderProduct?.status === PreOrderStatusEnum.ACTIVE
+          cartItem?.productClassification?.preOrderProduct?.status === PreOrderProductEnum.ACTIVE
             ? OrderEnum.PRE_ORDER
             : (cartItem?.productClassification?.productDiscount &&
                   cartItem?.productClassification?.productDiscount?.status === ProductDiscountEnum.ACTIVE) ||

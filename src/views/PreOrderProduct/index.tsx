@@ -11,7 +11,7 @@ function PreOrderProductSections() {
     queryFn: getPreOrderProductFilterApi.fn,
     select: (data) => data.data,
   })
-  console.log('productData', preOrderProductData)
+  console.log('preOrderProductData', preOrderProductData)
 
   return (
     <section className="py-12 px-4 bg-gray-50">
@@ -30,7 +30,7 @@ function PreOrderProductSections() {
         >
           <CarouselContent className="-ml-2 md:-ml-4">
             {preOrderProductData?.items.map((preOrderProduct) => (
-              <CarouselItem key={preOrderProduct.id} className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3 xl:basis-1/4">
+              <CarouselItem key={preOrderProduct.id} className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3 xl:basis-1/3">
                 <div className="h-full">
                   <PreOrderProductCard preOrderProduct={preOrderProduct} />
                 </div>

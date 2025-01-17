@@ -17,7 +17,7 @@ import ReviewSection from '@/components/reviews/ReviewSection'
 import { getProductApi } from '@/network/apis/product'
 import { IClassification } from '@/types/classification'
 import { DiscountTypeEnum, OrderEnum, ProductDiscountEnum, StatusEnum } from '@/types/enum'
-import { PreOrderStatusEnum } from '@/types/pre-order'
+import { PreOrderProductEnum } from '@/types/pre-order'
 import { ProductClassificationTypeEnum } from '@/types/product'
 import { getCheapestClassification } from '@/utils/product'
 
@@ -28,13 +28,16 @@ const ProductDetail = () => {
     queryKey: [getProductApi.queryKey, productId as string],
     queryFn: getProductApi.fn,
   })
+
+  console.log('useProductData', useProductData)
+
   const event = useMemo(
     () =>
       (useProductData?.data?.productDiscounts ?? [])?.length > 0 &&
       (useProductData?.data?.productDiscounts ?? [])[0]?.status === ProductDiscountEnum.ACTIVE
         ? OrderEnum.FLASH_SALE
         : (useProductData?.data?.preOrderProducts ?? [])?.length > 0 &&
-            (useProductData?.data?.preOrderProducts ?? [])[0]?.status === PreOrderStatusEnum.ACTIVE
+            (useProductData?.data?.preOrderProducts ?? [])[0]?.status === PreOrderProductEnum.ACTIVE
           ? OrderEnum.PRE_ORDER
           : OrderEnum.NORMAL,
     [useProductData?.data?.preOrderProducts, useProductData?.data?.productDiscounts],

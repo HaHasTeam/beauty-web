@@ -1,15 +1,17 @@
 import { TBrand } from './brand'
-import { TProduct } from './product'
+import { IClassification } from './classification'
+import { IResponseProduct, TProduct } from './product'
 import { TMetaData } from './request'
 
 export type TFlashSale = TMetaData & {
   startTime: string
   endTime: string
   discount: number
-  product: TProduct
+  product: IResponseProduct
   brand: TBrand
   images: string[]
   status: FlashSaleStatusEnum
+  productClassifications: IClassification[]
 }
 
 export enum FlashSaleStatusEnum {
