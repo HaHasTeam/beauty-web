@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { Truck } from 'lucide-react'
+import { MessageSquareText, Truck } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 
@@ -26,30 +26,48 @@ const OrderDetail = () => {
         <span className="text-lg text-muted-foreground font-medium">{t('orderDetail.title')}</span>
         {!isFetching && useOrderData && useOrderData?.data && (
           <>
-            <div className="flex flex-col gap-2 w-full">
+            <div className="flex flex-col gap-7 w-full">
               {/* order status tracking */}
               <OrderStatusTracking currentStatus={useOrderData?.data?.status} />
 
               {/* order customer information, shipment */}
-              <OrderGeneral
-                title={t('orderDetail.shippingAddress')}
-                icon={<Truck />}
-                content={
-                  <div className="flex flex-col gap-1">
-                    <span>
-                      {t('orderDetail.address')}: {useOrderData?.data?.shippingAddress}
-                    </span>
-                    <span>
-                      {t('orderDetail.phone')}: {useOrderData?.data?.phone}
-                    </span>
-                    <span>
-                      {t('orderDetail.notes')}: {useOrderData?.data?.notes ?? t('orderDetail.no')}
-                    </span>
-                  </div>
-                }
-              />
+              <div className="flex flex-col md:flex-row gap-4 justify-between w-full items-stretch">
+                <div className="w-full md:w-1/2 flex">
+                  <OrderGeneral
+                    title={t('orderDetail.shippingAddress')}
+                    icon={<Truck />}
+                    content={
+                      <div className="flex flex-col gap-1 text-sm md:text-base">
+                        <span>
+                          {t('orderDetail.address')}: {useOrderData?.data?.shippingAddress}
+                        </span>
+                        <span>
+                          {t('orderDetail.phone')}: {useOrderData?.data?.phone}
+                        </span>
+                        <span>
+                          {t('orderDetail.notes')}: {useOrderData?.data?.notes ?? t('orderDetail.no')}
+                        </span>
+                      </div>
+                    }
+                  />
+                </div>
+                <div className="w-full md:w-1/2 flex">
+                  <OrderGeneral
+                    title={t('orderDetail.message')}
+                    icon={<MessageSquareText />}
+                    content={
+                      <span className="text-sm md:text-base">
+                        {t('orderDetail.message')}:{' '}
+                        {useOrderData?.data?.message && useOrderData?.data?.message !== ''
+                          ? useOrderData?.data?.message
+                          : t('orderDetail.no')}
+                      </span>
+                    }
+                  />
+                </div>
+              </div>
               {/* order items */}
-              <OrderDetailItems />
+              <OrderDetailItems orderDetails={useOrderData?.data?.orderDetails} />
             </div>
           </>
         )}

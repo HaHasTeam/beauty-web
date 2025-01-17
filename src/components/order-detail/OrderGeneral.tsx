@@ -6,10 +6,10 @@ interface OrderGeneralProps {
 
 const OrderGeneral = ({ title, icon, content }: OrderGeneralProps) => {
   return (
-    <div className="bg-card rounded-lg shadow-md">
-      <div className="flex gap-1">
+    <div className="w-full bg-card rounded-lg border border-primary/40 p-4 space-y-2">
+      <div className="flex gap-2 text-primary items-center">
         {icon}
-        <span className="text-lg font-medium">{title}</span>
+        <span className="text-base md:text-lg font-medium">{title}</span>
       </div>
       <div className="text-muted-foreground">{content}</div>
     </div>

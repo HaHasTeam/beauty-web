@@ -577,6 +577,10 @@
     "address": "Address",
     "phone": "Phone Number",
     "notes": "Notes",
-    "no": "No"
+    "no": "No",
+    "message": "Message",
+    "subTotal": "Sub Total",
+    "quantity": "Quantity",
+    "products": "Products"
   }
 }

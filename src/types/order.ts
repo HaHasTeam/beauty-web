@@ -36,6 +36,7 @@ export interface IOrderItem {
   status: string
   orderDetails: IOrderDetail[]
   voucher: null | TVoucher
+  message: string
 }
 
 export type IOrder = {

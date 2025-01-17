@@ -19,9 +19,12 @@ export const getMyOrdersApi = toMutationFetcher<IOrderFilter, TServerResponse<IO
   },
 )
 
-export const getOrderByIdApi = toQueryFetcher<string, TServerResponse<IOrder>>('getOrderByIdApi', async (orderId) => {
-  return privateRequest(`/orders/get-by-id/${orderId}`)
-})
+export const getOrderByIdApi = toQueryFetcher<string, TServerResponse<IOrderItem>>(
+  'getOrderByIdApi',
+  async (orderId) => {
+    return privateRequest(`/orders/get-by-id/${orderId}`)
+  },
+)
 
 export const getAllOrderListApi = toQueryFetcher<void, TServerResponse<IOrder[]>>('getAllOrderListApi', async () => {
   return privateRequest('/orders', {

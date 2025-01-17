@@ -1,5 +1,42 @@
-const OrderDetailItems = () => {
-  return <div>OrderDetailItems</div>
+import { useTranslation } from 'react-i18next'
+
+import { IOrderDetail } from '@/types/order'
+
+import ProductOrderDetailLandscape from './ProductOrderDetailLandscape'
+
+interface OrderDetailItemsProps {
+  orderDetails: IOrderDetail[]
+}
+const OrderDetailItems = ({ orderDetails }: OrderDetailItemsProps) => {
+  const { t } = useTranslation()
+  return (
+    <div className="w-full">
+      <div className="w-full flex p-2 md:p-3 lg:p-4 bg-secondary/30 rounded-sm">
+        <div className="w-[70%] md:w-[77%] sm:w-[80%] flex items-center justify-center text-xs sm:text-sm md:text-base text-center">
+          {t('orderDetail.products')} ({orderDetails?.length} {t('cart.products')})
+        </div>
+        <div className="w-[10%] md:w-[9%] sm:w-[8%] flex items-center justify-center text-xs sm:text-sm md:text-base text-center">
+          {t('orderDetail.quantity')}
+        </div>
+        <div className="w-[20%] md:w-[14%] sm:w-[12%] flex items-center justify-center text-xs sm:text-sm md:text-base text-center">
+          {t('orderDetail.subTotal')}
+        </div>
+      </div>
+      {orderDetails?.map((orderDetail) => (
+        <ProductOrderDetailLandscape
+          productImage={orderDetail?.productClassification?.images?.[0]?.fileUrl ?? ''}
+          productId={orderDetail?.product?.id ?? ''}
+          productName={orderDetail?.product?.name ?? ''}
+          eventType={orderDetail?.type ?? ''}
+          unitPriceAfterDiscount={orderDetail?.unitPriceAfterDiscount}
+          unitPriceBeforeDiscount={orderDetail?.unitPriceBeforeDiscount}
+          subTotal={orderDetail?.subTotal}
+          productQuantity={orderDetail?.productClassification?.quantity}
+          productClassification={orderDetail?.productClassification}
+        />
+      ))}
+    </div>
+  )
 }
 
 export default OrderDetailItems

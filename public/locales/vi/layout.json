@@ -570,8 +570,12 @@
     "title": "Chi tiết đơn hàng",
     "shippingAddress": "Địa chỉ nhận hàng",
     "address": "Địa chỉ",
-    "phone": "Số điện thoại",
+    "phone": "Điện thoại",
     "notes": "Ghi chú",
-    "no": "Không"
+    "no": "Không",
+    "message": "Tin nhắn",
+    "subTotal": "Tạm Tính",
+    "quantity": "Số lượng",
+    "products": "Sản phẩm"
   }
 }
