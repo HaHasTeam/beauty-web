@@ -25,7 +25,7 @@ export default function OrderStatus({ tag, text, size = 'medium' }: OrderStatusP
       tagColorClass = 'text-yellow-400'
       tagText = t('order.pending')
       break
-    case ShippingStatusEnum.WAIT_FOR_SHOP_CONFIRM:
+    case ShippingStatusEnum.WAIT_FOR_CONFIRMATION:
       tagColorClass = 'text-amber-500'
       tagText = t('order.waitConfirm')
       break

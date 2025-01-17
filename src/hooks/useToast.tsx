@@ -34,12 +34,7 @@ export const useToast = () => {
 
   const warningToast = ({ message, description, duration, onClose }: ToastOptions) => {
     toast.warning(message, {
-      description: (
-        <span className="text-yellow-500 text-xs">
-          {description ||
-            'You are about to perform a unsafe action, please be cautious. If you are not sure, please contact the support team.'}
-        </span>
-      ),
+      description: <span className="text-yellow-500 text-xs">{description || t('toast.warning')}</span>,
       duration,
       onDismiss: onClose,
       icon: <ShieldAlertIcon size={20} />,

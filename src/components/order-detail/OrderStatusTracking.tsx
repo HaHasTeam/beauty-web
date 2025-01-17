@@ -13,7 +13,7 @@ const OrderStatusTracking = ({ currentStatus }: OrderStatusTrackingProps) => {
     { status: 'ORDER_CREATED', text: t('order.created'), icon: <Package className="w-5 h-5" /> },
     { status: ShippingStatusEnum.TO_PAY, text: t('order.pending'), icon: <Banknote className="w-5 h-5" /> },
     {
-      status: ShippingStatusEnum.WAIT_FOR_SHOP_CONFIRM,
+      status: ShippingStatusEnum.WAIT_FOR_CONFIRMATION,
       text: t('order.waitConfirm'),
       icon: <PackageCheck className="w-5 h-5" />,
     },
