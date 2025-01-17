@@ -243,7 +243,10 @@
     "selectOption": "Chọn tùy chọn",
     "selectClassification": "Chọn phân loại",
     "title": "Chi tiết sản phẩm",
-    "originalPrice": "Giá gốc"
+    "originalPrice": "Giá gốc",
+    "Color": "Màu sắc",
+    "Size": "Kích cỡ",
+    "Other": "Khác"
   },
   "event": {
     "finishIn": "Kết thúc trong"

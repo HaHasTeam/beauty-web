@@ -184,6 +184,7 @@ const ProductDetailAction = ({
             currentPrice={discountedPrice}
             deal={product?.productDiscounts?.[0]?.discount ?? 0}
             price={chosenClassification ? (chosenClassification?.price ?? 0) : 0}
+            isHighlight={false}
           />
         ) : null}
       </div>

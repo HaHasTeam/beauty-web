@@ -177,7 +177,7 @@ const ProductDetail = () => {
     reviewSectionRef.current?.scrollIntoView({ behavior: 'smooth' })
   }
 
-  console.log(productClassifications)
+  console.log('test', productClassifications, chosenClassification)
 
   return (
     <div className="w-full mx-auto px-4 py-5">

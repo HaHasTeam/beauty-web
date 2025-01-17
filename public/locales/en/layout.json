@@ -248,7 +248,10 @@
     "selectOption": "Select Option",
     "selectClassification": "Select Classification",
     "title": "Product details",
-    "originalPrice": "Original Price"
+    "originalPrice": "Original Price",
+    "Color": "Color",
+    "Size": "Size",
+    "Other": "Other"
   },
   "event": {
     "finishIn": "Finish In"

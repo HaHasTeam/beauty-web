@@ -56,7 +56,6 @@ const ProductDetailInformation = ({
       ...new Set(
         productClassifications
           ?.filter((classification) => {
-            // Ignore the current level (key) in filtering
             return Object.entries(selections).every(
               ([k, v]) => !v || k === key || classification[k as IClassificationKey] === v,
             )
@@ -78,48 +77,72 @@ const ProductDetailInformation = ({
     other: getAvailableOptions('other', selectedValues),
   }
   const handleSelection = (key: IClassificationKey, value: string) => {
-    setSelectedValues((prev) => ({
-      ...prev,
-      [key]: prev[key] === value ? null : value,
-    }))
-  }
+    setSelectedValues((prev) => {
+      const updatedValues = {
+        ...prev,
+        [key]: prev[key] === value ? null : value,
+      }
 
-  console.log(selectedValues)
+      const classificationKeys = Object.keys(allOptions).filter((k) => allOptions[k as IClassificationKey].length > 0)
+
+      const isComplete = classificationKeys.every((k) => updatedValues[k as IClassificationKey] !== null)
+
+      console.log(isComplete)
+      if (isComplete) {
+        const matchingClassification = productClassifications?.find((classification) =>
+          Object.entries(updatedValues).every(([k, v]) => classification[k as IClassificationKey] === v),
+        )
+
+        if (matchingClassification) {
+          setChosenClassification(matchingClassification)
+        }
+      } else {
+        setChosenClassification(null)
+      }
+
+      return updatedValues
+    })
+  }
 
   const renderOptions = (key: IClassificationKey, options: string[]) => {
     if (!options.length) return null
+
+    const showImage = key === 'color' ? allOptions.color.length > 0 : key === 'other' && allOptions.color.length === 0
+
     return (
       <div className="flex gap-2 items-center">
-        <span className="text-gray-600">{key.charAt(0).toUpperCase() + key.slice(1)}</span>
+        <span className="text-gray-600">{t(`productDetail.${key.charAt(0).toUpperCase() + key.slice(1)}`)}</span>
         <div className="flex flex-wrap items-start gap-4">
-          {options.map((option) => (
-            <Button
-              onClick={() => handleSelection(key, option)}
-              key={option}
-              variant="outline"
-              className={`w-fit h-fit justify-start px-2 py-2 text-sm ${
-                selectedValues[key] === option ? 'bg-accent text-accent-foreground' : ''
-              }`}
-              disabled={!availableOptions[key].includes(option)}
-            >
-              {/* <div className="w-10 h-10 rounded-md"> */}
-              {/* <img
-                alt="option"
-                src={classification?.images[0]?.fileUrl}
-                className="w-full h-full object-contain rounded-md"
-              /> */}
-              {/* </div> */}
-              {option}
-            </Button>
-          ))}
+          {options.map((option) => {
+            const classification = productClassifications?.find((c) => c[key] === option)
+
+            return (
+              <Button
+                onClick={() => handleSelection(key, option)}
+                key={option}
+                variant="outline"
+                className={`w-fit h-fit justify-start px-2 py-2 text-sm ${
+                  selectedValues[key] === option ? 'bg-accent text-accent-foreground' : ''
+                }`}
+                disabled={!availableOptions[key].includes(option)}
+              >
+                {showImage && classification?.images?.[0]?.fileUrl && (
+                  <div className="w-10 h-10 rounded-md">
+                    <img
+                      alt={option}
+                      src={classification.images[0].fileUrl}
+                      className="w-full h-full object-cover rounded-md"
+                    />
+                  </div>
+                )}
+                {option}
+              </Button>
+            )
+          })}
         </div>
       </div>
     )
   }
-
-  // const handleSelectClassification = (classification: IClassification) => {
-  //   setChosenClassification(classification)
-  // }
   const chosenPrice = chosenClassification ? chosenClassification?.price : (cheapestClassification?.price ?? 0)
 
   const discountedPrice =
