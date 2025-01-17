@@ -32,7 +32,7 @@ const OrderDetail = () => {
 
               {/* order customer information, shipment */}
               <OrderGeneral
-                title={t('orderDetail.shipingAddress')}
+                title={t('orderDetail.shippingAddress')}
                 icon={<Truck />}
                 content={
                   <div className="flex flex-col gap-1">
@@ -43,7 +43,7 @@ const OrderDetail = () => {
                       {t('orderDetail.phone')}: {useOrderData?.data?.phone}
                     </span>
                     <span>
-                      {t('orderDetail.note')}: {useOrderData?.data?.notes ?? t('orderDetail.no')}
+                      {t('orderDetail.notes')}: {useOrderData?.data?.notes ?? t('orderDetail.no')}
                     </span>
                   </div>
                 }
