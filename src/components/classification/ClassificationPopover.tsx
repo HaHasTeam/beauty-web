@@ -180,9 +180,9 @@ export default function ClassificationPopover({
     const showImage = key === 'color' ? allOptions.color.length > 0 : key === 'other' && allOptions.color.length === 0
     console.log('op', options)
     return (
-      <div className="flex gap-2 items-center">
-        <span className="text-gray-600">{t(`productDetail.${key.charAt(0).toUpperCase() + key.slice(1)}`)}</span>
-        <div className="flex flex-wrap items-start gap-4">
+      <div className="flex gap-3 items-center w-full">
+        <div className="text-gray-600 w-1/5">{t(`productDetail.${key.charAt(0).toUpperCase() + key.slice(1)}`)}</div>
+        <div className="w-4/5 flex flex-wrap items-start gap-2">
           {options.map((option) => {
             const classification = classifications.find((c) => c[key] === option)
 
@@ -256,7 +256,7 @@ export default function ClassificationPopover({
                 <ChevronDown className="sm:w-4 sm:h-4 h-2 w-2 ml-1 sm:ml-2 opacity-50" />
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-[280px] p-0" align="end">
+            <PopoverContent className="md:w-[360px] sm:w-[200px] w-[200px] p-0" align="end">
               <div className="p-4 border-b">
                 <Label> {t('productDetail.classification')}</Label>
               </div>
