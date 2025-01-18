@@ -238,13 +238,17 @@
     "detailTitle": "Thông tin chi tiết",
     "breadcrumbProductName": "{{name}}",
     "brandDeal": "Ưu đãi của thương hiệu",
+    "classifications": "Phân loại",
     "classification": "Phân loại",
     "classification1": "Phân loại 1",
     "classification2": "Phân loại 2",
     "selectOption": "Chọn tùy chọn",
     "selectClassification": "Chọn phân loại",
     "title": "Chi tiết sản phẩm",
-    "originalPrice": "Giá gốc"
+    "originalPrice": "Giá gốc",
+    "Color": "Màu sắc",
+    "Size": "Kích cỡ",
+    "Other": "Khác"
   },
   "event": {
     "finishIn": "Kết thúc trong"
@@ -500,7 +504,9 @@
     "buyAgain": "Mua lại",
     "classification": "Phân loại",
     "all": "Tất cả",
+    "created": "Đơn hàng đã tạo",
     "pending": "Chờ thanh toán",
+    "waitConfirm": "Chờ xác nhận",
     "shipping": "Vận chuyển",
     "delivering": "Chờ giao hàng",
     "cancelled": "Đã hủy",
@@ -522,7 +528,8 @@
   "toast": {
     "success": "Yêu cầu của bạn đã được xử lý thành công, tiếp tục công việc của bạn.",
     "error": "Đã xảy ra lỗi khi xử lý yêu cầu của bạn, vui lòng thử lại sau. Nếu vấn đề vẫn tiếp diễn, vui lòng liên hệ với đội ngũ hỗ trợ.",
-    "info": "Đây là một thông báo để cung cấp thêm thông tin quan trọng liên quan đến công việc của bạn."
+    "info": "Đây là một thông báo để cung cấp thêm thông tin quan trọng liên quan đến công việc của bạn.",
+    "warning": "Bạn sắp thực hiện một hành động không an toàn, vui lòng cẩn thận. Nếu bạn không chắc chắn, hãy liên hệ với đội hỗ trợ."
   },
   "delete": {
     "productCart": {
@@ -561,6 +568,11 @@
     }
   },
   "orderDetail": {
-    "title": "Chi tiết đơn hàng"
+    "title": "Chi tiết đơn hàng",
+    "shippingAddress": "Địa chỉ nhận hàng",
+    "address": "Địa chỉ",
+    "phone": "Số điện thoại",
+    "notes": "Ghi chú",
+    "no": "Không"
   }
 }

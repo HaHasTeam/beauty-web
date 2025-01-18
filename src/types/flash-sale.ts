@@ -1,6 +1,6 @@
 import { TBrand } from './brand'
 import { IClassification } from './classification'
-import { IResponseProduct, TProduct } from './product'
+import { IResponseProduct } from './product'
 import { TMetaData } from './request'
 
 export type TFlashSale = TMetaData & {

@@ -1,5 +1,5 @@
 import { MessageCircle, Store, Tag } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
@@ -26,6 +26,7 @@ interface CartItemProps {
   brand?: IBrand
   checkoutItems: ICheckoutItem[]
   selectedCheckoutItems: ICheckoutItem[]
+  setIsTriggerTotal: Dispatch<SetStateAction<boolean>>
 }
 const CartItem = ({
   brandName,
@@ -37,6 +38,7 @@ const CartItem = ({
   brand,
   checkoutItems,
   selectedCheckoutItems,
+  setIsTriggerTotal,
 }: CartItemProps) => {
   const { t } = useTranslation()
   const [chosenVoucher, setChosenVoucher] = useState<TVoucher | null>(null)
@@ -143,6 +145,7 @@ const CartItem = ({
             onChooseProduct={() => handleSelectCartItem(cartItem?.id, !selectedCartItems?.includes(cartItem?.id))}
             productQuantity={productQuantity}
             productClassificationQuantity={productClassificationQuantity}
+            setIsTriggerTotal={setIsTriggerTotal}
           />
         )
       })}

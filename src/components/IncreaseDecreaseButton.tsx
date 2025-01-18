@@ -29,18 +29,18 @@ const IncreaseDecreaseButton = ({
   size = 'medium',
 }: IncreaseDecreaseButtonProps) => {
   const buttonSize = {
-    small: 'w-7 h-7',
+    small: 'sm:w-7 sm:h-7 w-4 h-4',
     medium: 'h-10 w-10',
     large: 'w-12 h-12',
   }
   const inputSize = {
-    small: 'w-10 h-7',
+    small: 'sm:w-12 sm:h-7 w-5 h-5',
     medium: 'w-16 h-10',
     large: 'w-20 h-12',
   }
   return (
     <div>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center sm:gap-2 gap-1">
         <Button
           variant="outline"
           disabled={isDecreaseDisabled || isProcessing}

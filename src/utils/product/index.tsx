@@ -1,3 +1,4 @@
+import { ICartByBrand, ICartItem } from '@/types/cart'
 import { IClassification, IClassificationWithSecondLevel } from '@/types/classification'
 import { StatusEnum } from '@/types/enum'
 
@@ -159,4 +160,21 @@ export const parseClassifications = (
     grouped[firstLevel].push({ ...classification, secondLevel })
   })
   return grouped
+}
+
+export function hasPreOrderProduct(products: ICartItem[]): boolean {
+  return products.some((product) => product.productClassification?.preOrderProduct !== undefined)
+}
+
+export function flattenObject(data: ICartByBrand | null): ICartItem[] {
+  const result: ICartItem[] = []
+
+  for (const brandName in data) {
+    const items = data[brandName]
+    items.forEach((item: ICartItem) => {
+      result.push(item)
+    })
+  }
+
+  return result
 }

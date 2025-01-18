@@ -1,4 +1,4 @@
-import { ICreateOrder, IOrder, IOrderFilter, IOrderItem } from '@/types/order'
+import { ICreateOrder, ICreatePreOrder, IOrder, IOrderFilter, IOrderItem } from '@/types/order'
 import { TServerResponse } from '@/types/request'
 import { toMutationFetcher, toQueryFetcher } from '@/utils/query'
 import { privateRequest } from '@/utils/request'
@@ -9,6 +9,16 @@ export const createOderApi = toMutationFetcher<ICreateOrder, TServerResponse<IOr
     data,
   })
 })
+
+export const createPreOderApi = toMutationFetcher<ICreatePreOrder, TServerResponse<IOrder>>(
+  'createPreOderApi',
+  async (data) => {
+    return privateRequest('/orders/create-pre-order', {
+      method: 'POST',
+      data,
+    })
+  },
+)
 export const getMyOrdersApi = toMutationFetcher<IOrderFilter, TServerResponse<IOrderItem[]>>(
   'getMyOrdersApi',
   async (data) => {

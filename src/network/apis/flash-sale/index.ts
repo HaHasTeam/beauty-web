@@ -1,10 +1,10 @@
 import { TFlashSale } from '@/types/flash-sale'
 import { TServerResponse } from '@/types/request'
+import { TBaseFilterRequestParams } from '@/types/types'
 import { toMutationFetcher, toQueryFetcher } from '@/utils/query'
 import { privateRequest, publicRequest } from '@/utils/request'
 
 import { TAddFlashSaleRequestParams, TGetAllFlashSaleByBrandIdRequestParams } from './type'
-import { TBaseFilterRequestParams } from '@/types/types'
 
 export const addFlashSaleApi = toMutationFetcher<TAddFlashSaleRequestParams, TServerResponse<TFlashSale>>(
   'addFlashSaleApi',

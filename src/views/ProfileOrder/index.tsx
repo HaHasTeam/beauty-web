@@ -21,6 +21,7 @@ export default function ProfileOrder() {
   const triggers = [
     { value: 'all', text: `${t('order.all')}` },
     { value: ShippingStatusEnum?.TO_PAY, text: `${t('order.pending')}` },
+    { value: ShippingStatusEnum?.WAIT_FOR_CONFIRMATION, text: `${t('order.waitConfirm')}` },
     { value: ShippingStatusEnum?.TO_SHIP, text: `${t('order.shipping')}` },
     { value: ShippingStatusEnum?.TO_RECEIVED, text: `${t('order.delivering')}` },
     { value: ShippingStatusEnum?.COMPLETED, text: `${t('order.completed')}` },
@@ -67,7 +68,12 @@ export default function ProfileOrder() {
         {orders?.map((orderItem) => (
           <div key={orderItem?.id} className="bg-white border rounded-md">
             <OrderItem
-              brand={orderItem?.orderDetails[0]?.productClassification?.product?.brand ?? null}
+              brand={
+                orderItem?.orderDetails[0]?.productClassification?.preOrderProduct?.product?.brand ??
+                orderItem?.orderDetails[0]?.productClassification?.productDiscount?.product?.brand ??
+                orderItem?.orderDetails[0]?.productClassification?.product?.brand ??
+                null
+              }
               orderItem={orderItem}
             />
           </div>

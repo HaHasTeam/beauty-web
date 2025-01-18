@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom'
 
 import configs from '@/config'
 import { IBrand } from '@/types/brand'
-import { ShippingStatusEnum } from '@/types/enum'
+import { OrderEnum, ShippingStatusEnum } from '@/types/enum'
 import { IOrderItem } from '@/types/order'
 
 import OrderStatus from '../order-status'
@@ -51,8 +51,19 @@ const OrderItem = ({ brand, orderItem }: OrderItemProps) => {
               <div className="border-b mb-2">
                 <ProductOrderLandscape
                   orderDetail={productOder}
-                  product={productOder?.productClassification?.product}
+                  product={
+                    productOder?.productClassification?.preOrderProduct?.product ??
+                    productOder?.productClassification?.productDiscount?.product ??
+                    productOder?.productClassification?.product
+                  }
                   productClassification={productOder?.productClassification}
+                  productType={
+                    productOder?.productClassification?.preOrderProduct?.product
+                      ? OrderEnum.PRE_ORDER
+                      : productOder?.productClassification?.productDiscount?.product
+                        ? OrderEnum.FLASH_SALE
+                        : OrderEnum.NORMAL
+                  }
                 />
               </div>
             </Link>

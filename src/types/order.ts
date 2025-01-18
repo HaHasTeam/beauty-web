@@ -78,3 +78,11 @@ export type ICreateOrder = {
   paymentMethod: PaymentMethod.CARD | PaymentMethod.CASH | PaymentMethod.WALLET
   platformVoucherId?: string
 }
+
+export type ICreatePreOrder = {
+  productClassificationId: string
+  quantity: number
+  addressId: string
+  paymentMethod: string
+  notes: string
+}

@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Trash2 } from 'lucide-react'
-import { useCallback, useState } from 'react'
+import { Dispatch, SetStateAction, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
@@ -44,6 +44,7 @@ interface ProductCardLandscapeProps {
   productClassificationQuantity: number
   isSelected: boolean
   onChooseProduct: (cartItemId: string) => void
+  setIsTriggerTotal: Dispatch<SetStateAction<boolean>>
 }
 const ProductCardLandscape = ({
   cartItem,
@@ -61,6 +62,7 @@ const ProductCardLandscape = ({
   productQuantity,
   productClassification,
   productClassificationQuantity,
+  setIsTriggerTotal,
 }: ProductCardLandscapeProps) => {
   const { t } = useTranslation()
   const [quantity, setQuantity] = useState(productQuantity)
@@ -68,7 +70,7 @@ const ProductCardLandscape = ({
   const [openConfirmDelete, setOpenConfirmDelete] = useState(false)
   const [isProcessing, setIsProcessing] = useState(false)
   const { successToast, errorToast } = useToast()
-  const { selectedCartItem, setSelectedCartItem } = useCartStore()
+  const { cartItems, setCartItems, selectedCartItem, setSelectedCartItem } = useCartStore()
   const handleServerError = useHandleServerError()
   const queryClient = useQueryClient()
   const PRODUCT_STOCK_COUNT = productClassification?.quantity ?? 0
@@ -116,7 +118,8 @@ const ProductCardLandscape = ({
       //   queryKey: [getCartByIdApi.queryKey, cartItemId as string],
       // })
       // console.log(productQuantity, quantity, inputValue)
-      // setIsQuantityUpdate((prev) => !prev)
+
+      setIsTriggerTotal((prev) => !prev)
     },
   })
 
@@ -142,14 +145,35 @@ const ProductCardLandscape = ({
           }
         }
 
+        const newCartItems: ICartByBrand = { ...cartItems }
+        for (const brandId in newCartItems) {
+          if (newCartItems[brandId]) {
+            newCartItems[brandId] = newCartItems[brandId].map((item) => {
+              if (item.id === cartItem?.id) {
+                return { ...item, quantity: newQuantity }
+              }
+              return item
+            })
+          }
+        }
         setSelectedCartItem(updatedCartItems)
+        setCartItems(newCartItems)
       } catch (error) {
         handleServerError({ error })
       } finally {
         setIsProcessing(false)
       }
     },
-    [isProcessing, updateCartItemFn, cartItem?.id, selectedCartItem, setSelectedCartItem, handleServerError],
+    [
+      isProcessing,
+      updateCartItemFn,
+      cartItem?.id,
+      selectedCartItem,
+      cartItems,
+      setSelectedCartItem,
+      setCartItems,
+      handleServerError,
+    ],
   )
   console.log(selectedCartItem)
   const handleDeleteCartItem = async () => {
@@ -234,7 +258,9 @@ const ProductCardLandscape = ({
   return (
     <div className={`w-full py-4 border-b border-gray-200`}>
       <div className={`w-full flex gap-2 items-center`}>
-        <div className={`ư-fit flex gap-1 items-center  ${PREVENT_ACTION ? 'opacity-40' : ''}`}>
+        {/* product label */}
+        <div className={`flex gap-1 items-center  ${PREVENT_ACTION ? 'opacity-40 w-fit' : 'w-[10%]'}`}>
+          {/* checkbox or text show hidden, inactive */}
           {IS_ACTIVE ? (
             <Checkbox id={cartItemId} checked={isSelected} onClick={() => onChooseProduct(cartItemId)} />
           ) : HIDDEN ? (
@@ -243,16 +269,19 @@ const ProductCardLandscape = ({
             <ProductTag tag={ProductCartStatusEnum.SOLD_OUT} />
           ) : null}
 
+          {/* product image */}
           <Link to={configs.routes.products + '/' + productId}>
-            <div className="lg:w-20 lg:h-20 md:w-14 md:h-14 h-8 w-8">
+            <div className="lg:w-20 lg:h-20 md:w-14 md:h-14 sm:h-14 sm:w-14 w-10 h-13">
               <img src={productImage} alt={productName} className="object-cover w-full h-full" />
             </div>
           </Link>
         </div>
 
+        {/* product name, classification, price */}
         <div
-          className={`flex md:flex-row flex-col lg:w-[65%] md:w-[65%] sm:w-[34%] w-[34%] gap-2 px-2 ${PREVENT_ACTION ? 'opacity-40' : ''}`}
+          className={`flex md:flex-row flex-col lg:w-[65%] md:w-[65%] sm:w-[50%] w-[34%] gap-2 px-2 ${PREVENT_ACTION ? 'opacity-40' : ''}`}
         >
+          {/* product name */}
           <div className="order-1 flex gap-1 items-center lg:w-[50%] md:w-[35%] w-full">
             <div className="ml-1 flex flex-col gap-1">
               <Link to={configs.routes.products + '/' + productId}>
@@ -289,6 +318,7 @@ const ProductCardLandscape = ({
               ) : null}
             </div>
           </div>
+          {/* product classification */}
           <div className="order-3 md:order-2 flex items-center gap-2 lg:w-[30%] md:w-[40%] w-full">
             {productClassification?.type === ClassificationTypeEnum?.CUSTOM && (
               <ClassificationPopover
@@ -300,10 +330,12 @@ const ProductCardLandscape = ({
               />
             )}
           </div>
+
+          {/* product price */}
           {discount &&
           discount > 0 &&
           (discountType === DiscountTypeEnum.AMOUNT || discountType === DiscountTypeEnum.PERCENTAGE) ? (
-            <div className="order-2 md:order-3 w-full md:w-[25%] lg:w-[20%] flex-col">
+            <div className="order-2 md:order-3 w-full md:w-[25%] lg:w-[20%] flex-col md:items-center sm:items-start items-start">
               <div className="flex gap-1 items-center">
                 <span className="text-red-500 lg:text-base md:text-sm sm:text-xs text-xs">
                   {t('productCard.currentPrice', { price: discountPrice })}
@@ -319,7 +351,7 @@ const ProductCardLandscape = ({
               </div>
             </div>
           ) : (
-            <div className="order-2 md:order-3 w-full md:w-[25%] lg:w-[20%] flex gap-1 items-center">
+            <div className="order-2 md:order-3 w-full md:w-[25%] lg:w-[20%] flex gap-1 items-center md:justify-center justify-start">
               <span className="lg:text-base md:text-sm sm:text-xs text-xs">
                 {t('productCard.price', { price: price })}
               </span>
@@ -327,8 +359,11 @@ const ProductCardLandscape = ({
           )}
         </div>
 
-        <div className={`w-[26%] md:w-[12%] sm:w-[20%] ${PREVENT_ACTION ? 'opacity-40' : ''}`}>
-          {IS_ACTIVE && (
+        {/* product quantity */}
+        <div
+          className={`w-[26%] md:w-[12%] sm:w-[23%] flex flex-col items-center ${PREVENT_ACTION ? 'opacity-40' : ''}`}
+        >
+          {IS_ACTIVE ? (
             <IncreaseDecreaseButton
               onIncrease={increaseQuantity}
               onDecrease={decreaseQuantity}
@@ -341,6 +376,8 @@ const ProductCardLandscape = ({
               isProcessing={isProcessing}
               size="small"
             />
+          ) : (
+            <div>1</div>
           )}
 
           {(PRODUCT_STOCK_COUNT < quantity || PRODUCT_STOCK_COUNT <= 0) && (
@@ -349,13 +386,16 @@ const ProductCardLandscape = ({
             </span>
           )}
         </div>
+
+        {/* product total price */}
         <span
-          className={`text-red-500 lg:text-base md:text-sm sm:text-xs text-xs w-[16%] md:w-[8%] sm:w-[12%] ${PREVENT_ACTION ? 'opacity-40' : ''}`}
+          className={`text-red-500 lg:text-base md:text-sm sm:text-xs text-xs w-[16%] md:w-[8%] sm:w-[12%] flex flex-col items-center ${PREVENT_ACTION ? 'opacity-40' : ''}`}
         >
           {t('productCard.currentPrice', { price: totalPrice })}
         </span>
 
-        <div className="w-[7%] sm:w-[5%]">
+        {/* delete action */}
+        <div className="w-[7%] sm:w-[5%] flex flex-col items-center">
           <Trash2
             onClick={() => {
               setOpenConfirmDelete(true)

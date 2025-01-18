@@ -8,8 +8,7 @@ import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import configs from '@/config'
 import { OrderEnum } from '@/types/enum'
 import { TFlashSale } from '@/types/flash-sale'
-import { DiscountType } from '@/types/product-discount'
-import { calculateDiscountedPrice, calculateDiscountPrice } from '@/utils/price'
+import { calculateDiscountPrice } from '@/utils/price'
 import { getCheapestClassification } from '@/utils/product'
 
 import { DiscountTypeEnum } from '../../../../../projcetNodeJs/Allure/src/utils/enum'
@@ -70,10 +69,7 @@ export default function SaleProductCard({ product }: ProductCardProps) {
             )}
           </div>
           <div className="w-full space-y-1.5">
-            <SoldProgress
-              soldAmount={product?.flashSale?.soldAmount ?? 0}
-              maxAmount={product?.flashSale?.productAmount ?? 0}
-            />
+            <SoldProgress soldAmount={0} maxAmount={0} />
           </div>
           {/* <Button className="w-full bg-primary hover:bg-primary/70 text-primary-foreground">
             {t('button.addToCard')}

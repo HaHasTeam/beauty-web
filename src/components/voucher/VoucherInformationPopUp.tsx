@@ -39,7 +39,7 @@ export default function VoucherInformationPopup({
               <span className="font-medium">{t('voucher.discount')}</span>
               <p>
                 {voucher?.discountType === DiscountTypeEnum.PERCENTAGE
-                  ? t('voucher.off.percentage', { amount: voucher?.discountValue })
+                  ? t('voucher.off.percentage', { percentage: voucher?.discountValue * 100 })
                   : t('voucher.off.amount', { amount: voucher?.discountValue })}
                 {voucher?.maxDiscount && (
                   <span>. {t('voucher.off.maxDiscount', { amount: voucher?.maxDiscount })}. </span>

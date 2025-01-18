@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import ReactQuill from 'react-quill-new'
 import { useParams } from 'react-router-dom'
 
 import BrandSection from '@/components/brand/BrandSection'
@@ -179,7 +180,7 @@ const ProductDetail = () => {
     reviewSectionRef.current?.scrollIntoView({ behavior: 'smooth' })
   }
 
-  console.log(productClassifications)
+  console.log('test', productClassifications, chosenClassification)
 
   return (
     <div className="w-full mx-auto px-4 py-5">
@@ -220,6 +221,12 @@ const ProductDetail = () => {
                   hasCustomType={hasCustomType ?? false}
                 />
               </div>
+            </div>
+
+            {/* description */}
+            <div className="w-full py-4 px-3 bg-white rounded-lg">
+              <h3 className="font-semibold mb-3 text-lg">{t('productDetail.descriptionTitle')}</h3>
+              <ReactQuill value={useProductData?.data?.description} readOnly={true} theme={'bubble'} />
             </div>
 
             {/* product brand */}

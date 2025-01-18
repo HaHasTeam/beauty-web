@@ -1,12 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
 import { ArrowRight, Zap } from 'lucide-react'
-import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import configs from '@/config'
 import { getFlashSaleProductFilterApi } from '@/network/apis/flash-sale'
-import { IProductCard } from '@/types/product'
 
 import SaleProductCard from '../product/SaleProductCard'
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '../ui/carousel'

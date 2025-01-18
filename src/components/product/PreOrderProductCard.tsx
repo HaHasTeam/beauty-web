@@ -8,7 +8,7 @@ import productImage from '@/assets/images/product_sample_img.png'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import configs from '@/config'
-import { IPreOrder, PreOrderProductEnum } from '@/types/pre-order'
+import { IPreOrder } from '@/types/pre-order'
 import { formatDate } from '@/utils'
 
 import { Countdown } from '../countDown/CountDown'
@@ -83,20 +83,20 @@ export default function PreOrderProductCard({ preOrderProduct }: ProductCardProp
     }
   }
 
-  const renderStatusInfo = () => {
-    switch (preOrderProduct.status) {
-      case PreOrderProductEnum.ACTIVE:
-        return renderDateInfo()
-      case PreOrderProductEnum.SOLD_OUT:
-        return <span className="text-lg font-semibold text-red-500">Hết hàng</span>
-      case PreOrderProductEnum.WAITING:
-        return <span className="text-lg font-semibold text-yellow-500">Sắp diễn ra</span>
-      case PreOrderProductEnum.INACTIVE:
-        return <span className="text-lg font-semibold text-gray-500">Không khả dụng</span>
-      case PreOrderProductEnum.CANCELLED:
-        return <span className="text-lg font-semibold text-red-500">Đã hủy</span>
-    }
-  }
+  // const renderStatusInfo = () => {
+  //   switch (preOrderProduct.status) {
+  //     case PreOrderProductEnum.ACTIVE:
+  //       return renderDateInfo()
+  //     case PreOrderProductEnum.SOLD_OUT:
+  //       return <span className="text-lg font-semibold text-red-500">Hết hàng</span>
+  //     case PreOrderProductEnum.WAITING:
+  //       return <span className="text-lg font-semibold text-yellow-500">Sắp diễn ra</span>
+  //     case PreOrderProductEnum.INACTIVE:
+  //       return <span className="text-lg font-semibold text-gray-500">Không khả dụng</span>
+  //     case PreOrderProductEnum.CANCELLED:
+  //       return <span className="text-lg font-semibold text-red-500">Đã hủy</span>
+  //   }
+  // }
 
   const renderButton = () => {
     console.log('timeStatus', timeStatus)

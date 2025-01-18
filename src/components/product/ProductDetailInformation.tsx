@@ -1,8 +1,7 @@
 import { Dispatch, SetStateAction, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import ReactQuill from 'react-quill-new'
 
-import { IClassification } from '@/types/classification'
+import { IClassification, IClassificationKey, IClassificationSelection } from '@/types/classification'
 import { DiscountTypeEnum, OrderEnum, ProductDiscountEnum } from '@/types/enum'
 import { IProduct } from '@/types/product'
 import { calculateDiscountPrice } from '@/utils/price'
@@ -36,55 +35,113 @@ const ProductDetailInformation = ({
   hasCustomType,
 }: ProductDetailInformationProps) => {
   const { t } = useTranslation()
-  const [selectedLevel1, setSelectedLevel1] = useState<string | null>(null)
-  const [selectedLevel2, setSelectedLevel2] = useState<string | null>(null)
+  const [selectedValues, setSelectedValues] = useState<IClassificationSelection>({
+    color: null,
+    size: null,
+    other: null,
+  })
 
-  const handleSelectLevel1 = (level1: string) => {
-    setSelectedLevel1(level1)
-    if (level1 && selectedLevel2) {
-      const selected = productClassifications?.find(
-        (classification) => classification.title === `${level1}-${selectedLevel2}`,
-      )
-      setChosenClassification(selected || null)
-    }
+  const getAllOptions = (key: IClassificationKey): string[] => {
+    return [
+      ...new Set(
+        productClassifications
+          ?.map((classification) => classification[key])
+          .filter((value): value is string => value !== null),
+      ),
+    ]
   }
 
-  const handleSelectLevel2 = (level2: string) => {
-    setSelectedLevel2(level2)
-    if (selectedLevel1 && level2) {
-      const selected = productClassifications?.find(
-        (classification) => classification.title === `${selectedLevel1}-${level2}`,
-      )
-      setChosenClassification(selected || null)
-    }
+  const getAvailableOptions = (key: IClassificationKey, selections: IClassificationSelection) => {
+    return [
+      ...new Set(
+        productClassifications
+          ?.filter((classification) => {
+            return Object.entries(selections).every(
+              ([k, v]) => !v || k === key || classification[k as IClassificationKey] === v,
+            )
+          })
+          .map((classification) => classification[key]),
+      ),
+    ]
   }
 
-  const classificationsLevel1 = Array.from(
-    new Set(productClassifications?.map((classification) => classification.title.split('-')[0])),
-  )
-  // const classificationsLevel2 = selectedLevel1
-  //   ? productClassifications
-  //       ?.filter((classification) => classification.title.startsWith(selectedLevel1 + '-'))
-  //       ?.map((classification) => classification.title.split('-')[1])
-  //   : []
+  const allOptions = {
+    color: getAllOptions('color'),
+    size: getAllOptions('size'),
+    other: getAllOptions('other'),
+  }
 
-  // const classificationsLevel2 = Array.from(
-  //   new Set(productClassifications?.map((classification) => classification.title.split('-')[1])),
-  // )
-  const classificationsLevel2 = productClassifications
-    ?.filter((classification) => classification.title.includes(`-`))
-    ?.map((classification) => classification.title.split('-')[1])
-    ?.filter((level2, index, self) => self.indexOf(level2) === index)
+  const availableOptions = {
+    color: getAvailableOptions('color', selectedValues),
+    size: getAvailableOptions('size', selectedValues),
+    other: getAvailableOptions('other', selectedValues),
+  }
+  const handleSelection = (key: IClassificationKey, value: string) => {
+    setSelectedValues((prev) => {
+      const updatedValues = {
+        ...prev,
+        [key]: prev[key] === value ? null : value,
+      }
 
-  const isLevel2Enabled = (level2: string): boolean => {
-    if (!selectedLevel1) return true
+      const classificationKeys = Object.keys(allOptions).filter((k) => allOptions[k as IClassificationKey].length > 0)
+
+      const isComplete = classificationKeys.every((k) => updatedValues[k as IClassificationKey] !== null)
+
+      console.log(isComplete)
+      if (isComplete) {
+        const matchingClassification = productClassifications?.find((classification) =>
+          Object.entries(updatedValues).every(([k, v]) => classification[k as IClassificationKey] === v),
+        )
+
+        if (matchingClassification) {
+          setChosenClassification(matchingClassification)
+        }
+      } else {
+        setChosenClassification(null)
+      }
+
+      return updatedValues
+    })
+  }
+
+  const renderOptions = (key: IClassificationKey, options: string[]) => {
+    if (!options.length) return null
+
+    const showImage = key === 'color' ? allOptions.color.length > 0 : key === 'other' && allOptions.color.length === 0
+
     return (
-      productClassifications?.some((classification) => classification.title === `${selectedLevel1}-${level2}`) ?? false
-    )
-  }
+      <div className="flex gap-2 items-center">
+        <span className="text-gray-600">{t(`productDetail.${key.charAt(0).toUpperCase() + key.slice(1)}`)}</span>
+        <div className="flex flex-wrap items-start gap-4">
+          {options.map((option) => {
+            const classification = productClassifications?.find((c) => c[key] === option)
 
-  const handleSelectClassification = (classification: IClassification) => {
-    setChosenClassification(classification)
+            return (
+              <Button
+                onClick={() => handleSelection(key, option)}
+                key={option}
+                variant="outline"
+                className={`w-fit h-fit justify-start px-2 py-2 text-sm ${
+                  selectedValues[key] === option ? 'bg-accent text-accent-foreground' : ''
+                }`}
+                disabled={!availableOptions[key].includes(option)}
+              >
+                {showImage && classification?.images?.[0]?.fileUrl && (
+                  <div className="w-10 h-10 rounded-md">
+                    <img
+                      alt={option}
+                      src={classification.images[0].fileUrl}
+                      className="w-full h-full object-cover rounded-md"
+                    />
+                  </div>
+                )}
+                {option}
+              </Button>
+            )
+          })}
+        </div>
+      </div>
+    )
   }
   const chosenPrice = chosenClassification ? chosenClassification?.price : (cheapestClassification?.price ?? 0)
 
@@ -96,7 +153,6 @@ const ProductDetailInformation = ({
         ? (chosenClassification?.price ?? 0)
         : (cheapestClassification?.price ?? 0)
 
-  console.log(classificationsLevel2 && classificationsLevel2?.length > 0)
   return (
     <div className="w-full flex flex-col gap-4">
       {/* name and tag */}
@@ -144,101 +200,16 @@ const ProductDetailInformation = ({
           <span className="text-gray-600">{t('productDetail.brandDeal')}</span>
           {product?.deal && product?.deal > 0 && <ProductTag tag="DealPercent" text={product?.deal * 100 + '%'} />}
         </div>
-        {/* classification */}
-        {hasCustomType ? (
-          <div className="flex gap-2 items-center">
-            <span className="text-gray-600">{t('productDetail.classification')}</span>
-            <div className="flex flex-wrap items-start gap-4">
-              {productClassifications?.map((classification) => (
-                <Button
-                  onClick={() => handleSelectClassification(classification)}
-                  key={classification?.id}
-                  variant="outline"
-                  className={`w-fit h-fit justify-start px-2 py-2 text-sm ${
-                    chosenClassification?.id === classification?.id ? 'bg-accent text-accent-foreground' : ''
-                  }`}
-                >
-                  <div className="w-10 h-10 rounded-md">
-                    <img
-                      alt="option"
-                      src={classification?.images[0]?.fileUrl}
-                      className="w-full h-full object-contain rounded-md"
-                    />
-                  </div>
-                  {classification?.title}
-                </Button>
-              ))}
-            </div>
-          </div>
-        ) : null}
 
-        {hasCustomType && (
-          <div className="flex flex-col gap-4">
-            {/* Level 1 Classification */}
-            {classificationsLevel1 && classificationsLevel1?.length > 0 ? (
-              <div className="flex gap-2 items-center">
-                <span className="text-gray-600">{t('productDetail.classification1')}</span>
-                <div className="flex flex-wrap items-start gap-4">
-                  {classificationsLevel1?.map((level1) => {
-                    const level1Classification = productClassifications?.find((classification) =>
-                      classification.title.startsWith(`${level1}`),
-                    )
-                    return (
-                      <Button
-                        onClick={() => handleSelectLevel1(level1)}
-                        key={level1}
-                        variant="outline"
-                        className={`w-fit h-fit justify-start px-2 py-2 text-sm ${
-                          selectedLevel1 === level1 ? 'bg-accent text-accent-foreground' : ''
-                        }`}
-                      >
-                        <div className="w-10 h-10 rounded-md">
-                          <img
-                            alt="option"
-                            src={level1Classification?.images[0]?.fileUrl}
-                            className="w-full h-full object-contain rounded-md"
-                          />
-                        </div>
-                        {level1}
-                      </Button>
-                    )
-                  })}
-                </div>
-              </div>
-            ) : null}
-            {/* Level 2 Classification */}
-            {classificationsLevel2 && classificationsLevel2?.length > 0 ? (
-              <div className="flex gap-2 items-center">
-                <span className="text-gray-600">{t('productDetail.classification2')}</span>
-                <div className="flex flex-wrap items-start gap-4">
-                  {classificationsLevel2?.map((level2) => (
-                    <Button
-                      onClick={() => isLevel2Enabled(level2) && handleSelectLevel2(level2)}
-                      key={level2}
-                      variant="outline"
-                      className={`w-fit h-fit justify-start px-2 py-2 text-sm ${
-                        selectedLevel2 === level2 ? 'bg-accent text-accent-foreground' : ''
-                      }`}
-                      disabled={!isLevel2Enabled(level2)}
-                    >
-                      {level2}
-                    </Button>
-                  ))}
-                </div>
-              </div>
-            ) : null}
-          </div>
-        )}
+        {/* classification */}
+        {hasCustomType && allOptions.color.length > 0 && renderOptions('color', allOptions.color)}
+        {hasCustomType && allOptions.size.length > 0 && renderOptions('size', allOptions.size)}
+        {hasCustomType && allOptions.other.length > 0 && renderOptions('other', allOptions.other)}
       </div>
       {/* detail */}
       <div className="w-full py-4 px-3 bg-white rounded-lg">
         <h3 className="font-semibold mb-3 text-lg">{t('productDetail.detailTitle')}</h3>
         <ProductDetailInfoSection detail={product?.detail ?? ''} detailCategoryObject={product?.category?.detail} />
-      </div>
-      {/* description */}
-      <div className="w-full py-4 px-3 bg-white rounded-lg">
-        <h3 className="font-semibold mb-3 text-lg">{t('productDetail.descriptionTitle')}</h3>
-        <ReactQuill value={product?.description} readOnly={true} theme={'bubble'} />
       </div>
     </div>
   )
