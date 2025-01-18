@@ -1,7 +1,8 @@
-import { TPreOrder } from '@/types/pre-order'
+import { IPreOrder, TPreOrder } from '@/types/pre-order'
 import { TServerResponse } from '@/types/request'
+import { TBaseFilterRequestParams } from '@/types/types'
 import { toMutationFetcher, toQueryFetcher } from '@/utils/query'
-import { privateRequest } from '@/utils/request'
+import { privateRequest, publicRequest } from '@/utils/request'
 
 import { TAddPreOderRequestParams, TGetPreOrderByIdRequestParams, TUpdatePreOrderRequestParams } from './type'
 
@@ -32,6 +33,15 @@ export const getAllPreOrderListApi = toQueryFetcher<void, TServerResponse<TPreOr
     })
   },
 )
+export const getPreOrderProductFilterApi = toQueryFetcher<
+  TBaseFilterRequestParams,
+  TServerResponse<{ total: string }, IPreOrder[]>
+>('getPreOrderProductFilterApi', async (params) => {
+  return publicRequest(`/pre-order-product/filter-pre-order-product`, {
+    method: 'GET',
+    params: params,
+  })
+})
 
 export const updatePreOrderApi = toMutationFetcher<TUpdatePreOrderRequestParams, TServerResponse<TPreOrder>>(
   'updatePreOrderApi',

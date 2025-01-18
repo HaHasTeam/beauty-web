@@ -1,5 +1,6 @@
 import { IProduct, IResponseProduct, IServerCreateProduct, TProduct } from '@/types/product'
 import { TServerResponse } from '@/types/request'
+import { TBaseFilterRequestParams } from '@/types/types'
 import { toMutationFetcher, toQueryFetcher } from '@/utils/query'
 import { privateRequest, publicRequest } from '@/utils/request'
 
@@ -43,3 +44,13 @@ export const updateProductApi = toMutationFetcher<UpdateProductParams, TServerRe
     })
   },
 )
+
+export const getProductFilterApi = toQueryFetcher<
+  TBaseFilterRequestParams,
+  TServerResponse<{ total: string }, IResponseProduct[]>
+>('getProductFilterApi', async (params) => {
+  return publicRequest(`/products/filter-product`, {
+    method: 'GET',
+    params: params,
+  })
+})

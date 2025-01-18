@@ -282,3 +282,25 @@ export const getTotalBrandProductsPrice = (cartBrandItem?: ICartItem[]): number 
 
   return total
 }
+
+/**
+ * Calculate the discounted price based on the current price and discount percentage.
+ *
+ * @param currentPrice - The original price of the product.
+ * @param discountPercent - The discount percentage to apply (0-100).
+ * @returns The discounted price, rounded to two decimal places.
+ */
+export function calculateDiscountedPrice(currentPrice: number, discountPercent: number): number {
+  if (currentPrice < 0) {
+    throw new Error('Current price must be a non-negative number.')
+  }
+
+  if (discountPercent < 0 || discountPercent > 100) {
+    throw new Error('Discount percentage must be between 0 and 100.')
+  }
+
+  const discountAmount = (currentPrice * discountPercent) / 100
+  const discountedPrice = currentPrice - discountAmount
+
+  return parseFloat(discountedPrice.toFixed(2))
+}

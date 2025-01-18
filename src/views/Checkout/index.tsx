@@ -34,6 +34,8 @@ import { IBrandBestVoucher, ICheckoutItem, IPlatformBestVoucher, TVoucher } from
 import { createCheckoutItem, createCheckoutItems } from '@/utils/cart'
 import { calculateCartTotals, calculatePlatformVoucherDiscount, calculateTotalVoucherDiscount } from '@/utils/price'
 
+import { flattenObject, hasPreOrderProduct } from '../../utils/product/index'
+
 const Checkout = () => {
   const { t } = useTranslation()
   const formId = useId()
@@ -142,6 +144,9 @@ const Checkout = () => {
     },
   })
 
+  const flatternProduct = flattenObject(selectedCartItem)
+  console.log('flatternProduct', flatternProduct)
+
   async function onSubmit(values: z.infer<typeof CreateOrderSchema>) {
     try {
       setIsLoading(true)
@@ -151,6 +156,7 @@ const Checkout = () => {
         orders,
         platformVoucherId: chosenPlatformVoucher?.id ?? '', // Optional
       }
+
       await createOrderFn(formData)
       setIsLoading(false)
     } catch (error) {
@@ -208,7 +214,9 @@ const Checkout = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCartItem, selectedCartItems])
 
-  console.log(selectedCartItem)
+  console.log('selectedCartItem', selectedCartItem)
+  // console.log('check flat', hasPreOrderProduct(flattenObject(selectedCartItem)))
+
   return (
     <>
       {(isGettingProfile || isGettingAddress) && <LoadingContentLayer />}
@@ -294,7 +302,10 @@ const Checkout = () => {
                     </div>
                     {/* Payment Section */}
                     <div className="w-full">
-                      <PaymentSelection form={form} />
+                      <PaymentSelection
+                        form={form}
+                        hasPreOrderProduct={hasPreOrderProduct(flattenObject(selectedCartItem))}
+                      />
                     </div>
                     <div>
                       <CheckoutTotal
