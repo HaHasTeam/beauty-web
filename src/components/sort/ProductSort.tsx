@@ -1,21 +1,29 @@
 import { ChevronDown } from 'lucide-react'
-import { useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Button } from '../ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui/dropdown-menu'
 
-const ProductSort = () => {
+const ProductSort = ({
+  sortOption,
+  setSortOption,
+}: {
+  sortOption: string | null
+  setSortOption: Dispatch<SetStateAction<string | null>>
+}) => {
   const { t } = useTranslation()
-  const [sortOption, setSortOption] = useState<null | string>('related')
+  const [filter, setFilter] = useState<null | string>('related')
   const sortButton = [
     { id: 'related', value: `${t('sort.related')}` },
     { id: 'lasted', value: `${t('sort.lasted')}` },
     { id: 'trend', value: `${t('sort.trend')}` },
   ]
+  const handleFilter = (id: string | null) => {
+    setFilter(id)
+  }
   const handleSortChange = (id: string | null) => {
     setSortOption(id)
-    console.log(sortOption)
   }
   return (
     <div className="w-full bg-secondary/50 rounded-sm">
@@ -23,10 +31,10 @@ const ProductSort = () => {
         <span className="text-secondary-foreground font-semibold">{t('sort.title')}</span>
         {sortButton.map((bt) => (
           <Button
-            className={`${bt.id === sortOption && 'hover:bg-primary/80'}`}
-            variant={bt.id === sortOption ? 'default' : 'outline'}
+            className={`${bt.id === filter && 'hover:bg-primary/80'}`}
+            variant={bt.id === filter ? 'default' : 'outline'}
             key={bt.id}
-            onClick={() => handleSortChange(bt.id)}
+            onClick={() => handleFilter(bt.id)}
           >
             {bt.value}
           </Button>

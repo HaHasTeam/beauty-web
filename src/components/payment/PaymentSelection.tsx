@@ -13,29 +13,45 @@ import AddPaymentCardDialog from './AddPaymentCardDialog'
 
 interface PaymentSelectionProps {
   form: UseFormReturn<z.infer<typeof CreateOrderSchema>>
+  hasPreOrderProduct: boolean
 }
-export default function PaymentSelection({ form }: PaymentSelectionProps) {
+export default function PaymentSelection({ form, hasPreOrderProduct }: PaymentSelectionProps) {
   const { t } = useTranslation()
-  const paymentMethods = [
-    {
-      id: PaymentMethod.CASH,
-      label: `${t('wallet.COD')}`,
-      icon: <HandCoins className="text-primary" />,
-      isAddMore: false,
-    },
-    {
-      id: PaymentMethod.WALLET,
-      label: `${t('wallet.title')}`,
-      icon: <WalletMinimal className="text-primary" />,
-      isAddMore: false,
-    },
-    {
-      id: PaymentMethod.CARD,
-      label: `${t('wallet.ATM')}`,
-      icon: <CreditCard className="text-primary" />,
-      isAddMore: true,
-    },
-  ]
+  const paymentMethods = hasPreOrderProduct
+    ? [
+        {
+          id: PaymentMethod.WALLET,
+          label: `${t('wallet.title')}`,
+          icon: <WalletMinimal className="text-primary" />,
+          isAddMore: false,
+        },
+        {
+          id: PaymentMethod.CARD,
+          label: `${t('wallet.ATM')}`,
+          icon: <CreditCard className="text-primary" />,
+          isAddMore: true,
+        },
+      ]
+    : [
+        {
+          id: PaymentMethod.CASH,
+          label: `${t('wallet.COD')}`,
+          icon: <HandCoins className="text-primary" />,
+          isAddMore: false,
+        },
+        {
+          id: PaymentMethod.WALLET,
+          label: `${t('wallet.title')}`,
+          icon: <WalletMinimal className="text-primary" />,
+          isAddMore: false,
+        },
+        {
+          id: PaymentMethod.CARD,
+          label: `${t('wallet.ATM')}`,
+          icon: <CreditCard className="text-primary" />,
+          isAddMore: true,
+        },
+      ]
   const creditCards = [{ id: '1', name: 'Visa - TienPhong Commercial Joint Stock Bank' }]
 
   return (

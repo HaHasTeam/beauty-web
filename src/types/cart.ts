@@ -10,8 +10,8 @@ export type ICart = {
 
 export interface ICartItem {
   id: string
-  createdAt: string
-  updatedAt: string
+  createdAt?: string
+  updatedAt?: string
   quantity: number
   classification?: string
   status: StatusEnum.ACTIVE | StatusEnum.INACTIVE

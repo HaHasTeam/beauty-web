@@ -38,7 +38,8 @@
     "preOrder": "Đặt trước",
     "groupBuying": "Mua nhóm",
     "hidden": "Đã ẩn",
-    "outOfStock": "Hết hàng"
+    "outOfStock": "Hết hàng",
+    "waiting": "Sắp diễn ra"
   },
   "statusTag": {
     "default": "Mặc định"

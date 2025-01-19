@@ -50,13 +50,13 @@ export default function Footer() {
             <h3 className="mb-4 font-semibold text-secondary opacity-80">MY ACCOUNT</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link to={configs.routes.accountAddress}>Addresses</Link>
+                <Link to={configs.routes.profileAddress}>Addresses</Link>
               </li>
               <li>
-                <Link to={configs.routes.accountOrder}>Order</Link>
+                <Link to={configs.routes.profileOrder}>Order</Link>
               </li>
               <li>
-                <Link to={configs.routes.accountWishlist}>Wishlist</Link>
+                <Link to={configs.routes.profileWishlist}>Wishlist</Link>
               </li>
             </ul>
           </div>

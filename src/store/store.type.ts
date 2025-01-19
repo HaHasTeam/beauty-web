@@ -1,5 +1,4 @@
 import { AuthSlice } from './auth/auth.type'
-import { CartSlice } from './cart-slice'
-import { UserSlice } from './user-slice'
-
-export type Store = AuthSlice & UserSlice & CartSlice
+// import { CartSlice } from './cart-slice'
+// & CartSlice
+export type Store = AuthSlice

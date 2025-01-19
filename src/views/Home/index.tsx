@@ -4,6 +4,8 @@ import FlashSale from '@/components/home/FlashSale'
 import HomeBanner from '@/components/home/HomeBanner'
 import RecommendProduct from '@/components/home/RecommendProduct'
 
+import PreOrderProductSections from '../PreOrderProduct'
+
 function Home() {
   return (
     <div className="w-full container mx-auto px-4 py-8 ">
@@ -13,6 +15,7 @@ function Home() {
         <BeautyOffers />
         <FlashSale />
         <RecommendProduct />
+        <PreOrderProductSections />
       </div>
     </div>
   )
