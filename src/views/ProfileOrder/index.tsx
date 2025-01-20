@@ -53,7 +53,7 @@ export default function ProfileOrder() {
     fetchOrders()
   }, [activeTab, getMyOrderFn, searchQuery])
   const renderOrders = () => {
-    if (orders && orders?.length === 0) {
+    if (!isLoading && orders && orders?.length === 0) {
       return (
         <div className="flex flex-col items-center justify-center min-h-[400px] text-center">
           <Empty

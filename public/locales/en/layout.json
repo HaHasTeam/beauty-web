@@ -500,7 +500,10 @@
     "cvvFull": "Card Verification Value",
     "bankAccountEx": "EG: JOHN SMITH",
     "cardNumberEx": "EG: 4123 4567 8901 2345",
-    "cvvEx": "EG: 123"
+    "cvvEx": "EG: 123",
+    "CARD": "Credit Card/Debit Card",
+    "WALLET": "Wallet",
+    "CASH": "Cash on Delivery"
   },
   "order": {
     "loading": "Loading order...",
@@ -527,7 +530,8 @@
     "continueShopping": "Continue Shopping",
     "tryAgain": "Try Again",
     "successDescription": "We will receive an order confirmation email with details of your order and a link to track it's progress.",
-    "failureDescription": "Unfortunately, we were unable to process your order. Please try again later or contact support for assistance."
+    "failureDescription": "Unfortunately, we were unable to process your order. Please try again later or contact support for assistance.",
+    "writeFeedback": "Write review"
   },
   "toast": {
     "success": "Your request has been successfully processed, continue with your work.",
@@ -574,6 +578,7 @@
   "orderDetail": {
     "title": "Order Details",
     "shippingAddress": "Recipient Address",
+    "recipientName": "Recipient's Name",
     "address": "Address",
     "phone": "Phone Number",
     "notes": "Notes",
@@ -581,6 +586,7 @@
     "message": "Message",
     "subTotal": "Sub Total",
     "quantity": "Quantity",
-    "products": "Products"
+    "products": "Products",
+    "status": "Status"
   }
 }

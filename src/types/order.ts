@@ -1,5 +1,5 @@
 import { IClassification } from './classification'
-import { PaymentMethod } from './enum'
+import { PaymentMethod, ShippingStatusEnum } from './enum'
 import { TUser } from './user'
 import { TVoucher } from './voucher'
 
@@ -30,13 +30,14 @@ export interface IOrderItem {
   totalPrice: number
   shippingAddress: string
   phone: string
-  paymentMethod: string
+  paymentMethod: PaymentMethod
   notes: string
   type: string
-  status: string
+  status: ShippingStatusEnum
   orderDetails: IOrderDetail[]
   voucher: null | TVoucher
   message: string
+  recipientName: string
 }
 
 export type IOrder = {
@@ -76,7 +77,7 @@ export type ICreateOrderItem = {
 export type ICreateOrder = {
   orders: ICreateOrderItem[]
   addressId: string
-  paymentMethod: PaymentMethod.CARD | PaymentMethod.CASH | PaymentMethod.WALLET
+  paymentMethod: string
   platformVoucherId?: string
 }
 

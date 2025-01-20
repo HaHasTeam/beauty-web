@@ -28,7 +28,7 @@ import { getBestPlatformVouchersApi, getBestShopVouchersApi } from '@/network/ap
 import CreateOrderSchema from '@/schemas/order.schema'
 import useCartStore from '@/store/cart'
 import { IAddress } from '@/types/address'
-import { DiscountTypeEnum, PaymentMethod, ProjectInformationEnum, ResultEnum } from '@/types/enum'
+import { DiscountTypeEnum, ProjectInformationEnum, ResultEnum } from '@/types/enum'
 import { ICreateOrder } from '@/types/order'
 import { IBrandBestVoucher, ICheckoutItem, IPlatformBestVoucher, TVoucher } from '@/types/voucher'
 import { createCheckoutItem, createCheckoutItems } from '@/utils/cart'
@@ -92,7 +92,7 @@ const Checkout = () => {
   const defaultOrderValues = {
     orders: [],
     addressId: '',
-    paymentMethod: PaymentMethod?.CASH,
+    paymentMethod: '',
     platformVoucherId: '', // Optional field, default to an empty string
   }
   const handleReset = () => {

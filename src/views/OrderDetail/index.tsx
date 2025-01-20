@@ -3,11 +3,14 @@ import { MessageSquareText, Truck } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 
+import BrandOrderInformation from '@/components/brand/BrandOrderInformation'
 import Empty from '@/components/empty/Empty'
 import LoadingContentLayer from '@/components/loading-icon/LoadingContentLayer'
 import OrderDetailItems from '@/components/order-detail/OrderDetailItems'
 import OrderGeneral from '@/components/order-detail/OrderGeneral'
 import OrderStatusTracking from '@/components/order-detail/OrderStatusTracking'
+import OrderSummary from '@/components/order-detail/OrderSummary'
+import OrderStatus from '@/components/order-status'
 import configs from '@/config'
 import { getOrderByIdApi } from '@/network/apis/order'
 
@@ -22,11 +25,20 @@ const OrderDetail = () => {
   return (
     <div>
       {isFetching && <LoadingContentLayer />}
-      <div className="w-full lg:px-5 md:px-4 sm:px-3 px-3 space-y-3 my-5">
-        <span className="text-lg text-muted-foreground font-medium">{t('orderDetail.title')}</span>
+      <div className="w-full lg:px-5 md:px-4 sm:px-3 px-3 space-y-6 my-5">
+        <div className="flex gap-2 w-full sm:justify-between sm:items-center sm:flex-row flex-col">
+          <div className="flex gap-2 sm:items-center sm:flex-row flex-col">
+            <span className="text-lg text-muted-foreground font-medium">{t('orderDetail.title')}</span>
+            <span className="text-lg text-muted-foreground">#{useOrderData?.data?.id}</span>
+          </div>
+          <div className="flex gap-2 items-center">
+            <span className="text-muted-foreground font-medium">{t('orderDetail.status')}: </span>
+            <OrderStatus tag={useOrderData?.data?.status ?? ''} size="medium" />
+          </div>
+        </div>
         {!isFetching && useOrderData && useOrderData?.data && (
           <>
-            <div className="flex flex-col gap-7 w-full">
+            <div className="space-y-6 w-full">
               {/* order status tracking */}
               <OrderStatusTracking currentStatus={useOrderData?.data?.status} />
 
@@ -38,6 +50,9 @@ const OrderDetail = () => {
                     icon={<Truck />}
                     content={
                       <div className="flex flex-col gap-1 text-sm md:text-base">
+                        <span>
+                          {t('orderDetail.recipientName')}: {useOrderData?.data?.recipientName}
+                        </span>
                         <span>
                           {t('orderDetail.address')}: {useOrderData?.data?.shippingAddress}
                         </span>
@@ -66,8 +81,44 @@ const OrderDetail = () => {
                   />
                 </div>
               </div>
-              {/* order items */}
-              <OrderDetailItems orderDetails={useOrderData?.data?.orderDetails} />
+
+              <div className="space-y-2">
+                {/* brand */}
+                <BrandOrderInformation
+                  brandId={
+                    (
+                      useOrderData?.data?.orderDetails?.[0]?.productClassification?.preOrderProduct ??
+                      useOrderData?.data?.orderDetails?.[0]?.productClassification?.productDiscount ??
+                      useOrderData?.data?.orderDetails?.[0]?.productClassification
+                    )?.product?.brand?.id ?? ''
+                  }
+                  brandName={
+                    (
+                      useOrderData?.data?.orderDetails?.[0]?.productClassification?.preOrderProduct ??
+                      useOrderData?.data?.orderDetails?.[0]?.productClassification?.productDiscount ??
+                      useOrderData?.data?.orderDetails?.[0]?.productClassification
+                    )?.product?.brand?.name ?? 'Brand'
+                  }
+                />
+
+                {/* order items */}
+                <div>
+                  {/* order items */}
+                  <OrderDetailItems
+                    orderDetails={useOrderData?.data?.orderDetails}
+                    status={useOrderData?.data?.status}
+                  />
+
+                  {/* order summary */}
+                  <OrderSummary
+                    totalProductCost={useOrderData?.data?.subTotal}
+                    totalBrandDiscount={useOrderData?.data?.shopVoucherDiscount}
+                    totalPlatformDiscount={useOrderData?.data?.platformVoucherDiscount}
+                    totalPayment={useOrderData?.data?.totalPrice}
+                    paymentMethod={useOrderData?.data?.paymentMethod}
+                  />
+                </div>
+              </div>
             </div>
           </>
         )}

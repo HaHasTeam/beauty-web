@@ -1,10 +1,8 @@
-import { MessageSquare, Store } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router-dom'
 
-import { Button } from '@/components/ui/button'
-import configs from '@/config'
 import { IBrand } from '@/types/brand'
+
+import BrandHeader from './BrandHeader'
 
 interface BrandSectionProps {
   brand: IBrand
@@ -20,25 +18,8 @@ export default function BrandSection({ brand }: BrandSectionProps) {
             <img src={brand?.logo} alt={brand?.name} className="rounded-full object-cover" />
           </div>
 
-          <div className="space-y-2">
-            <h1 className="text-xl font-bold">{brand?.name}</h1>
-            <div className="text-sm text-muted-foreground">{t('brand.lastOnline', { time: '59 Minutes' })}</div>
-            <div className="flex gap-2 w-full md:w-auto">
-              <Button className="flex-1 md:flex-none bg-primary hover:bg-primary/80" size="sm">
-                <MessageSquare className="w-4 h-4 mr-2" />
-                {t('brand.chatNow')}
-              </Button>
-              <Link
-                to={configs.routes.brands + brand?.id}
-                className="px-2 rounded-md flex items-center flex-1 md:flex-none border-primary text-primary hover:text-primary hover:bg-primary/10"
-              >
-                <Store className="w-4 h-4 mr-2" />
-                {t('brand.viewShop')}
-              </Link>
-            </div>
-          </div>
+          <BrandHeader brandId={brand?.id ?? ''} brandName={brand?.name ?? ''} />
         </div>
-
         <div className="flex-1 grid grid-cols-2 md:grid-cols-4 gap-4 w-full">
           <div className="space-y-1">
             <div className="text-sm text-muted-foreground">{t('brand.reviews.title')}</div>

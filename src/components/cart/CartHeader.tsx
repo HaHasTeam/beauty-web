@@ -19,7 +19,7 @@ export default function CartHeader({
 
   return (
     <div className="w-full bg-secondary/30 rounded-sm">
-      <div className="w-full flex px-4 py-3 sm:space-y-2 items-center lg:text-base md:text-sm sm:text-xs text-xs">
+      <div className="w-full flex px-4 py-3 items-center lg:text-base md:text-sm sm:text-xs text-xs">
         {/* Product Label */}
         <div className="flex items-center gap-2 justify-between lg:w-[75%] md:w-[75%] sm:w-[60%] w-[60%]">
           <div className="flex items-center gap-2 lg:w-[65%] md:w-[65%] sm:w-full w-full">

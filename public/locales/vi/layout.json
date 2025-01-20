@@ -496,7 +496,10 @@
     "cvvFull": "Card Verification Value",
     "bankAccountEx": "VD: NGUYEN VAN A",
     "cardNumberEx": "VD: 4123 4567 8901 2345",
-    "cvvEx": "VD: 123"
+    "cvvEx": "VD: 123",
+    "CARD": "Thẻ tín dụng/ghi nợ",
+    "WALLET": "Ví",
+    "CASH": "Thanh toán khi nhận hàng"
   },
   "order": {
     "loading": "Đang tải đơn hàng...",
@@ -523,7 +526,8 @@
     "continueShopping": "Tiếp tục mua sắm",
     "tryAgain": "Thử lại",
     "successDescription": "Chúng tôi sẽ gửi email xác nhận đơn hàng với thông tin chi tiết về đơn hàng của bạn và một liên kết để theo dõi tiến trình của nó.",
-    "failureDescription": "Rất tiếc, chúng tôi không thể xử lý đơn hàng của bạn. Vui lòng thử lại sau hoặc liên hệ bộ phận hỗ trợ để được trợ giúp."
+    "failureDescription": "Rất tiếc, chúng tôi không thể xử lý đơn hàng của bạn. Vui lòng thử lại sau hoặc liên hệ bộ phận hỗ trợ để được trợ giúp.",
+    "writeFeedback": "Viết đánh giá"
   },
   "toast": {
     "success": "Yêu cầu của bạn đã được xử lý thành công, tiếp tục công việc của bạn.",
@@ -570,6 +574,7 @@
   "orderDetail": {
     "title": "Chi tiết đơn hàng",
     "shippingAddress": "Địa chỉ nhận hàng",
+    "recipientName": "Tên người nhận",
     "address": "Địa chỉ",
     "phone": "Điện thoại",
     "notes": "Ghi chú",
@@ -577,6 +582,7 @@
     "message": "Tin nhắn",
     "subTotal": "Tạm Tính",
     "quantity": "Số lượng",
-    "products": "Sản phẩm"
+    "products": "Sản phẩm",
+    "status": "Trạng thái"
   }
 }
