@@ -64,6 +64,7 @@ const ProductDetail = () => {
       ),
     [productClassifications],
   )
+  const inStock = productClassifications?.some((classification) => classification?.quantity > 0) ?? false
 
   const [chosenClassification, setChosenClassification] = useState<IClassification | null>(
     !hasCustomType && productClassifications ? productClassifications?.[0] : null,
@@ -219,6 +220,7 @@ const ProductDetail = () => {
                   }
                   discountType={DiscountTypeEnum.PERCENTAGE}
                   hasCustomType={hasCustomType ?? false}
+                  inStock={inStock}
                 />
               </div>
             </div>
