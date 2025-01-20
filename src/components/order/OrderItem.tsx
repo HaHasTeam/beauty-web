@@ -90,7 +90,7 @@ const OrderItem = ({ brand, orderItem }: OrderItemProps) => {
           >
             {t('order.viewDetail')}
           </Button>
-          <Button>{t('order.returnOrder')}</Button>
+          {orderItem?.status === ShippingStatusEnum.COMPLETED && <Button>{t('order.returnOrder')}</Button>}
           {orderItem?.status === ShippingStatusEnum.COMPLETED && <Button>{t('order.buyAgain')}</Button>}
         </div>
       </div>
