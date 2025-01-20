@@ -29,12 +29,16 @@ const OrderDetail = () => {
         <div className="flex gap-2 w-full sm:justify-between sm:items-center sm:flex-row flex-col">
           <div className="flex gap-2 sm:items-center sm:flex-row flex-col">
             <span className="text-lg text-muted-foreground font-medium">{t('orderDetail.title')}</span>
-            <span className="text-lg text-muted-foreground">#{useOrderData?.data?.id}</span>
+            {!isFetching && useOrderData?.data && (
+              <span className="text-lg text-muted-foreground">#{useOrderData?.data?.id}</span>
+            )}
           </div>
-          <div className="flex gap-2 items-center">
-            <span className="text-muted-foreground font-medium">{t('orderDetail.status')}: </span>
-            <OrderStatus tag={useOrderData?.data?.status ?? ''} size="medium" />
-          </div>
+          {!isFetching && useOrderData?.data && (
+            <div className="flex gap-2 items-center">
+              <span className="text-muted-foreground font-medium">{t('orderDetail.status')}: </span>
+              <OrderStatus tag={useOrderData?.data?.status ?? ''} size="medium" />
+            </div>
+          )}
         </div>
         {!isFetching && useOrderData && useOrderData?.data && (
           <>

@@ -79,14 +79,14 @@ const PriceSection = ({
 
                 <div className="border-t pt-4">
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-900">{t('cart.tmpTotalProductPrice')}</span>
+                    <span className="text-gray-900">{t('cart.estimateProductPrice')}</span>
                     <span className="text-red-500 font-medium">
                       {t('productCard.price', {
                         price: calculateDiscountPrice(price, deal, DiscountTypeEnum.PERCENTAGE),
                       })}
                     </span>
                   </div>
-                  <p className="text-gray-500 text-sm mt-2 italic">{t('cart.voucherNote')}</p>
+                  {/* <p className="text-gray-500 text-sm mt-2 italic">{t('cart.voucherNote')}</p> */}
                 </div>
               </div>
             </div>

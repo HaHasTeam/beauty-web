@@ -357,7 +357,8 @@
     "addToCartSuccess": "Sản phẩm đã được thêm vào giỏ hàng.",
     "chooseClassification": "Vui lòng chọn phân loại sản phẩm để mua.",
     "tmpTotalProductPrice": "Giá tạm tính (khi áp dụng các voucher trên)",
-    "voucherNote": "*Vui lòng thêm Vvoucher khi đặt hàng ở bước thanh toán để được giá như trên",
+    "estimateProductPrice": "Estimated price",
+    "voucherNote": "*Vui lòng thêm Voucher khi đặt hàng ở bước thanh toán để được giá như trên",
     "buyToDiscountCurrency": "Mua từ {{minOrder, currency}} để được giảm {{discount, currency}}. Số lượng Voucher có hạn",
     "buyToDiscountPercentage": "Mua từ {{minOrder, currency}} để được giảm {{discount}}%. Số lượng Voucher có hạn"
   },

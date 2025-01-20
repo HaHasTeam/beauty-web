@@ -361,6 +361,7 @@
     "addToCartSuccess": "The product has been added to your cart.",
     "chooseClassification": "To buy, choose a classification.",
     "tmpTotalProductPrice": "Estimated price (when applying the vouchers above)",
+    "estimateProductPrice": "Estimated price",
     "voucherNote": "*Please add vouchers at the checkout step to receive the price mentioned above",
     "buyToDiscountCurrency": "Spend {{minOrder, currency}} to get a discount of {{discount, currency}}. Limited number of vouchers available",
     "buyToDiscountPercentage": "Spend {{minOrder, currency}} to get a discount of {{discount}}%. Limited number of vouchers available"

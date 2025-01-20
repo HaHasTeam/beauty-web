@@ -83,7 +83,11 @@ const OrderItem = ({ brand, orderItem }: OrderItemProps) => {
           </span>
         </div>
         <div className="flex gap-2 items-center">
-          <Button variant="outline" onClick={() => navigate(configs.routes.profileOrder + '/' + orderItem?.id)}>
+          <Button
+            variant="outline"
+            className="border border-primary text-primary"
+            onClick={() => navigate(configs.routes.profileOrder + '/' + orderItem?.id)}
+          >
             {t('order.viewDetail')}
           </Button>
           <Button>{t('order.returnOrder')}</Button>
