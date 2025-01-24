@@ -17,6 +17,7 @@ import { getOrderByIdApi } from '@/network/apis/order'
 const OrderDetail = () => {
   const { orderId } = useParams()
   const { t } = useTranslation()
+
   const { data: useOrderData, isFetching } = useQuery({
     queryKey: [getOrderByIdApi.queryKey, orderId ?? ('' as string)],
     queryFn: getOrderByIdApi.fn,

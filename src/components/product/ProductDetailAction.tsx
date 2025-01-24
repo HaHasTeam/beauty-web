@@ -79,7 +79,7 @@ const ProductDetailAction = ({
         }
       } else {
         await createCartItemFn({
-          classification: chosenClassification?.title,
+          classification: (product?.productClassifications ?? [])[0]?.title,
           productClassification: (product?.productClassifications ?? [])[0]?.id,
           quantity: quantity,
         })

@@ -85,13 +85,27 @@ const OrderItem = ({ brand, orderItem }: OrderItemProps) => {
         <div className="flex gap-2 items-center">
           <Button
             variant="outline"
-            className="border border-primary text-primary"
+            className="border border-primary text-primary hover:text-primary hover:border-primary/10"
             onClick={() => navigate(configs.routes.profileOrder + '/' + orderItem?.id)}
           >
             {t('order.viewDetail')}
           </Button>
-          {orderItem?.status === ShippingStatusEnum.COMPLETED && <Button>{t('order.returnOrder')}</Button>}
-          {orderItem?.status === ShippingStatusEnum.COMPLETED && <Button>{t('order.buyAgain')}</Button>}
+          {orderItem?.status === ShippingStatusEnum.COMPLETED && (
+            <Button
+              variant="outline"
+              className="border border-primary text-primary hover:text-primary hover:border-primary/10"
+            >
+              {t('order.returnOrder')}
+            </Button>
+          )}
+          {orderItem?.status === ShippingStatusEnum.COMPLETED && (
+            <Button
+              variant="outline"
+              className="border border-primary text-primary hover:text-primary hover:border-primary/10"
+            >
+              {t('order.buyAgain')}
+            </Button>
+          )}
         </div>
       </div>
     </div>
