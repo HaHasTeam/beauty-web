@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 import { z } from 'zod'
 
 import configs from '@/config'
-import CreateOrderSchema from '@/schemas/order.schema'
+import { CreateOrderSchema } from '@/schemas/order.schema'
 import { IBrand } from '@/types/brand'
 import { ICartItem } from '@/types/cart'
 import { DiscountTypeEnum, OrderEnum } from '@/types/enum'

@@ -1,9 +1,11 @@
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { MessageSquareText, Truck } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 
 import BrandOrderInformation from '@/components/brand/BrandOrderInformation'
+import CancelOrderDialog from '@/components/dialog/CancelOrderDialog'
 import Empty from '@/components/empty/Empty'
 import LoadingContentLayer from '@/components/loading-icon/LoadingContentLayer'
 import OrderDetailItems from '@/components/order-detail/OrderDetailItems'
@@ -11,17 +13,30 @@ import OrderGeneral from '@/components/order-detail/OrderGeneral'
 import OrderStatusTracking from '@/components/order-detail/OrderStatusTracking'
 import OrderSummary from '@/components/order-detail/OrderSummary'
 import OrderStatus from '@/components/order-status'
+import { Button } from '@/components/ui/button'
 import configs from '@/config'
 import { getOrderByIdApi } from '@/network/apis/order'
+import { ShippingStatusEnum } from '@/types/enum'
 
 const OrderDetail = () => {
   const { orderId } = useParams()
   const { t } = useTranslation()
+  const queryClient = useQueryClient()
+  const [openCancelOrderDialog, setOpenCancelOrderDialog] = useState<boolean>(false)
+  const [isTrigger, setIsTrigger] = useState<boolean>(false)
 
   const { data: useOrderData, isFetching } = useQuery({
     queryKey: [getOrderByIdApi.queryKey, orderId ?? ('' as string)],
     queryFn: getOrderByIdApi.fn,
   })
+
+  useEffect(() => {
+    if (isTrigger) {
+      queryClient.invalidateQueries({
+        queryKey: [getOrderByIdApi.queryKey],
+      })
+    }
+  }, [isTrigger, queryClient])
 
   return (
     <div>
@@ -123,6 +138,18 @@ const OrderDetail = () => {
                     paymentMethod={useOrderData?.data?.paymentMethod}
                   />
                 </div>
+                {(useOrderData?.data?.status === ShippingStatusEnum.TO_PAY ||
+                  useOrderData?.data?.status === ShippingStatusEnum.WAIT_FOR_CONFIRMATION) && (
+                  <div className="w-full">
+                    <Button
+                      variant="outline"
+                      className="w-full border border-primary text-primary hover:text-primary hover:bg-primary/10"
+                      onClick={() => setOpenCancelOrderDialog(true)}
+                    >
+                      {t('order.cancelOrder')}
+                    </Button>
+                  </div>
+                )}
               </div>
             </div>
           </>
@@ -133,6 +160,14 @@ const OrderDetail = () => {
             description={t('empty.orderDetail.description')}
             link={configs.routes.profileOrder}
             linkText={t('empty.orderDetail.button')}
+          />
+        )}
+        {!isFetching && useOrderData?.data && (
+          <CancelOrderDialog
+            open={openCancelOrderDialog}
+            onOpenChange={setOpenCancelOrderDialog}
+            setIsTrigger={setIsTrigger}
+            orderId={useOrderData?.data?.id ?? ''}
           />
         )}
       </div>

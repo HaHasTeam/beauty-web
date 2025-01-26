@@ -17,6 +17,7 @@ export default function ProfileOrder() {
   const [activeTab, setActiveTab] = useState<string>('all')
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [searchQuery, setSearchQuery] = useState<string>('')
+  const [isTrigger, setIsTrigger] = useState<boolean>(false)
 
   const triggers = [
     { value: 'all', text: `${t('order.all')}` },
@@ -51,7 +52,8 @@ export default function ProfileOrder() {
       await getMyOrderFn(filters)
     }
     fetchOrders()
-  }, [activeTab, getMyOrderFn, searchQuery])
+  }, [activeTab, getMyOrderFn, searchQuery, isTrigger])
+
   const renderOrders = () => {
     if (!isLoading && orders && orders?.length === 0) {
       return (
@@ -75,6 +77,7 @@ export default function ProfileOrder() {
                 null
               }
               orderItem={orderItem}
+              setIsTrigger={setIsTrigger}
             />
           </div>
         ))}

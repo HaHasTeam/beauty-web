@@ -26,31 +26,43 @@ const OrderDetailItems = ({ orderDetails, status }: OrderDetailItemsProps) => {
       </div>
       <div className="bg-white rounded-md">
         {orderDetails?.map((orderDetail) => (
-          <ProductOrderDetailLandscape
-            productImage={orderDetail?.productClassification?.images?.[0]?.fileUrl ?? ''}
-            productId={
+          <div
+            key={
+              orderDetail?.id +
+              orderDetail?.type +
               (
                 orderDetail?.productClassification?.preOrderProduct ??
                 orderDetail?.productClassification?.productDiscount ??
                 orderDetail?.productClassification
-              )?.product?.id ?? ''
+              )?.product?.id
             }
-            productName={
-              (
-                orderDetail?.productClassification?.preOrderProduct ??
-                orderDetail?.productClassification?.productDiscount ??
-                orderDetail?.productClassification
-              )?.product?.name ?? ''
-            }
-            eventType={orderDetail?.type ?? ''}
-            unitPriceAfterDiscount={orderDetail?.unitPriceAfterDiscount}
-            unitPriceBeforeDiscount={orderDetail?.unitPriceBeforeDiscount}
-            subTotal={orderDetail?.subTotal}
-            productQuantity={orderDetail?.productClassification?.quantity}
-            productClassification={orderDetail?.productClassification}
-            status={status}
-            isFeedback={orderDetail?.isFeedback}
-          />
+          >
+            <ProductOrderDetailLandscape
+              productImage={orderDetail?.productClassification?.images?.[0]?.fileUrl ?? ''}
+              productId={
+                (
+                  orderDetail?.productClassification?.preOrderProduct ??
+                  orderDetail?.productClassification?.productDiscount ??
+                  orderDetail?.productClassification
+                )?.product?.id ?? ''
+              }
+              productName={
+                (
+                  orderDetail?.productClassification?.preOrderProduct ??
+                  orderDetail?.productClassification?.productDiscount ??
+                  orderDetail?.productClassification
+                )?.product?.name ?? ''
+              }
+              eventType={orderDetail?.type ?? ''}
+              unitPriceAfterDiscount={orderDetail?.unitPriceAfterDiscount}
+              unitPriceBeforeDiscount={orderDetail?.unitPriceBeforeDiscount}
+              subTotal={orderDetail?.subTotal}
+              productQuantity={orderDetail?.productClassification?.quantity}
+              productClassification={orderDetail?.productClassification}
+              status={status}
+              isFeedback={orderDetail?.isFeedback}
+            />
+          </div>
         ))}
       </div>
     </div>

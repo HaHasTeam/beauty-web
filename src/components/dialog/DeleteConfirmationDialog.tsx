@@ -35,7 +35,11 @@ export default function DeleteConfirmationDialog({
           </div>
         </DialogHeader>
         <div className="flex justify-end gap-2 mt-4">
-          <Button variant="outline" onClick={() => onOpenChange(false)}>
+          <Button
+            variant="outline"
+            className="border border-primary text-primary hover:text-primary hover:bg-primary/10"
+            onClick={() => onOpenChange(false)}
+          >
             {t(`delete.${item}.cancel`)}
           </Button>
           <Button onClick={() => onConfirm()}>{t(`delete.${item}.confirm`)}</Button>

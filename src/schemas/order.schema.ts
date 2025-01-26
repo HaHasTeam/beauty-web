@@ -11,11 +11,14 @@ const OrderSchema = z.object({
   items: z.array(ItemSchema).optional(), // Create items manually
   message: z.string().optional(), // Optional message for brand
 })
-const CreateOrderSchema = z.object({
+export const CreateOrderSchema = z.object({
   orders: z.array(OrderSchema).min(1), // Must have at least one order
   addressId: z.string().uuid(), // Must be a valid UUID
-  paymentMethod: z.string(), // Restrict to specific payment methods
+  paymentMethod: z.string(), // string
   platformVoucherId: z.string().optional(), // Optional UUID
 })
 
-export default CreateOrderSchema
+export const CancelOrderSchema = z.object({
+  reason: z.string().min(1),
+  otherReason: z.string(),
+})

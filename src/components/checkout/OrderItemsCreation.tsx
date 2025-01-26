@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import CreateOrderSchema from '@/schemas/order.schema'
+import { CreateOrderSchema } from '@/schemas/order.schema'
 import { ICartByBrand } from '@/types/cart'
 import { ICreateOrderItem } from '@/types/order'
 import { TVoucher } from '@/types/voucher'

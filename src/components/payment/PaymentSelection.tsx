@@ -5,7 +5,7 @@ import { z } from 'zod'
 
 import Label from '@/components/form-label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import CreateOrderSchema from '@/schemas/order.schema'
+import { CreateOrderSchema } from '@/schemas/order.schema'
 import { PaymentMethod } from '@/types/enum'
 
 import { FormControl, FormField, FormItem, FormMessage } from '../ui/form'

@@ -7,7 +7,7 @@ import { z } from 'zod'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { RadioGroup } from '@/components/ui/radio-group'
-import CreateOrderSchema from '@/schemas/order.schema'
+import { CreateOrderSchema } from '@/schemas/order.schema'
 import { IAddress } from '@/types/address'
 
 import Empty from '../empty/Empty'
