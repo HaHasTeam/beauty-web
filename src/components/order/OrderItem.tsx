@@ -127,6 +127,7 @@ const OrderItem = ({ brand, orderItem, setIsTrigger }: OrderItemProps) => {
       </div>
       <CancelOrderDialog
         open={openCancelOrderDialog}
+        setOpen={setOpenCancelOrderDialog}
         onOpenChange={setOpenCancelOrderDialog}
         setIsTrigger={setIsTrigger}
         orderId={orderItem?.id ?? ''}

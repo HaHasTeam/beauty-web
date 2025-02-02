@@ -60,17 +60,29 @@ const ProductOrderDetailLandscape = ({
               </div>
               <div className="sm:flex gap-2 hidden">
                 {status === ShippingStatusEnum.COMPLETED && (
-                  <Button variant="outline" size="sm" className="border border-primary text-primary">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="border border-primary text-primary hover:text-primary hover:bg-primary/10"
+                  >
                     {t('order.buyAgain')}
                   </Button>
                 )}
                 {status === ShippingStatusEnum.COMPLETED && (
-                  <Button variant="outline" size="sm" className="border border-primary text-primary">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="border border-primary text-primary hover:text-primary hover:bg-primary/10"
+                  >
                     {t('order.buyAgain')}
                   </Button>
                 )}
                 {!isFeedback && (
-                  <Button variant="outline" size="sm" className="border border-primary text-primary">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="border border-primary text-primary hover:text-primary hover:bg-primary/10"
+                  >
                     {t('order.writeFeedback')}
                   </Button>
                 )}
@@ -116,13 +128,21 @@ const ProductOrderDetailLandscape = ({
 
           <div className="order-4 flex gap-2 sm:hidden flex-wrap">
             {status === ShippingStatusEnum.COMPLETED && (
-              <Button variant="outline" size="sm" className="border border-primary text-primary">
+              <Button
+                variant="outline"
+                size="sm"
+                className="border border-primary text-primary hover:text-primary hover:bg-primary/10"
+              >
                 {t('order.buyAgain')}
               </Button>
             )}
 
             {!isFeedback && (
-              <Button variant="outline" size="sm" className="border border-primary text-primary">
+              <Button
+                variant="outline"
+                size="sm"
+                className="border border-primary text-primary hover:text-primary hover:bg-primary/10"
+              >
                 {t('order.writeFeedback')}
               </Button>
             )}

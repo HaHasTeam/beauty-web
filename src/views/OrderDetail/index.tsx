@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { MessageSquareText, Truck } from 'lucide-react'
+import { Ban, MessageSquareText, Truck } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
@@ -62,6 +62,35 @@ const OrderDetail = () => {
               {/* order status tracking */}
               <OrderStatusTracking currentStatus={useOrderData?.data?.status} />
 
+              {/* order cancel detail */}
+              {(useOrderData?.data?.status === ShippingStatusEnum.CANCELLED ||
+                useOrderData?.data?.status === ShippingStatusEnum.CANCELLED_BY_SHOP) && (
+                <div className="w-full flex">
+                  <OrderGeneral
+                    title={t('orderDetail.cancelOrderDetails')}
+                    icon={<Ban />}
+                    status="danger"
+                    content={
+                      <div className="flex flex-col gap-1 text-sm md:text-base">
+                        <p>
+                          <span className="font-medium">{t('orderDetail.cancelByDate')}:</span>{' '}
+                          {useOrderData?.data?.recipientName}
+                        </p>
+                        <p>
+                          <span className="font-medium">{t('orderDetail.cancelBy')}:</span>{' '}
+                          {useOrderData?.data?.status === ShippingStatusEnum.CANCELLED
+                            ? t('orderDetail.customer')
+                            : t('orderDetail.brand')}
+                        </p>
+                        <p>
+                          <span className="font-medium">{t('orderDetail.cancelReason')}:</span>{' '}
+                          {useOrderData?.data?.phone}
+                        </p>
+                      </div>
+                    }
+                  />
+                </div>
+              )}
               {/* order customer information, shipment */}
               <div className="flex flex-col md:flex-row gap-4 justify-between w-full items-stretch">
                 <div className="w-full md:w-1/2 flex">
@@ -70,18 +99,21 @@ const OrderDetail = () => {
                     icon={<Truck />}
                     content={
                       <div className="flex flex-col gap-1 text-sm md:text-base">
-                        <span>
-                          {t('orderDetail.recipientName')}: {useOrderData?.data?.recipientName}
-                        </span>
-                        <span>
-                          {t('orderDetail.address')}: {useOrderData?.data?.shippingAddress}
-                        </span>
-                        <span>
-                          {t('orderDetail.phone')}: {useOrderData?.data?.phone}
-                        </span>
-                        <span>
-                          {t('orderDetail.notes')}: {useOrderData?.data?.notes ?? t('orderDetail.no')}
-                        </span>
+                        <p>
+                          <span className="font-medium">{t('orderDetail.recipientName')}:</span>{' '}
+                          {useOrderData?.data?.recipientName}
+                        </p>
+                        <p>
+                          <span className="font-medium">{t('orderDetail.address')}:</span>{' '}
+                          {useOrderData?.data?.shippingAddress}
+                        </p>
+                        <p>
+                          <span className="font-medium">{t('orderDetail.phone')}:</span> {useOrderData?.data?.phone}
+                        </p>
+                        <p>
+                          <span className="font-medium">{t('orderDetail.notes')}:</span>{' '}
+                          {useOrderData?.data?.notes ?? t('orderDetail.no')}
+                        </p>
                       </div>
                     }
                   />
@@ -91,12 +123,12 @@ const OrderDetail = () => {
                     title={t('orderDetail.message')}
                     icon={<MessageSquareText />}
                     content={
-                      <span className="text-sm md:text-base">
-                        {t('orderDetail.message')}:{' '}
+                      <p className="text-sm md:text-base">
+                        <span className="font-medium">{t('orderDetail.message')}: </span>
                         {useOrderData?.data?.message && useOrderData?.data?.message !== ''
                           ? useOrderData?.data?.message
                           : t('orderDetail.no')}
-                      </span>
+                      </p>
                     }
                   />
                 </div>
@@ -165,6 +197,7 @@ const OrderDetail = () => {
         {!isFetching && useOrderData?.data && (
           <CancelOrderDialog
             open={openCancelOrderDialog}
+            setOpen={setOpenCancelOrderDialog}
             onOpenChange={setOpenCancelOrderDialog}
             setIsTrigger={setIsTrigger}
             orderId={useOrderData?.data?.id ?? ''}
