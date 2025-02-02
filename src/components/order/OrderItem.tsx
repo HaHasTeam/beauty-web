@@ -38,7 +38,7 @@ const OrderItem = ({ brand, orderItem, setIsTrigger }: OrderItemProps) => {
               <MessageCircle className="w-4 h-4" />
               {t('brand.chat')}
             </Button>
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" className="">
               <Store className="h-4 w-4" />
               {t('brand.viewShop')}
             </Button>
