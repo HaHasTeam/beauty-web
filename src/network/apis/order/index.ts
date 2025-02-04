@@ -1,5 +1,6 @@
 import { ICancelOrder, ICreateOrder, ICreatePreOrder, IOrder, IOrderFilter, IOrderItem } from '@/types/order'
 import { TServerResponse } from '@/types/request'
+import { IStatusTracking } from '@/types/status-tracking'
 import { toMutationFetcher, toQueryFetcher } from '@/utils/query'
 import { privateRequest } from '@/utils/request'
 
@@ -33,6 +34,13 @@ export const getOrderByIdApi = toQueryFetcher<string, TServerResponse<IOrderItem
   'getOrderByIdApi',
   async (orderId) => {
     return privateRequest(`/orders/get-by-id/${orderId}`)
+  },
+)
+
+export const getStatusTrackingByIdApi = toQueryFetcher<string, TServerResponse<IStatusTracking[]>>(
+  'getStatusTrackingByIdApi',
+  async (orderId) => {
+    return privateRequest(`/orders/get-status-tracking/${orderId}`)
   },
 )
 

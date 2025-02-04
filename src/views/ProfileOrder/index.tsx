@@ -27,7 +27,7 @@ export default function ProfileOrder() {
     { value: ShippingStatusEnum?.TO_RECEIVED, text: `${t('order.delivering')}` },
     { value: ShippingStatusEnum?.COMPLETED, text: `${t('order.completed')}` },
     { value: ShippingStatusEnum?.CANCELLED, text: `${t('order.cancelled')}` },
-    { value: ShippingStatusEnum?.RETURN_REFUND, text: `${t('order.return')}` },
+    { value: ShippingStatusEnum?.REFUNDED, text: `${t('order.return')}` },
   ]
   const { mutateAsync: getMyOrderFn } = useMutation({
     mutationKey: [getMyOrdersApi.mutationKey],

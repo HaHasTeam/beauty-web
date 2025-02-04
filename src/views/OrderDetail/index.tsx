@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { Ban, MessageSquareText, Truck } from 'lucide-react'
+import { History, MessageSquareText, Truck } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
@@ -11,11 +11,12 @@ import LoadingContentLayer from '@/components/loading-icon/LoadingContentLayer'
 import OrderDetailItems from '@/components/order-detail/OrderDetailItems'
 import OrderGeneral from '@/components/order-detail/OrderGeneral'
 import OrderStatusTracking from '@/components/order-detail/OrderStatusTracking'
+import OrderStatusTrackingDetail from '@/components/order-detail/OrderStatusTrackingDetail'
 import OrderSummary from '@/components/order-detail/OrderSummary'
 import OrderStatus from '@/components/order-status'
 import { Button } from '@/components/ui/button'
 import configs from '@/config'
-import { getOrderByIdApi } from '@/network/apis/order'
+import { getOrderByIdApi, getStatusTrackingByIdApi } from '@/network/apis/order'
 import { ShippingStatusEnum } from '@/types/enum'
 
 const OrderDetail = () => {
@@ -28,6 +29,12 @@ const OrderDetail = () => {
   const { data: useOrderData, isFetching } = useQuery({
     queryKey: [getOrderByIdApi.queryKey, orderId ?? ('' as string)],
     queryFn: getOrderByIdApi.fn,
+  })
+
+  const { data: useStatusTrackingData, isFetching: isFetchingStatusTracking } = useQuery({
+    queryKey: [getStatusTrackingByIdApi.queryKey, orderId ?? ('' as string)],
+    queryFn: getStatusTrackingByIdApi.fn,
+    enabled: !!orderId,
   })
 
   useEffect(() => {
@@ -60,40 +67,26 @@ const OrderDetail = () => {
           <>
             <div className="space-y-6 w-full">
               {/* order status tracking */}
-              <OrderStatusTracking currentStatus={useOrderData?.data?.status} />
+              {!isFetchingStatusTracking && useStatusTrackingData && useStatusTrackingData?.data && (
+                <OrderStatusTracking statusTrackingData={useStatusTrackingData?.data} />
+              )}
 
-              {/* order cancel detail */}
-              {(useOrderData?.data?.status === ShippingStatusEnum.CANCELLED ||
-                useOrderData?.data?.status === ShippingStatusEnum.CANCELLED_BY_SHOP) && (
-                <div className="w-full flex">
+              {/* order customer timeline, information, shipment */}
+              <div className="flex flex-col md:flex-row gap-4 justify-between w-full items-stretch">
+                <div className="w-full md:w-1/2 flex">
                   <OrderGeneral
-                    title={t('orderDetail.cancelOrderDetails')}
-                    icon={<Ban />}
-                    status="danger"
+                    title={t('orderDetail.timeline')}
+                    icon={<History />}
                     content={
-                      <div className="flex flex-col gap-1 text-sm md:text-base">
-                        <p>
-                          <span className="font-medium">{t('orderDetail.cancelByDate')}:</span>{' '}
-                          {useOrderData?.data?.recipientName}
-                        </p>
-                        <p>
-                          <span className="font-medium">{t('orderDetail.cancelBy')}:</span>{' '}
-                          {useOrderData?.data?.status === ShippingStatusEnum.CANCELLED
-                            ? t('orderDetail.customer')
-                            : t('orderDetail.brand')}
-                        </p>
-                        <p>
-                          <span className="font-medium">{t('orderDetail.cancelReason')}:</span>{' '}
-                          {useOrderData?.data?.phone}
-                        </p>
-                      </div>
+                      !isFetchingStatusTracking && useStatusTrackingData && useStatusTrackingData?.data ? (
+                        <OrderStatusTrackingDetail statusTrackingData={useStatusTrackingData?.data} />
+                      ) : (
+                        <p></p>
+                      )
                     }
                   />
                 </div>
-              )}
-              {/* order customer information, shipment */}
-              <div className="flex flex-col md:flex-row gap-4 justify-between w-full items-stretch">
-                <div className="w-full md:w-1/2 flex">
+                <div className="w-full md:w-1/2 flex flex-col gap-2">
                   <OrderGeneral
                     title={t('orderDetail.shippingAddress')}
                     icon={<Truck />}
@@ -117,8 +110,6 @@ const OrderDetail = () => {
                       </div>
                     }
                   />
-                </div>
-                <div className="w-full md:w-1/2 flex">
                   <OrderGeneral
                     title={t('orderDetail.message')}
                     icon={<MessageSquareText />}

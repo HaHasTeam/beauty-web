@@ -89,7 +89,7 @@ const ProductOrderDetailLandscape = ({
               </div>
             </div>
           </div>
-          <div className="order-3 sm:order-2 xl:w-[30%] lg:w-[30%] md:w-[30%] w-full">
+          <div className="order-3 sm:order-2 xl:w-[30%] lg:w-[30%] md:w-[30%] w-full flex md:flex-row flex-col justify-center items-center">
             {productClassification?.type === ClassificationTypeEnum?.CUSTOM && (
               <div className="w-full flex items-center gap-2">
                 <Label>
