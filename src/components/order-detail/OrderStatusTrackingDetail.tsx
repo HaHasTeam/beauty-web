@@ -1,10 +1,10 @@
 import { Check, Package } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
+import { RoleEnum, ShippingStatusEnum } from '@/types/enum'
 import { IStatusTracking } from '@/types/status-tracking'
 
 import { StatusTrackingIcon, StatusTrackingText } from '../status-tracking-order/StatusTrackingOrder'
-import { RoleEnum, ShippingStatusEnum } from '@/types/enum'
 
 interface OrderStatusTrackingDetailProps {
   statusTrackingData: IStatusTracking[]
