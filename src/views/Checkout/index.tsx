@@ -32,7 +32,11 @@ import { DiscountTypeEnum, ProjectInformationEnum, ResultEnum } from '@/types/en
 import { ICreateOrder } from '@/types/order'
 import { IBrandBestVoucher, ICheckoutItem, IPlatformBestVoucher, TVoucher } from '@/types/voucher'
 import { createCheckoutItem, createCheckoutItems } from '@/utils/cart'
-import { calculateCartTotals, calculatePlatformVoucherDiscount, calculateTotalVoucherDiscount } from '@/utils/price'
+import {
+  calculateCartTotals,
+  calculatePlatformVoucherDiscount,
+  calculateTotalBrandVoucherDiscount,
+} from '@/utils/price'
 
 import { flattenObject, hasPreOrderProduct } from '../../utils/product/index'
 
@@ -73,8 +77,8 @@ const Checkout = () => {
   }, [selectedCartItem, selectedCartItems])
   // Calculate total voucher discount
   const totalBrandDiscount = useMemo(() => {
-    return calculateTotalVoucherDiscount(chosenBrandVouchers)
-  }, [chosenBrandVouchers])
+    return calculateTotalBrandVoucherDiscount(selectedCartItem, selectedCartItems, chosenBrandVouchers)
+  }, [chosenBrandVouchers, selectedCartItems, selectedCartItem])
 
   // Calculate platform voucher discount
   const totalPlatformDiscount = useMemo(() => {
@@ -253,7 +257,6 @@ const Checkout = () => {
                             onVoucherSelect={handleVoucherSelection}
                             bestVoucherForBrand={bestVoucherForBrand}
                             chosenBrandVoucher={chosenVoucherForBrand}
-                            totalBrandDiscount={totalBrandDiscount}
                             index={index}
                             form={form}
                           />

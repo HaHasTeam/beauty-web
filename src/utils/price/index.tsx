@@ -1,5 +1,5 @@
 import { ICartByBrand, ICartItem } from '@/types/cart'
-import { DiscountTypeEnum, ProductDiscountEnum } from '@/types/enum'
+import { DiscountTypeEnum, ProductDiscountEnum, VoucherApplyTypeEnum } from '@/types/enum'
 import { DiscountType } from '@/types/product-discount'
 import { TVoucher } from '@/types/voucher'
 
@@ -225,23 +225,27 @@ export const calculateCartTotals = (
 /**
  * Calculates total voucher discount by brand.
  *
+ * @param cartItems - selected products
  * @param chosenVouchersByBrand - voucher that user selected from brand voucher list.
  * @param totalPrice - price of product after direct discount in that product.
  * @returns An object show total brands voucher discount of selected products.
  */
-export const calculateTotalVoucherDiscount = (chosenVouchersByBrand: { [brandId: string]: TVoucher | null }) => {
-  return Object.values(chosenVouchersByBrand).reduce((total, voucher) => {
-    if (!voucher) return total
-    const { discountType, discountValue, maxDiscount, discount } = voucher
-    const voucherDiscount = discountType === DiscountTypeEnum.PERCENTAGE ? (discount ?? 0) : discountValue
+// export const calculateTotalVoucherDiscount = (
+//   cartItems: ICartByBrand,
+//   chosenVouchersByBrand: { [brandId: string]: TVoucher | null },
+// ) => {
+//   return Object.values(chosenVouchersByBrand).reduce((total, voucher) => {
+//     if (!voucher) return total
+//     const { discountType, discountValue, maxDiscount, discount, applyProducts, applyType, minOrderValue } = voucher
+//     const voucherDiscount = discountType === DiscountTypeEnum.PERCENTAGE ? (discount ?? 0) : discountValue
 
-    return maxDiscount && maxDiscount > 0
-      ? total + voucherDiscount > maxDiscount
-        ? maxDiscount
-        : total + voucherDiscount
-      : total + voucherDiscount
-  }, 0)
-}
+//     return maxDiscount && maxDiscount > 0
+//       ? total + voucherDiscount > maxDiscount
+//         ? maxDiscount
+//         : total + voucherDiscount
+//       : total + voucherDiscount
+//   }, 0)
+// }
 
 /**
  * Calculates total voucher discount by platform.
@@ -250,12 +254,57 @@ export const calculateTotalVoucherDiscount = (chosenVouchersByBrand: { [brandId:
  * @param totalPrice - price of product after direct discount in that product.
  * @returns An object show total platform voucher discount of selected products.
  */
-export const calculatePlatformVoucherDiscount = (platformChosenVoucher: TVoucher | null) => {
-  if (!platformChosenVoucher) return 0
+// export const calculatePlatformVoucherDiscount = (platformChosenVoucher: TVoucher | null) => {
+//   if (!platformChosenVoucher) return 0
 
-  const { discountType, discountValue, maxDiscount, discount } = platformChosenVoucher
-  const voucherValue = discountType === DiscountTypeEnum.PERCENTAGE ? (discount ?? 0) : discountValue
-  return maxDiscount && maxDiscount > 0 ? (voucherValue > maxDiscount ? maxDiscount : voucherValue) : voucherValue
+//   const { discountType, discountValue, maxDiscount, discount } = platformChosenVoucher
+//   const voucherValue = discountType === DiscountTypeEnum.PERCENTAGE ? (discount ?? 0) : discountValue
+//   return maxDiscount && maxDiscount > 0 ? (voucherValue > maxDiscount ? maxDiscount : voucherValue) : voucherValue
+// }
+export const calculatePlatformVoucherDiscount = (
+  cartItems: ICartByBrand,
+  selectedCartItems: string[],
+  platformChosenVoucher: TVoucher | null,
+  chosenVouchersByBrand: { [brandId: string]: TVoucher | null },
+): number => {
+  if (!platformChosenVoucher || selectedCartItems.length === 0) return 0
+
+  const { applyType, applyProducts, discountType, discountValue, minOrderValue, maxDiscount } = platformChosenVoucher
+  const applyProductIds = applyProducts?.map((p) => p.id) ?? []
+
+  // Calculate total price after brand voucher discounts
+  const totalPriceAfterBrandDiscount = Object.keys(cartItems).reduce((total, brandName) => {
+    const brandItems = cartItems[brandName]
+    const brandId =
+      (
+        brandItems[0]?.productClassification?.productDiscount?.product ??
+        brandItems[0]?.productClassification?.preOrderProduct?.product ??
+        brandItems[0]?.productClassification?.product
+      )?.brand?.id ?? ''
+    const brandVoucher = chosenVouchersByBrand[brandId] || null
+
+    // Price before platform discount, but after brand discount
+    const priceAfterBrandDiscount = brandItems.reduce((subtotal, cartItem) => {
+      if (!selectedCartItems.includes(cartItem.id)) return subtotal
+
+      const productClassification = cartItem.productClassification
+      const discount = productClassification?.productDiscount?.discount ?? 0
+      const discountType = discount > 0 ? DiscountTypeEnum.PERCENTAGE : null
+      const basePrice = calculateTotalPrice(productClassification.price, cartItem.quantity, discount, discountType)
+      const brandDiscount = calculateBrandVoucherDiscount(brandItems, selectedCartItems, brandVoucher)
+
+      return subtotal + basePrice - brandDiscount
+    }, 0)
+
+    return total + priceAfterBrandDiscount
+  }, 0)
+
+  if (totalPriceAfterBrandDiscount < minOrderValue) return 0
+
+  const discountVoucherValue =
+    discountType === DiscountTypeEnum.PERCENTAGE ? discountValue * totalPriceAfterBrandDiscount : discountValue
+
+  return Math.min(discountVoucherValue, maxDiscount)
 }
 
 /**
@@ -303,4 +352,151 @@ export function calculateDiscountedPrice(currentPrice: number, discountPercent: 
   const discountedPrice = currentPrice - discountAmount
 
   return parseFloat(discountedPrice.toFixed(2))
+}
+
+/**
+ * Calculate the discounted voucher price of products in one brand that user selected.
+ *
+ * @param cartBrandItem - List of cart items for a specific brand.
+ * @param selectedCartItems - IDs of the cart items selected for checkout.
+ * @param voucher - The voucher being applied to this brand's items.
+ * @returns The discounted voucher price.
+ */
+export const calculateBrandVoucherDiscount = (
+  cartBrandItem: ICartItem[],
+  selectedCartItems: string[],
+  voucher: TVoucher | null,
+): number => {
+  if (!voucher || selectedCartItems.length === 0) return 0
+
+  const { applyType, applyProducts, discountType, discountValue, minOrderValue, maxDiscount } = voucher
+  const applyProductIds = applyProducts ? applyProducts.map((p) => p.id) : []
+
+  // Calculate total price of products in brand that available apply discount
+  const totalProductPrice = cartBrandItem.reduce((total, cartItem) => {
+    const product =
+      cartItem?.productClassification?.productDiscount?.product ??
+      cartItem?.productClassification?.preOrderProduct?.product ??
+      cartItem?.productClassification?.product
+
+    if (
+      applyType === VoucherApplyTypeEnum.SPECIFIC &&
+      applyProductIds.length > 0 &&
+      !applyProductIds.includes(product.id)
+    ) {
+      return total
+    }
+
+    if (!selectedCartItems.includes(cartItem.id)) return total
+
+    const productClassification = cartItem.productClassification
+    const discount = productClassification?.productDiscount?.discount ?? 0
+    const productDiscountType = discount > 0 ? DiscountTypeEnum.PERCENTAGE : null
+
+    return total + calculateTotalPrice(productClassification.price, cartItem.quantity, discount, productDiscountType)
+  }, 0)
+
+  if (totalProductPrice < minOrderValue) return 0
+
+  const discountVoucherValue =
+    discountType === DiscountTypeEnum.PERCENTAGE ? discountValue * totalProductPrice : discountValue
+
+  console.log('totalProductPrice', totalProductPrice)
+  console.log('discountValue', discountValue)
+  console.log('discountVoucherValue', discountVoucherValue)
+  console.log('finalValue', Math.min(discountVoucherValue, maxDiscount))
+  return Math.min(discountVoucherValue, maxDiscount)
+}
+/**
+ * Calculate the discounted voucher price of products in one brand that user selected.
+ *
+ * @param checkoutBrandItem - List of cart items for a specific brand.
+ * @param voucher - The voucher being applied to this brand's items.
+ * @returns The discounted voucher price.
+ */
+export const calculateCheckoutBrandVoucherDiscount = (
+  checkoutBrandItem: ICartItem[],
+  voucher: TVoucher | null,
+): number => {
+  if (!voucher || checkoutBrandItem.length === 0) return 0
+
+  const { applyType, applyProducts, discountType, discountValue, minOrderValue, maxDiscount } = voucher
+  const applyProductIds = applyProducts ? applyProducts.map((p) => p.id) : []
+
+  // Calculate total price of products in brand that available apply discount
+  const totalProductPrice = checkoutBrandItem.reduce((total, cartItem) => {
+    const product =
+      cartItem?.productClassification?.productDiscount?.product ??
+      cartItem?.productClassification?.preOrderProduct?.product ??
+      cartItem?.productClassification?.product
+
+    if (
+      applyType === VoucherApplyTypeEnum.SPECIFIC &&
+      applyProductIds.length > 0 &&
+      !applyProductIds.includes(product.id)
+    ) {
+      return total
+    }
+
+    const productClassification = cartItem.productClassification
+    const discount = productClassification?.productDiscount?.discount ?? 0
+    const productDiscountType = discount > 0 ? DiscountTypeEnum.PERCENTAGE : null
+
+    return total + calculateTotalPrice(productClassification.price, cartItem.quantity, discount, productDiscountType)
+  }, 0)
+
+  if (totalProductPrice < minOrderValue) return 0
+
+  const discountVoucherValue =
+    discountType === DiscountTypeEnum.PERCENTAGE ? discountValue * totalProductPrice : discountValue
+
+  console.log('totalProductPrice', totalProductPrice)
+  console.log('discountValue', discountValue)
+  console.log('discountVoucherValue', discountVoucherValue)
+  console.log('finalValue', Math.min(discountVoucherValue, maxDiscount))
+  return Math.min(discountVoucherValue, maxDiscount)
+}
+
+/**
+ * Calculate the total discounted voucher price of products in one brand that user selected.
+ *
+ * @param cartItems - All items in cart.
+ * @param selectedCartItems - List of id that user selected.
+ * @param voucher - The voucher selected.
+ * @returns The discounted voucher price.
+ */
+export const calculateTotalBrandVoucherDiscount = (
+  cartItems: ICartByBrand | null,
+  selectedCartItems: string[],
+  chosenVouchersByBrand: { [brandId: string]: TVoucher | null },
+): number => {
+  if (!cartItems) return 0
+  return Object.keys(cartItems).reduce((totalDiscount, brandName) => {
+    const brandItems = cartItems[brandName]
+    const brandId = brandItems[0]?.productClassification?.product?.brand?.id ?? ''
+    const brandVoucher = chosenVouchersByBrand[brandId] || null
+
+    return totalDiscount + calculateBrandVoucherDiscount(brandItems, selectedCartItems, brandVoucher)
+  }, 0)
+}
+
+/**
+ * Calculate the total discounted voucher price of products in one brand that user selected.
+ *
+ * @param checkoutItems - All items in cart.
+ * @param voucher - The voucher selected.
+ * @returns The discounted voucher price.
+ */
+export const calculateTotalCheckoutBrandVoucherDiscount = (
+  checkoutItems: ICartByBrand | null,
+  chosenVouchersByBrand: { [brandId: string]: TVoucher | null },
+): number => {
+  if (!checkoutItems) return 0
+  return Object.keys(checkoutItems).reduce((totalDiscount, brandName) => {
+    const brandItems = checkoutItems[brandName]
+    const brandId = brandItems[0]?.productClassification?.product?.brand?.id ?? ''
+    const brandVoucher = chosenVouchersByBrand[brandId] || null
+
+    return totalDiscount + calculateCheckoutBrandVoucherDiscount(brandItems, brandVoucher)
+  }, 0)
 }

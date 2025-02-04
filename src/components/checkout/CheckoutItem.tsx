@@ -11,7 +11,7 @@ import { IBrand } from '@/types/brand'
 import { ICartItem } from '@/types/cart'
 import { DiscountTypeEnum, OrderEnum } from '@/types/enum'
 import { IBrandBestVoucher, ICheckoutItem, TVoucher } from '@/types/voucher'
-import { getTotalBrandProductsPrice } from '@/utils/price'
+import { calculateCheckoutBrandVoucherDiscount, getTotalBrandProductsPrice } from '@/utils/price'
 
 import ProductCheckoutLandscape from '../product/ProductCheckoutLandscape'
 import { Button } from '../ui/button'
@@ -27,7 +27,6 @@ interface CheckoutItemProps {
   chosenBrandVoucher: TVoucher | null
   bestVoucherForBrand: IBrandBestVoucher
   brand?: IBrand
-  totalBrandDiscount: number
   index: number
   form: UseFormReturn<z.infer<typeof CreateOrderSchema>>
 }
@@ -38,7 +37,6 @@ const CheckoutItem = ({
   bestVoucherForBrand,
   chosenBrandVoucher,
   brand,
-  totalBrandDiscount,
   index,
   form,
 }: CheckoutItemProps) => {
@@ -56,6 +54,10 @@ const CheckoutItem = ({
   const handleVoucherChange = (voucher: TVoucher | null) => {
     onVoucherSelect(brand?.id ?? '', voucher)
   }
+  const voucherDiscount = useMemo(
+    () => calculateCheckoutBrandVoucherDiscount(cartBrandItem, chosenBrandVoucher),
+    [cartBrandItem, chosenBrandVoucher],
+  )
 
   return (
     <div className="w-full bg-white sm:p-4 p-2 rounded-lg space-y-2 shadow-sm">
@@ -151,8 +153,8 @@ const CheckoutItem = ({
           <span>
             {chosenBrandVoucher
               ? chosenBrandVoucher?.discountType === DiscountTypeEnum.AMOUNT && chosenBrandVoucher?.discountValue
-                ? t('voucher.discountAmount', { amount: chosenBrandVoucher?.discountValue })
-                : t('voucher.discountAmount', { amount: totalBrandDiscount })
+                ? t('voucher.discountAmount', { amount: voucherDiscount })
+                : t('voucher.discountAmount', { amount: voucherDiscount })
               : bestVoucherForBrand?.bestVoucher
                 ? bestVoucherForBrand?.bestVoucher?.discountType === DiscountTypeEnum.AMOUNT &&
                   bestVoucherForBrand?.bestVoucher?.discountValue
@@ -181,7 +183,7 @@ const CheckoutItem = ({
           {t('cart.total')} ({cartBrandItem?.length} {t('cart.products')}):
         </span>
         <span className="text-red-500 lg:text-lg md:text-sm sm:text-xs text-xs font-medium text-end">
-          {t('productCard.currentPrice', { price: totalBrandPrice - totalBrandDiscount })}
+          {t('productCard.currentPrice', { price: totalBrandPrice - voucherDiscount })}
         </span>
       </div>
     </div>
