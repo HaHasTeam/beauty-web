@@ -54,8 +54,8 @@ const Cart = () => {
 
   // Calculate platform voucher discount
   const platformVoucherDiscount = useMemo(() => {
-    return calculatePlatformVoucherDiscount(cartItems, selectedCartItems, platformChosenVoucher, chosenVouchersByBrand)
-  }, [cartItems, chosenVouchersByBrand, selectedCartItems, isTriggerTotal, platformChosenVoucher])
+    return calculatePlatformVoucherDiscount(cartItems, selectedCartItems, platformChosenVoucher)
+  }, [cartItems, selectedCartItems, isTriggerTotal, platformChosenVoucher])
 
   // Total saved price (product discounts + brand vouchers + platform voucher)
   const savedPrice = totalDirectProductsDiscount + totalVoucherDiscount + platformVoucherDiscount

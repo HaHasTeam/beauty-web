@@ -11,7 +11,7 @@ import { IBrand } from '@/types/brand'
 import { ICartItem } from '@/types/cart'
 import { DiscountTypeEnum, OrderEnum } from '@/types/enum'
 import { IBrandBestVoucher, ICheckoutItem, TVoucher } from '@/types/voucher'
-import { calculateCheckoutBrandVoucherDiscount, getTotalBrandProductsPrice } from '@/utils/price'
+import { getTotalBrandProductsPrice } from '@/utils/price'
 
 import ProductCheckoutLandscape from '../product/ProductCheckoutLandscape'
 import { Button } from '../ui/button'
@@ -54,10 +54,10 @@ const CheckoutItem = ({
   const handleVoucherChange = (voucher: TVoucher | null) => {
     onVoucherSelect(brand?.id ?? '', voucher)
   }
-  const voucherDiscount = useMemo(
-    () => calculateCheckoutBrandVoucherDiscount(cartBrandItem, chosenBrandVoucher),
-    [cartBrandItem, chosenBrandVoucher],
-  )
+  // const voucherDiscount = useMemo(
+  //   () => calculateCheckoutBrandVoucherDiscount(cartBrandItem, chosenBrandVoucher),
+  //   [cartBrandItem, chosenBrandVoucher],
+  // )
 
   return (
     <div className="w-full bg-white sm:p-4 p-2 rounded-lg space-y-2 shadow-sm">
@@ -153,8 +153,8 @@ const CheckoutItem = ({
           <span>
             {chosenBrandVoucher
               ? chosenBrandVoucher?.discountType === DiscountTypeEnum.AMOUNT && chosenBrandVoucher?.discountValue
-                ? t('voucher.discountAmount', { amount: voucherDiscount })
-                : t('voucher.discountAmount', { amount: voucherDiscount })
+                ? t('voucher.discountAmount', { amount: chosenBrandVoucher?.discount })
+                : t('voucher.discountAmount', { amount: chosenBrandVoucher?.discount })
               : bestVoucherForBrand?.bestVoucher
                 ? bestVoucherForBrand?.bestVoucher?.discountType === DiscountTypeEnum.AMOUNT &&
                   bestVoucherForBrand?.bestVoucher?.discountValue
@@ -183,7 +183,7 @@ const CheckoutItem = ({
           {t('cart.total')} ({cartBrandItem?.length} {t('cart.products')}):
         </span>
         <span className="text-red-500 lg:text-lg md:text-sm sm:text-xs text-xs font-medium text-end">
-          {t('productCard.currentPrice', { price: totalBrandPrice - voucherDiscount })}
+          {t('productCard.currentPrice', { price: totalBrandPrice - (chosenBrandVoucher?.discount ?? 0) })}
         </span>
       </div>
     </div>
