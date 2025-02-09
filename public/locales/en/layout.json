@@ -558,6 +558,34 @@
       "reason": "Reason",
       "otherReason": "Details"
     },
+    "cancelOrderReasonByBrand": {
+      "OUT_OF_STOCK": "Product is out of stock.",
+      "INCORRECT_PRICING": "Incorrect pricing.",
+      "SUSPICIOUS_ORDER": "Suspicious order detected.",
+      "PAYMENT_FAILED": "Payment failed.",
+      "UNDELIVERABLE_ADDRESS": "Cannot ship to this address.",
+      "MINIMUM_ORDER_NOT_MET": "Minimum order requirement not met.",
+      "POLICY_VIOLATION": "Violates brand policy.",
+      "CUSTOMER_REQUEST": "Customer requested cancellation.",
+      "DAMAGED_PRODUCT": "Product is damaged or defective.",
+      "SHIPPING_ISSUE": "Shipping issue.",
+      "other": "Other",
+      "selectAReason": "Select a reason",
+      "reason": "Reason",
+      "otherReason": "Details"
+    },
+    "cancelOrderReasonByAdmin": {
+      "productViolation": "Product violates platform policies.",
+      "sellerRestricted": "Seller account is suspended or restricted.",
+      "fraudSuspected": "Order flagged for potential fraud.",
+      "paymentIssue": "Payment issue detected.",
+      "noShippingCarrier": "Shipping carrier unavailable.",
+      "legalRestriction": "Legal or regulatory restrictions.",
+      "duplicateOrder": "Duplicate or suspicious bulk orders.",
+      "customerDispute": "Customer dispute or complaint.",
+      "systemError": "System error in processing the order.",
+      "highRiskTransaction": "High-risk transaction detected."
+    },
     "cancelSuccess": "Cancel order successfully!"
   },
   "toast": {
