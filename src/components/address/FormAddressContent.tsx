@@ -254,7 +254,9 @@ export default function FormAddressContent({ form }: FormAddressContentProps) {
               <FormItem className="w-full">
                 <div className="w-full flex items-start gap-2">
                   <div className="w-1/5 flex items-center">
-                    <Label htmlFor="detailAddress">{t('address.detailAddress')}</Label>
+                    <Label required htmlFor="detailAddress">
+                      {t('address.detailAddress')}
+                    </Label>
                   </div>
                   <div className="w-full space-y-1">
                     <FormControl>
