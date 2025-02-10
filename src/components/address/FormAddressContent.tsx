@@ -47,14 +47,12 @@ export default function FormAddressContent({ form }: FormAddressContentProps) {
 
   const handleProvinceChange = (provinceCode: string) => {
     setProvinceCode(provinceCode)
-    form.setValue('province', provinceCode)
     form.resetField('district')
     form.resetField('ward')
   }
 
   const handleDistrictChange = (districtCode: string) => {
     setDistrictCode(districtCode)
-    form.setValue('district', districtCode)
     form.resetField('ward')
   }
 
@@ -127,8 +125,9 @@ export default function FormAddressContent({ form }: FormAddressContentProps) {
                     <FormControl>
                       <Select
                         onValueChange={(value) => {
+                          const selectedProvince = provinces?.find((p) => p.name === value)
                           field.onChange(value)
-                          handleProvinceChange(value)
+                          handleProvinceChange(selectedProvince?.code ?? '')
                         }}
                         value={field.value ?? ''}
                       >
@@ -142,7 +141,7 @@ export default function FormAddressContent({ form }: FormAddressContentProps) {
                         <SelectContent>
                           <SelectGroup>
                             {provinces?.map((province: IProvince) => (
-                              <SelectItem key={province.code} value={province.code.toString()}>
+                              <SelectItem key={province.code} value={province.name}>
                                 {province.name}
                               </SelectItem>
                             ))}
@@ -178,8 +177,9 @@ export default function FormAddressContent({ form }: FormAddressContentProps) {
                         )}
                         <Select
                           onValueChange={(value) => {
+                            const selectedDistrict = province?.districts?.find((p) => p.name === value)
                             field.onChange(value)
-                            handleDistrictChange(value)
+                            handleDistrictChange(selectedDistrict?.code ?? '')
                           }}
                           value={field?.value || ''}
                           disabled={!form.watch('province') || isDistrictsLoading}
@@ -189,7 +189,7 @@ export default function FormAddressContent({ form }: FormAddressContentProps) {
                           </SelectTrigger>
                           <SelectContent>
                             {province?.districts.map((district: IDistrict) => (
-                              <SelectItem key={district.code} value={district.code.toString()}>
+                              <SelectItem key={district.code} value={district.name}>
                                 {district.name}
                               </SelectItem>
                             ))}
@@ -232,7 +232,7 @@ export default function FormAddressContent({ form }: FormAddressContentProps) {
                           </SelectTrigger>
                           <SelectContent>
                             {district?.wards?.map((ward: IWard) => (
-                              <SelectItem key={ward.code} value={ward.code.toString()}>
+                              <SelectItem key={ward.code} value={ward.name.toString()}>
                                 {ward.name}
                               </SelectItem>
                             ))}
