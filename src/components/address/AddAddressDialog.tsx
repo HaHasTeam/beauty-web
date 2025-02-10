@@ -112,7 +112,7 @@ const AddAddressDialog = ({ triggerComponent }: AddAddressDialogProps) => {
             >
               <div>
                 {/* Form Address */}
-                <ScrollArea className="h-72">
+                <ScrollArea className="h-72 pr-2">
                   <FormAddressContent form={form} />
                 </ScrollArea>
               </div>

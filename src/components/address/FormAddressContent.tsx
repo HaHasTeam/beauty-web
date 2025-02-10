@@ -1,4 +1,5 @@
-import {} from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { useState } from 'react'
 import { UseFormReturn } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { z } from 'zod'
@@ -7,10 +8,13 @@ import Label from '@/components/form-label'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { getDistrictsByProvinceApi, getProvincesApi, getWardsByDistrictApi } from '@/network/apis/address'
 import CreateAddressSchema from '@/schemas/address.schema'
+import { IDistrict, IProvince, IWard } from '@/types/address'
 import { AddressEnum } from '@/types/enum'
 
+import LoadingIcon from '../loading-icon'
 import { PhoneInputWithCountries } from '../phone-input'
 import { FormControl, FormField, FormItem, FormMessage } from '../ui/form'
 import { Textarea } from '../ui/textarea'
@@ -20,6 +24,39 @@ interface FormAddressContentProps {
 }
 export default function FormAddressContent({ form }: FormAddressContentProps) {
   const { t } = useTranslation()
+  // const [provinces, setProvinces] = useState<IProvince[]>([])
+  const [provinceCode, setProvinceCode] = useState<string>('')
+  const [districtCode, setDistrictCode] = useState<string>('')
+
+  const { data: provinces } = useQuery({
+    queryKey: [getProvincesApi.queryKey],
+    queryFn: getProvincesApi.fn,
+  })
+
+  const { data: province, isLoading: isDistrictsLoading } = useQuery({
+    queryKey: [getDistrictsByProvinceApi.queryKey, provinceCode as string],
+    queryFn: getDistrictsByProvinceApi.fn,
+    enabled: !!provinceCode, // Only fetch when provinceCode is available
+  })
+
+  const { data: district, isLoading: isWardsLoading } = useQuery({
+    queryKey: [getWardsByDistrictApi.queryKey, districtCode as string],
+    queryFn: getWardsByDistrictApi.fn,
+    enabled: !!districtCode, // Only fetch when districtCode is available
+  })
+
+  const handleProvinceChange = (provinceCode: string) => {
+    setProvinceCode(provinceCode)
+    form.setValue('province', provinceCode)
+    form.resetField('district')
+    form.resetField('ward')
+  }
+
+  const handleDistrictChange = (districtCode: string) => {
+    setDistrictCode(districtCode)
+    form.setValue('district', districtCode)
+    form.resetField('ward')
+  }
 
   return (
     <div className="w-full py-2">
@@ -88,13 +125,28 @@ export default function FormAddressContent({ form }: FormAddressContentProps) {
                   </div>
                   <div className="w-full space-y-1">
                     <FormControl>
-                      <Select onValueChange={(value) => field?.onChange(value)} value={field?.value || ''}>
-                        <SelectTrigger>
-                          <SelectValue {...field} placeholder={t('address.chooseProvinceOrCity')} />
+                      <Select
+                        onValueChange={(value) => {
+                          field.onChange(value)
+                          handleProvinceChange(value)
+                        }}
+                        value={field.value ?? ''}
+                      >
+                        <SelectTrigger className="border-primary/40">
+                          <SelectValue
+                            className="border-primary/40"
+                            {...field}
+                            placeholder={t('address.chooseProvinceOrCity')}
+                          />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="hcm">Hồ Chí Minh</SelectItem>
-                          <SelectItem value="hn">HN</SelectItem>
+                          <SelectGroup>
+                            {provinces?.map((province: IProvince) => (
+                              <SelectItem key={province.code} value={province.code.toString()}>
+                                {province.name}
+                              </SelectItem>
+                            ))}
+                          </SelectGroup>
                         </SelectContent>
                       </Select>
                     </FormControl>
@@ -104,6 +156,7 @@ export default function FormAddressContent({ form }: FormAddressContentProps) {
               </FormItem>
             )}
           />
+
           <FormField
             control={form.control}
             name="district"
@@ -115,17 +168,34 @@ export default function FormAddressContent({ form }: FormAddressContentProps) {
                       {t('address.district')}
                     </Label>
                   </div>
-                  <div className="w-full space-y-1">
+                  <div className="w-full space-y-1 relative">
                     <FormControl>
-                      <Select onValueChange={(value) => field?.onChange(value)} value={field?.value || ''}>
-                        <SelectTrigger>
-                          <SelectValue {...field} placeholder={t('address.chooseDistrict')} />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="hcm">Thu Duc</SelectItem>
-                          <SelectItem value="hn">Q1</SelectItem>
-                        </SelectContent>
-                      </Select>
+                      <div>
+                        {isDistrictsLoading && (
+                          <div className="z-20 absolute justify-center items-center w-full flex">
+                            <LoadingIcon size="small" color="primaryBackground" />
+                          </div>
+                        )}
+                        <Select
+                          onValueChange={(value) => {
+                            field.onChange(value)
+                            handleDistrictChange(value)
+                          }}
+                          value={field?.value || ''}
+                          disabled={!form.watch('province') || isDistrictsLoading}
+                        >
+                          <SelectTrigger className="border-primary/40">
+                            <SelectValue {...field} placeholder={t('address.chooseDistrict')} />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {province?.districts.map((district: IDistrict) => (
+                              <SelectItem key={district.code} value={district.code.toString()}>
+                                {district.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </div>
@@ -144,17 +214,31 @@ export default function FormAddressContent({ form }: FormAddressContentProps) {
                       {t('address.ward')}
                     </Label>
                   </div>
-                  <div className="w-full space-y-1">
+                  <div className="w-full space-y-1 relative">
                     <FormControl>
-                      <Select onValueChange={(value) => field?.onChange(value)} value={field?.value || ''}>
-                        <SelectTrigger>
-                          <SelectValue {...field} placeholder={t('address.chooseWard')} />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="hcm">Truong Thanh</SelectItem>
-                          <SelectItem value="hn">My Tho</SelectItem>
-                        </SelectContent>
-                      </Select>
+                      <div>
+                        {isWardsLoading && (
+                          <div className="z-20 absolute justify-center items-center w-full flex">
+                            <LoadingIcon size="small" color="primaryBackground" />
+                          </div>
+                        )}
+                        <Select
+                          onValueChange={(value) => field?.onChange(value)}
+                          value={field?.value || ''}
+                          disabled={!form.watch('district') || isWardsLoading}
+                        >
+                          <SelectTrigger className="border-primary/40">
+                            <SelectValue {...field} placeholder={t('address.chooseWard')} />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {district?.wards?.map((ward: IWard) => (
+                              <SelectItem key={ward.code} value={ward.code.toString()}>
+                                {ward.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </div>
@@ -201,7 +285,7 @@ export default function FormAddressContent({ form }: FormAddressContentProps) {
                     <FormControl>
                       <Textarea
                         id="notes"
-                        placeholder={t('address.enterDetailAddress')}
+                        placeholder={t('address.enterNotes')}
                         className="border-primary/40"
                         {...field}
                         value={field.value ?? ''}

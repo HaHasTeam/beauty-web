@@ -48,7 +48,9 @@ const AlertMessage = ({
   return (
     <Alert variant="default" className={`bg-yellow-50 flex items-center ${className}`}>
       <AlertDescription className="flex items-center gap-2 border-0">
-        <Info className={`flex items-center ${sizeClasses[size]} ${iconColorClasses[color]}`} />
+        <div>
+          <Info className={`flex items-center ${sizeClasses[size]} ${iconColorClasses[color]}`} size={24} />
+        </div>
         <span className={`${textColorClasses[text]} ${textSizeClasses[textSize]}`}>{message}</span>
       </AlertDescription>
     </Alert>

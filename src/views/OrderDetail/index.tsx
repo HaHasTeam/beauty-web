@@ -6,6 +6,7 @@ import { useParams } from 'react-router-dom'
 
 import BrandOrderInformation from '@/components/brand/BrandOrderInformation'
 import CancelOrderDialog from '@/components/dialog/CancelOrderDialog'
+import RequestCancelOrderDialog from '@/components/dialog/RequestCancelOrderDialog'
 import Empty from '@/components/empty/Empty'
 import LoadingContentLayer from '@/components/loading-icon/LoadingContentLayer'
 import OrderDetailItems from '@/components/order-detail/OrderDetailItems'
@@ -24,6 +25,7 @@ const OrderDetail = () => {
   const { t } = useTranslation()
   const queryClient = useQueryClient()
   const [openCancelOrderDialog, setOpenCancelOrderDialog] = useState<boolean>(false)
+  const [openRequestCancelOrderDialog, setOpenRequestCancelOrderDialog] = useState<boolean>(false)
   const [isTrigger, setIsTrigger] = useState<boolean>(false)
 
   const { data: useOrderData, isFetching } = useQuery({
@@ -173,6 +175,17 @@ const OrderDetail = () => {
                     </Button>
                   </div>
                 )}
+                {useOrderData?.data?.status === ShippingStatusEnum.PREPARING_ORDER && (
+                  <div className="w-full">
+                    <Button
+                      variant="outline"
+                      className="w-full border border-primary text-primary hover:text-primary hover:bg-primary/10"
+                      onClick={() => setOpenRequestCancelOrderDialog(true)}
+                    >
+                      {t('order.cancelOrder')}
+                    </Button>
+                  </div>
+                )}
               </div>
             </div>
           </>
@@ -190,6 +203,15 @@ const OrderDetail = () => {
             open={openCancelOrderDialog}
             setOpen={setOpenCancelOrderDialog}
             onOpenChange={setOpenCancelOrderDialog}
+            setIsTrigger={setIsTrigger}
+            orderId={useOrderData?.data?.id ?? ''}
+          />
+        )}
+        {!isFetching && useOrderData?.data && (
+          <RequestCancelOrderDialog
+            open={openRequestCancelOrderDialog}
+            setOpen={setOpenRequestCancelOrderDialog}
+            onOpenChange={setOpenRequestCancelOrderDialog}
             setIsTrigger={setIsTrigger}
             orderId={useOrderData?.data?.id ?? ''}
           />

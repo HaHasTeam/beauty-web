@@ -17,4 +17,8 @@ const CreateAddressSchema = z.object({
   isDefault: z.boolean().optional(),
 })
 
+export const UpdateDefaultAddressSchema = z.object({
+  isDefault: z.boolean().optional(),
+})
+
 export default CreateAddressSchema

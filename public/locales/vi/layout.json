@@ -408,7 +408,10 @@
     "addSuccess": "Thêm địa chỉ mới thành công!",
     "updateSuccess": "Địa chỉ của bạn đã được cập nhật thành công.",
     "alertMessage": "Please add new address before {{action}}!",
-    "notes": "Ghi chú"
+    "notes": "Ghi chú",
+    "enterNotes": "Nhập ghi chú về địa chỉ",
+    "profileAddress": "Địa Chỉ Của Tôi",
+    "profileAddressDescription": "Quản lý địa chỉ đã lưu để thanh toán nhanh hơn và giao hàng thuận tiện."
   },
   "voucher": {
     "title": "Voucher",
@@ -538,7 +541,9 @@
     "failureDescription": "Rất tiếc, chúng tôi không thể xử lý đơn hàng của bạn. Vui lòng thử lại sau hoặc liên hệ bộ phận hỗ trợ để được trợ giúp.",
     "writeFeedback": "Viết đánh giá",
     "cancelOrder": "Hủy đơn",
-    "cancelOrderDescription": "Nhấn nút \"Xác nhận\" đồng nghĩa với hủy tất cả sản phẩm trong đơn hàng và không thể thay đổi. Mã khuyến mãi (nếu có) vẫn có thể áp dụng cho đơn hàng khác sau khi hủy đơn hàng này.",
+    "requestCancelOrder": "Yêu cầu hủy đơn",
+    "cancelOrderDescription": "Nhấn nút \"Xác nhận\" đồng nghĩa với hủy tất cả sản phẩm trong đơn hàng và không thể hoàn tác. Mã khuyến mãi (nếu có) vẫn có thể áp dụng cho đơn hàng khác sau khi hủy đơn hàng này.",
+    "requestCancelOrderDescription": "Nhấn nút \"Xác nhận\" đồng nghĩa với việc gửi yêu cầu hủy toàn bộ sản phẩm trong đơn hàng. Do đơn hàng đang được chuẩn bị, yêu cầu này sẽ cần được xét duyệt trước khi hủy. Hành động này không thể hoàn tác. Mã khuyến mãi (nếu có) vẫn có thể áp dụng cho đơn hàng khác sau khi hủy đơn hàng này.",
     "cancelOrderReason": {
       "changeOfMind": "Thay đổi ý định",
       "foundCheaper": "Tìm thấy giá rẻ hơn",
