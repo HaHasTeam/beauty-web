@@ -1,16 +1,20 @@
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { MessageCircle, Store } from 'lucide-react'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router-dom'
 
 import configs from '@/config'
+import useHandleServerError from '@/hooks/useHandleServerError'
+import { useToast } from '@/hooks/useToast'
+import { createCartItemApi, getMyCartApi } from '@/network/apis/cart'
 import { getMyCancelRequestApi } from '@/network/apis/order'
 import { IBrand } from '@/types/brand'
 import { OrderEnum, ShippingStatusEnum } from '@/types/enum'
 import { ICancelRequestOrder, IOrderItem } from '@/types/order'
 
 import CancelOrderDialog from '../dialog/CancelOrderDialog'
+import LoadingIcon from '../loading-icon'
 import OrderStatus from '../order-status'
 import { Button } from '../ui/button'
 import ProductOrderLandscape from './ProductOrderLandscape'
@@ -35,6 +39,46 @@ const OrderItem = ({ brand, orderItem, setIsTrigger }: OrderItemProps) => {
       setIsLoading(false)
     },
   })
+
+  const [isProcessing, setIsProcessing] = useState(false)
+  const { successToast } = useToast()
+  const queryClient = useQueryClient()
+  const handleServerError = useHandleServerError()
+  const { mutateAsync: createCartItemFn } = useMutation({
+    mutationKey: [createCartItemApi.mutationKey],
+    mutationFn: createCartItemApi.fn,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [getMyCartApi.queryKey],
+      })
+      successToast({
+        message: t('cart.addToCartSuccess'),
+        isShowDescription: false,
+      })
+    },
+  })
+
+  const handleCreateCartItem = async () => {
+    if (isProcessing) return
+    setIsProcessing(true)
+    try {
+      if (orderItem?.orderDetails?.length) {
+        await Promise.all(
+          orderItem.orderDetails.map((productOrder) =>
+            createCartItemFn({
+              classification: productOrder?.productClassification?.title,
+              productClassification: productOrder?.productClassification?.id,
+              quantity: 1,
+            }),
+          ),
+        )
+      }
+    } catch (error) {
+      handleServerError({ error })
+    } finally {
+      setIsProcessing(false)
+    }
+  }
 
   useEffect(() => {
     const fetchCancelRequests = async () => {
@@ -142,8 +186,9 @@ const OrderItem = ({ brand, orderItem, setIsTrigger }: OrderItemProps) => {
               <Button
                 variant="outline"
                 className="border border-primary text-primary hover:text-primary hover:bg-primary/10"
+                onClick={() => handleCreateCartItem()}
               >
-                {t('order.buyAgain')}
+                {isProcessing ? <LoadingIcon color="primaryBackground" /> : t('order.buyAgain')}
               </Button>
             )}
           </div>

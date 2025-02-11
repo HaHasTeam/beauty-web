@@ -1,10 +1,16 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import configs from '@/config'
+import useHandleServerError from '@/hooks/useHandleServerError'
+import { useToast } from '@/hooks/useToast'
+import { createCartItemApi, getMyCartApi } from '@/network/apis/cart'
 import { IClassification } from '@/types/classification'
 import { ClassificationTypeEnum, OrderEnum, ShippingStatusEnum } from '@/types/enum'
 
+import LoadingIcon from '../loading-icon'
 import ProductTag from '../product/ProductTag'
 import { Button } from '../ui/button'
 import { Label } from '../ui/label'
@@ -36,6 +42,42 @@ const ProductOrderDetailLandscape = ({
   isFeedback,
 }: ProductOrderDetailLandscapeProps) => {
   const { t } = useTranslation()
+  const [isProcessing, setIsProcessing] = useState(false)
+  const { successToast } = useToast()
+  const queryClient = useQueryClient()
+  const handleServerError = useHandleServerError()
+  const { mutateAsync: createCartItemFn } = useMutation({
+    mutationKey: [createCartItemApi.mutationKey],
+    mutationFn: createCartItemApi.fn,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [getMyCartApi.queryKey],
+      })
+      successToast({
+        message: t('cart.addToCartSuccess'),
+        isShowDescription: false,
+      })
+    },
+  })
+
+  const handleCreateCartItem = async () => {
+    if (isProcessing) return
+    setIsProcessing(true)
+    try {
+      if (productClassification) {
+        await createCartItemFn({
+          classification: productClassification?.title,
+          productClassification: productClassification?.id,
+          quantity: 1,
+        })
+      }
+    } catch (error) {
+      handleServerError({ error })
+    } finally {
+      setIsProcessing(false)
+    }
+  }
+
   return (
     <div className="w-full py-4 border-b border-gray-200">
       <div className="w-full flex gap-2 items-center p-2 md:p-3 lg:p-4">
@@ -64,8 +106,9 @@ const ProductOrderDetailLandscape = ({
                     variant="outline"
                     size="sm"
                     className="border border-primary text-primary hover:text-primary hover:bg-primary/10"
+                    onClick={() => handleCreateCartItem()}
                   >
-                    {t('order.buyAgain')}
+                    {isProcessing ? <LoadingIcon color="primaryBackground" /> : t('order.buyAgain')}
                   </Button>
                 )}
                 {status === ShippingStatusEnum.DELIVERED && (
