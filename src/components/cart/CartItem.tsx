@@ -69,6 +69,7 @@ const CartItem = ({
   }
   const voucherDiscount = useMemo(
     () => calculateBrandVoucherDiscount(cartBrandItem, selectedCartItems, chosenVoucher),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [cartBrandItem, selectedCartItems, chosenVoucher, isTriggerTotal],
   )
 

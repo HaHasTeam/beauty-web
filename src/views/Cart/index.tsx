@@ -50,11 +50,13 @@ const Cart = () => {
   // Calculate total voucher discount
   const totalVoucherDiscount = useMemo(() => {
     return calculateTotalBrandVoucherDiscount(cartItems, selectedCartItems, chosenVouchersByBrand)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cartItems, chosenVouchersByBrand, selectedCartItems, isTriggerTotal])
 
   // Calculate platform voucher discount
   const platformVoucherDiscount = useMemo(() => {
     return calculatePlatformVoucherDiscount(cartItems, selectedCartItems, platformChosenVoucher)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cartItems, selectedCartItems, isTriggerTotal, platformChosenVoucher])
 
   // Total saved price (product discounts + brand vouchers + platform voucher)
