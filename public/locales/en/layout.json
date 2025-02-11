@@ -544,6 +544,7 @@
     "successDescription": "We will receive an order confirmation email with details of your order and a link to track it's progress.",
     "failureDescription": "Unfortunately, we were unable to process your order. Please try again later or contact support for assistance.",
     "writeFeedback": "Write review",
+    "viewFeedback": "View review",
     "cancelOrder": "Cancel order",
     "requestCancelOrder": "Request cancel order",
     "cancelOrderDescription": "Clicking \"Confirm\" button means canceling all items in the order, and this action cannot be undone. Promotional codes (if any) can still be applied to other orders after canceling this one.",

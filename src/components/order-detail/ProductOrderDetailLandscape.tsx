@@ -68,13 +68,13 @@ const ProductOrderDetailLandscape = ({
                     {t('order.buyAgain')}
                   </Button>
                 )}
-                {status === ShippingStatusEnum.COMPLETED && (
+                {status === ShippingStatusEnum.DELIVERED && (
                   <Button
                     variant="outline"
                     size="sm"
                     className="border border-primary text-primary hover:text-primary hover:bg-primary/10"
                   >
-                    {t('order.buyAgain')}
+                    {t('order.returnOrder')}
                   </Button>
                 )}
                 {!isFeedback && (
@@ -84,6 +84,15 @@ const ProductOrderDetailLandscape = ({
                     className="border border-primary text-primary hover:text-primary hover:bg-primary/10"
                   >
                     {t('order.writeFeedback')}
+                  </Button>
+                )}
+                {isFeedback && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="border border-primary text-primary hover:text-primary hover:bg-primary/10"
+                  >
+                    {t('order.viewFeedback')}
                   </Button>
                 )}
               </div>

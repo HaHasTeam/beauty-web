@@ -540,6 +540,7 @@
     "successDescription": "Chúng tôi sẽ gửi email xác nhận đơn hàng với thông tin chi tiết về đơn hàng của bạn và một liên kết để theo dõi tiến trình của nó.",
     "failureDescription": "Rất tiếc, chúng tôi không thể xử lý đơn hàng của bạn. Vui lòng thử lại sau hoặc liên hệ bộ phận hỗ trợ để được trợ giúp.",
     "writeFeedback": "Viết đánh giá",
+    "viewFeedback": "Xem đánh giá",
     "cancelOrder": "Hủy đơn",
     "requestCancelOrder": "Yêu cầu hủy đơn",
     "cancelOrderDescription": "Nhấn nút \"Xác nhận\" đồng nghĩa với hủy tất cả sản phẩm trong đơn hàng và không thể hoàn tác. Mã khuyến mãi (nếu có) vẫn có thể áp dụng cho đơn hàng khác sau khi hủy đơn hàng này.",
