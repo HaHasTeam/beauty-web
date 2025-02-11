@@ -14,6 +14,7 @@ export interface IAddress {
   type?: AddressEnum.HOME | AddressEnum.OFFICE | AddressEnum.OTHER
   status?: string
   isDefault?: boolean
+  notes?: string
 }
 
 export interface IProvince {

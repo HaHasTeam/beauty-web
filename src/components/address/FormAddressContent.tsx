@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { UseFormReturn } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { z } from 'zod'
@@ -17,12 +17,18 @@ import { AddressEnum } from '@/types/enum'
 import LoadingIcon from '../loading-icon'
 import { PhoneInputWithCountries } from '../phone-input'
 import { FormControl, FormField, FormItem, FormMessage } from '../ui/form'
+import { ScrollArea } from '../ui/scroll-area'
 import { Textarea } from '../ui/textarea'
 
 interface FormAddressContentProps {
   form: UseFormReturn<z.infer<typeof CreateAddressSchema>>
+  initialAddress?: {
+    province?: string
+    district?: string
+    ward?: string
+  }
 }
-export default function FormAddressContent({ form }: FormAddressContentProps) {
+export default function FormAddressContent({ form, initialAddress }: FormAddressContentProps) {
   const { t } = useTranslation()
   // const [provinces, setProvinces] = useState<IProvince[]>([])
   const [provinceCode, setProvinceCode] = useState<string>('')
@@ -56,6 +62,22 @@ export default function FormAddressContent({ form }: FormAddressContentProps) {
     form.resetField('ward')
   }
 
+  useEffect(() => {
+    if (provinces && initialAddress?.province) {
+      const selectedProvince = provinces.find((p) => p.name === initialAddress.province)
+      if (selectedProvince) {
+        setProvinceCode(selectedProvince.code)
+      }
+    }
+  }, [provinces, initialAddress?.province])
+  useEffect(() => {
+    if (province?.districts && initialAddress?.district) {
+      const selectedDistrict = province.districts.find((d) => d.name === initialAddress.district)
+      if (selectedDistrict) {
+        setDistrictCode(selectedDistrict.code)
+      }
+    }
+  }, [province?.districts, initialAddress?.district])
   return (
     <div className="w-full py-2">
       <div className="space-y-6">
@@ -139,13 +161,15 @@ export default function FormAddressContent({ form }: FormAddressContentProps) {
                           />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectGroup>
-                            {provinces?.map((province: IProvince) => (
-                              <SelectItem key={province.code} value={province.name}>
-                                {province.name}
-                              </SelectItem>
-                            ))}
-                          </SelectGroup>
+                          <ScrollArea className="h-72 pr-2">
+                            <SelectGroup>
+                              {provinces?.map((province: IProvince) => (
+                                <SelectItem key={province.code} value={province.name}>
+                                  {province.name}
+                                </SelectItem>
+                              ))}
+                            </SelectGroup>
+                          </ScrollArea>
                         </SelectContent>
                       </Select>
                     </FormControl>
@@ -188,11 +212,13 @@ export default function FormAddressContent({ form }: FormAddressContentProps) {
                             <SelectValue {...field} placeholder={t('address.chooseDistrict')} />
                           </SelectTrigger>
                           <SelectContent>
-                            {province?.districts.map((district: IDistrict) => (
-                              <SelectItem key={district.code} value={district.name}>
-                                {district.name}
-                              </SelectItem>
-                            ))}
+                            <ScrollArea className="h-72 pr-2">
+                              {province?.districts.map((district: IDistrict) => (
+                                <SelectItem key={district.code} value={district.name}>
+                                  {district.name}
+                                </SelectItem>
+                              ))}
+                            </ScrollArea>
                           </SelectContent>
                         </Select>
                       </div>
@@ -231,11 +257,13 @@ export default function FormAddressContent({ form }: FormAddressContentProps) {
                             <SelectValue {...field} placeholder={t('address.chooseWard')} />
                           </SelectTrigger>
                           <SelectContent>
-                            {district?.wards?.map((ward: IWard) => (
-                              <SelectItem key={ward.code} value={ward.name.toString()}>
-                                {ward.name}
-                              </SelectItem>
-                            ))}
+                            <ScrollArea className="h-72 pr-2">
+                              {district?.wards?.map((ward: IWard) => (
+                                <SelectItem key={ward.code} value={ward.name.toString()}>
+                                  {ward.name}
+                                </SelectItem>
+                              ))}
+                            </ScrollArea>
                           </SelectContent>
                         </Select>
                       </div>
