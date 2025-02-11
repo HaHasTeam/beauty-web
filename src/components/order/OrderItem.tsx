@@ -1,12 +1,14 @@
+import { useMutation } from '@tanstack/react-query'
 import { MessageCircle, Store } from 'lucide-react'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router-dom'
 
 import configs from '@/config'
+import { getMyCancelRequestApi } from '@/network/apis/order'
 import { IBrand } from '@/types/brand'
 import { OrderEnum, ShippingStatusEnum } from '@/types/enum'
-import { IOrderItem } from '@/types/order'
+import { ICancelRequestOrder, IOrderItem } from '@/types/order'
 
 import CancelOrderDialog from '../dialog/CancelOrderDialog'
 import OrderStatus from '../order-status'
@@ -22,6 +24,25 @@ const OrderItem = ({ brand, orderItem, setIsTrigger }: OrderItemProps) => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const [openCancelOrderDialog, setOpenCancelOrderDialog] = useState<boolean>(false)
+  const [cancelRequests, setCancelRequests] = useState<ICancelRequestOrder[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+
+  const { mutateAsync: getMyCancelRequestOrderFn } = useMutation({
+    mutationKey: [getMyCancelRequestApi.mutationKey],
+    mutationFn: getMyCancelRequestApi.fn,
+    onSuccess: (data) => {
+      setCancelRequests(data?.data)
+      setIsLoading(false)
+    },
+  })
+
+  useEffect(() => {
+    const fetchCancelRequests = async () => {
+      setIsLoading(true)
+      await getMyCancelRequestOrderFn({})
+    }
+    fetchCancelRequests()
+  }, [getMyCancelRequestOrderFn])
 
   return (
     <>
@@ -96,7 +117,10 @@ const OrderItem = ({ brand, orderItem, setIsTrigger }: OrderItemProps) => {
               {t('order.viewDetail')}
             </Button>
             {(orderItem?.status === ShippingStatusEnum.TO_PAY ||
-              orderItem?.status === ShippingStatusEnum.WAIT_FOR_CONFIRMATION) && (
+              orderItem?.status === ShippingStatusEnum.WAIT_FOR_CONFIRMATION ||
+              (orderItem?.status === ShippingStatusEnum.PREPARING_ORDER &&
+                !isLoading &&
+                !cancelRequests?.some((cancelRequest) => cancelRequest?.order?.id === orderItem?.id))) && (
               <Button
                 variant="outline"
                 className="border border-primary text-primary hover:text-primary hover:bg-primary/10"

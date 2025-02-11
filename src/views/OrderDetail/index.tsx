@@ -1,9 +1,10 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { History, MessageSquareText, Truck } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 
+import AlertMessage from '@/components/alert/AlertMessage'
 import BrandOrderInformation from '@/components/brand/BrandOrderInformation'
 import CancelOrderDialog from '@/components/dialog/CancelOrderDialog'
 import RequestCancelOrderDialog from '@/components/dialog/RequestCancelOrderDialog'
@@ -17,8 +18,9 @@ import OrderSummary from '@/components/order-detail/OrderSummary'
 import OrderStatus from '@/components/order-status'
 import { Button } from '@/components/ui/button'
 import configs from '@/config'
-import { getOrderByIdApi, getStatusTrackingByIdApi } from '@/network/apis/order'
-import { ShippingStatusEnum } from '@/types/enum'
+import { getMyCancelRequestApi, getOrderByIdApi, getStatusTrackingByIdApi } from '@/network/apis/order'
+import { CancelOrderRequestStatusEnum, ShippingStatusEnum } from '@/types/enum'
+import { ICancelRequestOrder } from '@/types/order'
 
 const OrderDetail = () => {
   const { orderId } = useParams()
@@ -27,6 +29,8 @@ const OrderDetail = () => {
   const [openCancelOrderDialog, setOpenCancelOrderDialog] = useState<boolean>(false)
   const [openRequestCancelOrderDialog, setOpenRequestCancelOrderDialog] = useState<boolean>(false)
   const [isTrigger, setIsTrigger] = useState<boolean>(false)
+  const [cancelRequests, setCancelRequests] = useState<ICancelRequestOrder[]>([])
+  const [isLoading, setIsLoading] = useState(true)
 
   const { data: useOrderData, isFetching } = useQuery({
     queryKey: [getOrderByIdApi.queryKey, orderId ?? ('' as string)],
@@ -47,6 +51,21 @@ const OrderDetail = () => {
     }
   }, [isTrigger, queryClient])
 
+  const { mutateAsync: getMyCancelRequestOrderFn } = useMutation({
+    mutationKey: [getMyCancelRequestApi.mutationKey],
+    mutationFn: getMyCancelRequestApi.fn,
+    onSuccess: (data) => {
+      setCancelRequests(data?.data)
+      setIsLoading(false)
+    },
+  })
+  useEffect(() => {
+    const fetchCancelRequests = async () => {
+      setIsLoading(true)
+      await getMyCancelRequestOrderFn({})
+    }
+    fetchCancelRequests()
+  }, [getMyCancelRequestOrderFn])
   return (
     <div>
       {isFetching && <LoadingContentLayer />}
@@ -72,6 +91,36 @@ const OrderDetail = () => {
               {!isFetchingStatusTracking && useStatusTrackingData && useStatusTrackingData?.data && (
                 <OrderStatusTracking statusTrackingData={useStatusTrackingData?.data} />
               )}
+
+              {/* cancel request information */}
+              {!isLoading &&
+                cancelRequests &&
+                cancelRequests?.some(
+                  (request) =>
+                    request?.order?.id === useOrderData?.data?.id &&
+                    request.status === CancelOrderRequestStatusEnum.PENDING,
+                ) && (
+                  <AlertMessage
+                    title={t('order.cancelRequestPendingTitle')}
+                    message={t('order.cancelRequestPendingMessage')}
+                    isShowIcon={false}
+                  />
+                )}
+              {!isLoading &&
+                cancelRequests &&
+                cancelRequests?.some(
+                  (request) =>
+                    request?.order?.id === useOrderData?.data?.id &&
+                    request.status === CancelOrderRequestStatusEnum.REJECTED,
+                ) && (
+                  <AlertMessage
+                    className="bg-red-100"
+                    color="danger"
+                    isShowIcon={false}
+                    title={t('order.cancelRequestRejectedTitle')}
+                    message={t('order.cancelRequestRejectedMessage')}
+                  />
+                )}
 
               {/* order customer timeline, information, shipment */}
               <div className="flex flex-col md:flex-row gap-4 justify-between w-full items-stretch">
@@ -175,17 +224,19 @@ const OrderDetail = () => {
                     </Button>
                   </div>
                 )}
-                {useOrderData?.data?.status === ShippingStatusEnum.PREPARING_ORDER && (
-                  <div className="w-full">
-                    <Button
-                      variant="outline"
-                      className="w-full border border-primary text-primary hover:text-primary hover:bg-primary/10"
-                      onClick={() => setOpenRequestCancelOrderDialog(true)}
-                    >
-                      {t('order.cancelOrder')}
-                    </Button>
-                  </div>
-                )}
+                {useOrderData?.data?.status === ShippingStatusEnum.PREPARING_ORDER &&
+                  !isLoading &&
+                  !cancelRequests?.some((cancelRequest) => cancelRequest?.order?.id === useOrderData?.data?.id) && (
+                    <div className="w-full">
+                      <Button
+                        variant="outline"
+                        className="w-full border border-primary text-primary hover:text-primary hover:bg-primary/10"
+                        onClick={() => setOpenRequestCancelOrderDialog(true)}
+                      >
+                        {t('order.cancelOrder')}
+                      </Button>
+                    </div>
+                  )}
               </div>
             </div>
           </>

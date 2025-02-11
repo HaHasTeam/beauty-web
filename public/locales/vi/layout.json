@@ -587,7 +587,12 @@
       "systemError": "Lỗi hệ thống khi xử lý đơn hàng.",
       "highRiskTransaction": "Giao dịch có rủi ro cao."
     },
-    "cancelSuccess": "Cancel order failed!"
+    "cancelSuccess": "Hủy đơn hàng thành công!",
+    "requestCancelSuccess": "Yêu cầu hủy đơn hàng thành công!",
+    "cancelRequestPendingTitle": "Yêu Cầu Hủy Đơn Đang Chờ Xác Nhận",
+    "cancelRequestRejectedTitle": "Yêu Cầu Hủy Đơn Bị Từ Chối",
+    "cancelRequestPendingMessage": "Yêu cầu hủy đơn hàng của bạn đã được gửi và đang chờ xác nhận. Đơn hàng sẽ vẫn được xử lý cho đến khi thương hiệu xem xét và phê duyệt yêu cầu. Chúng tôi sẽ cập nhật kết quả trong vòng 2 ngày. Nếu yêu cầu được chấp nhận, chúng tôi sẽ hoàn tiền cho bạn (nếu có).",
+    "cancelRequestRejectedMessage": "Yêu cầu hủy đơn hàng của bạn đã bị từ chối. Đơn hàng sẽ tiếp tục được xử lý như bình thường. Bạn có thể nhấn \"Trả hàng\" sau khi nhận được sản phẩm nếu có nhu cầu. Vui lòng liên hệ bộ phận hỗ trợ khách hàng nếu cần thêm trợ giúp."
   },
   "toast": {
     "success": "Yêu cầu của bạn đã được xử lý thành công, tiếp tục công việc của bạn.",

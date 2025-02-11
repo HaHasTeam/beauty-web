@@ -11,6 +11,7 @@ interface OrderDetailItemsProps {
 }
 const OrderDetailItems = ({ orderDetails, status }: OrderDetailItemsProps) => {
   const { t } = useTranslation()
+
   return (
     <div className="w-full">
       <div className="w-full flex p-2 md:p-3 lg:p-4 bg-secondary/30 rounded-sm text-secondary-foreground">

@@ -73,7 +73,7 @@ export default function RequestCancelOrderDialog({
     mutationFn: cancelOrderApi.fn,
     onSuccess: () => {
       successToast({
-        message: t('order.cancelSuccess'),
+        message: t('order.requestCancelSuccess'),
       })
       setIsTrigger((prev) => !prev)
       handleReset()

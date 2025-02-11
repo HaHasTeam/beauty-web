@@ -591,7 +591,12 @@
       "systemError": "System error in processing the order.",
       "highRiskTransaction": "High-risk transaction detected."
     },
-    "cancelSuccess": "Cancel order successfully!"
+    "cancelSuccess": "Cancel order successfully!",
+    "requestCancelSuccess": "Request cancel order successfully!",
+    "cancelRequestPendingTitle": "Cancellation Request Pending Confirmation",
+    "cancelRequestRejectedTitle": "Cancellation Request Rejected",
+    "cancelRequestPendingMessage": "Your cancellation request has been submitted and is awaiting confirmation. The order will remain active until the brand reviews and approves the request. We will update you with the result within 2 days. If your request is approved, we will process a refund (if applicable).",
+    "cancelRequestRejectedMessage": "Your cancellation request has been rejected. The order will continue to be processed as usual. You can click \"Return order\" after receiving the item if needed. Please contact customer support if you need further assistance."
   },
   "toast": {
     "success": "Your request has been successfully processed, continue with your work.",
