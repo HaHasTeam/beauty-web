@@ -65,7 +65,9 @@ const ProductCheckoutLandscape = ({
                     {t('productDetail.classification')}:
                   </span>
                 </Label>
-                <span className="line-clamp-2 lg:text-sm md:text-sm sm:text-xs text-xs">{selectedClassification}</span>
+                <span className="line-clamp-2 lg:text-sm md:text-sm sm:text-xs text-xs text-primary font-semibold">
+                  {selectedClassification}
+                </span>
               </div>
             )}
           </div>

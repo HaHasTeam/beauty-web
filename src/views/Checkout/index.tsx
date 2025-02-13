@@ -25,14 +25,14 @@ import { getMyAddressesApi } from '@/network/apis/address'
 import { createOderApi } from '@/network/apis/order'
 import { getUserProfileApi } from '@/network/apis/user'
 import { getBestPlatformVouchersApi, getBestShopVouchersApi } from '@/network/apis/voucher'
-import CreateOrderSchema from '@/schemas/order.schema'
+import { CreateOrderSchema } from '@/schemas/order.schema'
 import useCartStore from '@/store/cart'
 import { IAddress } from '@/types/address'
-import { DiscountTypeEnum, PaymentMethod, ProjectInformationEnum, ResultEnum } from '@/types/enum'
+import { DiscountTypeEnum, ProjectInformationEnum, ResultEnum } from '@/types/enum'
 import { ICreateOrder } from '@/types/order'
 import { IBrandBestVoucher, ICheckoutItem, IPlatformBestVoucher, TVoucher } from '@/types/voucher'
 import { createCheckoutItem, createCheckoutItems } from '@/utils/cart'
-import { calculateCartTotals, calculatePlatformVoucherDiscount, calculateTotalVoucherDiscount } from '@/utils/price'
+import { calculateCartTotals, calculateTotalCheckoutBrandVoucherDiscount } from '@/utils/price'
 
 import { flattenObject, hasPreOrderProduct } from '../../utils/product/index'
 
@@ -72,27 +72,30 @@ const Checkout = () => {
     return calculateCartTotals(selectedCartItems, selectedCartItem).totalPrice
   }, [selectedCartItem, selectedCartItems])
   // Calculate total voucher discount
+  // const totalBrandDiscount = useMemo(() => {
+  //   return calculateTotalBrandVoucherDiscount(selectedCartItem, selectedCartItems, chosenBrandVouchers)
+  // }, [chosenBrandVouchers, selectedCartItems, selectedCartItem])
   const totalBrandDiscount = useMemo(() => {
-    return calculateTotalVoucherDiscount(chosenBrandVouchers)
+    return calculateTotalCheckoutBrandVoucherDiscount(chosenBrandVouchers)
   }, [chosenBrandVouchers])
 
   // Calculate platform voucher discount
-  const totalPlatformDiscount = useMemo(() => {
-    return calculatePlatformVoucherDiscount(chosenPlatformVoucher)
-  }, [chosenPlatformVoucher])
+  // const totalPlatformDiscount = useMemo(() => {
+  //   return calculatePlatformVoucherDiscount(chosenPlatformVoucher)
+  // }, [chosenPlatformVoucher])
 
   const totalProductDiscount = useMemo(() => {
     return calculateCartTotals(selectedCartItems, selectedCartItem).totalProductDiscount
   }, [selectedCartItem, selectedCartItems])
 
   // Total saved price (product discounts + brand vouchers + platform voucher)
-  const totalSavings = totalProductDiscount + totalBrandDiscount + totalPlatformDiscount
-  const totalPayment = totalPrice - totalBrandDiscount - totalPlatformDiscount
+  const totalSavings = totalProductDiscount + totalBrandDiscount + (chosenPlatformVoucher?.discount ?? 0)
+  const totalPayment = totalPrice - totalBrandDiscount - (chosenPlatformVoucher?.discount ?? 0)
 
   const defaultOrderValues = {
     orders: [],
     addressId: '',
-    paymentMethod: PaymentMethod?.CASH,
+    paymentMethod: '',
     platformVoucherId: '', // Optional field, default to an empty string
   }
   const handleReset = () => {
@@ -253,7 +256,6 @@ const Checkout = () => {
                             onVoucherSelect={handleVoucherSelection}
                             bestVoucherForBrand={bestVoucherForBrand}
                             chosenBrandVoucher={chosenVoucherForBrand}
-                            totalBrandDiscount={totalBrandDiscount}
                             index={index}
                             form={form}
                           />
@@ -277,16 +279,25 @@ const Checkout = () => {
                               chosenPlatformVoucher?.discountType === DiscountTypeEnum.AMOUNT &&
                               chosenPlatformVoucher?.discountValue ? (
                                 <div className="flex gap-2 items-center">
-                                  {t('voucher.discountAmount', { amount: chosenPlatformVoucher?.discountValue })}
+                                  {t('voucher.discountAmount', { amount: chosenPlatformVoucher?.discount })}
                                   <Pen />
                                 </div>
                               ) : (
                                 <div className="flex gap-2 items-center">
-                                  {t('voucher.discountPercentage', {
-                                    percentage: chosenPlatformVoucher?.discountValue * 100,
-                                  })}
+                                  {t('voucher.discountAmount', { amount: chosenPlatformVoucher?.discount })}
                                   <Pen />
                                 </div>
+                              )
+                            ) : bestPlatformVoucher?.bestVoucher ? (
+                              bestPlatformVoucher?.bestVoucher?.discountType === DiscountTypeEnum.AMOUNT &&
+                              bestPlatformVoucher?.bestVoucher?.discountValue ? (
+                                t('voucher.bestDiscountAmountDisplay', {
+                                  amount: bestPlatformVoucher?.bestVoucher?.discountValue,
+                                })
+                              ) : (
+                                t('voucher.bestDiscountPercentageDisplay', {
+                                  percentage: bestPlatformVoucher?.bestVoucher?.discountValue * 100,
+                                })
                               )
                             ) : (
                               t('cart.selectVoucher')
@@ -313,7 +324,7 @@ const Checkout = () => {
                         totalProductDiscount={totalProductDiscount}
                         totalProductCost={totalProductCost}
                         totalBrandDiscount={totalBrandDiscount}
-                        totalPlatformDiscount={totalPlatformDiscount}
+                        totalPlatformDiscount={chosenPlatformVoucher?.discount ?? 0}
                         totalSavings={totalSavings}
                         totalPayment={totalPayment}
                         formId={`form-${formId}`}

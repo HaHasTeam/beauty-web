@@ -81,14 +81,17 @@ export enum PaymentMethod {
 }
 
 export enum ShippingStatusEnum {
-  TO_PAY = 'TO_PAY',
-  TO_SHIP = 'TO_SHIP',
-  WAIT_FOR_CONFIRMATION = 'WAIT_FOR_CONFIRMATION',
-  TO_RECEIVED = 'TO_RECEIVED',
-  RETURN_REFUND = 'RETURN_REFUND',
-  COMPLETED = 'COMPLETED',
-  CANCELLED = 'CANCELLED',
-  CANCELLED_BY_SHOP = 'CANCELLED_BY_SHOP',
+  JOIN_GROUP_BUYING = 'JOIN_GROUP_BUYING', // Tham gia mua nhóm
+  TO_PAY = 'TO_PAY', // Chờ thanh toán
+  WAIT_FOR_CONFIRMATION = 'WAIT_FOR_CONFIRMATION', // Chờ xác nhận đơn hàng
+  PREPARING_ORDER = 'PREPARING_ORDER', // Chuẩn bị đơn hàng
+  TO_SHIP = 'TO_SHIP', // Lấy hàng
+  TO_RECEIVED = 'TO_RECEIVED', // Đang vận chuyển
+  DELIVERED = 'DELIVERED', // Đã nhận hàng
+  COMPLETED = 'COMPLETED', // Hoàn thành
+  RETURNING = 'RETURNING', // Đang trả hàng
+  REFUNDED = 'REFUNDED', // Đã trả hàng
+  CANCELLED = 'CANCELLED', // Đã hủy
 }
 
 export enum ProductDiscountEnum {
@@ -136,4 +139,10 @@ export enum ResultEnum {
   ERROR = 'ERROR',
   WARNING = 'WARNING',
   FAILURE = 'FAILURE',
+}
+
+export enum CancelOrderRequestStatusEnum {
+  PENDING = 'PENDING',
+  APPROVED = 'APPROVED',
+  REJECTED = 'REJECTED',
 }

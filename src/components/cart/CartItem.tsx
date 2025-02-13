@@ -1,5 +1,5 @@
 import { MessageCircle, Store, Tag } from 'lucide-react'
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
@@ -10,6 +10,7 @@ import { IClassification } from '@/types/classification'
 import { DiscountTypeEnum, OrderEnum, ProductDiscountEnum } from '@/types/enum'
 import { PreOrderProductEnum } from '@/types/pre-order'
 import { IBrandBestVoucher, ICheckoutItem, TVoucher } from '@/types/voucher'
+import { calculateBrandVoucherDiscount } from '@/utils/price'
 
 import ProductCardLandscape from '../product/ProductCardLandscape'
 import { Button } from '../ui/button'
@@ -26,6 +27,7 @@ interface CartItemProps {
   brand?: IBrand
   checkoutItems: ICheckoutItem[]
   selectedCheckoutItems: ICheckoutItem[]
+  isTriggerTotal: boolean
   setIsTriggerTotal: Dispatch<SetStateAction<boolean>>
 }
 const CartItem = ({
@@ -38,6 +40,7 @@ const CartItem = ({
   brand,
   checkoutItems,
   selectedCheckoutItems,
+  isTriggerTotal,
   setIsTriggerTotal,
 }: CartItemProps) => {
   const { t } = useTranslation()
@@ -64,6 +67,12 @@ const CartItem = ({
     setChosenVoucher(voucher)
     onVoucherSelect(brand?.id ?? '', voucher)
   }
+  const voucherDiscount = useMemo(
+    () => calculateBrandVoucherDiscount(cartBrandItem, selectedCartItems, chosenVoucher),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [cartBrandItem, selectedCartItems, chosenVoucher, isTriggerTotal],
+  )
+
   useEffect(() => {
     if (selectedCartItems.length === 0) {
       setChosenVoucher(null)
@@ -155,9 +164,9 @@ const CartItem = ({
         <Tag className="w-4 h-4 text-red-500" />
         <span>
           {chosenVoucher && hasBrandProductSelected
-            ? chosenVoucher?.discountType === DiscountTypeEnum.AMOUNT && chosenVoucher?.discountValue
-              ? t('voucher.discountAmount', { amount: chosenVoucher?.discountValue })
-              : t('voucher.discountAmount', { amount: chosenVoucher?.discount })
+            ? chosenVoucher?.discountType === DiscountTypeEnum.AMOUNT
+              ? t('voucher.discountAmount', { amount: voucherDiscount })
+              : t('voucher.discountAmount', { amount: voucherDiscount })
             : bestVoucherForBrand?.bestVoucher
               ? bestVoucherForBrand?.bestVoucher?.discountType === DiscountTypeEnum.AMOUNT &&
                 bestVoucherForBrand?.bestVoucher?.discountValue

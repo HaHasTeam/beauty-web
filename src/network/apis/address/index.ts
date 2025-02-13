@@ -1,7 +1,7 @@
-import { IAddress } from '@/types/address'
+import { IAddress, IDistrictDetail, IProvince, IProvinceDetail } from '@/types/address'
 import { TServerResponse } from '@/types/request'
 import { toMutationFetcher, toQueryFetcher } from '@/utils/query'
-import { privateRequest } from '@/utils/request'
+import { privateRequest, provincesPublicRequest } from '@/utils/request'
 
 export const getAllAddressesApi = toQueryFetcher<void, TServerResponse<IAddress[]>>('getAllAddressesApi', async () => {
   return privateRequest('/address', {
@@ -39,6 +39,27 @@ export const updateAddressApi = toMutationFetcher<IAddress, TServerResponse<IAdd
     return privateRequest(`/address/${data.id}`, {
       method: 'PUT',
       data,
+    })
+  },
+)
+export const getProvincesApi = toQueryFetcher<void, IProvince[]>('getProvincesApi', async () => {
+  return provincesPublicRequest(`/p/`, {
+    method: 'GET',
+  })
+})
+export const getDistrictsByProvinceApi = toQueryFetcher<string, IProvinceDetail>(
+  'getDistrictsByProvinceApi',
+  async (provinceCode) => {
+    return provincesPublicRequest(`/p/${provinceCode}?depth=2`, {
+      method: 'GET',
+    })
+  },
+)
+export const getWardsByDistrictApi = toQueryFetcher<string, IDistrictDetail>(
+  'getWardsByDistrictApi',
+  async (districtCode) => {
+    return provincesPublicRequest(`/d/${districtCode}?depth=2`, {
+      method: 'GET',
     })
   },
 )

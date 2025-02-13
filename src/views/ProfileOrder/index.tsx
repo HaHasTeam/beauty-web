@@ -17,6 +17,7 @@ export default function ProfileOrder() {
   const [activeTab, setActiveTab] = useState<string>('all')
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [searchQuery, setSearchQuery] = useState<string>('')
+  const [isTrigger, setIsTrigger] = useState<boolean>(false)
 
   const triggers = [
     { value: 'all', text: `${t('order.all')}` },
@@ -26,7 +27,7 @@ export default function ProfileOrder() {
     { value: ShippingStatusEnum?.TO_RECEIVED, text: `${t('order.delivering')}` },
     { value: ShippingStatusEnum?.COMPLETED, text: `${t('order.completed')}` },
     { value: ShippingStatusEnum?.CANCELLED, text: `${t('order.cancelled')}` },
-    { value: ShippingStatusEnum?.RETURN_REFUND, text: `${t('order.return')}` },
+    { value: ShippingStatusEnum?.REFUNDED, text: `${t('order.return')}` },
   ]
   const { mutateAsync: getMyOrderFn } = useMutation({
     mutationKey: [getMyOrdersApi.mutationKey],
@@ -51,9 +52,10 @@ export default function ProfileOrder() {
       await getMyOrderFn(filters)
     }
     fetchOrders()
-  }, [activeTab, getMyOrderFn, searchQuery])
+  }, [activeTab, getMyOrderFn, searchQuery, isTrigger])
+
   const renderOrders = () => {
-    if (orders && orders?.length === 0) {
+    if (!isLoading && orders && orders?.length === 0) {
       return (
         <div className="flex flex-col items-center justify-center min-h-[400px] text-center">
           <Empty
@@ -75,6 +77,7 @@ export default function ProfileOrder() {
                 null
               }
               orderItem={orderItem}
+              setIsTrigger={setIsTrigger}
             />
           </div>
         ))}

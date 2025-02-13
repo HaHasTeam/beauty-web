@@ -11,14 +11,13 @@ import { useToast } from '@/hooks/useToast'
 import { createCartItemApi, getMyCartApi } from '@/network/apis/cart'
 import useCartStore from '@/store/cart'
 import { IClassification } from '@/types/classification'
-import { DiscountTypeEnum, ProductDiscountEnum } from '@/types/enum'
+import { DiscountTypeEnum, ProductDiscountEnum, StatusEnum } from '@/types/enum'
 import { IProduct } from '@/types/product'
 import { createCartFromProduct } from '@/utils/cart'
 import { calculateDiscountPrice, calculateTotalPrice } from '@/utils/price'
 
 import IncreaseDecreaseButton from '../IncreaseDecreaseButton'
 import { Button } from '../ui/button'
-import PriceSection from './PriceSection'
 
 interface ProductDetailActionProps {
   product: IProduct
@@ -26,6 +25,7 @@ interface ProductDetailActionProps {
   discount?: number
   discountType?: DiscountTypeEnum | null
   hasCustomType?: boolean
+  inStock: boolean
 }
 
 const ProductDetailAction = ({
@@ -34,6 +34,7 @@ const ProductDetailAction = ({
   discount,
   discountType,
   hasCustomType,
+  inStock,
 }: ProductDetailActionProps) => {
   const { t } = useTranslation()
   const { setSelectedCartItem } = useCartStore()
@@ -78,7 +79,7 @@ const ProductDetailAction = ({
         }
       } else {
         await createCartItemFn({
-          classification: chosenClassification?.title,
+          classification: (product?.productClassifications ?? [])[0]?.title,
           productClassification: (product?.productClassifications ?? [])[0]?.id,
           quantity: quantity,
         })
@@ -180,12 +181,7 @@ const ProductDetailAction = ({
     <div className="flex flex-col gap-3">
       <div>
         {chosenClassification ? (
-          <PriceSection
-            currentPrice={discountedPrice}
-            deal={product?.productDiscounts?.[0]?.discount ?? 0}
-            price={chosenClassification ? (chosenClassification?.price ?? 0) : 0}
-            isHighlight={false}
-          />
+          <span className={`text-lg font-semibold`}>{t('productCard.currentPrice', { price: discountedPrice })}</span>
         ) : null}
       </div>
 
@@ -230,8 +226,14 @@ const ProductDetailAction = ({
           />
         </div>
 
-        {!chosenClassification && hasCustomType ? (
+        {!inStock && !chosenClassification && (product?.productClassifications ?? [])?.length > 0 ? (
+          <span className="text-red-500 text-sm">{t('cart.soldOutAllMessage')}</span>
+        ) : !chosenClassification && hasCustomType ? (
           <span className="text-yellow-500 text-sm">{t('cart.chooseClassification')}</span>
+        ) : chosenClassification && chosenClassification?.quantity <= 0 ? (
+          <span className="text-red-500 text-sm">{t('cart.soldOutMessage')}</span>
+        ) : chosenClassification && chosenClassification?.status !== StatusEnum.ACTIVE ? (
+          <span className="text-gray-500 text-sm">{t('cart.hiddenMessage')}</span>
         ) : null}
 
         {chosenClassification ? (
@@ -242,7 +244,14 @@ const ProductDetailAction = ({
         ) : null}
         <div className="space-y-2">
           <Button
-            disabled={!chosenClassification && hasCustomType}
+            disabled={
+              !inStock ||
+              (!chosenClassification && hasCustomType) ||
+              (chosenClassification &&
+                (chosenClassification?.quantity <= 0 || chosenClassification?.status !== StatusEnum.ACTIVE))
+                ? true
+                : false
+            }
             className="w-full bg-primary hover:bg-primary/80 text-white"
             onClick={() => handleCheckout()}
           >
@@ -252,7 +261,14 @@ const ProductDetailAction = ({
             variant="outline"
             className="w-full border-primary text-primary hover:text-primary hover:bg-primary/10"
             onClick={() => handleCreateCartItem()}
-            disabled={!chosenClassification && hasCustomType}
+            disabled={
+              !inStock ||
+              (!chosenClassification && hasCustomType) ||
+              (chosenClassification &&
+                (chosenClassification?.quantity <= 0 || chosenClassification?.status !== StatusEnum.ACTIVE))
+                ? true
+                : false
+            }
           >
             {t('productDetail.addToCart')}
           </Button>

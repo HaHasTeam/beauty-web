@@ -1,19 +1,24 @@
+import i18next from 'i18next'
 import { z } from 'zod'
 
-import { defaultRequiredRegex, phoneRegex } from '@/constants/regex'
+import { phoneRegex } from '@/constants/regex'
 import { AddressEnum } from '@/types/enum'
 
 const CreateAddressSchema = z.object({
-  fullName: z.string().regex(defaultRequiredRegex.pattern, defaultRequiredRegex.message),
+  fullName: z.string().min(1, i18next.t('validation.required')),
   account: z.string().optional(),
   phone: z.string().refine(phoneRegex.pattern, phoneRegex.message),
-  detailAddress: z.string().regex(defaultRequiredRegex.pattern, defaultRequiredRegex.message),
-  ward: z.string().regex(defaultRequiredRegex.pattern, defaultRequiredRegex.message),
-  district: z.string().regex(defaultRequiredRegex.pattern, defaultRequiredRegex.message),
-  province: z.string().regex(defaultRequiredRegex.pattern, defaultRequiredRegex.message),
+  detailAddress: z.string().min(1, i18next.t('validation.required')),
+  ward: z.string().min(1, i18next.t('validation.required')),
+  district: z.string().min(1, i18next.t('validation.required')),
+  province: z.string().min(1, i18next.t('validation.required')),
   fullAddress: z.string().optional(),
   notes: z.string().optional(),
   type: z.enum([AddressEnum?.HOME, AddressEnum?.OFFICE, AddressEnum.OTHER]).optional(),
+  isDefault: z.boolean().optional(),
+})
+
+export const UpdateDefaultAddressSchema = z.object({
   isDefault: z.boolean().optional(),
 })
 

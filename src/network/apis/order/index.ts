@@ -1,5 +1,14 @@
-import { ICreateOrder, ICreatePreOrder, IOrder, IOrderFilter, IOrderItem } from '@/types/order'
+import {
+  ICancelOrder,
+  ICancelRequestOrder,
+  ICreateOrder,
+  ICreatePreOrder,
+  IOrder,
+  IOrderFilter,
+  IOrderItem,
+} from '@/types/order'
 import { TServerResponse } from '@/types/request'
+import { IStatusTracking } from '@/types/status-tracking'
 import { toMutationFetcher, toQueryFetcher } from '@/utils/query'
 import { privateRequest } from '@/utils/request'
 
@@ -28,10 +37,29 @@ export const getMyOrdersApi = toMutationFetcher<IOrderFilter, TServerResponse<IO
     })
   },
 )
+export const getMyCancelRequestApi = toMutationFetcher<IOrderFilter, TServerResponse<ICancelRequestOrder[]>>(
+  'getMyCancelRequestApi',
+  async (data) => {
+    return privateRequest('/orders/get-my-cancel-requests', {
+      method: 'POST',
+      data,
+    })
+  },
+)
 
-export const getOrderByIdApi = toQueryFetcher<string, TServerResponse<IOrder>>('getOrderByIdApi', async (orderId) => {
-  return privateRequest(`/orders/get-by-id/${orderId}`)
-})
+export const getOrderByIdApi = toQueryFetcher<string, TServerResponse<IOrderItem>>(
+  'getOrderByIdApi',
+  async (orderId) => {
+    return privateRequest(`/orders/get-by-id/${orderId}`)
+  },
+)
+
+export const getStatusTrackingByIdApi = toQueryFetcher<string, TServerResponse<IStatusTracking[]>>(
+  'getStatusTrackingByIdApi',
+  async (orderId) => {
+    return privateRequest(`/orders/get-status-tracking/${orderId}`)
+  },
+)
 
 export const getAllOrderListApi = toQueryFetcher<void, TServerResponse<IOrder[]>>('getAllOrderListApi', async () => {
   return privateRequest('/orders', {
@@ -45,3 +73,13 @@ export const updateOrderApi = toMutationFetcher<IOrder, TServerResponse<IOrder>>
     data,
   })
 })
+
+export const cancelOrderApi = toMutationFetcher<ICancelOrder, TServerResponse<IOrder>>(
+  'cancelOrderApi',
+  async ({ orderId, reason }) => {
+    return privateRequest(`/orders/customer-cancel-order/${orderId}`, {
+      method: 'POST',
+      data: { reason },
+    })
+  },
+)

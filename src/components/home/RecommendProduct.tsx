@@ -7,6 +7,7 @@ import configs from '@/config'
 import { getAllProductApi } from '@/network/apis/product'
 import { buildOneWayResource } from '@/router'
 
+import LoadingIcon from '../loading-icon'
 import ProductCard from '../product/ProductCard'
 
 const RecommendProduct = () => {
@@ -158,7 +159,7 @@ const RecommendProduct = () => {
   //   },
   // ]
 
-  const { data: allProducts } = useQuery({
+  const { data: allProducts, isFetching } = useQuery({
     queryKey: [getAllProductApi.queryKey],
     queryFn: getAllProductApi.fn,
     select: (data) => data.data,
@@ -180,31 +181,38 @@ const RecommendProduct = () => {
           <ArrowRight className="w-4 h-4" />
         </Link>
       </div>
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-        {allProducts?.map((product) => {
-          const productImages = product?.images ?? [{ id: '1', image: 'path/to/image1.png' }]
-          const mockProduct = {
-            id: product.id,
-            name: product.name,
-            tag: 'Best Seller',
-            price: 20.09,
-            currentPrice: product.productClassifications[0].price,
-            images: productImages,
-            deal: 0.33,
-            flashSale: {
-              productAmount: 100,
-              soldAmount: 65,
-            },
-            description: product.description,
-            detail: product.detail,
-            rating: 4.5,
-            ratingAmount: 250,
-            soldInPastMonth: 300,
-            classifications: product.productClassifications,
-          }
-          return <ProductCard key={product?.id} product={mockProduct} />
-        })}
-      </div>
+      {isFetching && (
+        <div className="w-full flex justify-center items-center">
+          <LoadingIcon color="primaryBackground" />
+        </div>
+      )}
+      {!isFetching && allProducts && (
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+          {allProducts?.map((product) => {
+            const productImages = product?.images ?? [{ id: '1', image: 'path/to/image1.png' }]
+            const mockProduct = {
+              id: product.id,
+              name: product.name,
+              tag: 'Best Seller',
+              price: 20.09,
+              currentPrice: product.productClassifications[0].price,
+              images: productImages,
+              deal: 0.33,
+              flashSale: {
+                productAmount: 100,
+                soldAmount: 65,
+              },
+              description: product.description,
+              detail: product.detail,
+              rating: 4.5,
+              ratingAmount: 250,
+              soldInPastMonth: 300,
+              classifications: product.productClassifications,
+            }
+            return <ProductCard key={product?.id} product={mockProduct} />
+          })}
+        </div>
+      )}
       <div className="flex justify-center mt-4">
         <Link
           to={configs.routes.recommendProducts}

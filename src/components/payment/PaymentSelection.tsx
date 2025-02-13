@@ -5,7 +5,7 @@ import { z } from 'zod'
 
 import Label from '@/components/form-label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import CreateOrderSchema from '@/schemas/order.schema'
+import { CreateOrderSchema } from '@/schemas/order.schema'
 import { PaymentMethod } from '@/types/enum'
 
 import { FormControl, FormField, FormItem, FormMessage } from '../ui/form'
@@ -21,13 +21,13 @@ export default function PaymentSelection({ form, hasPreOrderProduct }: PaymentSe
     ? [
         {
           id: PaymentMethod.WALLET,
-          label: `${t('wallet.title')}`,
+          label: `${t('wallet.WALLET')}`,
           icon: <WalletMinimal className="text-primary" />,
           isAddMore: false,
         },
         {
           id: PaymentMethod.CARD,
-          label: `${t('wallet.ATM')}`,
+          label: `${t('wallet.CARD')}`,
           icon: <CreditCard className="text-primary" />,
           isAddMore: true,
         },
@@ -35,19 +35,19 @@ export default function PaymentSelection({ form, hasPreOrderProduct }: PaymentSe
     : [
         {
           id: PaymentMethod.CASH,
-          label: `${t('wallet.COD')}`,
+          label: `${t('wallet.CASH')}`,
           icon: <HandCoins className="text-primary" />,
           isAddMore: false,
         },
         {
           id: PaymentMethod.WALLET,
-          label: `${t('wallet.title')}`,
+          label: `${t('wallet.WALLET')}`,
           icon: <WalletMinimal className="text-primary" />,
           isAddMore: false,
         },
         {
           id: PaymentMethod.CARD,
-          label: `${t('wallet.ATM')}`,
+          label: `${t('wallet.CARD')}`,
           icon: <CreditCard className="text-primary" />,
           isAddMore: true,
         },

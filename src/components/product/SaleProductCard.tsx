@@ -6,12 +6,11 @@ import { Link } from 'react-router-dom'
 import productImage from '@/assets/images/product_sample_img.png'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import configs from '@/config'
-import { OrderEnum } from '@/types/enum'
+import { DiscountTypeEnum, OrderEnum } from '@/types/enum'
 import { TFlashSale } from '@/types/flash-sale'
 import { calculateDiscountPrice } from '@/utils/price'
 import { getCheapestClassification } from '@/utils/product'
 
-import { DiscountTypeEnum } from '../../../../../projcetNodeJs/Allure/src/utils/enum'
 import ProductTag from './ProductTag'
 import SoldProgress from './SoldProgress'
 
@@ -29,7 +28,6 @@ export default function SaleProductCard({ product }: ProductCardProps) {
       <Card>
         <CardContent className="p-0 relative">
           <div className="absolute top-3 left-3 z-10">
-            {' '}
             <ProductTag tag={OrderEnum.FLASH_SALE} />
           </div>
           <button className="absolute top-3 right-3 z-10 bg-gray-300 bg-opacity-30 rounded-full p-2 flex items-center justify-center hover:opacity-70">
@@ -44,9 +42,9 @@ export default function SaleProductCard({ product }: ProductCardProps) {
             />
           </div>
         </CardContent>
-        <CardFooter className="flex flex-col gap-3 p-4">
-          <div className="flex justify-between items-center w-full">
-            <div className="flex items-baseline gap-2">
+        <CardFooter className="flex flex-col gap-3 sm:p-4 px-2 py-4">
+          <div className="flex sm:flex-row flex-col sm:justify-between sm:items-center items-end w-full">
+            <div className="sm:order-1 order-2 flex items-baseline gap-2">
               <span className="text-xl font-semibold">
                 {t('productCard.currentPrice', {
                   price: calculateDiscountPrice(
@@ -65,7 +63,9 @@ export default function SaleProductCard({ product }: ProductCardProps) {
               )}
             </div>
             {product?.discount && product?.discount > 0 && (
-              <ProductTag tag="DealPercent" text={`-${(product.discount * 100).toFixed(0)}%`} />
+              <div className="sm:order-2 order-1">
+                <ProductTag tag="DealPercent" text={`-${(product.discount * 100).toFixed(0)}%`} />
+              </div>
             )}
           </div>
           <div className="w-full space-y-1.5">

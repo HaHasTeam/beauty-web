@@ -187,14 +187,19 @@ const ProductDetailInformation = ({
         ) : null}
 
         {/* price */}
-        <PriceSection
-          currentPrice={discountedPrice}
-          deal={product?.productDiscounts?.[0]?.discount ?? 0}
-          price={chosenClassification ? (chosenClassification?.price ?? 0) : (cheapestClassification?.price ?? 0)}
-          minOrder={0}
-          discountValue={0}
-          discountType={DiscountTypeEnum.PERCENTAGE}
-        />
+        {(product?.productClassifications ?? [])?.length === 0 ? (
+          <></>
+        ) : (
+          <PriceSection
+            currentPrice={discountedPrice}
+            deal={product?.productDiscounts?.[0]?.discount ?? 0}
+            price={chosenClassification ? (chosenClassification?.price ?? 0) : (cheapestClassification?.price ?? 0)}
+            minOrder={0}
+            discountValue={0}
+            discountType={DiscountTypeEnum.PERCENTAGE}
+          />
+        )}
+
         {/* brand deals */}
         <div className="flex gap-2">
           <span className="text-gray-600">{t('productDetail.brandDeal')}</span>

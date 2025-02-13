@@ -15,7 +15,11 @@ import useCartStore from '@/store/cart'
 import { ICartByBrand } from '@/types/cart'
 import { IBrandBestVoucher, ICheckoutItem, IPlatformBestVoucher, TVoucher } from '@/types/voucher'
 import { createCheckoutItem, createCheckoutItems } from '@/utils/cart'
-import { calculateCartTotals, calculatePlatformVoucherDiscount, calculateTotalVoucherDiscount } from '@/utils/price'
+import {
+  calculateCartTotals,
+  calculatePlatformVoucherDiscount,
+  calculateTotalBrandVoucherDiscount,
+} from '@/utils/price'
 
 const Cart = () => {
   const { t } = useTranslation()
@@ -45,13 +49,15 @@ const Cart = () => {
 
   // Calculate total voucher discount
   const totalVoucherDiscount = useMemo(() => {
-    return calculateTotalVoucherDiscount(chosenVouchersByBrand)
-  }, [chosenVouchersByBrand])
+    return calculateTotalBrandVoucherDiscount(cartItems, selectedCartItems, chosenVouchersByBrand)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cartItems, chosenVouchersByBrand, selectedCartItems, isTriggerTotal])
 
   // Calculate platform voucher discount
   const platformVoucherDiscount = useMemo(() => {
-    return calculatePlatformVoucherDiscount(platformChosenVoucher)
-  }, [platformChosenVoucher])
+    return calculatePlatformVoucherDiscount(cartItems, selectedCartItems, platformChosenVoucher)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cartItems, selectedCartItems, isTriggerTotal, platformChosenVoucher])
 
   // Total saved price (product discounts + brand vouchers + platform voucher)
   const savedPrice = totalDirectProductsDiscount + totalVoucherDiscount + platformVoucherDiscount
@@ -242,6 +248,7 @@ const Cart = () => {
                     checkoutItems={checkoutItems}
                     selectedCheckoutItems={selectedCheckoutItems}
                     setIsTriggerTotal={setIsTriggerTotal}
+                    isTriggerTotal={isTriggerTotal}
                   />
                 )
               })}

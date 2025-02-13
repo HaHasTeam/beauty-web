@@ -12,20 +12,23 @@ import UpdateAddressDialog from './UpdateAddressDialog'
 interface AddressItemProps {
   address: IAddress
   selectedAddressId?: string
+  isShowRadioItem?: boolean
 }
-const AddressItem = ({ address, selectedAddressId }: AddressItemProps) => {
+const AddressItem = ({ address, selectedAddressId, isShowRadioItem = true }: AddressItemProps) => {
   const { t } = useTranslation()
   return (
     <div className="w-full shadow-lg border border-gray-300 rounded-lg">
       <div className="p-2 sm:p-4 flex gap-2">
-        <div className="h-8 flex items-center py-2">
-          <RadioGroupItem
-            className="h-4"
-            value={address?.id ?? ''}
-            id={address?.id ?? ''}
-            checked={address?.id === selectedAddressId}
-          />
-        </div>
+        {isShowRadioItem ? (
+          <div className="h-8 flex items-center py-2">
+            <RadioGroupItem
+              className="h-4"
+              value={address?.id ?? ''}
+              id={address?.id ?? ''}
+              checked={address?.id === selectedAddressId}
+            />
+          </div>
+        ) : null}
         <div className="w-full flex flex-col gap-3">
           <div className="w-full flex flex-col gap-2">
             <div className="w-full flex items-center justify-between">

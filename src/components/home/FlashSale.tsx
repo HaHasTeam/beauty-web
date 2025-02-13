@@ -6,148 +6,18 @@ import { Link } from 'react-router-dom'
 import configs from '@/config'
 import { getFlashSaleProductFilterApi } from '@/network/apis/flash-sale'
 
+import LoadingIcon from '../loading-icon'
 import SaleProductCard from '../product/SaleProductCard'
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '../ui/carousel'
 
 const FlashSale = () => {
   const { t } = useTranslation()
-  const { data: flashSaleProductData } = useQuery({
+  const { data: flashSaleProductData, isFetching } = useQuery({
     queryKey: [getFlashSaleProductFilterApi.queryKey, { page: 1, limit: 10 }],
     queryFn: getFlashSaleProductFilterApi.fn,
     select: (data) => data.data,
   })
   console.log('flashSaleProductData', flashSaleProductData)
-
-  // const flashSaleProducts: IProductCard[] = [
-  //   {
-  //     id: '1',
-  //     name: 'Cherry Blossom Serum',
-  //     tag: 'Best Seller',
-  //     price: 29.99,
-  //     currentPrice: 20.09, // Calculated with deal
-  //     deal: 0.33,
-  //     flashSale: {
-  //       productAmount: 200,
-  //       soldAmount: 65,
-  //     },
-  //     images: [],
-  //     rating: 0,
-  //     ratingAmount: 0,
-  //     soldInPastMonth: 0,
-  //   },
-  //   {
-  //     id: '2',
-  //     name: 'Aloe Vera Moisturizer',
-  //     tag: 'Limited Edition',
-  //     price: 34.99,
-  //     currentPrice: 24.84, // Calculated with deal
-  //     deal: 0.29,
-  //     flashSale: {
-  //       productAmount: 190,
-  //       soldAmount: 120,
-  //     },
-  //     rating: 0,
-  //     ratingAmount: 0,
-  //     soldInPastMonth: 0,
-  //     images: [],
-  //   },
-  //   {
-  //     id: '3',
-  //     name: 'Vitamin C Brightening Serum',
-  //     tag: 'New Arrival',
-  //     price: 19.99,
-  //     currentPrice: 14.99, // Calculated with deal
-  //     deal: 0.25,
-  //     flashSale: {
-  //       productAmount: 190,
-  //       soldAmount: 80,
-  //     },
-  //     images: [],
-  //     rating: 0,
-  //     ratingAmount: 0,
-  //     soldInPastMonth: 0,
-  //   },
-  //   {
-  //     id: '4',
-  //     name: 'Hydrating Face Mist',
-  //     tag: 'Hot Deal',
-  //     price: 15.99,
-  //     currentPrice: 12.79, // Calculated with deal
-  //     deal: 0.2,
-  //     flashSale: {
-  //       productAmount: 190,
-  //       soldAmount: 50,
-  //     },
-  //     images: [],
-  //     rating: 0,
-  //     ratingAmount: 0,
-  //     soldInPastMonth: 0,
-  //   },
-  //   {
-  //     id: '5',
-  //     name: 'Green Tea Cleanser',
-  //     tag: 'Flash Sale',
-  //     price: 12.99,
-  //     currentPrice: 10.0, // Calculated with deal
-  //     deal: 0.23,
-  //     flashSale: {
-  //       productAmount: 80,
-  //       soldAmount: 30,
-  //     },
-  //     images: [],
-  //     rating: 0,
-  //     ratingAmount: 0,
-  //     soldInPastMonth: 0,
-  //   },
-  //   {
-  //     id: '6',
-  //     name: 'Green Tea Cleanser',
-  //     tag: 'Flash Sale',
-  //     price: 12.99,
-  //     currentPrice: 10.0, // Calculated with deal
-  //     deal: 0.23,
-  //     flashSale: {
-  //       productAmount: 70,
-  //       soldAmount: 30,
-  //     },
-  //     images: [],
-  //     rating: 0,
-  //     ratingAmount: 0,
-  //     soldInPastMonth: 0,
-  //   },
-  //   {
-  //     id: '7',
-  //     name: 'Green Tea Cleanser',
-  //     tag: 'Flash Sale',
-  //     price: 12.99,
-  //     currentPrice: 10.0, // Calculated with deal
-  //     deal: 0.23,
-  //     flashSale: {
-  //       productAmount: 200,
-  //       soldAmount: 30,
-  //     },
-  //     images: [],
-  //     rating: 0,
-  //     ratingAmount: 0,
-  //     soldInPastMonth: 0,
-  //   },
-  //   {
-  //     id: '8',
-  //     name: 'Green Tea Cleanser',
-  //     tag: '', // No specific tag
-  //     price: 12.99,
-  //     currentPrice: 10.0, // Calculated with deal
-  //     deal: 0.23,
-  //     flashSale: {
-  //       productAmount: 100,
-  //       soldAmount: 30,
-  //     },
-  //     images: [],
-  //     rating: 0,
-  //     ratingAmount: 0,
-  //     soldInPastMonth: 0,
-  //   },
-  // ]
 
   // const [time, setTime] = useState({
   //   hours: 1,
@@ -211,25 +81,32 @@ const FlashSale = () => {
           <ArrowRight className="w-4 h-4" />
         </Link>
       </div>
-      <div className="relative">
-        <Carousel className="w-full">
-          <CarouselContent className="w-full m-0">
-            {flashSaleProductData?.items.map((product) => (
-              <CarouselItem key={product?.id} className="pl-1 basis-1/3 sm:basis-1/3 lg:basis-1/5">
-                <div className="p-1">
-                  <SaleProductCard product={product} />
-                </div>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <div className="absolute left-16 top-2/4">
-            <CarouselPrevious />
-          </div>
-          <div className="absolute right-16 top-2/4">
-            <CarouselNext />
-          </div>
-        </Carousel>
-      </div>
+      {!isFetching && flashSaleProductData && (
+        <div className="relative">
+          <Carousel className="w-full">
+            <CarouselContent className="w-full m-0">
+              {flashSaleProductData?.items.map((product) => (
+                <CarouselItem key={product?.id} className="pl-1 basis-1/2 sm:basis-1/3 lg:basis-1/5">
+                  <div className="p-1">
+                    <SaleProductCard product={product} />
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <div className="absolute left-16 top-2/4">
+              <CarouselPrevious />
+            </div>
+            <div className="absolute right-16 top-2/4">
+              <CarouselNext />
+            </div>
+          </Carousel>
+        </div>
+      )}
+      {isFetching && (
+        <div className="w-full flex justify-center items-center">
+          <LoadingIcon color="primaryBackground" />
+        </div>
+      )}
     </div>
   )
 }

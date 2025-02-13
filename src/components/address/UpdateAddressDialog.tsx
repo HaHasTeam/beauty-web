@@ -41,7 +41,10 @@ const UpdateAddressDialog = ({ address, triggerComponent }: UpdateAddressDialogP
     province: address?.province ?? '',
     fullAddress: address?.fullAddress ?? '',
     type: address?.type ?? AddressEnum?.HOME,
+    notes: address?.notes ?? '',
+    isDefault: address?.isDefault ?? false,
   }
+  console.log(defaultValues)
 
   const form = useForm<z.infer<typeof CreateAddressSchema>>({
     resolver: zodResolver(CreateAddressSchema),
@@ -109,7 +112,7 @@ const UpdateAddressDialog = ({ address, triggerComponent }: UpdateAddressDialogP
               <div>
                 {/* Form Address */}
                 <ScrollArea className="h-72">
-                  <FormAddressContent form={form} />
+                  <FormAddressContent form={form} initialAddress={defaultValues} />
                 </ScrollArea>
               </div>
               <DialogFooter>
