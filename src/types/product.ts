@@ -102,6 +102,7 @@ export type IResponseProduct = {
   sku?: string
   menu?: string
   updatedAt: string
+  certificate: string
 }
 
 export type IProductTable = {
@@ -159,6 +160,7 @@ export type IProduct = {
   productDiscounts?: IProductDiscount[] | null // use for cart
   preOrderProducts?: IPreOrder[] | null // use for cart
   category?: ICategory // use for product details
+  certificate: string
 }
 
 export type IProductCart = {
@@ -188,6 +190,7 @@ export type IProductCard = {
   ratingAmount: number
   soldInPastMonth: number
   classifications?: IServerProductClassification[]
+  certificate: string
 }
 
 // components interface ends

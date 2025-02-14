@@ -8,6 +8,7 @@ import { calculateDiscountPrice } from '@/utils/price'
 
 import { Button } from '../ui/button'
 import PriceSection from './PriceSection'
+import ProductCertificate from './ProductCertificate'
 import ProductDetailInfoSection from './ProductDetailInfoSection'
 import ProductStar from './ProductStar'
 import ProductTag from './ProductTag'
@@ -211,6 +212,8 @@ const ProductDetailInformation = ({
         {hasCustomType && allOptions.size.length > 0 && renderOptions('size', allOptions.size)}
         {hasCustomType && allOptions.other.length > 0 && renderOptions('other', allOptions.other)}
       </div>
+      {/* certificate */}
+      {product.certificate && <ProductCertificate certificateUrl={product.certificate} />}
       {/* detail */}
       <div className="w-full py-4 px-3 bg-white rounded-lg">
         <h3 className="font-semibold mb-3 text-lg">{t('productDetail.detailTitle')}</h3>
