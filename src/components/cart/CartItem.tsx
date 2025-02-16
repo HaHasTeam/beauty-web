@@ -7,7 +7,7 @@ import configs from '@/config'
 import { IBrand } from '@/types/brand'
 import { ICartItem } from '@/types/cart'
 import { IClassification } from '@/types/classification'
-import { DiscountTypeEnum, OrderEnum, ProductDiscountEnum } from '@/types/enum'
+import { ClassificationTypeEnum, DiscountTypeEnum, OrderEnum, ProductDiscountEnum, StatusEnum } from '@/types/enum'
 import { PreOrderProductEnum } from '@/types/pre-order'
 import { IBrandBestVoucher, ICheckoutItem, TVoucher } from '@/types/voucher'
 import { calculateBrandVoucherDiscount } from '@/utils/price'
@@ -109,7 +109,11 @@ const CartItem = ({
           productClassification?.product?.productClassifications ??
           []
         const productClassificationQuantity = cartItem?.productClassification?.quantity ?? 0
-        const productImage = cartItem?.productClassification?.images?.[0]?.fileUrl ?? ''
+        // const productImage = cartItem?.productClassification?.images?.[0]?.fileUrl ?? ''
+        const productImage =
+          (cartItem?.productClassification?.type === ClassificationTypeEnum.DEFAULT
+            ? product?.images?.filter((img) => img?.status === StatusEnum.ACTIVE)[0]?.fileUrl
+            : cartItem?.productClassification?.images?.[0]?.fileUrl) ?? ''
         const productName = product?.name ?? ''
         const productId = product?.id ?? ''
         const productPrice = cartItem?.productClassification?.price ?? 0

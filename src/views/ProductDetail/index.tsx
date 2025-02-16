@@ -45,11 +45,16 @@ const ProductDetail = () => {
   )
 
   const productClassifications = useMemo(() => {
-    return event === OrderEnum.FLASH_SALE
-      ? useProductData?.data?.productDiscounts?.[0]?.productClassifications
-      : event === OrderEnum.PRE_ORDER
-        ? useProductData?.data?.preOrderProducts?.[0]?.productClassifications
-        : useProductData?.data?.productClassifications
+    if (!useProductData?.data) return []
+
+    switch (event) {
+      case OrderEnum.FLASH_SALE:
+        return useProductData.data.productDiscounts?.[0]?.productClassifications
+      case OrderEnum.PRE_ORDER:
+        return useProductData.data.preOrderProducts?.[0]?.productClassifications
+      default:
+        return useProductData.data.productClassifications
+    }
   }, [event, useProductData?.data])
 
   const cheapestClassification = useMemo(
@@ -194,7 +199,7 @@ const ProductDetail = () => {
             <div className="flex gap-2 w-full">
               {/* product image carousel */}
               <div className="shadow-sm p-3 bg-white rounded-lg w-[calc(30%-8px)] sticky top-0 max-h-fit">
-                <ProductCarousel product={useProductData?.data} />
+                <ProductCarousel product={useProductData?.data} activeClassification={chosenClassification} />
               </div>
 
               {/* product detail information */}

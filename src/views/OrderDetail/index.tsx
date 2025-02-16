@@ -44,11 +44,9 @@ const OrderDetail = () => {
   })
 
   useEffect(() => {
-    if (isTrigger) {
-      queryClient.invalidateQueries({
-        queryKey: [getOrderByIdApi.queryKey],
-      })
-    }
+    queryClient.invalidateQueries({
+      queryKey: [getOrderByIdApi.queryKey],
+    })
   }, [isTrigger, queryClient])
 
   const { mutateAsync: getMyCancelRequestOrderFn } = useMutation({

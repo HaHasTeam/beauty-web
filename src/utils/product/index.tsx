@@ -163,7 +163,7 @@ export const parseClassifications = (
 }
 
 export function hasPreOrderProduct(products: ICartItem[]): boolean {
-  return products.some((product) => product.productClassification?.preOrderProduct !== undefined)
+  return products.some((product) => product.productClassification?.preOrderProduct != null)
 }
 
 export function flattenObject(data: ICartByBrand | null): ICartItem[] {
