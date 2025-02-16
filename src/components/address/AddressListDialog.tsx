@@ -57,7 +57,7 @@ export default function AddressListDialog({
       <DialogTrigger asChild>{triggerComponent}</DialogTrigger>
       <DialogContent className="max-w-md sm:max-w-xl lg:max-w-3xl">
         <DialogHeader>
-          <div className="flex justify-between items-center px-3">
+          <div className="flex justify-between items-center px-3 z-20">
             <DialogTitle>{t('address.chooseAddress')}</DialogTitle>
             <AddAddressDialog
               triggerComponent={
@@ -72,7 +72,7 @@ export default function AddressListDialog({
           </div>
         </DialogHeader>
 
-        <div className="space-y-4">
+        <div className="space-y-4 z-10">
           {/* Address List */}
           {addresses && addresses?.length > 0 ? (
             <ScrollArea className="h-72 w-full">

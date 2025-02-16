@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
 import { z } from 'zod'
@@ -17,10 +17,12 @@ import useHandleServerError from '@/hooks/useHandleServerError'
 import { useToast } from '@/hooks/useToast'
 import { formRegisterSchema } from '@/lib/schema'
 import { cn } from '@/lib/utils'
+import { getRoleIdByEnum } from '@/network/apis/role'
 import { createUserApi } from '@/network/apis/user'
 
 import Button from '../button'
 import { Icons } from '../Icons'
+import LoadingLayer from '../loading-icon/LoadingLayer'
 
 export default function SignUp() {
   // const [isSubmitting, setIsSubmitting] = useState(false)
@@ -28,6 +30,11 @@ export default function SignUp() {
 
   const navigate = useNavigate()
   const { successToast } = useToast()
+  const { isLoading: isGettingRolesIdByEnum, data: getRoleIdByEnumData } = useQuery({
+    queryKey: [getRoleIdByEnum.queryKey],
+    queryFn: getRoleIdByEnum.fn,
+  })
+
   const form = useForm<z.infer<typeof formRegisterSchema>>({
     resolver: zodResolver(formRegisterSchema),
     defaultValues: {
@@ -57,7 +64,7 @@ export default function SignUp() {
     try {
       const formateData = {
         ...values,
-        role: 'e016d06f-126e-4e67-8f6a-dfc63d25361c',
+        role: getRoleIdByEnumData?.CUSTOMER.id || '',
         username: values.firstName + ' ' + values.lastName,
       }
       await createUserFn(formateData)
@@ -71,6 +78,8 @@ export default function SignUp() {
 
   return (
     <div className="my-8 ">
+      {isGettingRolesIdByEnum && <LoadingLayer />}
+
       <p className="text-[32px] font-bold text-primary dark:text-white text-center">Sign Up</p>
       <p className="mb-2.5 mt-2.5 font-normal text-zinc-950 dark:text-zinc-400 text-center">Enter your information</p>
       <Form {...form}>

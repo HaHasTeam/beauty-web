@@ -21,7 +21,7 @@ export type TUser = TMetaData & {
   username: string
   email: string
   password: string
-  role: UserRoleEnum | string
+  role: TRoleResponse
   gender?: UserGenderEnum | string
   phone?: string
   dob?: string
