@@ -1,5 +1,3 @@
-import { RoleEnum } from './enum'
-
 export enum UserRoleEnum {
   CUSTOMER = 'CUSTOMER',
   MANAGER = 'MANAGER',
@@ -18,6 +16,6 @@ export enum RoleStatusEnum {
 }
 export type TRoleResponse = {
   id: string
-  role: RoleEnum
+  role: UserRoleEnum
   status: RoleStatusEnum
 }

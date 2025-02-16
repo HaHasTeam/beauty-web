@@ -85,8 +85,8 @@ export enum ShippingStatusEnum {
   TO_PAY = 'TO_PAY', // Chờ thanh toán
   WAIT_FOR_CONFIRMATION = 'WAIT_FOR_CONFIRMATION', // Chờ xác nhận đơn hàng
   PREPARING_ORDER = 'PREPARING_ORDER', // Chuẩn bị đơn hàng
-  TO_SHIP = 'TO_SHIP', // Lấy hàng
-  TO_RECEIVED = 'TO_RECEIVED', // Đang vận chuyển
+  TO_SHIP = 'TO_SHIP', // Lấy hàng/Sẵn sàng để giao
+  SHIPPING = 'SHIPPING', // Đang vận chuyển
   DELIVERED = 'DELIVERED', // Đã nhận hàng
   COMPLETED = 'COMPLETED', // Hoàn thành
   RETURNING = 'RETURNING', // Đang trả hàng
