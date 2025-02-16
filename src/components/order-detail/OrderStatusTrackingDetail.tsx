@@ -30,7 +30,7 @@ const OrderStatusTrackingDetail = ({ statusTrackingData }: OrderStatusTrackingDe
     icon: StatusTrackingIcon(tracking.status),
     reason: tracking.reason,
     updatedBy: t(
-      `role.${tracking.updatedBy.role === RoleEnum.MANAGER || tracking.updatedBy.role === RoleEnum.STAFF ? 'BRAND' : tracking.updatedBy.role}`,
+      `role.${tracking.updatedBy.role.role === RoleEnum.MANAGER || tracking.updatedBy.role.role === RoleEnum.STAFF ? 'BRAND' : tracking.updatedBy.role.role}`,
     ),
   }))
 

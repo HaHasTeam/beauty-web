@@ -1,6 +1,6 @@
 import { IBrand } from './brand'
 import { TMetaData } from './request'
-import { UserRoleEnum } from './role'
+import { TRoleResponse, UserRoleEnum } from './role'
 
 export enum UserGenderEnum {
   MALE = 'MALE',
@@ -21,7 +21,7 @@ export type TUser = TMetaData & {
   username: string
   email: string
   password: string
-  role: UserRoleEnum | string
+  role: TRoleResponse
   gender?: UserGenderEnum | string
   phone?: string
   dob?: string
