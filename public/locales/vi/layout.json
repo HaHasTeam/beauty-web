@@ -259,7 +259,12 @@
     "originalPrice": "Giá gốc",
     "Color": "Màu sắc",
     "Size": "Kích cỡ",
-    "Other": "Khác"
+    "Other": "Khác",
+    "viewing": "Đang xem",
+    "view": "Xem",
+    "images": "Hình Ảnh",
+    "viewProductImages": "Xem Hình Ảnh Sản Phẩm",
+    "viewClassificationImages": "Xem Hình Ảnh Của Phân Loại"
   },
   "event": {
     "finishIn": "Kết thúc trong"

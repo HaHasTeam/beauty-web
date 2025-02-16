@@ -259,7 +259,12 @@
     "originalPrice": "Original Price",
     "Color": "Color",
     "Size": "Size",
-    "Other": "Other"
+    "Other": "Other",
+    "viewing": "Viewing",
+    "view": "View",
+    "images": "Images",
+    "viewProductImages": "View Product Images",
+    "viewClassificationImages": "View Classification Images"
   },
   "event": {
     "finishIn": "Finish In"

@@ -1,5 +1,8 @@
-import { Download, FileText } from 'lucide-react'
+import { Download, Eye, FileText } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+
+import docFile from '@/assets/images/docFile.png'
+import pdfFile from '@/assets/images/pdfFile.png'
 
 const ProductCertificate = ({ certificateUrl }: { certificateUrl: string }) => {
   const { t } = useTranslation()
@@ -11,6 +14,7 @@ const ProductCertificate = ({ certificateUrl }: { certificateUrl: string }) => {
   const fileExtension = filename.split('.').pop()?.toLowerCase() || ''
 
   const isPDF = fileExtension === 'pdf'
+  const isDoc = fileExtension === 'doc'
   const isImage = ['jpg', 'jpeg', 'png', 'gif'].includes(fileExtension)
 
   const handleDownload = async () => {
@@ -31,10 +35,10 @@ const ProductCertificate = ({ certificateUrl }: { certificateUrl: string }) => {
   }
 
   return (
-    <div className="mt-6">
-      <h3 className="text-lg font-semibold mb-3">{t('createProduct.certificate')}</h3>
+    <div className="w-full py-4 px-3 bg-white rounded-lg">
+      <h3 className="font-semibold mb-3 text-lg">{t('createProduct.certificate')}</h3>
 
-      <div className="border rounded-lg p-4">
+      <div>
         {isImage ? (
           // Image preview
           <div className="space-y-3">
@@ -44,12 +48,17 @@ const ProductCertificate = ({ certificateUrl }: { certificateUrl: string }) => {
               <span>{t('createProduct.downloadCertificate')}</span>
             </button>
           </div>
-        ) : isPDF ? (
+        ) : isPDF || isDoc ? (
           // PDF preview with option to view or download
-          <div className="space-y-4">
-            <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-              <FileText size={24} className="text-red-500" />
-              <span className="flex-1 truncate">{filename}</span>
+          <div className="space-y-3">
+            <div className="cursor-default border border-gray-300 p-2 bg-card flex items-center gap-3 rounded-lg">
+              {isPDF ? (
+                <img src={pdfFile} alt="pdf" className="w-10 h-10" />
+              ) : (
+                <img src={docFile} alt="doc" className="w-10 h-10" />
+              )}
+
+              <span className="flex-1 truncate cursor-default">{filename}</span>
             </div>
 
             <div className="flex gap-4">
@@ -59,8 +68,8 @@ const ProductCertificate = ({ certificateUrl }: { certificateUrl: string }) => {
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 text-primary hover:text-primary/80"
               >
-                <FileText size={20} />
-                <span>{t('createProduct.downloadCertificate')}</span>
+                <Eye size={20} />
+                <span>{t('createProduct.viewCertificate')}</span>
               </a>
 
               <button onClick={handleDownload} className="flex items-center gap-2 text-primary hover:text-primary/80">
