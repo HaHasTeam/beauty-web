@@ -77,9 +77,9 @@ export const StatusTrackingText = (status: string) => {
     case ShippingStatusEnum.CANCELLED:
       return t('order.cancelled')
     case CancelOrderRequestStatusEnum.APPROVED:
-      return t('order.approvedCancelRequest')
+      return t('order.cancelled')
     case CancelOrderRequestStatusEnum.REJECTED:
-      return t('order.rejectedCancelRequest')
+      return t('order.rejectedCancelRequestTitle')
     default:
       return t('order.created')
   }

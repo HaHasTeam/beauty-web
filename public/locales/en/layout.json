@@ -560,7 +560,7 @@
     "cancelOrder": "Cancel order",
     "requestCancelOrder": "Request cancel order",
     "cancelOrderDescription": "Clicking \"Confirm\" button means canceling all items in the order, and this action cannot be undone. Promotional codes (if any) can still be applied to other orders after canceling this one.",
-    "requestCancelOrderDescription": "Clicking \"Confirm\" button means submitting a request to cancel all items in this order. Since the order is being prepared, this request will need to be reviewed before cancellation. This action cannot be undone. Promotional codes (if any) can still be applied to other orders after canceling this one.",
+    "requestCancelOrderDescription": "Since the order is being prepared, this request will need to be reviewed before cancellation. Clicking \"Confirm\" button means submitting a request to cancel all items in this order. This action cannot be undone. Promotional codes (if any) can still be applied to other orders after canceling this one.",
     "cancelOrderReason": {
       "changeOfMind": "Changed my mind",
       "foundCheaper": "Found a cheaper option",
