@@ -44,9 +44,9 @@ const OrderStatusTracking = ({ statusTrackingData }: OrderStatusTrackingProps) =
             createdAt: '',
           },
           {
-            status: ShippingStatusEnum.TO_RECEIVED,
-            text: StatusTrackingText(ShippingStatusEnum.TO_RECEIVED),
-            icon: StatusTrackingIcon(ShippingStatusEnum.TO_RECEIVED),
+            status: ShippingStatusEnum.SHIPPING,
+            text: StatusTrackingText(ShippingStatusEnum.SHIPPING),
+            icon: StatusTrackingIcon(ShippingStatusEnum.SHIPPING),
             createdAt: '',
           },
           {
@@ -65,9 +65,9 @@ const OrderStatusTracking = ({ statusTrackingData }: OrderStatusTrackingProps) =
               createdAt: '',
             },
             {
-              status: ShippingStatusEnum.TO_RECEIVED,
-              text: StatusTrackingText(ShippingStatusEnum.TO_RECEIVED),
-              icon: StatusTrackingIcon(ShippingStatusEnum.TO_RECEIVED),
+              status: ShippingStatusEnum.SHIPPING,
+              text: StatusTrackingText(ShippingStatusEnum.SHIPPING),
+              icon: StatusTrackingIcon(ShippingStatusEnum.SHIPPING),
               createdAt: '',
             },
             {
@@ -80,9 +80,9 @@ const OrderStatusTracking = ({ statusTrackingData }: OrderStatusTrackingProps) =
         : statusTrackingData[statusTrackingData.length - 1]?.status === ShippingStatusEnum.TO_SHIP
           ? [
               {
-                status: ShippingStatusEnum.TO_RECEIVED,
-                text: StatusTrackingText(ShippingStatusEnum.TO_RECEIVED),
-                icon: StatusTrackingIcon(ShippingStatusEnum.TO_RECEIVED),
+                status: ShippingStatusEnum.SHIPPING,
+                text: StatusTrackingText(ShippingStatusEnum.SHIPPING),
+                icon: StatusTrackingIcon(ShippingStatusEnum.SHIPPING),
                 createdAt: '',
               },
               {
@@ -92,7 +92,7 @@ const OrderStatusTracking = ({ statusTrackingData }: OrderStatusTrackingProps) =
                 createdAt: '',
               },
             ]
-          : statusTrackingData[statusTrackingData.length - 1]?.status === ShippingStatusEnum.TO_RECEIVED
+          : statusTrackingData[statusTrackingData.length - 1]?.status === ShippingStatusEnum.SHIPPING
             ? [
                 {
                   status: ShippingStatusEnum.COMPLETED,

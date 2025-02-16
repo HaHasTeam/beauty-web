@@ -24,7 +24,7 @@ export default function ProfileOrder() {
     { value: ShippingStatusEnum?.TO_PAY, text: `${t('order.pending')}` },
     { value: ShippingStatusEnum?.WAIT_FOR_CONFIRMATION, text: `${t('order.waitConfirm')}` },
     { value: ShippingStatusEnum?.TO_SHIP, text: `${t('order.shipping')}` },
-    { value: ShippingStatusEnum?.TO_RECEIVED, text: `${t('order.delivering')}` },
+    { value: ShippingStatusEnum?.SHIPPING, text: `${t('order.delivering')}` },
     { value: ShippingStatusEnum?.COMPLETED, text: `${t('order.completed')}` },
     { value: ShippingStatusEnum?.CANCELLED, text: `${t('order.cancelled')}` },
     { value: ShippingStatusEnum?.REFUNDED, text: `${t('order.return')}` },

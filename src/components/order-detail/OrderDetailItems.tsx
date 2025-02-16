@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 
-import { ShippingStatusEnum } from '@/types/enum'
+import { ClassificationTypeEnum, ShippingStatusEnum, StatusEnum } from '@/types/enum'
 import { IOrderDetail } from '@/types/order'
 
 import ProductOrderDetailLandscape from './ProductOrderDetailLandscape'
@@ -39,7 +39,15 @@ const OrderDetailItems = ({ orderDetails, status }: OrderDetailItemsProps) => {
             }
           >
             <ProductOrderDetailLandscape
-              productImage={orderDetail?.productClassification?.images?.[0]?.fileUrl ?? ''}
+              productImage={
+                (orderDetail?.productClassification?.type === ClassificationTypeEnum.DEFAULT
+                  ? (
+                      orderDetail?.productClassification?.preOrderProduct ??
+                      orderDetail?.productClassification?.productDiscount ??
+                      orderDetail?.productClassification
+                    )?.product?.images?.filter((img) => img?.status === StatusEnum.ACTIVE)[0]?.fileUrl
+                  : orderDetail?.productClassification?.images?.[0]?.fileUrl) ?? ''
+              }
               productId={
                 (
                   orderDetail?.productClassification?.preOrderProduct ??
