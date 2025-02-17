@@ -69,7 +69,7 @@ const OrderGeneral = ({ title, icon, content, status = 'normal' }: OrderGeneralP
                 onClick={() => setExpanded(!expanded)}
                 className="mt-2 text-primary text-sm font-medium hover:bg-card border-0 shadow-none hover:text-primary/80"
               >
-                <CircleChevronUp />
+                <CircleChevronUp size={18} />
               </Button>
             </div>
           ) : (
@@ -79,7 +79,7 @@ const OrderGeneral = ({ title, icon, content, status = 'normal' }: OrderGeneralP
                 onClick={() => setExpanded(!expanded)}
                 className="mt-2 text-primary text-sm font-medium hover:bg-card border-0 shadow-none hover:text-primary/80"
               >
-                <CircleChevronDown />
+                <CircleChevronDown size={18} />
               </Button>
             </div>
           ))}

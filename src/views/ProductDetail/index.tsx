@@ -6,6 +6,7 @@ import { useParams } from 'react-router-dom'
 
 import BrandSection from '@/components/brand/BrandSection'
 import CustomBreadcrumb from '@/components/breadcrumb/CustomBreadcrumb'
+import Collapsible from '@/components/collapsiable'
 import Empty from '@/components/empty/Empty'
 import ReviewFilter from '@/components/filter/ReviewFilter'
 import LoadingContentLayer from '@/components/loading-icon/LoadingContentLayer'
@@ -30,7 +31,7 @@ const ProductDetail = () => {
     queryFn: getProductApi.fn,
   })
 
-  console.log('useProductData', useProductData)
+  const carouselRef = useRef(null)
 
   const event = useMemo(
     () =>
@@ -196,23 +197,31 @@ const ProductDetail = () => {
         <CustomBreadcrumb dynamicSegments={[{ segment: useProductData?.data?.name ?? t('productDetail.title') }]} />
         {!isFetching && useProductData && useProductData?.data && (
           <>
-            <div className="flex gap-2 w-full">
+            <div className="flex gap-2 w-full items-stretch">
               {/* product image carousel */}
-              <div className="shadow-sm p-3 bg-white rounded-lg w-[calc(30%-8px)] sticky top-0 max-h-fit">
+              <div
+                ref={carouselRef}
+                className="shadow-sm p-3 bg-white rounded-lg w-[calc(30%-8px)] sticky top-0 max-h-fit"
+              >
                 <ProductCarousel product={useProductData?.data} activeClassification={chosenClassification} />
               </div>
 
               {/* product detail information */}
               <div className="w-[calc(50%-8px)]">
-                <ProductDetailInformation
-                  product={useProductData?.data}
-                  scrollToReviews={scrollToReviews}
-                  productClassifications={productClassifications}
-                  cheapestClassification={cheapestClassification}
-                  event={event}
-                  chosenClassification={chosenClassification}
-                  setChosenClassification={setChosenClassification}
-                  hasCustomType={hasCustomType ?? false}
+                <Collapsible
+                  containerRef={carouselRef}
+                  content={
+                    <ProductDetailInformation
+                      product={useProductData?.data}
+                      scrollToReviews={scrollToReviews}
+                      productClassifications={productClassifications}
+                      cheapestClassification={cheapestClassification}
+                      event={event}
+                      chosenClassification={chosenClassification}
+                      setChosenClassification={setChosenClassification}
+                      hasCustomType={hasCustomType ?? false}
+                    />
+                  }
                 />
               </div>
               {/* call to action */}
