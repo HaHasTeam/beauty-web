@@ -855,6 +855,13 @@
     "resultSheetTitleRequired": "Result sheet title is required.",
     "orderIndexRequired": "Order index is required.",
     "sectionDescriptionRequired": "Section description is required.",
-    "resultSheetSectionsRequired": "Result sheet sections is required."
+    "resultSheetSectionsRequired": "Result sheet sections is required.",
+    "section": "Section",
+    "updateSuccessMessage": "Update system service successfully!",
+    "eitherResultSheetOrDataRequired": "Please select an existing result sheet or create a new one.",
+    "createNew": "Create new result sheet",
+    "selectOrCreateNew": "Select an existing result sheet or create a new one",
+    "selectResultSheet": "Select result sheet",
+    "preview": "Preview"
   }
 }
