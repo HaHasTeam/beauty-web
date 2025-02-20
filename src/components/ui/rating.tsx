@@ -39,7 +39,7 @@ const Ratings = ({ ...props }: RatingsProps) => {
 
   return (
     <div className={cn('flex items-center gap-2')} {...props}>
-      {[...Array(fullStars)].map((_, i) =>
+      {[...Array(fullStars)]?.map((_, i) =>
         cloneElement(Icon, {
           key: i,
           size,

@@ -1,8 +1,9 @@
-import { IClassification, TClassification } from './classification'
+import { IClassification } from './classification'
+import { PaymentMethod, ShippingStatusEnum } from './enum'
 import { TUser } from './user'
 import { TVoucher } from './voucher'
 
-interface OrderDetail {
+export interface IOrderDetail {
   platformVoucherDiscount: number
   shopVoucherDiscount: number
   id: string
@@ -13,11 +14,13 @@ interface OrderDetail {
   quantity: number
   type: string | null
   isFeedback: boolean
-  productClassification: TClassification
+  productClassification: IClassification
   productClassificationPreOrder: null | IClassification
+  unitPriceAfterDiscount: number
+  unitPriceBeforeDiscount: number
 }
 
-export interface OrderItem {
+export interface IOrderItem {
   platformVoucherDiscount: number
   shopVoucherDiscount: number
   id: string
@@ -27,12 +30,14 @@ export interface OrderItem {
   totalPrice: number
   shippingAddress: string
   phone: string
-  paymentMethod: string
+  paymentMethod: PaymentMethod
   notes: string
   type: string
-  status: string
-  orderDetails: OrderDetail[]
+  status: ShippingStatusEnum
+  orderDetails: IOrderDetail[]
   voucher: null | TVoucher
+  message: string
+  recipientName: string
 }
 
 export type IOrder = {
@@ -50,5 +55,50 @@ export type IOrder = {
   type: string
   status: string
   account: TUser
-  children: OrderItem[]
+  children: IOrderItem[]
+}
+
+export type IOrderFilter = {
+  search?: string
+  status?: string
+}
+
+export type IOrderCheckoutItem = {
+  productClassificationId: string
+  quantity?: number
+}
+
+export type ICreateOrderItem = {
+  shopVoucherId?: string
+  items: IOrderCheckoutItem[]
+  message?: string
+}
+
+export type ICreateOrder = {
+  orders: ICreateOrderItem[]
+  addressId: string
+  paymentMethod: string
+  platformVoucherId?: string
+}
+
+export type ICreatePreOrder = {
+  productClassificationId: string
+  quantity: number
+  addressId: string
+  paymentMethod: string
+  notes: string
+}
+
+export type ICancelOrder = {
+  orderId: string
+  reason: string
+}
+
+export interface ICancelRequestOrder {
+  id: string
+  createdAt: string
+  updatedAt: string
+  reason: string
+  status: string
+  order: IOrder
 }

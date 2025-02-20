@@ -1,68 +1,81 @@
-import { useRef, useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { useMemo, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import ReactQuill from 'react-quill-new'
 import { useParams } from 'react-router-dom'
 
 import BrandSection from '@/components/brand/BrandSection'
 import CustomBreadcrumb from '@/components/breadcrumb/CustomBreadcrumb'
+import Collapsible from '@/components/collapsiable'
+import Empty from '@/components/empty/Empty'
 import ReviewFilter from '@/components/filter/ReviewFilter'
+import LoadingContentLayer from '@/components/loading-icon/LoadingContentLayer'
 import APIPagination from '@/components/pagination/Pagination'
 import ProductCarousel from '@/components/product/ProductCarousel'
 import ProductDetailAction from '@/components/product/ProductDetailAction'
 import ProductDetailInformation from '@/components/product/ProductDetailInformation'
 import ReviewOverall from '@/components/reviews/ReviewOverall'
 import ReviewSection from '@/components/reviews/ReviewSection'
+import { getProductApi } from '@/network/apis/product'
 import { IClassification } from '@/types/classification'
-import { IProduct } from '@/types/product'
+import { DiscountTypeEnum, OrderEnum, ProductDiscountEnum, StatusEnum } from '@/types/enum'
+import { PreOrderProductEnum } from '@/types/pre-order'
+import { ProductClassificationTypeEnum } from '@/types/product'
+import { getCheapestClassification } from '@/utils/product'
 
 const ProductDetail = () => {
   const { productId } = useParams()
-  console.log(productId)
-  const product: IProduct = {
-    id: '10',
-    name: 'Cherry Blossom Serum',
-    tag: 'Best Seller',
-    price: 29.99,
-    currentPrice: 20.09,
-    images: [
-      { id: '0', image: 'https://i.pinimg.com/736x/64/8d/d1/648dd13916b0cb608877e4674ef99c24.jpg' },
-      { id: '1', image: 'https://i.pinimg.com/736x/67/54/ba/6754baa52b96d4a820e0fad84efefcf0.jpg' },
-      { id: '2', image: 'https://i.pinimg.com/736x/f1/0f/fe/f10ffe8ba580fefb88cb44f8837add67.jpg' },
-      { id: '3', image: 'https://i.pinimg.com/736x/13/da/ae/13daaeee2b1ab5948c7044e4e37983ed.jpg' },
-      { id: '4', image: 'https://i.pinimg.com/736x/b8/61/de/b861de524383302e0ce9c5c35c5bad6a.jpg' },
-      { id: '5', image: 'https://i.pinimg.com/736x/06/63/86/0663861011db30d5368c872202eafa7f.jpg' },
-    ],
-    deal: 0.33,
-    flashSale: {
-      productAmount: 100,
-      soldAmount: 65,
-    },
-    rating: 4.5,
-    ratingAmount: 250,
-    soldInPastMonth: 300,
-    description:
-      "Unveil a radiant and youthful glow with our Cherry Blossom Serum – a luxurious skincare essential for those seeking to refresh and rejuvenate their skin. Formulated with natural extracts, this serum is designed to hydrate and nourish your skin, helping to reduce the appearance of fine lines, blemishes, and uneven skin tone.\n\nKey Benefits:\n- Deep Hydration: Keeps your skin moisturized all day long, leaving it feeling soft and smooth.\n- Anti-aging: Packed with antioxidants that fight the signs of aging, giving you a youthful and refreshed look.\n- Brightening: Helps even out skin tone and promotes a radiant, glowing complexion.\n- Lightweight Formula: Absorbs quickly, leaving no greasy residue – perfect for all skin types.\n\nPerfect for daily use, the Cherry Blossom Serum combines the delicate essence of cherry blossoms with powerful skin-nourishing ingredients, making it an ideal addition to your skincare routine.\n\nWith a 4.5-star rating from over 250 reviews, our customers rave about its effectiveness in brightening and revitalizing the skin. Whether you're dealing with dryness, dullness, or fine lines, this serum offers the perfect solution.\n\nPrice:\n- Regular Price: $29.99\n- Current Price: $20.09 (Save 33%)\n\nDon't miss out – stock is limited, with only 100 units available, and 65 sold already. Get yours today and experience the magic of cherry blossoms!",
-    classifications: [
-      {
-        id: '0',
-        name: 'Rose',
-        image: '',
-      },
-      {
-        id: '1',
-        name: 'Bold Rose',
-        image: '',
-      },
-      {
-        id: '2',
-        name: 'Semi Rose',
-        image: '',
-      },
-      {
-        id: '3',
-        name: 'Thin Rose',
-        image: '',
-      },
-    ],
-  }
+  const { t } = useTranslation()
+  const { data: useProductData, isFetching } = useQuery({
+    queryKey: [getProductApi.queryKey, productId as string],
+    queryFn: getProductApi.fn,
+  })
+
+  const carouselRef = useRef(null)
+
+  const event = useMemo(
+    () =>
+      (useProductData?.data?.productDiscounts ?? [])?.length > 0 &&
+      (useProductData?.data?.productDiscounts ?? [])[0]?.status === ProductDiscountEnum.ACTIVE
+        ? OrderEnum.FLASH_SALE
+        : (useProductData?.data?.preOrderProducts ?? [])?.length > 0 &&
+            (useProductData?.data?.preOrderProducts ?? [])[0]?.status === PreOrderProductEnum.ACTIVE
+          ? OrderEnum.PRE_ORDER
+          : OrderEnum.NORMAL,
+    [useProductData?.data?.preOrderProducts, useProductData?.data?.productDiscounts],
+  )
+
+  const productClassifications = useMemo(() => {
+    if (!useProductData?.data) return []
+
+    switch (event) {
+      case OrderEnum.FLASH_SALE:
+        return useProductData.data.productDiscounts?.[0]?.productClassifications
+      case OrderEnum.PRE_ORDER:
+        return useProductData.data.preOrderProducts?.[0]?.productClassifications
+      default:
+        return useProductData.data.productClassifications
+    }
+  }, [event, useProductData?.data])
+
+  const cheapestClassification = useMemo(
+    () => getCheapestClassification(productClassifications ?? []),
+    [productClassifications],
+  )
+  const hasCustomType = useMemo(
+    () =>
+      productClassifications?.some(
+        (classification) =>
+          classification?.type === ProductClassificationTypeEnum.CUSTOM && classification.status === StatusEnum.ACTIVE,
+      ),
+    [productClassifications],
+  )
+  const inStock = productClassifications?.some((classification) => classification?.quantity > 0) ?? false
+
+  const [chosenClassification, setChosenClassification] = useState<IClassification | null>(
+    !hasCustomType && productClassifications ? productClassifications?.[0] : null,
+  )
+
   const reviews = [
     {
       id: 'rev1',
@@ -173,63 +186,104 @@ const ProductDetail = () => {
   const scrollToReviews = () => {
     reviewSectionRef.current?.scrollIntoView({ behavior: 'smooth' })
   }
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [classification, setClassification] = useState<IClassification>(product.classifications[0])
+
+  console.log('test', productClassifications, chosenClassification)
+
   return (
-    <div className="w-full mx-auto px-4 py-5 ">
+    <div className="w-full mx-auto px-4 py-5">
+      {isFetching && <LoadingContentLayer />}
       {/* product information */}
       <div className="w-full lg:px-20 md:px-10 sm:px-8 px-3 space-y-3 ">
-        <CustomBreadcrumb dynamicSegments={[{ segment: product.name ?? '' }]} />
-        <div className="flex gap-2 w-full">
-          {/* product image carousel */}
-          <div className="shadow-sm p-3 bg-white rounded-lg w-[calc(30%-8px)]">
-            <ProductCarousel product={product} />
-          </div>
+        <CustomBreadcrumb dynamicSegments={[{ segment: useProductData?.data?.name ?? t('productDetail.title') }]} />
+        {!isFetching && useProductData && useProductData?.data && (
+          <>
+            <div className="flex gap-2 w-full items-stretch">
+              {/* product image carousel */}
+              <div
+                ref={carouselRef}
+                className="shadow-sm p-3 bg-white rounded-lg w-[calc(30%-8px)] sticky top-0 max-h-fit"
+              >
+                <ProductCarousel product={useProductData?.data} activeClassification={chosenClassification} />
+              </div>
 
-          {/* product detail information */}
-          <div className="w-[calc(50%-8px)]">
-            <ProductDetailInformation product={product} scrollToReviews={scrollToReviews} />
-          </div>
-          {/* call to action */}
-          <div className="shadow-sm p-3 bg-white rounded-lg w-[calc(20%-8px)]">
-            <ProductDetailAction product={product} chosenClassification={classification} />
-          </div>
-        </div>
-
-        {/* product brand */}
-        <BrandSection />
-
-        {/* product reviews */}
-        <div className="flex gap-2 bg-white rounded-lg" id="customerReviews" ref={reviewSectionRef}>
-          <ReviewOverall />
-          <div>
-            <div className="border-b border-gray-200">
-              <ReviewFilter />
-            </div>
-            <div className="p-4">
-              {reviews.map((review) => (
-                <ReviewSection
-                  key={review.id}
-                  author={review.author}
-                  reviewUpdatedAt={review.reviewUpdatedAt}
-                  classification={review.classification}
-                  numberOfItem={review.numberOfItem}
-                  title={review.title}
-                  reviewDescription={review.reviewDescription}
-                  images={review.images}
-                  rating={review.rating}
-                  brandName={review.brandName}
-                  updatedAt={review.updatedAt}
-                  description={review.description}
-                  brandLogo={review.brandLogo}
+              {/* product detail information */}
+              <div className="w-[calc(50%-8px)]">
+                <Collapsible
+                  containerRef={carouselRef}
+                  content={
+                    <ProductDetailInformation
+                      product={useProductData?.data}
+                      scrollToReviews={scrollToReviews}
+                      productClassifications={productClassifications}
+                      cheapestClassification={cheapestClassification}
+                      event={event}
+                      chosenClassification={chosenClassification}
+                      setChosenClassification={setChosenClassification}
+                      hasCustomType={hasCustomType ?? false}
+                    />
+                  }
                 />
-              ))}
+              </div>
+              {/* call to action */}
+              <div className="shadow-sm p-3 bg-white rounded-lg w-[calc(20%-8px)] sticky top-0 max-h-fit">
+                <ProductDetailAction
+                  product={useProductData?.data}
+                  chosenClassification={chosenClassification}
+                  discount={
+                    event === OrderEnum.FLASH_SALE ? useProductData?.data?.productDiscounts?.[0]?.discount : undefined
+                  }
+                  discountType={DiscountTypeEnum.PERCENTAGE}
+                  hasCustomType={hasCustomType ?? false}
+                  inStock={inStock}
+                />
+              </div>
             </div>
-            <APIPagination currentPage={1} onPageChange={() => {}} totalPages={5} />
-          </div>
-        </div>
 
-        {/* other product in same brand */}
+            {/* description */}
+            <div className="w-full py-4 px-3 bg-white rounded-lg">
+              <h3 className="font-semibold mb-3 text-lg">{t('productDetail.descriptionTitle')}</h3>
+              <ReactQuill value={useProductData?.data?.description} readOnly={true} theme={'bubble'} />
+            </div>
+
+            {/* product brand */}
+            {useProductData?.data?.brand && <BrandSection brand={useProductData?.data?.brand} />}
+
+            {/* product reviews */}
+            <div className="flex gap-2 bg-white rounded-lg" id="customerReviews" ref={reviewSectionRef}>
+              <ReviewOverall />
+              <div>
+                <div className="border-b border-gray-200">
+                  <ReviewFilter />
+                </div>
+                <div className="p-4">
+                  {reviews.map((review) => (
+                    <ReviewSection
+                      key={review.id}
+                      author={review.author}
+                      reviewUpdatedAt={review.reviewUpdatedAt}
+                      classification={review.classification}
+                      numberOfItem={review.numberOfItem}
+                      title={review.title}
+                      reviewDescription={review.reviewDescription}
+                      images={review.images}
+                      rating={review.rating}
+                      brandName={review.brandName}
+                      updatedAt={review.updatedAt}
+                      description={review.description}
+                      brandLogo={review.brandLogo}
+                    />
+                  ))}
+                </div>
+                <APIPagination currentPage={1} onPageChange={() => {}} totalPages={5} />
+              </div>
+            </div>
+
+            {/* other product in same brand */}
+          </>
+        )}
+        {!isFetching && (!useProductData || !useProductData?.data) && (
+          <Empty title={t('empty.productDetail.title')} description={t('empty.productDetail.description')} />
+        )}
       </div>
     </div>
   )

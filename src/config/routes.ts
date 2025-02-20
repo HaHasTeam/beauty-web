@@ -29,6 +29,7 @@ const routes = {
   profile: '/profile',
   profileAddress: '/profile/address',
   profileOrder: '/profile/order',
+  profileOrderDetail: '/profile/order/:orderId',
   profilePassword: '/profile/password',
   profileNotification: '/profile/notification',
   profileVoucher: '/profile/voucher',
@@ -37,11 +38,12 @@ const routes = {
   termsAndConditions: '/terms-and-condition',
   cart: '/cart',
   checkout: '/checkout',
+  checkoutResult: '/checkout/result',
   sellLanding: '/landing/sell',
   professionalLanding: '/landing/professional',
   search: '/search',
   brands: '/brands',
-  brandDetail: '/brands/brandId',
+  brandDetail: '/brands/:brandId',
   notFound: '*',
 }
 

@@ -1,5 +1,6 @@
 import PrimaryLayout from '@/components/layout/PrimaryLayout'
 import configs from '@/config'
+import Cart from '@/views/Cart'
 import EmailVerification from '@/views/EmailVerifycation'
 import ForgotPassword from '@/views/ForgotPassword'
 import Home from '@/views/Home'
@@ -40,15 +41,15 @@ const publicRoutes = [
     element: <EmailVerification />,
   },
   {
-    element: (
-      <GuestGuard>
-        <PrimaryLayout />
-      </GuestGuard>
-    ),
+    element: <PrimaryLayout />,
     children: [
       {
         path: configs.routes.home,
         element: <Home />,
+      },
+      {
+        path: configs.routes.cart,
+        element: <Cart />,
       },
     ],
   },

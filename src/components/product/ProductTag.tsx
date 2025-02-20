@@ -1,5 +1,8 @@
 import { useTranslation } from 'react-i18next'
 
+import { OrderEnum, PaymentMethod, ProductCartStatusEnum } from '@/types/enum'
+import { PreOrderProductEnum } from '@/types/pre-order'
+
 interface ProductTagProps {
   tag: string
   text?: string
@@ -38,7 +41,15 @@ export default function ProductTag({ tag, text, size = 'medium' }: ProductTagPro
     case 'DealPercent':
       tagColorClass = 'bg-red-100 text-red-500'
       break
-    case 'Flash Sale':
+    case ProductCartStatusEnum.HIDDEN: // use for product in cart
+      tagColorClass = 'bg-gray-200 text-gray-800'
+      tagText = t('productTag.hidden')
+      break
+    case ProductCartStatusEnum.SOLD_OUT: // use for product in cart
+      tagColorClass = 'bg-red-100 text-red-500'
+      tagText = t('productTag.outOfStock')
+      break
+    case OrderEnum.FLASH_SALE:
       tagColorClass = 'bg-orange-200 text-orange-800'
       tagText = t('productTag.flashSale')
       break
@@ -46,13 +57,46 @@ export default function ProductTag({ tag, text, size = 'medium' }: ProductTagPro
       tagColorClass = 'bg-white text-red-500 border border-red-500'
       tagText = t('productTag.liveStream')
       break
-    case 'GroupBuying':
+    case OrderEnum.GROUP_BUYING:
       tagColorClass = 'bg-white text-orange-500 border border-orange-500'
       tagText = t('productTag.groupBuying')
       break
-    case 'PreOrder':
+    case OrderEnum.PRE_ORDER:
       tagColorClass = 'bg-white text-yellow-500 border border-yellow-500'
       tagText = t('productTag.preOrder')
+      break
+    case PreOrderProductEnum.WAITING:
+      tagColorClass = 'bg-yellow-100 text-yellow-800 border border-yellow-300'
+      tagText = t('productTag.waiting')
+      break
+    case PreOrderProductEnum.ACTIVE:
+      tagColorClass = 'bg-green-100 text-green-800 border border-green-300'
+      tagText = t('productTag.preOrder')
+      break
+    case PreOrderProductEnum.CANCELLED:
+      tagColorClass = 'bg-red-100 text-red-800 border border-red-300'
+      tagText = t('productTag.cancelled')
+      break
+    case PreOrderProductEnum.INACTIVE:
+      tagColorClass = 'bg-gray-100 text-gray-800 border border-gray-300'
+      tagText = t('productTag.inactive')
+      break
+    case PreOrderProductEnum.SOLD_OUT:
+      tagColorClass = 'bg-blue-100 text-blue-800 border border-blue-300'
+      tagText = t('productTag.soldOut')
+      break
+    // for payment methods
+    case PaymentMethod.CARD:
+      tagColorClass = 'bg-white text-yellow-500 border border-yellow-500'
+      tagText = t('paymentMethod.tag.cash')
+      break
+    case PaymentMethod.CASH:
+      tagColorClass = 'bg-white text-orange-500 border border-orange-500'
+      tagText = t('paymentMethod.tag.card')
+      break
+    case PaymentMethod.WALLET:
+      tagColorClass = 'bg-white text-purple-500 border border-purple-500'
+      tagText = t('paymentMethod.tag.wallet')
       break
     default:
       tagColorClass = 'bg-gray-200 text-gray-800' // Default color
@@ -60,5 +104,9 @@ export default function ProductTag({ tag, text, size = 'medium' }: ProductTagPro
       break
   }
 
-  return <span className={`${sizeClasses[size]} rounded-md font-medium ${tagColorClass}`}>{text ? text : tagText}</span>
+  return (
+    <span className={`${sizeClasses[size]} min-w-fit cursor-default rounded-md font-medium ${tagColorClass}`}>
+      {text ? text : tagText}
+    </span>
+  )
 }

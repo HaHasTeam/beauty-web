@@ -1,6 +1,8 @@
 import { IBrand, TBrand } from './brand'
 import { ICategory } from './category'
 import { IClassification } from './classification'
+import { IPreOrder } from './pre-order'
+import { IProductDiscount } from './product-discount'
 import { IImage } from './productImage'
 import { TMetaData } from './request'
 
@@ -86,20 +88,21 @@ export type IServerCreateProduct = {
   sku?: string
 }
 export type IResponseProduct = {
-  id?: string
+  id: string
   name: string
-  brand?: IBrand
+  brand: IBrand
   category?: ICategory
   images: IImage[]
   description: string
-  status?: string
-  detail?: string
-  productClassifications?: IServerProductClassification[]
-  price?: number
-  quantity?: number
+  status: string
+  detail: string
+  productClassifications: IClassification[]
+  price: number
+  quantity: number
   sku?: string
   menu?: string
-  updatedAt?: string
+  updatedAt: string
+  certificate: string
 }
 
 export type IProductTable = {
@@ -124,10 +127,11 @@ export type IProductTable = {
 export interface ProductTableProps {
   tableData: TProduct[]
 }
-type IProductImage = {
-  id: string
-  image: string
-}
+// type IProductImage = {
+//   id: string
+//   image: string
+//   fileUrl?: string
+// }
 
 export type IProduct = {
   id: string
@@ -135,7 +139,7 @@ export type IProduct = {
   tag?: string
   price: number
   currentPrice?: number
-  images: IProductImage[]
+  images: IImage[]
   deal?: number
   flashSale?: {
     productAmount: number
@@ -152,6 +156,11 @@ export type IProduct = {
   sku?: string
   status?: string
   brand?: IBrand
+  productClassifications?: IClassification[] // use for cart
+  productDiscounts?: IProductDiscount[] | null // use for cart
+  preOrderProducts?: IPreOrder[] | null // use for cart
+  category?: ICategory // use for product details
+  certificate: string
 }
 
 export type IProductCart = {
@@ -171,7 +180,7 @@ export type IProductCard = {
   tag?: string
   price?: number
   currentPrice?: number
-  images: IProductImage[]
+  images: IImage[]
   deal?: number
   flashSale?: {
     productAmount: number
@@ -180,6 +189,8 @@ export type IProductCard = {
   rating: number
   ratingAmount: number
   soldInPastMonth: number
+  classifications?: IServerProductClassification[]
+  certificate: string
 }
 
 // components interface ends

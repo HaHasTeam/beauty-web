@@ -81,10 +81,68 @@ export enum PaymentMethod {
 }
 
 export enum ShippingStatusEnum {
-  TO_PAY = 'TO_PAY',
-  TO_SHIP = 'TO_SHIP',
-  TO_RECEIVED = 'TO_RECEIVED',
-  RETURN_REFUND = 'RETURN_REFUND',
-  COMPLETED = 'COMPLETED',
+  JOIN_GROUP_BUYING = 'JOIN_GROUP_BUYING', // Tham gia mua nhóm
+  TO_PAY = 'TO_PAY', // Chờ thanh toán
+  WAIT_FOR_CONFIRMATION = 'WAIT_FOR_CONFIRMATION', // Chờ xác nhận đơn hàng
+  PREPARING_ORDER = 'PREPARING_ORDER', // Chuẩn bị đơn hàng
+  TO_SHIP = 'TO_SHIP', // Lấy hàng/Sẵn sàng để giao
+  SHIPPING = 'SHIPPING', // Đang vận chuyển
+  DELIVERED = 'DELIVERED', // Đã nhận hàng
+  COMPLETED = 'COMPLETED', // Hoàn thành
+  RETURNING = 'RETURNING', // Đang trả hàng
+  REFUNDED = 'REFUNDED', // Đã trả hàng
+  CANCELLED = 'CANCELLED', // Đã hủy
+}
+
+export enum ProductDiscountEnum {
+  ACTIVE = 'ACTIVE',
+  SOLD_OUT = 'SOLD_OUT',
+  WAITING = 'WAITING',
+  INACTIVE = 'INACTIVE',
   CANCELLED = 'CANCELLED',
+}
+
+export enum VoucherApplyTypeEnum {
+  ALL = 'ALL',
+  SPECIFIC = 'SPECIFIC',
+}
+
+export enum VoucherStatusEnum {
+  AVAILABLE = 'AVAILABLE',
+  UNAVAILABLE = 'UNAVAILABLE',
+}
+
+export enum ProductCartStatusEnum {
+  HIDDEN = 'HIDDEN',
+  SOLD_OUT = 'SOLD_OUT',
+}
+export enum ClassificationTypeEnum {
+  DEFAULT = 'DEFAULT',
+  CUSTOM = 'CUSTOM',
+}
+
+export enum VoucherUsedStatusEnum {
+  AVAILABLE = 'AVAILABLE',
+  UNAVAILABLE = 'UNAVAILABLE',
+  UNCLAIMED = 'UNCLAIMED',
+}
+
+export enum VoucherUnavailableReasonEnum {
+  MINIMUM_ORDER_NOT_MET = 'MINIMUM_ORDER_NOT_MET',
+  OUT_OF_STOCK = 'OUT_OF_STOCK',
+  NOT_START_YET = 'NOT_START_YET',
+  NOT_APPLICABLE = 'NOT_APPLICABLE',
+}
+
+export enum ResultEnum {
+  SUCCESS = 'SUCCESS',
+  ERROR = 'ERROR',
+  WARNING = 'WARNING',
+  FAILURE = 'FAILURE',
+}
+
+export enum CancelOrderRequestStatusEnum {
+  PENDING = 'PENDING',
+  APPROVED = 'APPROVED',
+  REJECTED = 'REJECTED',
 }

@@ -2,13 +2,14 @@ import { useRoutes } from 'react-router-dom'
 
 import PrimaryLayout from '@/components/layout/PrimaryLayout'
 import configs from '@/config'
+import externalLink from '@/config/externalLink'
 import About from '@/views/About'
 import Contact from '@/views/Contact'
 import Forbidden from '@/views/Forbidden'
 import Home from '@/views/Home'
 import NotFound from '@/views/NotFound'
 import ProductDetail from '@/views/ProductDetail'
-import RecommendProducts from '@/views/RecommendProducts'
+// import RecommendProducts from '@/views/RecommendProducts'
 import SearchPage from '@/views/Search'
 import ServerError from '@/views/ServerError'
 
@@ -34,10 +35,10 @@ export default function RouterProvider() {
           path: configs.routes.productDetail,
           element: <ProductDetail />,
         },
-        {
-          path: configs.routes.recommendProducts,
-          element: <RecommendProducts />,
-        },
+        // {
+        //   path: configs.routes.recommendProducts,
+        //   element: <RecommendProducts />,
+        // },
       ],
     },
     {
@@ -68,3 +69,6 @@ export default function RouterProvider() {
     },
   ])
 }
+export const buildResource = (root: string, route: string) => `${externalLink.appURL}/${root}/${route}`
+
+export const buildOneWayResource = (root: string) => `window.location.pathname/${root}`

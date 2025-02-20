@@ -25,12 +25,14 @@ i18n
       escapeValue: false,
       format: (value, format, lng) => {
         if (value instanceof Date) {
-          return moment(value).format(format || 'DD/MM/YYYY') // Use 'DD/MM/YYYY' as default format
+          const dateValue = value instanceof Date ? value : new Date(value)
+          // eslint-disable-next-line import/no-named-as-default-member
+          return moment(dateValue).format(format || 'DD/MM/YYYY HH:mm:ss')
         }
 
         if (format === 'currency') {
-          const currency = lng === 'vi' ? 'VND' : 'USD' // Change currency per language
-          return Intl.NumberFormat(lng, { style: 'currency', currency }).format(value)
+          const currency = lng === 'vi' ? 'VND' : 'VND' // Don't change currency per language
+          return Intl.NumberFormat('vi', { style: 'currency', currency }).format(value)
         }
         return value
       },
