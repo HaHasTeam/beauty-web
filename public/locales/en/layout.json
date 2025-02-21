@@ -69,6 +69,8 @@
     "seeAll": "See All",
     "viewAll": "View All",
     "cancel": "Cancel",
+    "create": "Create",
+    "addSection": "Add section",
     "ok": "Confirm",
     "save": "Save",
     "submit": "Submit",
@@ -78,7 +80,8 @@
     "submitAndShow": "Submit and Show",
     "submitAndHide": "Submit and Hide",
     "deselect": "Deselect",
-    "select": "Select"
+    "select": "Select",
+    "edit": "Edit"
   },
   "noData": "No matching data found",
   "sell": {
@@ -269,7 +272,8 @@
     "qualityService": "Guaranteed Quality & Service",
     "verified": "Inspection Upon Receipt",
     "official": "100% Authentic Products",
-    "certificateOfProduct": "Certificate of {{name}}"
+    "certificateOfProduct": "Certificate of {{name}}",
+    "name": "Name"
   },
   "event": {
     "finishIn": "Finish In"
@@ -297,6 +301,8 @@
       "title": "Reviews",
       "count": "{{count}}k"
     },
+    "establishmentDate": "Establishment date",
+    "businessTaxCode": "Business Tax Code",
     "responseRate": {
       "title": "Response Rate",
       "value": "{{rate}}%"
@@ -397,6 +403,7 @@
     "state": "State",
     "country": "Country",
     "postalCode": "Postal Code",
+    "email": "Email",
     "phoneNumber": "Phone Number",
     "save": "Save",
     "cancel": "Cancel",
@@ -789,6 +796,7 @@
     "uniqueNameClassification": "Each option in the same classification must have a unique name.",
     "classificationInformation": "Pricing & Inventory",
     "skuProduct": "Product SKU",
+    "sku": "SKU",
     "skuProductPlaceholder": "Enter product SKU",
     "skuClassification": "Product classification SKU",
     "productClassification": "Product Classification",
@@ -817,6 +825,73 @@
     "copy": "Copy",
     "downloadCertificate": "Download Certificate",
     "viewCertificate": "View Certificate",
-    "download": "Download"
+    "download": "Download",
+    "duplicated": "This item already exists!",
+    "createdAt": "Created At",
+    "productId": "Product ID",
+    "updateProductStatusSuccess": "Update product status successfully!",
+    "statusDescription": {
+      "ACTIVE": "The product is available for purchase and ready to be ordered.",
+      "INACTIVE": "The product is currently unavailable for purchase and not visible to customers.",
+      "PRE_ORDER": "The product is not yet released or out of stock but can be ordered in advance.",
+      "OFFICIAL": "The product is an officially verified item from the brand or manufacturer and has been reviewed by the platform moderator.",
+      "OUT_OF_STOCK": "The product is temporarily unavailable due to no remaining stock."
+    }
+  },
+  "status": {
+    "ACTIVE": "Active",
+    "INACTIVE": "Inactive",
+    "DRAFT": "Draft",
+    "PUBLIC": "Public",
+    "DENIED": "Denied",
+    "BAN": "Baned",
+    "PENDING": "Pending",
+    "PRE_ORDER": "Pre-Order",
+    "OFFICIAL": "Official",
+    "OUT_OF_STOCK": "Out of stock"
+  },
+  "systemService": {
+    "generalInformation": "General Information",
+    "resultSheetInformation": "Result Sheet Information",
+    "name": "Service Name",
+    "description": "Description",
+    "category": "Category",
+    "type": "Type",
+    "standard": "Standard",
+    "premium": "Premium",
+    "required": "Required",
+    "sectionName": "Section Name",
+    "sections": "Sections",
+    "title": "Title",
+    "selectServiceType": "Select service type",
+    "enterServiceName": "Enter service name",
+    "enterServiceDescription": "Enter service description",
+    "selectServiceCategory": "Select service category",
+    "enterSectionName": "Enter section name",
+    "enterResultSheetTitle": "Enter result sheet's title",
+    "enterSectionDescription": "Enter section description",
+    "createSuccessMessage": "Service created successfully!",
+    "status": "Status",
+    "serviceImages": "Service Images",
+    "serviceNameRequired": "Service name is required.",
+    "descriptionRequired": "Service description is required.",
+    "imagesRequired": "Please select at least one image.",
+    "categoryRequired": "Please select a category.",
+    "typeRequired": "Please select a type.",
+    "standardOrPremiumRequired": "Please select a standard or premium type.",
+    "sectionNameRequired": "Section name is required.",
+    "sectionsRequired": "Please add at least one section.",
+    "resultSheetTitleRequired": "Result sheet title is required.",
+    "orderIndexRequired": "Order index is required.",
+    "sectionDescriptionRequired": "Section description is required.",
+    "resultSheetSectionsRequired": "Result sheet sections is required.",
+    "section": "Section",
+    "updateSuccessMessage": "Update system service successfully!",
+    "eitherResultSheetOrDataRequired": "Please select an existing result sheet or create a new one.",
+    "createNew": "Create new result sheet",
+    "selectOrCreateNew": "Select an existing result sheet or create a new one",
+    "selectResultSheet": "Select result sheet",
+    "preview": "Preview",
+    "alsoUsedFor": "This result sheet also used for the following system services"
   }
 }
