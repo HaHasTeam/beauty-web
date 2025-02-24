@@ -4,10 +4,12 @@ import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import emptyNotification from '@/assets/images/EmptyInbox.png'
+import fallBackImage from '@/assets/images/fallBackImage.jpg'
 import logo from '@/assets/images/logo.png'
 import configs from '@/config'
 
 import Empty from '../empty/Empty'
+import ImageWithFallback from '../ImageFallback'
 
 type Notification = {
   id: number
@@ -68,7 +70,7 @@ const WebNotification: React.FC<WebNotificationProps> = ({
                     className="flex gap-2 align-middle text-black text-sm p-3 cursor-pointer hover:bg-gray-100 rounded-md"
                   >
                     <div className="h-6 w-6">
-                      <img src={logo} className="object-contain" />
+                      <ImageWithFallback src={logo} className="object-contain" fallback={fallBackImage} alt={logo} />
                     </div>
                     <div>{notification.message}</div>
                   </div>

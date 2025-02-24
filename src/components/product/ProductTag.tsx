@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 
-import { OrderEnum, PaymentMethod, ProductCartStatusEnum } from '@/types/enum'
+import { OrderEnum, PaymentMethod, ProductCartStatusEnum, ProductEnum } from '@/types/enum'
 import { PreOrderProductEnum } from '@/types/pre-order'
 
 interface ProductTagProps {
@@ -49,6 +49,10 @@ export default function ProductTag({ tag, text, size = 'medium' }: ProductTagPro
       tagColorClass = 'bg-red-100 text-red-500'
       tagText = t('productTag.outOfStock')
       break
+    case ProductEnum.OUT_OF_STOCK: // use for product in cart
+      tagColorClass = 'bg-red-100 text-red-500'
+      tagText = t('productTag.outOfStock')
+      break
     case OrderEnum.FLASH_SALE:
       tagColorClass = 'bg-orange-200 text-orange-800'
       tagText = t('productTag.flashSale')
@@ -83,7 +87,7 @@ export default function ProductTag({ tag, text, size = 'medium' }: ProductTagPro
       break
     case PreOrderProductEnum.SOLD_OUT:
       tagColorClass = 'bg-blue-100 text-blue-800 border border-blue-300'
-      tagText = t('productTag.soldOut')
+      tagText = t('productTag.outOfStock')
       break
     // for payment methods
     case PaymentMethod.CARD:

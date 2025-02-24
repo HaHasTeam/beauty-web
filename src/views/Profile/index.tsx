@@ -1,83 +1,93 @@
+import { useTranslation } from 'react-i18next'
+
+import fallBackImage from '@/assets/images/fallBackImage.jpg'
+import ImageWithFallback from '@/components/ImageFallback'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 
 export default function Profile() {
+  const { t } = useTranslation()
   return (
     <div className="flex flex-col ">
       <main className="flex-1 p-6">
         <div className="space-y-6">
           <div>
-            <h3 className="text-2xl font-semibold">Hồ Sơ Của Tôi</h3>
-            <p className="text-sm text-gray-500">Quản lý thông tin hồ sơ để bảo mật tài khoản</p>
+            <h3 className="text-2xl font-semibold">{t('profile.myProfile')}</h3>
+            <p className="text-sm text-gray-500">{t('profile.profileDescription')}</p>
           </div>
           <div className="grid gap-6 md:grid-cols-[1fr_200px]">
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="username">Tên đăng nhập</Label>
-                <Input id="username" placeholder="g40i0070kd" disabled />
-                <p className="text-sm text-gray-500">Tên Đăng nhập chỉ có thể thay đổi một lần</p>
+                <Label htmlFor="username">{t('profile.username')}</Label>
+                <Input id="username" placeholder={t('profile.usernamePlaceholder')} disabled />
+                <p className="text-sm text-gray-500">{t('profile.usernameNote')}</p>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="name">Tên</Label>
-                <Input id="name" placeholder="Phạm Công Minh" />
+                <Label htmlFor="name">{t('profile.name')}</Label>
+                <Input id="name" placeholder={t('profile.namePlaceholder')} />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">{t('profile.email')}</Label>
                 <div className="flex items-center gap-2">
-                  <Input id="email" type="email" placeholder="m********@gmail.com" disabled />
+                  <Input id="email" type="email" placeholder={t('profile.emailPlaceholder')} disabled />
                   <Button variant="outline" className="shrink-0 text-primary">
-                    Thay Đổi
+                    {t('profile.change')}
                   </Button>
                 </div>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="phone">Số điện thoại</Label>
+                <Label htmlFor="phone">{t('profile.phone')}</Label>
                 <div className="flex items-center gap-2">
-                  <Input id="phone" type="tel" placeholder="*******67" disabled />
+                  <Input id="phone" type="tel" placeholder={t('profile.phonePlaceholder')} disabled />
                   <Button variant="outline" className="shrink-0 text-primary">
-                    Thay Đổi
+                    {t('profile.change')}
                   </Button>
                 </div>
               </div>
               <div className="space-y-2">
-                <Label>Giới tính</Label>
-                <RadioGroup defaultValue="nam" className="flex gap-4">
+                <Label>{t('profile.gender')}</Label>
+                <RadioGroup defaultValue="male" className="flex gap-4">
                   <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="nam" id="nam" />
-                    <Label htmlFor="nam">Nam</Label>
+                    <RadioGroupItem value="male" id="male" />
+                    <Label htmlFor="male">{t('profile.male')}</Label>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="nu" id="nu" />
-                    <Label htmlFor="nu">Nữ</Label>
+                    <RadioGroupItem value="female" id="female" />
+                    <Label htmlFor="female">{t('profile.female')}</Label>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="khac" id="khac" />
-                    <Label htmlFor="khac">Khác</Label>
+                    <RadioGroupItem value="other" id="other" />
+                    <Label htmlFor="other">{t('profile.other')}</Label>
                   </div>
                 </RadioGroup>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="birthday">Ngày sinh</Label>
+                <Label htmlFor="birthday">{t('profile.birthday')}</Label>
                 <div className="flex items-center gap-2">
-                  <Input id="birthday" type="text" placeholder="**/05/20**" disabled />
+                  <Input id="birthday" type="text" placeholder={t('profile.birthdayPlaceholder')} disabled />
                   <Button variant="outline" className="shrink-0 text-primary">
-                    Thay Đổi
+                    {t('profile.change')}
                   </Button>
                 </div>
               </div>
-              <Button className="bg-[#ee4d2d] hover:bg-[#ee4d2d]/90">Lưu</Button>
+              <Button className="bg-[#ee4d2d] hover:bg-[#ee4d2d]/90">{t('profile.save')}</Button>
             </div>
             <div className="space-y-4">
               <div className="flex flex-col items-center gap-4">
                 <div className="relative h-32 w-32">
-                  <img alt="Avatar" className="rounded-full object-cover" src="/placeholder.svg" />
+                  <ImageWithFallback
+                    fallback={fallBackImage}
+                    alt={t('profile.avatar')}
+                    className="rounded-full object-cover"
+                    src="/placeholder.svg"
+                  />
                 </div>
-                <Button variant="outline">Chọn Ảnh</Button>
+                <Button variant="outline">{t('profile.chooseImage')}</Button>
                 <div className="text-center text-sm text-gray-500">
-                  <p>Dung lượng file tối đa 1 MB</p>
-                  <p>Định dạng: .JPEG, .PNG</p>
+                  <p>{t('profile.fileSizeLimit')}</p>
+                  <p>{t('profile.fileFormat')}</p>
                 </div>
               </div>
             </div>

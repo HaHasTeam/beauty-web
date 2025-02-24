@@ -1,12 +1,14 @@
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
+import fallBackImage from '@/assets/images/fallBackImage.jpg'
 import configs from '@/config'
 import { IClassification } from '@/types/classification'
 import { ClassificationTypeEnum, DiscountTypeEnum } from '@/types/enum'
 import { DiscountType } from '@/types/product-discount'
 import { calculateDiscountPrice, calculateTotalPrice } from '@/utils/price'
 
+import ImageWithFallback from '../ImageFallback'
 import { Label } from '../ui/label'
 import ProductTag from './ProductTag'
 
@@ -43,7 +45,12 @@ const ProductCheckoutLandscape = ({
         <div className="flex gap-1 items-center lg:w-[10%] md:w-[10%] w-[16%]">
           <Link to={configs.routes.products + '/' + productId}>
             <div className="md:w-20 md:h-20 sm:w-20 sm:h-20 h-16 w-16">
-              <img src={productImage} alt={productName} className="object-cover w-full h-full" />
+              <ImageWithFallback
+                fallback={fallBackImage}
+                src={productImage}
+                alt={productName}
+                className="object-cover w-full h-full"
+              />
             </div>
           </Link>
         </div>

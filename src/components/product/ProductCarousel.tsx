@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import fallBackImage from '@/assets/images/fallBackImage.jpg'
 import { IClassification } from '@/types/classification'
 import { StatusEnum } from '@/types/enum'
 import { IProduct } from '@/types/product'
 
+import ImageWithFallback from '../ImageFallback'
 import { Button } from '../ui/button'
 import { Carousel, CarouselApi, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '../ui/carousel'
 
@@ -121,7 +123,8 @@ const ProductCarousel = ({ product, activeClassification }: ProductCarouselProps
       {/* product display here */}
       <div className="w-full bg-white flex justify-center align-middle items-center border-gray-200 border rounded-lg">
         <div className="p-1 w-full h-96 rounded-lg flex justify-center align-middle items-center">
-          <img
+          <ImageWithFallback
+            fallback={fallBackImage}
             className="w-full h-full object-cover object-center rounded-lg"
             src={currentImage}
             alt={`${imageSource === 'product' ? 'Product' : 'Classification'} view ${current + 1}`}
@@ -140,7 +143,8 @@ const ProductCarousel = ({ product, activeClassification }: ProductCarouselProps
                   current === index ? 'border-primary' : 'border-gray-200'
                 } focus:outline-none`}
               >
-                <img
+                <ImageWithFallback
+                  fallback={fallBackImage}
                   className="w-full h-full object-cover rounded-md"
                   src={img?.fileUrl}
                   alt={`Thumbnail ${index + 1}`}

@@ -4,6 +4,7 @@ import { Dispatch, SetStateAction, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
+import fallBackImage from '@/assets/images/fallBackImage.jpg'
 import configs from '@/config'
 import useHandleServerError from '@/hooks/useHandleServerError'
 import { useToast } from '@/hooks/useToast'
@@ -24,6 +25,7 @@ import {
 import AlertMessage from '../alert/AlertMessage'
 import ClassificationPopover from '../classification/ClassificationPopover'
 import DeleteConfirmationDialog from '../dialog/DeleteConfirmationDialog'
+import ImageWithFallback from '../ImageFallback'
 import IncreaseDecreaseButton from '../IncreaseDecreaseButton'
 import { Checkbox } from '../ui/checkbox'
 import ProductTag from './ProductTag'
@@ -272,7 +274,12 @@ const ProductCardLandscape = ({
           {/* product image */}
           <Link to={configs.routes.products + '/' + productId}>
             <div className="lg:w-20 lg:h-20 md:w-14 md:h-14 sm:h-14 sm:w-14 w-10 h-13">
-              <img src={productImage} alt={productName} className="object-cover w-full h-full" />
+              <ImageWithFallback
+                fallback={fallBackImage}
+                src={productImage}
+                alt={productName}
+                className="object-cover w-full h-full"
+              />
             </div>
           </Link>
         </div>

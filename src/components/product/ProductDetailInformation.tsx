@@ -1,11 +1,13 @@
 import { Dispatch, SetStateAction, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import fallBackImage from '@/assets/images/fallBackImage.jpg'
 import { IClassification, IClassificationKey, IClassificationSelection } from '@/types/classification'
-import { DiscountTypeEnum, OrderEnum, ProductDiscountEnum } from '@/types/enum'
+import { DiscountTypeEnum, OrderEnum, ProductDiscountEnum, StatusEnum } from '@/types/enum'
 import { IProduct } from '@/types/product'
 import { calculateDiscountPrice } from '@/utils/price'
 
+import ImageWithFallback from '../ImageFallback'
 import { Button } from '../ui/button'
 import PriceSection from './PriceSection'
 import ProductDetailInfoSection from './ProductDetailInfoSection'
@@ -129,9 +131,10 @@ const ProductDetailInformation = ({
               >
                 {showImage && classification?.images?.[0]?.fileUrl && (
                   <div className="w-10 h-10 rounded-md">
-                    <img
+                    <ImageWithFallback
+                      fallback={fallBackImage}
                       alt={option}
-                      src={classification.images[0].fileUrl}
+                      src={classification.images.filter((img) => img.status === StatusEnum.ACTIVE)?.[0].fileUrl}
                       className="w-full h-full object-cover rounded-md"
                     />
                   </div>

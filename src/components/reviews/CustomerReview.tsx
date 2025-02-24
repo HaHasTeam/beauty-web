@@ -1,6 +1,9 @@
 import { UserCircle } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
+import fallBackImage from '@/assets/images/fallBackImage.jpg'
+
+import ImageWithFallback from '../ImageFallback'
 import { Ratings } from '../ui/rating'
 
 interface CustomerReviewProps {
@@ -55,7 +58,12 @@ const CustomerReview = ({
       <div className="flex gap-2 flex-wrap">
         {images.map((item) => (
           <div className="w-24 h-24" key={item?.id}>
-            <img src={item.image} className="object-cover w-full h-full rounded-md" />
+            <ImageWithFallback
+              fallback={fallBackImage}
+              alt={item.image}
+              src={item.image}
+              className="object-cover w-full h-full rounded-md"
+            />
           </div>
         ))}
       </div>

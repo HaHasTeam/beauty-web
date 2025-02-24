@@ -5,6 +5,7 @@ import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
+import fallBackImage from '@/assets/images/fallBackImage.jpg'
 import configs from '@/config'
 import useHandleServerError from '@/hooks/useHandleServerError'
 import { useToast } from '@/hooks/useToast'
@@ -16,6 +17,7 @@ import { IProduct } from '@/types/product'
 import { createCartFromProduct } from '@/utils/cart'
 import { calculateDiscountPrice, calculateTotalPrice } from '@/utils/price'
 
+import ImageWithFallback from '../ImageFallback'
 import IncreaseDecreaseButton from '../IncreaseDecreaseButton'
 import { Button } from '../ui/button'
 
@@ -193,9 +195,10 @@ const ProductDetailAction = ({
             className={`w-fit h-fit justify-start px-2 py-2 text-sm`}
           >
             <div className="w-10 h-10 rounded-md">
-              <img
+              <ImageWithFallback
+                fallback={fallBackImage}
                 alt="option"
-                src={chosenClassification?.images[0]?.fileUrl}
+                src={chosenClassification?.images?.filter((img) => img.status === StatusEnum.ACTIVE)?.[0]?.fileUrl}
                 className="w-full h-full object-contain rounded-md"
               />
             </div>

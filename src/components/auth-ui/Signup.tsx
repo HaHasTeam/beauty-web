@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
 import { z } from 'zod'
 
+import fallBackImage from '@/assets/images/fallBackImage.jpg'
 import OrVector from '@/assets/images/orVector.png'
 import OrVector02 from '@/assets/images/orVector02.png'
 import { buttonVariants } from '@/components/ui/button'
@@ -22,6 +23,7 @@ import { createUserApi } from '@/network/apis/user'
 
 import Button from '../button'
 import { Icons } from '../Icons'
+import ImageWithFallback from '../ImageFallback'
 import LoadingLayer from '../loading-icon/LoadingLayer'
 
 export default function SignUp() {
@@ -230,9 +232,9 @@ export default function SignUp() {
       </Form>
       <div className="mt-6 text-center">
         <div className="flex items-baseline justify-center gap-2">
-          <img src={OrVector} alt="vector" />
+          <ImageWithFallback src={OrVector} alt="vector" fallback={fallBackImage} className="object-contain" />
           <p className="text-sm text-gray-600 mb-4">OR</p>
-          <img src={OrVector02} alt="vector" />
+          <ImageWithFallback src={OrVector02} alt="vector" fallback={fallBackImage} className="object-contain" />
         </div>
         <a
           className={cn(

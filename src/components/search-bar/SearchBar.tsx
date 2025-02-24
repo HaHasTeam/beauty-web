@@ -10,10 +10,15 @@ const SearchBar = () => {
   const navigate = useNavigate()
   const location = useLocation()
 
-  const handleSearch = () => {
-    if (query.trim()) {
-      navigate(`/search?keyword=${encodeURIComponent(query)}`)
+  const handleSearch = (searchQuery = query) => {
+    if (searchQuery.trim()) {
+      navigate(`/search?keyword=${encodeURIComponent(searchQuery)}`)
     }
+  }
+
+  const handleSuggestionClick = (suggestion: string) => {
+    setQuery(suggestion)
+    handleSearch(suggestion)
   }
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search)
@@ -24,6 +29,7 @@ const SearchBar = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.search])
+  const suggestions = ['mask', 'toner', 'cushion', 'lipstick']
   return (
     <div className="flex-1 px-2 md:px-12">
       <div className="flex w-full">
@@ -43,10 +49,15 @@ const SearchBar = () => {
         </Button>
       </div>
       <div className="mt-1 flex space-x-4 text-sm text-gray-500">
-        <span>mask</span>
-        <span>toner</span>
-        <span>cushion</span>
-        <span>lipstick</span>
+        {suggestions.map((suggestion) => (
+          <span
+            key={suggestion}
+            className="cursor-pointer hover:text-gray-700"
+            onClick={() => handleSuggestionClick(suggestion)}
+          >
+            {suggestion}
+          </span>
+        ))}
       </div>
     </div>
   )

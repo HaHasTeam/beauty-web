@@ -144,7 +144,7 @@ export type IProduct = {
   flashSale?: {
     productAmount: number
     soldAmount?: number
-  }
+  } | null
   rating: number
   ratingAmount: number
   soldInPastMonth: number

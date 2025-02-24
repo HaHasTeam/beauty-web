@@ -6,158 +6,15 @@ import { Link } from 'react-router-dom'
 import configs from '@/config'
 import { getAllProductApi } from '@/network/apis/product'
 import { buildOneWayResource } from '@/router'
+import { DiscountTypeEnum, OrderEnum, ProductEnum, StatusEnum } from '@/types/enum'
+import { calculateDiscountPrice } from '@/utils/price'
+import { getCheapestClassification } from '@/utils/product'
 
 import LoadingIcon from '../loading-icon'
 import ProductCard from '../product/ProductCard'
 
 const RecommendProduct = () => {
   const { t } = useTranslation()
-  // const recommendProducts: IProductCard[] = [
-  //   {
-  //     id: '1',
-  //     name: 'Cherry Blossom Serum',
-  //     tag: 'Best Seller',
-  //     price: 29.99,
-  //     currentPrice: 20.09,
-  //     images: [{ id: '1', image: 'path/to/image1.png' }],
-  //     deal: 0.33,
-  //     flashSale: {
-  //       productAmount: 100,
-  //       soldAmount: 65,
-  //     },
-  //     rating: 4.5,
-  //     ratingAmount: 250,
-  //     soldInPastMonth: 300,
-  //   },
-  //   {
-  //     id: '2',
-  //     name: 'Aloe Vera Moisturizer',
-  //     tag: 'Limited Edition',
-  //     price: 34.99,
-  //     currentPrice: 24.84,
-  //     images: [{ id: '1', image: 'path/to/image1.png' }],
-  //     deal: 0.29,
-  //     flashSale: {
-  //       productAmount: 200,
-  //       soldAmount: 120,
-  //     },
-  //     rating: 4.7,
-  //     ratingAmount: 340,
-  //     soldInPastMonth: 500,
-  //   },
-  //   {
-  //     id: '3',
-  //     name: 'Vitamin C Brightening Serum',
-  //     tag: 'New Arrival',
-  //     price: 19.99,
-  //     currentPrice: 14.99,
-  //     images: [{ id: '1', image: 'path/to/image1.png' }],
-  //     deal: 0.25,
-  //     rating: 4.6,
-  //     ratingAmount: 180,
-  //     soldInPastMonth: 220,
-  //   },
-  //   {
-  //     id: '4',
-  //     name: 'Hydrating Face Mist',
-  //     tag: 'Hot Deal',
-  //     price: 15.99,
-  //     currentPrice: 12.79,
-  //     images: [{ id: '1', image: 'path/to/image1.png' }],
-  //     deal: 0.2,
-  //     flashSale: {
-  //       productAmount: 80,
-  //       soldAmount: 50,
-  //     },
-  //     rating: 4.2,
-  //     ratingAmount: 130,
-  //     soldInPastMonth: 160,
-  //   },
-  //   {
-  //     id: '5',
-  //     name: 'Green Tea Cleanser',
-  //     tag: 'Flash Sale',
-  //     price: 12.99,
-  //     currentPrice: 10.0,
-  //     images: [{ id: '1', image: 'path/to/image1.png' }],
-  //     deal: 0.23,
-  //     flashSale: {
-  //       productAmount: 50,
-  //       soldAmount: 30,
-  //     },
-  //     rating: 4.8,
-  //     ratingAmount: 95,
-  //     soldInPastMonth: 120,
-  //   },
-  //   {
-  //     id: '6',
-  //     name: 'Hyaluronic Acid Serum',
-  //     tag: 'Best Seller',
-  //     price: 25.99,
-  //     currentPrice: 20.79,
-  //     images: [{ id: '1', image: 'path/to/image1.png' }],
-  //     deal: 0.2,
-  //     rating: 4.9,
-  //     ratingAmount: 400,
-  //     soldInPastMonth: 550,
-  //   },
-  //   {
-  //     id: '7',
-  //     name: 'Retinol Anti-Aging Cream',
-  //     tag: 'Limited Edition',
-  //     price: 49.99,
-  //     currentPrice: 39.99,
-  //     images: [{ id: '1', image: 'path/to/image1.png' }],
-  //     deal: 0.2,
-  //     rating: 4.4,
-  //     ratingAmount: 210,
-  //     soldInPastMonth: 310,
-  //   },
-  //   {
-  //     id: '8',
-  //     name: 'Rose Water Toner',
-  //     tag: 'Hot Deal',
-  //     price: 18.99,
-  //     currentPrice: 15.19,
-  //     images: [{ id: '1', image: 'path/to/image1.png' }],
-  //     deal: 0.2,
-  //     rating: 4.3,
-  //     ratingAmount: 170,
-  //     soldInPastMonth: 200,
-  //   },
-  //   {
-  //     id: '9',
-  //     name: 'Cherry Blossom Serum Cherry Blossom Serum Cherry Blossom Serum',
-  //     tag: 'Best Seller',
-  //     price: 29.99,
-  //     currentPrice: 20.09,
-  //     images: [{ id: '1', image: 'path/to/image1.png' }],
-  //     deal: 0.33,
-  //     flashSale: {
-  //       productAmount: 100,
-  //       soldAmount: 65,
-  //     },
-  //     rating: 4.5,
-  //     ratingAmount: 250,
-  //     soldInPastMonth: 300,
-  //   },
-  //   {
-  //     id: '10',
-  //     name: 'Cherry Blossom Serum',
-  //     tag: 'Best Seller',
-  //     price: 29.99,
-  //     currentPrice: 20.09,
-  //     images: [{ id: '1', image: 'path/to/image1.png' }],
-  //     deal: 0.33,
-  //     flashSale: {
-  //       productAmount: 100,
-  //       soldAmount: 65,
-  //     },
-  //     rating: 4.5,
-  //     ratingAmount: 250,
-  //     soldInPastMonth: 300,
-  //   },
-  // ]
 
   const { data: allProducts, isFetching } = useQuery({
     queryKey: [getAllProductApi.queryKey],
@@ -189,28 +46,62 @@ const RecommendProduct = () => {
       {!isFetching && allProducts && (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
           {allProducts?.map((product) => {
-            const productImages = product?.images ?? [{ id: '1', image: 'path/to/image1.png' }]
+            const productClassifications = product?.productClassifications.filter(
+              (classification) => classification.status === StatusEnum.ACTIVE,
+            )
+            // show cheapest classification
+            const productClassification = getCheapestClassification(product.productClassifications ?? [])
+            const currentPrice = calculateDiscountPrice(
+              productClassification?.price ?? 0,
+              productClassification?.productDiscount && productClassification?.status === StatusEnum.ACTIVE
+                ? productClassification?.productDiscount?.discount
+                : 0,
+              DiscountTypeEnum.PERCENTAGE,
+            )
+            const productTag =
+              productClassification?.preOrderProduct && productClassification?.status === StatusEnum.ACTIVE
+                ? OrderEnum.PRE_ORDER
+                : productClassification?.productDiscount && productClassification?.status === StatusEnum.ACTIVE
+                  ? OrderEnum.FLASH_SALE
+                  : product.status === ProductEnum.OFFICIAL
+                    ? ''
+                    : product.status
+
             const mockProduct = {
               id: product.id,
               name: product.name,
-              tag: 'Best Seller',
-              price: 20.09,
-              currentPrice: product.productClassifications[0]?.price,
-              images: productImages,
-              deal: 0.33,
-              flashSale: {
-                productAmount: 100,
-                soldAmount: 65,
-              },
+              tag: productTag,
+              price: productClassification?.price ?? -1,
+              currentPrice: currentPrice,
+              images: product.images,
+              deal:
+                productClassification?.productDiscount && productClassification?.status === StatusEnum.ACTIVE
+                  ? productClassification?.productDiscount?.discount
+                  : 0,
+              flashSale:
+                productClassification?.productDiscount && productClassification?.status === StatusEnum.ACTIVE
+                  ? {
+                      productAmount: (productClassification?.productDiscount?.productClassifications ?? []).filter(
+                        (classification) => classification?.status === StatusEnum.ACTIVE,
+                      )?.[0].quantity,
+                      soldAmount: 65,
+                    }
+                  : null,
               description: product.description,
               detail: product.detail,
               rating: 4.5,
               ratingAmount: 250,
               soldInPastMonth: 300,
-              classifications: product.productClassifications,
+              classifications: productClassifications,
               certificates: product.certificates,
             }
-            return <ProductCard key={product?.id} product={mockProduct} />
+            return (
+              <ProductCard
+                key={product?.id}
+                product={mockProduct}
+                isProductDiscount={productTag === OrderEnum.FLASH_SALE}
+              />
+            )
           })}
         </div>
       )}
