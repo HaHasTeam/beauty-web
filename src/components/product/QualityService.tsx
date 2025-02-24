@@ -1,42 +1,77 @@
 import { BadgeCheck, Download, Eye, Package, PackageCheck } from 'lucide-react'
+import { Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { handleDownload } from '@/utils/certificate/handleDownload'
 
 import { Table, TableBody, TableCell, TableRow } from '../ui/table'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip'
 
 interface QualityService {
-  certificateUrl: string
+  certificateUrls: string[]
   productName: string
 }
-const QualityService = ({ certificateUrl, productName }: QualityService) => {
+const QualityService = ({ productName }: QualityService) => {
   const { t } = useTranslation()
+  const certificateUrls = ['https://storage.googleapis.com/test-firebase-storage-d1b61.appspot.com/1739600237927.pdf']
+  const renderCertificateActions = (certificateUrl: string, index: number) => (
+    <div className="flex items-center gap-1">
+      {certificateUrls.length > 0 && (
+        <span>
+          {t('createProduct.file')} #{index + 1}
+        </span>
+      )}
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <a
+              href={certificateUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-full hover:bg-gray-100 transition-colors"
+            >
+              <Eye size={16} className="text-gray-500 hover:text-gray-800" />
+            </a>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>{t('productDetail.view')}</p>
+          </TooltipContent>
+        </Tooltip>
+
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Download
+              size={16}
+              className="text-gray-500 hover:text-gray-800 cursor-pointer hover:bg-gray-100 transition-colors"
+              onClick={() =>
+                handleDownload(certificateUrl, `${productName}`, certificateUrls.length > 1 ? `${index + 1}` : '')
+              }
+            />
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>{t('createProduct.download')}</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    </div>
+  )
 
   const safeServices = [
-    ...(certificateUrl?.length > 0
+    ...(certificateUrls?.length > 0
       ? [
           {
             id: '1',
             icon: <BadgeCheck className="text-green-500" />,
             name: (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-4">
                 <span>{t('productDetail.safeCertificate')}</span>
-                <div className="flex gap-2">
-                  <a
-                    href={certificateUrl ?? ''}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-gray-500 hover:text-gray-800"
-                  >
-                    <Eye size={18} />
-                  </a>
-
-                  <button
-                    onClick={() => handleDownload(certificateUrl ?? '', productName)}
-                    className="flex items-center gap-2 text-gray-500 hover:text-gray-800"
-                  >
-                    <Download size={18} />
-                  </button>
+                <div className="flex items-center gap-1 flex-wrap">
+                  {certificateUrls.map((url, index) => (
+                    <Fragment key={index}>
+                      {index > 0 && <span className="text-gray-300">|</span>}
+                      {renderCertificateActions(url, index)}
+                    </Fragment>
+                  ))}
                 </div>
               </div>
             ),

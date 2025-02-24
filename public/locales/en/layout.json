@@ -272,7 +272,7 @@
     "qualityService": "Guaranteed Quality & Service",
     "verified": "Inspection Upon Receipt",
     "official": "100% Authentic Products",
-    "certificateOfProduct": "Certificate of {{name}}",
+    "certificateOfProduct": "Product certificate of {{name}}",
     "name": "Name"
   },
   "event": {
@@ -541,6 +541,7 @@
     "buyAgain": "Buy Again",
     "classification": "Classification",
     "all": "All",
+    "totalPrice": "{{price, currency}}",
     "created": "Order Created",
     "pending": "Pending Payment",
     "waitConfirm": "Waiting For Confirmation",
@@ -836,7 +837,10 @@
       "PRE_ORDER": "The product is not yet released or out of stock but can be ordered in advance.",
       "OFFICIAL": "The product is an officially verified item from the brand or manufacturer and has been reviewed by the platform moderator.",
       "OUT_OF_STOCK": "The product is temporarily unavailable due to no remaining stock."
-    }
+    },
+    "brandInformation": "Brand Information",
+    "noCertificates": "No Certificate",
+    "file": "File"
   },
   "status": {
     "ACTIVE": "Active",

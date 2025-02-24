@@ -214,7 +214,7 @@ const ProductDetailInformation = ({
       </div>
 
       {/* certificate */}
-      <QualityService certificateUrl={product?.certificate ?? ''} productName={product.name ?? ''} />
+      <QualityService certificateUrls={product?.certificates ?? ''} productName={product.name ?? ''} />
 
       {/* detail */}
       <div className="w-full py-4 px-3 bg-white rounded-lg">

@@ -11,7 +11,7 @@ import { useToast } from '@/hooks/useToast'
 import { createCartItemApi, getMyCartApi } from '@/network/apis/cart'
 import useCartStore from '@/store/cart'
 import { IClassification } from '@/types/classification'
-import { DiscountTypeEnum, ProductDiscountEnum, StatusEnum } from '@/types/enum'
+import { DiscountTypeEnum, ProductDiscountEnum, ProductEnum, StatusEnum } from '@/types/enum'
 import { IProduct } from '@/types/product'
 import { createCartFromProduct } from '@/utils/cart'
 import { calculateDiscountPrice, calculateTotalPrice } from '@/utils/price'
@@ -227,6 +227,8 @@ const ProductDetailAction = ({
         </div>
 
         {!inStock && !chosenClassification && (product?.productClassifications ?? [])?.length > 0 ? (
+          <span className="text-red-500 text-sm">{t('cart.soldOutAllMessage')}</span>
+        ) : product.status === ProductEnum.OUT_OF_STOCK ? (
           <span className="text-red-500 text-sm">{t('cart.soldOutAllMessage')}</span>
         ) : !chosenClassification && hasCustomType ? (
           <span className="text-yellow-500 text-sm">{t('cart.chooseClassification')}</span>

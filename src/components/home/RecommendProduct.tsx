@@ -195,7 +195,7 @@ const RecommendProduct = () => {
               name: product.name,
               tag: 'Best Seller',
               price: 20.09,
-              currentPrice: product.productClassifications[0].price,
+              currentPrice: product.productClassifications[0]?.price,
               images: productImages,
               deal: 0.33,
               flashSale: {
@@ -208,7 +208,7 @@ const RecommendProduct = () => {
               ratingAmount: 250,
               soldInPastMonth: 300,
               classifications: product.productClassifications,
-              certificate: product.certificate,
+              certificates: product.certificates,
             }
             return <ProductCard key={product?.id} product={mockProduct} />
           })}

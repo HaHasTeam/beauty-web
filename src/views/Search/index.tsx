@@ -71,7 +71,7 @@ const SearchPage = () => {
                         ratingAmount: 250,
                         soldInPastMonth: 300,
                         classifications: product.productClassifications,
-                        certificate: product.certificate,
+                        certificates: product.certificates,
                       }
                       return <ProductCard key={product?.id} product={formatProduct} />
                     })}

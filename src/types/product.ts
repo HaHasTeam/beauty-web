@@ -102,7 +102,7 @@ export type IResponseProduct = {
   sku?: string
   menu?: string
   updatedAt: string
-  certificate: string
+  certificates: string[]
 }
 
 export type IProductTable = {
@@ -160,7 +160,7 @@ export type IProduct = {
   productDiscounts?: IProductDiscount[] | null // use for cart
   preOrderProducts?: IPreOrder[] | null // use for cart
   category?: ICategory // use for product details
-  certificate: string
+  certificates: string[]
 }
 
 export type IProductCart = {
