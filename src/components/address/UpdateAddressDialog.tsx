@@ -8,7 +8,7 @@ import { z } from 'zod'
 import useHandleServerError from '@/hooks/useHandleServerError'
 import { useToast } from '@/hooks/useToast'
 import { getAddressByIdApi, getMyAddressesApi, updateAddressApi } from '@/network/apis/address'
-import CreateAddressSchema from '@/schemas/address.schema'
+import { getCreateAddressSchema } from '@/schemas/address.schema'
 import { IAddress } from '@/types/address'
 import { AddressEnum } from '@/types/enum'
 
@@ -31,6 +31,7 @@ const UpdateAddressDialog = ({ address, triggerComponent }: UpdateAddressDialogP
   const { successToast } = useToast()
   const handleServerError = useHandleServerError()
   const queryClient = useQueryClient()
+  const CreateAddressSchema = getCreateAddressSchema()
 
   const defaultValues = {
     fullName: address?.fullName ?? '',
