@@ -50,7 +50,7 @@ const WebNotification: React.FC<WebNotificationProps> = ({
       <div className="relative cursor-pointer" onClick={toggleDropdown}>
         <Bell className="text-gray-700" />
         {notificationCount > 0 && (
-          <span className="absolute -top-1 -right-1 rounded-full bg-red-500 text-white text-xs w-4 h-4 flex items-center justify-center">
+          <span className="absolute -top-1 -right-1 rounded-full bg-primary text-white text-xs w-4 h-4 flex items-center justify-center">
             {notificationCount}
           </span>
         )}

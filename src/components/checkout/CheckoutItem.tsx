@@ -9,7 +9,7 @@ import configs from '@/config'
 import { CreateOrderSchema } from '@/schemas/order.schema'
 import { IBrand } from '@/types/brand'
 import { ICartItem } from '@/types/cart'
-import { DiscountTypeEnum, OrderEnum } from '@/types/enum'
+import { ClassificationTypeEnum, DiscountTypeEnum, OrderEnum, StatusEnum } from '@/types/enum'
 import { IBrandBestVoucher, ICheckoutItem, TVoucher } from '@/types/voucher'
 import { getTotalBrandProductsPrice } from '@/utils/price'
 
@@ -81,7 +81,11 @@ const CheckoutItem = ({
           cartItem?.productClassification?.productDiscount?.product ??
           cartItem?.productClassification?.product
         const productClassification = cartItem?.productClassification ?? null
-        const productImage = cartItem?.productClassification?.images?.[0]?.fileUrl ?? ''
+        // const productImage = cartItem?.productClassification?.images?.[0]?.fileUrl ?? ''
+        const productImage =
+          (cartItem?.productClassification?.type === ClassificationTypeEnum.DEFAULT
+            ? product?.images?.filter((img) => img?.status === StatusEnum.ACTIVE)[0]?.fileUrl
+            : cartItem?.productClassification?.images?.[0]?.fileUrl) ?? ''
         const productName = product?.name ?? ''
         const productId = product?.id ?? ''
         const selectedClassification = cartItem?.classification ?? ''
