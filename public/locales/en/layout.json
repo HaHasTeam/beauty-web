@@ -107,7 +107,8 @@
     "submitAndHide": "Submit and Hide",
     "deselect": "Deselect",
     "select": "Select",
-    "edit": "Edit"
+    "edit": "Edit",
+    "backToList": "Back to List"
   },
   "noData": "No matching data found",
   "sell": {
@@ -265,7 +266,7 @@
     "productDetail": {
       "title": "Product Not Found",
       "description": "The product you're looking for either does not exist, has been removed, or is currently unavailable.",
-      "button": "Browse Other Products"
+      "button": "Browse Other Product"
     },
     "systemServiceDetail": {
       "title": "System Service Not Found",
@@ -930,7 +931,18 @@
     "preview": "Preview",
     "alsoUsedFor": "This consultation criteria also used for the following system services",
     "updateResultSheet": "Update Consultation Criteria",
-    "updateResultSheetSuccess": "Update consultation criteria successfully!"
+    "updateResultSheetSuccess": "Update consultation criteria successfully!",
+    "deleteSectionSuccess": "Delete consultant criteria section successfully!",
+    "createdAt": "Created At",
+    "lastUpdated": "Last updated",
+    "updateSystemServiceStatusSuccess": "Update system service status successfully!",
+    "statusDescription": {
+      "ACTIVE": "The system service is currently visible in the system, and consultants can register.",
+      "INACTIVE": "The system service is currently hidden from the system, and consultant registration is disabled."
+    },
+    "consultantCriteriaDetails": "Consultation Criteria Details",
+    "ID": "ID",
+    "applicableServices": "Applicable Services"
   },
   "layout": {
     "help": "HELP",
@@ -954,9 +966,9 @@
     "location": "Our Location",
     "address": "99 S.t Jomblo Park Pekanbaru 28292, Indonesia",
     "phone": "Phone Number",
-    "phoneNumber": "Enter your phone number",
-    "email": "Email",
-    "emailAddress": "Enter your email address",
+    "phoneNumber": "(+62)81 414 257 9980",
+    "email": "Email Address",
+    "emailAddress": "info@yourdomain.com",
     "yourInformation": "Your Information",
     "fullName": "Full Name",
     "fullNamePlaceholder": "Your Full Name",
@@ -966,5 +978,9 @@
     "messagePlaceholder": "Your Message",
     "sendMessage": "Send Message",
     "sendSuccess": "Send message successfully!"
+  },
+  "systemServiceType": {
+    "PREMIUM": "Premium",
+    "STANDARD": "Standard"
   }
 }
