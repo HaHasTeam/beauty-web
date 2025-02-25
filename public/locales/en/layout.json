@@ -749,10 +749,12 @@
     "phoneValid": "Please fill in a valid phone number",
     "arrayRequired": "Field value must be an array",
     "stringOrArrayRequired": "Field value must be a string or an array",
-    "sizeFileValid": "Each file must be under {{size}}MB.",
+    "sizeFileValid": "Each file must be under {{size}}MB",
     "fileFormat": "Accepted file formats are",
     "fileCountValid": "You can upload up to {{count}} files",
-    "tooLong": "Message too long."
+    "tooLong": "Message too long.",
+    "ratingFeedback": "The rating must be between 1 and 5",
+    "contentFeedback": "The feedback content must be at least 25 characters long but no more than 500 characters"
   },
   "role": {
     "ADMIN": "Admin",
@@ -982,5 +984,15 @@
   "systemServiceType": {
     "PREMIUM": "Premium",
     "STANDARD": "Standard"
+  },
+  "feedback": {
+    "successTitle": "",
+    "successDescription": "",
+    "writeReview": "Write a Review",
+    "rating": "Rating",
+    "content": "Share Your Experiences",
+    "contentPlaceholder": "Enter your message here...",
+    "mediaFiles": "Upload video and images",
+    "mediaFilesHint": "Upload maximum 1 video and 4 images"
   }
 }

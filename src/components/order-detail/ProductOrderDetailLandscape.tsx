@@ -11,6 +11,7 @@ import { createCartItemApi, getMyCartApi } from '@/network/apis/cart'
 import { IClassification } from '@/types/classification'
 import { ClassificationTypeEnum, OrderEnum, ShippingStatusEnum } from '@/types/enum'
 
+import { WriteFeedbackDialog } from '../feedback/WriteFeedbackDialog'
 import ImageWithFallback from '../ImageFallback'
 import LoadingIcon from '../loading-icon'
 import ProductTag from '../product/ProductTag'
@@ -29,6 +30,7 @@ interface ProductOrderDetailLandscapeProps {
   productClassification: IClassification | null
   status: ShippingStatusEnum
   isFeedback: boolean
+  orderDetailId: string
 }
 const ProductOrderDetailLandscape = ({
   productImage,
@@ -42,9 +44,11 @@ const ProductOrderDetailLandscape = ({
   productClassification,
   status,
   isFeedback,
+  orderDetailId,
 }: ProductOrderDetailLandscapeProps) => {
   const { t } = useTranslation()
   const [isProcessing, setIsProcessing] = useState(false)
+  const [openWriteFeedbackDialog, setOpenWriteFeedbackDialog] = useState(false)
   const { successToast } = useToast()
   const queryClient = useQueryClient()
   const handleServerError = useHandleServerError()
@@ -127,8 +131,9 @@ const ProductOrderDetailLandscape = ({
                     {t('order.returnOrder')}
                   </Button>
                 )}
-                {!isFeedback && (
+                {status === ShippingStatusEnum.COMPLETED && !isFeedback && (
                   <Button
+                    onClick={() => setOpenWriteFeedbackDialog(true)}
                     variant="outline"
                     size="sm"
                     className="border border-primary text-primary hover:text-primary hover:bg-primary/10"
@@ -215,6 +220,13 @@ const ProductOrderDetailLandscape = ({
           {t('productCard.currentPrice', { price: subTotal })}
         </span>
       </div>
+      {openWriteFeedbackDialog && (
+        <WriteFeedbackDialog
+          isOpen={openWriteFeedbackDialog}
+          onClose={() => setOpenWriteFeedbackDialog(false)}
+          orderDetailId={orderDetailId}
+        />
+      )}
     </div>
   )
 }
