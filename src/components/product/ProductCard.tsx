@@ -1,8 +1,7 @@
-import { Heart } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
-import placeholderImage from '@/assets/images/placeholder_error_img.png'
+import fallBackImage from '@/assets/images/fallBackImage.jpg'
 import { Card, CardContent } from '@/components/ui/card'
 import configs from '@/config'
 import { IProduct } from '@/types/product'
@@ -30,14 +29,14 @@ export default function ProductCard({ product, isProductDiscount = false }: Prod
       >
         <div className="absolute top-3 left-3 z-10">{product?.tag && <ProductTag tag={product?.tag} />}</div>
 
-        <button className="absolute top-3 right-3 z-10 bg-gray-300 bg-opacity-30 rounded-full p-2 flex items-center justify-center hover:opacity-70">
+        {/* <button className="absolute top-3 right-3 z-10 bg-gray-300 bg-opacity-30 rounded-full p-2 flex items-center justify-center hover:opacity-70">
           <Heart fill="white" className="w-5 h-5 focus:text-rose-500 transition-colors text-white opacity-100 " />
-          {/* <Heart fill="red" className="w-5 h-5 hover:w-5 hover:h-5 text-rose-500 transition-colors  " /> */}
-        </button>
+          <Heart fill="red" className="w-5 h-5 hover:w-5 hover:h-5 text-rose-500 transition-colors  " />
+        </button> */}
         <div className="relative aspect-square">
           <ImageWithFallback
             src={product?.images[0]?.fileUrl}
-            fallback={placeholderImage}
+            fallback={fallBackImage}
             alt={product.name}
             className="object-cover w-full h-full rounded-tl-xl rounded-tr-xl"
           />
@@ -54,17 +53,20 @@ export default function ProductCard({ product, isProductDiscount = false }: Prod
             </span>
           </div>
           <div className="flex justify-between items-center w-full">
-            <div className="flex items-baseline gap-2">
-              <span className="text-lg font-semibold">
-                {t('productCard.currentPrice', { price: product?.currentPrice })}
-              </span>
-
-              {product?.deal && product?.deal > 0 && (
+            {product?.deal && product?.deal > 0 ? (
+              <div className="flex gap-1 items-center">
+                <span className="text-red-500 lg:text-base md:text-sm sm:text-xs text-xs font-medium">
+                  {t('productCard.currentPrice', { price: product?.currentPrice })}
+                </span>
                 <span className="text-sm text-muted-foreground line-through">
                   {t('productCard.price', { price: product?.price })}
                 </span>
-              )}
-            </div>
+              </div>
+            ) : product?.price >= 0 ? (
+              <span className="lg:text-base md:text-sm sm:text-xs text-xs">
+                {t('productCard.price', { price: product?.price })}
+              </span>
+            ) : null}
           </div>
         </div>
       </CardContent>

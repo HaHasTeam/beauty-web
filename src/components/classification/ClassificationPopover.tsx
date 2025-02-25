@@ -3,6 +3,7 @@ import { ChevronDown } from 'lucide-react'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import fallBackImage from '@/assets/images/fallBackImage.jpg'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
@@ -10,9 +11,11 @@ import useHandleServerError from '@/hooks/useHandleServerError'
 import { useToast } from '@/hooks/useToast'
 import { createCartItemApi, deleteCartItemApi, getCartByIdApi, getMyCartApi } from '@/network/apis/cart'
 import { IClassification, IClassificationKey, IClassificationSelection } from '@/types/classification'
+import { StatusEnum } from '@/types/enum'
 import { checkCurrentProductClassificationActive } from '@/utils/product'
 
 import Empty from '../empty/Empty'
+import ImageWithFallback from '../ImageFallback'
 import LoadingContentLayer from '../loading-icon/LoadingContentLayer'
 
 interface ClassificationPopoverProps {
@@ -199,15 +202,17 @@ export default function ClassificationPopover({
                   (classification && !checkCurrentProductClassificationActive(classification, classifications))
                 }
               >
-                {showImage && classification?.images?.[0]?.fileUrl && (
-                  <div className="w-10 h-10 rounded-md">
-                    <img
-                      alt={option}
-                      src={classification.images[0].fileUrl}
-                      className="w-full h-full object-cover rounded-md"
-                    />
-                  </div>
-                )}
+                {showImage &&
+                  classification?.images?.filter((img) => img.status === StatusEnum.ACTIVE)?.[0]?.fileUrl && (
+                    <div className="w-10 h-10 rounded-md">
+                      <ImageWithFallback
+                        alt={option}
+                        src={classification.images?.filter((img) => img.status === StatusEnum.ACTIVE)?.[0].fileUrl}
+                        fallback={fallBackImage}
+                        className="w-full h-full object-cover rounded-md"
+                      />
+                    </div>
+                  )}
                 {option}
               </Button>
             )

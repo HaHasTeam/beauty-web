@@ -2,11 +2,13 @@ import { Mail, MapPin, Phone } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
+import fallBackImage from '@/assets/images/fallBackImage.jpg'
 import configs from '@/config'
 import { ProjectInformationEnum } from '@/types/enum'
 
 import appGooglePlayDownload from '../assets/images/appGooglePlayDownload.png'
 import appQRDownload from '../assets/images/appQRDownload.png'
+import ImageWithFallback from './ImageFallback'
 
 export default function Footer() {
   const { t } = useTranslation()
@@ -33,51 +35,61 @@ export default function Footer() {
             </div>
           </div>
           <div>
-            <h3 className="mb-4 font-semibold text-secondary opacity-80">HELP</h3>
+            <h3 className="mb-4 font-semibold text-secondary opacity-80">{t('layout.help')}</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link to={configs.routes.contact}>Contact us</Link>
+                <Link to={configs.routes.contact}>{t('layout.contactUs')}</Link>
               </li>
               <li>
-                <Link to={configs.routes.helpCenter}>FAQ</Link>
+                <Link to={configs.routes.helpCenter}>{t('layout.faq')}</Link>
               </li>
               <li>
-                <Link to={configs.routes.helpCenter}>Shipping & Returns</Link>
+                <Link to={configs.routes.helpCenter}>{t('layout.shippingReturns')}</Link>
               </li>
             </ul>
           </div>
           <div>
-            <h3 className="mb-4 font-semibold text-secondary opacity-80">MY ACCOUNT</h3>
+            <h3 className="mb-4 font-semibold text-secondary opacity-80">{t('layout.myAccount')}</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link to={configs.routes.profileAddress}>Addresses</Link>
+                <Link to={configs.routes.profileAddress}>{t('layout.addresses')}</Link>
               </li>
               <li>
-                <Link to={configs.routes.profileOrder}>Order</Link>
+                <Link to={configs.routes.profileOrder}>{t('layout.orders')}</Link>
               </li>
               <li>
-                <Link to={configs.routes.profileWishlist}>Wishlist</Link>
+                <Link to={configs.routes.profileVoucher}>{t('layout.vouchers')}</Link>
               </li>
             </ul>
           </div>
           <div>
-            <h3 className="mb-4 font-semibold text-secondary opacity-80">CUSTOMER CARE</h3>
+            <h3 className="mb-4 font-semibold text-secondary opacity-80">{t('layout.customerCare')}</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link to={configs.routes.about}>About us</Link>
+                <Link to={configs.routes.about}>{t('layout.aboutUs')}</Link>
               </li>
               <li>
-                <Link to={configs.routes.blogs}>Blog</Link>
+                <Link to={configs.routes.blogs}>{t('layout.blog')}</Link>
               </li>
             </ul>
           </div>
           <div className="flex flex-col justify-center align-middle">
             <div className="w-32 h-32 mb-2">
-              <img src={appQRDownload} alt="QR Code" className="object-contain" />
+              <ImageWithFallback
+                src={appQRDownload}
+                fallback={fallBackImage}
+                alt={'QR Code'}
+                className="object-contain"
+              />
             </div>
             <Link to={configs.externalLink.appDownloadUrl} className="bg-transparent hover:bg-transparent">
               <div className="w-32 h-4">
-                <img src={appGooglePlayDownload} alt="Google Play" className="w-full object-contain" />
+                <ImageWithFallback
+                  src={appGooglePlayDownload}
+                  fallback={fallBackImage}
+                  alt={'Google Play'}
+                  className="w-full object-contain"
+                />
               </div>
             </Link>
           </div>
@@ -86,8 +98,8 @@ export default function Footer() {
       <div className="flex justify-between align-middle mt-2 border-t border-zinc-700 px-6 py-4 text-gray-400 text-center text-sm">
         <p>{ProjectInformationEnum.copyRight}</p>
         <div className="mt-2 space-x-4">
-          <Link to={configs.routes.privacyPolicy}>Privacy Policy</Link>
-          <Link to={configs.routes.termsAndConditions}>Terms And Conditions</Link>
+          <Link to={configs.routes.privacyPolicy}>{t('layout.privacyPolicy')}</Link>
+          <Link to={configs.routes.termsAndConditions}>{t('layout.termsAndConditions')}</Link>
         </div>
       </div>
     </footer>

@@ -1,8 +1,8 @@
-import { Heart } from 'lucide-react'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
+import fallBackImage from '@/assets/images/fallBackImage.jpg'
 import productImage from '@/assets/images/product_sample_img.png'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import configs from '@/config'
@@ -11,6 +11,7 @@ import { TFlashSale } from '@/types/flash-sale'
 import { calculateDiscountPrice } from '@/utils/price'
 import { getCheapestClassification } from '@/utils/product'
 
+import ImageWithFallback from '../ImageFallback'
 import ProductTag from './ProductTag'
 import SoldProgress from './SoldProgress'
 
@@ -30,14 +31,15 @@ export default function SaleProductCard({ product }: ProductCardProps) {
           <div className="absolute top-3 left-3 z-10">
             <ProductTag tag={OrderEnum.FLASH_SALE} />
           </div>
-          <button className="absolute top-3 right-3 z-10 bg-gray-300 bg-opacity-30 rounded-full p-2 flex items-center justify-center hover:opacity-70">
+          {/* <button className="absolute top-3 right-3 z-10 bg-gray-300 bg-opacity-30 rounded-full p-2 flex items-center justify-center hover:opacity-70">
             <Heart fill="white" className="w-5 h-5 focus:text-rose-500 transition-colors text-white opacity-100 " />
-            {/* <Heart fill="red" className="w-5 h-5 hover:w-5 hover:h-5 text-rose-500 transition-colors  " /> */}
-          </button>
+            <Heart fill="red" className="w-5 h-5 hover:w-5 hover:h-5 text-rose-500 transition-colors  " />
+          </button> */}
           <div className="relative aspect-square">
-            <img
+            <ImageWithFallback
+              fallback={fallBackImage}
               src={productImage}
-              alt="Pink serum bottle with cherry blossoms"
+              alt={productImage}
               className="object-cover w-full h-full rounded-tl-xl rounded-tr-xl"
             />
           </div>

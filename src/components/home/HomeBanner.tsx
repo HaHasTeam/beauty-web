@@ -1,6 +1,7 @@
 import Autoplay from 'embla-carousel-autoplay'
 import { useEffect, useRef, useState } from 'react'
 
+import fallBackImage from '@/assets/images/fallBackImage.jpg'
 import homeBanner1 from '@/assets/images/home_banner_1.jpg'
 import homeBanner2 from '@/assets/images/home_banner_2.jpg'
 import homeBanner3 from '@/assets/images/home_banner_3.jpg'
@@ -8,6 +9,7 @@ import homeBanner4 from '@/assets/images/home_banner_4.jpg'
 import homeBanner5 from '@/assets/images/home_banner_5.jpg'
 import homeBanner6 from '@/assets/images/home_banner_6.jpg'
 
+import ImageWithFallback from '../ImageFallback'
 import { Carousel, CarouselApi, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '../ui/carousel'
 import { RadioGroup, RadioGroupItem } from '../ui/radio-group'
 
@@ -55,10 +57,11 @@ const HomeBanner = () => {
         {banners.map((banner) => (
           <CarouselItem key={banner?.id}>
             <div className="p-1 w-full h-80 rounded-lg">
-              <img
+              <ImageWithFallback
                 className="w-full h-full object-cover object-center rounded-lg"
                 src={banner?.image}
                 alt={banner?.alt}
+                fallback={fallBackImage}
               />
             </div>
           </CarouselItem>

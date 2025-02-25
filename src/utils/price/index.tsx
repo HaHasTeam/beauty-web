@@ -17,7 +17,7 @@ export const calculateDiscountPrice = (
   discount?: number | null,
   discountType?: DiscountType | null,
 ): number => {
-  if (!discount || !discountType) {
+  if (!discount || !discountType || discount === 0) {
     return price
   }
 

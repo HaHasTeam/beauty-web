@@ -4,7 +4,7 @@ export default function CheckoutHeader() {
   const { t } = useTranslation()
 
   return (
-    <div className="w-full bg-secondary/30 rounded-sm">
+    <div className="w-full bg-secondary/30 rounded-sm text-primary font-medium">
       <div className="w-full flex px-4 py-3 space-y-2 items-center lg:text-base md:text-sm sm:text-xs text-xs">
         <div className="flex items-center gap-2 w-fit">
           <label className="w-fit">{t('cart.Products')}</label>

@@ -5,17 +5,19 @@ import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
+import fallBackImage from '@/assets/images/fallBackImage.jpg'
 import configs from '@/config'
 import useHandleServerError from '@/hooks/useHandleServerError'
 import { useToast } from '@/hooks/useToast'
 import { createCartItemApi, getMyCartApi } from '@/network/apis/cart'
 import useCartStore from '@/store/cart'
 import { IClassification } from '@/types/classification'
-import { DiscountTypeEnum, ProductDiscountEnum, StatusEnum } from '@/types/enum'
+import { DiscountTypeEnum, ProductDiscountEnum, ProductEnum, StatusEnum } from '@/types/enum'
 import { IProduct } from '@/types/product'
 import { createCartFromProduct } from '@/utils/cart'
 import { calculateDiscountPrice, calculateTotalPrice } from '@/utils/price'
 
+import ImageWithFallback from '../ImageFallback'
 import IncreaseDecreaseButton from '../IncreaseDecreaseButton'
 import { Button } from '../ui/button'
 
@@ -193,9 +195,10 @@ const ProductDetailAction = ({
             className={`w-fit h-fit justify-start px-2 py-2 text-sm`}
           >
             <div className="w-10 h-10 rounded-md">
-              <img
+              <ImageWithFallback
+                fallback={fallBackImage}
                 alt="option"
-                src={chosenClassification?.images[0]?.fileUrl}
+                src={chosenClassification?.images?.filter((img) => img.status === StatusEnum.ACTIVE)?.[0]?.fileUrl}
                 className="w-full h-full object-contain rounded-md"
               />
             </div>
@@ -227,6 +230,8 @@ const ProductDetailAction = ({
         </div>
 
         {!inStock && !chosenClassification && (product?.productClassifications ?? [])?.length > 0 ? (
+          <span className="text-red-500 text-sm">{t('cart.soldOutAllMessage')}</span>
+        ) : product.status === ProductEnum.OUT_OF_STOCK ? (
           <span className="text-red-500 text-sm">{t('cart.soldOutAllMessage')}</span>
         ) : !chosenClassification && hasCustomType ? (
           <span className="text-yellow-500 text-sm">{t('cart.chooseClassification')}</span>

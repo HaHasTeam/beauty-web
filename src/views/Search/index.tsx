@@ -13,6 +13,9 @@ import ProductCard from '@/components/product/ProductCard'
 import ProductSort from '@/components/sort/ProductSort'
 import { limit, page } from '@/constants/infor'
 import { getProductFilterApi } from '@/network/apis/product'
+import { DiscountTypeEnum, OrderEnum, ProductEnum, StatusEnum } from '@/types/enum'
+import { calculateDiscountPrice } from '@/utils/price'
+import { getCheapestClassification } from '@/utils/product'
 
 const SearchPage = () => {
   const [currentPage, setCurrentPage] = useState(page)
@@ -34,8 +37,8 @@ const SearchPage = () => {
   return (
     <>
       {isFetching && <LoadingContentLayer />}
-      <div className="container w-full mx-auto pt-4 pb-8 my-10">
-        <div className="w-full  px-1">
+      <div className="container w-full mx-auto sm:px-4 px-2 pt-4 pb-8 my-5">
+        <div className="w-full lg:px-28 md:px-16 sm:px-4 px-0 space-y-12">
           <div className="flex flex-col gap-2">
             <CustomBreadcrumb
               customSegments={{
@@ -52,28 +55,64 @@ const SearchPage = () => {
                 {productData && productData.items?.length > 0 ? (
                   <div className=" w-full mt-2 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 md:gap-4">
                     {productData.items?.map((product) => {
-                      const productImages = product.images ?? [{ id: '1', image: 'path/to/image1.png' }]
+                      const productClassifications = product?.productClassifications.filter(
+                        (classification) => classification.status === StatusEnum.ACTIVE,
+                      )
+                      // show cheapest classification
+                      const productClassification = getCheapestClassification(product.productClassifications ?? [])
+                      const currentPrice = calculateDiscountPrice(
+                        productClassification?.price ?? 0,
+                        productClassification?.productDiscount && productClassification?.status === StatusEnum.ACTIVE
+                          ? productClassification?.productDiscount?.discount
+                          : 0,
+                        DiscountTypeEnum.PERCENTAGE,
+                      )
+                      const productTag =
+                        productClassification?.preOrderProduct && productClassification?.status === StatusEnum.ACTIVE
+                          ? OrderEnum.PRE_ORDER
+                          : productClassification?.productDiscount &&
+                              productClassification?.status === StatusEnum.ACTIVE
+                            ? OrderEnum.FLASH_SALE
+                            : product.status === ProductEnum.OFFICIAL
+                              ? ''
+                              : product.status
+
                       const formatProduct = {
                         id: product.id,
                         name: product.name,
-                        tag: 'Best Seller',
-                        price: 20.09,
-                        currentPrice: product.productClassifications[0].price,
-                        images: productImages,
-                        deal: 0.33,
-                        flashSale: {
-                          productAmount: 100,
-                          soldAmount: 65,
-                        },
+                        tag: productTag,
+                        price: productClassification?.price ?? -1,
+                        currentPrice: currentPrice,
+                        images: product.images,
+                        deal:
+                          productClassification?.productDiscount && productClassification?.status === StatusEnum.ACTIVE
+                            ? productClassification?.productDiscount?.discount
+                            : 0,
+                        flashSale:
+                          productClassification?.productDiscount && productClassification?.status === StatusEnum.ACTIVE
+                            ? {
+                                productAmount: (
+                                  productClassification?.productDiscount?.productClassifications ?? []
+                                ).filter((classification) => classification?.status === StatusEnum.ACTIVE)?.[0]
+                                  .quantity,
+                                soldAmount: 65,
+                              }
+                            : null,
                         description: product.description,
                         detail: product.detail,
                         rating: 4.5,
                         ratingAmount: 250,
                         soldInPastMonth: 300,
-                        classifications: product.productClassifications,
-                        certificate: product.certificate,
+                        classifications: productClassifications,
+                        certificates: product.certificates,
                       }
-                      return <ProductCard key={product?.id} product={formatProduct} />
+                      return (
+                        <ProductCard
+                          key={product?.id}
+                          product={formatProduct}
+                          isProductDiscount={productTag === OrderEnum.FLASH_SALE}
+                        />
+                      )
                     })}
                   </div>
                 ) : (

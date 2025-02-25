@@ -4,10 +4,12 @@ import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import emptyNotification from '@/assets/images/EmptyInbox.png'
+import fallBackImage from '@/assets/images/fallBackImage.jpg'
 import logo from '@/assets/images/logo.png'
 import configs from '@/config'
 
 import Empty from '../empty/Empty'
+import ImageWithFallback from '../ImageFallback'
 
 type Notification = {
   id: number
@@ -50,7 +52,7 @@ const WebNotification: React.FC<WebNotificationProps> = ({
       <div className="relative cursor-pointer" onClick={toggleDropdown}>
         <Bell className="text-gray-700" />
         {notificationCount > 0 && (
-          <span className="absolute -top-1 -right-1 rounded-full bg-red-500 text-white text-xs w-4 h-4 flex items-center justify-center">
+          <span className="absolute -top-1 -right-1 rounded-full bg-primary text-white text-xs w-4 h-4 flex items-center justify-center">
             {notificationCount}
           </span>
         )}
@@ -68,7 +70,7 @@ const WebNotification: React.FC<WebNotificationProps> = ({
                     className="flex gap-2 align-middle text-black text-sm p-3 cursor-pointer hover:bg-gray-100 rounded-md"
                   >
                     <div className="h-6 w-6">
-                      <img src={logo} className="object-contain" />
+                      <ImageWithFallback src={logo} className="object-contain" fallback={fallBackImage} alt={logo} />
                     </div>
                     <div>{notification.message}</div>
                   </div>

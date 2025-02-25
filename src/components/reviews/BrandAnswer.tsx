@@ -1,5 +1,9 @@
 import { useTranslation } from 'react-i18next'
 
+import fallBackImage from '@/assets/images/fallBackImage.jpg'
+
+import ImageWithFallback from '../ImageFallback'
+
 interface BrandAnswerProps {
   brandName: string
   updatedAt: string
@@ -14,7 +18,12 @@ const BrandAnswer = ({ brandName, updatedAt, description, brandLogo }: BrandAnsw
         <div className="flex gap-2 items-center">
           {brandLogo && (
             <div className="w-6 h-6">
-              <img src={brandLogo} alt={brandName} className="object-cover w-full h-full rounded-full" />
+              <ImageWithFallback
+                fallback={fallBackImage}
+                src={brandLogo}
+                alt={brandName}
+                className="object-cover w-full h-full rounded-full"
+              />
             </div>
           )}
           <span className="font-semibold text-sm">{brandName}</span>

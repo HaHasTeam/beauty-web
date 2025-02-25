@@ -2,6 +2,7 @@ import { useMutation } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import fallBackImage from '@/assets/images/fallBackImage.jpg'
 import useHandleServerError from '@/hooks/useHandleServerError'
 import { useToast } from '@/hooks/useToast'
 import { cn } from '@/lib/utils'
@@ -10,6 +11,7 @@ import { DiscountTypeEnum, VoucherApplyTypeEnum, VoucherUsedStatusEnum } from '@
 import { IBrandBestVoucher, TVoucher } from '@/types/voucher'
 
 import Button from '../button'
+import ImageWithFallback from '../ImageFallback'
 import StatusTag from '../status-tag/StatusTag'
 import { CardContent } from '../ui/card'
 import { RadioGroupItem } from '../ui/radio-group'
@@ -91,7 +93,12 @@ const VoucherCartItem = ({
 
             {brandLogo && brandLogo !== '' ? (
               <div className="w-14 h-14">
-                <img src={brandLogo} alt="Brand logo" className="w-full h-full object-contain" />
+                <ImageWithFallback
+                  fallback={fallBackImage}
+                  src={brandLogo}
+                  alt="Brand logo"
+                  className="w-full h-full object-contain"
+                />
               </div>
             ) : (
               <div className="flex justify-center items-center">

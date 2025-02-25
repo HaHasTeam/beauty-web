@@ -9,7 +9,7 @@ import useHandleServerError from '@/hooks/useHandleServerError'
 import { useToast } from '@/hooks/useToast'
 import { createAddressApi, getMyAddressesApi } from '@/network/apis/address'
 import { getUserProfileApi } from '@/network/apis/user'
-import CreateAddressSchema from '@/schemas/address.schema'
+import { getCreateAddressSchema } from '@/schemas/address.schema'
 import { AddressEnum } from '@/types/enum'
 
 import Button from '../button'
@@ -30,6 +30,7 @@ const AddAddressDialog = ({ triggerComponent }: AddAddressDialogProps) => {
   const { successToast } = useToast()
   const handleServerError = useHandleServerError()
   const queryClient = useQueryClient()
+  const CreateAddressSchema = getCreateAddressSchema()
 
   const defaultValues = {
     fullName: '',

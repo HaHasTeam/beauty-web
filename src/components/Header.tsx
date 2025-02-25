@@ -1,4 +1,4 @@
-import { Bell, CircleUserRound, HelpCircle, Menu, ShoppingCart, X } from 'lucide-react'
+import { CircleUserRound, HelpCircle, Menu, ShoppingCart, X } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
@@ -6,6 +6,7 @@ import { useShallow } from 'zustand/react/shallow'
 
 import { Button } from '@/components/ui/button'
 import configs from '@/config'
+import useCartStore from '@/store/cart'
 import { useStore } from '@/store/store'
 import { ProjectInformationEnum } from '@/types/enum'
 
@@ -33,6 +34,7 @@ export default function Header() {
       authData: state.authData,
     })),
   )
+  const { cartItems } = useCartStore()
   return (
     <header className="w-full bg-white relative shadow-lg">
       <div className="">
@@ -90,7 +92,14 @@ export default function Header() {
             )}
 
             <Link to={configs.routes.cart}>
-              <ShoppingCart />
+              <div className="relative cursor-pointer">
+                <ShoppingCart />
+                {cartItems && Object.keys(cartItems)?.length > 0 && (
+                  <span className="absolute -top-1 -right-1 rounded-full bg-primary text-white text-xs w-4 h-4 flex items-center justify-center">
+                    {Object.keys(cartItems)?.length}
+                  </span>
+                )}
+              </div>
               <span className="sr-only">{t('header.shoppingCart')}</span>
             </Link>
           </div>
@@ -105,29 +114,40 @@ export default function Header() {
       {/* Mobile Dropdown */}
       {menuOpen && (
         <div className="md:hidden absolute z-20 top-full left-0 w-full bg-white shadow-md border-t">
-          <div className="p-4">
-            <div className="flex gap-2 items-center">
-              <Link className="flex gap-2" to={configs.routes.notification}>
-                <Bell className="h-5 w-5" />
+          <div className="p-4 space-y-2">
+            <div className="p-2 flex gap-2 items-center hover:bg-primary/10 rounded-md">
+              <Link className="w-full flex gap-2" to={configs.routes.notification}>
+                <WebNotification
+                  notifications={notifications}
+                  notificationCount={notifications.length}
+                  onNotificationClick={handleNotificationClick}
+                />
                 <span> {t('header.notification')}</span>
               </Link>
             </div>
-            <div className="flex gap-2">
+            <div className="w-full p-2 hover:bg-primary/10 rounded-md flex gap-2">
               <Link
                 to={configs.routes.cart}
-                className="flex gap-2 items-center justify-start"
+                className="w-full flex gap-2 items-center justify-start"
                 onClick={() => {
                   setMenuOpen(false)
                 }}
               >
-                <ShoppingCart className="h-5 w-5" />
+                <div className="relative cursor-pointer">
+                  <ShoppingCart className="h-5 w-5" />
+                  {cartItems && Object.keys(cartItems)?.length > 0 && (
+                    <span className="absolute -top-1 -right-1 rounded-full bg-primary text-white text-xs w-4 h-4 flex items-center justify-center">
+                      {Object.keys(cartItems)?.length}
+                    </span>
+                  )}
+                </div>
                 <span>{t('header.shoppingCart')}</span>
               </Link>
             </div>
             {!isLoading && isAuthenticated ? (
               <Link
                 to={configs.routes.profile}
-                className="flex gap-2 items-center justify-start"
+                className="w-full flex gap-2 items-center justify-start p-2 hover:bg-primary/10 rounded-md "
                 onClick={() => {
                   setMenuOpen(false)
                 }}

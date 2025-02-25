@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { getDistrictsByProvinceApi, getProvincesApi, getWardsByDistrictApi } from '@/network/apis/address'
-import CreateAddressSchema from '@/schemas/address.schema'
+import { CreateAddressSchema } from '@/schemas/address.schema'
 import { IDistrict, IProvince, IWard } from '@/types/address'
 import { AddressEnum } from '@/types/enum'
 
