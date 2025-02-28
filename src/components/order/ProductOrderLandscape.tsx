@@ -28,7 +28,7 @@ const ProductOrderLandscape = ({
         <ImageWithFallback
           src={product?.images[0]?.fileUrl}
           alt={product?.name}
-          className="object-cover w-full h-full"
+          className="object-cover w-full h-full rounded-md"
           fallback={fallBackImage}
         />
       </div>

@@ -804,7 +804,7 @@
     "successStatusMessage": "Update product status successfully!",
     "categoryLastLevel": "Please select the last-level category.",
     "certificateRequired": "Product certificate is required.",
-    "totalQuantityTooLow": "The total quantity is too low. Please increase the quantity to meet the required minimum."
+    "totalQuantityTooLow": "The total quantity is too low. Please increase the quantity to meet the required minimum ({{count}})."
   },
   "createProduct": {
     "successOfficial": "Product created successfully!",
@@ -882,7 +882,9 @@
       "INACTIVE": "The product is currently unavailable for purchase and not visible to customers.",
       "PRE_ORDER": "The product is not yet released or out of stock but can be ordered in advance.",
       "OFFICIAL": "The product is an officially verified item from the brand or manufacturer and has been reviewed by the platform moderator.",
-      "OUT_OF_STOCK": "The product is temporarily unavailable due to no remaining stock."
+      "OUT_OF_STOCK": "The product is temporarily unavailable due to no remaining stock.",
+      "SOLD_OUT": "This product is currently out of stock. Restock now so customers can continue purchasing!",
+      "ALMOST_OUT": "Running low on stock—restock soon!"
     },
     "brandInformation": "Brand Information",
     "noCertificates": "No Certificate",
@@ -900,7 +902,9 @@
     "PENDING": "Pending",
     "PRE_ORDER": "Pre-Order",
     "OFFICIAL": "Official",
-    "OUT_OF_STOCK": "Out of stock"
+    "OUT_OF_STOCK": "Out of stock",
+    "SOLD_OUT": "Out of stock",
+    "ALMOST_OUT": "Almost out of stock"
   },
   "systemService": {
     "generalInformation": "General Information",

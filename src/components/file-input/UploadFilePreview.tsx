@@ -24,7 +24,7 @@ const UploadFilePreview = <T extends FieldValues>({
   header,
   renderInputUI,
   renderFileItemUI,
-  vertical = true
+  vertical = true,
 }: UploadFileModalProps<T>) => {
   const [files, setFiles] = useState<File[]>([])
   const handleServerError = useHandleServerError()
@@ -40,17 +40,17 @@ const UploadFilePreview = <T extends FieldValues>({
 
       return {
         fieldType: 'string',
-        fieldValue: field?.value
+        fieldValue: field?.value,
       }
     } else if (Array.isArray(field?.value)) {
       return {
         fieldType: 'array',
-        fieldValue: field?.value
+        fieldValue: field?.value,
       }
     } else if (typeof field?.value === 'object') {
       return {
         fieldType: 'array',
-        fieldValue: field?.value
+        fieldValue: field?.value,
       }
     }
     throw new Error('Field value must be a string or an array')
@@ -61,12 +61,12 @@ const UploadFilePreview = <T extends FieldValues>({
     accept: {
       'image/*': ['.jpg', '.jpeg', '.png'],
       'application/pdf': ['.pdf'],
-      'application/msword': ['.doc', '.docx']
+      'application/msword': ['.doc', '.docx'],
     },
     multiple: true,
     maxFiles: 10,
     maxSize: 1 * 1024 * 1024,
-    ...dropZoneConfigOptions
+    ...dropZoneConfigOptions,
   } satisfies DropzoneOptions
 
   useEffect(() => {
@@ -81,7 +81,7 @@ const UploadFilePreview = <T extends FieldValues>({
         }
       } catch (error) {
         handleServerError({
-          error: error
+          error: error,
         })
       }
     }
@@ -114,7 +114,7 @@ const UploadFilePreview = <T extends FieldValues>({
         if (newFiles.length > oldFiles.length) {
           const diffedFiles = newFiles.filter((file) => {
             return !oldFiles?.some(
-              (oldFile) => oldFile.name === file.name && oldFile.lastModified === file.lastModified
+              (oldFile) => oldFile.name === file.name && oldFile.lastModified === file.lastModified,
             )
           })
           const updateFiles = [...diffedFiles, ...field.value]
@@ -122,7 +122,7 @@ const UploadFilePreview = <T extends FieldValues>({
           // const newDiffedFileUrls = await convertFileToUrl(diffedFiles)
           field?.onChange?.([
             ...(field?.value as string[]),
-            ...diffedFiles
+            ...diffedFiles,
           ] as unknown as React.ChangeEvent<HTMLInputElement>)
         } else {
           const deletedIndex = oldFiles.findIndex((oldFile) => {
@@ -145,12 +145,12 @@ const UploadFilePreview = <T extends FieldValues>({
       // setFiles(markedFiles || [])
     } catch (error) {
       handleServerError({
-        error
+        error,
       })
     }
   }
   const message = `You can upload up to ${dropZoneConfig.maxFiles} files. Accepted file formats are ${Object.values(
-    dropZoneConfig.accept
+    dropZoneConfig.accept,
   )
     .flat()
     .join(', ')}. Each file must be under ${dropZoneConfig.maxSize / (1024 * 1024)}MB.`
@@ -168,18 +168,18 @@ const UploadFilePreview = <T extends FieldValues>({
             {renderInputUI ? (
               renderInputUI(isDragActive, files, dropZoneConfig.maxFiles, message)
             ) : (
-              <div className='overflow-hidden hover:bg-primary/15 flex flex-col items-center justify-center text-center w-full border border-dashed rounded-xl   border-primary py-4 text-primary transition-all duration-500'>
-                <Upload className='w-12 h-12 mb-4 text-muted-foreground' />
+              <div className="overflow-hidden hover:bg-primary/15 flex flex-col items-center justify-center text-center w-full border border-dashed rounded-xl   border-primary py-4 text-primary transition-all duration-500">
+                <Upload className="w-12 h-12 mb-4 text-muted-foreground" />
                 {isDragActive ? (
-                  <p className='text-lg font-medium text-foreground'>Drop your file here</p>
+                  <p className="text-lg font-medium text-foreground">Drop your file here</p>
                 ) : (
                   <>
-                    <p className='text-lg font-medium text-primary'>Drag & drop your files here</p>
-                    <p className='mt-2 text-sm text-muted-foreground'>or click to select files</p>
+                    <p className="text-lg font-medium text-primary">Drag & drop your files here</p>
+                    <p className="mt-2 text-sm text-muted-foreground">or click to select files</p>
                     {files && files.length < dropZoneConfig.maxFiles ? (
-                      <span className='mt-2 text-sm text-primary px-8'>{message} </span>
+                      <span className="mt-2 text-sm text-primary px-8">{message} </span>
                     ) : (
-                      <span className='mt-2 text-sm text-primary px-8'>
+                      <span className="mt-2 text-sm text-primary px-8">
                         {`You have reached the maximum number of files allowed`}
                       </span>
                     )}
@@ -190,28 +190,28 @@ const UploadFilePreview = <T extends FieldValues>({
           </FileInput>
           <FileUploaderContent>
             {files && files.length > 0 && (
-              <div className=''>
+              <div className="">
                 {/* <p className='text-sm font-medium text-muted-foreground flex justify-center gap-2 items-center pb-2'>
                   <TbWorldUpload /> <span>{files.length} file(s) selected</span>
                 </p> */}
 
                 {vertical ? (
-                  <ScrollArea className='h-[120px] w-full rounded-md shadow-2xl py-2 border-t-4 border-primary'>
-                    <div className='flex gap-2 px-4'>
+                  <ScrollArea className="h-[120px] w-full rounded-md shadow-2xl py-2 border-t-4 border-primary">
+                    <div className="flex gap-2 px-4">
                       {files.map((file, index) => (
                         <FileUploaderItem
                           key={index}
                           index={index}
-                          className='flex items-center justify-between rounded-lg hover:bg-primary w-full'
+                          className="flex items-center justify-between rounded-lg hover:bg-primary w-full"
                         >
                           <PreviewDialog
                             content={
                               file.type.includes('image') ? (
                                 URL.createObjectURL(file)
                               ) : (
-                                <div className='flex items-center justify-center'>
-                                  <FilesIcon className='w-12 h-12 text-muted-foreground' />
-                                  <span className='text-sm font-medium truncate max-w-[200px]'>{file.name}</span>
+                                <div className="flex items-center justify-center">
+                                  <FilesIcon className="w-12 h-12 text-muted-foreground" />
+                                  <span className="text-sm font-medium truncate max-w-[200px]">{file.name}</span>
                                 </div>
                               )
                             }
@@ -219,20 +219,20 @@ const UploadFilePreview = <T extends FieldValues>({
                               renderFileItemUI ? (
                                 renderFileItemUI(file)
                               ) : (
-                                <div key={file.name} className='flex items-center space-x-3'>
-                                  <div className='rounded-md flex items-center justify-center'>
+                                <div key={file.name} className="flex items-center space-x-3">
+                                  <div className="rounded-md flex items-center justify-center">
                                     {file.type.includes('image') ? (
                                       <img
                                         src={URL.createObjectURL(file)}
                                         alt={file.name}
-                                        className='size-12 object-cover rounded-lg border-2'
+                                        className="size-12 object-cover rounded-lg border-2"
                                         onLoad={() => URL.revokeObjectURL(URL.createObjectURL(file))}
                                       />
                                     ) : (
-                                      <FilesIcon className='w-12 h-12 text-muted-foreground' />
+                                      <FilesIcon className="w-12 h-12 text-muted-foreground" />
                                     )}
                                   </div>
-                                  <span className='text-sm font-medium truncate max-w-[200px]'>{file.name}</span>
+                                  <span className="text-sm font-medium truncate max-w-[200px]">{file.name}</span>
                                 </div>
                               )
                             }
@@ -244,21 +244,21 @@ const UploadFilePreview = <T extends FieldValues>({
                   </ScrollArea>
                 ) : (
                   // <ScrollArea className='h-[120px] w-full rounded-md shadow-2xl py-2 border-t-4 border-primary'>
-                  <div className='flex gap-2 '>
+                  <div className="flex gap-2 ">
                     {files.map((file, index) => (
                       <FileUploaderItem
                         key={index}
                         index={index}
-                        className='flex items-center justify-between rounded-lg hover:bg-primary '
+                        className="flex items-center justify-between rounded-lg hover:bg-primary "
                       >
                         <PreviewDialog
                           content={
                             file?.type?.includes('image') ? (
                               URL.createObjectURL(file)
                             ) : (
-                              <div className='flex items-center justify-center'>
-                                <FilesIcon className='w-12 h-12 text-muted-foreground' />
-                                <span className='text-sm font-medium truncate max-w-[200px]'>{file.name}</span>
+                              <div className="flex items-center justify-center">
+                                <FilesIcon className="w-12 h-12 text-muted-foreground" />
+                                <span className="text-sm font-medium truncate max-w-[200px]">{file.name}</span>
                               </div>
                             )
                           }
@@ -266,20 +266,20 @@ const UploadFilePreview = <T extends FieldValues>({
                             renderFileItemUI ? (
                               renderFileItemUI(file)
                             ) : (
-                              <div key={file.name} className='flex items-center space-x-3'>
-                                <div className='rounded-md flex items-center justify-center'>
+                              <div key={file.name} className="flex items-center space-x-3">
+                                <div className="rounded-md flex items-center justify-center">
                                   {file?.type?.includes('image') ? (
                                     <img
                                       src={URL.createObjectURL(file)}
                                       alt={file.name}
-                                      className='size-12 object-cover rounded-lg border-2'
+                                      className="size-12 object-cover rounded-lg border-2"
                                       onLoad={() => URL.revokeObjectURL(URL.createObjectURL(file))}
                                     />
                                   ) : (
-                                    <FilesIcon className='w-12 h-12 text-muted-foreground' />
+                                    <FilesIcon className="w-12 h-12 text-muted-foreground" />
                                   )}
                                 </div>
-                                <span className='text-sm font-medium truncate max-w-[200px]'>{file.name}</span>
+                                <span className="text-sm font-medium truncate max-w-[200px]">{file.name}</span>
                               </div>
                             )
                           }

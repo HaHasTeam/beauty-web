@@ -31,7 +31,7 @@ type UploadFileModalProps<T extends FieldValues> = {
   maxVideos: number
 }
 
-const UploadFeedbackMediaFiles = <T extends FieldValues>({
+const UploadMediaFiles = <T extends FieldValues>({
   dropZoneConfigOptions,
   field,
   header,
@@ -445,4 +445,4 @@ const UploadFeedbackMediaFiles = <T extends FieldValues>({
   )
 }
 
-export default UploadFeedbackMediaFiles
+export default UploadMediaFiles

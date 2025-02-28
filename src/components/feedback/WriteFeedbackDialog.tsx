@@ -18,8 +18,8 @@ import { getFeedbackSchema, IFeedbackSchema, MAX_FEEDBACK_LENGTH } from '@/schem
 import { ISubmitFeedback } from '@/types/feedback'
 
 import Button from '../button'
-import { VideoThumbnail } from '../file-input/VideoThumnail'
-import UploadFeedbackMediaFiles from './UploadFeedbackMediaFiles'
+import UploadMediaFiles from '../file-input/UploadMediaFiles'
+import { VideoThumbnail } from '../file-input/VideoThumbnail'
 
 interface WriteFeedbackDialogProps {
   isOpen: boolean
@@ -208,7 +208,7 @@ export const WriteFeedbackDialog: React.FC<WriteFeedbackDialogProps> = ({ isOpen
                       <FormDescription>{t('feedback.mediaFilesHint')}</FormDescription>
                     </div>
                     <div className="w-full space-y-1">
-                      <UploadFeedbackMediaFiles
+                      <UploadMediaFiles
                         field={field}
                         vertical={false}
                         isAcceptImage={true}

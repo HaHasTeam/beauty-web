@@ -804,7 +804,7 @@
     "successStatusMessage": "Cập nhật trạng thái sản phẩm thành công!",
     "categoryLastLevel": "Vui lòng chọn danh mục cấp cuối.",
     "certificateRequired": "Chứng nhận sản phẩm là bắt buộc.",
-    "totalQuantityTooLow": "Tổng số lượng quá thấp. Vui lòng tăng số lượng để đáp ứng mức tối thiểu yêu cầu."
+    "totalQuantityTooLow": "Tổng số lượng quá thấp. Vui lòng tăng số lượng để đáp ứng mức tối thiểu yêu cầu ({{count}})."
   },
   "createProduct": {
     "successOfficial": "Tạo sản phẩm thành công!",
@@ -882,7 +882,9 @@
       "INACTIVE": "Sản phẩm hiện không có sẵn để mua và không hiển thị với khách hàng.",
       "PRE_ORDER": "Sản phẩm chưa được phát hành nhưng có thể đặt trước.",
       "OFFICIAL": "Sản phẩm được xác nhận chính thức từ thương hiệu hoặc nhà sản xuất và được kiểm duyệt bởi kiểm duyệt viên của nền tảng.",
-      "OUT_OF_STOCK": "Sản phẩm tạm thời hết hàng do không còn tồn kho."
+      "OUT_OF_STOCK": "Sản phẩm tạm thời hết hàng do không còn tồn kho.",
+      "SOLD_OUT": "Sản phẩm đã hết hàng do không còn trong kho. Hãy bổ sung ngay để khách hàng có thể tiếp tục mua sắm!",
+      "ALMOST_OUT": "Sản phẩm sắp hết, hãy nhanh tay bổ sung!"
     },
     "brandInformation": "Thông Tin Thương Hiệu",
     "noCertificates": "Không có chứng nhận",
@@ -900,7 +902,9 @@
     "PENDING": "Đang chờ duyệt",
     "PRE_ORDER": "Đặt trước",
     "OFFICIAL": "Chính thức",
-    "OUT_OF_STOCK": "Hết hàng"
+    "OUT_OF_STOCK": "Hết hàng",
+    "SOLD_OUT": "Hết hàng",
+    "ALMOST_OUT": "Sắp hết hàng"
   },
   "systemService": {
     "generalInformation": "Thông Tin Chung",

@@ -278,7 +278,7 @@ const ProductCardLandscape = ({
                 fallback={fallBackImage}
                 src={productImage}
                 alt={productName}
-                className="object-cover w-full h-full"
+                className="object-cover w-full h-full rounded-md"
               />
             </div>
           </Link>

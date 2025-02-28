@@ -25,7 +25,7 @@ import { getMyAddressesApi } from '@/network/apis/address'
 import { createOderApi } from '@/network/apis/order'
 import { getUserProfileApi } from '@/network/apis/user'
 import { getBestPlatformVouchersApi, getBestShopVouchersApi } from '@/network/apis/voucher'
-import { CreateOrderSchema } from '@/schemas/order.schema'
+import { getCreateOrderSchema } from '@/schemas/order.schema'
 import useCartStore from '@/store/cart'
 import { IAddress } from '@/types/address'
 import { DiscountTypeEnum, ProjectInformationEnum, ResultEnum } from '@/types/enum'
@@ -54,6 +54,7 @@ const Checkout = () => {
   const [myAddresses, setMyAddresses] = useState<IAddress[]>([])
   const [bestBrandVouchers, setBestBrandVouchers] = useState<IBrandBestVoucher[]>([])
   const [bestPlatformVoucher, setBestPlatformVoucher] = useState<IPlatformBestVoucher | null>(null)
+  const CreateOrderSchema = getCreateOrderSchema()
 
   const selectedCartItems = useMemo(() => {
     return selectedCartItem

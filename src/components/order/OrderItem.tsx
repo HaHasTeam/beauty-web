@@ -173,7 +173,7 @@ const OrderItem = ({ brand, orderItem, setIsTrigger }: OrderItemProps) => {
                 {t('order.cancelOrder')}
               </Button>
             )}
-            {orderItem?.status === ShippingStatusEnum.DELIVERED && (
+            {orderItem?.status === ShippingStatusEnum.COMPLETED && (
               <Button
                 variant="outline"
                 className="border border-primary text-primary hover:text-primary hover:bg-primary/10"
