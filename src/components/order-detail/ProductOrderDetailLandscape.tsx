@@ -122,7 +122,8 @@ const ProductOrderDetailLandscape = ({
                     {isProcessing ? <LoadingIcon color="primaryBackground" /> : t('order.buyAgain')}
                   </Button>
                 )}
-                {status === ShippingStatusEnum.DELIVERED && (
+
+                {status === ShippingStatusEnum.COMPLETED && (
                   <Button
                     variant="outline"
                     size="sm"

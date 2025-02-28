@@ -8,7 +8,12 @@ import configs from '@/config'
 import useHandleServerError from '@/hooks/useHandleServerError'
 import { useToast } from '@/hooks/useToast'
 import { createCartItemApi, getMyCartApi } from '@/network/apis/cart'
-import { getMyCancelRequestApi } from '@/network/apis/order'
+import {
+  getMyCancelRequestApi,
+  getOrderByIdApi,
+  getStatusTrackingByIdApi,
+  updateOrderStatusApi,
+} from '@/network/apis/order'
 import { IBrand } from '@/types/brand'
 import { OrderEnum, ShippingStatusEnum } from '@/types/enum'
 import { ICancelRequestOrder, IOrderItem } from '@/types/order'
@@ -87,6 +92,33 @@ const OrderItem = ({ brand, orderItem, setIsTrigger }: OrderItemProps) => {
     }
     fetchCancelRequests()
   }, [getMyCancelRequestOrderFn])
+
+  const { mutateAsync: updateOrderStatusFn } = useMutation({
+    mutationKey: [updateOrderStatusApi.mutationKey],
+    mutationFn: updateOrderStatusApi.fn,
+    onSuccess: async () => {
+      successToast({
+        message: t('order.receivedOrderStatusSuccess'),
+      })
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: [getOrderByIdApi.queryKey] }),
+        queryClient.invalidateQueries({ queryKey: [getStatusTrackingByIdApi.queryKey] }),
+      ])
+      setIsTrigger((prev) => !prev)
+    },
+  })
+  async function handleUpdateStatus(values: string) {
+    try {
+      setIsLoading(true)
+      await updateOrderStatusFn({ id: orderItem?.id, status: values })
+      setIsLoading(false)
+    } catch (error) {
+      setIsLoading(false)
+      handleServerError({
+        error,
+      })
+    }
+  }
 
   return (
     <>
@@ -179,6 +211,17 @@ const OrderItem = ({ brand, orderItem, setIsTrigger }: OrderItemProps) => {
                 className="border border-primary text-primary hover:text-primary hover:bg-primary/10"
               >
                 {t('order.returnOrder')}
+              </Button>
+            )}
+            {orderItem?.status === ShippingStatusEnum.DELIVERED && (
+              <Button
+                variant="outline"
+                className="border border-primary text-primary hover:text-primary hover:bg-primary/10"
+                onClick={() => {
+                  handleUpdateStatus(ShippingStatusEnum.COMPLETED)
+                }}
+              >
+                {isProcessing ? <LoadingIcon color="primaryBackground" /> : t('order.received')}
               </Button>
             )}
 

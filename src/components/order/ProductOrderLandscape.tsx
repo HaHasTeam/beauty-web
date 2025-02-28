@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next'
 
 import fallBackImage from '@/assets/images/fallBackImage.jpg'
 import { IClassification } from '@/types/classification'
-import { ClassificationTypeEnum, OrderEnum } from '@/types/enum'
+import { ClassificationTypeEnum, OrderEnum, StatusEnum } from '@/types/enum'
 import { IOrderDetail } from '@/types/order'
 import { IProduct } from '@/types/product'
 
@@ -26,7 +26,7 @@ const ProductOrderLandscape = ({
     <div className="flex gap-4 mb-4">
       <div className="lg:w-22 lg:h-22 md:w-16 md:h-16 h-10 w-10 my-auto">
         <ImageWithFallback
-          src={product?.images[0]?.fileUrl}
+          src={product?.images?.filter((img) => img.status === StatusEnum.ACTIVE)[0]?.fileUrl}
           alt={product?.name}
           className="object-cover w-full h-full rounded-md"
           fallback={fallBackImage}

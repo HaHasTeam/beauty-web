@@ -11,4 +11,4 @@ export type ISubmitFeedbackScheme = {
 
 export type IResponseFeedback = TMetaData & IFeedbackSchema
 
-export type ISubmitFeedback = TMetaData & ISubmitFeedbackScheme
+export type ISubmitFeedback = ISubmitFeedbackScheme

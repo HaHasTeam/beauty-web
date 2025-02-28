@@ -83,3 +83,13 @@ export const cancelOrderApi = toMutationFetcher<ICancelOrder, TServerResponse<IO
     })
   },
 )
+
+export const updateOrderStatusApi = toMutationFetcher<
+  { id: string; status: string; mediaFiles?: string[] },
+  TServerResponse<IOrder>
+>('updateOrderStatusApi', async ({ id, status, mediaFiles }) => {
+  return privateRequest(`/orders/update-status/${id}`, {
+    method: 'PUT',
+    data: { status: status, mediaFiles: mediaFiles },
+  })
+})

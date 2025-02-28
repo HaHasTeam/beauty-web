@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation } from '@tanstack/react-query'
-import { FilesIcon, ImagePlus, Star } from 'lucide-react'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { FilesIcon, ImagePlus, Star, Video } from 'lucide-react'
 import { useId, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -14,8 +14,8 @@ import useHandleServerError from '@/hooks/useHandleServerError'
 import { useToast } from '@/hooks/useToast'
 import { createFeedbackApi } from '@/network/apis/feedback'
 import { uploadFilesApi } from '@/network/apis/file'
+import { getOrderByIdApi } from '@/network/apis/order'
 import { getFeedbackSchema, IFeedbackSchema, MAX_FEEDBACK_LENGTH } from '@/schemas/feedback.schema'
-import { ISubmitFeedback } from '@/types/feedback'
 
 import Button from '../button'
 import UploadMediaFiles from '../file-input/UploadMediaFiles'
@@ -30,8 +30,9 @@ interface WriteFeedbackDialogProps {
 export const WriteFeedbackDialog: React.FC<WriteFeedbackDialogProps> = ({ isOpen, onClose, orderDetailId }) => {
   const MAX_IMAGES = 4
   const MAX_VIDEOS = 1
-  const MAX_FILES = MAX_IMAGES + MAX_VIDEOS
-  const MAX_SIZE = 10 * 1024 * 1024
+  // const MAX_FILES = MAX_IMAGES + MAX_VIDEOS
+  const MAX_SIZE_NUMBER = 10
+  const MAX_SIZE = MAX_SIZE_NUMBER * 1024 * 1024
 
   const { t } = useTranslation()
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -40,12 +41,15 @@ export const WriteFeedbackDialog: React.FC<WriteFeedbackDialogProps> = ({ isOpen
   const { successToast } = useToast()
   const handleServerError = useHandleServerError()
   const id = useId()
+  const queryClient = useQueryClient()
 
   const defaultValues = {
     rating: 0,
     content: '',
     orderDetailId,
     mediaFiles: [],
+    videos: [],
+    images: [],
   }
 
   const form = useForm<z.infer<typeof FeedbackSchema>>({
@@ -60,6 +64,9 @@ export const WriteFeedbackDialog: React.FC<WriteFeedbackDialogProps> = ({ isOpen
       successToast({
         message: t('feedback.successTitle'),
         description: t('feedback.successDescription'),
+      })
+      queryClient.invalidateQueries({
+        queryKey: [getOrderByIdApi.queryKey, orderDetailId],
       })
       handleReset()
       onClose()
@@ -89,11 +96,12 @@ export const WriteFeedbackDialog: React.FC<WriteFeedbackDialogProps> = ({ isOpen
   const handleSubmit = async (values: IFeedbackSchema) => {
     try {
       setIsLoading(true)
-      const imgUrls = values.mediaFiles ? await convertFileToUrl(values.mediaFiles) : []
+      const imgUrls = values.images ? await convertFileToUrl(values.images) : []
+      const videoUrls = values.videos ? await convertFileToUrl(values.videos) : []
       await submitFeedbackFn({
         ...values,
-        mediaFiles: imgUrls,
-      } as ISubmitFeedback)
+        mediaFiles: [...imgUrls, ...videoUrls],
+      })
       setIsLoading(false)
     } catch (error) {
       setIsLoading(false)
@@ -197,26 +205,33 @@ export const WriteFeedbackDialog: React.FC<WriteFeedbackDialogProps> = ({ isOpen
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="mediaFiles"
-              render={({ field }) => (
-                <FormItem className="w-full">
-                  <div className="w-full flex flex-col gap-2">
-                    <div className="w-full space-y-1">
-                      <FormLabel className="text-primary">{t('feedback.mediaFiles')}</FormLabel>
-                      <FormDescription>{t('feedback.mediaFilesHint')}</FormDescription>
-                    </div>
-                    <div className="w-full space-y-1">
+            <div className="space-y-1">
+              <FormLabel className="text-primary">{t('feedback.mediaFiles')}</FormLabel>
+              <FormDescription>
+                {t('feedback.mediaFilesHint', {
+                  videoCount: MAX_VIDEOS,
+                  imageCount: MAX_IMAGES,
+                  size: MAX_SIZE_NUMBER,
+                  format: 'mp4/wmv/mov/avi/mkv/flv/jpg/jpeg/png'.toLocaleUpperCase(),
+                })}
+              </FormDescription>
+            </div>
+            <div className={(form.getValues('images') ?? [])?.length >= 4 ? 'flex flex-col gap-1' : 'flex gap-1'}>
+              <FormField
+                control={form.control}
+                name="images"
+                render={({ field }) => (
+                  <FormItem>
+                    <div>
                       <UploadMediaFiles
                         field={field}
                         vertical={false}
                         isAcceptImage={true}
-                        isAcceptVideo={true}
+                        isAcceptVideo={false}
                         maxImages={MAX_IMAGES}
                         maxVideos={MAX_VIDEOS}
                         dropZoneConfigOptions={{
-                          maxFiles: MAX_FILES,
+                          maxFiles: MAX_IMAGES,
                           maxSize: MAX_SIZE,
                         }}
                         renderFileItemUI={(file) => {
@@ -246,9 +261,9 @@ export const WriteFeedbackDialog: React.FC<WriteFeedbackDialogProps> = ({ isOpen
                           return (
                             <div className="w-32 h-32 hover:bg-primary/15 p-4 rounded-lg border flex flex-col gap-2 items-center justify-center text-center border-dashed border-primary transition-all duration-500">
                               <ImagePlus className="w-8 h-8 text-primary" />
-                              <p className="text-xs text-primary">{t('validation.inputMedia')}</p>
+                              {/* <p className="text-xs text-primary">{t('validation.inputMedia')}</p> */}
                               <p className="text-xs text-muted-foreground">
-                                {files.length}/{maxFiles} {t('systemService.files')}
+                                {files.length}/{maxFiles} {t('media.imagesFile')}
                               </p>
                             </div>
                           )
@@ -257,11 +272,70 @@ export const WriteFeedbackDialog: React.FC<WriteFeedbackDialogProps> = ({ isOpen
                       <p className="text-xs text-muted-foreground"></p>
                       <FormMessage />
                     </div>
-                  </div>
-                </FormItem>
-              )}
-            />
-
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="videos"
+                render={({ field }) => (
+                  <FormItem className="">
+                    <div className="flex flex-col gap-2">
+                      <div className="space-y-1">
+                        <UploadMediaFiles
+                          field={field}
+                          vertical={false}
+                          isAcceptImage={false}
+                          isAcceptVideo={true}
+                          maxImages={MAX_IMAGES}
+                          maxVideos={MAX_VIDEOS}
+                          dropZoneConfigOptions={{
+                            maxFiles: MAX_VIDEOS,
+                            maxSize: MAX_SIZE,
+                          }}
+                          renderFileItemUI={(file) => {
+                            return (
+                              <div
+                                key={file.name}
+                                className="hover:border-primary w-32 h-32 rounded-lg border border-gay-300 p-0 relative"
+                              >
+                                {file.type.includes('image') ? (
+                                  <img
+                                    src={URL.createObjectURL(file)}
+                                    alt={file.name}
+                                    className="object-contain w-full h-full rounded-lg"
+                                    onLoad={() => URL.revokeObjectURL(URL.createObjectURL(file))}
+                                  />
+                                ) : file.type.includes('video') ? (
+                                  <VideoThumbnail file={file} />
+                                ) : (
+                                  <div className="flex items-center justify-center h-full">
+                                    <FilesIcon className="w-12 h-12 text-muted-foreground" />
+                                  </div>
+                                )}
+                              </div>
+                            )
+                          }}
+                          renderInputUI={(_isDragActive, files, maxFiles) => {
+                            return (
+                              <div className="w-32 h-32 hover:bg-primary/15 p-4 rounded-lg border flex flex-col gap-2 items-center justify-center text-center border-dashed border-primary transition-all duration-500">
+                                <Video className="w-8 h-8 text-primary" />
+                                {/* <p className="text-xs text-primary">{t('validation.inputMedia')}</p> */}
+                                <p className="text-xs text-muted-foreground">
+                                  {files.length}/{maxFiles} {t('media.videosFile')}
+                                </p>
+                              </div>
+                            )
+                          }}
+                        />
+                        <p className="text-xs text-muted-foreground"></p>
+                        <FormMessage />
+                      </div>
+                    </div>
+                  </FormItem>
+                )}
+              />
+            </div>
             <DialogFooter>
               <Button
                 type="button"

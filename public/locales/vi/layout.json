@@ -674,7 +674,9 @@
     "orderCancellationUpdate": "Cập nhật hủy đơn hàng thành công!",
     "approvedCancelRequest": "Yêu cầu hủy được chấp nhận. Đơn hàng đã bị hủy.",
     "rejectedCancelRequest": "Yêu cầu hủy bị từ chối. Đơn hàng tiếp tục xử lý.",
-    "rejectedCancelRequestTitle": "Yêu Cầu Hủy Bị Từ Chối"
+    "rejectedCancelRequestTitle": "Yêu Cầu Hủy Bị Từ Chối",
+    "received": "Đã nhận hàng",
+    "receivedOrderStatusSuccess": "Xác nhận nhận hàng thành công!"
   },
   "toast": {
     "success": "Yêu cầu của bạn đã được xử lý thành công, tiếp tục công việc của bạn.",
@@ -1006,14 +1008,35 @@
   "feedback": {
     "successTitle": "Gửi đánh giá thành công",
     "successDescription": "Cảm ơn bạn đã gửi đánh giá! Đánh giá của bạn sẽ giúp khách hàng khác đưa ra quyết định chính xác và hỗ trợ các thương hiệu cải thiện sản phẩm của họ.",
-    "writeReview": "Write a Review",
-    "rating": "Rating",
-    "content": "Share Your Experiences",
-    "contentPlaceholder": "Enter your message here...",
-    "mediaFiles": "Upload video and images",
-    "mediaFilesHint": "Upload maximum 1 video and 4 images"
+    "writeReview": "Viết đánh giá",
+    "rating": "Đánh giá",
+    "content": "Chia sẻ trải nghiệm của bạn",
+    "contentPlaceholder": "Nhập nội dung tại đây...",
+    "mediaFiles": "Tải lên video và hình ảnh",
+    "mediaFilesHint": "Bạn có thể tải lên tối đa {{videoCount}} video và {{imageCount}} hình ảnh, đảm bảo tổng dung lượng tệp không vượt quá {{size}}MB. \nHỗ trợ những định dạng sau: {{format}}.",
+    "imagesHint": {
+      "TO_SHIP": "Hiển thị nội dung đơn hàng, cách đóng gói, nhãn vận chuyển.",
+      "SHIPPING": "Cung cấp bằng chứng bàn giao kiện hàng cho đơn vị vận chuyển.",
+      "DELIVERED": "Hiển thị bao bì bên ngoài, sản phẩm bên trong, bất kỳ hư hại nào (nếu có).",
+      "RETURNING": "Cung cấp bằng chứng về quá trình hoàn trả.",
+      "REFUNDED": "Tải lên bằng chứng hoàn tất trả hàng và hoàn tiền."
+    },
+    "videosHint": {
+      "TO_SHIP": "Quay video 360° gói hàng để xác nhận được niêm phong đúng cách.",
+      "SHIPPING": "Quay lại khoảnh khắc bàn giao hoặc đoạn clip ngắn về kiện hàng đã niêm phong trước khi vận chuyển.",
+      "DELIVERED": "Video mở hộp để ghi lại tình trạng kiện hàng & độ chính xác của sản phẩm.",
+      "RETURNING": "Ghi lại rõ ràng lỗi, phần bị thiếu hoặc vấn đề để xác minh.",
+      "REFUNDED": "Tải lên video xác nhận hoàn tất trả hàng và hoàn tiền."
+    },
+    "uploadVideos": "Tải lên video",
+    "uploadImages": "Tải lên hình ảnh"
   },
   "media": {
-    "previewImage": "Xem trước hình ảnh/video"
+    "previewImage": "Xem trước hình ảnh/video",
+    "viewMediaFiles": "Xem hình ảnh/video",
+    "images": "Hình Ảnh",
+    "imagesFile": "hình ảnh",
+    "videos": "Videos",
+    "videosFile": "video"
   }
 }

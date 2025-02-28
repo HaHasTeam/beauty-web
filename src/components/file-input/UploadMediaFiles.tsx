@@ -87,7 +87,7 @@ const UploadMediaFiles = <T extends FieldValues>({
   const isDragActive = false
   const dropZoneConfig = {
     accept: {
-      ...(isAcceptImage ? { 'image/*': ['.jpg', '.jpeg', '.png', '.gif', '.webp'] } : {}),
+      ...(isAcceptImage ? { 'image/*': ['.jpg', '.jpeg', '.png'] } : {}),
       ...(isAcceptVideo ? { 'video/*': ['.mp4', '.wmv', '.mov', '.avi', '.mkv', '.flv'] } : {}), //mp4|mov|avi|mkv|wmv|flv
       ...(isAcceptFile
         ? {
