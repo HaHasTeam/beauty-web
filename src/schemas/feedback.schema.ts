@@ -9,9 +9,9 @@ export const getFeedbackSchema = () => {
     content: z
       .string()
       .min(MIN_FEEDBACK_LENGTH, i18next.t('validation.contentFeedback'))
-      .min(MAX_FEEDBACK_LENGTH, i18next.t('validation.contentFeedback')),
+      .max(MAX_FEEDBACK_LENGTH, i18next.t('validation.contentFeedback')),
     orderDetailId: z.string().uuid(), // uuid
-    mediaFiles: z.array(z.string()).optional(),
+    mediaFiles: z.array(z.instanceof(File)).optional(),
   })
 }
 export const FeedbackSchema = getFeedbackSchema()

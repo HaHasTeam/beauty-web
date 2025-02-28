@@ -1,12 +1,11 @@
-import { ICreateFeedbackSchema } from '@/schemas/feedback.schema'
-import { IResponseFeedback } from '@/types/feedback'
+import { IResponseFeedback, ISubmitFeedback } from '@/types/feedback'
 import { TServerResponse } from '@/types/request'
 import { toMutationFetcher, toQueryFetcher } from '@/utils/query'
 import { privateRequest } from '@/utils/request'
 
 import { IFilterFeedback, IReplyFeedback } from './type'
 
-export const createFeedbackApi = toMutationFetcher<ICreateFeedbackSchema, TServerResponse<string>>(
+export const createFeedbackApi = toMutationFetcher<ISubmitFeedback, TServerResponse<string>>(
   'createFeedbackApi',
   async (data) => {
     return privateRequest('/feedbacks/create', {

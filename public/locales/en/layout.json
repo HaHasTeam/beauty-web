@@ -754,7 +754,17 @@
     "fileCountValid": "You can upload up to {{count}} files",
     "tooLong": "Message too long.",
     "ratingFeedback": "The rating must be between 1 and 5",
-    "contentFeedback": "The feedback content must be at least 25 characters long but no more than 500 characters"
+    "contentFeedback": "The feedback content must be at least 25 characters long but no more than 500 characters",
+    "maxImagesExceeded": "You can upload a maximum of {{count}} images.",
+    "maxVideosExceeded": "You can upload a maximum of {{count}} videos.",
+    "inputMedia": "Please upload at least one image or video.",
+    "imageCount": "You have selected {{count}} images.",
+    "videoCount": "You have selected {{count}} videos.",
+    "files": "Files must be in a supported format and within the allowed size limit.",
+    "videoBrowser": "Your browser does not support the video tag.",
+    "fileTypeLimits": "You can upload up to {{imageCount}} images and {{videoCount}} videos.",
+    "maxImages": "You can only upload up to {{count}} images.",
+    "maxVideos": "You can only upload up to {{count}} videos."
   },
   "role": {
     "ADMIN": "Admin",
@@ -793,7 +803,8 @@
     "successUpdateInactiveMessage": "Product updated successfully! It is currently inactive and will not be visible until activated.",
     "successStatusMessage": "Update product status successfully!",
     "categoryLastLevel": "Please select the last-level category.",
-    "certificateRequired": "Product certificate is required."
+    "certificateRequired": "Product certificate is required.",
+    "totalQuantityTooLow": "The total quantity is too low. Please increase the quantity to meet the required minimum."
   },
   "createProduct": {
     "successOfficial": "Product created successfully!",
@@ -875,7 +886,9 @@
     },
     "brandInformation": "Brand Information",
     "noCertificates": "No Certificate",
-    "file": "File"
+    "file": "File",
+    "restockNow": "Restock now",
+    "updateProductClassificationQuantitySuccess": "Product quantity have been successfully updated!"
   },
   "status": {
     "ACTIVE": "Active",
@@ -944,7 +957,8 @@
     },
     "consultantCriteriaDetails": "Consultation Criteria Details",
     "ID": "ID",
-    "applicableServices": "Applicable Services"
+    "applicableServices": "Applicable Services",
+    "files": "files"
   },
   "layout": {
     "help": "HELP",
@@ -986,13 +1000,16 @@
     "STANDARD": "Standard"
   },
   "feedback": {
-    "successTitle": "",
-    "successDescription": "",
+    "successTitle": "Review submitted successfully!",
+    "successDescription": "Thank you for your review! Your review helps other customers make informed decisions and supports brands in improving their products.",
     "writeReview": "Write a Review",
     "rating": "Rating",
     "content": "Share Your Experiences",
     "contentPlaceholder": "Enter your message here...",
     "mediaFiles": "Upload video and images",
     "mediaFilesHint": "Upload maximum 1 video and 4 images"
+  },
+  "media": {
+    "previewImage": "Preview Image/Video"
   }
 }

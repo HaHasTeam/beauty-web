@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
-import { Check, Star, Upload, X } from 'lucide-react'
+import { FilesIcon, ImagePlus, Star } from 'lucide-react'
 import { useId, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -13,9 +13,12 @@ import { Textarea } from '@/components/ui/textarea'
 import useHandleServerError from '@/hooks/useHandleServerError'
 import { useToast } from '@/hooks/useToast'
 import { createFeedbackApi } from '@/network/apis/feedback'
+import { uploadFilesApi } from '@/network/apis/file'
 import { getFeedbackSchema, IFeedbackSchema, MAX_FEEDBACK_LENGTH } from '@/schemas/feedback.schema'
+import { ISubmitFeedback } from '@/types/feedback'
 
 import Button from '../button'
+import { VideoThumbnail } from '../file-input/VideoThumnail'
 import UploadFeedbackMediaFiles from './UploadFeedbackMediaFiles'
 
 interface WriteFeedbackDialogProps {
@@ -25,10 +28,14 @@ interface WriteFeedbackDialogProps {
 }
 
 export const WriteFeedbackDialog: React.FC<WriteFeedbackDialogProps> = ({ isOpen, onClose, orderDetailId }) => {
+  const MAX_IMAGES = 4
+  const MAX_VIDEOS = 1
+  const MAX_FILES = MAX_IMAGES + MAX_VIDEOS
+  const MAX_SIZE = 10 * 1024 * 1024
+
   const { t } = useTranslation()
-  const [files, setFiles] = useState<File[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [previewUrls, setPreviewUrls] = useState<string[]>([])
+  const [hoveredRating, setHoveredRating] = useState<number | null>(null)
   const FeedbackSchema = getFeedbackSchema()
   const { successToast } = useToast()
   const handleServerError = useHandleServerError()
@@ -61,18 +68,32 @@ export const WriteFeedbackDialog: React.FC<WriteFeedbackDialogProps> = ({ isOpen
 
   const handleReset = () => {
     form.reset()
-    setFiles([])
-    setPreviewUrls([])
+  }
+
+  const { mutateAsync: uploadFilesFn } = useMutation({
+    mutationKey: [uploadFilesApi.mutationKey],
+    mutationFn: uploadFilesApi.fn,
+  })
+
+  const convertFileToUrl = async (files: File[]) => {
+    const formData = new FormData()
+    files.forEach((file) => {
+      formData.append('files', file)
+    })
+
+    const uploadedFilesResponse = await uploadFilesFn(formData)
+
+    return uploadedFilesResponse.data
   }
 
   const handleSubmit = async (values: IFeedbackSchema) => {
-    // Here you would typically upload the files first and get back URLs
-    // For this example, we'll assume it's handled separately or through a form data approach
-
-    // Assuming the API accepts the entire form with files
     try {
       setIsLoading(true)
-      await submitFeedbackFn(values)
+      const imgUrls = values.mediaFiles ? await convertFileToUrl(values.mediaFiles) : []
+      await submitFeedbackFn({
+        ...values,
+        mediaFiles: imgUrls,
+      } as ISubmitFeedback)
       setIsLoading(false)
     } catch (error) {
       setIsLoading(false)
@@ -83,62 +104,50 @@ export const WriteFeedbackDialog: React.FC<WriteFeedbackDialogProps> = ({ isOpen
     }
   }
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
-      const newFiles = Array.from(e.target.files)
-      setFiles((prev) => [...prev, ...newFiles])
-
-      // Create preview URLs
-      const newPreviewUrls = newFiles.map((file) => URL.createObjectURL(file))
-      setPreviewUrls((prev) => [...prev, ...newPreviewUrls])
-
-      // Update form value
-      const currentMediaFiles = form.getValues('mediaFiles')
-      form.setValue('mediaFiles', [...currentMediaFiles, ...newPreviewUrls])
-    }
-  }
-
-  const removeFile = (index: number) => {
-    // Revoke object URL to prevent memory leaks
-    URL.revokeObjectURL(previewUrls[index])
-
-    const updatedFiles = [...files]
-    updatedFiles.splice(index, 1)
-    setFiles(updatedFiles)
-
-    const updatedPreviewUrls = [...previewUrls]
-    updatedPreviewUrls.splice(index, 1)
-    setPreviewUrls(updatedPreviewUrls)
-
-    // Update form value
-    form.setValue('mediaFiles', updatedPreviewUrls)
-  }
-
   const renderStarRating = () => {
     const rating = form.getValues('rating')
 
     return (
-      <div className="flex items-center space-x-1">
-        {[1, 2, 3, 4, 5].map((star) => (
-          <Star
-            key={star}
-            className={`w-8 h-8 cursor-pointer ${star <= rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`}
-            onClick={() => form.setValue('rating', star)}
-          />
-        ))}
+      <div className="flex items-center space-x-2">
+        {[1, 2, 3, 4, 5].map((star) => {
+          const isFilled =
+            hoveredRating !== null
+              ? star <= hoveredRating // During hover
+              : star <= rating // Permanent selection
+
+          return (
+            <Star
+              key={star}
+              className={`w-8 h-8 cursor-pointer transition-all duration-150 ${
+                isFilled ? 'fill-yellow-400 text-yellow-400 scale-110' : 'text-gray-200 hover:text-slate-300'
+              }`}
+              onClick={() => {
+                form.setValue('rating', star)
+                // Optional - trigger validation if needed
+                form.trigger('rating')
+              }}
+              onMouseEnter={() => setHoveredRating(star)}
+              onMouseLeave={() => setHoveredRating(null)}
+            />
+          )
+        })}
       </div>
     )
   }
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-lg">
+      <DialogContent className="md:max-w-xl sm:max-w-lg">
         <DialogHeader>
           <DialogTitle className="text-primary">{t('feedback.writeReview')}</DialogTitle>
         </DialogHeader>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6" id={`form-${id}`}>
+          <form
+            onSubmit={form.handleSubmit(handleSubmit, (e) => console.log(e))}
+            className="space-y-6"
+            id={`form-${id}`}
+          >
             <FormField
               control={form.control}
               name="rating"
@@ -151,7 +160,7 @@ export const WriteFeedbackDialog: React.FC<WriteFeedbackDialogProps> = ({ isOpen
                           {renderStarRating()}
                         </div>
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage className="text-center" />
                     </div>
                   </div>
                 </FormItem>
@@ -165,7 +174,9 @@ export const WriteFeedbackDialog: React.FC<WriteFeedbackDialogProps> = ({ isOpen
                 <FormItem className="w-full">
                   <div className="w-full flex flex-col gap-2">
                     <div className="w-full flex items-center">
-                      <FormLabel required>{t('feedback.content')}</FormLabel>
+                      <FormLabel required className="text-primary">
+                        {t('feedback.content')}
+                      </FormLabel>
                     </div>
                     <div className="w-full space-y-1">
                       <FormControl>
@@ -189,40 +200,55 @@ export const WriteFeedbackDialog: React.FC<WriteFeedbackDialogProps> = ({ isOpen
             <FormField
               control={form.control}
               name="mediaFiles"
-              render={() => (
+              render={({ field }) => (
                 <FormItem className="w-full">
                   <div className="w-full flex flex-col gap-2">
-                    <div className="w-full flex items-center">
-                      <FormLabel>{t('feedback.mediaFiles')}</FormLabel>
+                    <div className="w-full space-y-1">
+                      <FormLabel className="text-primary">{t('feedback.mediaFiles')}</FormLabel>
                       <FormDescription>{t('feedback.mediaFilesHint')}</FormDescription>
                     </div>
                     <div className="w-full space-y-1">
                       <UploadFeedbackMediaFiles
                         field={field}
                         vertical={false}
-                        dropZoneConfigOptions={{ maxFiles: MAX_PRODUCT_IMAGES }}
+                        isAcceptImage={true}
+                        isAcceptVideo={true}
+                        maxImages={MAX_IMAGES}
+                        maxVideos={MAX_VIDEOS}
+                        dropZoneConfigOptions={{
+                          maxFiles: MAX_FILES,
+                          maxSize: MAX_SIZE,
+                        }}
                         renderFileItemUI={(file) => {
                           return (
                             <div
-                              key={file?.name}
-                              className="hover:border-primary w-32 h-32 rounded-lg border border-gay-300 p-0"
+                              key={file.name}
+                              className="hover:border-primary w-32 h-32 rounded-lg border border-gay-300 p-0 relative"
                             >
-                              <img
-                                src={URL?.createObjectURL(file)}
-                                alt={file?.name}
-                                className="object-contain w-full h-full rounded-lg"
-                                onLoad={() => URL?.revokeObjectURL(URL?.createObjectURL(file))}
-                              />
+                              {file.type.includes('image') ? (
+                                <img
+                                  src={URL.createObjectURL(file)}
+                                  alt={file.name}
+                                  className="object-contain w-full h-full rounded-lg"
+                                  onLoad={() => URL.revokeObjectURL(URL.createObjectURL(file))}
+                                />
+                              ) : file.type.includes('video') ? (
+                                <VideoThumbnail file={file} />
+                              ) : (
+                                <div className="flex items-center justify-center h-full">
+                                  <FilesIcon className="w-12 h-12 text-muted-foreground" />
+                                </div>
+                              )}
                             </div>
                           )
                         }}
                         renderInputUI={(_isDragActive, files, maxFiles) => {
                           return (
                             <div className="w-32 h-32 hover:bg-primary/15 p-4 rounded-lg border flex flex-col gap-2 items-center justify-center text-center border-dashed border-primary transition-all duration-500">
-                              <ImagePlus className="w-12 h-12 text-primary" />
-
-                              <p className="text-sm text-primary">
-                                {t('createProduct.inputImage')} ({files?.length ?? 0}/{maxFiles})
+                              <ImagePlus className="w-8 h-8 text-primary" />
+                              <p className="text-xs text-primary">{t('validation.inputMedia')}</p>
+                              <p className="text-xs text-muted-foreground">
+                                {files.length}/{maxFiles} {t('systemService.files')}
                               </p>
                             </div>
                           )
