@@ -70,6 +70,7 @@ const OrderDetailItems = ({ orderDetails, status }: OrderDetailItemsProps) => {
               productClassification={orderDetail?.productClassification}
               status={status}
               isFeedback={orderDetail?.isFeedback}
+              orderDetailId={orderDetail?.id}
             />
           </div>
         ))}

@@ -674,7 +674,9 @@
     "orderCancellationUpdate": "Order cancellation updated successfully!",
     "approvedCancelRequest": "Cancellation approved. Order is now canceled.",
     "rejectedCancelRequest": "Cancellation rejected. Order will proceed.",
-    "rejectedCancelRequestTitle": "Cancellation Rejected"
+    "rejectedCancelRequestTitle": "Cancellation Rejected",
+    "received": "Received",
+    "receivedOrderStatusSuccess": "Successfully confirmed order receipt!"
   },
   "toast": {
     "success": "Your request has been successfully processed, continue with your work.",
@@ -749,10 +751,22 @@
     "phoneValid": "Please fill in a valid phone number",
     "arrayRequired": "Field value must be an array",
     "stringOrArrayRequired": "Field value must be a string or an array",
-    "sizeFileValid": "Each file must be under {{size}}MB.",
+    "sizeFileValid": "Each file must be under {{size}}MB",
     "fileFormat": "Accepted file formats are",
     "fileCountValid": "You can upload up to {{count}} files",
-    "tooLong": "Message too long."
+    "tooLong": "Message too long.",
+    "ratingFeedback": "The rating must be between 1 and 5",
+    "contentFeedback": "The feedback content must be at least 25 characters long but no more than 500 characters",
+    "maxImagesExceeded": "You can upload a maximum of {{count}} images.",
+    "maxVideosExceeded": "You can upload a maximum of {{count}} videos.",
+    "inputMedia": "Please upload at least one image or video.",
+    "imageCount": "You have selected {{count}} images.",
+    "videoCount": "You have selected {{count}} videos.",
+    "files": "Files must be in a supported format and within the allowed size limit.",
+    "videoBrowser": "Your browser does not support the video tag.",
+    "fileTypeLimits": "You can upload up to {{imageCount}} images and {{videoCount}} videos.",
+    "maxImages": "You can only upload up to {{count}} images.",
+    "maxVideos": "You can only upload up to {{count}} videos."
   },
   "role": {
     "ADMIN": "Admin",
@@ -791,7 +805,8 @@
     "successUpdateInactiveMessage": "Product updated successfully! It is currently inactive and will not be visible until activated.",
     "successStatusMessage": "Update product status successfully!",
     "categoryLastLevel": "Please select the last-level category.",
-    "certificateRequired": "Product certificate is required."
+    "certificateRequired": "Product certificate is required.",
+    "totalQuantityTooLow": "The total quantity is too low. Please increase the quantity to meet the required minimum ({{count}})."
   },
   "createProduct": {
     "successOfficial": "Product created successfully!",
@@ -869,11 +884,15 @@
       "INACTIVE": "The product is currently unavailable for purchase and not visible to customers.",
       "PRE_ORDER": "The product is not yet released or out of stock but can be ordered in advance.",
       "OFFICIAL": "The product is an officially verified item from the brand or manufacturer and has been reviewed by the platform moderator.",
-      "OUT_OF_STOCK": "The product is temporarily unavailable due to no remaining stock."
+      "OUT_OF_STOCK": "The product is temporarily unavailable due to no remaining stock.",
+      "SOLD_OUT": "This product is currently out of stock. Restock now so customers can continue purchasing!",
+      "ALMOST_OUT": "Running low on stock—restock soon!"
     },
     "brandInformation": "Brand Information",
     "noCertificates": "No Certificate",
-    "file": "File"
+    "file": "File",
+    "restockNow": "Restock now",
+    "updateProductClassificationQuantitySuccess": "Product quantity have been successfully updated!"
   },
   "status": {
     "ACTIVE": "Active",
@@ -885,7 +904,9 @@
     "PENDING": "Pending",
     "PRE_ORDER": "Pre-Order",
     "OFFICIAL": "Official",
-    "OUT_OF_STOCK": "Out of stock"
+    "OUT_OF_STOCK": "Out of stock",
+    "SOLD_OUT": "Out of stock",
+    "ALMOST_OUT": "Almost out of stock"
   },
   "systemService": {
     "generalInformation": "General Information",
@@ -942,7 +963,8 @@
     },
     "consultantCriteriaDetails": "Consultation Criteria Details",
     "ID": "ID",
-    "applicableServices": "Applicable Services"
+    "applicableServices": "Applicable Services",
+    "files": "files"
   },
   "layout": {
     "help": "HELP",
@@ -982,5 +1004,39 @@
   "systemServiceType": {
     "PREMIUM": "Premium",
     "STANDARD": "Standard"
+  },
+  "feedback": {
+    "successTitle": "Review submitted successfully!",
+    "successDescription": "Thank you for your review! Your review helps other customers make informed decisions and supports brands in improving their products.",
+    "writeReview": "Write a Review",
+    "rating": "Rating",
+    "content": "Share Your Experiences",
+    "contentPlaceholder": "Enter your message here...",
+    "mediaFiles": "Upload video and images",
+    "mediaFilesHint": "You can upload up to {{videoCount}} video(s) and {{imageCount}} image(s), ensuring the total file size does not exceed {{size}}MB. \nSupports the following formats: {{format}}.",
+    "imagesHint": {
+      "TO_SHIP": "Show order contents, packaging, shipping label.",
+      "SHIPPING": "Provide proof of handing the package to the shipping carrier.",
+      "DELIVERED": "Show outer package, product inside, any visible damage (if any).",
+      "RETURNING": "Provide evidence of the return process.",
+      "REFUNDED": "Upload proof of return completion and refund."
+    },
+    "videosHint": {
+      "TO_SHIP": "A 360° view of the package to confirm it’s properly sealed.",
+      "SHIPPING": "Record handover moment or a short clip of the sealed package before shipping.",
+      "DELIVERED": "Unboxing video to capture package condition & item accuracy.",
+      "RETURNING": "Record defect/missing parts/issues clearly for verification.",
+      "REFUNDED": "Upload video of return completion and refund."
+    },
+    "uploadVideos": "Upload videos",
+    "uploadImages": "Upload images"
+  },
+  "media": {
+    "previewImage": "Preview Image/Video",
+    "viewMediaFiles": "View videos/images",
+    "images": "Images",
+    "imagesFile": "images",
+    "videos": "Videos",
+    "videosFile": "videos"
   }
 }

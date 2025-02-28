@@ -146,3 +146,10 @@ export enum CancelOrderRequestStatusEnum {
   APPROVED = 'APPROVED',
   REJECTED = 'REJECTED',
 }
+
+export enum FeedbackFilterEnum {
+  ALL = 'ALL',
+  RATING = 'RATING',
+  IMAGE_VIDEO = 'IMAGE_VIDEO',
+  CLASSIFICATION = 'CLASSIFICATION',
+}

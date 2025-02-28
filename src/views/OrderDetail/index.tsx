@@ -9,6 +9,7 @@ import BrandOrderInformation from '@/components/brand/BrandOrderInformation'
 import CancelOrderDialog from '@/components/dialog/CancelOrderDialog'
 import RequestCancelOrderDialog from '@/components/dialog/RequestCancelOrderDialog'
 import Empty from '@/components/empty/Empty'
+import LoadingIcon from '@/components/loading-icon'
 import LoadingContentLayer from '@/components/loading-icon/LoadingContentLayer'
 import OrderDetailItems from '@/components/order-detail/OrderDetailItems'
 import OrderGeneral from '@/components/order-detail/OrderGeneral'
@@ -18,7 +19,14 @@ import OrderSummary from '@/components/order-detail/OrderSummary'
 import OrderStatus from '@/components/order-status'
 import { Button } from '@/components/ui/button'
 import configs from '@/config'
-import { getMyCancelRequestApi, getOrderByIdApi, getStatusTrackingByIdApi } from '@/network/apis/order'
+import useHandleServerError from '@/hooks/useHandleServerError'
+import { useToast } from '@/hooks/useToast'
+import {
+  getMyCancelRequestApi,
+  getOrderByIdApi,
+  getStatusTrackingByIdApi,
+  updateOrderStatusApi,
+} from '@/network/apis/order'
 import { CancelOrderRequestStatusEnum, ShippingStatusEnum } from '@/types/enum'
 import { ICancelRequestOrder } from '@/types/order'
 
@@ -31,6 +39,8 @@ const OrderDetail = () => {
   const [isTrigger, setIsTrigger] = useState<boolean>(false)
   const [cancelRequests, setCancelRequests] = useState<ICancelRequestOrder[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const { successToast } = useToast()
+  const handleServerError = useHandleServerError()
 
   const { data: useOrderData, isFetching } = useQuery({
     queryKey: [getOrderByIdApi.queryKey, orderId ?? ('' as string)],
@@ -64,6 +74,32 @@ const OrderDetail = () => {
     }
     fetchCancelRequests()
   }, [getMyCancelRequestOrderFn])
+
+  const { mutateAsync: updateOrderStatusFn } = useMutation({
+    mutationKey: [updateOrderStatusApi.mutationKey],
+    mutationFn: updateOrderStatusApi.fn,
+    onSuccess: async () => {
+      successToast({
+        message: t('order.receivedOrderStatusSuccess'),
+      })
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: [getOrderByIdApi.queryKey] }),
+        queryClient.invalidateQueries({ queryKey: [getStatusTrackingByIdApi.queryKey] }),
+      ])
+    },
+  })
+  async function handleUpdateStatus(values: string) {
+    try {
+      setIsLoading(true)
+      await updateOrderStatusFn({ id: useOrderData?.data?.id ?? '', status: values })
+      setIsLoading(false)
+    } catch (error) {
+      setIsLoading(false)
+      handleServerError({
+        error,
+      })
+    }
+  }
   return (
     <div>
       {isFetching && <LoadingContentLayer />}
@@ -235,6 +271,17 @@ const OrderDetail = () => {
                       </Button>
                     </div>
                   )}
+                {useOrderData?.data?.status === ShippingStatusEnum.DELIVERED && (
+                  <Button
+                    variant="outline"
+                    className="w-full border border-primary text-primary hover:text-primary hover:bg-primary/10"
+                    onClick={() => {
+                      handleUpdateStatus(ShippingStatusEnum.COMPLETED)
+                    }}
+                  >
+                    {isLoading ? <LoadingIcon color="primaryBackground" /> : t('order.received')}
+                  </Button>
+                )}
               </div>
             </div>
           </>

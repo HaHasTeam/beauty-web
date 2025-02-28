@@ -35,6 +35,8 @@ export default function Header() {
     })),
   )
   const { cartItems } = useCartStore()
+  const totalItems = Object.values(cartItems).reduce((acc, items) => acc + items.length, 0)
+
   return (
     <header className="w-full bg-white relative shadow-lg">
       <div className="">
@@ -94,9 +96,9 @@ export default function Header() {
             <Link to={configs.routes.cart}>
               <div className="relative cursor-pointer">
                 <ShoppingCart />
-                {cartItems && Object.keys(cartItems)?.length > 0 && (
+                {cartItems && totalItems > 0 && (
                   <span className="absolute -top-1 -right-1 rounded-full bg-primary text-white text-xs w-4 h-4 flex items-center justify-center">
-                    {Object.keys(cartItems)?.length}
+                    {totalItems}
                   </span>
                 )}
               </div>
