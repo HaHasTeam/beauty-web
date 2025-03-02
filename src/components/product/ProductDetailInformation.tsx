@@ -217,7 +217,10 @@ const ProductDetailInformation = ({
       </div>
 
       {/* certificate */}
-      <QualityService certificateUrls={product?.certificates ?? ''} productName={product.name ?? ''} />
+      <QualityService
+        certificateUrls={product?.certificates?.filter((cert) => cert.status === StatusEnum.ACTIVE) ?? []}
+        productName={product.name ?? ''}
+      />
 
       {/* detail */}
       <div className="w-full py-4 px-3 bg-white rounded-lg">

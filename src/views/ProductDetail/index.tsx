@@ -197,17 +197,17 @@ const ProductDetail = () => {
         <CustomBreadcrumb dynamicSegments={[{ segment: useProductData?.data?.name ?? t('productDetail.title') }]} />
         {!isFetching && useProductData && useProductData?.data && (
           <>
-            <div className="flex gap-2 w-full items-stretch">
+            <div className="flex md:flex-row flex-col gap-2 w-full items-stretch">
               {/* product image carousel */}
               <div
                 ref={carouselRef}
-                className="shadow-sm p-3 bg-white rounded-lg w-[calc(30%-8px)] sticky top-0 max-h-fit"
+                className="shadow-sm p-3 bg-white rounded-lg w-full md:w-[calc(30%-8px)] md:sticky md:top-0 md:max-h-fit"
               >
                 <ProductCarousel product={useProductData?.data} activeClassification={chosenClassification} />
               </div>
 
               {/* product detail information */}
-              <div className="w-[calc(50%-8px)]">
+              <div className="w-full md:w-[calc(50%-8px)]">
                 <Collapsible
                   containerRef={carouselRef}
                   content={
@@ -225,7 +225,7 @@ const ProductDetail = () => {
                 />
               </div>
               {/* call to action */}
-              <div className="shadow-sm p-3 bg-white rounded-lg w-[calc(20%-8px)] sticky top-0 max-h-fit">
+              <div className="shadow-sm p-3 bg-white rounded-lg w-full md:w-[calc(20%-8px)] md:sticky md:top-0 md:max-h-fit">
                 <ProductDetailAction
                   product={useProductData?.data}
                   chosenClassification={chosenClassification}
