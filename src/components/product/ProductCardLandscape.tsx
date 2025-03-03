@@ -80,7 +80,7 @@ const ProductCardLandscape = ({
   const OUT_OF_STOCK = PRODUCT_STOCK_COUNT <= 0
   const HIDDEN = checkCurrentProductClassificationHide(productClassification, classifications)
   const IS_ACTIVE = checkCurrentProductClassificationActive(productClassification, classifications)
-
+  console.log(IS_ACTIVE)
   console.log(
     'info',
     classifications,

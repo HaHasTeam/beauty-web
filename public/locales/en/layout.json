@@ -108,7 +108,8 @@
     "deselect": "Deselect",
     "select": "Select",
     "edit": "Edit",
-    "backToList": "Back to List"
+    "backToList": "Back to List",
+    "close": "Close"
   },
   "noData": "No matching data found",
   "sell": {
@@ -766,7 +767,8 @@
     "videoBrowser": "Your browser does not support the video tag.",
     "fileTypeLimits": "You can upload up to {{imageCount}} images and {{videoCount}} videos.",
     "maxImages": "You can only upload up to {{count}} images.",
-    "maxVideos": "You can only upload up to {{count}} videos."
+    "maxVideos": "You can only upload up to {{count}} videos.",
+    "contentReplyFeedback": "The feedback reply must be at least 25 characters long but no more than 500 characters"
   },
   "role": {
     "ADMIN": "Admin",
@@ -1012,7 +1014,9 @@
   },
   "feedback": {
     "successTitle": "Review submitted successfully!",
+    "successRepTitle": "Response Sent!",
     "successDescription": "Thank you for your review! Your review helps other customers make informed decisions and supports brands in improving their products.",
+    "successRepDescription": "Your response has been successfully submitted. Thank you for addressing customer feedback!",
     "writeReview": "Write a Review",
     "rating": "Rating",
     "content": "Share Your Experiences",
@@ -1034,7 +1038,14 @@
       "REFUNDED": "Upload video of return completion and refund."
     },
     "uploadVideos": "Upload videos",
-    "uploadImages": "Upload images"
+    "uploadImages": "Upload images",
+    "viewReview": "View Review",
+    "images": "Images",
+    "ID": "ID",
+    "order": "Order",
+    "reply": "Reply",
+    "writeYourRep": "Write your reply...",
+    "yourReply": "Your reply"
   },
   "media": {
     "previewImage": "Preview Image/Video",

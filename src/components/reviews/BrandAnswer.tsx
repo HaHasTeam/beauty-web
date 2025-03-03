@@ -1,8 +1,6 @@
 import { useTranslation } from 'react-i18next'
 
-import fallBackImage from '@/assets/images/fallBackImage.jpg'
-
-import ImageWithFallback from '../ImageFallback'
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 
 interface BrandAnswerProps {
   brandName: string
@@ -17,20 +15,16 @@ const BrandAnswer = ({ brandName, updatedAt, description, brandLogo }: BrandAnsw
       <div className="flex gap-2 items-center">
         <div className="flex gap-2 items-center">
           {brandLogo && (
-            <div className="w-6 h-6">
-              <ImageWithFallback
-                fallback={fallBackImage}
-                src={brandLogo}
-                alt={brandName}
-                className="object-cover w-full h-full rounded-full"
-              />
-            </div>
+            <Avatar>
+              <AvatarImage src={brandLogo} alt={brandName} />
+              <AvatarFallback>{brandName?.charAt(0) ?? 'A'}</AvatarFallback>
+            </Avatar>
           )}
           <span className="font-semibold text-sm">{brandName}</span>
         </div>
         <div className="border-l px-2 border-gray-500">
           <span className="text-gray-500 text-sm">
-            Last updated: {t('date.toLocaleDateString', { val: new Date(updatedAt) })}
+            {t('order.lastUpdated')}: {t('date.toLocaleDateString', { val: new Date(updatedAt) })}
           </span>
         </div>
       </div>

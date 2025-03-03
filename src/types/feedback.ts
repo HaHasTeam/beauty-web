@@ -1,6 +1,6 @@
-import { IFeedbackSchema } from '@/schemas/feedback.schema'
-
+import { TServerFile } from './file'
 import { TMetaData } from './request'
+import { TUser } from './user'
 
 export type ISubmitFeedbackScheme = {
   rating: number
@@ -9,6 +9,12 @@ export type ISubmitFeedbackScheme = {
   mediaFiles: string[]
 }
 
-export type IResponseFeedback = TMetaData & IFeedbackSchema
+export type IResponseFeedback = TMetaData & {
+  rating: number
+  content: string
+  orderDetailId: string
+  mediaFiles: TServerFile[]
+  author: TUser
+}
 
 export type ISubmitFeedback = ISubmitFeedbackScheme

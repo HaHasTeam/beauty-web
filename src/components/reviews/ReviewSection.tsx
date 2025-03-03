@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import BrandAnswer from './BrandAnswer'
 import CustomerReview from './CustomerReview'
 
@@ -31,7 +32,7 @@ const ReviewSection = ({
 }: ReviewSectionProps) => {
   return (
     <div className="w-full border-b border-gray-200 px-3 py-4 flex flex-col gap-5">
-      <CustomerReview
+      {/* <CustomerReview
         author={author}
         updatedAt={reviewUpdatedAt}
         classification={classification}
@@ -40,7 +41,7 @@ const ReviewSection = ({
         description={reviewDescription}
         images={images}
         rating={rating}
-      />
+      /> */}
       <BrandAnswer brandName={brandName} updatedAt={updatedAt} description={description} brandLogo={brandLogo} />
     </div>
   )

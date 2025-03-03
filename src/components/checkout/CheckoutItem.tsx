@@ -85,7 +85,9 @@ const CheckoutItem = ({
         const productImage =
           (cartItem?.productClassification?.type === ClassificationTypeEnum.DEFAULT
             ? product?.images?.filter((img) => img?.status === StatusEnum.ACTIVE)[0]?.fileUrl
-            : cartItem?.productClassification?.images?.[0]?.fileUrl) ?? ''
+            : cartItem?.productClassification?.images?.filter((img) => img?.status === StatusEnum.ACTIVE)[0]
+                ?.fileUrl) ?? ''
+
         const productName = product?.name ?? ''
         const productId = product?.id ?? ''
         const selectedClassification = cartItem?.classification ?? ''

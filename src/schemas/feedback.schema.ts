@@ -16,5 +16,6 @@ export const getFeedbackSchema = () => {
     images: z.array(z.instanceof(File)).optional(),
   })
 }
+
 export const FeedbackSchema = getFeedbackSchema()
 export type IFeedbackSchema = z.infer<typeof FeedbackSchema>

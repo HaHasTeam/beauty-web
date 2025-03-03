@@ -14,12 +14,11 @@ export function checkCurrentProductClassificationHide(
 ): boolean {
   if (!productClassification || !productClassifications) return false
 
-  // Check if the title exists in productClassifications or if quantity > 0
-  const isTitleMatch = productClassifications?.some((item) => item?.title !== productClassification?.title)
+  // Check if the title doesn't exist in productClassifications or if status is not active
+  const titleDoesNotExist = !productClassifications.some((item) => item?.title === productClassification?.title)
+  const isStatusNotActive = productClassification?.status !== StatusEnum.ACTIVE
 
-  const isStatusActive = productClassifications?.some((item) => item?.status !== StatusEnum.ACTIVE)
-
-  return isTitleMatch && isStatusActive
+  return titleDoesNotExist || isStatusNotActive
 }
 
 /**

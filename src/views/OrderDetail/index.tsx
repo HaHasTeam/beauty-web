@@ -227,6 +227,13 @@ const OrderDetail = () => {
                       useOrderData?.data?.orderDetails?.[0]?.productClassification
                     )?.product?.brand?.name ?? 'Brand'
                   }
+                  brandLogo={
+                    (
+                      useOrderData?.data?.orderDetails?.[0]?.productClassification?.preOrderProduct ??
+                      useOrderData?.data?.orderDetails?.[0]?.productClassification?.productDiscount ??
+                      useOrderData?.data?.orderDetails?.[0]?.productClassification
+                    )?.product?.brand?.logo ?? 'Brand'
+                  }
                 />
 
                 {/* order items */}
@@ -235,6 +242,15 @@ const OrderDetail = () => {
                   <OrderDetailItems
                     orderDetails={useOrderData?.data?.orderDetails}
                     status={useOrderData?.data?.status}
+                    brand={
+                      (
+                        useOrderData?.data?.orderDetails?.[0]?.productClassification?.preOrderProduct ??
+                        useOrderData?.data?.orderDetails?.[0]?.productClassification?.productDiscount ??
+                        useOrderData?.data?.orderDetails?.[0]?.productClassification
+                      )?.product?.brand ?? null
+                    }
+                    recipientAvatar=""
+                    recipientName={useOrderData?.data?.recipientName}
                   />
 
                   {/* order summary */}

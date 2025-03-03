@@ -26,7 +26,11 @@ const ProductOrderLandscape = ({
     <div className="flex gap-4 mb-4">
       <div className="lg:w-22 lg:h-22 md:w-16 md:h-16 h-10 w-10 my-auto">
         <ImageWithFallback
-          src={product?.images?.filter((img) => img.status === StatusEnum.ACTIVE)[0]?.fileUrl}
+          src={
+            productClassification?.type === ClassificationTypeEnum.DEFAULT
+              ? product?.images?.filter((img) => img?.status === StatusEnum.ACTIVE)[0]?.fileUrl
+              : productClassification?.images?.filter((img) => img?.status === StatusEnum.ACTIVE)[0]?.fileUrl
+          }
           alt={product?.name}
           className="object-cover w-full h-full rounded-md"
           fallback={fallBackImage}
