@@ -21,6 +21,12 @@ export interface IOrderDetail {
   unitPriceBeforeDiscount: number
   feedback: IResponseFeedback | null
 }
+export interface IOrderFeedback extends IOrderItem {
+  account: TUser
+}
+export interface IOrderDetailFeedback extends IOrderDetail {
+  order: IOrderFeedback
+}
 
 export interface IOrderItem {
   platformVoucherDiscount: number

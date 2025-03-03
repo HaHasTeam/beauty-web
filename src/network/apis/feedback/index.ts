@@ -1,4 +1,4 @@
-import { IResponseFeedback, ISubmitFeedback } from '@/types/feedback'
+import { IFeedbackGeneral, IResponseFeedback, ISubmitFeedback } from '@/types/feedback'
 import { TServerResponse } from '@/types/request'
 import { toMutationFetcher, toQueryFetcher } from '@/utils/query'
 import { privateRequest } from '@/utils/request'
@@ -30,7 +30,7 @@ export const getFeedbackByIdApi = toQueryFetcher<string, TServerResponse<IRespon
     return privateRequest(`/feedbacks/get-by-id/${feedbackId}`)
   },
 )
-export const getFeedbackGeneralOfProductApi = toQueryFetcher<string, TServerResponse<IResponseFeedback>>(
+export const getFeedbackGeneralOfProductApi = toQueryFetcher<string, TServerResponse<IFeedbackGeneral>>(
   'getFeedbackGeneralOfProductApi',
   async (feedbackId) => {
     return privateRequest(`/feedbacks/review-general-of-product/${feedbackId}`)
@@ -39,19 +39,24 @@ export const getFeedbackGeneralOfProductApi = toQueryFetcher<string, TServerResp
 
 export const filterFeedbackApi = toMutationFetcher<IFilterFeedback, TServerResponse<string>>(
   'filterFeedbackApi',
-  async (params, data) => {
+  async ({ params, data }) => {
     return privateRequest(`/feedbacks/filter/${params}`, {
       method: 'POST',
-      data,
+      data: data
+        ? {
+            type: data?.type,
+            value: data?.value,
+          }
+        : {},
     })
   },
 )
 export const replyFeedbackApi = toMutationFetcher<IReplyFeedback, TServerResponse<string>>(
   'replyFeedbackApi',
-  async (params, data) => {
+  async ({ params, content }) => {
     return privateRequest(`/feedbacks/reply/${params}`, {
       method: 'POST',
-      data,
+      data: { content },
     })
   },
 )

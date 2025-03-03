@@ -52,7 +52,11 @@ export const ViewFeedbackDialog: React.FC<ViewFeedbackDialogProps> = ({
         <BrandAnswer brandName={brand?.name ?? ''} updatedAt={''} description={''} brandLogo={brand?.logo ?? ''} />
 
         <DialogFooter>
-          <Button variant="outline" onClick={onClose}>
+          <Button
+            variant="outline"
+            className="border border-primary text-primary hover:text-primary hover:bg-primary/10"
+            onClick={onClose}
+          >
             {t('button.close')}
           </Button>
         </DialogFooter>
