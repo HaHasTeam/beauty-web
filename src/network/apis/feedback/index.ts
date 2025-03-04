@@ -15,7 +15,7 @@ export const createFeedbackApi = toMutationFetcher<ISubmitFeedback, TServerRespo
   },
 )
 
-export const getMyFeedbacksApi = toMutationFetcher<void, TServerResponse<IResponseFeedback[]>>(
+export const getMyFeedbacksApi = toQueryFetcher<void, TServerResponse<IResponseFeedback[]>>(
   'getMyFeedbacksApi',
   async () => {
     return privateRequest('/feedbacks/get-my-feedbacks/', {
