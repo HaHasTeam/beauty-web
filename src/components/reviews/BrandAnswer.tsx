@@ -81,9 +81,10 @@ const BrandAnswer = ({
                         (account.role.role === UserRoleEnum.MANAGER || account.role.role === UserRoleEnum.STAFF) ? (
                           <span className="font-semibold text-sm">{brand.name}</span>
                         ) : (
-                          (account.firstName || account.lastName) && (
+                          account.username && (
                             <span className="font-semibold text-sm">
-                              {[account?.lastName, account?.firstName].join(' ')}
+                              {/* {[account?.lastName, account?.firstName].join(' ')} */}
+                              {account.username}
                             </span>
                           )
                         )}
@@ -113,7 +114,8 @@ const BrandAnswer = ({
                       (account.role.role === UserRoleEnum.MANAGER || account.role.role === UserRoleEnum.STAFF) && (
                         <div className="flex items-center gap-1">
                           <span className="font-medium text-xs text-muted-foreground">
-                            {[account?.lastName, account?.firstName].join(' ')}
+                            {/* {[account?.lastName, account?.firstName].join(' ')} */}
+                            {account.username ?? ''}
                           </span>
                           <RoleTag role={account?.role?.role} size="small" />
                         </div>

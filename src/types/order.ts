@@ -48,6 +48,7 @@ export interface IOrderItem {
   voucher: null | TVoucher
   message: string
   recipientName: string
+  account: TUser
 }
 
 export type IOrder = {

@@ -10,10 +10,10 @@ interface OrderDetailItemsProps {
   orderDetails: IOrderDetail[]
   status: ShippingStatusEnum
   brand: IBrand | null
-  recipientAvatar: string
-  recipientName: string
+  accountAvatar: string
+  accountName: string
 }
-const OrderDetailItems = ({ recipientAvatar, recipientName, orderDetails, status, brand }: OrderDetailItemsProps) => {
+const OrderDetailItems = ({ accountAvatar, accountName, orderDetails, status, brand }: OrderDetailItemsProps) => {
   const { t } = useTranslation()
   console.log(brand, '1')
   return (
@@ -76,8 +76,8 @@ const OrderDetailItems = ({ recipientAvatar, recipientName, orderDetails, status
               feedback={orderDetail?.feedback ?? null}
               orderDetailId={orderDetail?.id}
               brand={brand || null}
-              recipientAvatar={recipientAvatar}
-              recipientName={recipientName}
+              accountAvatar={accountAvatar}
+              accountName={accountName}
             />
           </div>
         ))}
