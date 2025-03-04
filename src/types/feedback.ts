@@ -15,6 +15,7 @@ export type IResponseFeedback = TMetaData & {
   content: string
   orderDetailId: string
   mediaFiles: TServerFile[]
+  replies: IReplyFeedback[]
 }
 export type IResponseFeedbackItemInFilter = TMetaData & {
   rating: number

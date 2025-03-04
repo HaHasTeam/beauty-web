@@ -19,3 +19,14 @@ export const getFeedbackSchema = () => {
 
 export const FeedbackSchema = getFeedbackSchema()
 export type IFeedbackSchema = z.infer<typeof FeedbackSchema>
+export const getReplyFeedbackSchema = () => {
+  return z.object({
+    content: z
+      .string()
+      .min(MIN_FEEDBACK_LENGTH, i18next.t('validation.contentReplyFeedback'))
+      .max(MAX_FEEDBACK_LENGTH, i18next.t('validation.contentReplyFeedback')),
+  })
+}
+
+export const ReplyFeedbackSchema = getReplyFeedbackSchema()
+export type IReplyFeedbackSchema = z.infer<typeof ReplyFeedbackSchema>

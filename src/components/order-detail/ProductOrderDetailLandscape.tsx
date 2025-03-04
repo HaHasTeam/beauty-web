@@ -267,8 +267,9 @@ const ProductOrderDetailLandscape = ({
           onClose={() => setOpenViewFbDialog(false)}
           feedback={feedback}
           brand={brand || null}
-          authorAvatar={recipientAvatar}
-          authorName={recipientName}
+          recipientAvatar={recipientAvatar}
+          recipientName={recipientName}
+          orderDetailId={orderDetailId}
         />
       )}
     </div>

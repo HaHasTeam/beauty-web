@@ -100,6 +100,7 @@ const OrderDetail = () => {
       })
     }
   }
+  console.log(useOrderData?.data)
   return (
     <div>
       {isFetching && <LoadingContentLayer />}
