@@ -22,10 +22,10 @@ export default function ReviewOverall({ reviewGeneral }: ReviewOverallProps) {
       <h2 className="text-xl font-medium mb-4 text-primary">{t('reviews.customerReview')}</h2>
 
       <div className="mb-6 ">
-        <div className="text-lg font-medium">{t('reviews.overall')}</div>
+        <div className="text-lg font-medium text-primary">{t('reviews.overall')}</div>
         <div className="flex items-baseline gap-2 mb-2">
-          <span className="text-4xl font-bold">{reviewGeneral.averageRating}</span>
-          <Ratings rating={reviewGeneral.averageRating} variant="yellow" />
+          <span className="text-4xl font-bold text-primary">{reviewGeneral.averageRating ?? 0}</span>
+          <Ratings rating={reviewGeneral.averageRating ?? 0} variant="yellow" />
         </div>
         <div className="text-gray-500 text-sm">({t('reviews.reviewCount', { amount: reviewGeneral.totalCount })})</div>
       </div>

@@ -1,4 +1,4 @@
-import { Bell, Heart, Home, Lock, LogOutIcon, Package, Ticket, User, Wallet } from 'lucide-react'
+import { Bell, Home, Lock, LogOutIcon, Package, Star, Ticket, User, Wallet } from 'lucide-react'
 import { Link, Outlet, useNavigate } from 'react-router-dom'
 import { useShallow } from 'zustand/react/shallow'
 
@@ -60,11 +60,11 @@ function AccountLayout() {
                 variant="ghost"
                 className="w-full justify-start"
                 onClick={() => {
-                  navigate(configs.routes.profileWishlist)
+                  navigate(configs.routes.profileFeedback)
                 }}
               >
-                <Heart className="mr-2 h-4 w-4" />
-                wishlist
+                <Star className="mr-2 h-4 w-4" />
+                My Feedbacks
               </Button>
             </div>
             <div className="space-y-1 py-2">

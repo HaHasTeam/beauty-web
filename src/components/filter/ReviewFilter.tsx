@@ -4,8 +4,11 @@ import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Button } from '@/components/ui/button'
+import useHandleServerError from '@/hooks/useHandleServerError'
 import { filterFeedbackApi } from '@/network/apis/feedback'
-import { IResponseFeedbackItemInFilter, IResponseFilterFeedback } from '@/types/feedback'
+import { IFilterFeedbackData } from '@/network/apis/feedback/type'
+import { FeedbackFilterEnum } from '@/types/enum'
+import { IResponseFeedback, IResponseFeedbackItemInFilter, IResponseFilterFeedback } from '@/types/feedback'
 
 import Empty from '../empty/Empty'
 import LoadingIcon from '../loading-icon'
@@ -24,14 +27,17 @@ interface ReviewFilterProps {
 }
 export default function ReviewFilter({ productId }: ReviewFilterProps) {
   const { t } = useTranslation()
-  const [selectedFilters, setSelectedFilters] = useState<Set<string>>(new Set())
+  // const [selectedFilters, setSelectedFilters] = useState<Set<string>>(new Set())
+  const [selectedFilter, setSelectedFilter] = useState<string>('')
   const [reviews, setReviews] = useState<IResponseFilterFeedback[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [totalPages, setTotalPages] = useState<number>(1)
+  const handleServerError = useHandleServerError()
+  // const [total, setTotal] = useState<number>(1)
 
   const filterOptions: FilterOption[] = [
-    { id: 'newest', label: `${t('filter.newest')}`, value: 'newest', type: 'toggle' },
+    // { id: 'newest', label: `${t('filter.newest')}`, value: 'newest', type: 'toggle' },
     { id: 'has-image', label: `${t('filter.hasImage')}`, value: 'has-image', type: 'toggle' },
     { id: 'star-5', label: `${t('filter.numberOfStar', { count: 5 })}`, value: 5, type: 'star' },
     { id: 'star-4', label: `${t('filter.numberOfStar', { count: 4 })}`, value: 4, type: 'star' },
@@ -42,41 +48,38 @@ export default function ReviewFilter({ productId }: ReviewFilterProps) {
 
   // API mutation
   const { mutateAsync: getFeedbackOfProduct } = useMutation({
-    mutationKey: [filterFeedbackApi.mutationKey, productId, selectedFilters, currentPage],
+    mutationKey: [filterFeedbackApi.mutationKey, productId],
     mutationFn: filterFeedbackApi.fn,
     onSuccess: (data) => {
-      setReviews(data?.data || [])
-      setTotalPages(data?.totalPages || 1)
-      setIsLoading(false)
-    },
-    onError: (error) => {
-      console.error('API error:', error)
+      setReviews(data?.data?.items || [])
+      setTotalPages(data?.data?.totalPages || 1)
+      // setTotal(data?.data?.totalPages || 1)
       setIsLoading(false)
     },
   })
 
   // Function to convert selected filters to API params
-  const convertFiltersToApiParams = () => {
-    const filters: Array<{ type: string; value: string | number }> = []
+  // const convertFiltersToApiParams = () => {
+  //   const filters: Array<{ type: string; value: string }> = []
 
-    // Check for star ratings
-    const starFilters = Array.from(selectedFilters)
-      .filter((id) => id.startsWith('star-'))
-      .map((id) => parseInt(id.split('-')[1]))
+  //   // Check for star ratings
+  //   const starFilters = Array.from(selectedFilters)
+  //     .filter((id) => id.startsWith('star-'))
+  //     .map((id) => parseInt(id.split('-')[1]))
 
-    if (starFilters.length > 0) {
-      starFilters.forEach((rating) => {
-        filters.push({ type: 'RATING', value: rating })
-      })
-    }
+  //   if (starFilters.length > 0) {
+  //     starFilters.forEach((rating) => {
+  //       filters.push({ type: 'RATING', value: rating.toString() })
+  //     })
+  //   }
 
-    // Check for has-image filter
-    if (selectedFilters.has('has-image')) {
-      filters.push({ type: 'IMAGE_VIDEO', value: '' })
-    }
+  //   // Check for has-image filter
+  //   if (selectedFilters.has('has-image')) {
+  //     filters.push({ type: 'IMAGE_VIDEO', value: '' })
+  //   }
 
-    return filters
-  }
+  //   return filters
+  // }
 
   // Apply filters and fetch data
   const applyFilters = useCallback(
@@ -84,37 +87,60 @@ export default function ReviewFilter({ productId }: ReviewFilterProps) {
       setIsLoading(true)
 
       try {
+        const convertFiltersToApiParams = () => {
+          let filter: { type: string; value: string } | object = {}
+
+          // Check for star ratings
+          if (selectedFilter.startsWith('star-')) {
+            const rating = parseInt(selectedFilter.split('-')[1])
+            filter = { type: FeedbackFilterEnum.RATING, value: rating.toString() }
+          }
+          // Check for has-image filter
+          if (selectedFilter === 'has-image') {
+            filter = { type: FeedbackFilterEnum.IMAGE_VIDEO, value: '' }
+          }
+          if (!selectedFilter) {
+            filter = { type: FeedbackFilterEnum.ALL, value: '' }
+          }
+
+          return filter
+        }
         // Convert selected filters to API parameters
         const filterParams = convertFiltersToApiParams()
 
         // Call API with filters and pagination
-        await getFeedbackOfProduct({
-          productId,
-          filters: filterParams,
-          page,
-          pageSize: 10,
-        })
+        await getFeedbackOfProduct({ params: productId, data: filterParams as IFilterFeedbackData })
 
         setCurrentPage(page)
       } catch (error) {
-        console.error('Error applying filters:', error)
+        handleServerError({
+          error,
+        })
         setIsLoading(false)
       }
     },
-    [selectedFilters, getFeedbackOfProduct, productId],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [selectedFilter, getFeedbackOfProduct, productId],
   )
 
   // Toggle a filter and apply filters
   const toggleFilter = (filterId: string) => {
-    const newFilters = new Set(selectedFilters)
+    // const newFilters = new Set(selectedFilters)
 
-    if (newFilters.has(filterId)) {
-      newFilters.delete(filterId)
-    } else {
-      newFilters.add(filterId)
-    }
+    // if (newFilters.has(filterId)) {
+    //   newFilters.delete(filterId)
+    // } else {
+    //   newFilters.add(filterId)
+    // }
 
-    setSelectedFilters(newFilters)
+    // setSelectedFilters(newFilters)
+    setSelectedFilter((prevFilter) => {
+      if (prevFilter === filterId) {
+        return ''
+      }
+
+      return filterId
+    })
     // Reset to first page when filters change
     setCurrentPage(1)
   }
@@ -132,22 +158,22 @@ export default function ReviewFilter({ productId }: ReviewFilterProps) {
   // Apply filters when they change
   useEffect(() => {
     applyFilters(1)
-  }, [selectedFilters, applyFilters])
+  }, [selectedFilter, applyFilters])
 
   return (
     <div>
       <div className="border-b border-gray-200">
         <div className="p-5 flex flex-col gap-2">
-          <span className="font-semibold">{t('filter.filterBy')}</span>
+          <span className="font-semibold text-primary">{t('filter.filterBy')}</span>
           <div className="flex flex-wrap gap-2">
             {filterOptions.map((option) => (
               <Button
                 key={option.id}
-                variant={selectedFilters.has(option.id) ? 'outline' : 'outline'}
+                variant={selectedFilter === option.id ? 'outline' : 'outline'}
                 onClick={() => toggleFilter(option.id)}
-                className={`h-8 gap-1.5 rounded-full border-gray-300 ${selectedFilters.has(option.id) ? ' border-primary bg-primary/10 hover:bg-primary/15 text-primary hover:text-primary' : 'border-gray-300'}`}
+                className={`h-8 gap-1.5 rounded-full border-gray-300 ${selectedFilter === option.id ? ' border-primary bg-primary/10 hover:bg-primary/15 text-primary hover:text-primary' : 'border-gray-300'}`}
               >
-                {option.type === 'toggle' && selectedFilters.has(option.id) && <Check className="text-primary/80" />}
+                {option.type === 'toggle' && selectedFilter === option.id && <Check className="text-primary/80" />}
                 {option.label}
                 {option.type === 'star' && <Star className="w-4 h-4 fill-current text-yellow-500" />}
               </Button>
@@ -168,15 +194,27 @@ export default function ReviewFilter({ productId }: ReviewFilterProps) {
               createdAt: review.createdAt,
               updatedAt: review.updatedAt,
               mediaFiles: review.mediaFiles ?? [],
+              replies: review.replies ?? [],
             }
             return (
               <ReviewSection
-                authorName={review.orderDetail.order.recipientName}
-                authorAvatar={review.orderDetail.order.account.avatar ?? ''}
-                productClassification={review.orderDetail.productClassification}
-                productQuantity={review.orderDetail.quantity}
-                feedback={feedback}
-                replies={review.replies}
+                productQuantity={review?.orderDetail?.quantity ?? 0}
+                productClassification={review?.orderDetail?.productClassification || null}
+                feedback={feedback as IResponseFeedback}
+                brand={
+                  (
+                    review?.orderDetail?.order?.productClassification?.preOrderProduct?.product ??
+                    review?.orderDetail?.order?.productClassification?.productDiscount?.product ??
+                    review?.orderDetail?.order?.productClassification?.product
+                  )?.brand || null
+                }
+                recipientAvatar={review?.orderDetail?.order?.account?.avatar ?? ''}
+                recipientName={
+                  [review?.orderDetail?.order?.account?.lastName, review?.orderDetail?.order?.account?.firstName].join(
+                    ' ',
+                  ) ?? ''
+                }
+                orderDetailId={review?.orderDetail?.id}
               />
             )
           })}
@@ -184,8 +222,8 @@ export default function ReviewFilter({ productId }: ReviewFilterProps) {
           <Empty
             title={t('empty.feedback.title')}
             description={t('empty.feedback.description', {
-              filter: selectedFilters.size === 0 ? '' : t('empty.feedback.filter'),
-              filterCallAction: selectedFilters.size === 0 ? '' : t('empty.feedback.filterCallAction'),
+              filter: !selectedFilter ? '' : t('empty.feedback.filter'),
+              filterCallAction: !selectedFilter ? '' : t('empty.feedback.filterCallAction'),
             })}
           />
         )}

@@ -21,6 +21,7 @@ export type IResponseFeedbackItemInFilter = TMetaData & {
   rating: number
   content: string
   mediaFiles: TServerFile[]
+  replies: IReplyFeedback[]
 }
 
 export type ISubmitFeedback = ISubmitFeedbackScheme
