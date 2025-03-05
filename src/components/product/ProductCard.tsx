@@ -19,7 +19,7 @@ export default function ProductCard({ product, isProductDiscount = false }: Prod
   const { t } = useTranslation()
 
   return (
-    <Card>
+    <Card className="shadow-md border-0">
       <CardContent
         className="p-0 relative cursor-pointer overflow-hidden"
         onClick={() => {
@@ -45,13 +45,18 @@ export default function ProductCard({ product, isProductDiscount = false }: Prod
           {isProductDiscount && product?.deal && product?.deal > 0 && (
             <ProductTag tag="DealPercent" text={`-${(product?.deal * 100).toFixed(0)}%`} />
           )}
-          <span className="text-semibold line-clamp-2">{product?.name}</span>
-          <ProductStar rating={product?.rating} ratingAmount={product?.ratingAmount} />
-          <div className="mt-1 mb-2">
-            <span className="text-gray-500 text-sm line-clamp-1">
-              {t('productCard.soldInPastMonth', { amount: product?.soldInPastMonth ?? 0 })}
-            </span>
+
+          <div className="min-h-[100px]">
+            <span className="text-semibold line-clamp-2">{product?.name}</span>
+            <ProductStar rating={product?.rating} ratingAmount={product?.ratingAmount} />
+            <div className="mt-1 mb-2">
+              <span className="text-gray-500 text-sm line-clamp-1">
+                {t('productCard.soldInPastMonth', { amount: product?.soldInPastMonth ?? 0 })}
+              </span>
+            </div>
           </div>
+
+          {/* price */}
           <div className="flex justify-between items-center w-full">
             {product?.deal && product?.deal > 0 ? (
               <div className="flex gap-1 items-center">

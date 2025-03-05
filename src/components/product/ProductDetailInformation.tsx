@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import fallBackImage from '@/assets/images/fallBackImage.jpg'
 import { IClassification, IClassificationKey, IClassificationSelection } from '@/types/classification'
 import { DiscountTypeEnum, OrderEnum, ProductDiscountEnum, StatusEnum } from '@/types/enum'
+import { IFeedbackGeneral } from '@/types/feedback'
 import { IProduct } from '@/types/product'
 import { calculateDiscountPrice } from '@/utils/price'
 
@@ -25,6 +26,7 @@ interface ProductDetailInformationProps {
   chosenClassification: IClassification | null
   setChosenClassification: Dispatch<SetStateAction<IClassification | null>>
   hasCustomType: boolean
+  reviewGeneral: IFeedbackGeneral | null
 }
 
 const ProductDetailInformation = ({
@@ -36,6 +38,7 @@ const ProductDetailInformation = ({
   chosenClassification,
   setChosenClassification,
   hasCustomType,
+  reviewGeneral,
 }: ProductDetailInformationProps) => {
   const { t } = useTranslation()
   const [selectedValues, setSelectedValues] = useState<IClassificationSelection>({
@@ -169,8 +172,8 @@ const ProductDetailInformation = ({
         {/* rating */}
         <div className="flex gap-2 align-middle items-center">
           <div className="flex gap-2 align-middle items-center hover:cursor-pointer" onClick={scrollToReviews}>
-            <span className="font-semibold">{product?.rating}</span>
-            <ProductStar rating={product?.rating ?? 0} ratingAmount={product?.ratingAmount} />
+            <span className="font-semibold">{reviewGeneral?.averageRating ?? 0}</span>
+            <ProductStar rating={reviewGeneral?.averageRating ?? 0} ratingAmount={reviewGeneral?.totalCount ?? 0} />
           </div>
           <div className="border-l border-gray-300 px-2">
             <span className="text-gray-500 text-sm">
@@ -217,7 +220,10 @@ const ProductDetailInformation = ({
       </div>
 
       {/* certificate */}
-      <QualityService certificateUrls={product?.certificates ?? ''} productName={product.name ?? ''} />
+      <QualityService
+        certificateUrls={product?.certificates?.filter((cert) => cert.status === StatusEnum.ACTIVE) ?? []}
+        productName={product.name ?? ''}
+      />
 
       {/* detail */}
       <div className="w-full py-4 px-3 bg-white rounded-lg">

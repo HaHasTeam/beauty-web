@@ -66,7 +66,7 @@ export const WriteFeedbackDialog: React.FC<WriteFeedbackDialogProps> = ({ isOpen
         description: t('feedback.successDescription'),
       })
       queryClient.invalidateQueries({
-        queryKey: [getOrderByIdApi.queryKey, orderDetailId],
+        queryKey: [getOrderByIdApi.queryKey],
       })
       handleReset()
       onClose()

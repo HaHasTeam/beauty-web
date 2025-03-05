@@ -2,18 +2,18 @@ import { BadgeCheck, Download, Eye, Package, PackageCheck } from 'lucide-react'
 import { Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { TServerFile } from '@/types/file'
 import { handleDownload } from '@/utils/certificate/handleDownload'
 
 import { Table, TableBody, TableCell, TableRow } from '../ui/table'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip'
 
 interface QualityService {
-  certificateUrls: string[]
+  certificateUrls: TServerFile[]
   productName: string
 }
-const QualityService = ({ productName }: QualityService) => {
+const QualityService = ({ certificateUrls, productName }: QualityService) => {
   const { t } = useTranslation()
-  const certificateUrls = ['https://storage.googleapis.com/test-firebase-storage-d1b61.appspot.com/1739600237927.pdf']
   const renderCertificateActions = (certificateUrl: string, index: number) => (
     <div className="flex items-center gap-1">
       {certificateUrls.length > 0 && (
@@ -69,7 +69,7 @@ const QualityService = ({ productName }: QualityService) => {
                   {certificateUrls.map((url, index) => (
                     <Fragment key={index}>
                       {index > 0 && <span className="text-gray-300">|</span>}
-                      {renderCertificateActions(url, index)}
+                      {renderCertificateActions(url.fileUrl, index)}
                     </Fragment>
                   ))}
                 </div>

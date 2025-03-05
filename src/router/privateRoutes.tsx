@@ -7,9 +7,9 @@ import CheckoutResult from '@/views/CheckoutResult'
 import OrderDetail from '@/views/OrderDetail'
 import Profile from '@/views/Profile'
 import ProfileAddress from '@/views/ProfileAddress'
+import ProfileFeedback from '@/views/ProfileFeedback'
 import ProfileOrder from '@/views/ProfileOrder'
 import ProfileVoucher from '@/views/ProfileVoucher'
-import ProfileWishlist from '@/views/ProfileWishlist'
 
 import AuthGuard from './guard/AuthGuard'
 
@@ -76,8 +76,8 @@ const privateRoutes = [
         element: <ProfileVoucher />,
       },
       {
-        path: configs.routes.profileWishlist,
-        element: <ProfileWishlist />,
+        path: configs.routes.profileFeedback,
+        element: <ProfileFeedback />,
       },
     ],
   },

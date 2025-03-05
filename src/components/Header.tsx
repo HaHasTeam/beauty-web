@@ -13,6 +13,7 @@ import { ProjectInformationEnum } from '@/types/enum'
 import LanguageSwitcher from './LanguageSwitcher'
 import WebNotification from './notification/WebNotification'
 import SearchBar from './search-bar/SearchBar'
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 
 export default function Header() {
   const notifications = [
@@ -27,16 +28,17 @@ export default function Header() {
   }
   const { t } = useTranslation()
   const [menuOpen, setMenuOpen] = useState(false)
-  const { isAuthenticated, isLoading, authData } = useStore(
+  const { isAuthenticated, isLoading, authData, user } = useStore(
     useShallow((state) => ({
       isAuthenticated: state.isAuthenticated,
       isLoading: state.isLoading,
       authData: state.authData,
+      user: state.user,
     })),
   )
   const { cartItems } = useCartStore()
   const totalItems = Object.values(cartItems).reduce((acc, items) => acc + items.length, 0)
-
+  console.log(user)
   return (
     <header className="w-full bg-white relative shadow-lg">
       <div className="">
@@ -84,7 +86,14 @@ export default function Header() {
                   setMenuOpen(false)
                 }}
               >
-                <CircleUserRound />
+                {user ? (
+                  <Avatar>
+                    <AvatarImage src={user.avatar} alt={user.firstName} />
+                    <AvatarFallback>{user.firstName?.charAt(0) ?? 'A'}</AvatarFallback>
+                  </Avatar>
+                ) : (
+                  <CircleUserRound />
+                )}
                 <span>{t('header.profile')}</span>
               </Link>
             ) : (
@@ -154,7 +163,15 @@ export default function Header() {
                   setMenuOpen(false)
                 }}
               >
-                <CircleUserRound className="h-5 w-5" />
+                {user ? (
+                  <Avatar>
+                    <AvatarImage src={user.avatar} alt={user.firstName} />
+                    <AvatarFallback>{user.firstName?.charAt(0) ?? 'A'}</AvatarFallback>
+                  </Avatar>
+                ) : (
+                  <CircleUserRound className="h-5 w-5" />
+                )}
+
                 <span>{t('header.profile')}</span>
               </Link>
             ) : (

@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next'
 
+import { IBrand } from '@/types/brand'
 import { ClassificationTypeEnum, ShippingStatusEnum, StatusEnum } from '@/types/enum'
 import { IOrderDetail } from '@/types/order'
 
@@ -8,10 +9,13 @@ import ProductOrderDetailLandscape from './ProductOrderDetailLandscape'
 interface OrderDetailItemsProps {
   orderDetails: IOrderDetail[]
   status: ShippingStatusEnum
+  brand: IBrand | null
+  accountAvatar: string
+  accountName: string
 }
-const OrderDetailItems = ({ orderDetails, status }: OrderDetailItemsProps) => {
+const OrderDetailItems = ({ accountAvatar, accountName, orderDetails, status, brand }: OrderDetailItemsProps) => {
   const { t } = useTranslation()
-
+  console.log(brand, '1')
   return (
     <div className="w-full">
       <div className="w-full flex p-2 md:p-3 lg:p-4 bg-secondary/30 rounded-sm text-secondary-foreground">
@@ -69,8 +73,11 @@ const OrderDetailItems = ({ orderDetails, status }: OrderDetailItemsProps) => {
               productQuantity={orderDetail?.productClassification?.quantity}
               productClassification={orderDetail?.productClassification}
               status={status}
-              isFeedback={orderDetail?.isFeedback}
+              feedback={orderDetail?.feedback ?? null}
               orderDetailId={orderDetail?.id}
+              brand={brand || null}
+              accountAvatar={accountAvatar}
+              accountName={accountName}
             />
           </div>
         ))}

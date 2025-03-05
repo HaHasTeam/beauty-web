@@ -1,5 +1,6 @@
 import { IClassification } from './classification'
 import { PaymentMethod, ShippingStatusEnum } from './enum'
+import { IResponseFeedback } from './feedback'
 import { TUser } from './user'
 import { TVoucher } from './voucher'
 
@@ -18,6 +19,15 @@ export interface IOrderDetail {
   productClassificationPreOrder: null | IClassification
   unitPriceAfterDiscount: number
   unitPriceBeforeDiscount: number
+  feedback: IResponseFeedback | null
+}
+export interface IOrderFeedback extends IOrderItem {
+  account: TUser
+  productClassification: IClassification
+  quantity: number
+}
+export interface IOrderDetailFeedback extends IOrderDetail {
+  order: IOrderFeedback
 }
 
 export interface IOrderItem {
@@ -38,6 +48,7 @@ export interface IOrderItem {
   voucher: null | TVoucher
   message: string
   recipientName: string
+  account: TUser
 }
 
 export type IOrder = {

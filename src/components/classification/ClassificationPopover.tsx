@@ -33,6 +33,7 @@ export default function ClassificationPopover({
   preventAction,
 }: ClassificationPopoverProps) {
   const { t } = useTranslation()
+  console.log(productClassification)
   const [currentSelectClassification, setCurrentSelectClassification] = useState<IClassification | null>(
     productClassification,
   )
@@ -175,7 +176,7 @@ export default function ClassificationPopover({
       return updatedValues
     })
   }
-  console.log(availableOptions)
+  console.log(currentSelectClassification)
 
   const renderOptions = (key: IClassificationKey, options: string[]) => {
     if (!options.length) return null
@@ -188,7 +189,12 @@ export default function ClassificationPopover({
         <div className="w-4/5 flex flex-wrap items-start gap-2">
           {options.map((option) => {
             const classification = classifications.find((c) => c[key] === option)
-
+            console.log(
+              currentSelectClassification,
+              classifications,
+              classification,
+              currentSelectClassification?.id === classification?.id,
+            )
             return (
               <Button
                 onClick={() => handleSelection(key, option)}

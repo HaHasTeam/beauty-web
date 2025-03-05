@@ -75,7 +75,7 @@ const FlashSale = () => {
         </div>
         <Link
           to={configs.routes.productFlashSale}
-          className="text-[#FF6B35] hover:opacity-80 transition-opacity flex items-center gap-1"
+          className="text-primary hover:opacity-80 transition-opacity flex items-center gap-1"
         >
           {t('button.seeAll')}
           <ArrowRight className="w-4 h-4" />

@@ -1,6 +1,7 @@
 import { IBrand, TBrand } from './brand'
 import { ICategory } from './category'
 import { IClassification } from './classification'
+import { TServerFile } from './file'
 import { IPreOrder } from './pre-order'
 import { IProductDiscount } from './product-discount'
 import { IImage } from './productImage'
@@ -102,7 +103,7 @@ export type IResponseProduct = {
   sku?: string
   menu?: string
   updatedAt: string
-  certificates: string[]
+  certificates: TServerFile[]
 }
 
 export type IProductTable = {
@@ -160,7 +161,7 @@ export type IProduct = {
   productDiscounts?: IProductDiscount[] | null // use for cart
   preOrderProducts?: IPreOrder[] | null // use for cart
   category?: ICategory // use for product details
-  certificates: string[]
+  certificates: TServerFile[]
 }
 
 export type IProductCart = {

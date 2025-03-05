@@ -25,7 +25,7 @@ const routes = {
   products: '/products',
   productDetail: '/products/:productId',
   productReview: '/products/:productId/review',
-  profileWishlist: '/profile/wishlist',
+  profileFeedback: '/profile/feedbacks/me',
   profile: '/profile',
   profileAddress: '/profile/address',
   profileOrder: '/profile/order',

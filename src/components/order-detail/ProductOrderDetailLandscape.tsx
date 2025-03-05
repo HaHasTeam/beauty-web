@@ -8,9 +8,12 @@ import configs from '@/config'
 import useHandleServerError from '@/hooks/useHandleServerError'
 import { useToast } from '@/hooks/useToast'
 import { createCartItemApi, getMyCartApi } from '@/network/apis/cart'
+import { IBrand } from '@/types/brand'
 import { IClassification } from '@/types/classification'
 import { ClassificationTypeEnum, OrderEnum, ShippingStatusEnum } from '@/types/enum'
+import { IResponseFeedback } from '@/types/feedback'
 
+import { ViewFeedbackDialog } from '../feedback/ViewFeedbackDialog'
 import { WriteFeedbackDialog } from '../feedback/WriteFeedbackDialog'
 import ImageWithFallback from '../ImageFallback'
 import LoadingIcon from '../loading-icon'
@@ -29,8 +32,11 @@ interface ProductOrderDetailLandscapeProps {
   productQuantity: number
   productClassification: IClassification | null
   status: ShippingStatusEnum
-  isFeedback: boolean
+  feedback: IResponseFeedback | null
   orderDetailId: string
+  brand: IBrand | null
+  accountName: string
+  accountAvatar: string
 }
 const ProductOrderDetailLandscape = ({
   productImage,
@@ -43,12 +49,16 @@ const ProductOrderDetailLandscape = ({
   subTotal,
   productClassification,
   status,
-  isFeedback,
+  feedback,
   orderDetailId,
+  brand,
+  accountName,
+  accountAvatar,
 }: ProductOrderDetailLandscapeProps) => {
   const { t } = useTranslation()
   const [isProcessing, setIsProcessing] = useState(false)
   const [openWriteFeedbackDialog, setOpenWriteFeedbackDialog] = useState(false)
+  const [openViewFbDialog, setOpenViewFbDialog] = useState(false)
   const { successToast } = useToast()
   const queryClient = useQueryClient()
   const handleServerError = useHandleServerError()
@@ -94,7 +104,7 @@ const ProductOrderDetailLandscape = ({
                 fallback={fallBackImage}
                 src={productImage}
                 alt={productName}
-                className="object-cover w-full h-full"
+                className="object-cover w-full h-full rounded-md"
               />
             </div>
           </Link>
@@ -111,7 +121,7 @@ const ProductOrderDetailLandscape = ({
                   <ProductTag tag={eventType} size="small" />
                 )}
               </div>
-              <div className="sm:flex gap-2 hidden">
+              <div className="sm:flex gap-1 hidden">
                 {status === ShippingStatusEnum.COMPLETED && (
                   <Button
                     variant="outline"
@@ -132,7 +142,7 @@ const ProductOrderDetailLandscape = ({
                     {t('order.returnOrder')}
                   </Button>
                 )}
-                {status === ShippingStatusEnum.COMPLETED && !isFeedback && (
+                {status === ShippingStatusEnum.COMPLETED && !feedback && (
                   <Button
                     onClick={() => setOpenWriteFeedbackDialog(true)}
                     variant="outline"
@@ -142,11 +152,12 @@ const ProductOrderDetailLandscape = ({
                     {t('order.writeFeedback')}
                   </Button>
                 )}
-                {isFeedback && (
+                {feedback && (
                   <Button
                     variant="outline"
                     size="sm"
                     className="border border-primary text-primary hover:text-primary hover:bg-primary/10"
+                    onClick={() => setOpenViewFbDialog(true)}
                   >
                     {t('order.viewFeedback')}
                   </Button>
@@ -202,13 +213,33 @@ const ProductOrderDetailLandscape = ({
               </Button>
             )}
 
-            {!isFeedback && (
+            {status === ShippingStatusEnum.COMPLETED && (
               <Button
                 variant="outline"
                 size="sm"
                 className="border border-primary text-primary hover:text-primary hover:bg-primary/10"
               >
+                {t('order.returnOrder')}
+              </Button>
+            )}
+            {status === ShippingStatusEnum.COMPLETED && !feedback && (
+              <Button
+                onClick={() => setOpenWriteFeedbackDialog(true)}
+                variant="outline"
+                size="sm"
+                className="border border-primary text-primary hover:text-primary hover:bg-primary/10"
+              >
                 {t('order.writeFeedback')}
+              </Button>
+            )}
+            {feedback && (
+              <Button
+                variant="outline"
+                size="sm"
+                className="border border-primary text-primary hover:text-primary hover:bg-primary/10"
+                onClick={() => setOpenViewFbDialog(true)}
+              >
+                {t('order.viewFeedback')}
               </Button>
             )}
           </div>
@@ -225,6 +256,19 @@ const ProductOrderDetailLandscape = ({
         <WriteFeedbackDialog
           isOpen={openWriteFeedbackDialog}
           onClose={() => setOpenWriteFeedbackDialog(false)}
+          orderDetailId={orderDetailId}
+        />
+      )}
+      {feedback && (
+        <ViewFeedbackDialog
+          productQuantity={productQuantity}
+          productClassification={productClassification}
+          isOpen={openViewFbDialog}
+          onClose={() => setOpenViewFbDialog(false)}
+          feedback={feedback}
+          brand={brand || null}
+          accountAvatar={accountAvatar}
+          accountName={accountName}
           orderDetailId={orderDetailId}
         />
       )}

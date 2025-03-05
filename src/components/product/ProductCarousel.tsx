@@ -93,7 +93,7 @@ const ProductCarousel = ({ product, activeClassification }: ProductCarouselProps
     <div className="w-full flex flex-col space-y-3">
       {/* Image Source Indicator */}
       {activeClassification && activeClassification.images?.length > 0 && (
-        <div className="flex justify-between items-center">
+        <div className="flex xl:justify-between xl:items-center xl:flex-row flex-col justify-start items-start">
           <Button
             variant="outline"
             size="sm"
@@ -111,12 +111,12 @@ const ProductCarousel = ({ product, activeClassification }: ProductCarouselProps
               : t('productDetail.viewProductImages')}
           </Button>
           {imageSource === 'classification' && (
-            <span className="text-sm text-gray-500">
+            <div className="text-sm text-gray-500">
               {t('productDetail.viewing')}:{' '}
               {[activeClassification.color, activeClassification.size, activeClassification.other]
                 .filter(Boolean)
                 .join(' & ')}
-            </span>
+            </div>
           )}
         </div>
       )}
