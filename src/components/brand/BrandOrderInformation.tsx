@@ -22,7 +22,7 @@ const BrandOrderInformation = ({ brandName, brandId, brandLogo }: BrandOrderInfo
           {brandLogo && (
             <Avatar>
               <AvatarImage src={brandLogo} alt={brandName} />
-              <AvatarFallback>{brandName}</AvatarFallback>
+              <AvatarFallback>{brandName.charAt(0).toUpperCase() ?? 'A'}</AvatarFallback>
             </Avatar>
           )}
         </div>

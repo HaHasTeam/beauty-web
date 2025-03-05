@@ -88,8 +88,8 @@ export default function Header() {
               >
                 {user ? (
                   <Avatar>
-                    <AvatarImage src={user.avatar} alt={user.firstName} />
-                    <AvatarFallback>{user.firstName?.charAt(0) ?? 'A'}</AvatarFallback>
+                    <AvatarImage src={user.avatar} alt={user.username} />
+                    <AvatarFallback>{user.username?.charAt(0).toUpperCase() ?? 'A'}</AvatarFallback>
                   </Avatar>
                 ) : (
                   <CircleUserRound />
@@ -165,8 +165,8 @@ export default function Header() {
               >
                 {user ? (
                   <Avatar>
-                    <AvatarImage src={user.avatar} alt={user.firstName} />
-                    <AvatarFallback>{user.firstName?.charAt(0) ?? 'A'}</AvatarFallback>
+                    <AvatarImage src={user.avatar} alt={user.username} />
+                    <AvatarFallback>{user.username?.charAt(0).toUpperCase() ?? 'A'}</AvatarFallback>
                   </Avatar>
                 ) : (
                   <CircleUserRound className="h-5 w-5" />
