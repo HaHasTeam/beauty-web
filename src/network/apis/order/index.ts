@@ -93,3 +93,13 @@ export const updateOrderStatusApi = toMutationFetcher<
     data: { status: status, mediaFiles: mediaFiles },
   })
 })
+
+export const requestReturnOrderApi = toMutationFetcher<
+  { orderId: string; reason: string; mediaFiles?: string[] },
+  TServerResponse<IOrder>
+>('requestReturnOrderApi', async ({ orderId, reason, mediaFiles }) => {
+  return privateRequest(`/orders/request-refund/${orderId}`, {
+    method: 'POST',
+    data: { reason: reason, mediaFiles: mediaFiles },
+  })
+})

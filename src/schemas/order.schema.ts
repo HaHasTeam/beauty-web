@@ -28,5 +28,16 @@ export const getCancelOrderSchema = () => {
   })
 }
 
+export const getRequestReturnOrderSchema = () => {
+  return z.object({
+    reason: z.string().min(1, i18next.t('validation.reasonRequired')),
+    otherReason: z.string(),
+    mediaFiles: z.array(z.instanceof(File)).optional(),
+    videos: z.array(z.instanceof(File)).min(1, i18next.t('validation.videosRequired')),
+    images: z.array(z.instanceof(File)).min(1, i18next.t('validation.imagesRequired')),
+  })
+}
+
 export const CreateOrderSchema = getCreateOrderSchema()
 export const CancelOrderSchema = getCancelOrderSchema()
+export const ReturnOrderSchema = getRequestReturnOrderSchema()

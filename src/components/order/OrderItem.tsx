@@ -18,11 +18,12 @@ import { IBrand } from '@/types/brand'
 import { OrderEnum, ShippingStatusEnum } from '@/types/enum'
 import { ICancelRequestOrder, IOrderItem } from '@/types/order'
 
-import CancelOrderDialog from '../dialog/CancelOrderDialog'
 import LoadingIcon from '../loading-icon'
 import OrderStatus from '../order-status'
 import { Button } from '../ui/button'
+import CancelOrderDialog from './CancelOrderDialog'
 import ProductOrderLandscape from './ProductOrderLandscape'
+import { RequestReturnOrderDialog } from './RequestReturnOrderDialog'
 
 interface OrderItemProps {
   brand: IBrand | null
@@ -33,6 +34,7 @@ const OrderItem = ({ brand, orderItem, setIsTrigger }: OrderItemProps) => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const [openCancelOrderDialog, setOpenCancelOrderDialog] = useState<boolean>(false)
+  const [openReqReturnDialog, setOpenReqReturnDialog] = useState<boolean>(false)
   const [cancelRequests, setCancelRequests] = useState<ICancelRequestOrder[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
@@ -205,10 +207,11 @@ const OrderItem = ({ brand, orderItem, setIsTrigger }: OrderItemProps) => {
                 {t('order.cancelOrder')}
               </Button>
             )}
-            {orderItem?.status === ShippingStatusEnum.COMPLETED && (
+            {orderItem?.status === ShippingStatusEnum.DELIVERED && (
               <Button
                 variant="outline"
                 className="border border-primary text-primary hover:text-primary hover:bg-primary/10"
+                onClick={() => setOpenReqReturnDialog(true)}
               >
                 {t('order.returnOrder')}
               </Button>
@@ -241,6 +244,13 @@ const OrderItem = ({ brand, orderItem, setIsTrigger }: OrderItemProps) => {
         open={openCancelOrderDialog}
         setOpen={setOpenCancelOrderDialog}
         onOpenChange={setOpenCancelOrderDialog}
+        setIsTrigger={setIsTrigger}
+        orderId={orderItem?.id ?? ''}
+      />
+      <RequestReturnOrderDialog
+        open={openReqReturnDialog}
+        setOpen={setOpenReqReturnDialog}
+        onOpenChange={setOpenReqReturnDialog}
         setIsTrigger={setIsTrigger}
         orderId={orderItem?.id ?? ''}
       />

@@ -111,7 +111,11 @@
     "backToList": "Back to List",
     "close": "Close",
     "showMore": "Show more {{count}} replies",
-    "showLess": "Show less"
+    "showLess": "Show less",
+    "importFile": "Import files",
+    "downloadSample": "Download sample",
+    "import": "Import",
+    "view": "View"
   },
   "noData": "No matching data found",
   "sell": {
@@ -696,7 +700,28 @@
     "rejectedCancelRequest": "Cancellation rejected. Order will proceed.",
     "rejectedCancelRequestTitle": "Cancellation Rejected",
     "received": "Received",
-    "receivedOrderStatusSuccess": "Successfully confirmed order receipt!"
+    "receivedOrderStatusSuccess": "Successfully confirmed order receipt!",
+    "cancelOrderAdditional": " by the customer",
+    "returnOrderDialog": {
+      "title": "Return Order Request",
+      "description": "By clicking 'Request Return,' you agree to return all items in this order. Once approved, this action cannot be undone.",
+      "successTitle": "Return Request Submitted",
+      "successDescription": "We will process your request within the next {{count}} days and notify you of the results as soon as possible. Thank you for trusting our service.",
+      "mediaFilesNotes": "Please provide clear images and videos that accurately show the product's condition, order ID, and packaging status. A video of the unboxing process is recommended to support the review."
+    },
+    "returnOrderReason": {
+      "wrongItem": "Received wrong item",
+      "damage": "Received damaged or broken product",
+      "missingItem": "Product missing from order",
+      "expired": "Expired product received",
+      "allergy": "Allergic reaction or skin irritation",
+      "notAsDescribed": "Product not as described",
+      "changedMind": "Changed my mind",
+      "betterPrice": "Found a better price elsewhere",
+      "duplicate": "Received duplicate order",
+      "lateDelivery": "Shipping took too long",
+      "other": "Other"
+    }
   },
   "toast": {
     "success": "Your request has been successfully processed, continue with your work.",
@@ -787,7 +812,9 @@
     "fileTypeLimits": "You can upload up to {{imageCount}} images and {{videoCount}} videos.",
     "maxImages": "You can only upload up to {{count}} images.",
     "maxVideos": "You can only upload up to {{count}} videos.",
-    "contentReplyFeedback": "The feedback reply must be at least 25 characters long but no more than 500 characters"
+    "contentReplyFeedback": "The feedback reply must be at least 25 characters long but no more than 500 characters",
+    "videosRequired": "Please upload at least one video.",
+    "imagesRequired": "Please upload at least one image."
   },
   "role": {
     "ADMIN": "Admin",
@@ -991,7 +1018,8 @@
     "consultantCriteriaDetails": "Consultation Criteria Details",
     "ID": "ID",
     "applicableServices": "Applicable Services",
-    "files": "files"
+    "files": "files",
+    "index": "Index"
   },
   "layout": {
     "help": "HELP",

@@ -105,7 +105,7 @@ export default function CancelOrderDialog({
           </div>
         </DialogHeader>
 
-        <AlertMessage message={t('order.cancelOrderDescription')} textSize="medium" />
+        <AlertMessage className="text-justify" message={t('order.cancelOrderDescription')} textSize="medium" />
         <Form {...form}>
           <form
             noValidate

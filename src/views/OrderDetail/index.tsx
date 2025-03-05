@@ -6,11 +6,12 @@ import { useParams } from 'react-router-dom'
 
 import AlertMessage from '@/components/alert/AlertMessage'
 import BrandOrderInformation from '@/components/brand/BrandOrderInformation'
-import CancelOrderDialog from '@/components/dialog/CancelOrderDialog'
-import RequestCancelOrderDialog from '@/components/dialog/RequestCancelOrderDialog'
 import Empty from '@/components/empty/Empty'
 import LoadingIcon from '@/components/loading-icon'
 import LoadingContentLayer from '@/components/loading-icon/LoadingContentLayer'
+import CancelOrderDialog from '@/components/order/CancelOrderDialog'
+import RequestCancelOrderDialog from '@/components/order/RequestCancelOrderDialog'
+import { RequestReturnOrderDialog } from '@/components/order/RequestReturnOrderDialog'
 import OrderDetailItems from '@/components/order-detail/OrderDetailItems'
 import OrderGeneral from '@/components/order-detail/OrderGeneral'
 import OrderStatusTracking from '@/components/order-detail/OrderStatusTracking'
@@ -38,6 +39,7 @@ const OrderDetail = () => {
   const [openRequestCancelOrderDialog, setOpenRequestCancelOrderDialog] = useState<boolean>(false)
   const [isTrigger, setIsTrigger] = useState<boolean>(false)
   const [cancelRequests, setCancelRequests] = useState<ICancelRequestOrder[]>([])
+  const [openReqReturnDialog, setOpenReqReturnDialog] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState(true)
   const { successToast } = useToast()
   const handleServerError = useHandleServerError()
@@ -275,30 +277,42 @@ const OrderDetail = () => {
                     </Button>
                   </div>
                 )}
-                {useOrderData?.data?.status === ShippingStatusEnum.PREPARING_ORDER &&
-                  !isLoading &&
-                  !cancelRequests?.some((cancelRequest) => cancelRequest?.order?.id === useOrderData?.data?.id) && (
-                    <div className="w-full">
-                      <Button
-                        variant="outline"
-                        className="w-full border border-primary text-primary hover:text-primary hover:bg-primary/10"
-                        onClick={() => setOpenRequestCancelOrderDialog(true)}
-                      >
-                        {t('order.cancelOrder')}
-                      </Button>
-                    </div>
+                <div className="w-full flex items-center flex-1 gap-2">
+                  {useOrderData?.data?.status === ShippingStatusEnum.PREPARING_ORDER &&
+                    !isLoading &&
+                    !cancelRequests?.some((cancelRequest) => cancelRequest?.order?.id === useOrderData?.data?.id) && (
+                      <div className="w-full">
+                        <Button
+                          variant="outline"
+                          className="w-full border border-primary text-primary hover:text-primary hover:bg-primary/10"
+                          onClick={() => setOpenRequestCancelOrderDialog(true)}
+                        >
+                          {t('order.cancelOrder')}
+                        </Button>
+                      </div>
+                    )}
+                  {useOrderData?.data?.status === ShippingStatusEnum.DELIVERED && (
+                    <Button
+                      variant="default"
+                      className="w-full hover:bg-primary/80"
+                      onClick={() => {
+                        handleUpdateStatus(ShippingStatusEnum.COMPLETED)
+                      }}
+                    >
+                      {isLoading ? <LoadingIcon color="primaryBackground" /> : t('order.received')}
+                    </Button>
                   )}
-                {useOrderData?.data?.status === ShippingStatusEnum.DELIVERED && (
-                  <Button
-                    variant="outline"
-                    className="w-full border border-primary text-primary hover:text-primary hover:bg-primary/10"
-                    onClick={() => {
-                      handleUpdateStatus(ShippingStatusEnum.COMPLETED)
-                    }}
-                  >
-                    {isLoading ? <LoadingIcon color="primaryBackground" /> : t('order.received')}
-                  </Button>
-                )}
+                  {useOrderData?.data?.status === ShippingStatusEnum.DELIVERED && (
+                    <Button
+                      variant="outline"
+                      type="button"
+                      className="w-full border border-primary text-primary hover:text-primary hover:bg-primary/10"
+                      onClick={() => setOpenReqReturnDialog(true)}
+                    >
+                      {isLoading ? <LoadingIcon color="primaryBackground" /> : t('order.returnOrder')}
+                    </Button>
+                  )}
+                </div>
               </div>
             </div>
           </>
@@ -325,6 +339,15 @@ const OrderDetail = () => {
             open={openRequestCancelOrderDialog}
             setOpen={setOpenRequestCancelOrderDialog}
             onOpenChange={setOpenRequestCancelOrderDialog}
+            setIsTrigger={setIsTrigger}
+            orderId={useOrderData?.data?.id ?? ''}
+          />
+        )}
+        {!isFetching && useOrderData?.data && (
+          <RequestReturnOrderDialog
+            open={openReqReturnDialog}
+            setOpen={setOpenReqReturnDialog}
+            onOpenChange={setOpenReqReturnDialog}
             setIsTrigger={setIsTrigger}
             orderId={useOrderData?.data?.id ?? ''}
           />
