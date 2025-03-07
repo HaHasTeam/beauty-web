@@ -23,13 +23,13 @@ import configs from '@/config'
 import useHandleServerError from '@/hooks/useHandleServerError'
 import { useToast } from '@/hooks/useToast'
 import {
-  getMyCancelRequestApi,
+  getCancelAndReturnRequestApi,
   getOrderByIdApi,
+  getRejectReturnRequestApi,
   getStatusTrackingByIdApi,
   updateOrderStatusApi,
 } from '@/network/apis/order'
-import { CancelOrderRequestStatusEnum, ShippingStatusEnum } from '@/types/enum'
-import { ICancelRequestOrder } from '@/types/order'
+import { RequestStatusEnum, ShippingStatusEnum } from '@/types/enum'
 
 const OrderDetail = () => {
   const { orderId } = useParams()
@@ -38,7 +38,6 @@ const OrderDetail = () => {
   const [openCancelOrderDialog, setOpenCancelOrderDialog] = useState<boolean>(false)
   const [openRequestCancelOrderDialog, setOpenRequestCancelOrderDialog] = useState<boolean>(false)
   const [isTrigger, setIsTrigger] = useState<boolean>(false)
-  const [cancelRequests, setCancelRequests] = useState<ICancelRequestOrder[]>([])
   const [openReqReturnDialog, setOpenReqReturnDialog] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState(true)
   const { successToast } = useToast()
@@ -61,21 +60,16 @@ const OrderDetail = () => {
     })
   }, [isTrigger, queryClient])
 
-  const { mutateAsync: getMyCancelRequestOrderFn } = useMutation({
-    mutationKey: [getMyCancelRequestApi.mutationKey],
-    mutationFn: getMyCancelRequestApi.fn,
-    onSuccess: (data) => {
-      setCancelRequests(data?.data)
-      setIsLoading(false)
-    },
+  const { data: cancelAndReturnRequestData } = useQuery({
+    queryKey: [getCancelAndReturnRequestApi.queryKey, orderId ?? ('' as string)],
+    queryFn: getCancelAndReturnRequestApi.fn,
+    enabled: !!orderId,
   })
-  useEffect(() => {
-    const fetchCancelRequests = async () => {
-      setIsLoading(true)
-      await getMyCancelRequestOrderFn({})
-    }
-    fetchCancelRequests()
-  }, [getMyCancelRequestOrderFn])
+  const { data: rejectReturnRequest } = useQuery({
+    queryKey: [getRejectReturnRequestApi.queryKey, orderId ?? ('' as string)],
+    queryFn: getRejectReturnRequestApi.fn,
+    enabled: !!orderId,
+  })
 
   const { mutateAsync: updateOrderStatusFn } = useMutation({
     mutationKey: [updateOrderStatusApi.mutationKey],
@@ -131,12 +125,7 @@ const OrderDetail = () => {
 
               {/* cancel request information */}
               {!isLoading &&
-                cancelRequests &&
-                cancelRequests?.some(
-                  (request) =>
-                    request?.order?.id === useOrderData?.data?.id &&
-                    request.status === CancelOrderRequestStatusEnum.PENDING,
-                ) && (
+                cancelAndReturnRequestData?.data?.cancelOrderRequest?.status === RequestStatusEnum.PENDING && (
                   <AlertMessage
                     title={t('order.cancelRequestPendingTitle')}
                     message={t('order.cancelRequestPendingMessage')}
@@ -144,18 +133,48 @@ const OrderDetail = () => {
                   />
                 )}
               {!isLoading &&
-                cancelRequests &&
-                cancelRequests?.some(
-                  (request) =>
-                    request?.order?.id === useOrderData?.data?.id &&
-                    request.status === CancelOrderRequestStatusEnum.REJECTED,
-                ) && (
+                cancelAndReturnRequestData?.data?.cancelOrderRequest?.status === RequestStatusEnum.REJECTED && (
                   <AlertMessage
                     className="bg-red-100"
                     color="danger"
                     isShowIcon={false}
                     title={t('order.cancelRequestRejectedTitle')}
                     message={t('order.cancelRequestRejectedMessage')}
+                  />
+                )}
+
+              {/* return request information */}
+              {!isLoading &&
+                (cancelAndReturnRequestData?.data?.refundRequest?.status === RequestStatusEnum.PENDING ||
+                  (cancelAndReturnRequestData?.data?.refundRequest?.status === RequestStatusEnum.REJECTED &&
+                    rejectReturnRequest?.data?.status === RequestStatusEnum.PENDING)) && (
+                  <AlertMessage
+                    title={t('order.returnRequestPendingTitle')}
+                    message={t('order.returnRequestPendingMessage')}
+                    isShowIcon={false}
+                  />
+                )}
+              {!isLoading &&
+                (cancelAndReturnRequestData?.data?.refundRequest?.status === RequestStatusEnum.REJECTED ||
+                  (cancelAndReturnRequestData?.data?.refundRequest?.status === RequestStatusEnum.REJECTED &&
+                    rejectReturnRequest?.data?.status === RequestStatusEnum.APPROVED)) && (
+                  <AlertMessage
+                    className="bg-red-100"
+                    color="danger"
+                    isShowIcon={false}
+                    title={t('order.returnRequestRejectedTitle')}
+                    message={t('order.returnRequestRejectedMessage')}
+                  />
+                )}
+
+              {!isLoading &&
+                (cancelAndReturnRequestData?.data?.refundRequest?.status === RequestStatusEnum.APPROVED ||
+                  (cancelAndReturnRequestData?.data?.refundRequest?.status === RequestStatusEnum.REJECTED &&
+                    rejectReturnRequest?.data?.status === RequestStatusEnum.REJECTED)) && (
+                  <AlertMessage
+                    title={t('order.returnRequestApprovedTitle')}
+                    message={t('order.returnRequestApprovedMessage')}
+                    isShowIcon={false}
                   />
                 )}
 
@@ -280,7 +299,7 @@ const OrderDetail = () => {
                 <div className="w-full flex items-center flex-1 gap-2">
                   {useOrderData?.data?.status === ShippingStatusEnum.PREPARING_ORDER &&
                     !isLoading &&
-                    !cancelRequests?.some((cancelRequest) => cancelRequest?.order?.id === useOrderData?.data?.id) && (
+                    !cancelAndReturnRequestData?.data?.cancelOrderRequest && (
                       <div className="w-full">
                         <Button
                           variant="outline"
@@ -302,7 +321,8 @@ const OrderDetail = () => {
                       {isLoading ? <LoadingIcon color="primaryBackground" /> : t('order.received')}
                     </Button>
                   )}
-                  {useOrderData?.data?.status === ShippingStatusEnum.DELIVERED && (
+                  {(useOrderData?.data?.status === ShippingStatusEnum.DELIVERED ||
+                    cancelAndReturnRequestData?.data?.refundRequest) && (
                     <Button
                       variant="outline"
                       type="button"

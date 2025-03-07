@@ -141,15 +141,14 @@ export enum ResultEnum {
   FAILURE = 'FAILURE',
 }
 
-export enum CancelOrderRequestStatusEnum {
-  PENDING = 'PENDING',
-  APPROVED = 'APPROVED',
-  REJECTED = 'REJECTED',
-}
-
 export enum FeedbackFilterEnum {
   ALL = 'ALL',
   RATING = 'RATING',
   IMAGE_VIDEO = 'IMAGE_VIDEO',
   CLASSIFICATION = 'CLASSIFICATION',
+}
+export enum RequestStatusEnum {
+  PENDING = 'PENDING',
+  APPROVED = 'APPROVED',
+  REJECTED = 'REJECTED',
 }

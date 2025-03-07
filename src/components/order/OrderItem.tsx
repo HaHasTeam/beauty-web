@@ -1,6 +1,6 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { MessageCircle, Store } from 'lucide-react'
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router-dom'
 
@@ -9,14 +9,14 @@ import useHandleServerError from '@/hooks/useHandleServerError'
 import { useToast } from '@/hooks/useToast'
 import { createCartItemApi, getMyCartApi } from '@/network/apis/cart'
 import {
-  getMyCancelRequestApi,
+  getCancelAndReturnRequestApi,
   getOrderByIdApi,
   getStatusTrackingByIdApi,
   updateOrderStatusApi,
 } from '@/network/apis/order'
 import { IBrand } from '@/types/brand'
 import { OrderEnum, ShippingStatusEnum } from '@/types/enum'
-import { ICancelRequestOrder, IOrderItem } from '@/types/order'
+import { IOrderItem } from '@/types/order'
 
 import LoadingIcon from '../loading-icon'
 import OrderStatus from '../order-status'
@@ -35,16 +35,12 @@ const OrderItem = ({ brand, orderItem, setIsTrigger }: OrderItemProps) => {
   const navigate = useNavigate()
   const [openCancelOrderDialog, setOpenCancelOrderDialog] = useState<boolean>(false)
   const [openReqReturnDialog, setOpenReqReturnDialog] = useState<boolean>(false)
-  const [cancelRequests, setCancelRequests] = useState<ICancelRequestOrder[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
-  const { mutateAsync: getMyCancelRequestOrderFn } = useMutation({
-    mutationKey: [getMyCancelRequestApi.mutationKey],
-    mutationFn: getMyCancelRequestApi.fn,
-    onSuccess: (data) => {
-      setCancelRequests(data?.data)
-      setIsLoading(false)
-    },
+  const { data: cancelAndReturnRequestData } = useQuery({
+    queryKey: [getCancelAndReturnRequestApi.queryKey, orderItem.id ?? ('' as string)],
+    queryFn: getCancelAndReturnRequestApi.fn,
+    enabled: !!orderItem.id,
   })
 
   const [isProcessing, setIsProcessing] = useState(false)
@@ -86,14 +82,6 @@ const OrderItem = ({ brand, orderItem, setIsTrigger }: OrderItemProps) => {
       setIsProcessing(false)
     }
   }
-
-  useEffect(() => {
-    const fetchCancelRequests = async () => {
-      setIsLoading(true)
-      await getMyCancelRequestOrderFn({})
-    }
-    fetchCancelRequests()
-  }, [getMyCancelRequestOrderFn])
 
   const { mutateAsync: updateOrderStatusFn } = useMutation({
     mutationKey: [updateOrderStatusApi.mutationKey],
@@ -194,20 +182,21 @@ const OrderItem = ({ brand, orderItem, setIsTrigger }: OrderItemProps) => {
             >
               {t('order.viewDetail')}
             </Button>
-            {(orderItem?.status === ShippingStatusEnum.TO_PAY ||
+            {orderItem?.status === ShippingStatusEnum.TO_PAY ||
               orderItem?.status === ShippingStatusEnum.WAIT_FOR_CONFIRMATION ||
               (orderItem?.status === ShippingStatusEnum.PREPARING_ORDER &&
                 !isLoading &&
-                !cancelRequests?.some((cancelRequest) => cancelRequest?.order?.id === orderItem?.id))) && (
-              <Button
-                variant="outline"
-                className="border border-primary text-primary hover:text-primary hover:bg-primary/10"
-                onClick={() => setOpenCancelOrderDialog(true)}
-              >
-                {t('order.cancelOrder')}
-              </Button>
-            )}
-            {orderItem?.status === ShippingStatusEnum.DELIVERED && (
+                !cancelAndReturnRequestData?.data?.cancelOrderRequest && (
+                  <Button
+                    variant="outline"
+                    className="border border-primary text-primary hover:text-primary hover:bg-primary/10"
+                    onClick={() => setOpenCancelOrderDialog(true)}
+                  >
+                    {t('order.cancelOrder')}
+                  </Button>
+                ))}
+            {(orderItem?.status === ShippingStatusEnum.DELIVERED ||
+              cancelAndReturnRequestData?.data?.refundRequest) && (
               <Button
                 variant="outline"
                 className="border border-primary text-primary hover:text-primary hover:bg-primary/10"

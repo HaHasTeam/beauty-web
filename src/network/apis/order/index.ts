@@ -1,4 +1,5 @@
 import {
+  ICancelAndReturnRequest,
   ICancelOrder,
   ICancelRequestOrder,
   ICreateOrder,
@@ -6,6 +7,7 @@ import {
   IOrder,
   IOrderFilter,
   IOrderItem,
+  IRejectReturnRequestOrder,
 } from '@/types/order'
 import { TServerResponse } from '@/types/request'
 import { IStatusTracking } from '@/types/status-tracking'
@@ -43,6 +45,22 @@ export const getMyCancelRequestApi = toMutationFetcher<IOrderFilter, TServerResp
     return privateRequest('/orders/get-my-cancel-requests', {
       method: 'POST',
       data,
+    })
+  },
+)
+export const getCancelAndReturnRequestApi = toQueryFetcher<string, TServerResponse<ICancelAndReturnRequest>>(
+  'getCancelAndReturnRequestApi',
+  async (orderId) => {
+    return privateRequest(`/orders/get-both-request-refund-cancel/${orderId}`, {
+      method: 'GET',
+    })
+  },
+)
+export const getRejectReturnRequestApi = toQueryFetcher<string, TServerResponse<IRejectReturnRequestOrder>>(
+  'getRejectReturnRequestApi',
+  async (orderId) => {
+    return privateRequest(`/orders/get-reject-request-refund/${orderId}`, {
+      method: 'GET',
     })
   },
 )

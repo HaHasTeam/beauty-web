@@ -133,7 +133,7 @@ const ProductOrderDetailLandscape = ({
                   </Button>
                 )}
 
-                {status === ShippingStatusEnum.COMPLETED && (
+                {/* {status === ShippingStatusEnum.DELIVERED && (
                   <Button
                     variant="outline"
                     size="sm"
@@ -141,7 +141,7 @@ const ProductOrderDetailLandscape = ({
                   >
                     {t('order.returnOrder')}
                   </Button>
-                )}
+                )} */}
                 {status === ShippingStatusEnum.COMPLETED && !feedback && (
                   <Button
                     onClick={() => setOpenWriteFeedbackDialog(true)}
@@ -213,7 +213,7 @@ const ProductOrderDetailLandscape = ({
               </Button>
             )}
 
-            {status === ShippingStatusEnum.COMPLETED && (
+            {/* {status === ShippingStatusEnum.DELIVERED && (
               <Button
                 variant="outline"
                 size="sm"
@@ -221,7 +221,7 @@ const ProductOrderDetailLandscape = ({
               >
                 {t('order.returnOrder')}
               </Button>
-            )}
+            )} */}
             {status === ShippingStatusEnum.COMPLETED && !feedback && (
               <Button
                 onClick={() => setOpenWriteFeedbackDialog(true)}
