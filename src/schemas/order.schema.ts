@@ -38,6 +38,14 @@ export const getRequestReturnOrderSchema = () => {
   })
 }
 
+export const getReturnOrderSchema = () => {
+  return z.object({
+    mediaFiles: z.array(z.instanceof(File)).optional(),
+    videos: z.array(z.instanceof(File)).min(1, i18next.t('validation.videosRequired')),
+    images: z.array(z.instanceof(File)).min(1, i18next.t('validation.imagesRequired')),
+  })
+}
+
 export const CreateOrderSchema = getCreateOrderSchema()
 export const CancelOrderSchema = getCancelOrderSchema()
 export const ReturnOrderSchema = getRequestReturnOrderSchema()

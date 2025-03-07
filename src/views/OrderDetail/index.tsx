@@ -12,6 +12,7 @@ import LoadingContentLayer from '@/components/loading-icon/LoadingContentLayer'
 import CancelOrderDialog from '@/components/order/CancelOrderDialog'
 import RequestCancelOrderDialog from '@/components/order/RequestCancelOrderDialog'
 import { RequestReturnOrderDialog } from '@/components/order/RequestReturnOrderDialog'
+import ReturnOrderSection from '@/components/order/ReturnOrderSection'
 import OrderDetailItems from '@/components/order-detail/OrderDetailItems'
 import OrderGeneral from '@/components/order-detail/OrderGeneral'
 import OrderStatusTracking from '@/components/order-detail/OrderStatusTracking'
@@ -39,7 +40,7 @@ const OrderDetail = () => {
   const [openRequestCancelOrderDialog, setOpenRequestCancelOrderDialog] = useState<boolean>(false)
   const [isTrigger, setIsTrigger] = useState<boolean>(false)
   const [openReqReturnDialog, setOpenReqReturnDialog] = useState<boolean>(false)
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
   const { successToast } = useToast()
   const handleServerError = useHandleServerError()
 
@@ -171,11 +172,7 @@ const OrderDetail = () => {
                 (cancelAndReturnRequestData?.data?.refundRequest?.status === RequestStatusEnum.APPROVED ||
                   (cancelAndReturnRequestData?.data?.refundRequest?.status === RequestStatusEnum.REJECTED &&
                     rejectReturnRequest?.data?.status === RequestStatusEnum.REJECTED)) && (
-                  <AlertMessage
-                    title={t('order.returnRequestApprovedTitle')}
-                    message={t('order.returnRequestApprovedMessage')}
-                    isShowIcon={false}
-                  />
+                  <ReturnOrderSection orderId={useOrderData?.data?.id} />
                 )}
 
               {/* order customer timeline, information, shipment */}
@@ -310,28 +307,29 @@ const OrderDetail = () => {
                         </Button>
                       </div>
                     )}
-                  {useOrderData?.data?.status === ShippingStatusEnum.DELIVERED && (
-                    <Button
-                      variant="default"
-                      className="w-full hover:bg-primary/80"
-                      onClick={() => {
-                        handleUpdateStatus(ShippingStatusEnum.COMPLETED)
-                      }}
-                    >
-                      {isLoading ? <LoadingIcon color="primaryBackground" /> : t('order.received')}
-                    </Button>
-                  )}
-                  {(useOrderData?.data?.status === ShippingStatusEnum.DELIVERED ||
-                    cancelAndReturnRequestData?.data?.refundRequest) && (
-                    <Button
-                      variant="outline"
-                      type="button"
-                      className="w-full border border-primary text-primary hover:text-primary hover:bg-primary/10"
-                      onClick={() => setOpenReqReturnDialog(true)}
-                    >
-                      {isLoading ? <LoadingIcon color="primaryBackground" /> : t('order.returnOrder')}
-                    </Button>
-                  )}
+                  {useOrderData?.data?.status === ShippingStatusEnum.DELIVERED &&
+                    !cancelAndReturnRequestData?.data?.refundRequest && (
+                      <Button
+                        variant="default"
+                        className="w-full hover:bg-primary/80"
+                        onClick={() => {
+                          handleUpdateStatus(ShippingStatusEnum.COMPLETED)
+                        }}
+                      >
+                        {isLoading ? <LoadingIcon color="primaryBackground" /> : t('order.received')}
+                      </Button>
+                    )}
+                  {useOrderData?.data?.status === ShippingStatusEnum.DELIVERED &&
+                    !cancelAndReturnRequestData?.data?.refundRequest && (
+                      <Button
+                        variant="outline"
+                        type="button"
+                        className="w-full border border-primary text-primary hover:text-primary hover:bg-primary/10"
+                        onClick={() => setOpenReqReturnDialog(true)}
+                      >
+                        {isLoading ? <LoadingIcon color="primaryBackground" /> : t('order.returnOrder')}
+                      </Button>
+                    )}
                 </div>
               </div>
             </div>

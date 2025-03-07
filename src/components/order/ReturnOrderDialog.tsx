@@ -1,75 +1,50 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { FilesIcon, ImagePlus, Video } from 'lucide-react'
-import { Dispatch, SetStateAction, useId, useMemo, useState } from 'react'
+import { Dispatch, SetStateAction, useId, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { z } from 'zod'
 
 import Label from '@/components/form-label'
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { Form, FormControl, FormDescription, FormField, FormItem, FormMessage } from '@/components/ui/form'
-import { Textarea } from '@/components/ui/textarea'
+import { Form, FormDescription, FormField, FormItem, FormMessage } from '@/components/ui/form'
 import useHandleServerError from '@/hooks/useHandleServerError'
 import { useToast } from '@/hooks/useToast'
 import { uploadFilesApi } from '@/network/apis/file'
-import { requestReturnOrderApi } from '@/network/apis/order'
-import { getRequestReturnOrderSchema } from '@/schemas/order.schema'
+import { getOrderByIdApi, getStatusTrackingByIdApi, updateOrderStatusApi } from '@/network/apis/order'
+import { getReturnOrderSchema } from '@/schemas/order.schema'
+import { ShippingStatusEnum } from '@/types/enum'
 
 import AlertMessage from '../alert/AlertMessage'
 import Button from '../button'
 import UploadMediaFiles from '../file-input/UploadMediaFiles'
 import { VideoThumbnail } from '../file-input/VideoThumbnail'
 import { ScrollArea } from '../ui/scroll-area'
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
 
-interface RequestReturnOrderDialogProps {
+interface ReturnOrderDialogProps {
   orderId: string
   open: boolean
   setOpen: Dispatch<SetStateAction<boolean>>
   onOpenChange: (open: boolean) => void
-  setIsTrigger: Dispatch<SetStateAction<boolean>>
 }
 
-export const RequestReturnOrderDialog: React.FC<RequestReturnOrderDialogProps> = ({
-  orderId,
-  open,
-  setOpen,
-  onOpenChange,
-  setIsTrigger,
-}) => {
+export const ReturnOrderDialog: React.FC<ReturnOrderDialogProps> = ({ orderId, open, setOpen, onOpenChange }) => {
   const MAX_IMAGES = 4
   const MAX_VIDEOS = 1
   // const MAX_FILES = MAX_IMAGES + MAX_VIDEOS
   const MAX_SIZE_NUMBER = 10
   const MAX_SIZE = MAX_SIZE_NUMBER * 1024 * 1024
-  const REQUEST_RETURN_ORDER_PROCESS_DATE = 2
 
   const { t } = useTranslation()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const { successToast } = useToast()
+  const queryClient = useQueryClient()
   const handleServerError = useHandleServerError()
   const id = useId()
-  const ReturnOrderSchema = getRequestReturnOrderSchema()
-  const [isOtherReason, setIsOtherReason] = useState<boolean>(false)
-
-  const reasons: { value: string }[] = useMemo(
-    () => [
-      { value: t('order.returnOrderReason.wrongItem') },
-      { value: t('order.returnOrderReason.damage') },
-      { value: t('order.returnOrderReason.missingItem') },
-      { value: t('order.returnOrderReason.expired') },
-      { value: t('order.returnOrderReason.allergy') },
-      { value: t('order.returnOrderReason.notAsDescribed') },
-      { value: t('order.returnOrderReason.duplicate') },
-      { value: t('order.returnOrderReason.other') },
-    ],
-    [t],
-  )
+  const ReturnOrderSchema = getReturnOrderSchema()
 
   const defaultValues = {
-    reason: '',
-    otherReason: '',
     mediaFiles: [],
     videos: [],
     images: [],
@@ -80,22 +55,23 @@ export const RequestReturnOrderDialog: React.FC<RequestReturnOrderDialogProps> =
     defaultValues,
   })
 
-  const { mutateAsync: requestReturnOrderFn } = useMutation({
-    mutationKey: [requestReturnOrderApi.mutationKey],
-    mutationFn: requestReturnOrderApi.fn,
-    onSuccess: () => {
+  const { mutateAsync: updateOrderStatusFn } = useMutation({
+    mutationKey: [updateOrderStatusApi.mutationKey],
+    mutationFn: updateOrderStatusApi.fn,
+    onSuccess: async () => {
       successToast({
-        message: t('order.returnOrderDialog.successTitle'),
-        description: t('order.returnOrderDialog.successDescription', { count: REQUEST_RETURN_ORDER_PROCESS_DATE }),
+        message: t('order.receivedOrderStatusSuccess'),
       })
-      setIsTrigger((prev) => !prev)
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: [getOrderByIdApi.queryKey] }),
+        queryClient.invalidateQueries({ queryKey: [getStatusTrackingByIdApi.queryKey] }),
+      ])
       handleReset()
     },
   })
 
   const handleReset = () => {
     form.reset()
-    setIsOtherReason(false)
     setOpen(false)
   }
 
@@ -118,21 +94,17 @@ export const RequestReturnOrderDialog: React.FC<RequestReturnOrderDialogProps> =
   const handleSubmit = async (values: z.infer<typeof ReturnOrderSchema>) => {
     try {
       setIsLoading(true)
-      console.log(isLoading)
       const imgUrls = values.images ? await convertFileToUrl(values.images) : []
       const videoUrls = values.videos ? await convertFileToUrl(values.videos) : []
-      const payload = isOtherReason ? { reason: values.otherReason } : { reason: values.reason }
 
-      await requestReturnOrderFn({
-        orderId,
-        ...payload,
+      await updateOrderStatusFn({
+        id: orderId,
+        status: ShippingStatusEnum.RETURNING,
         mediaFiles: [...imgUrls, ...videoUrls],
       })
       setIsLoading(false)
-      console.log(isLoading)
     } catch (error) {
       setIsLoading(false)
-      console.log(isLoading)
       handleServerError({
         error,
         form,
@@ -146,12 +118,12 @@ export const RequestReturnOrderDialog: React.FC<RequestReturnOrderDialogProps> =
         <ScrollArea className="max-h-[80vh]">
           <div className="space-y-3 mr-2">
             <DialogHeader>
-              <DialogTitle className="text-primary">{t('order.returnOrderDialog.title')}</DialogTitle>
+              <DialogTitle className="text-primary">{t('order.returnOrderEvidenceDialog.title')}</DialogTitle>
             </DialogHeader>
 
             <AlertMessage
               className="text-justify"
-              message={t('order.returnOrderDialog.description')}
+              message={t('order.returnOrderEvidenceDialog.description')}
               textSize="medium"
             />
             <Form {...form}>
@@ -160,86 +132,13 @@ export const RequestReturnOrderDialog: React.FC<RequestReturnOrderDialogProps> =
                 className="space-y-6"
                 id={`form-${id}`}
               >
-                <FormField
-                  control={form.control}
-                  name="reason"
-                  render={({ field }) => (
-                    <FormItem className="w-full">
-                      <div className="w-full flex gap-2">
-                        <div className="w-1/5 flex items-center">
-                          <Label htmlFor="reason" required className="w-fit text-primary">
-                            {t('order.cancelOrderReason.reason')}
-                          </Label>
-                        </div>
-                        <div className="w-full space-y-1">
-                          <FormControl>
-                            <Select
-                              value={field.value ?? ''}
-                              onValueChange={(value) => {
-                                field.onChange(value)
-                                setIsOtherReason(value === t('order.returnOrderReason.other'))
-                              }}
-                              required
-                              name="reason"
-                            >
-                              <SelectTrigger className="border-primary/40">
-                                <SelectValue {...field} placeholder={t('order.cancelOrderReason.selectAReason')} />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectGroup>
-                                  {reasons.map((reason) => (
-                                    <SelectItem key={reason.value} value={reason.value}>
-                                      {reason.value}
-                                    </SelectItem>
-                                  ))}
-                                </SelectGroup>
-                              </SelectContent>
-                            </Select>
-                          </FormControl>
-                          <FormMessage />
-                        </div>
-                      </div>
-                    </FormItem>
-                  )}
-                />
-                {isOtherReason && (
-                  <FormField
-                    control={form.control}
-                    name="otherReason"
-                    render={({ field }) => (
-                      <FormItem className="w-full">
-                        <div className="w-full flex gap-2">
-                          <div className="w-1/5 flex items-center">
-                            <Label htmlFor="otherReason" required className="w-fit text-primary">
-                              {t('order.cancelOrderReason.otherReason')}
-                            </Label>
-                          </div>
-                          <div className="w-full space-y-1">
-                            <FormControl>
-                              <Textarea
-                                id="otherReason"
-                                {...field}
-                                className="w-full p-2 border rounded-md focus:outline-none focus:ring border-primary/40"
-                                placeholder={t('order.cancelOrderReason.enterReason')}
-                                rows={4}
-                                value={field.value ?? ''}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </div>
-                        </div>
-                      </FormItem>
-                    )}
-                  />
-                )}
-
                 {/* media */}
                 <div className="space-y-1">
                   <Label required className="text-primary">
                     {t('feedback.mediaFiles')}
                   </Label>
                   <FormDescription className="text-justify">
-                    {t('order.returnOrderDialog.mediaFilesNotes')}
+                    {t('order.returnOrderEvidenceDialog.mediaFilesNotes')}
                   </FormDescription>
                   <FormDescription className="text-justify">
                     {t('feedback.mediaFilesHint', {
