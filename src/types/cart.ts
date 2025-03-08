@@ -1,5 +1,6 @@
 import { IClassification } from './classification'
 import { StatusEnum } from './enum'
+import { TGroupBuying } from './group-buying'
 import { IProductCart } from './product'
 
 export type ICart = {
@@ -12,14 +13,16 @@ export interface ICartItem {
   id: string
   createdAt?: string
   updatedAt?: string
+  groupBuying?:TGroupBuying
   quantity: number
   classification?: string
   status: StatusEnum.ACTIVE | StatusEnum.INACTIVE
   productClassification: IClassification
 }
 
-export type ICreateCartItem = Omit<ICartItem, 'createdAt' | 'updatedAt' | 'status' | 'id' | 'productClassification'> & {
+export type ICreateCartItem = Omit<ICartItem, 'createdAt' | 'updatedAt' | 'status' | 'id' | 'productClassification'|"groupBuying"> & {
   productClassification: string
+  groupBuying?:string
 }
 export type IUpdateCartItem = Omit<ICartItem, 'createdAt' | 'updatedAt' | 'status' | 'productClassification'> & {
   productClassification?: string

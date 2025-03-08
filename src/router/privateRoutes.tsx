@@ -10,6 +10,8 @@ import ProfileAddress from '@/views/ProfileAddress'
 import ProfileFeedback from '@/views/ProfileFeedback'
 import ProfileOrder from '@/views/ProfileOrder'
 import ProfileVoucher from '@/views/ProfileVoucher'
+import ProfileWishlist from '@/views/ProfileWishlist'
+import Wallet from '@/views/Wallet'
 
 import AuthGuard from './guard/AuthGuard'
 
@@ -70,6 +72,10 @@ const privateRoutes = [
       {
         path: configs.routes.profilePassword,
         element: <ChangePassword />,
+      },
+      {
+        path: configs.routes.profileWallet,
+        element: <Wallet />,
       },
       {
         path: configs.routes.profileVoucher,

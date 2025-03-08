@@ -29,8 +29,10 @@ interface CartItemProps {
   selectedCheckoutItems: ICheckoutItem[]
   isTriggerTotal: boolean
   setIsTriggerTotal: Dispatch<SetStateAction<boolean>>
+  isInGroupBuying?: boolean
 }
 const CartItem = ({
+  isInGroupBuying = false,
   brandName,
   cartBrandItem,
   selectedCartItems,
@@ -78,6 +80,7 @@ const CartItem = ({
       setChosenVoucher(null)
     }
   }, [selectedCartItems])
+
   return (
     <div className="w-full bg-white p-4 rounded-lg space-y-2 shadow-sm">
       {/* Brand Header */}
@@ -121,9 +124,10 @@ const CartItem = ({
         const productQuantity = cartItem?.quantity ?? 0
         // const selectedClassification = cartItem?.classification ?? ''
 
-        const eventType =
-          cartItem?.productClassification?.preOrderProduct &&
-          cartItem?.productClassification?.preOrderProduct?.status === PreOrderProductEnum.ACTIVE
+        const eventType = isInGroupBuying
+          ? ''
+          : cartItem?.productClassification?.preOrderProduct &&
+              cartItem?.productClassification?.preOrderProduct?.status === PreOrderProductEnum.ACTIVE
             ? OrderEnum.PRE_ORDER
             : (cartItem?.productClassification?.productDiscount &&
                   cartItem?.productClassification?.productDiscount?.status === ProductDiscountEnum.ACTIVE) ||
@@ -131,13 +135,15 @@ const CartItem = ({
                   (product?.productDiscounts ?? [])[0]?.discount)
               ? OrderEnum.FLASH_SALE
               : ''
-        const discount =
-          eventType === OrderEnum.FLASH_SALE
+        const discount = isInGroupBuying
+          ? null
+          : eventType === OrderEnum.FLASH_SALE
             ? cartItem?.productClassification?.productDiscount?.discount
             : ((product?.productDiscounts ?? [])[0]?.discount ?? null)
 
-        const discountType =
-          eventType === OrderEnum.FLASH_SALE || (product?.productDiscounts ?? [])[0]?.discount
+        const discountType = isInGroupBuying
+          ? null
+          : eventType === OrderEnum.FLASH_SALE || (product?.productDiscounts ?? [])[0]?.discount
             ? DiscountTypeEnum.PERCENTAGE
             : null
 
@@ -165,35 +171,37 @@ const CartItem = ({
       })}
 
       {/* Voucher */}
-      <div className="flex items-center gap-3 text-sm">
-        <Tag className="w-4 h-4 text-red-500" />
-        <span>
-          {chosenVoucher && hasBrandProductSelected
-            ? chosenVoucher?.discountType === DiscountTypeEnum.AMOUNT
-              ? t('voucher.discountAmount', { amount: voucherDiscount })
-              : t('voucher.discountAmount', { amount: voucherDiscount })
-            : bestVoucherForBrand?.bestVoucher
-              ? bestVoucherForBrand?.bestVoucher?.discountType === DiscountTypeEnum.AMOUNT &&
-                bestVoucherForBrand?.bestVoucher?.discountValue
-                ? t('voucher.bestDiscountAmountDisplay', { amount: bestVoucherForBrand?.bestVoucher?.discountValue })
-                : t('voucher.bestDiscountPercentageDisplay', {
-                    percentage: bestVoucherForBrand?.bestVoucher?.discountValue * 100,
-                  })
-              : null}
-        </span>
-        <VoucherCartList
-          triggerText={t('cart.viewMoreVoucher')}
-          brandName={brand?.name ?? ''}
-          brandId={brand?.id ?? ''}
-          brandLogo={brand?.logo ?? ''}
-          hasBrandProductSelected={hasBrandProductSelected}
-          handleVoucherChange={handleVoucherChange}
-          checkoutItems={checkoutItems}
-          selectedCheckoutItems={selectedCheckoutItems}
-          bestVoucherForBrand={bestVoucherForBrand}
-          chosenBrandVoucher={chosenVoucher}
-        />
-      </div>
+      {!isInGroupBuying && (
+        <div className="flex items-center gap-3 text-sm">
+          <Tag className="w-4 h-4 text-red-500" />
+          <span>
+            {chosenVoucher && hasBrandProductSelected
+              ? chosenVoucher?.discountType === DiscountTypeEnum.AMOUNT && chosenVoucher?.discountValue
+                ? t('voucher.discountAmount', { amount: chosenVoucher?.discountValue })
+                : t('voucher.discountAmount', { amount: chosenVoucher?.discount })
+              : bestVoucherForBrand?.bestVoucher
+                ? bestVoucherForBrand?.bestVoucher?.discountType === DiscountTypeEnum.AMOUNT &&
+                  bestVoucherForBrand?.bestVoucher?.discountValue
+                  ? t('voucher.bestDiscountAmountDisplay', { amount: bestVoucherForBrand?.bestVoucher?.discountValue })
+                  : t('voucher.bestDiscountPercentageDisplay', {
+                      percentage: bestVoucherForBrand?.bestVoucher?.discountValue * 100,
+                    })
+                : null}
+          </span>
+          <VoucherCartList
+            triggerText={t('cart.viewMoreVoucher')}
+            brandName={brand?.name ?? ''}
+            brandId={brand?.id ?? ''}
+            brandLogo={brand?.logo ?? ''}
+            hasBrandProductSelected={hasBrandProductSelected}
+            handleVoucherChange={handleVoucherChange}
+            checkoutItems={checkoutItems}
+            selectedCheckoutItems={selectedCheckoutItems}
+            bestVoucherForBrand={bestVoucherForBrand}
+            chosenBrandVoucher={chosenVoucher}
+          />
+        </div>
+      )}
     </div>
   )
 }

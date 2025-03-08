@@ -2,6 +2,9 @@ import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import configs from '@/config'
+import useCartStore from '@/store/cart'
+import { DiscountTypeEnum } from '@/types/enum'
+import { formatCurrency, formatNumber } from '@/utils/number'
 
 import Button from '../button'
 
@@ -26,7 +29,8 @@ export default function CheckoutTotal({
   formId,
 }: CheckoutTotalProps) {
   const { t } = useTranslation()
-
+  const { groupBuying, groupBuyingOrder } = useCartStore()
+  const criteria = groupBuying?.groupProduct.criterias[0]
   return (
     <div className="w-full bg-white rounded-md shadow-sm p-4">
       <div>
@@ -35,6 +39,16 @@ export default function CheckoutTotal({
             <span className="text-sm text-muted-foreground">{t('cart.totalCost')}</span>
             <span className="font-medium">{t('productCard.price', { price: totalProductCost })}</span>
           </div>
+          {!!groupBuying && (
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-muted-foreground">{t('cart.wishDiscount')}</span>
+              <span className="font-medium">
+                {criteria?.voucher.discountType === DiscountTypeEnum.PERCENTAGE
+                  ? formatNumber(String(criteria?.voucher?.discountValue ?? 0), '%')
+                  : formatCurrency(criteria?.voucher.discountValue ?? 0)}
+              </span>
+            </div>
+          )}
           {totalProductDiscount && totalProductDiscount > 0 ? (
             <div className="flex justify-between items-center">
               <span className="text-sm text-muted-foreground">{t('cart.directDiscount')}</span>
@@ -59,12 +73,29 @@ export default function CheckoutTotal({
               </span>
             </div>
           ) : null}
-          <div className="flex justify-between items-center pt-3 border-t text-base font-medium">
-            <span>{t('cart.totalPayment')}</span>
-            <span className="font-semibold text-red-500 text-lg">
-              {t('productCard.price', { price: totalPayment })}
-            </span>
-          </div>
+          {groupBuying ? (
+            <div className="flex justify-between items-center pt-3 border-t text-base font-medium">
+              <span>{t('cart.maxPrice')}</span>
+              <span className="font-semibold text-red-500 text-lg">
+                {t('productCard.price', {
+                  price:
+                    criteria?.voucher.discountType === DiscountTypeEnum.PERCENTAGE
+                      ? (totalPayment * (100 - criteria?.voucher.discountValue)) / 100
+                      : totalPayment - (criteria?.voucher?.discountValue ?? 0) <= 0
+                        ? 0
+                        : totalPayment - (criteria?.voucher?.discountValue ?? 0),
+                })}
+              </span>
+            </div>
+          ) : (
+            <div className="flex justify-between items-center pt-3 border-t text-base font-medium">
+              <span>{t('cart.totalPayment')}</span>
+              <span className="font-semibold text-red-500 text-lg">
+                {t('productCard.price', { price: totalPayment })}
+              </span>
+            </div>
+          )}
+
           {totalSavings && totalSavings > 0 ? (
             <div className="flex gap-1 justify-end items-center text-sm text-green-700">
               <span className="text-green-700 font-medium">{t('cart.savings')}: </span>
@@ -87,7 +118,11 @@ export default function CheckoutTotal({
           className="w-full bg-destructive hover:bg-destructive/80 mt-2"
           loading={isLoading}
         >
-          {t('cart.checkout')}
+          {groupBuying
+            ? groupBuyingOrder
+              ? t('cart.updateGroupOrder')
+              : t('cart.createGroupOrder')
+            : t('cart.checkout')}
         </Button>
       </div>
     </div>

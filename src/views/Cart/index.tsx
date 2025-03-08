@@ -9,6 +9,7 @@ import Empty from '@/components/empty/Empty'
 import LoadingContentLayer from '@/components/loading-icon/LoadingContentLayer'
 import configs from '@/config'
 import { useCart } from '@/hooks/useCarts'
+import { cn } from '@/lib/utils'
 // import { getMyCartApi } from '@/network/apis/cart'
 import { getBestPlatformVouchersApi, getBestShopVouchersApi } from '@/network/apis/voucher'
 import useCartStore from '@/store/cart'
@@ -21,7 +22,12 @@ import {
   calculateTotalBrandVoucherDiscount,
 } from '@/utils/price'
 
-const Cart = () => {
+type CartProps = {
+  isInGroupBuy?: boolean
+  isInPeriod?: boolean
+}
+
+const Cart = ({ isInGroupBuy = false, isInPeriod = false }: CartProps) => {
   const { t } = useTranslation()
   const [selectedCartItems, setSelectedCartItems] = useState<string[]>([])
   const [allCartItemIds, setAllCartItemIds] = useState<string[]>([])
@@ -205,7 +211,7 @@ const Cart = () => {
       {isMyCartFetching && <LoadingContentLayer />}
       {!isMyCartFetching && cartItems && Object.keys(cartItems)?.length > 0 && (
         <div className="relative w-full mx-auto py-5">
-          <div className="w-full xl:px-28 lg:px-12 sm:px-2 px-1 space-y-3 ">
+          <div className={cn('w-full space-y-3 ', isInGroupBuy ? '' : ' xl:px-28 lg:px-12 sm:px-2 px-1')}>
             <h2 className="uppercase font-bold text-xl">{t('cart.title')}</h2>
             <CartHeader
               onCheckAll={handleSelectAll}
@@ -237,6 +243,7 @@ const Cart = () => {
                   ?.filter((item) => item.classificationId !== null)
                 return (
                   <CartItem
+                    isInGroupBuying={isInGroupBuy}
                     key={`${brandName}_${index}`}
                     brandName={brandName}
                     cartBrandItem={cartBrandItem}
@@ -254,6 +261,8 @@ const Cart = () => {
               })}
 
             <CartFooter
+              isInPeriod={isInPeriod}
+              isInGroupBuying={isInGroupBuy}
               cartItemCountAll={allCartItemIds?.length}
               cartItemCount={selectedCartItems?.length}
               setSelectedCartItems={setSelectedCartItems}

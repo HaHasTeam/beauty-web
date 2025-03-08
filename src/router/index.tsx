@@ -4,8 +4,12 @@ import PrimaryLayout from '@/components/layout/PrimaryLayout'
 import configs from '@/config'
 import externalLink from '@/config/externalLink'
 import About from '@/views/About'
+import BrandDetail from '@/views/Brand'
 import Contact from '@/views/Contact'
 import Forbidden from '@/views/Forbidden'
+import GroupBuy from '@/views/GroupBuy'
+import GroupBuyDetails from '@/views/GroupBuy/GroupBuyDetail'
+import GroupBuyingOfBrand from '@/views/GroupBuy/GroupBuyingOfBrand'
 import Home from '@/views/Home'
 import NotFound from '@/views/NotFound'
 import ProductDetail from '@/views/ProductDetail'
@@ -34,6 +38,22 @@ export default function RouterProvider() {
         {
           path: configs.routes.productDetail,
           element: <ProductDetail />,
+        },
+        {
+          path: configs.routes.groupBuy,
+          element: <GroupBuy />,
+        },
+        {
+          path: configs.routes.groupBuyByBrand,
+          element: <GroupBuyingOfBrand />,
+        },
+        {
+          path: configs.routes.groupBuyDetail,
+          element: <GroupBuyDetails />,
+        },
+        {
+          path: configs.routes.brandDetail,
+          element: <BrandDetail />,
         },
         // {
         //   path: configs.routes.recommendProducts,

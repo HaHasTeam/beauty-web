@@ -1,7 +1,4 @@
-import 'quill/dist/quill.core.css'
-import 'quill/dist/quill.bubble.css'
-import 'quill/dist/quill.snow.css'
-
+import { TooltipProvider } from '@radix-ui/react-tooltip'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 // import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { Toaster } from 'sonner'
@@ -12,12 +9,15 @@ const queryClient = new QueryClient()
 function App() {
   return (
     <>
+    <TooltipProvider>
+
       <QueryClientProvider client={queryClient}>
         <RouterProvider />
         {/* <ReactQueryDevtools initialIsOpen={true} /> */}
 
         <Toaster closeButton position="top-center" richColors />
       </QueryClientProvider>
+    </TooltipProvider>
     </>
   )
 }

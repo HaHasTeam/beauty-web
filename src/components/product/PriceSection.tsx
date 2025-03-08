@@ -28,6 +28,8 @@ const PriceSection = ({
   isHighlight = true,
 }: PriceSectionProps) => {
   const { t } = useTranslation()
+  console.log(deal, 'DSd')
+
   return (
     <div className="flex gap-1">
       <div className="flex items-center gap-2">

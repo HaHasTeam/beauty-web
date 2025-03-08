@@ -32,9 +32,15 @@ function AccountLayout() {
                 <User className="mr-2 h-4 w-4" />
                 Hồ Sơ
               </Button>
-              <Button variant="ghost" className="w-full justify-start">
+              <Button
+                variant="ghost"
+                className="w-full justify-start"
+                onClick={() => {
+                  navigate(configs.routes.profileWallet)
+                }}
+              >
                 <Wallet className="mr-2 h-4 w-4" />
-                Ngân Hàng
+                Ví Tiền
               </Button>
               <Button
                 variant="ghost"

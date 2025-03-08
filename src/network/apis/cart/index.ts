@@ -68,3 +68,4 @@ export const deleteCartItemApi = toMutationFetcher<string, TServerResponse<ICart
     })
   },
 )
+

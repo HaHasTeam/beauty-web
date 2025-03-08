@@ -15,6 +15,7 @@ import ProductCarousel from '@/components/product/ProductCarousel'
 import ProductDetailAction from '@/components/product/ProductDetailAction'
 import ProductDetailInformation from '@/components/product/ProductDetailInformation'
 import ReviewOverall from '@/components/reviews/ReviewOverall'
+import { cn } from '@/lib/utils'
 import { getFeedbackGeneralOfProductApi } from '@/network/apis/feedback'
 import { getProductApi } from '@/network/apis/product'
 import { IClassification } from '@/types/classification'
@@ -23,8 +24,16 @@ import { PreOrderProductEnum } from '@/types/pre-order'
 import { ProductClassificationTypeEnum } from '@/types/product'
 import { getCheapestClassification } from '@/utils/product'
 
-const ProductDetail = () => {
-  const { productId } = useParams()
+type ProductDetailProps = {
+  initProductId?: string
+  isInGroupBuying?: boolean
+}
+
+const ProductDetail = ({ initProductId, isInGroupBuying = false }: ProductDetailProps) => {
+  let { productId } = useParams()
+  if (initProductId) {
+    productId = initProductId
+  }
   const { t } = useTranslation()
   const { data: useProductData, isFetching } = useQuery({
     queryKey: [getProductApi.queryKey, productId as string],
@@ -39,28 +48,34 @@ const ProductDetail = () => {
 
   const event = useMemo(
     () =>
-      (useProductData?.data?.productDiscounts ?? [])?.length > 0 &&
-      (useProductData?.data?.productDiscounts ?? [])[0]?.status === ProductDiscountEnum.ACTIVE
-        ? OrderEnum.FLASH_SALE
-        : (useProductData?.data?.preOrderProducts ?? [])?.length > 0 &&
-            (useProductData?.data?.preOrderProducts ?? [])[0]?.status === PreOrderProductEnum.ACTIVE
-          ? OrderEnum.PRE_ORDER
-          : OrderEnum.NORMAL,
-    [useProductData?.data?.preOrderProducts, useProductData?.data?.productDiscounts],
+      isInGroupBuying
+        ? OrderEnum.NORMAL
+        : (useProductData?.data?.productDiscounts ?? [])?.length > 0 &&
+            (useProductData?.data?.productDiscounts ?? [])[0]?.status === ProductDiscountEnum.ACTIVE
+          ? OrderEnum.FLASH_SALE
+          : (useProductData?.data?.preOrderProducts ?? [])?.length > 0 &&
+              (useProductData?.data?.preOrderProducts ?? [])[0]?.status === PreOrderProductEnum.ACTIVE
+            ? OrderEnum.PRE_ORDER
+            : OrderEnum.NORMAL,
+
+    [useProductData?.data?.preOrderProducts, useProductData?.data?.productDiscounts, isInGroupBuying],
   )
 
   const productClassifications = useMemo(() => {
     if (!useProductData?.data) return []
+    if (isInGroupBuying) {
+      return useProductData.data.productClassifications
+    }
 
     switch (event) {
       case OrderEnum.FLASH_SALE:
-        return useProductData.data.productDiscounts?.[0]?.productClassifications
-      case OrderEnum.PRE_ORDER:
-        return useProductData.data.preOrderProducts?.[0]?.productClassifications
-      default:
+          return useProductData.data.productDiscounts?.[0]?.productClassifications
+        case OrderEnum.PRE_ORDER:
+          return useProductData.data.preOrderProducts?.[0]?.productClassifications
+        default:
         return useProductData.data.productClassifications
     }
-  }, [event, useProductData?.data])
+  }, [event, useProductData?.data, isInGroupBuying])
 
   const cheapestClassification = useMemo(
     () => getCheapestClassification(productClassifications ?? []),
@@ -85,13 +100,11 @@ const ProductDetail = () => {
     reviewSectionRef.current?.scrollIntoView({ behavior: 'smooth' })
   }
 
-  console.log('test', productClassifications, chosenClassification)
-
   return (
     <div className="w-full mx-auto px-4 py-5">
       {isFetching && <LoadingContentLayer />}
       {/* product information */}
-      <div className="w-full lg:px-20 md:px-10 sm:px-8 px-3 space-y-3 ">
+      <div className={cn('w-full space-y-3 ', !isInGroupBuying ? 'lg:px-20 md:px-10 sm:px-8 px-3' : '')}>
         <CustomBreadcrumb dynamicSegments={[{ segment: useProductData?.data?.name ?? t('productDetail.title') }]} />
         {!isFetching && useProductData && useProductData?.data && (
           <>
@@ -110,7 +123,8 @@ const ProductDetail = () => {
                   containerRef={carouselRef}
                   content={
                     <ProductDetailInformation
-                      product={useProductData?.data}
+                      isInGroupBuying={isInGroupBuying}
+                  product={useProductData?.data}
                       scrollToReviews={scrollToReviews}
                       productClassifications={productClassifications}
                       cheapestClassification={cheapestClassification}
@@ -133,6 +147,7 @@ const ProductDetail = () => {
                   }
                   discountType={DiscountTypeEnum.PERCENTAGE}
                   hasCustomType={hasCustomType ?? false}
+                  isInGroupBuying={isInGroupBuying}
                   inStock={inStock}
                 />
               </div>

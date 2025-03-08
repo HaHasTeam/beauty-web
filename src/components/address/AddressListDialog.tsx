@@ -92,7 +92,6 @@ export default function AddressListDialog({
             <Empty title={t('empty.address.title')} description={t('empty.address.description')} />
           )}
         </div>
-
         <DialogFooter>
           <div className="flex justify-end gap-2 w-full">
             <Button variant="outline" onClick={() => setOpen(false)}>

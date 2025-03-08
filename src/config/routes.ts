@@ -33,6 +33,7 @@ const routes = {
   profilePassword: '/profile/password',
   profileNotification: '/profile/notification',
   profileVoucher: '/profile/voucher',
+  profileWallet: '/profile/wallet',
   blogs: '/blogs',
   privacyPolicy: '/privacy-policy',
   termsAndConditions: '/terms-and-condition',
@@ -44,6 +45,9 @@ const routes = {
   search: '/search',
   brands: '/brands',
   brandDetail: '/brands/:brandId',
+  groupBuy: '/products/group-buying',
+  groupBuyByBrand: '/products/group-buying/:brandId',
+  groupBuyDetail: '/products/group-buying/:brandId/:groupId',
   notFound: '*',
 }
 

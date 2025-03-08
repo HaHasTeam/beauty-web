@@ -30,7 +30,7 @@ export type TUser = TMetaData & {
   isEmailVerify: boolean
   brands?: IBrand[]
 }
-export type TUserPa = {
+export type TUserPa = TMetaData&{
   firstName?: string
   lastName?: string
   username: string
