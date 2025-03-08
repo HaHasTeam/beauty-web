@@ -58,6 +58,7 @@ const ProductsByCategories = ({ groupBuyingInfo }: ProductsByCategoriesProps) =>
               ratingAmount: 250,
               soldInPastMonth: 300,
               classifications: product.productClassifications,
+              certificates:product.certificates,
             }
             return <ProductCard key={product?.id} product={mockProduct} isInGroupBuying />
           })}

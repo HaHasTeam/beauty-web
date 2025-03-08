@@ -1,5 +1,5 @@
 import { MessageCircle, Store, Tag } from 'lucide-react'
-import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
@@ -10,7 +10,6 @@ import { IClassification } from '@/types/classification'
 import { ClassificationTypeEnum, DiscountTypeEnum, OrderEnum, ProductDiscountEnum, StatusEnum } from '@/types/enum'
 import { PreOrderProductEnum } from '@/types/pre-order'
 import { IBrandBestVoucher, ICheckoutItem, TVoucher } from '@/types/voucher'
-import { calculateBrandVoucherDiscount } from '@/utils/price'
 
 import ProductCardLandscape from '../product/ProductCardLandscape'
 import { Button } from '../ui/button'
@@ -42,7 +41,6 @@ const CartItem = ({
   brand,
   checkoutItems,
   selectedCheckoutItems,
-  isTriggerTotal,
   setIsTriggerTotal,
 }: CartItemProps) => {
   const { t } = useTranslation()
@@ -69,11 +67,7 @@ const CartItem = ({
     setChosenVoucher(voucher)
     onVoucherSelect(brand?.id ?? '', voucher)
   }
-  const voucherDiscount = useMemo(
-    () => calculateBrandVoucherDiscount(cartBrandItem, selectedCartItems, chosenVoucher),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [cartBrandItem, selectedCartItems, chosenVoucher, isTriggerTotal],
-  )
+
 
   useEffect(() => {
     if (selectedCartItems.length === 0) {

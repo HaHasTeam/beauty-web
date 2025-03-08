@@ -110,3 +110,19 @@ export type IUpdateGroupOrder = {
   items: IOrderCheckoutItem[]
   addressId: string
 }
+
+
+
+export type ICancelOrder = {
+  orderId: string
+  reason: string
+}
+
+export interface ICancelRequestOrder {
+  id: string
+  createdAt: string
+  updatedAt: string
+  reason: string
+  status: string
+  order: IOrder
+}

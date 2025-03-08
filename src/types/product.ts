@@ -16,6 +16,7 @@ export type TProduct = TMetaData & {
   images: IImage[]
   status: ProductStatusEnum
   productClassifications: IClassification[]
+    certificates: TServerFile[]
 }
 
 export type IProductDetail = {

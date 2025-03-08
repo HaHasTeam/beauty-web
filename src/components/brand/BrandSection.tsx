@@ -1,10 +1,13 @@
+import { MessageSquare, Store } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router-dom'
 
 import fallBackImage from '@/assets/images/fallBackImage.jpg'
+import configs from '@/config'
 import { IBrand } from '@/types/brand'
 
+import Button from '../button'
 import ImageWithFallback from '../ImageFallback'
-import BrandHeader from './BrandHeader'
 
 interface BrandSectionProps {
   brand: IBrand
