@@ -25,10 +25,9 @@ export const createPreOderApi = toMutationFetcher<ICreatePreOrder, TServerRespon
 export const createGroupOderApi = toMutationFetcher<ICreateGroupOrder, TServerResponse<IOrder>>(
   'createGroupOderApi',
   async (data) => {
-
-    return privateRequest('/group-buyings/buy/'+data.groupBuyingId, {
+    return privateRequest('/group-buyings/buy/' + data.groupBuyingId, {
       method: 'POST',
-      data
+      data,
     })
   },
 )

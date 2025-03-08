@@ -22,8 +22,8 @@ const PrimaryLayout = ({ children }: { children?: React.ReactNode }) => {
   const { isCurrentPath: isMatchGroupBuyPath } = useCurrentPath(routes.groupBuyDetail)
   const { isCurrentPath: isMatchCartPath } = useCurrentPath(routes.cart)
   const groupId = useParams().groupId
-  console.log('groupId', groupId);
-  
+  console.log('groupId', groupId)
+
   const brandId = useParams().brandId
   const { data: brand } = useQuery({
     queryKey: [getBrandByIdApi.queryKey, brandId as string],
@@ -43,13 +43,13 @@ const PrimaryLayout = ({ children }: { children?: React.ReactNode }) => {
     enabled: isMatchGroupBuyPath && !!groupId,
   })
 
-  console.log(groupBuyingOrder,"groupBuyingOrder");
-  
+  console.log(groupBuyingOrder, 'groupBuyingOrder')
+
   // Update Zustand store when myCart data changes
   useEffect(() => {
-    if (isMatchGroupBuyPath && brand?.data && groupId ) {
-      console.log('groupBuyingOrder', groupBuyingOrder);
-      
+    if (isMatchGroupBuyPath && brand?.data && groupId) {
+      console.log('groupBuyingOrder', groupBuyingOrder)
+
       setGroupBuyingOrder(groupBuyingOrder?.data)
       const cartItems = myCart?.data?.[brand.data.name] || []
       setGroupBuying(groupBuying?.data)

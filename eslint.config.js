@@ -22,7 +22,7 @@ export default tseslint.config(
       'react-refresh': reactRefresh,
       '@tanstack/query': pluginQuery,
       'simple-import-sort': simpleImportSort,
-       'unused-imports': unusedImports
+      'unused-imports': unusedImports,
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
@@ -34,14 +34,14 @@ export default tseslint.config(
       'import/no-duplicates': 'error',
       'no-unused-vars': 'off',
       '@typescript-eslint/no-unused-vars': ['error'],
-         'unused-imports/no-unused-vars': [
+      'unused-imports/no-unused-vars': [
         'warn',
         {
           vars: 'all',
           varsIgnorePattern: '^_',
           args: 'after-used',
-          argsIgnorePattern: '^_'
-        }
+          argsIgnorePattern: '^_',
+        },
       ],
     },
     settings: {

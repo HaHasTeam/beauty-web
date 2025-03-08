@@ -10,8 +10,6 @@ import { IBranch } from '@/types/brand'
 
 import GroupBuyingCard from './GroupBuyingCard'
 
-
-
 const GroupBuyingOfBrand = () => {
   const { t } = useTranslation()
 

@@ -34,7 +34,7 @@ export default function BrandSection({ brand }: BrandSectionProps) {
                 {t('brand.chatNow')}
               </Button>
               <Link
-                to={configs.routes.brands +"/"+ brand?.id}
+                to={configs.routes.brands + '/' + brand?.id}
                 className="px-2 rounded-md flex items-center flex-1 md:flex-none border-primary text-primary hover:text-primary hover:bg-primary/10"
               >
                 <Store className="w-4 h-4 mr-2" />

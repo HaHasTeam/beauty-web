@@ -101,12 +101,12 @@ export type ICreatePreOrder = {
 }
 
 export type ICreateGroupOrder = {
-  groupBuyingId: string,
+  groupBuyingId: string
   items: IOrderCheckoutItem[]
   addressId: string
 }
-export  type IUpdateGroupOrder = {
-  orderId: string,
+export type IUpdateGroupOrder = {
+  orderId: string
   items: IOrderCheckoutItem[]
   addressId: string
 }

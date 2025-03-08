@@ -1,7 +1,7 @@
 {
-  "format":{
+  "format": {
     "number": "{{value, number}}",
-    "customAmount":"Own amount",
+    "customAmount": "Own amount",
     "currency": "{{value, currency}}"
   },
   "welcome": "Welcome to Allure",
@@ -160,11 +160,11 @@
     "highToLow": "High to Low"
   },
   "empty": {
-    "brandHasGroupProduct":{
+    "brandHasGroupProduct": {
       "title": "There no brands selling group-buying products",
       "description": "Please come back later to check out the latest group-buying deals from your favorite brands."
     },
-    "groupBuying":{
+    "groupBuying": {
       "title": "No group buying deals available",
       "description": "Please come back later to check out the latest group-buying deals from your favorite brands."
     },
@@ -360,7 +360,7 @@
     "reviewCount": "{{amount}} reviews"
   },
   "brand": {
-      "empty":{
+    "empty": {
       "title": "No brands available",
       "description": "Explore other brands in the platform!"
     },
@@ -415,7 +415,7 @@
     "updateGroupOrder": "Update Group Order",
     "createGroupOrder": "Create Group Order",
     "wishDiscount": "Wish discount",
-    "minPrice":"Max Total Price",
+    "minPrice": "Max Total Price",
     "title": "Cart",
     "total": "Total",
     "remove": "Remove",
@@ -774,10 +774,10 @@
     "notes": "Notes",
     "no": "No"
   },
-  "groupBuy":{
-    "productListLabel":"Product available in this deal ({{amount}})",
-    "title":"Brands with Group Buy Deals",
-    "item":{
+  "groupBuy": {
+    "productListLabel": "Product available in this deal ({{amount}})",
+    "title": "Brands with Group Buy Deals",
+    "item": {
       "maxDiscount": "Up to {{discount}} off",
       "limitAmount": "Each person can buy up to {{amount}} items",
       "productAmount": "Up to {{amount}} products listed in this deal",
@@ -788,21 +788,20 @@
       "demandDiscountLabel": "Wish discount",
       "startTimeLabel": "Start time",
       "endTimeLabel": "End time",
-      "linkInviteLabel":"Share link to invite friends",
-      "goToGroupBuy":"Go to Group Buy Deal",
-      "createBtn":"Create Group Buy Deal"
+      "linkInviteLabel": "Share link to invite friends",
+      "goToGroupBuy": "Go to Group Buy Deal",
+      "createBtn": "Create Group Buy Deal"
     },
-    "createBtn":"Create Group",
-    "otherEvent":"Other Events ({{amount}})",
-    "viewAll":"View All",
-    "noGroupBuy":"No group-buying deals available", 
-    "noGroupBuyDes": "Explore other event in platform!"
-    ,"brandGroupBuy":{
-
+    "createBtn": "Create Group",
+    "otherEvent": "Other Events ({{amount}})",
+    "viewAll": "View All",
+    "noGroupBuy": "No group-buying deals available",
+    "noGroupBuyDes": "Explore other event in platform!",
+    "brandGroupBuy": {
       "title": "Group Buy Deals of {{brand}}"
     }
   },
-  "time":{
+  "time": {
     "day": "day",
     "hour": "hour",
     "minute": "minute",
@@ -810,32 +809,32 @@
     "expired": "Expired",
     "ended": "Ended",
     "startAfter": "Start After",
-    "endsIn":"Ends In"
+    "endsIn": "Ends In"
   },
-      "store": {
-      "logo": "Store Logo",
-      "name": "Minh Khoi Wholesale",
-      "online_status": "Online 24 minutes ago",
-      "follow": "Follow",
-      "following": "Following",
-      "chat": "Chat",
-      "products": "Products:",
-      "followers": "Followers:",
-      "rating": "Rating:",
-      "reviews": "Reviews",
-      "response_rate": "Chat Response Rate:",
-      "response_time": "Within a Few Hours",
-      "categories": {
-    "featured": "Featured",
-        "all": "All Products",
-        "new": "New Products",
-        "sale": "Sale Products",
-        "best_selling": "Best Selling",
-        "group_buying": "Group Buying"
-      }
-    },
-    "btn":{
-      "copyAndShare":"Copy and Share",
-      "cooldown": "Limit ended in {{value}} minutes"
+  "store": {
+    "logo": "Store Logo",
+    "name": "Minh Khoi Wholesale",
+    "online_status": "Online 24 minutes ago",
+    "follow": "Follow",
+    "following": "Following",
+    "chat": "Chat",
+    "products": "Products:",
+    "followers": "Followers:",
+    "rating": "Rating:",
+    "reviews": "Reviews",
+    "response_rate": "Chat Response Rate:",
+    "response_time": "Within a Few Hours",
+    "categories": {
+      "featured": "Featured",
+      "all": "All Products",
+      "new": "New Products",
+      "sale": "Sale Products",
+      "best_selling": "Best Selling",
+      "group_buying": "Group Buying"
     }
+  },
+  "btn": {
+    "copyAndShare": "Copy and Share",
+    "cooldown": "Limit ended in {{value}} minutes"
+  }
 }

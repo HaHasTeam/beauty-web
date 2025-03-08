@@ -72,7 +72,7 @@ const Checkout = () => {
     acc[voucher.brandId] = voucher
     return acc
   }, {})
-console.log(groupBuyingOrder,"PPPP");
+  console.log(groupBuyingOrder, 'PPPP')
 
   const totalProductCost = useMemo(() => {
     return calculateCartTotals(selectedCartItems, selectedCartItem).totalProductCost

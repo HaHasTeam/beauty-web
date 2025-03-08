@@ -13,16 +13,19 @@ export interface ICartItem {
   id: string
   createdAt?: string
   updatedAt?: string
-  groupBuying?:TGroupBuying
+  groupBuying?: TGroupBuying
   quantity: number
   classification?: string
   status: StatusEnum.ACTIVE | StatusEnum.INACTIVE
   productClassification: IClassification
 }
 
-export type ICreateCartItem = Omit<ICartItem, 'createdAt' | 'updatedAt' | 'status' | 'id' | 'productClassification'|"groupBuying"> & {
+export type ICreateCartItem = Omit<
+  ICartItem,
+  'createdAt' | 'updatedAt' | 'status' | 'id' | 'productClassification' | 'groupBuying'
+> & {
   productClassification: string
-  groupBuying?:string
+  groupBuying?: string
 }
 export type IUpdateCartItem = Omit<ICartItem, 'createdAt' | 'updatedAt' | 'status' | 'productClassification'> & {
   productClassification?: string

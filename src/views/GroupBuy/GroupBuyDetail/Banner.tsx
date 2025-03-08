@@ -137,9 +137,7 @@ const Banner = ({ brand, groupBuyingInfo }: BannerProps) => {
               <div>
                 <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">{groupBuyingInfo.groupProduct.name}</h1>
                 <p className="text-xl text-gray-200 mb-8 max-w-xl">{groupBuyingInfo.groupProduct.description}</p>
-                <div className="flex items-center gap-2">
-             
-                </div>
+                <div className="flex items-center gap-2"></div>
               </div>
               <div className="p-4 overflow-auto rounded-3xl backdrop-blur-2xl border-2 shadow-md bg-gray-900 bg-opacity-70">
                 <Timeline className="flex-1">
@@ -224,35 +222,34 @@ const Banner = ({ brand, groupBuyingInfo }: BannerProps) => {
                   <span className="text-xs text-white mt-1">{t('time.second')}</span>
                 </div>
               </div>
-              <div className='flex flex-col gap-2'>
-
-              <Dialog>
-                <DialogTrigger>
-                  <Button variant="secondary" className="bg-white text-red-600 hover:bg-gray-100 w-full">
-                    <ShoppingCart className="size-10" strokeWidth={'4'} />
-                    {t('header.shoppingCart')} (
-                    {cartItems[brand?.name]?.reduce((acc, item) => acc + item.quantity, 0) ?? 0})
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="max-w-7xl max-h-[80%] overflow-auto">
-                  <DialogHeader>
-                    <Cart isInGroupBuy isInPeriod={inProgress} />
-                  </DialogHeader>
-                </DialogContent>
-              </Dialog>
-                   <Button
-                    variant={'outline'}
-                    className="bg-white text-red-600 hover:bg-gray-100 w-fit"
-                    onClick={() => {
-                      navigator.clipboard.writeText(window.location.href)
-                      successToast({
-                        message: t('toast.copied'),
-                      })
-                    }}
-                  >
-                    <Copy className="size-10" strokeWidth={'4'} />
-                    {t('btn.copyAndShare')}
-                  </Button>
+              <div className="flex flex-col gap-2">
+                <Dialog>
+                  <DialogTrigger>
+                    <Button variant="secondary" className="bg-white text-red-600 hover:bg-gray-100 w-full">
+                      <ShoppingCart className="size-10" strokeWidth={'4'} />
+                      {t('header.shoppingCart')} (
+                      {cartItems[brand?.name]?.reduce((acc, item) => acc + item.quantity, 0) ?? 0})
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="max-w-7xl max-h-[80%] overflow-auto">
+                    <DialogHeader>
+                      <Cart isInGroupBuy isInPeriod={inProgress} />
+                    </DialogHeader>
+                  </DialogContent>
+                </Dialog>
+                <Button
+                  variant={'outline'}
+                  className="bg-white text-red-600 hover:bg-gray-100 w-fit"
+                  onClick={() => {
+                    navigator.clipboard.writeText(window.location.href)
+                    successToast({
+                      message: t('toast.copied'),
+                    })
+                  }}
+                >
+                  <Copy className="size-10" strokeWidth={'4'} />
+                  {t('btn.copyAndShare')}
+                </Button>
               </div>
             </div>
           </div>

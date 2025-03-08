@@ -1,4 +1,4 @@
-import {  useQuery } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { Info, MoreHorizontal, Wallet, X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
@@ -16,7 +16,7 @@ import TopUpModal from './TopUpModal'
 export default function BalanceOverview() {
   // const [currentPage, setCurrentPage] = useState(1)
   const { t } = useTranslation()
-  const { data: myWallet,  } = useQuery({
+  const { data: myWallet } = useQuery({
     queryKey: [getMyWalletApi.queryKey],
     queryFn: getMyWalletApi.fn,
   })

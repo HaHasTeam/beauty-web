@@ -1,5 +1,4 @@
-export type TCreateWalletRequestParams = 
-{
-    balance?:number
-    ownerId:string
+export type TCreateWalletRequestParams = {
+  balance?: number
+  ownerId: string
 }

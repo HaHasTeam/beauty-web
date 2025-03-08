@@ -150,17 +150,23 @@ export default function GroupBuyingCard({ brand, groupProduct }: GroupBuyingCard
             </div>
 
             <div className="flex items-stretch gap-2 overflow-auto flex-nowrap mt-4">
-              {products.slice(0,6).map((product) => (
-                  <Tooltip>
-                    <TooltipTrigger className='overflow-hidden rounded-md shadow-md cursor-pointer w-fit border p-0.5' key={product.id}>
-                      <img
-                        src={product.images[0]?.fileUrl||"https://icons.veryicon.com/png/o/miscellaneous/fu-jia-intranet/product-29.png"}
-                        alt={product.name}
-                        className="object-cover w-10 aspect-square transition-transform duration-300"
-                      />
-                    </TooltipTrigger>
-                    <TooltipContent>{product.name}</TooltipContent>
-                  </Tooltip>
+              {products.slice(0, 6).map((product) => (
+                <Tooltip>
+                  <TooltipTrigger
+                    className="overflow-hidden rounded-md shadow-md cursor-pointer w-fit border p-0.5"
+                    key={product.id}
+                  >
+                    <img
+                      src={
+                        product.images[0]?.fileUrl ||
+                        'https://icons.veryicon.com/png/o/miscellaneous/fu-jia-intranet/product-29.png'
+                      }
+                      alt={product.name}
+                      className="object-cover w-10 aspect-square transition-transform duration-300"
+                    />
+                  </TooltipTrigger>
+                  <TooltipContent>{product.name}</TooltipContent>
+                </Tooltip>
               ))}
             </div>
           </div>
@@ -202,9 +208,7 @@ export default function GroupBuyingCard({ brand, groupProduct }: GroupBuyingCard
                   <div className="pt-2">
                     <Form {...form}>
                       <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
-                       
                         <div className="col-span-1 sm:col-span-2 gap-4 grid grid-flow-row grid-cols-1">
-
                           <FormField
                             control={form.control}
                             name="endTime"
@@ -267,7 +271,6 @@ export default function GroupBuyingCard({ brand, groupProduct }: GroupBuyingCard
           </div>
         </div>
       </div>
- 
     </div>
   )
 }

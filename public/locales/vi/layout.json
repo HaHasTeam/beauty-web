@@ -1,8 +1,8 @@
 {
-  "format":{
-    "number":"{{value, number}}",
-    "customAmount":"Tự nhập",
-    "currency":"{{value, currency}}"
+  "format": {
+    "number": "{{value, number}}",
+    "customAmount": "Tự nhập",
+    "currency": "{{value, currency}}"
   },
   "welcome": "Chào mừng đến với Allure",
   "header": {
@@ -165,13 +165,13 @@
       "description": "Hãy thử điều chỉnh tìm kiếm của bạn để tìm những gì bạn đang tìm.",
       "button": "Tìm lại"
     },
-     "groupBuying":{
+    "groupBuying": {
       "title": "Không có sản phẩm mua chung",
       "description": "Hãy ghé lại sau để cập nhật thông tin mới nhất về sản phẩm mua chung từ các thương hiệu hàng đầu."
     },
-    "brandHasGroupProduct":{
-      "title":"Hiện tại không có thương hiệu nào có sản phẩm mua chung",
-      "description":"Hãy ghé lại sau để cập nhật thông tin mới nhất về sản phẩm mua chung từ các thương hiệu hàng đầu."
+    "brandHasGroupProduct": {
+      "title": "Hiện tại không có thương hiệu nào có sản phẩm mua chung",
+      "description": "Hãy ghé lại sau để cập nhật thông tin mới nhất về sản phẩm mua chung từ các thương hiệu hàng đầu."
     },
     "image": {
       "title": "Không có hình ảnh",
@@ -360,7 +360,7 @@
     "reviewCount": "{{amount}} đánh giá"
   },
   "brand": {
-    "emty":{
+    "emty": {
       "title": "Không có thương hiệu",
       "description": "Chưa có thương hiệu nào được tìm thấy."
     },
@@ -413,7 +413,7 @@
   },
   "cart": {
     "updateGroupOrder": "Cập nhật đơn hàng",
-    "createGroupOrder":"Xác nhận đơn hàng",
+    "createGroupOrder": "Xác nhận đơn hàng",
     "wishDiscount": "Mức giảm tối thiểu từ việc mua chung",
     "maxPrice": "Giá tối đa",
     "title": "Giỏ hàng",
@@ -775,69 +775,67 @@
     "notes": "Ghi chú",
     "no": "Không"
   },
-    "groupBuy":{
-    "productListLabel":"Danh sách sản phẩm mua chung ({{amount}})",
-    "title":" Nhãn hiệu hỗ trợ mua nhóm",
-    "item":{
-      "notice":"Điểm nổi bật:",
+  "groupBuy": {
+    "productListLabel": "Danh sách sản phẩm mua chung ({{amount}})",
+    "title": " Nhãn hiệu hỗ trợ mua nhóm",
+    "item": {
+      "notice": "Điểm nổi bật:",
       "maxDiscount": "Giảm tối đa {{discount}}",
       "limitAmount": "Mỗi người chỉ được mua tối đa {{amount}} sản phẩm",
       "productAmount": "Có lên đến {{amount}} sản phẩm được áp dụng cho đơn hàng chung",
-      "tierDescription":"Giảm ngay {{discount}} với {{count}} người cùng mua chung cùng một chương trình",
+      "tierDescription": "Giảm ngay {{discount}} với {{count}} người cùng mua chung cùng một chương trình",
       "dialogTitle": "Tạo chương trình mua chung cho sự kiện {{event}}",
-       "dialogDescription": "Chương trình mua chung sẽ được tạo ra và chia sẻ với bạn bè của bạn. Khi đủ số lượng người tham gia, bạn sẽ nhận được giảm giá đặc biệt cho đơn hàng của mình.",
+      "dialogDescription": "Chương trình mua chung sẽ được tạo ra và chia sẻ với bạn bè của bạn. Khi đủ số lượng người tham gia, bạn sẽ nhận được giảm giá đặc biệt cho đơn hàng của mình.",
       "demandDiscountLabel": "Yêu cầu giảm giá",
       "startTimeLabel": "Thời gian bắt đầu",
       "endTimeLabel": "Thời gian kết thúc",
       "linkInviteLabel": "Chia sẻ lời mời với bạn bè",
       "goToGroupBuy": "Đi đến chương trình mua chung",
       "createBtn": "Tạo chương trình mua chung"
-
     },
-    "createBtn":"Tạo nhóm mua",
-    "otherEvent":"Sự kiện khác ({{amount}})",
-    "viewAll":"Xem tất cả",
-    "noGroupBuy":"Hiện tại không có sự kiện mua chung nào",
-    "noGroupBuyDes":"Khám phá những chương trình khác ngay!",
-    "brandGroupBuy":{
-      "title":"Chương trình mua chung của {{brand}}"
+    "createBtn": "Tạo nhóm mua",
+    "otherEvent": "Sự kiện khác ({{amount}})",
+    "viewAll": "Xem tất cả",
+    "noGroupBuy": "Hiện tại không có sự kiện mua chung nào",
+    "noGroupBuyDes": "Khám phá những chương trình khác ngay!",
+    "brandGroupBuy": {
+      "title": "Chương trình mua chung của {{brand}}"
     }
   },
-      "time":{
-      "day":"Ngày",
-      "hour":"Giờ",
-      "minute":"Phút",
-      "second":"Giây",
-      "expired":"Hết hạn",
-      "startAfter": "Bắt đầu sau",
-      "ended": "Đã kết thúc",
-     "endsIn": "Kết thúc trong"
+  "time": {
+    "day": "Ngày",
+    "hour": "Giờ",
+    "minute": "Phút",
+    "second": "Giây",
+    "expired": "Hết hạn",
+    "startAfter": "Bắt đầu sau",
+    "ended": "Đã kết thúc",
+    "endsIn": "Kết thúc trong"
+  },
+  "store": {
+    "logo": "Logo cửa hàng",
+    "name": "Tổng Kho Sỉ Minh Khôi",
+    "online_status": "Online 24 phút trước",
+    "follow": "Theo Dõi",
+    "following": "Đang Theo Dõi",
+    "chat": "Chat",
+    "products": "Sản Phẩm:",
+    "followers": "Người Theo Dõi:",
+    "rating": "Đánh Giá:",
+    "reviews": "Đánh Giá",
+    "response_rate": "Tỉ Lệ Phản Hồi Chat:",
+    "response_time": "Trong Vài Giờ",
+    "categories": {
+      "featured": "Dạo",
+      "all": "TẤT CẢ SẢN PHẨM",
+      "new": "MỚI",
+      "sale": "GIẢM GIÁ",
+      "best_selling": "BÁN CHẠY",
+      "group_buying": "MUA CHUNG"
     }
-    ,"store": {
-      "logo": "Logo cửa hàng",
-      "name": "Tổng Kho Sỉ Minh Khôi",
-      "online_status": "Online 24 phút trước",
-      "follow": "Theo Dõi",
-      "following": "Đang Theo Dõi",
-      "chat": "Chat",
-      "products": "Sản Phẩm:",
-      "followers": "Người Theo Dõi:",
-      "rating": "Đánh Giá:",
-      "reviews": "Đánh Giá",
-      "response_rate": "Tỉ Lệ Phản Hồi Chat:",
-      "response_time": "Trong Vài Giờ",
-      "categories": {
-        "featured": "Dạo",
-        "all": "TẤT CẢ SẢN PHẨM",
-        "new": "MỚI",
-        "sale": "GIẢM GIÁ",
-        "best_selling": "BÁN CHẠY",
-        "group_buying": "MUA CHUNG"
-      }
-    },
-    "btn":{
-      "copyAndShare":"Sao chép và chia sẻ",
-      "cooldown":"Giới hạn thời gian kết thúc trong {{value}} phút"
-    }
-
+  },
+  "btn": {
+    "copyAndShare": "Sao chép và chia sẻ",
+    "cooldown": "Giới hạn thời gian kết thúc trong {{value}} phút"
+  }
 }

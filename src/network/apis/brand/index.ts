@@ -49,7 +49,7 @@ export const getAllBrandsApi = toQueryFetcher<void, TServerResponse<TBrand[]>>('
 })
 
 export const getBrandsHasGroupProductApi = toQueryFetcher<void, TServerResponse<IBranch[]>>(
-  "getBrandsHasGroupProductApi",
+  'getBrandsHasGroupProductApi',
   async () => {
     return publicRequest(`/group-products/get-brands-have-group-products/`, {
       method: 'GET',

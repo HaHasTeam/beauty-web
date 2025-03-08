@@ -9,15 +9,14 @@ const queryClient = new QueryClient()
 function App() {
   return (
     <>
-    <TooltipProvider>
+      <TooltipProvider>
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider />
+          {/* <ReactQueryDevtools initialIsOpen={true} /> */}
 
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider />
-        {/* <ReactQueryDevtools initialIsOpen={true} /> */}
-
-        <Toaster closeButton position="top-center" richColors />
-      </QueryClientProvider>
-    </TooltipProvider>
+          <Toaster closeButton position="top-center" richColors />
+        </QueryClientProvider>
+      </TooltipProvider>
     </>
   )
 }

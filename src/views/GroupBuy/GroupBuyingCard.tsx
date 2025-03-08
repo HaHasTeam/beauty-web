@@ -284,7 +284,6 @@ export default function GroupBuyingCard({ brand, groupProduct }: GroupBuyingCard
                             )}
                           />
                           <div className="col-span-1 sm:col-span-2 gap-4 grid grid-flow-row grid-cols-1">
-                           
                             <FormField
                               control={form.control}
                               name="endTime"
