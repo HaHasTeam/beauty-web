@@ -100,6 +100,19 @@ export type ICreatePreOrder = {
   notes: string
 }
 
+export type ICreateGroupOrder = {
+  groupBuyingId: string
+  items: IOrderCheckoutItem[]
+  addressId: string
+}
+export type IUpdateGroupOrder = {
+  orderId: string
+  items: IOrderCheckoutItem[]
+  addressId: string
+}
+
+
+
 export type ICancelOrder = {
   orderId: string
   reason: string

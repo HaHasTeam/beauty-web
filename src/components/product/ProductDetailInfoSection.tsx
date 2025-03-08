@@ -10,6 +10,7 @@ interface ProductDetailInfoSectionProps {
 }
 export default function ProductDetailInfoSection({ detail, detailCategoryObject }: ProductDetailInfoSectionProps) {
   const { t } = useTranslation()
+
   const detailObject = JSON.parse(detail)
   const isValidDate = (value: unknown): boolean => {
     return typeof value === 'string' && !isNaN(new Date(value).getTime())

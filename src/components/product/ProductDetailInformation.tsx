@@ -27,6 +27,7 @@ interface ProductDetailInformationProps {
   setChosenClassification: Dispatch<SetStateAction<IClassification | null>>
   hasCustomType: boolean
   reviewGeneral: IFeedbackGeneral | null
+  isInGroupBuying: boolean
 }
 
 const ProductDetailInformation = ({
@@ -39,6 +40,7 @@ const ProductDetailInformation = ({
   setChosenClassification,
   hasCustomType,
   reviewGeneral,
+  isInGroupBuying = false,
 }: ProductDetailInformationProps) => {
   const { t } = useTranslation()
   const [selectedValues, setSelectedValues] = useState<IClassificationSelection>({
@@ -152,10 +154,10 @@ const ProductDetailInformation = ({
   }
   const chosenPrice = chosenClassification ? chosenClassification?.price : (cheapestClassification?.price ?? 0)
 
+  const productDiscounts = isInGroupBuying ? [] : (product?.productDiscounts ?? [])
   const discountedPrice =
-    (product?.productDiscounts ?? [])?.length > 0 &&
-    (product?.productDiscounts ?? [])[0]?.status === ProductDiscountEnum.ACTIVE
-      ? calculateDiscountPrice(chosenPrice, product?.productDiscounts?.[0]?.discount, DiscountTypeEnum.PERCENTAGE)
+    productDiscounts?.length > 0 && productDiscounts[0]?.status === ProductDiscountEnum.ACTIVE
+      ? calculateDiscountPrice(chosenPrice, productDiscounts?.[0]?.discount, DiscountTypeEnum.PERCENTAGE)
       : chosenClassification
         ? (chosenClassification?.price ?? 0)
         : (cheapestClassification?.price ?? 0)
@@ -168,7 +170,6 @@ const ProductDetailInformation = ({
           {product?.tag && <ProductTag tag={product?.tag} text={product?.tag} />}
           <span className="line-clamp-2 font-semibold text-lg">{product?.name}</span>
         </div>
-
         {/* rating */}
         <div className="flex gap-2 align-middle items-center">
           <div className="flex gap-2 align-middle items-center hover:cursor-pointer" onClick={scrollToReviews}>
@@ -181,18 +182,15 @@ const ProductDetailInformation = ({
             </span>
           </div>
         </div>
-
         {/* special flash sale, group buying or pre-order event */}
         {event === OrderEnum.FLASH_SALE ? (
           <SpecialEvent time={product?.productDiscounts?.[0]?.endTime ?? ''} title={event} />
         ) : event === OrderEnum.PRE_ORDER ? (
           <SpecialEvent time={product?.preOrderProducts?.[0]?.endTime ?? ''} title={event} />
         ) : null}
-
         {product?.productDiscounts?.[0]?.status === ProductDiscountEnum.WAITING ? (
           <div>{t('flashSale.waiting', { val: new Date(product?.productDiscounts?.[0]?.startTime) })}</div>
         ) : null}
-
         {/* price */}
         {(product?.productClassifications ?? [])?.length === 0 ? (
           <></>
@@ -212,7 +210,6 @@ const ProductDetailInformation = ({
           {product?.deal && product?.deal > 0 && <span className="text-gray-600">{t('productDetail.brandDeal')}</span>}
           {product?.deal && product?.deal > 0 && <ProductTag tag="DealPercent" text={product?.deal * 100 + '%'} />}
         </div>
-
         {/* classification */}
         {hasCustomType && allOptions.color.length > 0 && renderOptions('color', allOptions.color)}
         {hasCustomType && allOptions.size.length > 0 && renderOptions('size', allOptions.size)}

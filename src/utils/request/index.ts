@@ -19,6 +19,8 @@ const getAccessToken = mem(
 
 export const privateRequest = async <R>(url: string, options?: AxiosRequestConfig): Promise<R> => {
   const accessToken = await getAccessToken()
+  console.log('go here')
+
   return axiosRequest({
     ...options,
     url,

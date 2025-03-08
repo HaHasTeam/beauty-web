@@ -6,11 +6,14 @@ import { Link } from 'react-router-dom'
 import { z } from 'zod'
 
 import configs from '@/config'
+import { cn } from '@/lib/utils'
 import { CreateOrderSchema } from '@/schemas/order.schema'
+import useCartStore from '@/store/cart'
 import { IBrand } from '@/types/brand'
 import { ICartItem } from '@/types/cart'
 import { ClassificationTypeEnum, DiscountTypeEnum, OrderEnum, StatusEnum } from '@/types/enum'
 import { IBrandBestVoucher, ICheckoutItem, TVoucher } from '@/types/voucher'
+import { formatCurrency, formatNumber } from '@/utils/number'
 import { getTotalBrandProductsPrice } from '@/utils/price'
 
 import ProductCheckoutLandscape from '../product/ProductCheckoutLandscape'
@@ -29,9 +32,11 @@ interface CheckoutItemProps {
   brand?: IBrand
   index: number
   form: UseFormReturn<z.infer<typeof CreateOrderSchema>>
+  isInGroupBuying?: boolean
 }
 const CheckoutItem = ({
   brandName,
+  isInGroupBuying = false,
   cartBrandItem,
   onVoucherSelect,
   bestVoucherForBrand,
@@ -59,6 +64,8 @@ const CheckoutItem = ({
   //   [cartBrandItem, chosenBrandVoucher],
   // )
 
+  const { groupBuying } = useCartStore()
+  const criteria = groupBuying?.groupProduct.criterias[0]
   return (
     <div className="w-full bg-white sm:p-4 p-2 rounded-lg space-y-2 shadow-sm">
       {/* Brand Header */}
@@ -73,7 +80,6 @@ const CheckoutItem = ({
           {t('brand.chatNow')}
         </Button>
       </div>
-
       {/* Product Cards */}
       {cartBrandItem?.map((cartItem) => {
         const product =
@@ -93,18 +99,22 @@ const CheckoutItem = ({
         const selectedClassification = cartItem?.classification ?? ''
         const productPrice = cartItem?.productClassification?.price ?? 0
         const productQuantity = cartItem?.quantity ?? 0
-        const eventType = cartItem?.productClassification?.preOrderProduct
-          ? OrderEnum.PRE_ORDER
-          : cartItem?.productClassification?.productDiscount || (product?.productDiscounts ?? [])[0]?.discount
-            ? OrderEnum.FLASH_SALE
-            : ''
-        const discount =
-          eventType === OrderEnum.FLASH_SALE
+        const eventType = isInGroupBuying
+          ? ''
+          : cartItem?.productClassification?.preOrderProduct
+            ? OrderEnum.PRE_ORDER
+            : cartItem?.productClassification?.productDiscount || (product?.productDiscounts ?? [])[0]?.discount
+              ? OrderEnum.FLASH_SALE
+              : ''
+        const discount = isInGroupBuying
+          ? null
+          : eventType === OrderEnum.FLASH_SALE
             ? cartItem?.productClassification?.productDiscount?.discount
             : ((product?.productDiscounts ?? [])[0]?.discount ?? null)
 
-        const discountType =
-          eventType === OrderEnum.FLASH_SALE || (product?.productDiscounts ?? [])[0]?.discount
+        const discountType = isInGroupBuying
+          ? null
+          : eventType === OrderEnum.FLASH_SALE || (product?.productDiscounts ?? [])[0]?.discount
             ? DiscountTypeEnum.PERCENTAGE
             : null
 
@@ -124,39 +134,44 @@ const CheckoutItem = ({
           />
         )
       })}
-
       {/* Message and brand voucher */}
-      <div className="w-full flex md:justify-between justify-start md:flex-row flex-col gap-3 border-b border-gray-200 py-3">
-        <div className="order-2 md:order-1 flex items-center gap-3 text-sm w-full">
-          <FormField
-            control={form.control}
-            name={`orders.${index}.message`}
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <div className="w-full flex gap-2">
-                  <div className="w-1/5 flex items-center">
-                    <Label>{t('input.message')}</Label>
+      {
+        <div
+          className={cn(
+            'w-full flex md:justify-between justify-start md:flex-row flex-col gap-3 border-b border-gray-200 py-3',
+            isInGroupBuying && 'hidden',
+          )}
+        >
+          <div className="order-2 md:order-1 flex items-center gap-3 text-sm w-full">
+            <FormField
+              control={form.control}
+              name={`orders.${index}.message`}
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <div className="w-full flex gap-2">
+                    <div className="w-1/5 flex items-center">
+                      <Label>{t('input.message')}</Label>
+                    </div>
+                    <div className="w-full space-y-1">
+                      <FormControl>
+                        <Input
+                          {...field}
+                          value={field.value ?? ''}
+                          className="border border-secondary w-full"
+                          placeholder={t('input.message')}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </div>
                   </div>
-                  <div className="w-full space-y-1">
-                    <FormControl>
-                      <Input
-                        {...field}
-                        value={field.value ?? ''}
-                        className="border border-secondary w-full"
-                        placeholder={t('input.message')}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </div>
-                </div>
-              </FormItem>
-            )}
-          />
-        </div>
-        {/* Voucher */}
-        <div className="order-1 md:order-2 flex items-center gap-3 text-sm w-full justify-end">
-          <Tag className="w-4 h-4 text-red-500" />
-          <span>
+                </FormItem>
+              )}
+            />
+          </div>
+          {/* Voucher */}
+          <div className="order-1 md:order-2 flex items-center gap-3 text-sm w-full justify-end">
+            <Tag className="w-4 h-4 text-red-500" />
+                 <span>
             {chosenBrandVoucher
               ? chosenBrandVoucher?.discountType === DiscountTypeEnum.AMOUNT && chosenBrandVoucher?.discountValue
                 ? t('voucher.discountAmount', { amount: chosenBrandVoucher?.discount })
@@ -170,28 +185,61 @@ const CheckoutItem = ({
                     })
                 : null}
           </span>
-          <VoucherCartList
-            triggerText={t('cart.viewMoreVoucher')}
-            brandName={brand?.name ?? ''}
-            brandLogo={brand?.logo ?? ''}
-            brandId={brand?.id ?? ''}
-            hasBrandProductSelected={true}
-            checkoutItems={checkoutItems}
-            selectedCheckoutItems={checkoutItems}
-            handleVoucherChange={handleVoucherChange}
-            bestVoucherForBrand={bestVoucherForBrand}
-            chosenBrandVoucher={chosenBrandVoucher}
-          />
+
+            <VoucherCartList
+              triggerText={t('cart.viewMoreVoucher')}
+              brandName={brand?.name ?? ''}
+              brandLogo={brand?.logo ?? ''}
+              brandId={brand?.id ?? ''}
+              hasBrandProductSelected={true}
+              checkoutItems={checkoutItems}
+              selectedCheckoutItems={checkoutItems}
+              handleVoucherChange={handleVoucherChange}
+              bestVoucherForBrand={bestVoucherForBrand}
+              chosenBrandVoucher={chosenBrandVoucher}
+            />
+          </div>
         </div>
-      </div>
+      }
       <div className="w-full flex gap-2 justify-end items-center">
         <span className="lg:text-lg md:text-sm sm:text-xs text-xs text-gray-600">
           {t('cart.total')} ({cartBrandItem?.length} {t('cart.products')}):
         </span>
-        <span className="text-red-500 lg:text-lg md:text-sm sm:text-xs text-xs font-medium text-end">
-          {t('productCard.currentPrice', { price: totalBrandPrice - (chosenBrandVoucher?.discount ?? 0) })}
+
+        <span
+          className={cn(
+            'text-red-500 lg:text-lg md:text-sm sm:text-xs text-xs font-medium text-end',
+            isInGroupBuying && 'text-gray-800 text-sm',
+          )}
+        >
+                     {t('productCard.currentPrice', { price: totalBrandPrice - (chosenBrandVoucher?.discount ?? 0) })}
         </span>
       </div>
+      {groupBuying && (
+        <div className="flex gap-2 items-end flex-col w-full">
+          <div className="flex items-center gap-1">
+            {t('cart.wishDiscount') + ':'}
+            <div className="text-lg w-[68px] text-end">
+              {criteria?.voucher.discountType === DiscountTypeEnum.PERCENTAGE
+                ? formatNumber(String(criteria?.voucher?.discountValue ?? 0), '%')
+                : formatCurrency(criteria?.voucher.discountValue ?? 0)}
+            </div>
+          </div>
+          <div className="flex items-center gap-1">
+            {t('cart.maxPrice') + ':'}
+            <div className=" w-[68px] text-red-500 lg:text-lg  font-medium text-end text-lg">
+              {t('format.currency', {
+                value:
+                  criteria?.voucher.discountType === DiscountTypeEnum.PERCENTAGE
+                    ? (totalBrandPrice * (100 - criteria?.voucher.discountValue)) / 100
+                    : totalBrandPrice - (criteria?.voucher?.discountValue ?? 0) <= 0
+                      ? 0
+                      : totalBrandPrice - (criteria?.voucher?.discountValue ?? 0),
+              })}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

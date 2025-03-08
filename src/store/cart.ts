@@ -1,11 +1,17 @@
 import { create } from 'zustand'
 
 import { ICartByBrand } from '@/types/cart'
+import { TGroupBuying } from '@/types/group-buying'
+import { IOrder } from '@/types/order'
 import { TVoucher } from '@/types/voucher'
 
 export interface CartState {
   //myCart
   cartItems: ICartByBrand
+  groupBuying?: TGroupBuying
+  groupBuyingOrder?: IOrder
+  setGroupBuyingOrder: (groupBuyingOrder?: IOrder) => void
+  setGroupBuying: (groupBuying?: TGroupBuying) => void
   setCartItems: (cartItem: ICartByBrand) => void
   // Selected cart items
   selectedCartItem: ICartByBrand | null
@@ -26,10 +32,12 @@ export interface CartState {
 }
 
 const initialState = {
+  groupBuying: undefined,
   cartItems: {},
   selectedCartItem: null,
   chosenBrandVouchers: {},
   chosenPlatformVoucher: null,
+  groupBuyingOrder: undefined,
 }
 
 const useCartStore = create<CartState>((set) => ({
@@ -54,6 +62,8 @@ const useCartStore = create<CartState>((set) => ({
 
   // Reset function
   resetCart: () => set(initialState),
+  setGroupBuying: (groupBuying) => set({ groupBuying }),
+  setGroupBuyingOrder: (groupBuyingOrder) => set({ groupBuyingOrder }),
 }))
 
 export default useCartStore
