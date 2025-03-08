@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import useHandleServerError from '@/hooks/useHandleServerError'
 import { filterFeedbackApi } from '@/network/apis/feedback'
 import { IFilterFeedbackData } from '@/network/apis/feedback/type'
+import { IBrand } from '@/types/brand'
 import { FeedbackFilterEnum } from '@/types/enum'
 import { IResponseFeedback, IResponseFeedbackItemInFilter, IResponseFilterFeedback } from '@/types/feedback'
 
@@ -24,8 +25,9 @@ interface FilterOption {
 
 interface ReviewFilterProps {
   productId: string
+  brand?: IBrand
 }
-export default function ReviewFilter({ productId }: ReviewFilterProps) {
+export default function ReviewFilter({ productId, brand }: ReviewFilterProps) {
   const { t } = useTranslation()
   // const [selectedFilters, setSelectedFilters] = useState<Set<string>>(new Set())
   const [selectedFilter, setSelectedFilter] = useState<string>('')
@@ -206,14 +208,11 @@ export default function ReviewFilter({ productId }: ReviewFilterProps) {
                     review?.orderDetail?.order?.productClassification?.preOrderProduct?.product ??
                     review?.orderDetail?.order?.productClassification?.productDiscount?.product ??
                     review?.orderDetail?.order?.productClassification?.product
-                  )?.brand || null
+                  )?.brand ??
+                  (brand || null)
                 }
                 recipientAvatar={review?.orderDetail?.order?.account?.avatar ?? ''}
-                recipientName={
-                  [review?.orderDetail?.order?.account?.lastName, review?.orderDetail?.order?.account?.firstName].join(
-                    ' ',
-                  ) ?? ''
-                }
+                recipientName={review?.orderDetail?.order?.account?.username ?? ''}
                 orderDetailId={review?.orderDetail?.id}
               />
             )

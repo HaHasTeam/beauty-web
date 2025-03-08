@@ -15,7 +15,7 @@ import {
   updateOrderStatusApi,
 } from '@/network/apis/order'
 import { IBrand } from '@/types/brand'
-import { OrderEnum, ShippingStatusEnum } from '@/types/enum'
+import { OrderEnum, RequestStatusEnum, ShippingStatusEnum } from '@/types/enum'
 import { IOrderItem } from '@/types/order'
 
 import LoadingIcon from '../loading-icon'
@@ -109,6 +109,11 @@ const OrderItem = ({ brand, orderItem, setIsTrigger }: OrderItemProps) => {
       })
     }
   }
+  console.log(
+    '1',
+    orderItem?.status === ShippingStatusEnum.PREPARING_ORDER &&
+      cancelAndReturnRequestData?.data?.cancelOrderRequest !== null,
+  )
 
   return (
     <>
@@ -131,6 +136,7 @@ const OrderItem = ({ brand, orderItem, setIsTrigger }: OrderItemProps) => {
             </Button>
           </div>
           {/* Order Status */}
+          <span>{orderItem.id}</span>
           <div className="flex items-center">
             <OrderStatus tag={orderItem?.status} />
           </div>
@@ -182,19 +188,19 @@ const OrderItem = ({ brand, orderItem, setIsTrigger }: OrderItemProps) => {
             >
               {t('order.viewDetail')}
             </Button>
-            {orderItem?.status === ShippingStatusEnum.TO_PAY ||
+            {(orderItem?.status === ShippingStatusEnum.TO_PAY ||
               orderItem?.status === ShippingStatusEnum.WAIT_FOR_CONFIRMATION ||
-              (orderItem?.status === ShippingStatusEnum.PREPARING_ORDER &&
-                !isLoading &&
-                !cancelAndReturnRequestData?.data?.cancelOrderRequest && (
-                  <Button
-                    variant="outline"
-                    className="border border-primary text-primary hover:text-primary hover:bg-primary/10"
-                    onClick={() => setOpenCancelOrderDialog(true)}
-                  >
-                    {t('order.cancelOrder')}
-                  </Button>
-                ))}
+              cancelAndReturnRequestData?.data?.cancelOrderRequest?.status === RequestStatusEnum.PENDING ||
+              cancelAndReturnRequestData?.data?.cancelOrderRequest?.status === RequestStatusEnum.APPROVED ||
+              cancelAndReturnRequestData?.data?.cancelOrderRequest?.status === RequestStatusEnum.REJECTED) && (
+              <Button
+                variant="outline"
+                className="border border-primary text-primary hover:text-primary hover:bg-primary/10"
+                onClick={() => setOpenCancelOrderDialog(true)}
+              >
+                {t('order.cancelOrder')}
+              </Button>
+            )}
             {orderItem?.status === ShippingStatusEnum.DELIVERED && !cancelAndReturnRequestData?.data?.refundRequest && (
               <Button
                 variant="outline"
@@ -204,7 +210,7 @@ const OrderItem = ({ brand, orderItem, setIsTrigger }: OrderItemProps) => {
                 {t('order.returnOrder')}
               </Button>
             )}
-            {orderItem?.status === ShippingStatusEnum.DELIVERED && (
+            {orderItem?.status === ShippingStatusEnum.DELIVERED && !cancelAndReturnRequestData?.data?.refundRequest && (
               <Button
                 variant="outline"
                 className="border border-primary text-primary hover:text-primary hover:bg-primary/10"
@@ -212,7 +218,7 @@ const OrderItem = ({ brand, orderItem, setIsTrigger }: OrderItemProps) => {
                   handleUpdateStatus(ShippingStatusEnum.COMPLETED)
                 }}
               >
-                {isProcessing ? <LoadingIcon color="primaryBackground" /> : t('order.received')}
+                {isLoading ? <LoadingIcon color="primaryBackground" /> : t('order.received')}
               </Button>
             )}
 

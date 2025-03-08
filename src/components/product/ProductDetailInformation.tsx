@@ -172,7 +172,13 @@ const ProductDetailInformation = ({
         {/* rating */}
         <div className="flex gap-2 align-middle items-center">
           <div className="flex gap-2 align-middle items-center hover:cursor-pointer" onClick={scrollToReviews}>
-            <span className="font-semibold">{reviewGeneral?.averageRating ?? 0}</span>
+            <span className="font-semibold">
+              {String(
+                (parseFloat((reviewGeneral?.averageRating ?? 0).toString()) === 0.0
+                  ? 0
+                  : reviewGeneral?.averageRating) ?? 0,
+              )}
+            </span>
             <ProductStar rating={reviewGeneral?.averageRating ?? 0} ratingAmount={reviewGeneral?.totalCount ?? 0} />
           </div>
           <div className="border-l border-gray-300 px-2">

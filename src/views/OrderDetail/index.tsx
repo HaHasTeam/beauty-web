@@ -99,7 +99,6 @@ const OrderDetail = () => {
       })
     }
   }
-  console.log(useOrderData?.data)
   return (
     <div>
       {isFetching && <LoadingContentLayer />}
@@ -296,19 +295,19 @@ const OrderDetail = () => {
                   </div>
                 )}
                 <div className="w-full flex items-center flex-1 gap-2">
-                  {useOrderData?.data?.status === ShippingStatusEnum.PREPARING_ORDER &&
-                    !isLoading &&
-                    !cancelAndReturnRequestData?.data?.cancelOrderRequest && (
-                      <div className="w-full">
-                        <Button
-                          variant="outline"
-                          className="w-full border border-primary text-primary hover:text-primary hover:bg-primary/10"
-                          onClick={() => setOpenRequestCancelOrderDialog(true)}
-                        >
-                          {t('order.cancelOrder')}
-                        </Button>
-                      </div>
-                    )}
+                  {(cancelAndReturnRequestData?.data?.cancelOrderRequest?.status === RequestStatusEnum.PENDING ||
+                    cancelAndReturnRequestData?.data?.cancelOrderRequest?.status === RequestStatusEnum.APPROVED ||
+                    cancelAndReturnRequestData?.data?.cancelOrderRequest?.status === RequestStatusEnum.REJECTED) && (
+                    <div className="w-full">
+                      <Button
+                        variant="outline"
+                        className="w-full border border-primary text-primary hover:text-primary hover:bg-primary/10"
+                        onClick={() => setOpenRequestCancelOrderDialog(true)}
+                      >
+                        {t('order.cancelOrder')}
+                      </Button>
+                    </div>
+                  )}
                   {useOrderData?.data?.status === ShippingStatusEnum.DELIVERED &&
                     !cancelAndReturnRequestData?.data?.refundRequest && (
                       <Button

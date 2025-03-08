@@ -1,10 +1,10 @@
 import { useTranslation } from 'react-i18next'
-import { useShallow } from 'zustand/react/shallow'
 
-import { useStore } from '@/store/store'
+// import { useShallow } from 'zustand/react/shallow'
+// import { useStore } from '@/store/store'
 import { IBrand } from '@/types/brand'
 import { IClassification } from '@/types/classification'
-import { RoleEnum } from '@/types/enum'
+// import { RoleEnum } from '@/types/enum'
 import { TServerFile } from '@/types/file'
 
 import ViewMediaSection from '../media/ViewMediaSection'
@@ -34,14 +34,14 @@ const CustomerReview = ({
   description,
   mediaFiles,
   onReplyClick,
-  brand,
+  // brand,
 }: CustomerReviewProps) => {
   const { t } = useTranslation()
-  const { user } = useStore(
-    useShallow((state) => ({
-      user: state.user,
-    })),
-  )
+  // const { user } = useStore(
+  //   useShallow((state) => ({
+  //     user: state.user,
+  //   })),
+  // )
   return (
     <div className="flex flex-col gap-1">
       <div>
@@ -86,16 +86,16 @@ const CustomerReview = ({
         <span className="text-muted-foreground font-medium text-xs">
           {t('date.toLocaleDateTimeString', { val: new Date(updatedAt) })}
         </span>
-        {(user?.brands?.find((b) => b.id === brand?.id) || user?.role === RoleEnum.CUSTOMER) && (
-          <Button
-            variant="ghost"
-            size="sm"
-            className="border-0 outline-0 text-muted-foreground hover:bg-transparent hover:text-muted-foreground/80"
-            onClick={onReplyClick}
-          >
-            {t('feedback.reply')}
-          </Button>
-        )}
+        {/* {(user?.brands?.find((b) => b.id === brand?.id) || user?.role === RoleEnum.CUSTOMER) && ( */}
+        <Button
+          variant="ghost"
+          size="sm"
+          className="border-0 outline-0 text-muted-foreground hover:bg-transparent hover:text-muted-foreground/80"
+          onClick={onReplyClick}
+        >
+          {t('feedback.reply')}
+        </Button>
+        {/* )} */}
       </div>
     </div>
   )
