@@ -171,20 +171,22 @@ const CheckoutItem = ({
           {/* Voucher */}
           <div className="order-1 md:order-2 flex items-center gap-3 text-sm w-full justify-end">
             <Tag className="w-4 h-4 text-red-500" />
-                 <span>
-            {chosenBrandVoucher
-              ? chosenBrandVoucher?.discountType === DiscountTypeEnum.AMOUNT && chosenBrandVoucher?.discountValue
-                ? t('voucher.discountAmount', { amount: chosenBrandVoucher?.discount })
-                : t('voucher.discountAmount', { amount: chosenBrandVoucher?.discount })
-              : bestVoucherForBrand?.bestVoucher
-                ? bestVoucherForBrand?.bestVoucher?.discountType === DiscountTypeEnum.AMOUNT &&
-                  bestVoucherForBrand?.bestVoucher?.discountValue
-                  ? t('voucher.bestDiscountAmountDisplay', { amount: bestVoucherForBrand?.bestVoucher?.discountValue })
-                  : t('voucher.bestDiscountPercentageDisplay', {
-                      percentage: bestVoucherForBrand?.bestVoucher?.discountValue * 100,
-                    })
-                : null}
-          </span>
+            <span>
+              {chosenBrandVoucher
+                ? chosenBrandVoucher?.discountType === DiscountTypeEnum.AMOUNT && chosenBrandVoucher?.discountValue
+                  ? t('voucher.discountAmount', { amount: chosenBrandVoucher?.discount })
+                  : t('voucher.discountAmount', { amount: chosenBrandVoucher?.discount })
+                : bestVoucherForBrand?.bestVoucher
+                  ? bestVoucherForBrand?.bestVoucher?.discountType === DiscountTypeEnum.AMOUNT &&
+                    bestVoucherForBrand?.bestVoucher?.discountValue
+                    ? t('voucher.bestDiscountAmountDisplay', {
+                        amount: bestVoucherForBrand?.bestVoucher?.discountValue,
+                      })
+                    : t('voucher.bestDiscountPercentageDisplay', {
+                        percentage: bestVoucherForBrand?.bestVoucher?.discountValue * 100,
+                      })
+                  : null}
+            </span>
 
             <VoucherCartList
               triggerText={t('cart.viewMoreVoucher')}
@@ -212,7 +214,7 @@ const CheckoutItem = ({
             isInGroupBuying && 'text-gray-800 text-sm',
           )}
         >
-                     {t('productCard.currentPrice', { price: totalBrandPrice - (chosenBrandVoucher?.discount ?? 0) })}
+          {t('productCard.currentPrice', { price: totalBrandPrice - (chosenBrandVoucher?.discount ?? 0) })}
         </span>
       </div>
       {groupBuying && (

@@ -68,7 +68,6 @@ const CartItem = ({
     onVoucherSelect(brand?.id ?? '', voucher)
   }
 
-
   useEffect(() => {
     if (selectedCartItems.length === 0) {
       setChosenVoucher(null)
