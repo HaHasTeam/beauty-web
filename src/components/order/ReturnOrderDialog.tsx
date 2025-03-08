@@ -60,7 +60,8 @@ export const ReturnOrderDialog: React.FC<ReturnOrderDialogProps> = ({ orderId, o
     mutationFn: updateOrderStatusApi.fn,
     onSuccess: async () => {
       successToast({
-        message: t('order.receivedOrderStatusSuccess'),
+        message: t('return.returnOrderEvidenceDialog.returnOrderShipmentSuccessTitle'),
+        description: t('return.returnOrderEvidenceDialog.returnOrderShipmentSuccessMessage'),
       })
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: [getOrderByIdApi.queryKey] }),
@@ -118,12 +119,12 @@ export const ReturnOrderDialog: React.FC<ReturnOrderDialogProps> = ({ orderId, o
         <ScrollArea className="max-h-[80vh]">
           <div className="space-y-3 mr-2">
             <DialogHeader>
-              <DialogTitle className="text-primary">{t('order.returnOrderEvidenceDialog.title')}</DialogTitle>
+              <DialogTitle className="text-primary">{t('return.returnOrderEvidenceDialog.title')}</DialogTitle>
             </DialogHeader>
 
             <AlertMessage
               className="text-justify"
-              message={t('order.returnOrderEvidenceDialog.description')}
+              message={t('return.returnOrderEvidenceDialog.description')}
               textSize="medium"
             />
             <Form {...form}>
@@ -138,7 +139,7 @@ export const ReturnOrderDialog: React.FC<ReturnOrderDialogProps> = ({ orderId, o
                     {t('feedback.mediaFiles')}
                   </Label>
                   <FormDescription className="text-justify">
-                    {t('order.returnOrderEvidenceDialog.mediaFilesNotes')}
+                    {t('return.returnOrderEvidenceDialog.mediaFilesNotes')}
                   </FormDescription>
                   <FormDescription className="text-justify">
                     {t('feedback.mediaFilesHint', {

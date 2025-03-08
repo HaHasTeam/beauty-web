@@ -8,11 +8,12 @@ import { ReturnOrderDialog } from './ReturnOrderDialog'
 const ReturnOrderSection = ({ orderId }: { orderId: string }) => {
   const { t } = useTranslation()
   const [openDialog, setOpenDialog] = useState(false)
+  const PENDING_CUSTOMER_SHIP_RETURN_DAYS = 2
   return (
     <div>
       <AlertMessage
         title={t('order.returnRequestApprovedTitle')}
-        message={t('order.returnRequestApprovedMessage')}
+        message={t('order.returnRequestApprovedMessage', { count: PENDING_CUSTOMER_SHIP_RETURN_DAYS })}
         isShowIcon={false}
       />
       <Button onClick={() => setOpenDialog(true)}>{t('button.upload')}</Button>

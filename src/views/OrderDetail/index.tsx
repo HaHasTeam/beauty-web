@@ -33,6 +33,8 @@ import {
 import { RequestStatusEnum, ShippingStatusEnum } from '@/types/enum'
 
 const OrderDetail = () => {
+  const PENDING_REQUEST_RETURN_DAYS = 2
+  const PENDING_REQUEST_CANCEL_DAYS = 2
   const { orderId } = useParams()
   const { t } = useTranslation()
   const queryClient = useQueryClient()
@@ -129,7 +131,7 @@ const OrderDetail = () => {
                 cancelAndReturnRequestData?.data?.cancelOrderRequest?.status === RequestStatusEnum.PENDING && (
                   <AlertMessage
                     title={t('order.cancelRequestPendingTitle')}
-                    message={t('order.cancelRequestPendingMessage')}
+                    message={t('order.cancelRequestPendingMessage', { count: PENDING_REQUEST_CANCEL_DAYS })}
                     isShowIcon={false}
                   />
                 )}
@@ -150,8 +152,8 @@ const OrderDetail = () => {
                   (cancelAndReturnRequestData?.data?.refundRequest?.status === RequestStatusEnum.REJECTED &&
                     rejectReturnRequest?.data?.status === RequestStatusEnum.PENDING)) && (
                   <AlertMessage
-                    title={t('order.returnRequestPendingTitle')}
-                    message={t('order.returnRequestPendingMessage')}
+                    title={t('return.returnRequestPendingTitleCustomer')}
+                    message={t('return.returnRequestPendingMessageCustomer', { count: PENDING_REQUEST_RETURN_DAYS })}
                     isShowIcon={false}
                   />
                 )}
@@ -163,8 +165,8 @@ const OrderDetail = () => {
                     className="bg-red-100"
                     color="danger"
                     isShowIcon={false}
-                    title={t('order.returnRequestRejectedTitle')}
-                    message={t('order.returnRequestRejectedMessage')}
+                    title={t('return.returnRequestRejectedTitleCustomer')}
+                    message={t('return.returnRequestRejectedMessageCustomer')}
                   />
                 )}
 
