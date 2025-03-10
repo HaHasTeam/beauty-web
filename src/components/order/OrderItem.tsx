@@ -15,7 +15,7 @@ import {
   updateOrderStatusApi,
 } from '@/network/apis/order'
 import { IBrand } from '@/types/brand'
-import { OrderEnum, RequestStatusEnum, ShippingStatusEnum } from '@/types/enum'
+import { OrderEnum, ShippingStatusEnum } from '@/types/enum'
 import { IOrderItem } from '@/types/order'
 
 import LoadingIcon from '../loading-icon'
@@ -23,6 +23,7 @@ import OrderStatus from '../order-status'
 import { Button } from '../ui/button'
 import CancelOrderDialog from './CancelOrderDialog'
 import ProductOrderLandscape from './ProductOrderLandscape'
+import RequestCancelOrderDialog from './RequestCancelOrderDialog'
 import { RequestReturnOrderDialog } from './RequestReturnOrderDialog'
 
 interface OrderItemProps {
@@ -34,8 +35,9 @@ const OrderItem = ({ brand, orderItem, setIsTrigger }: OrderItemProps) => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const [openCancelOrderDialog, setOpenCancelOrderDialog] = useState<boolean>(false)
+  const [openRequestCancelOrderDialog, setOpenRequestCancelOrderDialog] = useState<boolean>(false)
   const [openReqReturnDialog, setOpenReqReturnDialog] = useState<boolean>(false)
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
 
   const { data: cancelAndReturnRequestData } = useQuery({
     queryKey: [getCancelAndReturnRequestApi.queryKey, orderItem.id ?? ('' as string)],
@@ -109,11 +111,7 @@ const OrderItem = ({ brand, orderItem, setIsTrigger }: OrderItemProps) => {
       })
     }
   }
-  console.log(
-    '1',
-    orderItem?.status === ShippingStatusEnum.PREPARING_ORDER &&
-      cancelAndReturnRequestData?.data?.cancelOrderRequest !== null,
-  )
+  console.log('1', cancelAndReturnRequestData?.data?.cancelOrderRequest)
 
   return (
     <>
@@ -189,10 +187,7 @@ const OrderItem = ({ brand, orderItem, setIsTrigger }: OrderItemProps) => {
               {t('order.viewDetail')}
             </Button>
             {(orderItem?.status === ShippingStatusEnum.TO_PAY ||
-              orderItem?.status === ShippingStatusEnum.WAIT_FOR_CONFIRMATION ||
-              cancelAndReturnRequestData?.data?.cancelOrderRequest?.status === RequestStatusEnum.PENDING ||
-              cancelAndReturnRequestData?.data?.cancelOrderRequest?.status === RequestStatusEnum.APPROVED ||
-              cancelAndReturnRequestData?.data?.cancelOrderRequest?.status === RequestStatusEnum.REJECTED) && (
+              orderItem?.status === ShippingStatusEnum.WAIT_FOR_CONFIRMATION) && (
               <Button
                 variant="outline"
                 className="border border-primary text-primary hover:text-primary hover:bg-primary/10"
@@ -201,6 +196,16 @@ const OrderItem = ({ brand, orderItem, setIsTrigger }: OrderItemProps) => {
                 {t('order.cancelOrder')}
               </Button>
             )}
+            {orderItem?.status === ShippingStatusEnum.PREPARING_ORDER &&
+              !cancelAndReturnRequestData?.data?.cancelOrderRequest && (
+                <Button
+                  variant="outline"
+                  className="border border-primary text-primary hover:text-primary hover:bg-primary/10"
+                  onClick={() => setOpenRequestCancelOrderDialog(true)}
+                >
+                  {t('order.cancelOrder')}
+                </Button>
+              )}
             {orderItem?.status === ShippingStatusEnum.DELIVERED && !cancelAndReturnRequestData?.data?.refundRequest && (
               <Button
                 variant="outline"
@@ -238,6 +243,13 @@ const OrderItem = ({ brand, orderItem, setIsTrigger }: OrderItemProps) => {
         open={openCancelOrderDialog}
         setOpen={setOpenCancelOrderDialog}
         onOpenChange={setOpenCancelOrderDialog}
+        setIsTrigger={setIsTrigger}
+        orderId={orderItem?.id ?? ''}
+      />
+      <RequestCancelOrderDialog
+        open={openRequestCancelOrderDialog}
+        setOpen={setOpenRequestCancelOrderDialog}
+        onOpenChange={setOpenRequestCancelOrderDialog}
         setIsTrigger={setIsTrigger}
         orderId={orderItem?.id ?? ''}
       />

@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { AlertTriangle } from 'lucide-react'
 import { Dispatch, SetStateAction, useId, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -10,8 +10,8 @@ import Label from '@/components/form-label'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import useHandleServerError from '@/hooks/useHandleServerError'
 import { useToast } from '@/hooks/useToast'
-import { cancelOrderApi } from '@/network/apis/order'
-import { CancelOrderSchema } from '@/schemas/order.schema'
+import { cancelOrderApi, getCancelAndReturnRequestApi } from '@/network/apis/order'
+import { getCancelOrderSchema } from '@/schemas/order.schema'
 
 import AlertMessage from '../alert/AlertMessage'
 import Button from '../button'
@@ -40,6 +40,8 @@ export default function CancelOrderDialog({
   const handleServerError = useHandleServerError()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isOtherReason, setIsOtherReason] = useState<boolean>(false)
+  const queryClient = useQueryClient()
+  const CancelOrderSchema = getCancelOrderSchema()
 
   const reasons: { value: string }[] = useMemo(
     () => [
@@ -76,6 +78,9 @@ export default function CancelOrderDialog({
         message: t('order.cancelSuccess'),
       })
       setIsTrigger((prev) => !prev)
+      queryClient.invalidateQueries({
+        queryKey: [getCancelAndReturnRequestApi.queryKey],
+      })
       handleReset()
     },
   })
@@ -105,7 +110,11 @@ export default function CancelOrderDialog({
           </div>
         </DialogHeader>
 
-        <AlertMessage className="text-justify" message={t('order.cancelOrderDescription')} textSize="medium" />
+        <AlertMessage
+          className="text-justify"
+          message={t('order.cancelOrderDescription', { brand: '' })}
+          textSize="medium"
+        />
         <Form {...form}>
           <form
             noValidate

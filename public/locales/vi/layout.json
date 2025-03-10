@@ -725,7 +725,15 @@
     },
     "proof": "Hình ảnh và videos bằng chứng",
     "returnRequestApprovedTitle": "Yêu Cầu Trả Hàng Đã Được Chấp Thuận",
-    "returnRequestApprovedMessage": "Yêu cầu trả hàng của bạn đã được thương hiệu chấp thuận. Vui lòng chuẩn bị, đóng gói và gửi hàng trong vòng {{count}} ngày. Hãy nhớ chụp ảnh và quay video rõ ràng để làm bằng chứng về tình trạng sản phẩm và bao bì nhé."
+    "returnRequestApprovedMessage": "Yêu cầu trả hàng của bạn đã được thương hiệu chấp thuận. Vui lòng chuẩn bị, đóng gói và gửi hàng trong vòng {{count}} ngày. Hãy nhớ chụp ảnh và quay video rõ ràng để làm bằng chứng về tình trạng sản phẩm và bao bì nhé.",
+    "rejectCancelOrderReason": {
+      "SHIPPED": "Đơn hàng đã được giao cho đơn vị vận chuyển và không thể hủy.",
+      "PROCESSED": "Đơn hàng đã được xử lý và sẵn sàng giao hàng.",
+      "MULTIPLE_ATTEMPTS": "Phát hiện nhiều yêu cầu hủy đơn, vi phạm chính sách hủy đơn hàng.",
+      "SUSPICIOUS_ACTIVITY": "Yêu cầu hủy đơn hàng có dấu hiệu gian lận hoặc đáng ngờ.",
+      "OTHER": "Khác"
+    },
+    "processSuccess": "Yêu cầu hủy đơn đã được xử lý thành công!"
   },
   "toast": {
     "success": "Yêu cầu của bạn đã được xử lý thành công, tiếp tục công việc của bạn.",
@@ -836,7 +844,7 @@
     "SKURequiredLength": "SKU là bắt buộc.",
     "SKUValidate": "SKU là bắt buộc và phải có 6-8 ký tự.",
     "SKUValidateFull": "SKU không hợp lệ, chỉ được chứa chữ, số, dấu \"-\" và \"_\" với độ dài 6-8 ký tự.",
-    "SKURegex": "SKU chỉ được chứa chữ, số, dấu \"-\" và \"_\".",
+    "SKURegex": "SKU chỉ được chứa chữ, số, dấu \"-\" và \"_\" và phải có 6-8 ký tự.",
     "priceValidate": "Giá phải ít nhất 1000đ.",
     "quantityValidate": "Số lượng phải ít nhất 1.",
     "quantityRequired": "Số lượng là bắt buộc khi không có phân loại sản phẩm.",
@@ -896,7 +904,7 @@
     "selectFile": "hoặc nhấp để chọn tệp",
     "reachMaxFiles": "Bạn đã đạt đến số lượng tệp tối đa cho phép",
     "uniqueNameClassification": "Mỗi tùy chọn trong cùng một phân loại phải có tên duy nhất.",
-    "classificationInformation": "Giá & Kho Hàng",
+    "classificationInformation": "Giá & Phân Loại",
     "skuProduct": "SKU Sản Phẩm",
     "sku": "SKU",
     "skuProductPlaceholder": "Nhập SKU sản phẩm",
@@ -1074,7 +1082,7 @@
     "content": "Chia sẻ trải nghiệm của bạn",
     "contentPlaceholder": "Nhập nội dung tại đây...",
     "mediaFiles": "Tải lên video và hình ảnh",
-    "mediaFilesHint": "Bạn có thể tải lên tối đa {{videoCount}} video và {{imageCount}} hình ảnh, đảm bảo tổng dung lượng tệp không vượt quá {{size}}MB. \nHỗ trợ những định dạng sau: {{format}}.",
+    "mediaFilesHint": "Bạn có thể tải lên tối đa {{videoCount}} video và {{imageCount}} hình ảnh, đảm bảo tổng dung lượng tệp không vượt quá {{size}}MB. Hệ thống hỗ trợ những định dạng phổ biến như: {{format}}.",
     "imagesHint": {
       "TO_SHIP": "Hiển thị nội dung đơn hàng, cách đóng gói, nhãn vận chuyển.",
       "SHIPPING": "Cung cấp bằng chứng bàn giao kiện hàng cho đơn vị vận chuyển.",
@@ -1164,7 +1172,6 @@
       "description": "Vui lòng cung cấp lý do hợp lệ để từ chối yêu cầu trả hàng này. Nếu có, hãy đính kèm bằng chứng hỗ trợ để giải thích quyết định của bạn. Thông tin này sẽ được xem xét trước khi xác nhận việc từ chối.",
       "mediaFilesNotes": "Đảm bảo rằng bất kỳ hình ảnh hoặc video nào được tải lên đều thể hiện rõ lý do từ chối, chẳng hạn như tình trạng sản phẩm, thiếu bao bì hoặc vi phạm chính sách."
     },
-
     "rejectReturnSuccess": "Từ Chối Yêu Cầu Trả Hàng Thành Công",
     "rejectReturnSuccessMessage": "Bạn đã từ chối yêu cầu trả hàng thành công. Đội ngũ hỗ trợ của chúng tôi sẽ xem xét quyết định này và phản hồi kết quả cho bạn sớm nhất có thể.",
     "rejectReturnRequestPendingTitleBrand": "Từ Chối Trả Hàng Đang Xem Xét",
@@ -1178,5 +1185,11 @@
     "successMakeDecisionOnReject": "Xử lý thành công yêu cầu từ chối trả hàng của thương hiệu!",
     "rejectReturnRequestPendingTitle": "Yêu Cầu Từ Chối Trả Hàng Đang Xem Xét",
     "returnOrderRequestMessage": "Yêu cầu trả hàng đang được xử lý. Vui lòng xem xét tất cả các chi tiết liên quan và chính sách của nền tảng trước khi đưa ra quyết định cuối cùng."
+  },
+  "reason": {
+    "rejectCancel": {
+      "title": "Từ chối yêu cầu hủy đơn",
+      "message": "Vui lòng cung cấp lý do từ chối yêu cầu."
+    }
   }
 }

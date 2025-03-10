@@ -629,7 +629,7 @@
     "viewFeedback": "View review",
     "cancelOrder": "Cancel order",
     "requestCancelOrder": "Request cancel order",
-    "cancelOrderDescription": "Clicking \"Confirm\" button means canceling all items in the order, and this action cannot be undone. Promotional codes (if any) can still be applied to other orders after canceling this one.",
+    "cancelOrderDescription": "Clicking \"Confirm\" button means canceling all items in the order, and this action cannot be undone. Promotional codes (if any) can still be applied{{brand}} to other orders after canceling this one.",
     "requestCancelOrderDescription": "Since the order is being prepared, this request will need to be reviewed before cancellation. Clicking \"Confirm\" button means submitting a request to cancel all items in this order. This action cannot be undone. Promotional codes (if any) can still be applied to other orders after canceling this one.",
     "cancelOrderReason": {
       "changeOfMind": "Changed my mind",
@@ -725,7 +725,15 @@
     },
     "proof": "Images and videos proof",
     "returnRequestApprovedTitle": "Return Request Approved",
-    "returnRequestApprovedMessage": "Your return request has been approved by the brand. Please prepare, pack, and ship the item within {{count}} days. Remember to keep clear photos and videos as proof of the product's condition and packaging."
+    "returnRequestApprovedMessage": "Your return request has been approved by the brand. Please prepare, pack, and ship the item within {{count}} days. Remember to keep clear photos and videos as proof of the product's condition and packaging.",
+    "rejectCancelOrderReason": {
+      "SHIPPED": "The order is in transit and cannot be canceled.",
+      "PROCESSED": "The order has already been processed and is ready for shipment.",
+      "MULTIPLE_ATTEMPTS": "Multiple cancellation attempts detected, violating our cancellation policy.",
+      "SUSPICIOUS_ACTIVITY": "This cancellation request appears to be fraudulent or suspicious.",
+      "OTHER": "Other"
+    },
+    "processSuccess": "Cancellation request processed successfully!"
   },
   "toast": {
     "success": "Your request has been successfully processed, continue with your work.",
@@ -836,7 +844,7 @@
     "SKURequiredLength": "SKU is required.",
     "SKUValidate": "SKU is required and must be 6-8 characters.",
     "SKUValidateFull": "Invalid SKU, can only contain letters, numbers, \"-\" and \"_\" with length 6-8 characters.",
-    "SKURegex": "SKU can only contain letters, numbers, \"-\" and \"_\".",
+    "SKURegex": "SKU can only contain letters, numbers, \"-\" and \"_\" and must be 6-8 characters.",
     "priceValidate": "Price must be at least 1000đ.",
     "quantityValidate": "Quantity must be at least 1.",
     "quantityRequired": "Quantity is required when no product classifications are provided.",
@@ -896,7 +904,7 @@
     "selectFile": "or click to select files",
     "reachMaxFiles": "You have reached the maximum number of files allowed",
     "uniqueNameClassification": "Each option in the same classification must have a unique name.",
-    "classificationInformation": "Pricing & Inventory",
+    "classificationInformation": "Pricing & Classifications",
     "skuProduct": "Product SKU",
     "sku": "SKU",
     "skuProductPlaceholder": "Enter product SKU",
@@ -1074,7 +1082,7 @@
     "content": "Share Your Experiences",
     "contentPlaceholder": "Enter your message here...",
     "mediaFiles": "Upload video and images",
-    "mediaFilesHint": "You can upload up to {{videoCount}} video(s) and {{imageCount}} image(s), ensuring the total file size does not exceed {{size}}MB. \nSupports the following formats: {{format}}.",
+    "mediaFilesHint": "You are allowed to upload a maximum of {{videoCount}} video(s) and {{imageCount}} image(s), provided that the total file size remains within {{size}}MB. Please ensure your files are in one of the supported formats: {{format}}.",
     "imagesHint": {
       "TO_SHIP": "Show order contents, packaging, shipping label.",
       "SHIPPING": "Provide proof of handing the package to the shipping carrier.",
@@ -1152,7 +1160,6 @@
       "description": "Please provide a valid reason for rejecting this return request. If applicable, attach supporting evidence to justify your decision. This information will be reviewed before finalizing the rejection.",
       "mediaFilesNotes": "Ensure that any uploaded images or videos clearly support your decision, such as product condition, missing packaging, or policy violations."
     },
-
     "rejectReturnSuccess": "Return Request Rejected Successfully",
     "rejectReturnSuccessMessage": "You have successfully rejected the return request. Our support team will review this decision and provide you with the final result as soon as possible.",
     "rejectReturnRequestPendingTitleBrand": "Return Rejection Under Review",
@@ -1166,5 +1173,11 @@
     "successMakeDecisionOnReject": "Successfully processed the brand's return rejection request!",
     "rejectReturnRequestPendingTitle": "Return Rejection Request Under Review",
     "returnOrderRequestMessage": "The return request is being processed. Please review all relevant details and platform policies before making a final decision."
+  },
+  "reason": {
+    "rejectCancel": {
+      "title": "Cancel Request Rejected",
+      "message": "Please provide a reason for rejecting the request."
+    }
   }
 }
