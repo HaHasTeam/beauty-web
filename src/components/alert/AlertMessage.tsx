@@ -1,5 +1,7 @@
 import { Info } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
+import Button from '../button'
 import { Alert, AlertDescription } from '../ui/alert'
 
 type AlertMessageProps = {
@@ -13,6 +15,9 @@ type AlertMessageProps = {
   titleClassName?: string
   title?: string
   isShowIcon?: boolean
+  onClick?: () => void
+  buttonText?: string
+  buttonClassName?: string
 }
 const AlertMessage = ({
   message,
@@ -25,7 +30,11 @@ const AlertMessage = ({
   title,
   titleSize = 'large',
   isShowIcon = true,
+  buttonText,
+  onClick,
+  buttonClassName,
 }: AlertMessageProps) => {
+  const { t } = useTranslation()
   const sizeClasses = {
     small: 'w-2 h-2',
     medium: 'w-4',
@@ -54,7 +63,7 @@ const AlertMessage = ({
     large: 'text-lg',
   }
   return (
-    <Alert variant="default" className={`bg-yellow-50 flex items-center ${className}`}>
+    <Alert variant="default" className={`bg-yellow-50 flex items-center border-yellow-300 ${className}`}>
       <AlertDescription className="border-0">
         {title && (
           <h3
@@ -70,6 +79,11 @@ const AlertMessage = ({
             </div>
           )}
           <span className={`${textColorClasses[text]} ${textSizeClasses[textSize]}`}>{message}</span>
+          {buttonText && (
+            <Button type="button" onClick={onClick} className={buttonClassName}>
+              {t(`button.${buttonText}`)}
+            </Button>
+          )}
         </div>
       </AlertDescription>
     </Alert>

@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import AlertMessage from '../alert/AlertMessage'
-import { Button } from '../ui/button'
 import { ReturnOrderDialog } from './ReturnOrderDialog'
 
 const ReturnOrderSection = ({ orderId }: { orderId: string }) => {
@@ -15,8 +14,10 @@ const ReturnOrderSection = ({ orderId }: { orderId: string }) => {
         title={t('order.returnRequestApprovedTitle')}
         message={t('order.returnRequestApprovedMessage', { count: PENDING_CUSTOMER_SHIP_RETURN_DAYS })}
         isShowIcon={false}
+        buttonText="upload"
+        onClick={() => setOpenDialog(true)}
+        buttonClassName="bg-yellow-500 hover:bg-yellow-600"
       />
-      <Button onClick={() => setOpenDialog(true)}>{t('button.upload')}</Button>
       <ReturnOrderDialog open={openDialog} onOpenChange={setOpenDialog} orderId={orderId} setOpen={setOpenDialog} />
     </div>
   )

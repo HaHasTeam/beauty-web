@@ -51,7 +51,7 @@ export const getMyCancelRequestApi = toMutationFetcher<IOrderFilter, TServerResp
 export const getCancelAndReturnRequestApi = toQueryFetcher<string, TServerResponse<ICancelAndReturnRequest>>(
   'getCancelAndReturnRequestApi',
   async (orderId) => {
-    return privateRequest(`/orders/get-both-request-refund-cancel/${orderId}`, {
+    return privateRequest(`/orders/get-requests-of-order/${orderId}`, {
       method: 'GET',
     })
   },
@@ -59,7 +59,7 @@ export const getCancelAndReturnRequestApi = toQueryFetcher<string, TServerRespon
 export const getRejectReturnRequestApi = toQueryFetcher<string, TServerResponse<IRejectReturnRequestOrder>>(
   'getRejectReturnRequestApi',
   async (orderId) => {
-    return privateRequest(`/orders/get-reject-request-refund/${orderId}`, {
+    return privateRequest(`/orders/get-requests-of-order/${orderId}`, {
       method: 'GET',
     })
   },

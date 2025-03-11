@@ -7,7 +7,14 @@ import { useTranslation } from 'react-i18next'
 import { z } from 'zod'
 
 import Label from '@/components/form-label'
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
 import { Form, FormDescription, FormField, FormItem, FormMessage } from '@/components/ui/form'
 import useHandleServerError from '@/hooks/useHandleServerError'
 import { useToast } from '@/hooks/useToast'
@@ -16,7 +23,6 @@ import { getOrderByIdApi, getStatusTrackingByIdApi, updateOrderStatusApi } from 
 import { getReturnOrderSchema } from '@/schemas/order.schema'
 import { ShippingStatusEnum } from '@/types/enum'
 
-import AlertMessage from '../alert/AlertMessage'
 import Button from '../button'
 import UploadMediaFiles from '../file-input/UploadMediaFiles'
 import { VideoThumbnail } from '../file-input/VideoThumbnail'
@@ -120,13 +126,11 @@ export const ReturnOrderDialog: React.FC<ReturnOrderDialogProps> = ({ orderId, o
           <div className="space-y-3 mr-2">
             <DialogHeader>
               <DialogTitle className="text-primary">{t('return.returnOrderEvidenceDialog.title')}</DialogTitle>
+              <DialogDescription className="text-justify">
+                {t('return.returnOrderEvidenceDialog.description')}
+              </DialogDescription>
             </DialogHeader>
 
-            <AlertMessage
-              className="text-justify"
-              message={t('return.returnOrderEvidenceDialog.description')}
-              textSize="medium"
-            />
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(handleSubmit, (e) => console.log(e))}
