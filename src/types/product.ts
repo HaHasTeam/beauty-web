@@ -13,8 +13,10 @@ export type TProduct = TMetaData & {
   description: string
   detail: string
   brand: TBrand
-  images: string[]
+  images: IImage[]
   status: ProductStatusEnum
+  productClassifications: IClassification[]
+    certificates: TServerFile[]
 }
 
 export type IProductDetail = {

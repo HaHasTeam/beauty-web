@@ -1,4 +1,9 @@
 {
+  "format": {
+    "number": "{{value, number}}",
+    "customAmount": "Own amount",
+    "currency": "{{value, currency}}"
+  },
   "welcome": "Welcome to Allure",
   "header": {
     "login": "Login",
@@ -160,6 +165,14 @@
     "highToLow": "High to Low"
   },
   "empty": {
+    "brandHasGroupProduct": {
+      "title": "There no brands selling group-buying products",
+      "description": "Please come back later to check out the latest group-buying deals from your favorite brands."
+    },
+    "groupBuying": {
+      "title": "No group buying deals available",
+      "description": "Please come back later to check out the latest group-buying deals from your favorite brands."
+    },
     "search": {
       "title": "No results found",
       "description": "Try adjusting your search to find what you are looking for",
@@ -352,7 +365,12 @@
     "reviewCount": "{{amount}} reviews"
   },
   "brand": {
-    "title": "Brand",
+    "empty": {
+      "title": "No brands available",
+      "description": "Explore other brands in the platform!"
+    },
+    "verifiedTag": "Verified",
+    "title": "HANGY",
     "lastOnline": "Online {{time}} Ago",
     "reviews": {
       "title": "Reviews",
@@ -399,10 +417,16 @@
     "viewNotification": "View Notifications"
   },
   "cart": {
+    "updateGroupOrder": "Update Group Order",
+    "createGroupOrder": "Create Group Order",
+    "wishDiscount": "Wish discount",
+    "minPrice": "Max Total Price",
     "title": "Cart",
     "total": "Total",
     "remove": "Remove",
     "checkout": "Checkout",
+    "confirmGroupOrder": "Confirm Group Order",
+    "editGroupOrder": "Edit Group Order",
     "continueShopping": "Continue Shopping",
     "emptyCart": "Your cart is empty",
     "product": "Product",
@@ -739,7 +763,8 @@
     "success": "Your request has been successfully processed, continue with your work.",
     "error": "An error occurred while processing your request, please try again later. If the problem persists, please contact the support team.",
     "info": "This is a message to provide important additional information related to your work.",
-    "warning": "You are about to perform a unsafe action, please be cautious. If you are not sure, please contact the support team."
+    "warning": "You are about to perform a unsafe action, please be cautious. If you are not sure, please contact the support team.",
+    "copied": "Copied to clipboard"
   },
   "delete": {
     "productCart": {
@@ -974,6 +999,33 @@
     "button_ACTIVE": "Active",
     "button_OFFICIAL": "Active"
   },
+  "groupBuy": {
+    "productListLabel": "Product available in this deal ({{amount}})",
+    "title": "Brands with Group Buy Deals",
+    "item": {
+      "maxDiscount": "Up to {{discount}} off",
+      "limitAmount": "Each person can buy up to {{amount}} items",
+      "productAmount": "Up to {{amount}} products listed in this deal",
+      "notice": "Notice:",
+      "tierDescription": "Discount {{discount}} off for {{count}} people buying together",
+      "dialogTitle": "Create Group Buy Deal for {{event}} event",
+      "dialogDescription": "The group-buying deal will be created and shared with your friends. Once the required number of participants is reached, you will receive a special discount on your order.",
+      "demandDiscountLabel": "Wish discount",
+      "startTimeLabel": "Start time",
+      "endTimeLabel": "End time",
+      "linkInviteLabel": "Share link to invite friends",
+      "goToGroupBuy": "Go to Group Buy Deal",
+      "createBtn": "Create Group Buy Deal"
+    },
+    "createBtn": "Create Group",
+    "otherEvent": "Other Events ({{amount}})",
+    "viewAll": "View All",
+    "noGroupBuy": "No group-buying deals available",
+    "noGroupBuyDes": "Explore other event in platform!",
+    "brandGroupBuy": {
+      "title": "Group Buy Deals of {{brand}}"
+    }
+  },
   "systemService": {
     "generalInformation": "General Information",
     "consultationCriteriaInformation": "Consultation Criteria",
@@ -1202,6 +1254,41 @@
     "rejectCancel": {
       "title": "Cancel Request Rejected",
       "message": "Please provide a reason for rejecting the request."
+    },
+  "time": {
+    "day": "day",
+    "hour": "hour",
+    "minute": "minute",
+    "second": "second",
+    "expired": "Expired",
+    "ended": "Ended",
+    "startAfter": "Start After",
+    "endsIn": "Ends In"
+  },
+  "store": {
+    "logo": "Store Logo",
+    "name": "Minh Khoi Wholesale",
+    "online_status": "Online 24 minutes ago",
+    "follow": "Follow",
+    "following": "Following",
+    "chat": "Chat",
+    "products": "Products:",
+    "followers": "Followers:",
+    "rating": "Rating:",
+    "reviews": "Reviews",
+    "response_rate": "Chat Response Rate:",
+    "response_time": "Within a Few Hours",
+    "categories": {
+      "featured": "Featured",
+      "all": "All Products",
+      "new": "New Products",
+      "sale": "Sale Products",
+      "best_selling": "Best Selling",
+      "group_buying": "Group Buying"
     }
+  },
+  "btn": {
+    "copyAndShare": "Copy and Share",
+    "cooldown": "Limit ended in {{value}} minutes"
   }
 }

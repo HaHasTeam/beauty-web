@@ -36,8 +36,12 @@ interface CartFooterProps {
   platformVoucherDiscount: number
   cartByBrand: ICartByBrand
   bestPlatformVoucher: IPlatformBestVoucher | null
+  isInGroupBuying?: boolean
+  isInPeriod?: boolean
 }
 export default function CartFooter({
+  isInPeriod = false,
+  isInGroupBuying = false,
   cartItemCountAll,
   cartItemCount,
   onCheckAll,
@@ -150,57 +154,60 @@ export default function CartFooter({
       }
     } else setOpenWarningDialog(true)
   }
+
   return (
     <>
       <div className="w-full sticky bottom-0 left-0 right-0 border-t bg-secondary rounded-tl-sm rounded-tr-sm">
         <div className="w-full px-4 py-3 space-y-2 lg:text-base md:text-sm sm:text-xs text-xs">
           {/* Voucher Section */}
-          <div className="flex items-center gap-4 justify-end border-b border-primary/20 py-1">
-            <div className="flex items-center gap-2">
-              <Ticket className="text-red-500" />
-              <span>
-                {ProjectInformationEnum.name} {t('cart.voucher')}
-              </span>
+          {!isInGroupBuying && (
+            <div className="flex items-center gap-4 justify-end border-b border-primary/20 py-1">
+              <div className="flex items-center gap-2">
+                <Ticket className="text-red-500" />
+                <span>
+                  {ProjectInformationEnum.name} {t('cart.voucher')}
+                </span>
+              </div>
+              <VoucherDialog
+                triggerComponent={
+                  <Button variant="link" className="text-blue-500 h-auto p-0 hover:no-underline">
+                    {platformChosenVoucher ? (
+                      platformChosenVoucher?.discountType === DiscountTypeEnum.AMOUNT &&
+                      platformChosenVoucher?.discountValue ? (
+                        <div className="flex gap-2 items-center">
+                          {t('voucher.discountAmount', { amount: platformChosenVoucher?.discountValue })}
+                          <Pen />
+                        </div>
+                      ) : (
+                        <div className="flex gap-2 items-center">
+                          {t('voucher.discountAmount', { amount: platformChosenVoucher?.discount })}
+                          <Pen />
+                        </div>
+                      )
+                    ) : bestPlatformVoucher?.bestVoucher ? (
+                      bestPlatformVoucher?.bestVoucher?.discountType === DiscountTypeEnum.AMOUNT &&
+                      bestPlatformVoucher?.bestVoucher?.discountValue ? (
+                        t('voucher.bestDiscountAmountDisplay', {
+                          amount: bestPlatformVoucher?.bestVoucher?.discountValue,
+                        })
+                      ) : (
+                        t('voucher.bestDiscountPercentageDisplay', {
+                          percentage: bestPlatformVoucher?.bestVoucher?.discountValue * 100,
+                        })
+                      )
+                    ) : (
+                      t('cart.selectVoucher')
+                    )}
+                  </Button>
+                }
+                bestPlatFormVoucher={bestPlatformVoucher}
+                onConfirmVoucher={setPlatformChosenVoucher}
+                selectedCartItems={selectedCartItems}
+                chosenPlatformVoucher={platformChosenVoucher}
+                cartByBrand={cartByBrand}
+              />
             </div>
-            <VoucherDialog
-              triggerComponent={
-                <Button variant="link" className="text-blue-500 h-auto p-0 hover:no-underline">
-                  {platformChosenVoucher ? (
-                    platformChosenVoucher?.discountType === DiscountTypeEnum.AMOUNT &&
-                    platformChosenVoucher?.discountValue ? (
-                      <div className="flex gap-2 items-center">
-                        {t('voucher.discountAmount', { amount: platformVoucherDiscount })}
-                        <Pen />
-                      </div>
-                    ) : (
-                      <div className="flex gap-2 items-center">
-                        {t('voucher.discountAmount', { amount: platformVoucherDiscount })}
-                        <Pen />
-                      </div>
-                    )
-                  ) : bestPlatformVoucher?.bestVoucher ? (
-                    bestPlatformVoucher?.bestVoucher?.discountType === DiscountTypeEnum.AMOUNT &&
-                    bestPlatformVoucher?.bestVoucher?.discountValue ? (
-                      t('voucher.bestDiscountAmountDisplay', {
-                        amount: bestPlatformVoucher?.bestVoucher?.discountValue,
-                      })
-                    ) : (
-                      t('voucher.bestDiscountPercentageDisplay', {
-                        percentage: bestPlatformVoucher?.bestVoucher?.discountValue * 100,
-                      })
-                    )
-                  ) : (
-                    t('cart.selectVoucher')
-                  )}
-                </Button>
-              }
-              bestPlatFormVoucher={bestPlatformVoucher}
-              onConfirmVoucher={setPlatformChosenVoucher}
-              selectedCartItems={selectedCartItems}
-              chosenPlatformVoucher={platformChosenVoucher}
-              cartByBrand={cartByBrand}
-            />
-          </div>
+          )}
           <div className="flex flex-col md:flex-row items-center justify-between space-y-2">
             {/* Left Section */}
             <div className="w-full md:w-1/3 justify-start flex items-center gap-6">
@@ -259,12 +266,14 @@ export default function CartFooter({
                     </div>
                   ) : null}
                 </div>
-                <Button
-                  onClick={() => handleCheckout()}
-                  className="text-destructive-foreground px-8 py-2 rounded-lg bg-destructive hover:bg-destructive/80"
-                >
-                  {t('cart.buy')}
-                </Button>
+                {isInGroupBuying && !isInPeriod ? null : (
+                  <Button
+                    onClick={() => handleCheckout()}
+                    className="text-destructive-foreground px-8 py-2 rounded-lg bg-destructive hover:bg-destructive/80"
+                  >
+                    {t('cart.buy')}
+                  </Button>
+                )}
               </div>
             </div>
           </div>

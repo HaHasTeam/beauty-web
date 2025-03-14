@@ -2,6 +2,7 @@ import {
   ICancelAndReturnRequest,
   ICancelOrder,
   ICancelRequestOrder,
+  ICreateGroupOrder,
   ICreateOrder,
   ICreatePreOrder,
   IOrder,
@@ -25,6 +26,16 @@ export const createPreOderApi = toMutationFetcher<ICreatePreOrder, TServerRespon
   'createPreOderApi',
   async (data) => {
     return privateRequest('/orders/create-pre-order', {
+      method: 'POST',
+      data,
+    })
+  },
+)
+
+export const createGroupOderApi = toMutationFetcher<ICreateGroupOrder, TServerResponse<IOrder>>(
+  'createGroupOderApi',
+  async (data) => {
+    return privateRequest('/group-buyings/buy/' + data.groupBuyingId, {
       method: 'POST',
       data,
     })

@@ -3,7 +3,7 @@ import '@/components/product/Product.css'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import fallBackImage from '@/assets/images/fallBackImage.jpg'
 import configs from '@/config'
@@ -28,9 +28,11 @@ interface ProductDetailActionProps {
   discountType?: DiscountTypeEnum | null
   hasCustomType?: boolean
   inStock: boolean
+  isInGroupBuying?: boolean
 }
 
 const ProductDetailAction = ({
+  isInGroupBuying = false,
   product,
   chosenClassification,
   discount,
@@ -40,6 +42,9 @@ const ProductDetailAction = ({
 }: ProductDetailActionProps) => {
   const { t } = useTranslation()
   const { setSelectedCartItem } = useCartStore()
+  let groupBuying = useParams().groupId
+  groupBuying = isInGroupBuying ? groupBuying : undefined
+
   const [quantity, setQuantity] = useState(1)
   const [inputValue, setInputValue] = useState('1')
   const MAX_QUANTITY_IN_CART = chosenClassification
@@ -74,6 +79,7 @@ const ProductDetailAction = ({
       if (hasCustomType) {
         if (chosenClassification) {
           await createCartItemFn({
+            groupBuying,
             classification: chosenClassification?.title,
             productClassification: chosenClassification?.id,
             quantity: quantity,
@@ -81,7 +87,8 @@ const ProductDetailAction = ({
         }
       } else {
         await createCartItemFn({
-          classification: (product?.productClassifications ?? [])[0]?.title,
+          groupBuying,
+          classification: (product?.productClassifications ?? [])[0]?.title ?? 'default',
           productClassification: (product?.productClassifications ?? [])[0]?.id,
           quantity: quantity,
         })
@@ -99,6 +106,7 @@ const ProductDetailAction = ({
     createCartItemFn,
     product?.productClassifications,
     handleServerError,
+    groupBuying,
   ])
 
   const decreaseQuantity = () => {
@@ -170,11 +178,10 @@ const ProductDetailAction = ({
   }
 
   const chosenPrice = chosenClassification ? chosenClassification?.price : 0
-
+  const productDiscounts = isInGroupBuying ? [] : (product?.productDiscounts ?? [])
   const discountedPrice =
-    (product?.productDiscounts ?? [])?.length > 0 &&
-    (product?.productDiscounts ?? [])[0]?.status === ProductDiscountEnum.ACTIVE
-      ? calculateDiscountPrice(chosenPrice, product?.productDiscounts?.[0]?.discount, DiscountTypeEnum.PERCENTAGE)
+    productDiscounts?.length > 0 && productDiscounts[0]?.status === ProductDiscountEnum.ACTIVE
+      ? calculateDiscountPrice(chosenPrice, productDiscounts?.[0]?.discount, DiscountTypeEnum.PERCENTAGE)
       : chosenClassification
         ? (chosenClassification?.price ?? 0)
         : 0
@@ -248,8 +255,9 @@ const ProductDetailAction = ({
           </div>
         ) : null}
         <div className="space-y-2">
-          <Button
-            disabled={
+          {!isInGroupBuying && (
+            <Button
+              disabled={
               !inStock ||
               (!chosenClassification && hasCustomType) ||
               (chosenClassification &&
@@ -257,11 +265,12 @@ const ProductDetailAction = ({
                 ? true
                 : false
             }
-            className="w-full bg-primary hover:bg-primary/80 text-white"
-            onClick={() => handleCheckout()}
-          >
-            {t('productDetail.buyNow')}
-          </Button>
+              className="w-full bg-primary hover:bg-primary/80 text-white"
+              onClick={() => handleCheckout()}
+            >
+              {t('productDetail.buyNow')}
+            </Button>
+          )}
           <Button
             variant="outline"
             className="w-full border-primary text-primary hover:text-primary hover:bg-primary/10"
