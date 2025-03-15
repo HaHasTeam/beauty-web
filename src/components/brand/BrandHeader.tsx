@@ -23,7 +23,7 @@ const BrandHeader = ({ brandName, brandId }: BrandHeaderProps) => {
           {t('brand.chatNow')}
         </Button>
         <Link
-          to={configs.routes.brands + brandId}
+          to={configs.routes.brands + '/' + brandId}
           className="px-2 rounded-md flex items-center flex-1 md:flex-none border border-primary text-primary hover:text-primary hover:bg-primary/10 text-sm"
         >
           <Store className="w-4 h-4 mr-2" />
