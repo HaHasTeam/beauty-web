@@ -61,9 +61,9 @@ const Cart = ({ isInGroupBuy = false, isInPeriod = false }: CartProps) => {
 
   // Calculate platform voucher discount
   const platformVoucherDiscount = useMemo(() => {
-    return calculatePlatformVoucherDiscount(cartItems, selectedCartItems, platformChosenVoucher)
+    return calculatePlatformVoucherDiscount(cartItems, selectedCartItems, platformChosenVoucher, chosenVouchersByBrand)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cartItems, selectedCartItems, isTriggerTotal, platformChosenVoucher])
+  }, [cartItems, selectedCartItems, isTriggerTotal, platformChosenVoucher, totalVoucherDiscount, chosenVouchersByBrand])
 
   // Total saved price (product discounts + brand vouchers + platform voucher)
   const savedPrice = totalDirectProductsDiscount + totalVoucherDiscount + platformVoucherDiscount
@@ -206,6 +206,7 @@ const Cart = ({ isInGroupBuy = false, isInPeriod = false }: CartProps) => {
   useEffect(() => {
     setChosenPlatformVoucher(platformChosenVoucher)
   }, [platformChosenVoucher, setChosenPlatformVoucher])
+
   return (
     <>
       {isMyCartFetching && <LoadingContentLayer />}

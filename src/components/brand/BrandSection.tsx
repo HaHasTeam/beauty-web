@@ -1,13 +1,10 @@
-import { MessageSquare, Store } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router-dom'
 
 import fallBackImage from '@/assets/images/fallBackImage.jpg'
-import configs from '@/config'
 import { IBrand } from '@/types/brand'
 
-import Button from '../button'
 import ImageWithFallback from '../ImageFallback'
+import BrandHeader from './BrandHeader'
 
 interface BrandSectionProps {
   brand: IBrand
@@ -28,7 +25,7 @@ export default function BrandSection({ brand }: BrandSectionProps) {
             />
           </div>
 
-          <div className="space-y-2">
+          {/* <div className="space-y-2">
             <h1 className="text-xl font-bold">{brand?.name}</h1>
             <div className="text-sm text-muted-foreground">{t('brand.lastOnline', { time: '59 Minutes' })}</div>
             <div className="flex gap-2 w-full md:w-auto">
@@ -44,7 +41,8 @@ export default function BrandSection({ brand }: BrandSectionProps) {
                 {t('brand.viewShop')}
               </Link>
             </div>
-          </div>
+          </div> */}
+          <BrandHeader brandId={brand?.id ?? ''} brandName={brand?.name ?? ''} />
         </div>
         <div className="flex-1 grid grid-cols-2 md:grid-cols-4 gap-4 w-full place-items-center">
           {/* <div className="space-y-1">

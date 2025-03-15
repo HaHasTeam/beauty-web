@@ -136,7 +136,7 @@ const VoucherCartList = ({
             </label>
             <div className="flex gap-2 w-full">
               <Input id="voucherInput" placeholder={t('voucher.input')} className="bg-white" />
-              <Button variant="outline" className="w-24">
+              <Button type="button" variant="outline" className="w-24">
                 {t('voucher.apply')}
               </Button>
             </div>

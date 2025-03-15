@@ -175,12 +175,12 @@ export default function CartFooter({
                       platformChosenVoucher?.discountType === DiscountTypeEnum.AMOUNT &&
                       platformChosenVoucher?.discountValue ? (
                         <div className="flex gap-2 items-center">
-                          {t('voucher.discountAmount', { amount: platformChosenVoucher?.discountValue })}
+                          {t('voucher.discountAmount', { amount: platformVoucherDiscount })}
                           <Pen />
                         </div>
                       ) : (
                         <div className="flex gap-2 items-center">
-                          {t('voucher.discountAmount', { amount: platformChosenVoucher?.discount })}
+                          {t('voucher.discountAmount', { amount: platformVoucherDiscount })}
                           <Pen />
                         </div>
                       )
