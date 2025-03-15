@@ -17,6 +17,7 @@ import ProductDetail from '@/views/ProductDetail'
 import SearchPage from '@/views/Search'
 import ServerError from '@/views/ServerError'
 
+import PublicGuard from './guard/PublicGuard'
 import privateRoutes from './privateRoutes'
 import publicRoutes from './publicRoutes'
 
@@ -25,7 +26,11 @@ export default function RouterProvider() {
     ...privateRoutes,
     ...publicRoutes,
     {
-      element: <PrimaryLayout />,
+      element: (
+        <PublicGuard>
+          <PrimaryLayout />
+        </PublicGuard>
+      ),
       children: [
         {
           path: configs.routes.home,
