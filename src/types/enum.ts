@@ -90,6 +90,8 @@ export enum ShippingStatusEnum {
   DELIVERED = 'DELIVERED', // Đã nhận hàng
   COMPLETED = 'COMPLETED', // Hoàn thành
   RETURNING = 'RETURNING', // Đang trả hàng
+  BRAND_RECEIVED = 'BRAND_RECEIVED',
+  RETURNED_FAIL = 'RETURNED_FAIL',
   REFUNDED = 'REFUNDED', // Đã trả hàng
   CANCELLED = 'CANCELLED', // Đã hủy
 }
@@ -151,4 +153,16 @@ export enum RequestStatusEnum {
   PENDING = 'PENDING',
   APPROVED = 'APPROVED',
   REJECTED = 'REJECTED',
+}
+
+export enum OrderRequestTypeEnum {
+  CANCEL = 'CANCEL',
+  REFUND = 'REFUND',
+  REJECT_REFUND = 'REJECT_REFUND',
+  COMPLAINT = 'COMPLAINT',
+}
+
+export enum ActionReceivedEnum {
+  RECEIVED = 'RECEIVED',
+  NOT_RECEIVED = 'NOT_RECEIVED',
 }

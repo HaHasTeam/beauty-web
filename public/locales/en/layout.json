@@ -93,6 +93,9 @@
   "loginRcm": "Log in to update your skills!",
   "facebook": "Facebook",
   "button": {
+    "received": "Received",
+    "notReceived": "Haven't received",
+    "complaint": "Complaint",
     "goBack": "Go Back",
     "preOderAction": "Pre-Order Now",
     "groupBuyingAction": "Explore Group-Buy Deals",
@@ -637,6 +640,8 @@
     "preparingOrder": "Preparing Order",
     "delivered": "Delivered",
     "returning": "Returning",
+    "brandReceived": "Brand Received",
+    "returnedFail": "Return Failed",
     "refunded": "Returned & Refunded",
     "lastUpdated": "Last updated",
     "success": "Order placed successfully!",
@@ -715,7 +720,9 @@
       "completed": "The customer has confirmed receipt of the order, and the transaction is finalized.",
       "cancelled": "The refund has been processed and issued to the customer.",
       "returning": "The customer has requested a return, and the order is in the process of being returned to the seller.",
-      "refunded": "The order has been canceled and will not be processed or shipped."
+      "refunded": "The order has been canceled and will not be processed or shipped.",
+      "brandReceived": "The returned order has been successfully received by the brand. The return process is awaiting further review. If the brand does not file a complaint, the coins will be refunded to the customer's wallet within {{count}} days. If the brand files a complaint, the support team will review and resolve the issue.",
+      "returnFailed": "The return process was unsuccessful due to issues such as incorrect return shipment, damaged item upon return, or failure to meet return conditions. Further action may be required."
     },
     "cancelRequestPendingBrandTitle": "Order Cancellation Request",
     "CancelOrderRequestBrandMessage": "The customer has requested to cancel the order. Please review and make a decision. You can approve the cancellation or reject it to proceed with the order.",
@@ -749,7 +756,7 @@
     },
     "proof": "Images and videos proof",
     "returnRequestApprovedTitle": "Return Request Approved",
-    "returnRequestApprovedMessage": "Your return request has been approved by the brand. Please prepare, pack, and ship the item within {{count}} days. Remember to keep clear photos and videos as proof of the product's condition and packaging.",
+    "returnRequestApprovedMessage": "Your return request has been approved. Please prepare, pack, and ship the item within {{count}} days. Remember to keep clear photos and videos as proof of the product's condition and packaging.",
     "rejectCancelOrderReason": {
       "SHIPPED": "The order is in transit and cannot be canceled.",
       "PROCESSED": "The order has already been processed and is ready for shipment.",
@@ -1184,6 +1191,9 @@
     "viewReturn": {
       "title": "Confirm Return Decision",
       "description": "The customer has submitted a return request for this order.",
+      "cus": "Customer's Return Request Details",
+      "admin": "Admin's Decision on the Brand's Request",
+      "brand": "Brand's Return Request Response",
       "cancel": "Cancel",
       "confirm": "Confirm"
     },
@@ -1191,12 +1201,44 @@
       "title": "Review Return Request Rejection",
       "description": "The brand has rejected the customer's return request. Please review the details of the request and the brand's reason for rejection. You can either approve or reject the rejection. If you reject the request, please provide a reason, the brand and customer will be notified.",
       "cus": "Customer's Return Request Details",
-      "brand": "Brand's Rejection Response",
+      "admin": "Admin's Decision on the Brand's Request",
+      "brand": "Brand's Return Request Response",
+      "cancel": "Cancel",
+      "confirm": "Confirm"
+    },
+    "returnTrackView": {
+      "title": "Return Order Details",
+      "description": "Below is the detailed information on the return review process.",
+      "cus": "Customer's Return Request Details",
+      "admin": "Admin's Decision on the Brand's Request",
+      "brand": "Brand's Return Request Response",
+      "cancel": "Cancel",
+      "confirm": "Confirm"
+    },
+    "complaintTrackView": {
+      "title": "Complaint Details",
+      "description": "Below is the detailed information on the complaint review process.",
+      "cus": "Brand's Complaint Details",
+      "admin": "Admin's Decision on the Brand's Complaint",
+      "brand": "Admin's Decision on the Brand's Complaint",
       "cancel": "Cancel",
       "confirm": "Confirm"
     }
   },
   "return": {
+    "returnRequestApprovedView": "Your return request has been approved. Press the \"View\" button to review the processing details.",
+    "rejectBrandRejectionReason": {
+      "validReturnRequest": "The customer's return request is valid and meets platform policies",
+      "insufficientJustification": "The brand's reason for rejecting the return request is not sufficiently justified",
+      "missingEvidence": "The brand did not provide enough evidence to support the rejection",
+      "policyCompliance": "The return request aligns with the platform's return policy",
+      "customerProtection": "Decision made in favor of customer protection and fair resolution",
+      "escalationRequired": "Further escalation or review is needed before rejecting the return request",
+      "other": "Other"
+    },
+    "rejectRequestRejectOrder": "Confirm Rejection",
+    "rejectRequestRejectOrderMessage": "Pressing 'Confirm' means rejecting the brand's request. The customer will receive a notification to pack and return the item to the brand.",
+    "decision": "Decision",
     "returnRequestPendingTitleCustomer": "Return Request Under Review",
     "returnRequestPendingMessageCustomer": "Your return request is being reviewed. We will notify you of the decision within {{count}} days. Please check your notifications for updates.",
     "returnRequestRejectedTitleCustomer": "Return Request Rejected",
@@ -1248,47 +1290,55 @@
     "returnOrderRequestMessage": "The brand has declined the customer's return request. Please review all relevant details and platform policies before making a final decision.",
     "successMakeDecisionOnReturn": "Successfully Processed Return Request",
     "returnRequestPendingTitleBrand": "Return Request Pending Review",
-    "returnOrderRequestMessageBrand": "A customer has requested a return for this order. You can review the request and make a decision. If no action is taken within {{count}} days, the request will be automatically approved. If approved, the customer will proceed with shipping the return. If rejected, the admin will review and make the final decision."
+    "returnOrderRequestMessageBrand": "A customer has requested a return for this order. You can review the request and make a decision. If no action is taken within {{count}} days, the request will be automatically approved. If approved, the customer will proceed with shipping the return. If rejected, the admin will review and make the final decision.",
+    "complaintRequestApprovedTitleCustomer": "Complaint Approved",
+    "complaintRequestApprovedMessageCustomer": "The brand's complaint has been approved by the admin. You will not receive a coin refund for this order. You can review the complaint details and contact the support team if needed."
   },
   "reason": {
     "rejectCancel": {
       "title": "Cancel Request Rejected",
       "message": "Please provide a reason for rejecting the request."
     },
-  "time": {
-    "day": "day",
-    "hour": "hour",
-    "minute": "minute",
-    "second": "second",
-    "expired": "Expired",
-    "ended": "Ended",
-    "startAfter": "Start After",
-    "endsIn": "Ends In"
-  },
-  "store": {
-    "logo": "Store Logo",
-    "name": "Minh Khoi Wholesale",
-    "online_status": "Online 24 minutes ago",
-    "follow": "Follow",
-    "following": "Following",
-    "chat": "Chat",
-    "products": "Products:",
-    "followers": "Followers:",
-    "rating": "Rating:",
-    "reviews": "Reviews",
-    "response_rate": "Chat Response Rate:",
-    "response_time": "Within a Few Hours",
-    "categories": {
-      "featured": "Featured",
-      "all": "All Products",
-      "new": "New Products",
-      "sale": "Sale Products",
-      "best_selling": "Best Selling",
-      "group_buying": "Group Buying"
+    "time": {
+      "day": "day",
+      "hour": "hour",
+      "minute": "minute",
+      "second": "second",
+      "expired": "Expired",
+      "ended": "Ended",
+      "startAfter": "Start After",
+      "endsIn": "Ends In"
+    },
+    "store": {
+      "logo": "Store Logo",
+      "name": "Minh Khoi Wholesale",
+      "online_status": "Online 24 minutes ago",
+      "follow": "Follow",
+      "following": "Following",
+      "chat": "Chat",
+      "products": "Products:",
+      "followers": "Followers:",
+      "rating": "Rating:",
+      "reviews": "Reviews",
+      "response_rate": "Chat Response Rate:",
+      "response_time": "Within a Few Hours",
+      "categories": {
+        "featured": "Featured",
+        "all": "All Products",
+        "new": "New Products",
+        "sale": "Sale Products",
+        "best_selling": "Best Selling",
+        "group_buying": "Group Buying"
+      }
+    },
+    "btn": {
+      "copyAndShare": "Copy and Share",
+      "cooldown": "Limit ended in {{value}} minutes"
     }
   },
-  "btn": {
-    "copyAndShare": "Copy and Share",
-    "cooldown": "Limit ended in {{value}} minutes"
+  "requestStatus": {
+    "approved": "Approved",
+    "rejected": "Rejected",
+    "pending": "Pending"
   }
 }

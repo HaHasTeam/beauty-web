@@ -69,10 +69,10 @@ const ProductDetail = ({ initProductId, isInGroupBuying = false }: ProductDetail
 
     switch (event) {
       case OrderEnum.FLASH_SALE:
-          return useProductData.data.productDiscounts?.[0]?.productClassifications
-        case OrderEnum.PRE_ORDER:
-          return useProductData.data.preOrderProducts?.[0]?.productClassifications
-        default:
+        return useProductData.data.productDiscounts?.[0]?.productClassifications
+      case OrderEnum.PRE_ORDER:
+        return useProductData.data.preOrderProducts?.[0]?.productClassifications
+      default:
         return useProductData.data.productClassifications
     }
   }, [event, useProductData?.data, isInGroupBuying])
@@ -124,7 +124,7 @@ const ProductDetail = ({ initProductId, isInGroupBuying = false }: ProductDetail
                   content={
                     <ProductDetailInformation
                       isInGroupBuying={isInGroupBuying}
-                  product={useProductData?.data}
+                      product={useProductData?.data}
                       scrollToReviews={scrollToReviews}
                       productClassifications={productClassifications}
                       cheapestClassification={cheapestClassification}

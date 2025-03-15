@@ -70,16 +70,13 @@ const OrderStatusTrackingDetail = ({ statusTrackingData }: OrderStatusTrackingDe
                       ? t('order.rejectedCancelRequest')
                       : StatusTrackingText(step.status)}
                 </div>
-                {(step.status === ShippingStatusEnum.CANCELLED ||
-                  step.status === RequestStatusEnum.APPROVED ||
-                  step.status === ShippingStatusEnum.REFUNDED) && (
+                {(step.status === ShippingStatusEnum.CANCELLED || step.status === RequestStatusEnum.APPROVED) && (
                   <div>
-                    {(step.status === ShippingStatusEnum.CANCELLED || step.status === RequestStatusEnum.APPROVED) && (
-                      <div className="text-sm text-muted-foreground mt-1">
-                        <span className="font-medium">{t('orderDetail.cancelBy')}: </span>
-                        {step.updatedBy}
-                      </div>
-                    )}
+                    <div className="text-sm text-muted-foreground mt-1">
+                      <span className="font-medium">{t('orderDetail.cancelBy')}: </span>
+                      {step.updatedBy}
+                    </div>
+
                     <div className="text-sm text-muted-foreground mt-1">
                       <span className="font-medium">{t('order.cancelOrderReason.reason')}: </span>
                       {step.reason}

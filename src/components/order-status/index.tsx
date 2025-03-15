@@ -72,6 +72,16 @@ export default function OrderStatus({ tag, text, size = 'medium' }: OrderStatusP
       bgColorClass = 'bg-indigo-100'
       tagText = t('order.returning')
       break
+    case ShippingStatusEnum.BRAND_RECEIVED:
+      tagColorClass = 'text-emerald-600'
+      bgColorClass = 'bg-emerald-100'
+      tagText = t('order.returning')
+      break
+    case ShippingStatusEnum.RETURNED_FAIL:
+      tagColorClass = 'text-rose-600'
+      bgColorClass = 'bg-rose-100'
+      tagText = t('order.returning')
+      break
     case ShippingStatusEnum.REFUNDED:
       tagColorClass = 'text-gray-600'
       bgColorClass = 'bg-gray-100'

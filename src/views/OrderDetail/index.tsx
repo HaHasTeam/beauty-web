@@ -13,6 +13,7 @@ import CancelOrderDialog from '@/components/order/CancelOrderDialog'
 import RequestCancelOrderDialog from '@/components/order/RequestCancelOrderDialog'
 import { RequestReturnOrderDialog } from '@/components/order/RequestReturnOrderDialog'
 import ReturnOrderSection from '@/components/order/ReturnOrderSection'
+import ConfirmDecisionDialog from '@/components/order-detail/ConfirmDecisionDialog'
 import OrderDetailItems from '@/components/order-detail/OrderDetailItems'
 import OrderGeneral from '@/components/order-detail/OrderGeneral'
 import OrderStatusTracking from '@/components/order-detail/OrderStatusTracking'
@@ -26,12 +27,10 @@ import { useToast } from '@/hooks/useToast'
 import {
   getCancelAndReturnRequestApi,
   getOrderByIdApi,
-  getRejectReturnRequestApi,
   getStatusTrackingByIdApi,
   updateOrderStatusApi,
 } from '@/network/apis/order'
 import { RequestStatusEnum, ShippingStatusEnum } from '@/types/enum'
-
 
 const OrderDetail = () => {
   const PENDING_REQUEST_RETURN_DAYS = 2
@@ -43,6 +42,7 @@ const OrderDetail = () => {
   const [openRequestCancelOrderDialog, setOpenRequestCancelOrderDialog] = useState<boolean>(false)
   const [isTrigger, setIsTrigger] = useState<boolean>(false)
   const [openReqReturnDialog, setOpenReqReturnDialog] = useState<boolean>(false)
+  const [openTrackRequest, setOpenTrackRequest] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState(false)
   const { successToast } = useToast()
   const handleServerError = useHandleServerError()
@@ -67,11 +67,6 @@ const OrderDetail = () => {
   const { data: cancelAndReturnRequestData } = useQuery({
     queryKey: [getCancelAndReturnRequestApi.queryKey, orderId ?? ('' as string)],
     queryFn: getCancelAndReturnRequestApi.fn,
-    enabled: !!orderId,
-  })
-  const { data: rejectReturnRequest } = useQuery({
-    queryKey: [getRejectReturnRequestApi.queryKey, orderId ?? ('' as string)],
-    queryFn: getRejectReturnRequestApi.fn,
     enabled: !!orderId,
   })
 
@@ -150,30 +145,53 @@ const OrderDetail = () => {
               {!isLoading &&
                 (cancelAndReturnRequestData?.data?.refundRequest?.status === RequestStatusEnum.PENDING ||
                   (cancelAndReturnRequestData?.data?.refundRequest?.status === RequestStatusEnum.REJECTED &&
-                    rejectReturnRequest?.data?.status === RequestStatusEnum.PENDING)) && (
+                    cancelAndReturnRequestData?.data?.refundRequest?.rejectedRefundRequest?.status ===
+                      RequestStatusEnum.PENDING)) && (
                   <AlertMessage
                     title={t('return.returnRequestPendingTitleCustomer')}
                     message={t('return.returnRequestPendingMessageCustomer', { count: PENDING_REQUEST_RETURN_DAYS })}
                     isShowIcon={false}
+                    buttonText={'view'}
+                    buttonClassName="bg-yellow-500 hover:bg-yellow-600"
+                    onClick={() => setOpenTrackRequest(true)}
                   />
                 )}
               {!isLoading &&
-                (cancelAndReturnRequestData?.data?.refundRequest?.status === RequestStatusEnum.REJECTED ||
-                  (cancelAndReturnRequestData?.data?.refundRequest?.status === RequestStatusEnum.REJECTED &&
-                    rejectReturnRequest?.data?.status === RequestStatusEnum.APPROVED)) && (
+                cancelAndReturnRequestData?.data?.refundRequest?.status === RequestStatusEnum.REJECTED &&
+                cancelAndReturnRequestData?.data?.refundRequest?.rejectedRefundRequest?.status ===
+                  RequestStatusEnum.APPROVED && (
                   <AlertMessage
-                    className="bg-red-100"
                     color="danger"
                     isShowIcon={false}
                     title={t('return.returnRequestRejectedTitleCustomer')}
                     message={t('return.returnRequestRejectedMessageCustomer')}
+                    buttonText={'view'}
+                    onClick={() => setOpenTrackRequest(true)}
+                  />
+                )}
+              {!isLoading &&
+                (cancelAndReturnRequestData?.data?.refundRequest?.status === RequestStatusEnum.APPROVED ||
+                  (cancelAndReturnRequestData?.data?.refundRequest?.status === RequestStatusEnum.REJECTED &&
+                    cancelAndReturnRequestData?.data?.refundRequest?.rejectedRefundRequest?.status ===
+                      RequestStatusEnum.REJECTED)) &&
+                useOrderData.data.status !== ShippingStatusEnum.DELIVERED && (
+                  <AlertMessage
+                    title={t('order.returnRequestApprovedTitle')}
+                    message={t('return.returnRequestApprovedView')}
+                    isShowIcon={false}
+                    color="success"
+                    buttonText="view"
+                    onClick={() => setOpenTrackRequest(true)}
+                    buttonClassName="bg-green-500 hover:bg-green-600"
                   />
                 )}
 
               {!isLoading &&
                 (cancelAndReturnRequestData?.data?.refundRequest?.status === RequestStatusEnum.APPROVED ||
                   (cancelAndReturnRequestData?.data?.refundRequest?.status === RequestStatusEnum.REJECTED &&
-                    rejectReturnRequest?.data?.status === RequestStatusEnum.REJECTED)) && (
+                    cancelAndReturnRequestData?.data?.refundRequest?.rejectedRefundRequest?.status ===
+                      RequestStatusEnum.REJECTED)) &&
+                useOrderData.data.status === ShippingStatusEnum.DELIVERED && (
                   <ReturnOrderSection orderId={useOrderData?.data?.id} />
                 )}
 
@@ -369,6 +387,22 @@ const OrderDetail = () => {
             onOpenChange={setOpenReqReturnDialog}
             setIsTrigger={setIsTrigger}
             orderId={useOrderData?.data?.id ?? ''}
+          />
+        )}
+        {!isFetching && useOrderData?.data && cancelAndReturnRequestData?.data?.refundRequest && (
+          <ConfirmDecisionDialog
+            open={openTrackRequest}
+            onOpenChange={setOpenTrackRequest}
+            item={'returnTrackView'}
+            rejectReason={cancelAndReturnRequestData?.data?.refundRequest?.rejectedRefundRequest?.reason}
+            rejectMediaFiles={cancelAndReturnRequestData?.data?.refundRequest?.rejectedRefundRequest?.mediaFiles}
+            reason={cancelAndReturnRequestData?.data?.refundRequest.reason}
+            mediaFiles={cancelAndReturnRequestData?.data?.refundRequest.mediaFiles}
+            isRejectRequest={cancelAndReturnRequestData?.data?.refundRequest?.rejectedRefundRequest !== null}
+            status={cancelAndReturnRequestData?.data?.refundRequest?.status}
+            rejectStatus={cancelAndReturnRequestData?.data?.refundRequest?.rejectedRefundRequest?.status}
+            reasonRejected={cancelAndReturnRequestData?.data?.refundRequest?.reasonRejected}
+            //  returnRequest={cancelAndReturnRequestData?.data?.refundRequest}
           />
         )}
       </div>

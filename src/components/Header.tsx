@@ -87,7 +87,7 @@ export default function Header() {
                 }}
               >
                 {user ? (
-                  <Avatar>
+                  <Avatar className="w-6 h-6">
                     <AvatarImage src={user.avatar} alt={user.username} />
                     <AvatarFallback>{user.username?.charAt(0).toUpperCase() ?? 'A'}</AvatarFallback>
                   </Avatar>

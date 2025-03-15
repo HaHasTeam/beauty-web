@@ -258,13 +258,13 @@ const ProductDetailAction = ({
           {!isInGroupBuying && (
             <Button
               disabled={
-              !inStock ||
-              (!chosenClassification && hasCustomType) ||
-              (chosenClassification &&
-                (chosenClassification?.quantity <= 0 || chosenClassification?.status !== StatusEnum.ACTIVE))
-                ? true
-                : false
-            }
+                !inStock ||
+                (!chosenClassification && hasCustomType) ||
+                (chosenClassification &&
+                  (chosenClassification?.quantity <= 0 || chosenClassification?.status !== StatusEnum.ACTIVE))
+                  ? true
+                  : false
+              }
               className="w-full bg-primary hover:bg-primary/80 text-white"
               onClick={() => handleCheckout()}
             >

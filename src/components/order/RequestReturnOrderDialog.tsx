@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { FilesIcon, ImagePlus, Video } from 'lucide-react'
 import { Dispatch, SetStateAction, useId, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -13,7 +13,7 @@ import { Textarea } from '@/components/ui/textarea'
 import useHandleServerError from '@/hooks/useHandleServerError'
 import { useToast } from '@/hooks/useToast'
 import { uploadFilesApi } from '@/network/apis/file'
-import { requestReturnOrderApi } from '@/network/apis/order'
+import { getOrderByIdApi, getStatusTrackingByIdApi, requestReturnOrderApi } from '@/network/apis/order'
 import { getRequestReturnOrderSchema } from '@/schemas/order.schema'
 
 import AlertMessage from '../alert/AlertMessage'
@@ -49,6 +49,7 @@ export const RequestReturnOrderDialog: React.FC<RequestReturnOrderDialogProps> =
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const { successToast } = useToast()
   const handleServerError = useHandleServerError()
+  const queryClient = useQueryClient()
   const id = useId()
   const ReturnOrderSchema = getRequestReturnOrderSchema()
   const [isOtherReason, setIsOtherReason] = useState<boolean>(false)
@@ -83,13 +84,17 @@ export const RequestReturnOrderDialog: React.FC<RequestReturnOrderDialogProps> =
   const { mutateAsync: requestReturnOrderFn } = useMutation({
     mutationKey: [requestReturnOrderApi.mutationKey],
     mutationFn: requestReturnOrderApi.fn,
-    onSuccess: () => {
+    onSuccess: async () => {
       successToast({
         message: t('order.returnOrderDialog.successTitle'),
         description: t('order.returnOrderDialog.successDescription', { count: REQUEST_RETURN_ORDER_PROCESS_DATE }),
       })
       setIsTrigger((prev) => !prev)
       handleReset()
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: [getOrderByIdApi.queryKey] }),
+        queryClient.invalidateQueries({ queryKey: [getStatusTrackingByIdApi.queryKey] }),
+      ])
     },
   })
 
