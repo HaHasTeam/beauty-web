@@ -60,7 +60,7 @@ const Checkout = () => {
   const [myAddresses, setMyAddresses] = useState<IAddress[]>([])
   const [bestBrandVouchers, setBestBrandVouchers] = useState<IBrandBestVoucher[]>([])
   const [bestPlatformVoucher, setBestPlatformVoucher] = useState<IPlatformBestVoucher | null>(null)
-  const queryClient = useQueryClient()  
+  const queryClient = useQueryClient()
   const CreateOrderSchema = getCreateOrderSchema()
 
   const selectedCartItems = useMemo(() => {
