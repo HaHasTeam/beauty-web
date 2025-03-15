@@ -30,7 +30,6 @@ import {
 import { CancelOrderRequestStatusEnum, ShippingStatusEnum } from '@/types/enum'
 import { ICancelRequestOrder } from '@/types/order'
 
-
 const OrderDetail = () => {
   const { orderId } = useParams()
   const { t } = useTranslation()

@@ -1,9 +1,6 @@
-import PrimaryLayout from '@/components/layout/PrimaryLayout'
 import configs from '@/config'
-import Cart from '@/views/Cart'
 import EmailVerification from '@/views/EmailVerifycation'
 import ForgotPassword from '@/views/ForgotPassword'
-import Home from '@/views/Home'
 import ResetPassword from '@/views/ResetPassword'
 import SignIn from '@/views/Signin'
 import SignUp from '@/views/Signup'
@@ -39,19 +36,6 @@ const publicRoutes = [
   {
     path: configs.routes.checkEmail,
     element: <EmailVerification />,
-  },
-  {
-    element: <PrimaryLayout />,
-    children: [
-      {
-        path: configs.routes.home,
-        element: <Home />,
-      },
-      {
-        path: configs.routes.cart,
-        element: <Cart />,
-      },
-    ],
   },
 ]
 

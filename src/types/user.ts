@@ -1,3 +1,4 @@
+import { IAddress } from './address'
 import { IBrand } from './brand'
 import { TMetaData } from './request'
 import { TRoleResponse, UserRoleEnum } from './role'
@@ -44,6 +45,7 @@ export type TUserPa = TMetaData & {
   status: UserStatusEnum | string
   isEmailVerify: boolean
   brands?: IBrand[]
+  addresses?: IAddress[]
 }
 export type TUserUpdateStatusTracking = TMetaData & {
   firstName?: string
