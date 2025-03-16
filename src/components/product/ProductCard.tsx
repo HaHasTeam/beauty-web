@@ -20,6 +20,9 @@ interface ProductCardProps {
 export default function ProductCard({ product, isProductDiscount = false, isInGroupBuying = false }: ProductCardProps) {
   const navigate = useNavigate()
   const { t } = useTranslation()
+  if (isProductDiscount) {
+    console.log(product)
+  }
 
   return (
     <Dialog>
@@ -49,8 +52,8 @@ export default function ProductCard({ product, isProductDiscount = false, isInGr
               {isProductDiscount && product?.deal && product?.deal > 0 && (
                 <ProductTag tag="DealPercent" text={`-${(product?.deal * 100).toFixed(0)}%`} />
               )}
-              <div className="min-h-[100px]">
-                <span className="text-semibold line-clamp-2">{product?.name}</span>
+              <div className="min-h-[90px]">
+                <span className="text-semibold line-clamp-2 sm:text-sm text-xs">{product?.name}</span>
                 <ProductStar rating={product?.rating} ratingAmount={product?.ratingAmount} />
                 <div className="mt-1 mb-2">
                   <span className="text-gray-500 text-sm line-clamp-1">

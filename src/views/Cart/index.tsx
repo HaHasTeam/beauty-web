@@ -58,7 +58,8 @@ const Cart = ({ isInGroupBuy = false, isInPeriod = false }: CartProps) => {
     return calculateTotalBrandVoucherDiscount(cartItems, selectedCartItems, chosenVouchersByBrand)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cartItems, chosenVouchersByBrand, selectedCartItems, isTriggerTotal])
-
+  console.log('test', totalVoucherDiscount)
+  console.log('test', chosenVouchersByBrand)
   // Calculate platform voucher discount
   const platformVoucherDiscount = useMemo(() => {
     return calculatePlatformVoucherDiscount(cartItems, selectedCartItems, platformChosenVoucher, chosenVouchersByBrand)
@@ -202,7 +203,7 @@ const Cart = ({ isInGroupBuy = false, isInPeriod = false }: CartProps) => {
       resetSelectedCartItem()
     }
   }, [cartItems, resetSelectedCartItem, selectedCartItems, setChosenPlatformVoucher, isTriggerTotal])
-
+  console.log('test', totalDirectProductsDiscount)
   useEffect(() => {
     setChosenPlatformVoucher(platformChosenVoucher)
   }, [platformChosenVoucher, setChosenPlatformVoucher])

@@ -95,15 +95,17 @@ const OrderDetail = () => {
       })
     }
   }
+
+  console.log('test', cancelAndReturnRequestData?.data?.cancelRequest)
   return (
     <div>
       {isFetching && <LoadingContentLayer />}
       <div className="w-full lg:px-5 md:px-4 sm:px-3 px-3 space-y-6 my-5">
         <div className="flex gap-2 w-full sm:justify-between sm:items-center sm:flex-row flex-col">
-          <div className="flex gap-2 sm:items-center sm:flex-row flex-col">
+          <div className="flex gap-2 items-center">
             <span className="text-lg text-muted-foreground font-medium">{t('orderDetail.title')}</span>
             {!isFetching && useOrderData?.data && (
-              <span className="text-lg text-muted-foreground">#{useOrderData?.data?.id}</span>
+              <span className="text-lg text-muted-foreground">#{useOrderData?.data?.id?.substring(0, 8)}</span>
             )}
           </div>
           {!isFetching && useOrderData?.data && (
@@ -122,24 +124,22 @@ const OrderDetail = () => {
               )}
 
               {/* cancel request information */}
-              {!isLoading &&
-                cancelAndReturnRequestData?.data?.cancelOrderRequest?.status === RequestStatusEnum.PENDING && (
-                  <AlertMessage
-                    title={t('order.cancelRequestPendingTitle')}
-                    message={t('order.cancelRequestPendingMessage', { count: PENDING_REQUEST_CANCEL_DAYS })}
-                    isShowIcon={false}
-                  />
-                )}
-              {!isLoading &&
-                cancelAndReturnRequestData?.data?.cancelOrderRequest?.status === RequestStatusEnum.REJECTED && (
-                  <AlertMessage
-                    className="bg-red-100"
-                    color="danger"
-                    isShowIcon={false}
-                    title={t('order.cancelRequestRejectedTitle')}
-                    message={t('order.cancelRequestRejectedMessage')}
-                  />
-                )}
+              {!isLoading && cancelAndReturnRequestData?.data?.cancelRequest?.status === RequestStatusEnum.PENDING && (
+                <AlertMessage
+                  title={t('order.cancelRequestPendingTitle')}
+                  message={t('order.cancelRequestPendingMessage', { count: PENDING_REQUEST_CANCEL_DAYS })}
+                  isShowIcon={false}
+                />
+              )}
+              {!isLoading && cancelAndReturnRequestData?.data?.cancelRequest?.status === RequestStatusEnum.REJECTED && (
+                <AlertMessage
+                  className="bg-red-100"
+                  color="danger"
+                  isShowIcon={false}
+                  title={t('order.cancelRequestRejectedTitle')}
+                  message={t('order.cancelRequestRejectedMessage')}
+                />
+              )}
 
               {/* return request information */}
               {!isLoading &&
@@ -315,7 +315,7 @@ const OrderDetail = () => {
                 )}
                 <div className="w-full flex items-center flex-1 gap-2">
                   {useOrderData?.data?.status === ShippingStatusEnum.PREPARING_ORDER &&
-                    !cancelAndReturnRequestData?.data?.cancelOrderRequest && (
+                    !cancelAndReturnRequestData?.data?.cancelRequest && (
                       <div className="w-full">
                         <Button
                           variant="outline"
@@ -338,7 +338,8 @@ const OrderDetail = () => {
                         {isLoading ? <LoadingIcon color="primaryBackground" /> : t('order.received')}
                       </Button>
                     )}
-                  {useOrderData?.data?.status === ShippingStatusEnum.DELIVERED &&
+                  {(useOrderData?.data?.status === ShippingStatusEnum.DELIVERED ||
+                    useOrderData?.data?.status === ShippingStatusEnum.COMPLETED) &&
                     !cancelAndReturnRequestData?.data?.refundRequest && (
                       <Button
                         variant="outline"

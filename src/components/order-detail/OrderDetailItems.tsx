@@ -15,7 +15,6 @@ interface OrderDetailItemsProps {
 }
 const OrderDetailItems = ({ accountAvatar, accountName, orderDetails, status, brand }: OrderDetailItemsProps) => {
   const { t } = useTranslation()
-  console.log(brand, '1')
   return (
     <div className="w-full">
       <div className="w-full flex p-2 md:p-3 lg:p-4 bg-secondary/30 rounded-sm text-secondary-foreground">

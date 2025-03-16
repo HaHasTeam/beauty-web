@@ -1,7 +1,7 @@
 import { IClassification } from './classification'
 import { PaymentMethod, RequestStatusEnum, ShippingStatusEnum } from './enum'
 import { IResponseFeedback } from './feedback'
-import { TServerFile } from './file'
+import { TFile, TServerFile } from './file'
 import { TUser } from './user'
 import { TVoucher } from './voucher'
 
@@ -68,11 +68,17 @@ export type IOrder = {
   status: string
   account: TUser
   children: IOrderItem[]
+  orderDetails: IOrderItem[] // for requests
 }
 
 export type IOrderFilter = {
   search?: string
-  status?: string
+  status?: string[]
+}
+export type IRequestFilter = {
+  search?: string
+  types?: string[]
+  statusList?: string[]
 }
 
 export type IOrderCheckoutItem = {
@@ -126,6 +132,19 @@ export interface ICancelRequestOrder {
   order: IOrder
 }
 
+export interface IRequest {
+  id: string
+  createdAt: string
+  updatedAt: string
+  reason: string
+  status: RequestStatusEnum.APPROVED | RequestStatusEnum.REJECTED | RequestStatusEnum.PENDING
+  reasonRejected: string | null
+  type: string
+  mediaFiles: TFile[]
+  rejectedRefundRequest: IRejectReturnRequestOrder
+  order: IOrderItem
+}
+
 export interface IReturnRequestOrder extends ICancelRequestOrder {
   mediaFiles: TServerFile[]
   rejectedRefundRequest: IRejectReturnRequestOrder
@@ -136,6 +155,6 @@ export interface IRejectReturnRequestOrder extends ICancelRequestOrder {
 }
 
 export interface ICancelAndReturnRequest {
-  cancelOrderRequest: ICancelRequestOrder
+  cancelRequest: ICancelRequestOrder
   refundRequest: IReturnRequestOrder
 }

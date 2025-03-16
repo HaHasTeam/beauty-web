@@ -473,9 +473,14 @@ export const calculateTotalBrandVoucherDiscount = (
   if (!cartItems) return 0
   return Object.keys(cartItems).reduce((totalDiscount, brandName) => {
     const brandItems = cartItems[brandName]
-    const brandId = brandItems[0]?.productClassification?.product?.brand?.id ?? ''
+    const brandId =
+      (
+        brandItems[0]?.productClassification?.preOrderProduct ??
+        brandItems[0]?.productClassification?.productDiscount ??
+        brandItems[0]?.productClassification
+      )?.product?.brand?.id ?? ''
     const brandVoucher = chosenVouchersByBrand[brandId] || null
-
+    console.log('test', brandItems[0]?.productClassification)
     return totalDiscount + calculateBrandVoucherDiscount(brandItems, selectedCartItems, brandVoucher)
   }, 0)
 }

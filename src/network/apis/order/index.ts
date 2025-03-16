@@ -9,6 +9,8 @@ import {
   IOrderFilter,
   IOrderItem,
   IRejectReturnRequestOrder,
+  IRequest,
+  IRequestFilter,
 } from '@/types/order'
 import { TServerResponse } from '@/types/request'
 import { IStatusTracking } from '@/types/status-tracking'
@@ -45,6 +47,15 @@ export const getMyOrdersApi = toMutationFetcher<IOrderFilter, TServerResponse<IO
   'getMyOrdersApi',
   async (data) => {
     return privateRequest('/orders/get-my-orders/', {
+      method: 'POST',
+      data,
+    })
+  },
+)
+export const getMyRequestsApi = toMutationFetcher<IRequestFilter, TServerResponse<IRequest[]>>(
+  'getMyRequestsApi',
+  async (data) => {
+    return privateRequest('/orders/get-my-requests/', {
       method: 'POST',
       data,
     })

@@ -15,11 +15,12 @@ import {
   updateOrderStatusApi,
 } from '@/network/apis/order'
 import { IBrand } from '@/types/brand'
-import { OrderEnum, ShippingStatusEnum } from '@/types/enum'
+import { OrderEnum, RequestStatusEnum, ShippingStatusEnum } from '@/types/enum'
 import { IOrderItem } from '@/types/order'
 
 import LoadingIcon from '../loading-icon'
 import OrderStatus from '../order-status'
+import { getRequestStatusColor } from '../request-status'
 import { Button } from '../ui/button'
 import CancelOrderDialog from './CancelOrderDialog'
 import ProductOrderLandscape from './ProductOrderLandscape'
@@ -111,32 +112,51 @@ const OrderItem = ({ brand, orderItem, setIsTrigger }: OrderItemProps) => {
       })
     }
   }
-  console.log('1', cancelAndReturnRequestData?.data?.cancelOrderRequest)
 
   return (
     <>
       <div className="p-4">
         {/* Order Item Header */}
-        <div className="flex justify-between items-center border-b py-2 mb-4">
+        <div className="flex flex-col-reverse gap-2 md:flex-row items-start md:justify-between md:items-center border-b py-2 mb-4">
           {/* Brand */}
           <div className="flex items-center gap-2">
-            <Store className="w-5 h-5 text-red-500" />
-            <Link to={configs.routes.brands + `/${brand?.id}`}>
-              <span className="font-medium">{brand?.name}</span>
-            </Link>
-            <Button className="bg-primary hover:bg-primary/80" variant="default" size="sm">
-              <MessageCircle className="w-4 h-4" />
-              {t('brand.chat')}
-            </Button>
-            <Button variant="outline" size="sm" className="">
-              <Store className="h-4 w-4" />
-              {t('brand.viewShop')}
-            </Button>
+            <div className="flex items-center gap-2">
+              <Store className="w-5 h-5 text-red-500" />
+              <Link to={configs.routes.brands + `/${brand?.id}`}>
+                <span className="font-medium">{brand?.name}</span>
+              </Link>
+            </div>
+            <div className="flex items-center gap-2">
+              <Button className="flex-1 md:flex-none bg-primary hover:bg-primary/80" variant="default" size="sm">
+                <MessageCircle className="w-4 h-4" />
+                {t('brand.chat')}
+              </Button>
+              <Link
+                to={configs.routes.brands + '/' + brand?.id}
+                className="hidden md:flex py-1.5 px-2 rounded-md items-center flex-1 md:flex-none border border-primary text-primary hover:text-primary hover:bg-primary/10 text-sm"
+              >
+                <Store className="w-4 h-4 mr-2" />
+                {t('brand.viewShop')}
+              </Link>
+            </div>
           </div>
-          {/* Order Status */}
-          <span>{orderItem.id}</span>
-          <div className="flex items-center">
-            <OrderStatus tag={orderItem?.status} />
+          {/* Order and request status */}
+          <div className="flex flex-col items-end gap-1">
+            {/* Order Status */}
+            <div className="flex items-center">
+              {cancelAndReturnRequestData?.data?.refundRequest &&
+              (cancelAndReturnRequestData?.data?.refundRequest?.status === RequestStatusEnum.PENDING ||
+                (cancelAndReturnRequestData?.data?.refundRequest?.status === RequestStatusEnum.REJECTED &&
+                  cancelAndReturnRequestData?.data?.refundRequest?.rejectedRefundRequest?.status ===
+                    RequestStatusEnum.PENDING)) ? (
+                <OrderStatus tag={ShippingStatusEnum.PENDING_RETURN_APPROVAL} />
+              ) : cancelAndReturnRequestData?.data?.cancelRequest &&
+                cancelAndReturnRequestData?.data?.cancelRequest?.status === RequestStatusEnum.PENDING ? (
+                <OrderStatus tag={ShippingStatusEnum.PENDING_CANCELLATION} />
+              ) : (
+                <OrderStatus tag={orderItem?.status} />
+              )}
+            </div>
           </div>
         </div>
 
@@ -171,14 +191,73 @@ const OrderItem = ({ brand, orderItem, setIsTrigger }: OrderItemProps) => {
           <span className="text-red-500 font-semibold">{t('productCard.price', { price: orderItem?.totalPrice })}</span>
         </div>
 
+        {/* Request Status Information (Enhanced) */}
+        {(cancelAndReturnRequestData?.data?.refundRequest || cancelAndReturnRequestData?.data?.cancelRequest) && (
+          <div className="mt-2 py-2 border-y">
+            {cancelAndReturnRequestData?.data?.cancelRequest && (
+              <div className="flex justify-between items-center">
+                <span className="font-medium">{t('request.cancelRequest')}</span>
+                <span
+                  className={`px-2 py-1 rounded-full uppercase font-bold cursor-default text-xs ${getRequestStatusColor(
+                    cancelAndReturnRequestData?.data?.cancelRequest?.status,
+                  )}`}
+                >
+                  {t(`request.status.BRAND_${cancelAndReturnRequestData?.data?.cancelRequest?.status}`)}
+                </span>
+              </div>
+            )}
+            {cancelAndReturnRequestData?.data?.refundRequest && (
+              <div className="flex flex-col gap-2">
+                <div className="flex justify-between items-center">
+                  <span className="font-medium">{t('request.returnRequest')}</span>
+                  <span
+                    className={`px-2 py-1 rounded-full uppercase font-bold cursor-default text-xs ${getRequestStatusColor(
+                      cancelAndReturnRequestData?.data?.refundRequest?.status,
+                    )}`}
+                  >
+                    {t(`request.status.BRAND_${cancelAndReturnRequestData?.data?.refundRequest?.status}`)}
+                  </span>
+                </div>
+
+                {/* Show rejection details if applicable */}
+                {cancelAndReturnRequestData?.data?.refundRequest?.status === RequestStatusEnum.REJECTED && (
+                  <>
+                    {/* Show pending counter-request if any */}
+                    {cancelAndReturnRequestData?.data?.refundRequest?.rejectedRefundRequest && (
+                      <div className="">
+                        <div className="flex justify-between items-center">
+                          <span className="font-medium">{t('request.appealRequest')}</span>
+                          <span
+                            className={`px-2 py-1 rounded-full uppercase font-bold cursor-default text-xs ${getRequestStatusColor(
+                              cancelAndReturnRequestData?.data?.refundRequest?.rejectedRefundRequest?.status,
+                            )}`}
+                          >
+                            {t(
+                              `request.status.ADMIN_${cancelAndReturnRequestData?.data?.refundRequest?.rejectedRefundRequest?.status}`,
+                            )}
+                          </span>
+                        </div>
+                        {cancelAndReturnRequestData?.data?.refundRequest?.rejectedRefundRequest?.status ===
+                          RequestStatusEnum.PENDING && (
+                          <div className="text-sm text-gray-600 mt-1">{t('request.awaitingResponse')}</div>
+                        )}
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+            )}
+          </div>
+        )}
+
         {/* Action button */}
-        <div className="flex justify-between gap-2 pt-4 items-center">
+        <div className="flex flex-col items-end md:flex-row md:justify-between gap-2 pt-4 md:items-center">
           <div>
-            <span className="text-gray-700 text-base">
+            <span className="text-gray-700 lg:text-base md:text-sm text-xs">
               {t('order.lastUpdated')}: {t('date.toLocaleDateTimeString', { val: new Date(orderItem?.updatedAt) })}
             </span>
           </div>
-          <div className="flex gap-2 items-center">
+          <div className="flex gap-2 items-center flex-wrap">
             <Button
               variant="outline"
               className="border border-primary text-primary hover:text-primary hover:bg-primary/10"
@@ -197,7 +276,7 @@ const OrderItem = ({ brand, orderItem, setIsTrigger }: OrderItemProps) => {
               </Button>
             )}
             {orderItem?.status === ShippingStatusEnum.PREPARING_ORDER &&
-              !cancelAndReturnRequestData?.data?.cancelOrderRequest && (
+              !cancelAndReturnRequestData?.data?.cancelRequest && (
                 <Button
                   variant="outline"
                   className="border border-primary text-primary hover:text-primary hover:bg-primary/10"

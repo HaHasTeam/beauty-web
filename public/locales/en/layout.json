@@ -620,6 +620,7 @@
     "BANK_TRANSFER": "Credit Card/Debit Card"
   },
   "order": {
+    "requestManagement": "Request Management",
     "loading": "Loading order...",
     "viewDetail": "View details",
     "buyAgain": "Buy Again",
@@ -632,9 +633,13 @@
     "shipping": "Ready to ship",
     "delivering": "In Transit",
     "cancelled": "Cancelled",
+    "pendingReturnApproval": "Pending Return Approval",
+    "pendingCancellation": "Pending Cancellation",
     "cancelledBySeller": "Cancelled By Seller",
     "completed": "Completed",
     "return": "Return/Refund",
+    "processing": "Processing",
+    "returns": "Returns",
     "returnOrder": "Return",
     "joinGroupBuying": "Waiting For Group Buying",
     "preparingOrder": "Preparing Order",
@@ -1339,6 +1344,42 @@
   "requestStatus": {
     "approved": "Approved",
     "rejected": "Rejected",
-    "pending": "Pending"
+    "pending": "Pending",
+    "all": "All"
+  },
+  "requestTypes": {
+    "cancel": "Cancel",
+    "return": "Return/Refund",
+    "rejectReturn": "Reject Return/Refund",
+    "complaint": "Complaint"
+  },
+  "request": {
+    "typeSelected": "Selected Type",
+    "selectType": "Choose a Type",
+    "searchType": "Search for a Type",
+    "noTypeFound": "No Types Found",
+    "statusSelected": "Selected Status",
+    "selectStatus": "Choose a Status",
+    "searchStatus": "Search for a Status",
+    "noStatusFound": "No Statuses Found",
+    "clearAll": "Clear All",
+    "cancel": "Cancel",
+    "return": "Return/Refund",
+    "returnRequest": "Return Request",
+    "cancelRequest": "Cancel Request",
+    "appealRequest": "Brand Appeal Request",
+    "rejectedOn": "Rejected on",
+    "awaitingResponse": "Awaiting Response",
+    "status": {
+      "PENDING": "Pending",
+      "APPROVAL": "Approved",
+      "REJECTED": "Rejected",
+      "BRAND_PENDING": "Pending",
+      "ADMIN_PENDING": "Pending",
+      "ADMIN_APPROVAL": "Approved by Admin",
+      "BRAND_APPROVAL": "Approved by Brand",
+      "ADMIN_REJECTED": "Rejected by Admin",
+      "BRAND_REJECTED": "Rejected by Brand"
+    }
   }
 }

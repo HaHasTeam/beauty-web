@@ -620,6 +620,7 @@
     "BANK_TRANSFER": "Thẻ tín dụng/ghi nợ"
   },
   "order": {
+    "requestManagement": "Quản Lý Yêu Cầu",
     "loading": "Đang tải đơn hàng...",
     "viewDetail": "Xem chi tiết",
     "buyAgain": "Mua lại",
@@ -632,6 +633,8 @@
     "shipping": "Sẵn Sàng Để Giao",
     "delivering": "Đang Vận Chuyển",
     "cancelled": "Đã Hủy",
+    "pendingReturnApproval": "Chờ duyệt trả hàng",
+    "pendingCancellation": "Chờ duyệt hủy",
     "cancelledBySeller": "Người Bán Đã Hủy",
     "completed": "Hoàn Thành",
     "return": "Trả Hàng/Hoàn Tiền",
@@ -640,6 +643,8 @@
     "preparingOrder": "Đang Chuẩn Bị Đơn Hàng",
     "delivered": "Đã Giao Hàng",
     "returning": "Đang Trả Hàng",
+    "processing": "Đang xử lý",
+    "returns": "Trả hàng",
     "brandReceived": "Thương Hiệu Đã Nhận",
     "returnedFail": "Trả Hàng Thất Bại",
     "refunded": "Đã Trả Hàng & Hoàn Tiền",
@@ -1339,6 +1344,42 @@
   "requestStatus": {
     "approved": "Phê duyệt",
     "rejected": "Từ chối",
-    "pending": "Chờ xét duyệt"
+    "pending": "Chờ xét duyệt",
+    "all": "Tất cả"
+  },
+  "requestTypes": {
+    "cancel": "Hủy",
+    "return": "Trả Hàng/Hoàn Tiền",
+    "rejectReturn": "Từ Chối Trả Hàng/Hoàn Tiền",
+    "complaint": "Khiếu nại"
+  },
+  "request": {
+    "typeSelected": "Loại đã chọn",
+    "selectType": "Chọn loại",
+    "searchType": "Tìm kiếm loại",
+    "noTypeFound": "Không tìm thấy loại nào",
+    "statusSelected": "Trạng thái đã chọn",
+    "selectStatus": "Chọn trạng thái",
+    "searchStatus": "Tìm kiếm trạng thái",
+    "noStatusFound": "Không tìm thấy trạng thái nào",
+    "clearAll": "Xóa tất cả",
+    "cancel": "Hủy",
+    "return": "Trả Hàng/Hoàn Tiền",
+    "returnRequest": "Yêu cầu trả hàng",
+    "cancelRequest": "Yêu cầu hủy đơn",
+    "appealRequest": "Yêu cầu từ chối của thương hiệu",
+    "rejectedOn": "Từ chối lúc",
+    "awaitingResponse": "Đang chờ phản hồi",
+    "status": {
+      "PENDING": "Chờ duyệt",
+      "APPROVAL": "Đã phê duyệt",
+      "REJECTED": "Bị từ chối",
+      "ADMIN_APPROVAL": "Quản trị viên đã duyệt",
+      "BRAND_PENDING": "Chờ duyệt",
+      "ADMIN_PENDING": "Chờ duyệt",
+      "BRAND_APPROVAL": "Thương hiệu đã duyệt",
+      "ADMIN_REJECTED": "Quản trị viên đã từ chối",
+      "BRAND_REJECTED": "Thương hiệu đã từ chối"
+    }
   }
 }

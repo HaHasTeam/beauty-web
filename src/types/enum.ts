@@ -94,6 +94,8 @@ export enum ShippingStatusEnum {
   RETURNED_FAIL = 'RETURNED_FAIL',
   REFUNDED = 'REFUNDED', // Đã trả hàng
   CANCELLED = 'CANCELLED', // Đã hủy
+  PENDING_CANCELLATION = 'PENDING_CANCELLATION', // FRONT END
+  PENDING_RETURN_APPROVAL = 'PENDING_RETURN_APPROVAL', // FRONT END
 }
 
 export enum ProductDiscountEnum {
