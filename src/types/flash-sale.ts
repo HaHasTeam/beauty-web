@@ -1,5 +1,6 @@
 import { TBrand } from './brand'
 import { IClassification } from './classification'
+import { IImage } from './image'
 import { IResponseProduct } from './product'
 import { TMetaData } from './request'
 
@@ -9,7 +10,7 @@ export type TFlashSale = TMetaData & {
   discount: number
   product: IResponseProduct
   brand: TBrand
-  images: string[]
+  images: IImage[]
   status: FlashSaleStatusEnum
   productClassifications: IClassification[]
 }

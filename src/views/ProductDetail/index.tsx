@@ -165,10 +165,27 @@ const ProductDetail = ({ initProductId, isInGroupBuying = false }: ProductDetail
             {/* product reviews */}
             <div className="flex gap-2 bg-white rounded-lg" id="customerReviews" ref={reviewSectionRef}>
               {isFetchingReviewGeneral && <LoadingIcon />}
-              {reviewGeneral && reviewGeneral.data ? <ReviewOverall reviewGeneral={reviewGeneral.data} /> : null}
-              <div>
-                <ReviewFilter productId={productId ?? ''} />
-              </div>
+              {reviewGeneral?.data.totalCount === 0 ? (
+                <div className="p-4 flex flex-col justify-center w-full">
+                  <h2 className="text-xl font-medium mb-4 text-primary">{t('reviews.customerReview')}</h2>
+                  <div className="flex justify-center items-center">
+                    <Empty
+                      title={t('empty.feedback.title')}
+                      description={t('empty.feedback.description', {
+                        filter: '',
+                        filterCallAction: '',
+                      })}
+                    />
+                  </div>
+                </div>
+              ) : (
+                <>
+                  {reviewGeneral && reviewGeneral.data ? <ReviewOverall reviewGeneral={reviewGeneral.data} /> : null}
+                  <div>
+                    <ReviewFilter productId={productId ?? ''} brand={useProductData?.data?.brand} />
+                  </div>
+                </>
+              )}
             </div>
 
             {/* other product in same brand */}

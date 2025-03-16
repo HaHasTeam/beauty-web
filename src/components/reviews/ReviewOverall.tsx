@@ -36,7 +36,7 @@ export default function ReviewOverall({ reviewGeneral }: ReviewOverallProps) {
             <Ratings rating={stars} size={13} variant="yellow" />
 
             <Progress value={(count / reviewGeneral.totalCount) * 100} className="h-2 w-48" />
-            <span className="text-sm text-gray-600 w-8">{count}%</span>
+            <span className="text-sm text-gray-600 w-8">{(count / reviewGeneral.totalCount) * 100}%</span>
           </div>
         ))}
       </div>

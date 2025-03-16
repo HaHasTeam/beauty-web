@@ -106,6 +106,8 @@ export type IResponseProduct = {
   menu?: string
   updatedAt: string
   certificates: TServerFile[]
+  average_rating: number
+  total_ratings: number
 }
 
 export type IProductTable = {

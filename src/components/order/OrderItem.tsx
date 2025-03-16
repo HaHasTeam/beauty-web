@@ -1,6 +1,6 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { MessageCircle, Store } from 'lucide-react'
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router-dom'
 
@@ -9,20 +9,23 @@ import useHandleServerError from '@/hooks/useHandleServerError'
 import { useToast } from '@/hooks/useToast'
 import { createCartItemApi, getMyCartApi } from '@/network/apis/cart'
 import {
-  getMyCancelRequestApi,
+  getCancelAndReturnRequestApi,
   getOrderByIdApi,
   getStatusTrackingByIdApi,
   updateOrderStatusApi,
 } from '@/network/apis/order'
 import { IBrand } from '@/types/brand'
-import { OrderEnum, ShippingStatusEnum } from '@/types/enum'
-import { ICancelRequestOrder, IOrderItem } from '@/types/order'
+import { OrderEnum, RequestStatusEnum, ShippingStatusEnum } from '@/types/enum'
+import { IOrderItem } from '@/types/order'
 
-import CancelOrderDialog from '../dialog/CancelOrderDialog'
 import LoadingIcon from '../loading-icon'
 import OrderStatus from '../order-status'
+import { getRequestStatusColor } from '../request-status'
 import { Button } from '../ui/button'
+import CancelOrderDialog from './CancelOrderDialog'
 import ProductOrderLandscape from './ProductOrderLandscape'
+import RequestCancelOrderDialog from './RequestCancelOrderDialog'
+import { RequestReturnOrderDialog } from './RequestReturnOrderDialog'
 
 interface OrderItemProps {
   brand: IBrand | null
@@ -33,16 +36,14 @@ const OrderItem = ({ brand, orderItem, setIsTrigger }: OrderItemProps) => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const [openCancelOrderDialog, setOpenCancelOrderDialog] = useState<boolean>(false)
-  const [cancelRequests, setCancelRequests] = useState<ICancelRequestOrder[]>([])
-  const [isLoading, setIsLoading] = useState(true)
+  const [openRequestCancelOrderDialog, setOpenRequestCancelOrderDialog] = useState<boolean>(false)
+  const [openReqReturnDialog, setOpenReqReturnDialog] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState(false)
 
-  const { mutateAsync: getMyCancelRequestOrderFn } = useMutation({
-    mutationKey: [getMyCancelRequestApi.mutationKey],
-    mutationFn: getMyCancelRequestApi.fn,
-    onSuccess: (data) => {
-      setCancelRequests(data?.data)
-      setIsLoading(false)
-    },
+  const { data: cancelAndReturnRequestData } = useQuery({
+    queryKey: [getCancelAndReturnRequestApi.queryKey, orderItem.id ?? ('' as string)],
+    queryFn: getCancelAndReturnRequestApi.fn,
+    enabled: !!orderItem.id,
   })
 
   const [isProcessing, setIsProcessing] = useState(false)
@@ -85,14 +86,6 @@ const OrderItem = ({ brand, orderItem, setIsTrigger }: OrderItemProps) => {
     }
   }
 
-  useEffect(() => {
-    const fetchCancelRequests = async () => {
-      setIsLoading(true)
-      await getMyCancelRequestOrderFn({})
-    }
-    fetchCancelRequests()
-  }, [getMyCancelRequestOrderFn])
-
   const { mutateAsync: updateOrderStatusFn } = useMutation({
     mutationKey: [updateOrderStatusApi.mutationKey],
     mutationFn: updateOrderStatusApi.fn,
@@ -124,25 +117,46 @@ const OrderItem = ({ brand, orderItem, setIsTrigger }: OrderItemProps) => {
     <>
       <div className="p-4">
         {/* Order Item Header */}
-        <div className="flex justify-between items-center border-b py-2 mb-4">
+        <div className="flex flex-col-reverse gap-2 md:flex-row items-start md:justify-between md:items-center border-b py-2 mb-4">
           {/* Brand */}
           <div className="flex items-center gap-2">
-            <Store className="w-5 h-5 text-red-500" />
-            <Link to={configs.routes.brands + `/${brand?.id}`}>
-              <span className="font-medium">{brand?.name}</span>
-            </Link>
-            <Button className="bg-primary hover:bg-primary/80" variant="default" size="sm">
-              <MessageCircle className="w-4 h-4" />
-              {t('brand.chat')}
-            </Button>
-            <Button variant="outline" size="sm" className="">
-              <Store className="h-4 w-4" />
-              {t('brand.viewShop')}
-            </Button>
+            <div className="flex items-center gap-2">
+              <Store className="w-5 h-5 text-red-500" />
+              <Link to={configs.routes.brands + `/${brand?.id}`}>
+                <span className="font-medium">{brand?.name}</span>
+              </Link>
+            </div>
+            <div className="flex items-center gap-2">
+              <Button className="flex-1 md:flex-none bg-primary hover:bg-primary/80" variant="default" size="sm">
+                <MessageCircle className="w-4 h-4" />
+                {t('brand.chat')}
+              </Button>
+              <Link
+                to={configs.routes.brands + '/' + brand?.id}
+                className="hidden md:flex py-1.5 px-2 rounded-md items-center flex-1 md:flex-none border border-primary text-primary hover:text-primary hover:bg-primary/10 text-sm"
+              >
+                <Store className="w-4 h-4 mr-2" />
+                {t('brand.viewShop')}
+              </Link>
+            </div>
           </div>
-          {/* Order Status */}
-          <div className="flex items-center">
-            <OrderStatus tag={orderItem?.status} />
+          {/* Order and request status */}
+          <div className="flex flex-col items-end gap-1">
+            {/* Order Status */}
+            <div className="flex items-center">
+              {cancelAndReturnRequestData?.data?.refundRequest &&
+              (cancelAndReturnRequestData?.data?.refundRequest?.status === RequestStatusEnum.PENDING ||
+                (cancelAndReturnRequestData?.data?.refundRequest?.status === RequestStatusEnum.REJECTED &&
+                  cancelAndReturnRequestData?.data?.refundRequest?.rejectedRefundRequest?.status ===
+                    RequestStatusEnum.PENDING)) ? (
+                <OrderStatus tag={ShippingStatusEnum.PENDING_RETURN_APPROVAL} />
+              ) : cancelAndReturnRequestData?.data?.cancelRequest &&
+                cancelAndReturnRequestData?.data?.cancelRequest?.status === RequestStatusEnum.PENDING ? (
+                <OrderStatus tag={ShippingStatusEnum.PENDING_CANCELLATION} />
+              ) : (
+                <OrderStatus tag={orderItem?.status} />
+              )}
+            </div>
           </div>
         </div>
 
@@ -177,14 +191,73 @@ const OrderItem = ({ brand, orderItem, setIsTrigger }: OrderItemProps) => {
           <span className="text-red-500 font-semibold">{t('productCard.price', { price: orderItem?.totalPrice })}</span>
         </div>
 
+        {/* Request Status Information (Enhanced) */}
+        {(cancelAndReturnRequestData?.data?.refundRequest || cancelAndReturnRequestData?.data?.cancelRequest) && (
+          <div className="mt-2 py-2 border-y">
+            {cancelAndReturnRequestData?.data?.cancelRequest && (
+              <div className="flex justify-between items-center">
+                <span className="font-medium">{t('request.cancelRequest')}</span>
+                <span
+                  className={`px-2 py-1 rounded-full uppercase font-bold cursor-default text-xs ${getRequestStatusColor(
+                    cancelAndReturnRequestData?.data?.cancelRequest?.status,
+                  )}`}
+                >
+                  {t(`request.status.BRAND_${cancelAndReturnRequestData?.data?.cancelRequest?.status}`)}
+                </span>
+              </div>
+            )}
+            {cancelAndReturnRequestData?.data?.refundRequest && (
+              <div className="flex flex-col gap-2">
+                <div className="flex justify-between items-center">
+                  <span className="font-medium">{t('request.returnRequest')}</span>
+                  <span
+                    className={`px-2 py-1 rounded-full uppercase font-bold cursor-default text-xs ${getRequestStatusColor(
+                      cancelAndReturnRequestData?.data?.refundRequest?.status,
+                    )}`}
+                  >
+                    {t(`request.status.BRAND_${cancelAndReturnRequestData?.data?.refundRequest?.status}`)}
+                  </span>
+                </div>
+
+                {/* Show rejection details if applicable */}
+                {cancelAndReturnRequestData?.data?.refundRequest?.status === RequestStatusEnum.REJECTED && (
+                  <>
+                    {/* Show pending counter-request if any */}
+                    {cancelAndReturnRequestData?.data?.refundRequest?.rejectedRefundRequest && (
+                      <div className="">
+                        <div className="flex justify-between items-center">
+                          <span className="font-medium">{t('request.appealRequest')}</span>
+                          <span
+                            className={`px-2 py-1 rounded-full uppercase font-bold cursor-default text-xs ${getRequestStatusColor(
+                              cancelAndReturnRequestData?.data?.refundRequest?.rejectedRefundRequest?.status,
+                            )}`}
+                          >
+                            {t(
+                              `request.status.ADMIN_${cancelAndReturnRequestData?.data?.refundRequest?.rejectedRefundRequest?.status}`,
+                            )}
+                          </span>
+                        </div>
+                        {cancelAndReturnRequestData?.data?.refundRequest?.rejectedRefundRequest?.status ===
+                          RequestStatusEnum.PENDING && (
+                          <div className="text-sm text-gray-600 mt-1">{t('request.awaitingResponse')}</div>
+                        )}
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+            )}
+          </div>
+        )}
+
         {/* Action button */}
-        <div className="flex justify-between gap-2 pt-4 items-center">
+        <div className="flex flex-col items-end md:flex-row md:justify-between gap-2 pt-4 md:items-center">
           <div>
-            <span className="text-gray-700 text-base">
+            <span className="text-gray-700 lg:text-base md:text-sm text-xs">
               {t('order.lastUpdated')}: {t('date.toLocaleDateTimeString', { val: new Date(orderItem?.updatedAt) })}
             </span>
           </div>
-          <div className="flex gap-2 items-center">
+          <div className="flex gap-2 items-center flex-wrap">
             <Button
               variant="outline"
               className="border border-primary text-primary hover:text-primary hover:bg-primary/10"
@@ -193,10 +266,7 @@ const OrderItem = ({ brand, orderItem, setIsTrigger }: OrderItemProps) => {
               {t('order.viewDetail')}
             </Button>
             {(orderItem?.status === ShippingStatusEnum.TO_PAY ||
-              orderItem?.status === ShippingStatusEnum.WAIT_FOR_CONFIRMATION ||
-              (orderItem?.status === ShippingStatusEnum.PREPARING_ORDER &&
-                !isLoading &&
-                !cancelRequests?.some((cancelRequest) => cancelRequest?.order?.id === orderItem?.id))) && (
+              orderItem?.status === ShippingStatusEnum.WAIT_FOR_CONFIRMATION) && (
               <Button
                 variant="outline"
                 className="border border-primary text-primary hover:text-primary hover:bg-primary/10"
@@ -205,15 +275,26 @@ const OrderItem = ({ brand, orderItem, setIsTrigger }: OrderItemProps) => {
                 {t('order.cancelOrder')}
               </Button>
             )}
-            {orderItem?.status === ShippingStatusEnum.COMPLETED && (
+            {orderItem?.status === ShippingStatusEnum.PREPARING_ORDER &&
+              !cancelAndReturnRequestData?.data?.cancelRequest && (
+                <Button
+                  variant="outline"
+                  className="border border-primary text-primary hover:text-primary hover:bg-primary/10"
+                  onClick={() => setOpenRequestCancelOrderDialog(true)}
+                >
+                  {t('order.cancelOrder')}
+                </Button>
+              )}
+            {orderItem?.status === ShippingStatusEnum.DELIVERED && !cancelAndReturnRequestData?.data?.refundRequest && (
               <Button
                 variant="outline"
                 className="border border-primary text-primary hover:text-primary hover:bg-primary/10"
+                onClick={() => setOpenReqReturnDialog(true)}
               >
                 {t('order.returnOrder')}
               </Button>
             )}
-            {orderItem?.status === ShippingStatusEnum.DELIVERED && (
+            {orderItem?.status === ShippingStatusEnum.DELIVERED && !cancelAndReturnRequestData?.data?.refundRequest && (
               <Button
                 variant="outline"
                 className="border border-primary text-primary hover:text-primary hover:bg-primary/10"
@@ -221,7 +302,7 @@ const OrderItem = ({ brand, orderItem, setIsTrigger }: OrderItemProps) => {
                   handleUpdateStatus(ShippingStatusEnum.COMPLETED)
                 }}
               >
-                {isProcessing ? <LoadingIcon color="primaryBackground" /> : t('order.received')}
+                {isLoading ? <LoadingIcon color="primaryBackground" /> : t('order.received')}
               </Button>
             )}
 
@@ -241,6 +322,20 @@ const OrderItem = ({ brand, orderItem, setIsTrigger }: OrderItemProps) => {
         open={openCancelOrderDialog}
         setOpen={setOpenCancelOrderDialog}
         onOpenChange={setOpenCancelOrderDialog}
+        setIsTrigger={setIsTrigger}
+        orderId={orderItem?.id ?? ''}
+      />
+      <RequestCancelOrderDialog
+        open={openRequestCancelOrderDialog}
+        setOpen={setOpenRequestCancelOrderDialog}
+        onOpenChange={setOpenRequestCancelOrderDialog}
+        setIsTrigger={setIsTrigger}
+        orderId={orderItem?.id ?? ''}
+      />
+      <RequestReturnOrderDialog
+        open={openReqReturnDialog}
+        setOpen={setOpenReqReturnDialog}
+        onOpenChange={setOpenReqReturnDialog}
         setIsTrigger={setIsTrigger}
         orderId={orderItem?.id ?? ''}
       />

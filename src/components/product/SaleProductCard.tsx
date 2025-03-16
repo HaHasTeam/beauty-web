@@ -3,10 +3,9 @@ import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import fallBackImage from '@/assets/images/fallBackImage.jpg'
-import productImage from '@/assets/images/product_sample_img.png'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import configs from '@/config'
-import { DiscountTypeEnum, OrderEnum } from '@/types/enum'
+import { DiscountTypeEnum, OrderEnum, StatusEnum } from '@/types/enum'
 import { TFlashSale } from '@/types/flash-sale'
 import { calculateDiscountPrice } from '@/utils/price'
 import { getCheapestClassification } from '@/utils/product'
@@ -38,8 +37,8 @@ export default function SaleProductCard({ product }: ProductCardProps) {
           <div className="relative aspect-square">
             <ImageWithFallback
               fallback={fallBackImage}
-              src={productImage}
-              alt={productImage}
+              src={cheapestClassification?.images?.filter((img) => img.status === StatusEnum.ACTIVE)?.[0]?.fileUrl}
+              alt={cheapestClassification?.title}
               className="object-cover w-full h-full rounded-tl-xl rounded-tr-xl"
             />
           </div>

@@ -42,16 +42,19 @@ const BrandAnswer = ({
   )
   const [showAllReplies, setShowAllReplies] = useState(false)
 
-  if (!replies || replies.length === 0) {
-    return null
-  }
+  // if (!replies || replies.length === 0) {
+  //   return null
+  // }
+  const sortedReplies = [...replies].sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
 
-  const displayedReplies = showAllReplies || replies.length <= 2 ? replies : replies.slice(0, 2)
+  const displayedReplies = showAllReplies || sortedReplies.length <= 2 ? sortedReplies : sortedReplies.slice(0, 2)
+
+  // const displayedReplies = showAllReplies || replies.length <= 2 ? replies : replies.slice(0, 2)
 
   const toggleReplies = () => {
     setShowAllReplies(!showAllReplies)
   }
-
+  console.log(user)
   return (
     <div className="pl-6 pr-2">
       <div className="space-y-2">
@@ -66,12 +69,12 @@ const BrandAnswer = ({
                   {brand && (account.role.role === UserRoleEnum.MANAGER || account.role.role === UserRoleEnum.STAFF) ? (
                     <Avatar>
                       <AvatarImage src={brand.logo} alt={brand.name} />
-                      <AvatarFallback>{brand.name?.charAt(0) ?? 'A'}</AvatarFallback>
+                      <AvatarFallback>{brand.name?.charAt(0).toUpperCase() ?? 'A'}</AvatarFallback>
                     </Avatar>
                   ) : (
                     <Avatar>
-                      <AvatarImage src={account.avatar} alt={account.firstName} />
-                      <AvatarFallback>{account.firstName?.charAt(0) ?? 'A'}</AvatarFallback>
+                      <AvatarImage src={account.avatar} alt={account.username} />
+                      <AvatarFallback>{account.username?.charAt(0).toUpperCase() ?? 'A'}</AvatarFallback>
                     </Avatar>
                   )}
                   <div className="space-y-1">
@@ -128,16 +131,16 @@ const BrandAnswer = ({
                 <span className="text-muted-foreground font-medium text-xs">
                   {t('date.toLocaleDateTimeString', { val: new Date(updatedAt) })}
                 </span>
-                {(user?.brands?.find((b) => b.id === brand?.id) || user?.role === RoleEnum.CUSTOMER) && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="border-0 outline-0 text-muted-foreground hover:bg-transparent hover:text-muted-foreground/80"
-                    onClick={onReplyClick}
-                  >
-                    {t('feedback.reply')}
-                  </Button>
-                )}
+                {/* {(user?.brands?.find((b) => b.id === brand?.id) || user?.role === RoleEnum.CUSTOMER) && ( */}
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="border-0 outline-0 text-muted-foreground hover:bg-transparent hover:text-muted-foreground/80"
+                  onClick={onReplyClick}
+                >
+                  {t('feedback.reply')}
+                </Button>
+                {/* )} */}
               </div>
             </div>
           )
@@ -155,7 +158,15 @@ const BrandAnswer = ({
           </Button>
         </div>
       )}
-      {showRep && <ReplyFeedbackForm ref={replyFormRef} isOpen={isOpen} feedback={feedback} setShowRep={setShowRep} />}
+      {showRep && (
+        <ReplyFeedbackForm
+          ref={replyFormRef}
+          isOpen={isOpen}
+          feedback={feedback}
+          setShowRep={setShowRep}
+          brand={user?.brands?.some((br) => br.id === brand?.id) ? brand : null}
+        />
+      )}
     </div>
   )
 }
