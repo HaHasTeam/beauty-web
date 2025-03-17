@@ -184,7 +184,7 @@ const ProductDetailInformation = ({
           </div>
           <div className="border-l border-gray-300 px-2">
             <span className="text-gray-500 text-sm">
-              {t('productCard.soldInPastMonth', { amount: product?.soldInPastMonth ?? 0 })}
+              {t('productCard.soldInPastMonth', { amount: product?.salesLast30Days ?? 0 })}
             </span>
           </div>
         </div>

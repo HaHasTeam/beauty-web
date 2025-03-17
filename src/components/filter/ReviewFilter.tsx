@@ -173,7 +173,7 @@ export default function ReviewFilter({ productId, brand }: ReviewFilterProps) {
                 key={option.id}
                 variant={selectedFilter === option.id ? 'outline' : 'outline'}
                 onClick={() => toggleFilter(option.id)}
-                className={`h-8 gap-1.5 rounded-full border-gray-300 ${selectedFilter === option.id ? ' border-primary bg-primary/10 hover:bg-primary/15 text-primary hover:text-primary' : 'border-gray-300'}`}
+                className={`h-8 gap-1.5 rounded-full border-gray-300 ${selectedFilter === option.id ? ' border-primary bg-primary/10 hover:bg-primary/15 text-primary hover:text-primary' : 'border-secondary-foreground text-secondary-foreground hover:text-secondary-foreground'}`}
               >
                 {option.type === 'toggle' && selectedFilter === option.id && <Check className="text-primary/80" />}
                 {option.label}
@@ -228,7 +228,9 @@ export default function ReviewFilter({ productId, brand }: ReviewFilterProps) {
         )}
       </div>
       {/* pagination */}
-      <APIPagination currentPage={currentPage} onPageChange={handlePageChange} totalPages={totalPages} />
+      {reviews && reviews.length > 0 && (
+        <APIPagination currentPage={currentPage} onPageChange={handlePageChange} totalPages={totalPages} />
+      )}
     </div>
   )
 }

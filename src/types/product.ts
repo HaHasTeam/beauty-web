@@ -152,7 +152,7 @@ export type IProduct = {
   } | null
   rating: number
   ratingAmount: number
-  soldInPastMonth: number
+  salesLast30Days: number
   description: string
   classifications: IClassification[]
   createdAt?: string

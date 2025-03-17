@@ -155,7 +155,7 @@
     "currency": "$",
     "filterBy": "Filter by",
     "newest": "Newest",
-    "hasImage": "Has image",
+    "hasImage": "Has videos/images",
     "numberOfStar": "{{count}} star"
   },
   "sort": {
@@ -349,7 +349,11 @@
     "name": "Name"
   },
   "event": {
-    "finishIn": "Finish In"
+    "finishIn": "Finish In",
+    "days": "Days",
+    "hours": "Hours",
+    "minutes": "Minutes",
+    "seconds": "Seconds"
   },
   "reviews": {
     "title": "Reviews",

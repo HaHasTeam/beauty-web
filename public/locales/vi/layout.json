@@ -155,7 +155,7 @@
     "currency": "đ",
     "filterBy": "Lọc theo",
     "newest": "Mới nhất",
-    "hasImage": "Có hình ảnh",
+    "hasImage": "Có video/hình ảnh",
     "numberOfStar": "{{count}} sao"
   },
   "sort": {
@@ -349,7 +349,11 @@
     "name": "Tên"
   },
   "event": {
-    "finishIn": "Kết thúc trong"
+    "finishIn": "Kết thúc trong",
+    "days": "Ngày",
+    "hours": "Giờ",
+    "minutes": "Phút",
+    "seconds": "Giây"
   },
   "reviews": {
     "title": "Đánh giá",
