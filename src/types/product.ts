@@ -108,6 +108,7 @@ export type IResponseProduct = {
   certificates: TServerFile[]
   average_rating: number
   total_ratings: number
+  salesLast30Days: number
 }
 
 export type IProductTable = {
