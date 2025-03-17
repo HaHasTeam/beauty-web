@@ -203,7 +203,6 @@ const Cart = ({ isInGroupBuy = false, isInPeriod = false }: CartProps) => {
       resetSelectedCartItem()
     }
   }, [cartItems, resetSelectedCartItem, selectedCartItems, setChosenPlatformVoucher, isTriggerTotal])
-  console.log('test', totalDirectProductsDiscount)
   useEffect(() => {
     setChosenPlatformVoucher(platformChosenVoucher)
   }, [platformChosenVoucher, setChosenPlatformVoucher])

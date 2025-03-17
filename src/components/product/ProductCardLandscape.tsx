@@ -12,7 +12,7 @@ import { deleteCartItemApi, getCartByIdApi, getMyCartApi, updateCartItemApi } fr
 import useCartStore from '@/store/cart'
 import { ICartByBrand, ICartItem } from '@/types/cart'
 import { IClassification } from '@/types/classification'
-import { ClassificationTypeEnum, DiscountTypeEnum, ProductCartStatusEnum } from '@/types/enum'
+import { ClassificationTypeEnum, DiscountTypeEnum, ProductCartStatusEnum, ProductEnum } from '@/types/enum'
 import { DiscountType } from '@/types/product-discount'
 import { calculateDiscountPrice, calculateTotalPrice } from '@/utils/price'
 import {
@@ -47,6 +47,7 @@ interface ProductCardLandscapeProps {
   isSelected: boolean
   onChooseProduct: (cartItemId: string) => void
   setIsTriggerTotal: Dispatch<SetStateAction<boolean>>
+  productStatus?: ProductEnum
 }
 const ProductCardLandscape = ({
   cartItem,
@@ -65,6 +66,7 @@ const ProductCardLandscape = ({
   productClassification,
   productClassificationQuantity,
   setIsTriggerTotal,
+  productStatus,
 }: ProductCardLandscapeProps) => {
   const { t } = useTranslation()
   const [quantity, setQuantity] = useState(productQuantity)
@@ -80,18 +82,6 @@ const ProductCardLandscape = ({
   const OUT_OF_STOCK = PRODUCT_STOCK_COUNT <= 0
   const HIDDEN = checkCurrentProductClassificationHide(productClassification, classifications)
   const IS_ACTIVE = checkCurrentProductClassificationActive(productClassification, classifications)
-  console.log(IS_ACTIVE)
-  console.log(
-    'info',
-    classifications,
-    productClassification,
-    productClassificationQuantity,
-    'hidden' + HIDDEN,
-    'active' + IS_ACTIVE,
-    'sold out' + OUT_OF_STOCK,
-    MAX_QUANTITY_IN_CART,
-    PRODUCT_STOCK_COUNT,
-  )
 
   const { mutateAsync: deleteCartItemFn } = useMutation({
     mutationKey: [deleteCartItemApi.mutationKey, cartItemId as string],
@@ -251,7 +241,10 @@ const ProductCardLandscape = ({
   const discountPrice = calculateDiscountPrice(price, discount, discountType)
   const HAS_ACTIVE_CLASSIFICATION = hasActiveClassification(classifications)
   const IN_STOCK_CLASSIFICATION = hasClassificationWithQuantity(classifications)
-  const PREVENT_ACTION = !HAS_ACTIVE_CLASSIFICATION || !IN_STOCK_CLASSIFICATION
+  const PREVENT_ACTION =
+    !HAS_ACTIVE_CLASSIFICATION ||
+    !IN_STOCK_CLASSIFICATION ||
+    !(productStatus === ProductEnum.FLASH_SALE || productStatus === ProductEnum.OFFICIAL)
 
   // useEffect(() => {
   //   setQuantity(productQuantity ?? 1)
@@ -263,11 +256,21 @@ const ProductCardLandscape = ({
         {/* product label */}
         <div className={`flex gap-1 items-center  ${PREVENT_ACTION ? 'opacity-40 w-fit' : 'w-[10%]'}`}>
           {/* checkbox or text show hidden, inactive */}
-          {IS_ACTIVE ? (
+          {productStatus === ProductEnum.BANNED ? (
+            <ProductTag tag={ProductCartStatusEnum.BANNED} />
+          ) : productStatus === ProductEnum.INACTIVE ? (
+            <ProductTag tag={ProductCartStatusEnum.INACTIVE} />
+          ) : productStatus === ProductEnum.UN_PUBLISHED ? (
+            <ProductTag tag={ProductCartStatusEnum.UN_PUBLISHED} />
+          ) : productStatus === ProductEnum.OUT_OF_STOCK ? (
+            <ProductTag tag={ProductCartStatusEnum.SOLD_OUT} />
+          ) : IS_ACTIVE ? (
             <Checkbox id={cartItemId} checked={isSelected} onClick={() => onChooseProduct(cartItemId)} />
           ) : HIDDEN ? (
             <ProductTag tag={ProductCartStatusEnum.HIDDEN} />
           ) : OUT_OF_STOCK ? (
+            <ProductTag tag={ProductCartStatusEnum.SOLD_OUT} />
+          ) : IN_STOCK_CLASSIFICATION ? (
             <ProductTag tag={ProductCartStatusEnum.SOLD_OUT} />
           ) : null}
 
@@ -295,7 +298,38 @@ const ProductCardLandscape = ({
                 <span className="lg:text-sm text-xs line-clamp-2">{productName}</span>
               </Link>
               <div>{eventType && eventType !== '' && <ProductTag tag={eventType} size="small" />}</div>
-              {HIDDEN ? (
+              {productStatus === ProductEnum.BANNED ? (
+                <AlertMessage
+                  className="w-fit border-0 outline-none rounded-md p-1 px-2 bg-red-50"
+                  textSize="small"
+                  color="danger"
+                  text="danger"
+                  message={t('cart.bannedMessage')}
+                />
+              ) : productStatus === ProductEnum.INACTIVE ? (
+                <AlertMessage
+                  className="w-fit border-0 outline-none rounded-md p-1 px-2 bg-gray-200"
+                  textSize="small"
+                  color="black"
+                  message={t('cart.inactiveMessage')}
+                />
+              ) : productStatus === ProductEnum.UN_PUBLISHED ? (
+                <AlertMessage
+                  className="w-fit border-0 outline-none rounded-md p-1 px-2 bg-red-50"
+                  textSize="small"
+                  color="danger"
+                  text="danger"
+                  message={t('cart.unPublishMessage')}
+                />
+              ) : productStatus === ProductEnum.OUT_OF_STOCK ? (
+                <AlertMessage
+                  className="w-fit border-0 outline-none rounded-md p-1 px-2 bg-red-50"
+                  textSize="small"
+                  color="danger"
+                  text="danger"
+                  message={t('cart.soldOutAllMessage')}
+                />
+              ) : HIDDEN ? (
                 <AlertMessage
                   className="w-fit border-0 outline-none rounded-md p-1 px-2 bg-gray-200"
                   textSize="small"
@@ -370,7 +404,7 @@ const ProductCardLandscape = ({
         <div
           className={`w-[26%] md:w-[12%] sm:w-[23%] flex flex-col items-center ${PREVENT_ACTION ? 'opacity-40' : ''}`}
         >
-          {IS_ACTIVE ? (
+          {IS_ACTIVE && (productStatus === ProductEnum.OFFICIAL || productStatus === ProductEnum.FLASH_SALE) ? (
             <IncreaseDecreaseButton
               onIncrease={increaseQuantity}
               onDecrease={decreaseQuantity}

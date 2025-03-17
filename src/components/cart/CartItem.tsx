@@ -145,6 +145,7 @@ const CartItem = ({
           : eventType === OrderEnum.FLASH_SALE || (product?.productDiscounts ?? [])[0]?.discount
             ? DiscountTypeEnum.PERCENTAGE
             : null
+        const productStatus = product.status
 
         return (
           <ProductCardLandscape
@@ -165,6 +166,7 @@ const CartItem = ({
             productQuantity={productQuantity}
             productClassificationQuantity={productClassificationQuantity}
             setIsTriggerTotal={setIsTriggerTotal}
+            productStatus={productStatus}
           />
         )
       })}

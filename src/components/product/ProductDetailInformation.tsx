@@ -95,7 +95,6 @@ const ProductDetailInformation = ({
 
       const isComplete = classificationKeys.every((k) => updatedValues[k as IClassificationKey] !== null)
 
-      console.log(isComplete)
       if (isComplete) {
         const matchingClassification = productClassifications?.find((classification) =>
           Object.entries(updatedValues).every(([k, v]) => classification[k as IClassificationKey] === v),
@@ -194,6 +193,7 @@ const ProductDetailInformation = ({
         ) : event === OrderEnum.PRE_ORDER ? (
           <SpecialEvent time={product?.preOrderProducts?.[0]?.endTime ?? ''} title={event} />
         ) : null}
+
         {product?.productDiscounts?.[0]?.status === ProductDiscountEnum.WAITING ? (
           <div>{t('flashSale.waiting', { val: new Date(product?.productDiscounts?.[0]?.startTime) })}</div>
         ) : null}

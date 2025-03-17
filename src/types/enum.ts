@@ -21,6 +21,7 @@ export enum StatusEnum {
   BANNED = 'BANNED',
   DENIED = 'DENIED',
 }
+
 export enum AddressEnum {
   HOME = 'HOME',
   OFFICE = 'OFFICE',
@@ -28,10 +29,13 @@ export enum AddressEnum {
 }
 
 export enum ProductEnum {
-  PRE_ORDER = 'PRE_ORDER',
+  UN_PUBLISHED = 'UN_PUBLISHED',
+  FLASH_SALE = 'FLASH_SALE',
   OFFICIAL = 'OFFICIAL',
   OUT_OF_STOCK = 'OUT_OF_STOCK',
   INACTIVE = 'INACTIVE',
+  BANNED = 'BANNED',
+  PRE_ORDER = 'PRE_ORDER',
 }
 
 export enum FileEnum {
@@ -119,6 +123,9 @@ export enum VoucherStatusEnum {
 export enum ProductCartStatusEnum {
   HIDDEN = 'HIDDEN',
   SOLD_OUT = 'SOLD_OUT',
+  INACTIVE = 'INACTIVE',
+  BANNED = 'BANNED',
+  UN_PUBLISHED = 'UN_PUBLISHED',
 }
 export enum ClassificationTypeEnum {
   DEFAULT = 'DEFAULT',

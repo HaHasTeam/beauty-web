@@ -105,6 +105,7 @@ const SearchPage = () => {
                         soldInPastMonth: 300,
                         classifications: productClassifications,
                         certificates: product.certificates,
+                        salesLast30Days: product.salesLast30Days,
                       }
                       return (
                         <ProductCard

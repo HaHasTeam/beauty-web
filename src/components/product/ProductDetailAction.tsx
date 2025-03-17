@@ -236,9 +236,13 @@ const ProductDetailAction = ({
           />
         </div>
 
-        {!inStock && !chosenClassification && (product?.productClassifications ?? [])?.length > 0 ? (
+        {product?.status === ProductEnum.BANNED ? (
+          <span className="text-red-500 text-sm">{t('cart.brannedAllMessage')}</span>
+        ) : product?.status === ProductEnum.UN_PUBLISHED ? (
+          <span className="text-red-500 text-sm">{t('cart.unPublishAllMessage')}</span>
+        ) : product?.status === ProductEnum.OUT_OF_STOCK ? (
           <span className="text-red-500 text-sm">{t('cart.soldOutAllMessage')}</span>
-        ) : product.status === ProductEnum.OUT_OF_STOCK ? (
+        ) : !inStock && !chosenClassification && (product?.productClassifications ?? [])?.length === 0 ? (
           <span className="text-red-500 text-sm">{t('cart.soldOutAllMessage')}</span>
         ) : !chosenClassification && hasCustomType ? (
           <span className="text-yellow-500 text-sm">{t('cart.chooseClassification')}</span>
@@ -258,6 +262,7 @@ const ProductDetailAction = ({
           {!isInGroupBuying && (
             <Button
               disabled={
+                !(product.status === ProductEnum.OFFICIAL || product.status === ProductEnum.FLASH_SALE) ||
                 !inStock ||
                 (!chosenClassification && hasCustomType) ||
                 (chosenClassification &&
@@ -276,6 +281,7 @@ const ProductDetailAction = ({
             className="w-full border-primary text-primary hover:text-primary hover:bg-primary/10"
             onClick={() => handleCreateCartItem()}
             disabled={
+              !(product.status === ProductEnum.OFFICIAL || product.status === ProductEnum.FLASH_SALE) ||
               !inStock ||
               (!chosenClassification && hasCustomType) ||
               (chosenClassification &&

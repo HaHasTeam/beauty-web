@@ -1,6 +1,7 @@
 import { IBrand, TBrand } from './brand'
 import { ICategory } from './category'
 import { IClassification } from './classification'
+import { ProductEnum } from './enum'
 import { TServerFile } from './file'
 import { IPreOrder } from './pre-order'
 import { IProductDiscount } from './product-discount'
@@ -17,6 +18,7 @@ export type TProduct = TMetaData & {
   status: ProductStatusEnum
   productClassifications: IClassification[]
   certificates: TServerFile[]
+  salesLast30Days: number
 }
 
 export type IProductDetail = {
@@ -160,7 +162,7 @@ export type IProduct = {
   updatedAt?: string
   detail: string
   sku?: string
-  status?: string
+  status?: ProductEnum
   brand?: IBrand
   productClassifications?: IClassification[] // use for cart
   productDiscounts?: IProductDiscount[] | null // use for cart
@@ -202,13 +204,6 @@ export type IProductCard = {
 // components interface ends
 
 // enum starts
-export enum ProductEnum {
-  PRE_ORDER = 'PRE_ORDER',
-  FLASH_SALE = 'FLASH_SALE',
-  OFFICIAL = 'OFFICIAL',
-  OUT_OF_STOCK = 'OUT_OF_STOCK',
-  INACTIVE = 'INACTIVE',
-}
 export enum ProductClassificationTypeEnum {
   DEFAULT = 'DEFAULT',
   CUSTOM = 'CUSTOM',
