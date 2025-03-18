@@ -12,49 +12,24 @@ export default function SpecialEvent({ title, time }: SpecialEventProps) {
   const { t } = useTranslation()
 
   const [timeLeft, setTimeLeft] = useState({
+    days: 0,
     hours: 0,
     minutes: 0,
     seconds: 0,
   })
-
-  // This function will parse the passed `time` (HH:MM:SS)
-  // const parseTime = (time: string) => {
-  //   const [hours, minutes, seconds] = time.split(':').map(Number)
-  //   return { hours, minutes, seconds }
-  // }
 
   const calculateTimeLeft = (endTime: string) => {
     const end = new Date(endTime).getTime()
     const now = new Date().getTime()
     const difference = Math.max(end - now, 0) // Ensure no negative values
 
+    const days = Math.floor(difference / (1000 * 60 * 60 * 24))
     const hours = Math.floor((difference / (1000 * 60 * 60)) % 24)
     const minutes = Math.floor((difference / (1000 * 60)) % 60)
     const seconds = Math.floor((difference / 1000) % 60)
 
-    return { hours, minutes, seconds }
+    return { days, hours, minutes, seconds }
   }
-
-  // useEffect(() => {
-  //   const { hours, minutes, seconds } = parseTime(time)
-  //   setTimeLeft({ hours, minutes, seconds })
-
-  //   const timer = setInterval(() => {
-  //     setTimeLeft((prev) => {
-  //       const newSeconds = prev.seconds - 1
-  //       const newMinutes = newSeconds < 0 ? prev.minutes - 1 : prev.minutes
-  //       const newHours = newMinutes < 0 ? prev.hours - 1 : prev.hours
-
-  //       return {
-  //         hours: newHours < 0 ? 23 : newHours,
-  //         minutes: newMinutes < 0 ? 59 : newMinutes,
-  //         seconds: newSeconds < 0 ? 59 : newSeconds,
-  //       }
-  //     })
-  //   }, 1000)
-
-  //   return () => clearInterval(timer)
-  // }, [time])
 
   useEffect(() => {
     setTimeLeft(calculateTimeLeft(time))
@@ -68,7 +43,7 @@ export default function SpecialEvent({ title, time }: SpecialEventProps) {
 
   return (
     <div
-      className={`text-white px-4 py-2 flex items-center justify-between ${title === OrderEnum.FLASH_SALE ? 'bg-[#FF4D15]' : 'bg-yellow-500'}`}
+      className={`text-white px-4 py-2 flex items-center justify-between rounded-sm ${title === OrderEnum.FLASH_SALE ? 'bg-rose-500' : 'bg-yellow-500'}`}
     >
       <div className="flex items-center gap-2">
         <Zap className="w-5 h-5 fill-white" />
@@ -78,14 +53,38 @@ export default function SpecialEvent({ title, time }: SpecialEventProps) {
       <div className="flex items-center gap-2">
         <span className="text-sm uppercase">{t('event.finishIn')}</span>
         <div className="flex gap-1" role="timer" aria-label="Flash sale countdown timer">
-          <div className="bg-black rounded px-1.5 py-0.5 min-w-[28px] text-center">
-            {String(timeLeft.hours).padStart(2, '0')}
+          <div className="flex flex-col items-center">
+            <div className="bg-black rounded px-1.5 py-0.5 min-w-[28px] text-center">
+              {String(timeLeft.days).padStart(2, '0')}
+            </div>
+            <span className="text-xs mt-1 text-white/80">{t('event.days')}</span>
           </div>
-          <div className="bg-black rounded px-1.5 py-0.5 min-w-[28px] text-center">
-            {String(timeLeft.minutes).padStart(2, '0')}
+
+          <span className="text-lg font-bold">:</span>
+
+          <div className="flex flex-col items-center">
+            <div className="bg-black rounded px-1.5 py-0.5 min-w-[28px] text-center">
+              {String(timeLeft.hours).padStart(2, '0')}
+            </div>
+            <span className="text-xs mt-1 text-white/80">{t('event.hours')}</span>
           </div>
-          <div className="bg-black rounded px-1.5 py-0.5 min-w-[28px] text-center">
-            {String(timeLeft.seconds).padStart(2, '0')}
+
+          <span className="text-lg font-bold">:</span>
+
+          <div className="flex flex-col items-center">
+            <div className="bg-black rounded px-1.5 py-0.5 min-w-[28px] text-center">
+              {String(timeLeft.minutes).padStart(2, '0')}
+            </div>
+            <span className="text-xs mt-1 text-white/80">{t('event.minutes')}</span>
+          </div>
+
+          <span className="text-lg font-bold">:</span>
+
+          <div className="flex flex-col items-center">
+            <div className="bg-black rounded px-1.5 py-0.5 min-w-[28px] text-center">
+              {String(timeLeft.seconds).padStart(2, '0')}
+            </div>
+            <span className="text-xs mt-1 text-white/80">{t('event.seconds')}</span>
           </div>
         </div>
       </div>

@@ -70,7 +70,9 @@
     "outOfStock": "Hết hàng",
     "waiting": "Sắp diễn ra",
     "cancelled": "Đã hủy",
-    "inactive": "Đã ẩn"
+    "inactive": "Đã ẩn",
+    "banned": "Đã cấm",
+    "unPublished": "Không khả dụng"
   },
   "statusTag": {
     "default": "Mặc định"
@@ -155,7 +157,7 @@
     "currency": "đ",
     "filterBy": "Lọc theo",
     "newest": "Mới nhất",
-    "hasImage": "Có hình ảnh",
+    "hasImage": "Có video/hình ảnh",
     "numberOfStar": "{{count}} sao"
   },
   "sort": {
@@ -349,7 +351,11 @@
     "name": "Tên"
   },
   "event": {
-    "finishIn": "Kết thúc trong"
+    "finishIn": "Kết thúc trong",
+    "days": "Ngày",
+    "hours": "Giờ",
+    "minutes": "Phút",
+    "seconds": "Giây"
   },
   "reviews": {
     "title": "Đánh giá",
@@ -420,6 +426,9 @@
     "viewNotification": "Xem thông báo"
   },
   "cart": {
+    "brannedAllMessage": "Sản phẩm này bị cấm.",
+    "unPublishAllMessage": "Sản phẩm này không có sẵn để mua.",
+    "deleteItem": "Xóa {{count}} sản phẩm",
     "updateGroupOrder": "Cập nhật đơn hàng",
     "createGroupOrder": "Xác nhận đơn hàng",
     "wishDiscount": "Mức giảm tối thiểu từ việc mua chung",
@@ -462,6 +471,9 @@
     "updateClassificationSuccess": "Thay đổi phân loại sản phẩm thành công!",
     "soldOutMessage": "Phân loại hàng này đã bán hết, vui lòng chọn phân loại khác.",
     "soldOutAllMessage": "Sản phẩm này đã hết hàng.",
+    "bannedMessage": "Sản phẩm này đã bị cấm.",
+    "inactiveMessage": "Sản phẩm này đang không hoạt động.",
+    "unPublishMessage": "Sản phẩm này hiện không khả dụng.",
     "hiddenAllMessage": "Sản phẩm này đã bị ẩn.",
     "hiddenMessage": "Phân loại hàng này đã bị ẩn, vui lòng chọn phân loại khác.",
     "maxQuantityError": "Số lượng còn lại của phân loại sản phẩm này là {{maxQuantity}}.",

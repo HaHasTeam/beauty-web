@@ -57,7 +57,7 @@ export default function ProductCard({ product, isProductDiscount = false, isInGr
                 <ProductStar rating={product?.rating} ratingAmount={product?.ratingAmount} />
                 <div className="mt-1 mb-2">
                   <span className="text-gray-500 text-sm line-clamp-1">
-                    {t('productCard.soldInPastMonth', { amount: product?.soldInPastMonth ?? 0 })}
+                    {t('productCard.soldInPastMonth', { amount: product?.salesLast30Days ?? 0 })}
                   </span>
                 </div>
               </div>
