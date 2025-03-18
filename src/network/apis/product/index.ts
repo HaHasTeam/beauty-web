@@ -1,3 +1,4 @@
+import { ProductTagEnum } from '@/types/enum'
 import { IProduct, IResponseProduct, IServerCreateProduct, TProduct } from '@/types/product'
 import { TServerResponse } from '@/types/request'
 import { TBaseFilterRequestParams } from '@/types/types'
@@ -52,5 +53,21 @@ export const getProductFilterApi = toQueryFetcher<
   return publicRequest(`/products/filter-product`, {
     method: 'GET',
     params: params,
+  })
+})
+export const getRecommendProducts = toMutationFetcher<
+  { search: string; tag: ProductTagEnum; page?: string | number; limit?: string | number },
+  TServerResponse<IServerCreateProduct>
+>('createProductApi', async (data) => {
+  return privateRequest('/products/get', {
+    method: 'POST',
+    data: {
+      search: data.search,
+      tag: data.tag,
+    },
+    params: {
+      page: data.page,
+      limit: data.limit,
+    },
   })
 })
