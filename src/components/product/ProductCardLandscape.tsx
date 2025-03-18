@@ -241,6 +241,7 @@ const ProductCardLandscape = ({
   const discountPrice = calculateDiscountPrice(price, discount, discountType)
   const HAS_ACTIVE_CLASSIFICATION = hasActiveClassification(classifications)
   const IN_STOCK_CLASSIFICATION = hasClassificationWithQuantity(classifications)
+
   const PREVENT_ACTION =
     !HAS_ACTIVE_CLASSIFICATION ||
     !IN_STOCK_CLASSIFICATION ||
