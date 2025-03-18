@@ -52,7 +52,6 @@ export const calculateDiscountAmount = (
   let discountedPrice = 0
 
   if (discountType === DiscountTypeEnum.PERCENTAGE) {
-    console.log(price * discount)
     discountedPrice = price * discount
   } else if (discountType === DiscountTypeEnum.AMOUNT) {
     discountedPrice = discount
@@ -401,11 +400,7 @@ export const calculateBrandVoucherDiscount = (
   const discountVoucherValue =
     discountType === DiscountTypeEnum.PERCENTAGE ? discountValue * totalProductPrice : discountValue
 
-  console.log('totalProductPrice', totalProductPrice)
-  console.log('discountValue', discountValue)
-  console.log('discountVoucherValue', discountVoucherValue)
-  console.log('finalValue', Math.min(discountVoucherValue, maxDiscount))
-  return Math.min(discountVoucherValue, maxDiscount)
+  return maxDiscount ? Math.min(discountVoucherValue, maxDiscount) : discountVoucherValue
 }
 /**
  * Calculate the discounted voucher price of products in one brand that user selected.
@@ -450,11 +445,7 @@ export const calculateCheckoutBrandVoucherDiscount = (
   const discountVoucherValue =
     discountType === DiscountTypeEnum.PERCENTAGE ? discountValue * totalProductPrice : discountValue
 
-  console.log('totalProductPrice', totalProductPrice)
-  console.log('discountValue', discountValue)
-  console.log('discountVoucherValue', discountVoucherValue)
-  console.log('finalValue', Math.min(discountVoucherValue, maxDiscount))
-  return Math.min(discountVoucherValue, maxDiscount)
+  return maxDiscount ? Math.min(discountVoucherValue, maxDiscount) : discountVoucherValue
 }
 
 /**
@@ -480,7 +471,7 @@ export const calculateTotalBrandVoucherDiscount = (
         brandItems[0]?.productClassification
       )?.product?.brand?.id ?? ''
     const brandVoucher = chosenVouchersByBrand[brandId] || null
-    console.log('test', brandItems[0]?.productClassification)
+
     return totalDiscount + calculateBrandVoucherDiscount(brandItems, selectedCartItems, brandVoucher)
   }, 0)
 }
@@ -726,9 +717,6 @@ export const calculatePlatformVoucherDiscount = (
       selectedCartItems.filter((id) => brandItems.some((item) => item.id === id)),
       brandVoucher,
     )
-    console.log('test', brandId)
-
-    console.log('test', brandVoucherDiscount)
 
     // Calculate the total price of selected items in this brand before brand discount
     let brandTotalPrice = 0
@@ -799,7 +787,7 @@ export const calculatePlatformVoucherDiscount = (
         // Apply proportional brand discount to this item
         const itemBrandDiscount = itemPrice * discountRatio
         const itemPriceAfterBrandDiscount = itemPrice - itemBrandDiscount
-        console.log('test', productClassification.price, itemPrice, itemPriceAfterBrandDiscount)
+
         // Add to total order price after brand discounts
         totalOrderPriceAfterBrandDiscounts += itemPriceAfterBrandDiscount
       }
@@ -816,5 +804,5 @@ export const calculatePlatformVoucherDiscount = (
   const discountVoucherValue =
     discountType === DiscountTypeEnum.PERCENTAGE ? totalOrderPriceAfterBrandDiscounts * discountValue : discountValue
 
-  return Math.min(discountVoucherValue, maxDiscount)
+  return maxDiscount ? Math.min(discountVoucherValue, maxDiscount) : discountVoucherValue
 }

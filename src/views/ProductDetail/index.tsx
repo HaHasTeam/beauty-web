@@ -69,14 +69,18 @@ const ProductDetail = ({ initProductId, isInGroupBuying = false }: ProductDetail
 
     switch (event) {
       case OrderEnum.FLASH_SALE:
-        return useProductData.data.productDiscounts?.[0]?.productClassifications
+        return useProductData.data.productDiscounts?.filter(
+          (product) => product.status === ProductDiscountEnum.ACTIVE,
+        )?.[0]?.productClassifications
       case OrderEnum.PRE_ORDER:
-        return useProductData.data.preOrderProducts?.[0]?.productClassifications
+        return useProductData.data.preOrderProducts?.filter(
+          (product) => product.status === PreOrderProductEnum.ACTIVE,
+        )?.[0]?.productClassifications
       default:
         return useProductData.data.productClassifications
     }
   }, [event, useProductData?.data, isInGroupBuying])
-
+  console.log(productClassifications)
   const cheapestClassification = useMemo(
     () => getCheapestClassification(productClassifications ?? []),
     [productClassifications],

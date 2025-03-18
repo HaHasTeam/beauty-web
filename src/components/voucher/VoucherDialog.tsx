@@ -13,7 +13,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { Input } from '@/components/ui/input'
 import { RadioGroup } from '@/components/ui/radio-group'
 import useHandleServerError from '@/hooks/useHandleServerError'
 import { getCheckoutListPlatformVouchersApi } from '@/network/apis/voucher'
@@ -134,11 +133,11 @@ export default function VoucherDialog({
               </div>
             )}
             {/* Voucher Input */}
-            <div className="flex gap-2 bg-muted/50 p-2 md:p-4 rounded-lg items-center">
+            {/* <div className="flex gap-2 bg-muted/50 p-2 md:p-4 rounded-lg items-center">
               <label className="text-sm font-medium mb-1.5 block"> {t('voucher.title')}</label>
               <Input placeholder={t('voucher.title')} className=" border border-gray-300 focus:border-primary/50" />
               <Button className="self-end uppercase"> {t('voucher.apply')}</Button>
-            </div>
+            </div> */}
           </div>
 
           {/* Voucher List */}
@@ -203,10 +202,10 @@ export default function VoucherDialog({
 
         <DialogFooter>
           <div className="flex justify-end gap-2 w-full">
-            <Button variant="outline" onClick={() => setOpen(false)}>
+            <Button type="button" variant="outline" onClick={() => setOpen(false)}>
               {t('dialog.cancel')}
             </Button>
-            <Button onClick={handleConfirm} disabled={selectedCartItems?.length === 0}>
+            <Button type="button" onClick={handleConfirm} disabled={selectedCartItems?.length === 0}>
               {t('dialog.ok')}
             </Button>
           </div>

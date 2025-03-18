@@ -75,11 +75,12 @@ const CartItem = ({
     [cartBrandItem, selectedCartItems, chosenVoucher, isTriggerTotal],
   )
   useEffect(() => {
-    if (selectedCartItems.length === 0) {
+    if (selectedCartItems.length === 0 || voucherDiscount === 0) {
+      console.log('testing', 1)
       setChosenVoucher(null)
     }
-  }, [selectedCartItems])
-
+  }, [selectedCartItems, voucherDiscount])
+  console.log('testing', voucherDiscount)
   return (
     <div className="w-full bg-white p-4 rounded-lg space-y-2 shadow-sm">
       {/* Brand Header */}
@@ -105,7 +106,6 @@ const CartItem = ({
 
         const productClassification = cartItem?.productClassification ?? null
         const allProductClassifications: IClassification[] =
-          (product?.productDiscounts ?? [])[0]?.productClassifications ??
           productClassification?.preOrderProduct?.productClassifications ??
           productClassification?.productDiscount?.productClassifications ??
           productClassification?.product?.productClassifications ??
@@ -128,21 +128,19 @@ const CartItem = ({
           : cartItem?.productClassification?.preOrderProduct &&
               cartItem?.productClassification?.preOrderProduct?.status === PreOrderProductEnum.ACTIVE
             ? OrderEnum.PRE_ORDER
-            : (cartItem?.productClassification?.productDiscount &&
-                  cartItem?.productClassification?.productDiscount?.status === ProductDiscountEnum.ACTIVE) ||
-                ((product?.productDiscounts ?? [])[0]?.status === ProductDiscountEnum.ACTIVE &&
-                  (product?.productDiscounts ?? [])[0]?.discount)
+            : cartItem?.productClassification?.productDiscount &&
+                cartItem?.productClassification?.productDiscount?.status === ProductDiscountEnum.ACTIVE
               ? OrderEnum.FLASH_SALE
               : ''
         const discount = isInGroupBuying
           ? null
           : eventType === OrderEnum.FLASH_SALE
             ? cartItem?.productClassification?.productDiscount?.discount
-            : ((product?.productDiscounts ?? [])[0]?.discount ?? null)
+            : null
 
         const discountType = isInGroupBuying
           ? null
-          : eventType === OrderEnum.FLASH_SALE || (product?.productDiscounts ?? [])[0]?.discount
+          : eventType === OrderEnum.FLASH_SALE
             ? DiscountTypeEnum.PERCENTAGE
             : null
         const productStatus = product.status
@@ -200,6 +198,7 @@ const CartItem = ({
             selectedCheckoutItems={selectedCheckoutItems}
             bestVoucherForBrand={bestVoucherForBrand}
             chosenBrandVoucher={chosenVoucher}
+            voucherDiscount={voucherDiscount}
           />
         </div>
       )}
