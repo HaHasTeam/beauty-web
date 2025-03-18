@@ -4,9 +4,9 @@ import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import configs from '@/config'
-import { getAllProductApi } from '@/network/apis/product'
+import { getRecommendProducts } from '@/network/apis/product'
 import { buildOneWayResource } from '@/router'
-import { DiscountTypeEnum, OrderEnum, ProductEnum, StatusEnum } from '@/types/enum'
+import { DiscountTypeEnum, OrderEnum, ProductEnum, ProductTagEnum, StatusEnum } from '@/types/enum'
 import { calculateDiscountPrice } from '@/utils/price'
 import { getCheapestClassification } from '@/utils/product'
 
@@ -16,10 +16,17 @@ import ProductCard from '../product/ProductCard'
 const RecommendProduct = () => {
   const { t } = useTranslation()
 
-  const { data: allProducts, isFetching } = useQuery({
-    queryKey: [getAllProductApi.queryKey],
-    queryFn: getAllProductApi.fn,
-    select: (data) => data.data,
+  const { data: products, isLoading } = useQuery({
+    queryKey: [
+      getRecommendProducts.queryKey,
+      {
+        search: '',
+        tag: ProductTagEnum.BEST_SELLER,
+        page: 1,
+        limit: 3,
+      },
+    ],
+    queryFn: getRecommendProducts.fn,
   })
 
   return (
@@ -38,14 +45,14 @@ const RecommendProduct = () => {
           <ArrowRight className="w-4 h-4" />
         </Link>
       </div>
-      {isFetching && (
+      {isLoading && (
         <div className="w-full flex justify-center items-center">
           <LoadingIcon color="primaryBackground" />
         </div>
       )}
-      {!isFetching && allProducts && (
+      {!isLoading && products?.data?.items && (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-          {allProducts?.map((product) => {
+          {products.data.items?.map((product) => {
             const productClassifications = product?.productClassifications.filter(
               (classification) => classification.status === StatusEnum.ACTIVE,
             )

@@ -55,11 +55,11 @@ export const getProductFilterApi = toQueryFetcher<
     params: params,
   })
 })
-export const getRecommendProducts = toMutationFetcher<
+export const getRecommendProductsMutation = toMutationFetcher<
   { search: string; tag: ProductTagEnum; page?: string | number; limit?: string | number },
-  TServerResponse<IServerCreateProduct>
->('createProductApi', async (data) => {
-  return privateRequest('/products/get', {
+  TServerResponse<{ total: string }, IResponseProduct[]>
+>('getRecommendProducts', async (data) => {
+  return publicRequest('/products/get', {
     method: 'POST',
     data: {
       search: data.search,
@@ -68,6 +68,22 @@ export const getRecommendProducts = toMutationFetcher<
     params: {
       page: data.page,
       limit: data.limit,
+    },
+  })
+})
+export const getRecommendProducts = toQueryFetcher<
+  { search: string; tag: ProductTagEnum; page: string | number; limit: string | number },
+  TServerResponse<{ total: string }, IResponseProduct[]>
+>('getRecommendProducts', async (params) => {
+  return publicRequest('/products/get', {
+    method: 'POST',
+    data: {
+      search: params?.search || '',
+      tag: params?.tag,
+    },
+    params: {
+      page: params?.page,
+      limit: params?.limit,
     },
   })
 })
