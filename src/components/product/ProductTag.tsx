@@ -50,7 +50,7 @@ export default function ProductTag({ tag, text, size = 'medium' }: ProductTagPro
       tagText = t('productTag.outOfStock')
       break
     case ProductCartStatusEnum.BANNED: // use for product in cart
-      tagColorClass = 'bg-orange-100 text-orange-500'
+      tagColorClass = 'bg-red-200 text-red-700'
       tagText = t('productTag.banned')
       break
     case ProductCartStatusEnum.UN_PUBLISHED: // use for product in cart

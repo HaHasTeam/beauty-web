@@ -58,8 +58,6 @@ const Cart = ({ isInGroupBuy = false, isInPeriod = false }: CartProps) => {
     return calculateTotalBrandVoucherDiscount(cartItems, selectedCartItems, chosenVouchersByBrand)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cartItems, chosenVouchersByBrand, selectedCartItems, isTriggerTotal])
-  console.log('test', totalVoucherDiscount)
-  console.log('test', chosenVouchersByBrand)
   // Calculate platform voucher discount
   const platformVoucherDiscount = useMemo(() => {
     return calculatePlatformVoucherDiscount(cartItems, selectedCartItems, platformChosenVoucher, chosenVouchersByBrand)
@@ -79,7 +77,6 @@ const Cart = ({ isInGroupBuy = false, isInPeriod = false }: CartProps) => {
     mutationKey: [getBestShopVouchersApi.mutationKey],
     mutationFn: getBestShopVouchersApi.fn,
     onSuccess: (data) => {
-      console.log(data)
       setBestBrandVouchers(data?.data)
     },
   })
@@ -87,7 +84,6 @@ const Cart = ({ isInGroupBuy = false, isInPeriod = false }: CartProps) => {
     mutationKey: [getBestPlatformVouchersApi.mutationKey],
     mutationFn: getBestPlatformVouchersApi.fn,
     onSuccess: (data) => {
-      console.log(data)
       setBestPlatformVoucher(data?.data)
     },
   })
@@ -191,7 +187,6 @@ const Cart = ({ isInGroupBuy = false, isInPeriod = false }: CartProps) => {
       setTotalPrice(calculateCartTotals(selectedCartItems, cartItems).totalPrice)
       setTotalOriginalPrice(calculateCartTotals(selectedCartItems, cartItems).totalProductCost)
       setTotalDirectProductsDiscount(calculateCartTotals(selectedCartItems, cartItems).totalProductDiscount)
-      console.log(calculateCartTotals(selectedCartItems, cartItems).totalPrice, cartItems)
     } else {
       setTotalPrice(0)
       setTotalOriginalPrice(0)
@@ -206,6 +201,15 @@ const Cart = ({ isInGroupBuy = false, isInPeriod = false }: CartProps) => {
   useEffect(() => {
     setChosenPlatformVoucher(platformChosenVoucher)
   }, [platformChosenVoucher, setChosenPlatformVoucher])
+
+  useEffect(() => {
+    if (totalVoucherDiscount === 0) {
+      setChosenVouchersByBrand({})
+    }
+    if (platformVoucherDiscount === 0) {
+      setPlatformChosenVoucher(null)
+    }
+  }, [platformVoucherDiscount, totalVoucherDiscount, isTriggerTotal, selectedCartItems])
 
   return (
     <>

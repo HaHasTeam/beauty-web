@@ -34,7 +34,12 @@ import { DiscountTypeEnum, PaymentMethod, ProjectInformationEnum, ResultEnum } f
 import { ICreateGroupOrder, ICreateOrder, IUpdateGroupOrder } from '@/types/order'
 import { IBrandBestVoucher, ICheckoutItem, IPlatformBestVoucher, TVoucher } from '@/types/voucher'
 import { createCheckoutItem, createCheckoutItems } from '@/utils/cart'
-import { calculateCartTotals, calculateTotalCheckoutBrandVoucherDiscount } from '@/utils/price'
+import {
+  calculateCartTotals,
+  calculatePlatformVoucherDiscount,
+  calculateTotalBrandVoucherDiscount,
+  calculateTotalCheckoutBrandVoucherDiscount,
+} from '@/utils/price'
 import { minifyStringId } from '@/utils/string'
 
 import { flattenObject, hasPreOrderProduct } from '../../utils/product/index'
@@ -84,10 +89,24 @@ const Checkout = () => {
   // const totalBrandDiscount = useMemo(() => {
   //   return calculateTotalBrandVoucherDiscount(selectedCartItem, selectedCartItems, chosenBrandVouchers)
   // }, [chosenBrandVouchers, selectedCartItems, selectedCartItem])
-  const totalBrandDiscount = useMemo(() => {
+  const totalBrandBEDiscount = useMemo(() => {
     return calculateTotalCheckoutBrandVoucherDiscount(chosenBrandVouchers)
   }, [chosenBrandVouchers])
-
+  const totalBrandDiscount = useMemo(() => {
+    return calculateTotalBrandVoucherDiscount(selectedCartItem, selectedCartItems, chosenBrandVouchers)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedCartItem, chosenBrandVouchers, selectedCartItems])
+  const platformVoucherDiscount = useMemo(() => {
+    return calculatePlatformVoucherDiscount(
+      selectedCartItem,
+      selectedCartItems,
+      chosenPlatformVoucher,
+      chosenBrandVouchers,
+    )
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedCartItem, selectedCartItems, chosenPlatformVoucher, totalBrandDiscount, chosenBrandVouchers])
+  console.log(totalBrandBEDiscount)
+  console.log(platformVoucherDiscount)
   // Calculate platform voucher discount
   // const totalPlatformDiscount = useMemo(() => {
   //   return calculatePlatformVoucherDiscount(chosenPlatformVoucher)
@@ -98,8 +117,8 @@ const Checkout = () => {
   }, [selectedCartItem, selectedCartItems])
 
   // Total saved price (product discounts + brand vouchers + platform voucher)
-  const totalSavings = totalProductDiscount + totalBrandDiscount + (chosenPlatformVoucher?.discount ?? 0)
-  const totalPayment = totalPrice - totalBrandDiscount - (chosenPlatformVoucher?.discount ?? 0)
+  const totalSavings = totalProductDiscount + totalBrandDiscount + (platformVoucherDiscount ?? 0)
+  const totalPayment = totalPrice - totalBrandDiscount - (platformVoucherDiscount ?? 0)
 
   const defaultOrderValues = {
     orders: [],
@@ -390,14 +409,14 @@ const Checkout = () => {
                             <Button variant="link" className="text-blue-500 h-auto p-0 hover:no-underline">
                               {chosenPlatformVoucher ? (
                                 chosenPlatformVoucher?.discountType === DiscountTypeEnum.AMOUNT &&
-                                chosenPlatformVoucher?.discountValue ? (
+                                platformVoucherDiscount > 0 ? (
                                   <div className="flex gap-2 items-center">
-                                    {t('voucher.discountAmount', { amount: chosenPlatformVoucher?.discount })}
+                                    {t('voucher.discountAmount', { amount: platformVoucherDiscount })}
                                     <Pen />
                                   </div>
                                 ) : (
                                   <div className="flex gap-2 items-center">
-                                    {t('voucher.discountAmount', { amount: chosenPlatformVoucher?.discount })}
+                                    {t('voucher.discountAmount', { amount: platformVoucherDiscount })}
                                     <Pen />
                                   </div>
                                 )
@@ -440,7 +459,7 @@ const Checkout = () => {
                         totalProductDiscount={totalProductDiscount}
                         totalProductCost={totalProductCost}
                         totalBrandDiscount={totalBrandDiscount}
-                        totalPlatformDiscount={chosenPlatformVoucher?.discount ?? 0}
+                        totalPlatformDiscount={platformVoucherDiscount ?? 0}
                         totalSavings={totalSavings}
                         totalPayment={totalPayment}
                         formId={`form-${formId}`}

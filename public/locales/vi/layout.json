@@ -276,7 +276,7 @@
     },
     "brandVoucher": {
       "title": "Không có voucher",
-      "description": "Chưa có mã giảm giá nào của Shop. Nhập mã giảm giá có thể sử dụng vào thanh bên trên.",
+      "description": "Chưa có mã giảm giá nào của thương hiệu. Nhập mã giảm giá có thể sử dụng vào thanh bên trên.",
       "button": "Khám phá thương hiệu"
     },
     "platformVoucher": {
