@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
@@ -12,6 +12,8 @@ import { IBrand } from '@/types/brand'
 import { IClassification } from '@/types/classification'
 import { ClassificationTypeEnum, OrderEnum, ShippingStatusEnum } from '@/types/enum'
 import { IResponseFeedback } from '@/types/feedback'
+import { IMasterConfig } from '@/types/master-config'
+import { IStatusTracking } from '@/types/status-tracking'
 
 import { ViewFeedbackDialog } from '../feedback/ViewFeedbackDialog'
 import { WriteFeedbackDialog } from '../feedback/WriteFeedbackDialog'
@@ -37,6 +39,8 @@ interface ProductOrderDetailLandscapeProps {
   brand: IBrand | null
   accountName: string
   accountAvatar: string
+  statusTracking?: IStatusTracking[]
+  masterConfig?: IMasterConfig[]
 }
 const ProductOrderDetailLandscape = ({
   productImage,
@@ -54,6 +58,8 @@ const ProductOrderDetailLandscape = ({
   brand,
   accountName,
   accountAvatar,
+  statusTracking,
+  masterConfig,
 }: ProductOrderDetailLandscapeProps) => {
   const { t } = useTranslation()
   const [isProcessing, setIsProcessing] = useState(false)
@@ -62,6 +68,7 @@ const ProductOrderDetailLandscape = ({
   const { successToast } = useToast()
   const queryClient = useQueryClient()
   const handleServerError = useHandleServerError()
+
   const { mutateAsync: createCartItemFn } = useMutation({
     mutationKey: [createCartItemApi.mutationKey],
     mutationFn: createCartItemApi.fn,
@@ -93,7 +100,22 @@ const ProductOrderDetailLandscape = ({
       setIsProcessing(false)
     }
   }
+  const showReviewButton = useMemo(() => {
+    const isWithinReviewPeriod = () => {
+      const deliveredStatusTrack = statusTracking?.find((track) => track.status === ShippingStatusEnum.DELIVERED)
 
+      if (!deliveredStatusTrack?.createdAt) return false
+
+      const deliveredDate = new Date(deliveredStatusTrack.createdAt)
+      const currentDate = new Date()
+      const allowedTimeInMs =
+        masterConfig && masterConfig[0].feedbackTimeExpired ? parseInt(masterConfig[0].feedbackTimeExpired) : null
+
+      return allowedTimeInMs ? currentDate.getTime() - deliveredDate.getTime() <= allowedTimeInMs : true
+    }
+
+    return status === ShippingStatusEnum.COMPLETED && !feedback && isWithinReviewPeriod()
+  }, [feedback, masterConfig, status, statusTracking])
   return (
     <div className="w-full py-4 border-b border-gray-200">
       <div className="w-full flex gap-2 items-center p-2 md:p-3 lg:p-4">
@@ -142,7 +164,7 @@ const ProductOrderDetailLandscape = ({
                     {t('order.returnOrder')}
                   </Button>
                 )} */}
-                {status === ShippingStatusEnum.COMPLETED && !feedback && (
+                {showReviewButton && (
                   <Button
                     onClick={() => setOpenWriteFeedbackDialog(true)}
                     variant="outline"

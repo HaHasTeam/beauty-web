@@ -112,7 +112,7 @@ export const ViewFeedbackDialog: React.FC<ViewFeedbackDialogProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="md:max-w-xl sm:max-w-lg">
+      <DialogContent className="md:max-w-2xl sm:max-w-lg">
         <ScrollArea className="max-h-96">
           <div className="space-y-3">
             <DialogHeader>

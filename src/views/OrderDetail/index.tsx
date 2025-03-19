@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { History, MessageSquareText, Truck } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 
@@ -24,6 +24,7 @@ import { Button } from '@/components/ui/button'
 import configs from '@/config'
 import useHandleServerError from '@/hooks/useHandleServerError'
 import { useToast } from '@/hooks/useToast'
+import { getMasterConfigApi } from '@/network/apis/master-config'
 import {
   getCancelAndReturnRequestApi,
   getOrderByIdApi,
@@ -31,10 +32,9 @@ import {
   updateOrderStatusApi,
 } from '@/network/apis/order'
 import { RequestStatusEnum, ShippingStatusEnum } from '@/types/enum'
+import { millisecondsToRoundedDays } from '@/utils/time'
 
 const OrderDetail = () => {
-  const PENDING_REQUEST_RETURN_DAYS = 2
-  const PENDING_REQUEST_CANCEL_DAYS = 2
   const { orderId } = useParams()
   const { t } = useTranslation()
   const queryClient = useQueryClient()
@@ -43,6 +43,7 @@ const OrderDetail = () => {
   const [isTrigger, setIsTrigger] = useState<boolean>(false)
   const [openReqReturnDialog, setOpenReqReturnDialog] = useState<boolean>(false)
   const [openTrackRequest, setOpenTrackRequest] = useState<boolean>(false)
+  const [openTrackComplaint, setOpenTrackComplaint] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState(false)
   const { successToast } = useToast()
   const handleServerError = useHandleServerError()
@@ -56,6 +57,10 @@ const OrderDetail = () => {
     queryKey: [getStatusTrackingByIdApi.queryKey, orderId ?? ('' as string)],
     queryFn: getStatusTrackingByIdApi.fn,
     enabled: !!orderId,
+  })
+  const { data: masterConfig } = useQuery({
+    queryKey: [getMasterConfigApi.queryKey],
+    queryFn: getMasterConfigApi.fn,
   })
 
   useEffect(() => {
@@ -96,7 +101,77 @@ const OrderDetail = () => {
     }
   }
 
-  console.log('test', cancelAndReturnRequestData?.data?.cancelRequest)
+  const showReturnButton = useMemo(() => {
+    const isOrderDeliveredRecently = () => {
+      const deliveredStatusTrack = useStatusTrackingData?.data?.find(
+        (track) => track.status === ShippingStatusEnum.DELIVERED,
+      )
+
+      if (!deliveredStatusTrack?.createdAt) return false
+
+      const deliveredDate = new Date(deliveredStatusTrack.createdAt)
+      const currentDate = new Date()
+      const allowedTimeInMs = masterConfig?.data[0].refundTimeExpired
+        ? parseInt(masterConfig?.data[0].refundTimeExpired)
+        : null
+      return allowedTimeInMs ? currentDate.getTime() - deliveredDate.getTime() <= allowedTimeInMs : true
+    }
+    return (
+      (useOrderData?.data?.status === ShippingStatusEnum.DELIVERED ||
+        useOrderData?.data?.status === ShippingStatusEnum.COMPLETED) &&
+      !cancelAndReturnRequestData?.data?.refundRequest &&
+      isOrderDeliveredRecently()
+    )
+  }, [
+    cancelAndReturnRequestData?.data?.refundRequest,
+    masterConfig?.data,
+    useOrderData?.data?.status,
+    useStatusTrackingData?.data,
+  ])
+  const showReceivedButton = useMemo(() => {
+    const isOrderDeliveredRecently = () => {
+      const deliveredStatusTrack = useStatusTrackingData?.data?.find(
+        (track) => track.status === ShippingStatusEnum.DELIVERED,
+      )
+
+      if (!deliveredStatusTrack?.createdAt) return false
+
+      const deliveredDate = new Date(deliveredStatusTrack.createdAt)
+      const currentDate = new Date()
+
+      const allowedTimeInMs = masterConfig?.data[0].expiredCustomerReceivedTime
+        ? parseInt(masterConfig?.data[0].expiredCustomerReceivedTime)
+        : null
+      return allowedTimeInMs ? currentDate.getTime() - deliveredDate.getTime() <= allowedTimeInMs : true
+    }
+    return (
+      useOrderData?.data?.status === ShippingStatusEnum.DELIVERED &&
+      !cancelAndReturnRequestData?.data?.refundRequest &&
+      isOrderDeliveredRecently()
+    )
+  }, [
+    cancelAndReturnRequestData?.data?.refundRequest,
+    masterConfig?.data,
+    useOrderData?.data?.status,
+    useStatusTrackingData?.data,
+  ])
+  const pendingRequestCancelTime = useMemo(() => {
+    return millisecondsToRoundedDays(parseInt(masterConfig?.data[0].autoApprovedRequestCancelTime ?? ''))
+  }, [masterConfig?.data])
+
+  const pendingRequestReturnTime = useMemo(() => {
+    return (
+      millisecondsToRoundedDays(parseInt(masterConfig?.data[0].autoApproveRefundRequestTime ?? '')) +
+      ' - ' +
+      millisecondsToRoundedDays(
+        parseInt(masterConfig?.data[0].autoApproveRefundRequestTime ?? '') +
+          parseInt(masterConfig?.data[0].pendingAdminCheckRejectRefundRequestTime ?? ''),
+      )
+    )
+  }, [masterConfig?.data])
+  const pendingCustomerShippingReturnTime = useMemo(() => {
+    return millisecondsToRoundedDays(parseInt(masterConfig?.data[0].pendingCustomerShippingReturnTime ?? ''))
+  }, [masterConfig?.data])
   return (
     <div>
       {isFetching && <LoadingContentLayer />}
@@ -127,7 +202,7 @@ const OrderDetail = () => {
               {!isLoading && cancelAndReturnRequestData?.data?.cancelRequest?.status === RequestStatusEnum.PENDING && (
                 <AlertMessage
                   title={t('order.cancelRequestPendingTitle')}
-                  message={t('order.cancelRequestPendingMessage', { count: PENDING_REQUEST_CANCEL_DAYS })}
+                  message={t('order.cancelRequestPendingMessage', { count: pendingRequestCancelTime })}
                   isShowIcon={false}
                 />
               )}
@@ -143,13 +218,25 @@ const OrderDetail = () => {
 
               {/* return request information */}
               {!isLoading &&
+                cancelAndReturnRequestData?.data?.complaintRequest?.status === RequestStatusEnum.APPROVED && (
+                  <AlertMessage
+                    title={t('return.complaintRequestApprovedTitleCustomer')}
+                    message={t('return.complaintRequestApprovedMessageCustomer')}
+                    isShowIcon={false}
+                    color="warn"
+                    buttonText="view"
+                    buttonClassName="bg-yellow-500 hover:bg-yellow-600"
+                    onClick={() => setOpenTrackComplaint(true)}
+                  />
+                )}
+              {!isLoading &&
                 (cancelAndReturnRequestData?.data?.refundRequest?.status === RequestStatusEnum.PENDING ||
                   (cancelAndReturnRequestData?.data?.refundRequest?.status === RequestStatusEnum.REJECTED &&
                     cancelAndReturnRequestData?.data?.refundRequest?.rejectedRefundRequest?.status ===
                       RequestStatusEnum.PENDING)) && (
                   <AlertMessage
                     title={t('return.returnRequestPendingTitleCustomer')}
-                    message={t('return.returnRequestPendingMessageCustomer', { count: PENDING_REQUEST_RETURN_DAYS })}
+                    message={t('return.returnRequestPendingMessageCustomer', { string: `${pendingRequestReturnTime}` })}
                     isShowIcon={false}
                     buttonText={'view'}
                     buttonClassName="bg-yellow-500 hover:bg-yellow-600"
@@ -174,7 +261,8 @@ const OrderDetail = () => {
                   (cancelAndReturnRequestData?.data?.refundRequest?.status === RequestStatusEnum.REJECTED &&
                     cancelAndReturnRequestData?.data?.refundRequest?.rejectedRefundRequest?.status ===
                       RequestStatusEnum.REJECTED)) &&
-                useOrderData.data.status !== ShippingStatusEnum.DELIVERED && (
+                useOrderData.data.status !== ShippingStatusEnum.DELIVERED &&
+                useOrderData.data.status !== ShippingStatusEnum.COMPLETED && (
                   <AlertMessage
                     title={t('order.returnRequestApprovedTitle')}
                     message={t('return.returnRequestApprovedView')}
@@ -191,8 +279,12 @@ const OrderDetail = () => {
                   (cancelAndReturnRequestData?.data?.refundRequest?.status === RequestStatusEnum.REJECTED &&
                     cancelAndReturnRequestData?.data?.refundRequest?.rejectedRefundRequest?.status ===
                       RequestStatusEnum.REJECTED)) &&
-                useOrderData.data.status === ShippingStatusEnum.DELIVERED && (
-                  <ReturnOrderSection orderId={useOrderData?.data?.id} />
+                (useOrderData.data.status === ShippingStatusEnum.DELIVERED ||
+                  useOrderData.data.status === ShippingStatusEnum.COMPLETED) && (
+                  <ReturnOrderSection
+                    orderId={useOrderData?.data?.id}
+                    pendingCustomerShippingReturnTime={pendingCustomerShippingReturnTime}
+                  />
                 )}
 
               {/* order customer timeline, information, shipment */}
@@ -290,6 +382,8 @@ const OrderDetail = () => {
                     }
                     accountAvatar={useOrderData?.data?.account?.avatar ?? ''}
                     accountName={useOrderData?.data?.account?.username ?? ''}
+                    masterConfig={masterConfig?.data}
+                    statusTracking={useStatusTrackingData?.data}
                   />
 
                   {/* order summary */}
@@ -326,30 +420,27 @@ const OrderDetail = () => {
                         </Button>
                       </div>
                     )}
-                  {useOrderData?.data?.status === ShippingStatusEnum.DELIVERED &&
-                    !cancelAndReturnRequestData?.data?.refundRequest && (
-                      <Button
-                        variant="default"
-                        className="w-full hover:bg-primary/80"
-                        onClick={() => {
-                          handleUpdateStatus(ShippingStatusEnum.COMPLETED)
-                        }}
-                      >
-                        {isLoading ? <LoadingIcon color="primaryBackground" /> : t('order.received')}
-                      </Button>
-                    )}
-                  {(useOrderData?.data?.status === ShippingStatusEnum.DELIVERED ||
-                    useOrderData?.data?.status === ShippingStatusEnum.COMPLETED) &&
-                    !cancelAndReturnRequestData?.data?.refundRequest && (
-                      <Button
-                        variant="outline"
-                        type="button"
-                        className="w-full border border-primary text-primary hover:text-primary hover:bg-primary/10"
-                        onClick={() => setOpenReqReturnDialog(true)}
-                      >
-                        {isLoading ? <LoadingIcon color="primaryBackground" /> : t('order.returnOrder')}
-                      </Button>
-                    )}
+                  {showReceivedButton && (
+                    <Button
+                      variant="default"
+                      className="w-full hover:bg-primary/80"
+                      onClick={() => {
+                        handleUpdateStatus(ShippingStatusEnum.COMPLETED)
+                      }}
+                    >
+                      {isLoading ? <LoadingIcon color="primaryBackground" /> : t('order.received')}
+                    </Button>
+                  )}
+                  {showReturnButton && (
+                    <Button
+                      variant="outline"
+                      type="button"
+                      className="w-full border border-primary text-primary hover:text-primary hover:bg-primary/10"
+                      onClick={() => setOpenReqReturnDialog(true)}
+                    >
+                      {isLoading ? <LoadingIcon color="primaryBackground" /> : t('order.returnOrder')}
+                    </Button>
+                  )}
                 </div>
               </div>
             </div>
@@ -404,6 +495,26 @@ const OrderDetail = () => {
             rejectStatus={cancelAndReturnRequestData?.data?.refundRequest?.rejectedRefundRequest?.status}
             reasonRejected={cancelAndReturnRequestData?.data?.refundRequest?.reasonRejected}
             //  returnRequest={cancelAndReturnRequestData?.data?.refundRequest}
+          />
+        )}
+        {!isFetching && useOrderData?.data && cancelAndReturnRequestData?.data?.complaintRequest && (
+          <ConfirmDecisionDialog
+            // isLoadingDecisionApproved
+            // isLoadingDecisionRejected
+            open={openTrackComplaint}
+            onOpenChange={setOpenTrackComplaint}
+            // onConfirm={() => {}}
+            item={'complaintTrackView'}
+            rejectReason={''}
+            rejectMediaFiles={[]}
+            reason={cancelAndReturnRequestData?.data?.complaintRequest?.reason}
+            mediaFiles={cancelAndReturnRequestData?.data?.complaintRequest?.mediaFiles}
+            // returnRequest={cancelAndReturnRequestData?.data?.complaintRequest}
+            isRejectRequest={false}
+            // isShowAction={false}
+            rejectStatus={cancelAndReturnRequestData?.data?.complaintRequest?.status}
+            status={cancelAndReturnRequestData?.data?.complaintRequest?.status}
+            reasonRejected={cancelAndReturnRequestData?.data?.complaintRequest?.reasonRejected}
           />
         )}
       </div>

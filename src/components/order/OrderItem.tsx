@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { MessageCircle, Store } from 'lucide-react'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { Dispatch, SetStateAction, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router-dom'
 
@@ -8,6 +8,7 @@ import configs from '@/config'
 import useHandleServerError from '@/hooks/useHandleServerError'
 import { useToast } from '@/hooks/useToast'
 import { createCartItemApi, getMyCartApi } from '@/network/apis/cart'
+import { getMasterConfigApi } from '@/network/apis/master-config'
 import {
   getCancelAndReturnRequestApi,
   getOrderByIdApi,
@@ -44,6 +45,15 @@ const OrderItem = ({ brand, orderItem, setIsTrigger }: OrderItemProps) => {
     queryKey: [getCancelAndReturnRequestApi.queryKey, orderItem.id ?? ('' as string)],
     queryFn: getCancelAndReturnRequestApi.fn,
     enabled: !!orderItem.id,
+  })
+  const { data: useStatusTrackingData } = useQuery({
+    queryKey: [getStatusTrackingByIdApi.queryKey, orderItem.id ?? ('' as string)],
+    queryFn: getStatusTrackingByIdApi.fn,
+    enabled: !!orderItem.id,
+  })
+  const { data: masterConfig } = useQuery({
+    queryKey: [getMasterConfigApi.queryKey],
+    queryFn: getMasterConfigApi.fn,
   })
 
   const [isProcessing, setIsProcessing] = useState(false)
@@ -113,6 +123,61 @@ const OrderItem = ({ brand, orderItem, setIsTrigger }: OrderItemProps) => {
     }
   }
 
+  const showReturnButton = useMemo(() => {
+    const isOrderDeliveredRecently = () => {
+      const deliveredStatusTrack = useStatusTrackingData?.data?.find(
+        (track) => track.status === ShippingStatusEnum.DELIVERED,
+      )
+
+      if (!deliveredStatusTrack?.createdAt) return false
+
+      const deliveredDate = new Date(deliveredStatusTrack.createdAt)
+      const currentDate = new Date()
+      const allowedTimeInMs = masterConfig?.data[0].refundTimeExpired
+        ? parseInt(masterConfig?.data[0].refundTimeExpired)
+        : null
+      console.log(currentDate.getTime() - deliveredDate.getTime())
+      return allowedTimeInMs ? currentDate.getTime() - deliveredDate.getTime() <= allowedTimeInMs : true
+    }
+    return (
+      (orderItem?.status === ShippingStatusEnum.DELIVERED || orderItem?.status === ShippingStatusEnum.COMPLETED) &&
+      !cancelAndReturnRequestData?.data?.refundRequest &&
+      isOrderDeliveredRecently()
+    )
+  }, [
+    cancelAndReturnRequestData?.data?.refundRequest,
+    masterConfig?.data,
+    orderItem?.status,
+    useStatusTrackingData?.data,
+  ])
+  const showReceivedButton = useMemo(() => {
+    const isOrderDeliveredRecently = () => {
+      const deliveredStatusTrack = useStatusTrackingData?.data?.find(
+        (track) => track.status === ShippingStatusEnum.DELIVERED,
+      )
+
+      if (!deliveredStatusTrack?.createdAt) return false
+
+      const deliveredDate = new Date(deliveredStatusTrack.createdAt)
+      const currentDate = new Date()
+      const allowedTimeInMs = masterConfig?.data[0].expiredCustomerReceivedTime
+        ? parseInt(masterConfig?.data[0].expiredCustomerReceivedTime)
+        : null
+      console.log(currentDate.getTime() - deliveredDate.getTime())
+      return allowedTimeInMs ? currentDate.getTime() - deliveredDate.getTime() <= allowedTimeInMs : true
+    }
+    return (
+      orderItem?.status === ShippingStatusEnum.DELIVERED &&
+      !cancelAndReturnRequestData?.data?.refundRequest &&
+      isOrderDeliveredRecently()
+    )
+  }, [
+    cancelAndReturnRequestData?.data?.refundRequest,
+    masterConfig?.data,
+    orderItem?.status,
+    useStatusTrackingData?.data,
+  ])
+
   return (
     <>
       <div className="p-4">
@@ -144,18 +209,19 @@ const OrderItem = ({ brand, orderItem, setIsTrigger }: OrderItemProps) => {
           <div className="flex flex-col items-end gap-1">
             {/* Order Status */}
             <div className="flex items-center">
-              {cancelAndReturnRequestData?.data?.refundRequest &&
+              {/* {cancelAndReturnRequestData?.data?.refundRequest &&
               (cancelAndReturnRequestData?.data?.refundRequest?.status === RequestStatusEnum.PENDING ||
                 (cancelAndReturnRequestData?.data?.refundRequest?.status === RequestStatusEnum.REJECTED &&
                   cancelAndReturnRequestData?.data?.refundRequest?.rejectedRefundRequest?.status ===
                     RequestStatusEnum.PENDING)) ? (
-                <OrderStatus tag={ShippingStatusEnum.PENDING_RETURN_APPROVAL} />
+                <OrderStatus tag={ShippingStatusEnum.PENDING_RETURN_APPROVED} />
               ) : cancelAndReturnRequestData?.data?.cancelRequest &&
                 cancelAndReturnRequestData?.data?.cancelRequest?.status === RequestStatusEnum.PENDING ? (
                 <OrderStatus tag={ShippingStatusEnum.PENDING_CANCELLATION} />
               ) : (
                 <OrderStatus tag={orderItem?.status} />
-              )}
+              )} */}
+              <OrderStatus tag={orderItem?.status} />
             </div>
           </div>
         </div>
@@ -285,7 +351,7 @@ const OrderItem = ({ brand, orderItem, setIsTrigger }: OrderItemProps) => {
                   {t('order.cancelOrder')}
                 </Button>
               )}
-            {orderItem?.status === ShippingStatusEnum.DELIVERED && !cancelAndReturnRequestData?.data?.refundRequest && (
+            {showReturnButton && (
               <Button
                 variant="outline"
                 className="border border-primary text-primary hover:text-primary hover:bg-primary/10"
@@ -294,10 +360,9 @@ const OrderItem = ({ brand, orderItem, setIsTrigger }: OrderItemProps) => {
                 {t('order.returnOrder')}
               </Button>
             )}
-            {orderItem?.status === ShippingStatusEnum.DELIVERED && !cancelAndReturnRequestData?.data?.refundRequest && (
+            {showReceivedButton && (
               <Button
-                variant="outline"
-                className="border border-primary text-primary hover:text-primary hover:bg-primary/10"
+                className="hover:bg-primary/80"
                 onClick={() => {
                   handleUpdateStatus(ShippingStatusEnum.COMPLETED)
                 }}

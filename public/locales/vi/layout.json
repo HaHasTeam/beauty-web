@@ -645,7 +645,7 @@
     "shipping": "Sẵn Sàng Để Giao",
     "delivering": "Đang Vận Chuyển",
     "cancelled": "Đã Hủy",
-    "pendingReturnApproval": "Chờ duyệt trả hàng",
+    "pendingReturnApproved": "Chờ duyệt trả hàng",
     "pendingCancellation": "Chờ duyệt hủy",
     "cancelledBySeller": "Người Bán Đã Hủy",
     "completed": "Hoàn Thành",
@@ -1289,7 +1289,7 @@
     "rejectRequestRejectOrderMessage": "Nhấn \"Xác nhận\" đồng nghĩa với việc từ chối yêu cầu của thương hiệu. Khách hàng sẽ nhận được thông báo đóng gói và gửi trả hàng về cho thương hiệu.",
     "decision": "Quyết định",
     "returnRequestPendingTitleCustomer": "Yêu Cầu Trả Hàng Đang Được Xem Xét",
-    "returnRequestPendingMessageCustomer": "Yêu cầu trả hàng của bạn đang được xem xét. Chúng tôi sẽ thông báo quyết định trong vòng {{count}} ngày. Vui lòng kiểm tra thông báo để cập nhật thông tin.",
+    "returnRequestPendingMessageCustomer": "Yêu cầu trả hàng của bạn đang được xem xét. Chúng tôi sẽ thông báo quyết định trong vòng {{string}} ngày. Vui lòng kiểm tra thông báo để cập nhật thông tin.",
     "returnRequestRejectedTitleCustomer": "Yêu Cầu Trả Hàng Bị Từ Chối",
     "returnRequestRejectedMessageCustomer": "Rất tiếc, yêu cầu trả hàng của bạn đã bị từ chối. Vui lòng kiểm tra lý do được cung cấp trong chi tiết trả hàng. Nếu bạn có bất kỳ câu hỏi nào, hãy liên hệ với đội ngũ hỗ trợ của chúng tôi.",
     "returnOrderEvidenceDialog": {
@@ -1340,8 +1340,8 @@
     "successMakeDecisionOnReturn": "Đã xử lý thành công yêu cầu trả hàng",
     "returnRequestPendingTitleBrand": "Yêu Cầu Từ chối Trả Hàng Đang Chờ Xét Duyệt",
     "returnOrderRequestMessageBrand": "Khách hàng đã yêu cầu trả hàng cho đơn hàng này. Bạn có thể xem xét yêu cầu và đưa ra quyết định. Nếu không có hành động nào được thực hiện trong {{count}} ngày, yêu cầu sẽ tự động được chấp thuận. Nếu được chấp thuận, khách hàng sẽ tiếp tục gửi hàng trả lại. Nếu bị từ chối, quản trị viên sẽ xem xét và đưa ra quyết định cuối cùng.",
-    "complaintRequestApprovedTitleCustomer": "Khiếu Nại Được Chấp Nhận",
-    "complaintRequestApprovedMessageCustomer": "Khiếu nại của thương hiệu đã được quản trị viên chấp nhận. Bạn sẽ không được hoàn xu cho đơn hàng này. Bạn có thể xem lại chi tiết khiếu nại và liên hệ đội ngũ hỗ trợ nếu cần."
+    "complaintRequestApprovedTitleCustomer": "Thương Hiệu Đã Khiếu Nại",
+    "complaintRequestApprovedMessageCustomer": "Thương hiệu đã khiếu nại về đơn hàng trả của bạn, và yêu cầu đã được quản trị viên phê duyệt. Bạn sẽ không được hoàn xu cho đơn hàng này. Bạn có thể xem lại chi tiết khiếu nại và liên hệ đội ngũ hỗ trợ nếu cần."
   },
   "reason": {
     "rejectCancel": {
@@ -1384,12 +1384,12 @@
     "awaitingResponse": "Đang chờ phản hồi",
     "status": {
       "PENDING": "Chờ duyệt",
-      "APPROVAL": "Đã phê duyệt",
+      "APPROVED": "Đã phê duyệt",
       "REJECTED": "Bị từ chối",
-      "ADMIN_APPROVAL": "Quản trị viên đã duyệt",
+      "ADMIN_APPROVED": "Quản trị viên đã duyệt",
       "BRAND_PENDING": "Chờ duyệt",
       "ADMIN_PENDING": "Chờ duyệt",
-      "BRAND_APPROVAL": "Thương hiệu đã duyệt",
+      "BRAND_APPROVED": "Thương hiệu đã duyệt",
       "ADMIN_REJECTED": "Quản trị viên đã từ chối",
       "BRAND_REJECTED": "Thương hiệu đã từ chối"
     }

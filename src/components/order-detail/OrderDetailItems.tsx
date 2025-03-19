@@ -2,7 +2,9 @@ import { useTranslation } from 'react-i18next'
 
 import { IBrand } from '@/types/brand'
 import { ClassificationTypeEnum, ShippingStatusEnum, StatusEnum } from '@/types/enum'
+import { IMasterConfig } from '@/types/master-config'
 import { IOrderDetail } from '@/types/order'
+import { IStatusTracking } from '@/types/status-tracking'
 
 import ProductOrderDetailLandscape from './ProductOrderDetailLandscape'
 
@@ -12,8 +14,18 @@ interface OrderDetailItemsProps {
   brand: IBrand | null
   accountAvatar: string
   accountName: string
+  statusTracking?: IStatusTracking[]
+  masterConfig?: IMasterConfig[]
 }
-const OrderDetailItems = ({ accountAvatar, accountName, orderDetails, status, brand }: OrderDetailItemsProps) => {
+const OrderDetailItems = ({
+  accountAvatar,
+  accountName,
+  orderDetails,
+  status,
+  brand,
+  statusTracking,
+  masterConfig,
+}: OrderDetailItemsProps) => {
   const { t } = useTranslation()
   return (
     <div className="w-full">
@@ -77,6 +89,8 @@ const OrderDetailItems = ({ accountAvatar, accountName, orderDetails, status, br
               brand={brand || null}
               accountAvatar={accountAvatar}
               accountName={accountName}
+              masterConfig={masterConfig}
+              statusTracking={statusTracking}
             />
           </div>
         ))}

@@ -75,7 +75,9 @@ const AlertMessage = ({
   }
 
   return (
-    <div className={`rounded-lg p-3 border flex items-center justify-between ${alertVariant[color]} ${className}`}>
+    <div
+      className={`rounded-lg p-3 border flex items-center justify-between ${alertVariant[color]} ${className} ${buttonText && 'gap-1'}`}
+    >
       <div>
         {title && (
           <h3
