@@ -73,7 +73,7 @@ export type IOrder = {
 
 export type IOrderFilter = {
   search?: string
-  status?: string[]
+  statusList?: string[]
 }
 export type IRequestFilter = {
   search?: string
@@ -157,4 +157,5 @@ export interface IRejectReturnRequestOrder extends ICancelRequestOrder {
 export interface ICancelAndReturnRequest {
   cancelRequest: ICancelRequestOrder
   refundRequest: IReturnRequestOrder
+  complaintRequest: IReturnRequestOrder
 }

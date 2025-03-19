@@ -13,7 +13,12 @@ import { Textarea } from '@/components/ui/textarea'
 import useHandleServerError from '@/hooks/useHandleServerError'
 import { useToast } from '@/hooks/useToast'
 import { uploadFilesApi } from '@/network/apis/file'
-import { getOrderByIdApi, getStatusTrackingByIdApi, requestReturnOrderApi } from '@/network/apis/order'
+import {
+  getCancelAndReturnRequestApi,
+  getOrderByIdApi,
+  getStatusTrackingByIdApi,
+  requestReturnOrderApi,
+} from '@/network/apis/order'
 import { getRequestReturnOrderSchema } from '@/schemas/order.schema'
 
 import AlertMessage from '../alert/AlertMessage'
@@ -94,6 +99,7 @@ export const RequestReturnOrderDialog: React.FC<RequestReturnOrderDialogProps> =
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: [getOrderByIdApi.queryKey] }),
         queryClient.invalidateQueries({ queryKey: [getStatusTrackingByIdApi.queryKey] }),
+        queryClient.invalidateQueries({ queryKey: [getCancelAndReturnRequestApi.queryKey] }),
       ])
     },
   })

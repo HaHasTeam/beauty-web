@@ -645,7 +645,7 @@
     "shipping": "Ready to ship",
     "delivering": "In Transit",
     "cancelled": "Cancelled",
-    "pendingReturnApproval": "Pending Return Approval",
+    "pendingReturnApproved": "Pending Return Approval",
     "pendingCancellation": "Pending Cancellation",
     "cancelledBySeller": "Cancelled By Seller",
     "completed": "Completed",
@@ -1257,7 +1257,7 @@
     "rejectRequestRejectOrderMessage": "Pressing 'Confirm' means rejecting the brand's request. The customer will receive a notification to pack and return the item to the brand.",
     "decision": "Decision",
     "returnRequestPendingTitleCustomer": "Return Request Under Review",
-    "returnRequestPendingMessageCustomer": "Your return request is being reviewed. We will notify you of the decision within {{count}} days. Please check your notifications for updates.",
+    "returnRequestPendingMessageCustomer": "Your return request is being reviewed. We will notify you of the decision within {{string}} days. Please check your notifications for updates.",
     "returnRequestRejectedTitleCustomer": "Return Request Rejected",
     "returnRequestRejectedMessageCustomer": "Unfortunately, your return request has been rejected. Please check the provided reason in your return details. If you have any questions, feel free to contact our support team.",
     "returnOrderEvidenceDialog": {
@@ -1308,8 +1308,8 @@
     "successMakeDecisionOnReturn": "Successfully Processed Return Request",
     "returnRequestPendingTitleBrand": "Return Request Pending Review",
     "returnOrderRequestMessageBrand": "A customer has requested a return for this order. You can review the request and make a decision. If no action is taken within {{count}} days, the request will be automatically approved. If approved, the customer will proceed with shipping the return. If rejected, the admin will review and make the final decision.",
-    "complaintRequestApprovedTitleCustomer": "Complaint Approved",
-    "complaintRequestApprovedMessageCustomer": "The brand's complaint has been approved by the admin. You will not receive a coin refund for this order. You can review the complaint details and contact the support team if needed."
+    "complaintRequestApprovedTitleCustomer": "Brand Has Filed A Complaint",
+    "complaintRequestApprovedMessageCustomer": "The brand has filed a complaint about your return order, and the request has been approved by the admin. You will not receive a coin refund for this order. You can review the complaint details and contact the support team if needed."
   },
   "reason": {
     "rejectCancel": {
@@ -1378,18 +1378,19 @@
     "cancel": "Cancel",
     "return": "Return/Refund",
     "returnRequest": "Return Request",
+    "complaintRequest": "Brand Complaint Request",
     "cancelRequest": "Cancel Request",
     "appealRequest": "Brand Appeal Request",
     "rejectedOn": "Rejected on",
     "awaitingResponse": "Awaiting Response",
     "status": {
       "PENDING": "Pending",
-      "APPROVAL": "Approved",
+      "APPROVED": "Approved",
       "REJECTED": "Rejected",
       "BRAND_PENDING": "Pending",
       "ADMIN_PENDING": "Pending",
-      "ADMIN_APPROVAL": "Approved by Admin",
-      "BRAND_APPROVAL": "Approved by Brand",
+      "ADMIN_APPROVED": "Approved by Admin",
+      "BRAND_APPROVED": "Approved by Brand",
       "ADMIN_REJECTED": "Rejected by Admin",
       "BRAND_REJECTED": "Rejected by Brand"
     }

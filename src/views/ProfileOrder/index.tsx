@@ -116,7 +116,7 @@ export default function ProfileOrder() {
         }
 
         const filters: IOrderFilter = {
-          status: statusFilters,
+          statusList: statusFilters,
           search: searchQuery || undefined,
         }
         await getMyOrderFn(filters)

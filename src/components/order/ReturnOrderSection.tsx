@@ -4,15 +4,20 @@ import { useTranslation } from 'react-i18next'
 import AlertMessage from '../alert/AlertMessage'
 import { ReturnOrderDialog } from './ReturnOrderDialog'
 
-const ReturnOrderSection = ({ orderId }: { orderId: string }) => {
+const ReturnOrderSection = ({
+  orderId,
+  pendingCustomerShippingReturnTime,
+}: {
+  orderId: string
+  pendingCustomerShippingReturnTime: number
+}) => {
   const { t } = useTranslation()
   const [openDialog, setOpenDialog] = useState(false)
-  const PENDING_CUSTOMER_SHIP_RETURN_DAYS = 2
   return (
     <div>
       <AlertMessage
         title={t('order.returnRequestApprovedTitle')}
-        message={t('order.returnRequestApprovedMessage', { count: PENDING_CUSTOMER_SHIP_RETURN_DAYS })}
+        message={t('order.returnRequestApprovedMessage', { count: pendingCustomerShippingReturnTime })}
         isShowIcon={false}
         color="success"
         buttonText="upload"

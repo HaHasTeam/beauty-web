@@ -67,10 +67,10 @@ export default function OrderStatus({ tag, text, size = 'medium' }: OrderStatusP
       bgColorClass = 'bg-amber-100'
       tagText = t('order.pendingCancellation')
       break
-    case ShippingStatusEnum.PENDING_RETURN_APPROVAL:
+    case ShippingStatusEnum.PENDING_RETURN_APPROVED:
       tagColorClass = 'text-slate-600'
       bgColorClass = 'bg-slate-100'
-      tagText = t('order.pendingReturnApproval')
+      tagText = t('order.pendingReturnApproved')
       break
     case ShippingStatusEnum.CANCELLED:
       tagColorClass = 'text-red-600'
@@ -89,8 +89,8 @@ export default function OrderStatus({ tag, text, size = 'medium' }: OrderStatusP
       break
     case ShippingStatusEnum.RETURNED_FAIL:
       tagColorClass = 'text-rose-600'
-      bgColorClass = 'bg-rose-100'
-      tagText = t('order.returning')
+      bgColorClass = 'bg-rose-300'
+      tagText = t('order.returnedFail')
       break
     case ShippingStatusEnum.REFUNDED:
       tagColorClass = 'text-gray-600'
