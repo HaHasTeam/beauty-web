@@ -258,7 +258,9 @@ const OrderItem = ({ brand, orderItem, setIsTrigger }: OrderItemProps) => {
         </div>
 
         {/* Request Status Information (Enhanced) */}
-        {(cancelAndReturnRequestData?.data?.refundRequest || cancelAndReturnRequestData?.data?.cancelRequest) && (
+        {(cancelAndReturnRequestData?.data?.refundRequest ||
+          cancelAndReturnRequestData?.data?.cancelRequest ||
+          cancelAndReturnRequestData?.data?.complaintRequest) && (
           <div className="mt-2 py-2 border-y">
             {cancelAndReturnRequestData?.data?.cancelRequest && (
               <div className="flex justify-between items-center">
@@ -311,6 +313,20 @@ const OrderItem = ({ brand, orderItem, setIsTrigger }: OrderItemProps) => {
                     )}
                   </>
                 )}
+              </div>
+            )}
+            {cancelAndReturnRequestData?.data?.complaintRequest && (
+              <div className="flex flex-col gap-2 mt-2">
+                <div className="flex justify-between items-center">
+                  <span className="font-medium">{t('request.complaintRequest')}</span>
+                  <span
+                    className={`px-2 py-1 rounded-full uppercase font-bold cursor-default text-xs ${getRequestStatusColor(
+                      cancelAndReturnRequestData?.data?.refundRequest?.status,
+                    )}`}
+                  >
+                    {t(`request.status.ADMIN_${cancelAndReturnRequestData?.data?.refundRequest?.status}`)}
+                  </span>
+                </div>
               </div>
             )}
           </div>
