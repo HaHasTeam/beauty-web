@@ -64,6 +64,11 @@ const privateRoutes = [
         path: configs.routes.profileOrder, // user order history
         element: <ProfileOrder />,
       },
+
+      {
+        path: 'message', // user order history detail
+        element: <OrderDetail />,
+      },
       {
         path: configs.routes.profileOrderDetail, // user order history detail
         element: <OrderDetail />,

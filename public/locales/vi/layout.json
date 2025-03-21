@@ -49,7 +49,8 @@
     "exclusiveBeautyOffersTitle": "Ưu đãi sắc đẹp độc quyền",
     "preOderCardTitle": "Đơn đặt trước",
     "groupBuyingDealsCardTitle": "Ưu đãi mua chung",
-    "recommendProductsTitle": "Gợi ý sản phẩm"
+    "recommendProductsTitle": "Gợi ý sản phẩm",
+    "preOrderTitle": "Sản phẩm sắp ra mắt"
   },
   "productCard": {
     "currentPrice": "{{price, currency}}",
@@ -144,11 +145,48 @@
     "title": "Lọc",
     "reset": "Đặt lại",
     "apply": "Áp dụng",
-    "currency": "đ",
     "filterBy": "Lọc theo",
     "newest": "Mới nhất",
     "hasImage": "Có hình ảnh",
-    "numberOfStar": "{{count}} sao"
+    "numberOfStar": "{{count}} sao",
+    "categories": "Danh mục",
+    "productTags": "Thẻ sản phẩm",
+    "productStatus": "Trạng thái sản phẩm",
+    "loading": "Đang tải danh mục...",
+    "noCategories": "Không tìm thấy danh mục nào",
+    "currency": "₫",
+    "tags": {
+      "bestSeller": "Bán chạy",
+      "hot": "Nổi bật",
+      "new": "Mới"
+    },
+    "status": {
+      "preOrder": "Đặt trước",
+      "official": "Chính hãng",
+      "outOfStock": "Hết hàng",
+      "inactive": "Không hoạt động"
+    },
+    "price": {
+      "slider": "Thanh trượt",
+      "custom": "Tùy chỉnh",
+      "quickRanges": "Khoảng giá nhanh",
+      "under": "Dưới",
+      "over": "Trên",
+      "min": "Tối thiểu",
+      "max": "Tối đa",
+      "minPlaceholder": "Giá tối thiểu",
+      "maxPlaceholder": "Giá tối đa",
+      "apply": "Áp dụng giá",
+      "under500k": "Dưới 500.000đ",
+      "500kto1m": "500.000đ - 1.000.000đ",
+      "1mto2m": "1.000.000đ - 2.000.000đ",
+      "2mto5m": "2.000.000đ - 5.000.000đ",
+      "over5m": "Trên 5.000.000đ",
+      "error": {
+        "minGreaterThanMax": "Giá tối thiểu không thể lớn hơn giá tối đa",
+        "negative": "Giá không thể âm"
+      }
+    }
   },
   "sort": {
     "title": "Sắp xếp theo",
@@ -165,9 +203,17 @@
       "description": "Hãy thử điều chỉnh tìm kiếm của bạn để tìm những gì bạn đang tìm.",
       "button": "Tìm lại"
     },
+    "preOrder": {
+      "title": "Không có sản phẩm đặt trước",
+      "description": "Hiện tại không có sản phẩm nào đang trong giai đoạn đặt trước. Vui lòng quay lại sau!"
+    },
     "groupBuying": {
       "title": "Không có sản phẩm mua chung",
       "description": "Hãy ghé lại sau để cập nhật thông tin mới nhất về sản phẩm mua chung từ các thương hiệu hàng đầu."
+    },
+    "flashSale": {
+      "title": "Không có sản phẩm Flash Sale",
+      "description": "Hiện tại không có sản phẩm Flash Sale nào. Vui lòng quay lại sau để xem các ưu đãi mới nhất!"
     },
     "brandHasGroupProduct": {
       "title": "Hiện tại không có thương hiệu nào có sản phẩm mua chung",
@@ -305,6 +351,10 @@
       "title": "Không tìm thấy đánh giá",
       "description": "Đánh giá này có thể đã bị xóa hoặc không tồn tại.",
       "button": "Quay lại"
+    },
+    "recommendProducts": {
+      "title": "Không có sản phẩm gợi ý",
+      "description": "Hiện tại không có sản phẩm gợi ý nào. Vui lòng quay lại sau!"
     }
   },
   "productDetail": {

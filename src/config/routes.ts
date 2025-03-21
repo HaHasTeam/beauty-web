@@ -20,7 +20,7 @@ const routes = {
   consultationStandard: '/consultation/standard',
   consultationPremium: '/consultation/premium',
   productFlashSale: '/flash-sale',
-  recommendProducts: '/products/recommend-products',
+  recommendProducts: '/recommend-products',
   helpCenter: '/portal',
   products: '/products',
   productDetail: '/products/:productId',

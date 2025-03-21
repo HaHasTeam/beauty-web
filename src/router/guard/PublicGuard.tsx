@@ -2,13 +2,13 @@ import { useQuery } from '@tanstack/react-query'
 import { FC, PropsWithChildren, useEffect } from 'react'
 import { useShallow } from 'zustand/react/shallow'
 
-import LoadingLayer from '@/components/loading-icon/LoadingLayer'
+// import LoadingLayer from '@/components/loading-icon/LoadingLayer'
 import { getUserProfileApi } from '@/network/apis/user'
 import { useStore } from '@/store/store'
 import { TUserPa } from '@/types/user'
 
 const PublicGuard: FC<PropsWithChildren> = ({ children }) => {
-  const { isAuthenticated, isLoading, setAuthState } = useStore(
+  const { isAuthenticated, setAuthState } = useStore(
     useShallow((state) => ({
       isAuthenticated: state.isAuthenticated,
       setAuthState: state.setAuthState,
@@ -38,7 +38,7 @@ const PublicGuard: FC<PropsWithChildren> = ({ children }) => {
     }
   }, [isAuthenticated, setAuthState, useProfileData, isGettingUserProfile])
 
-  if (isLoading) return <LoadingLayer />
+  // if (isLoading) return <LoadingLayer />
 
   return <>{children}</>
 }

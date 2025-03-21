@@ -45,9 +45,14 @@ export const updateProductApi = toMutationFetcher<UpdateProductParams, TServerRe
     })
   },
 )
+interface FilterParamProducts extends TBaseFilterRequestParams {
+  minPrice?: number
+  maxPrice?: number
+  statuses?: string
+}
 
 export const getProductFilterApi = toQueryFetcher<
-  TBaseFilterRequestParams,
+  FilterParamProducts,
   TServerResponse<{ total: string }, IResponseProduct[]>
 >('getProductFilterApi', async (params) => {
   return publicRequest(`/products/filter-product`, {
@@ -73,7 +78,7 @@ export const getRecommendProductsMutation = toMutationFetcher<
 })
 export const getRecommendProducts = toQueryFetcher<
   { search: string; tag: ProductTagEnum; page: string | number; limit: string | number },
-  TServerResponse<{ total: string }, IResponseProduct[]>
+  TServerResponse<{ total: string; totalPages: number }, IResponseProduct[]>
 >('getRecommendProducts', async (params) => {
   return publicRequest('/products/get', {
     method: 'POST',
