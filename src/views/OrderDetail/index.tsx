@@ -1,16 +1,19 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { History, MessageSquareText, Truck } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 
 import AlertMessage from '@/components/alert/AlertMessage'
 import BrandOrderInformation from '@/components/brand/BrandOrderInformation'
-import CancelOrderDialog from '@/components/dialog/CancelOrderDialog'
-import RequestCancelOrderDialog from '@/components/dialog/RequestCancelOrderDialog'
 import Empty from '@/components/empty/Empty'
 import LoadingIcon from '@/components/loading-icon'
 import LoadingContentLayer from '@/components/loading-icon/LoadingContentLayer'
+import CancelOrderDialog from '@/components/order/CancelOrderDialog'
+import RequestCancelOrderDialog from '@/components/order/RequestCancelOrderDialog'
+import { RequestReturnOrderDialog } from '@/components/order/RequestReturnOrderDialog'
+import ReturnOrderSection from '@/components/order/ReturnOrderSection'
+import ConfirmDecisionDialog from '@/components/order-detail/ConfirmDecisionDialog'
 import OrderDetailItems from '@/components/order-detail/OrderDetailItems'
 import OrderGeneral from '@/components/order-detail/OrderGeneral'
 import OrderStatusTracking from '@/components/order-detail/OrderStatusTracking'
@@ -21,14 +24,15 @@ import { Button } from '@/components/ui/button'
 import configs from '@/config'
 import useHandleServerError from '@/hooks/useHandleServerError'
 import { useToast } from '@/hooks/useToast'
+import { getMasterConfigApi } from '@/network/apis/master-config'
 import {
-  getMyCancelRequestApi,
+  getCancelAndReturnRequestApi,
   getOrderByIdApi,
   getStatusTrackingByIdApi,
   updateOrderStatusApi,
 } from '@/network/apis/order'
-import { CancelOrderRequestStatusEnum, ShippingStatusEnum } from '@/types/enum'
-import { ICancelRequestOrder } from '@/types/order'
+import { RequestStatusEnum, ShippingStatusEnum } from '@/types/enum'
+import { millisecondsToRoundedDays } from '@/utils/time'
 
 const OrderDetail = () => {
   const { orderId } = useParams()
@@ -37,8 +41,10 @@ const OrderDetail = () => {
   const [openCancelOrderDialog, setOpenCancelOrderDialog] = useState<boolean>(false)
   const [openRequestCancelOrderDialog, setOpenRequestCancelOrderDialog] = useState<boolean>(false)
   const [isTrigger, setIsTrigger] = useState<boolean>(false)
-  const [cancelRequests, setCancelRequests] = useState<ICancelRequestOrder[]>([])
-  const [isLoading, setIsLoading] = useState(true)
+  const [openReqReturnDialog, setOpenReqReturnDialog] = useState<boolean>(false)
+  const [openTrackRequest, setOpenTrackRequest] = useState<boolean>(false)
+  const [openTrackComplaint, setOpenTrackComplaint] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState(false)
   const { successToast } = useToast()
   const handleServerError = useHandleServerError()
 
@@ -52,6 +58,10 @@ const OrderDetail = () => {
     queryFn: getStatusTrackingByIdApi.fn,
     enabled: !!orderId,
   })
+  const { data: masterConfig } = useQuery({
+    queryKey: [getMasterConfigApi.queryKey],
+    queryFn: getMasterConfigApi.fn,
+  })
 
   useEffect(() => {
     queryClient.invalidateQueries({
@@ -59,21 +69,11 @@ const OrderDetail = () => {
     })
   }, [isTrigger, queryClient])
 
-  const { mutateAsync: getMyCancelRequestOrderFn } = useMutation({
-    mutationKey: [getMyCancelRequestApi.mutationKey],
-    mutationFn: getMyCancelRequestApi.fn,
-    onSuccess: (data) => {
-      setCancelRequests(data?.data)
-      setIsLoading(false)
-    },
+  const { data: cancelAndReturnRequestData } = useQuery({
+    queryKey: [getCancelAndReturnRequestApi.queryKey, orderId ?? ('' as string)],
+    queryFn: getCancelAndReturnRequestApi.fn,
+    enabled: !!orderId,
   })
-  useEffect(() => {
-    const fetchCancelRequests = async () => {
-      setIsLoading(true)
-      await getMyCancelRequestOrderFn({})
-    }
-    fetchCancelRequests()
-  }, [getMyCancelRequestOrderFn])
 
   const { mutateAsync: updateOrderStatusFn } = useMutation({
     mutationKey: [updateOrderStatusApi.mutationKey],
@@ -100,16 +100,87 @@ const OrderDetail = () => {
       })
     }
   }
-  console.log(useOrderData?.data)
+
+  const showReturnButton = useMemo(() => {
+    const isOrderDeliveredRecently = () => {
+      const deliveredStatusTrack = useStatusTrackingData?.data?.find(
+        (track) => track.status === ShippingStatusEnum.DELIVERED,
+      )
+
+      if (!deliveredStatusTrack?.createdAt) return false
+
+      const deliveredDate = new Date(deliveredStatusTrack.createdAt)
+      const currentDate = new Date()
+      const allowedTimeInMs = masterConfig?.data[0].refundTimeExpired
+        ? parseInt(masterConfig?.data[0].refundTimeExpired)
+        : null
+      return allowedTimeInMs ? currentDate.getTime() - deliveredDate.getTime() <= allowedTimeInMs : true
+    }
+    return (
+      (useOrderData?.data?.status === ShippingStatusEnum.DELIVERED ||
+        useOrderData?.data?.status === ShippingStatusEnum.COMPLETED) &&
+      !cancelAndReturnRequestData?.data?.refundRequest &&
+      isOrderDeliveredRecently()
+    )
+  }, [
+    cancelAndReturnRequestData?.data?.refundRequest,
+    masterConfig?.data,
+    useOrderData?.data?.status,
+    useStatusTrackingData?.data,
+  ])
+  const showReceivedButton = useMemo(() => {
+    const isOrderDeliveredRecently = () => {
+      const deliveredStatusTrack = useStatusTrackingData?.data?.find(
+        (track) => track.status === ShippingStatusEnum.DELIVERED,
+      )
+
+      if (!deliveredStatusTrack?.createdAt) return false
+
+      const deliveredDate = new Date(deliveredStatusTrack.createdAt)
+      const currentDate = new Date()
+
+      const allowedTimeInMs = masterConfig?.data[0].expiredCustomerReceivedTime
+        ? parseInt(masterConfig?.data[0].expiredCustomerReceivedTime)
+        : null
+      return allowedTimeInMs ? currentDate.getTime() - deliveredDate.getTime() <= allowedTimeInMs : true
+    }
+    return (
+      useOrderData?.data?.status === ShippingStatusEnum.DELIVERED &&
+      !cancelAndReturnRequestData?.data?.refundRequest &&
+      isOrderDeliveredRecently()
+    )
+  }, [
+    cancelAndReturnRequestData?.data?.refundRequest,
+    masterConfig?.data,
+    useOrderData?.data?.status,
+    useStatusTrackingData?.data,
+  ])
+  const pendingRequestCancelTime = useMemo(() => {
+    return millisecondsToRoundedDays(parseInt(masterConfig?.data[0].autoApprovedRequestCancelTime ?? ''))
+  }, [masterConfig?.data])
+
+  const pendingRequestReturnTime = useMemo(() => {
+    return (
+      millisecondsToRoundedDays(parseInt(masterConfig?.data[0].autoApproveRefundRequestTime ?? '')) +
+      ' - ' +
+      millisecondsToRoundedDays(
+        parseInt(masterConfig?.data[0].autoApproveRefundRequestTime ?? '') +
+          parseInt(masterConfig?.data[0].pendingAdminCheckRejectRefundRequestTime ?? ''),
+      )
+    )
+  }, [masterConfig?.data])
+  const pendingCustomerShippingReturnTime = useMemo(() => {
+    return millisecondsToRoundedDays(parseInt(masterConfig?.data[0].pendingCustomerShippingReturnTime ?? ''))
+  }, [masterConfig?.data])
   return (
     <div>
       {isFetching && <LoadingContentLayer />}
       <div className="w-full lg:px-5 md:px-4 sm:px-3 px-3 space-y-6 my-5">
         <div className="flex gap-2 w-full sm:justify-between sm:items-center sm:flex-row flex-col">
-          <div className="flex gap-2 sm:items-center sm:flex-row flex-col">
+          <div className="flex gap-2 items-center">
             <span className="text-lg text-muted-foreground font-medium">{t('orderDetail.title')}</span>
             {!isFetching && useOrderData?.data && (
-              <span className="text-lg text-muted-foreground">#{useOrderData?.data?.id}</span>
+              <span className="text-lg text-muted-foreground">#{useOrderData?.data?.id?.substring(0, 8)}</span>
             )}
           </div>
           {!isFetching && useOrderData?.data && (
@@ -128,32 +199,91 @@ const OrderDetail = () => {
               )}
 
               {/* cancel request information */}
+              {!isLoading && cancelAndReturnRequestData?.data?.cancelRequest?.status === RequestStatusEnum.PENDING && (
+                <AlertMessage
+                  title={t('order.cancelRequestPendingTitle')}
+                  message={t('order.cancelRequestPendingMessage', { count: pendingRequestCancelTime })}
+                  isShowIcon={false}
+                />
+              )}
+              {!isLoading && cancelAndReturnRequestData?.data?.cancelRequest?.status === RequestStatusEnum.REJECTED && (
+                <AlertMessage
+                  className="bg-red-100"
+                  color="danger"
+                  isShowIcon={false}
+                  title={t('order.cancelRequestRejectedTitle')}
+                  message={t('order.cancelRequestRejectedMessage')}
+                />
+              )}
+
+              {/* return request information */}
               {!isLoading &&
-                cancelRequests &&
-                cancelRequests?.some(
-                  (request) =>
-                    request?.order?.id === useOrderData?.data?.id &&
-                    request.status === CancelOrderRequestStatusEnum.PENDING,
-                ) && (
+                cancelAndReturnRequestData?.data?.complaintRequest?.status === RequestStatusEnum.APPROVED && (
                   <AlertMessage
-                    title={t('order.cancelRequestPendingTitle')}
-                    message={t('order.cancelRequestPendingMessage')}
+                    title={t('return.complaintRequestApprovedTitleCustomer')}
+                    message={t('return.complaintRequestApprovedMessageCustomer')}
                     isShowIcon={false}
+                    color="warn"
+                    buttonText="view"
+                    buttonClassName="bg-yellow-500 hover:bg-yellow-600"
+                    onClick={() => setOpenTrackComplaint(true)}
                   />
                 )}
               {!isLoading &&
-                cancelRequests &&
-                cancelRequests?.some(
-                  (request) =>
-                    request?.order?.id === useOrderData?.data?.id &&
-                    request.status === CancelOrderRequestStatusEnum.REJECTED,
-                ) && (
+                (cancelAndReturnRequestData?.data?.refundRequest?.status === RequestStatusEnum.PENDING ||
+                  (cancelAndReturnRequestData?.data?.refundRequest?.status === RequestStatusEnum.REJECTED &&
+                    cancelAndReturnRequestData?.data?.refundRequest?.rejectedRefundRequest?.status ===
+                      RequestStatusEnum.PENDING)) && (
                   <AlertMessage
-                    className="bg-red-100"
+                    title={t('return.returnRequestPendingTitleCustomer')}
+                    message={t('return.returnRequestPendingMessageCustomer', { string: `${pendingRequestReturnTime}` })}
+                    isShowIcon={false}
+                    buttonText={'view'}
+                    buttonClassName="bg-yellow-500 hover:bg-yellow-600"
+                    onClick={() => setOpenTrackRequest(true)}
+                  />
+                )}
+              {!isLoading &&
+                cancelAndReturnRequestData?.data?.refundRequest?.status === RequestStatusEnum.REJECTED &&
+                cancelAndReturnRequestData?.data?.refundRequest?.rejectedRefundRequest?.status ===
+                  RequestStatusEnum.APPROVED && (
+                  <AlertMessage
                     color="danger"
                     isShowIcon={false}
-                    title={t('order.cancelRequestRejectedTitle')}
-                    message={t('order.cancelRequestRejectedMessage')}
+                    title={t('return.returnRequestRejectedTitleCustomer')}
+                    message={t('return.returnRequestRejectedMessageCustomer')}
+                    buttonText={'view'}
+                    onClick={() => setOpenTrackRequest(true)}
+                  />
+                )}
+              {!isLoading &&
+                (cancelAndReturnRequestData?.data?.refundRequest?.status === RequestStatusEnum.APPROVED ||
+                  (cancelAndReturnRequestData?.data?.refundRequest?.status === RequestStatusEnum.REJECTED &&
+                    cancelAndReturnRequestData?.data?.refundRequest?.rejectedRefundRequest?.status ===
+                      RequestStatusEnum.REJECTED)) &&
+                useOrderData.data.status !== ShippingStatusEnum.DELIVERED &&
+                useOrderData.data.status !== ShippingStatusEnum.COMPLETED && (
+                  <AlertMessage
+                    title={t('order.returnRequestApprovedTitle')}
+                    message={t('return.returnRequestApprovedView')}
+                    isShowIcon={false}
+                    color="success"
+                    buttonText="view"
+                    onClick={() => setOpenTrackRequest(true)}
+                    buttonClassName="bg-green-500 hover:bg-green-600"
+                  />
+                )}
+
+              {!isLoading &&
+                (cancelAndReturnRequestData?.data?.refundRequest?.status === RequestStatusEnum.APPROVED ||
+                  (cancelAndReturnRequestData?.data?.refundRequest?.status === RequestStatusEnum.REJECTED &&
+                    cancelAndReturnRequestData?.data?.refundRequest?.rejectedRefundRequest?.status ===
+                      RequestStatusEnum.REJECTED)) &&
+                (useOrderData.data.status === ShippingStatusEnum.DELIVERED ||
+                  useOrderData.data.status === ShippingStatusEnum.COMPLETED) && (
+                  <ReturnOrderSection
+                    orderId={useOrderData?.data?.id}
+                    pendingCustomerShippingReturnTime={pendingCustomerShippingReturnTime}
                   />
                 )}
 
@@ -252,6 +382,8 @@ const OrderDetail = () => {
                     }
                     accountAvatar={useOrderData?.data?.account?.avatar ?? ''}
                     accountName={useOrderData?.data?.account?.username ?? ''}
+                    masterConfig={masterConfig?.data}
+                    statusTracking={useStatusTrackingData?.data}
                   />
 
                   {/* order summary */}
@@ -275,30 +407,41 @@ const OrderDetail = () => {
                     </Button>
                   </div>
                 )}
-                {useOrderData?.data?.status === ShippingStatusEnum.PREPARING_ORDER &&
-                  !isLoading &&
-                  !cancelRequests?.some((cancelRequest) => cancelRequest?.order?.id === useOrderData?.data?.id) && (
-                    <div className="w-full">
-                      <Button
-                        variant="outline"
-                        className="w-full border border-primary text-primary hover:text-primary hover:bg-primary/10"
-                        onClick={() => setOpenRequestCancelOrderDialog(true)}
-                      >
-                        {t('order.cancelOrder')}
-                      </Button>
-                    </div>
+                <div className="w-full flex items-center flex-1 gap-2">
+                  {useOrderData?.data?.status === ShippingStatusEnum.PREPARING_ORDER &&
+                    !cancelAndReturnRequestData?.data?.cancelRequest && (
+                      <div className="w-full">
+                        <Button
+                          variant="outline"
+                          className="w-full border border-primary text-primary hover:text-primary hover:bg-primary/10"
+                          onClick={() => setOpenRequestCancelOrderDialog(true)}
+                        >
+                          {t('order.cancelOrder')}
+                        </Button>
+                      </div>
+                    )}
+                  {showReceivedButton && (
+                    <Button
+                      variant="default"
+                      className="w-full hover:bg-primary/80"
+                      onClick={() => {
+                        handleUpdateStatus(ShippingStatusEnum.COMPLETED)
+                      }}
+                    >
+                      {isLoading ? <LoadingIcon color="primaryBackground" /> : t('order.received')}
+                    </Button>
                   )}
-                {useOrderData?.data?.status === ShippingStatusEnum.DELIVERED && (
-                  <Button
-                    variant="outline"
-                    className="w-full border border-primary text-primary hover:text-primary hover:bg-primary/10"
-                    onClick={() => {
-                      handleUpdateStatus(ShippingStatusEnum.COMPLETED)
-                    }}
-                  >
-                    {isLoading ? <LoadingIcon color="primaryBackground" /> : t('order.received')}
-                  </Button>
-                )}
+                  {showReturnButton && (
+                    <Button
+                      variant="outline"
+                      type="button"
+                      className="w-full border border-primary text-primary hover:text-primary hover:bg-primary/10"
+                      onClick={() => setOpenReqReturnDialog(true)}
+                    >
+                      {isLoading ? <LoadingIcon color="primaryBackground" /> : t('order.returnOrder')}
+                    </Button>
+                  )}
+                </div>
               </div>
             </div>
           </>
@@ -327,6 +470,51 @@ const OrderDetail = () => {
             onOpenChange={setOpenRequestCancelOrderDialog}
             setIsTrigger={setIsTrigger}
             orderId={useOrderData?.data?.id ?? ''}
+          />
+        )}
+        {!isFetching && useOrderData?.data && (
+          <RequestReturnOrderDialog
+            open={openReqReturnDialog}
+            setOpen={setOpenReqReturnDialog}
+            onOpenChange={setOpenReqReturnDialog}
+            setIsTrigger={setIsTrigger}
+            orderId={useOrderData?.data?.id ?? ''}
+          />
+        )}
+        {!isFetching && useOrderData?.data && cancelAndReturnRequestData?.data?.refundRequest && (
+          <ConfirmDecisionDialog
+            open={openTrackRequest}
+            onOpenChange={setOpenTrackRequest}
+            item={'returnTrackView'}
+            rejectReason={cancelAndReturnRequestData?.data?.refundRequest?.rejectedRefundRequest?.reason}
+            rejectMediaFiles={cancelAndReturnRequestData?.data?.refundRequest?.rejectedRefundRequest?.mediaFiles}
+            reason={cancelAndReturnRequestData?.data?.refundRequest.reason}
+            mediaFiles={cancelAndReturnRequestData?.data?.refundRequest.mediaFiles}
+            isRejectRequest={cancelAndReturnRequestData?.data?.refundRequest?.rejectedRefundRequest !== null}
+            status={cancelAndReturnRequestData?.data?.refundRequest?.status}
+            rejectStatus={cancelAndReturnRequestData?.data?.refundRequest?.rejectedRefundRequest?.status}
+            reasonRejected={cancelAndReturnRequestData?.data?.refundRequest?.reasonRejected}
+            //  returnRequest={cancelAndReturnRequestData?.data?.refundRequest}
+          />
+        )}
+        {!isFetching && useOrderData?.data && cancelAndReturnRequestData?.data?.complaintRequest && (
+          <ConfirmDecisionDialog
+            // isLoadingDecisionApproved
+            // isLoadingDecisionRejected
+            open={openTrackComplaint}
+            onOpenChange={setOpenTrackComplaint}
+            // onConfirm={() => {}}
+            item={'complaintTrackView'}
+            rejectReason={''}
+            rejectMediaFiles={[]}
+            reason={cancelAndReturnRequestData?.data?.complaintRequest?.reason}
+            mediaFiles={cancelAndReturnRequestData?.data?.complaintRequest?.mediaFiles}
+            // returnRequest={cancelAndReturnRequestData?.data?.complaintRequest}
+            isRejectRequest={false}
+            // isShowAction={false}
+            rejectStatus={cancelAndReturnRequestData?.data?.complaintRequest?.status}
+            status={cancelAndReturnRequestData?.data?.complaintRequest?.status}
+            reasonRejected={cancelAndReturnRequestData?.data?.complaintRequest?.reasonRejected}
           />
         )}
       </div>

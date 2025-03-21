@@ -75,6 +75,7 @@ const RecommendProduct = () => {
       rating: Number(product.averageRating),
       ratingAmount: Number(product.totalRatings),
       soldInPastMonth: Number(product.salesLast30Days),
+      salesLast30Days: Number(product.salesLast30Days),
       classifications: productClassifications,
       certificates: product.certificates,
     }

@@ -1,6 +1,7 @@
 import AccountLayout from '@/components/layout/AccountLayout'
 import PrimaryLayout from '@/components/layout/PrimaryLayout'
 import configs from '@/config'
+import Cart from '@/views/Cart'
 import ChangePassword from '@/views/ChangePassword'
 import Checkout from '@/views/Checkout'
 import CheckoutResult from '@/views/CheckoutResult'
@@ -27,7 +28,10 @@ const privateRoutes = [
       //   index: true,
       //   element: <Home />,
       // },
-
+      {
+        path: configs.routes.cart,
+        element: <Cart />,
+      },
       {
         path: configs.routes.checkout,
         element: <Checkout />,

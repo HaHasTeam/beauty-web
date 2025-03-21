@@ -1,7 +1,7 @@
 import { Check, Package } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
-import { CancelOrderRequestStatusEnum, ShippingStatusEnum } from '@/types/enum'
+import { RequestStatusEnum, ShippingStatusEnum } from '@/types/enum'
 import { UserRoleEnum } from '@/types/role'
 import { IStatusTracking } from '@/types/status-tracking'
 
@@ -64,23 +64,19 @@ const OrderStatusTrackingDetail = ({ statusTrackingData }: OrderStatusTrackingDe
                 <div
                   className={`text-sm font-medium ${currentIndex === index ? 'text-emerald-500' : 'text-muted-foreground'}`}
                 >
-                  {step.status === CancelOrderRequestStatusEnum.APPROVED
+                  {step.status === RequestStatusEnum.APPROVED
                     ? t('order.approvedCancelRequest')
-                    : step.status === CancelOrderRequestStatusEnum.REJECTED
+                    : step.status === RequestStatusEnum.REJECTED
                       ? t('order.rejectedCancelRequest')
                       : StatusTrackingText(step.status)}
                 </div>
-                {(step.status === ShippingStatusEnum.CANCELLED ||
-                  step.status === CancelOrderRequestStatusEnum.APPROVED ||
-                  step.status === ShippingStatusEnum.REFUNDED) && (
+                {(step.status === ShippingStatusEnum.CANCELLED || step.status === RequestStatusEnum.APPROVED) && (
                   <div>
-                    {(step.status === ShippingStatusEnum.CANCELLED ||
-                      step.status === CancelOrderRequestStatusEnum.APPROVED) && (
-                      <div className="text-sm text-muted-foreground mt-1">
-                        <span className="font-medium">{t('orderDetail.cancelBy')}: </span>
-                        {step.updatedBy}
-                      </div>
-                    )}
+                    <div className="text-sm text-muted-foreground mt-1">
+                      <span className="font-medium">{t('orderDetail.cancelBy')}: </span>
+                      {step.updatedBy}
+                    </div>
+
                     <div className="text-sm text-muted-foreground mt-1">
                       <span className="font-medium">{t('order.cancelOrderReason.reason')}: </span>
                       {step.reason}

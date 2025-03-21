@@ -8,8 +8,14 @@ export const getFeedbackSchema = () => {
     rating: z.number().min(1, i18next.t('validation.ratingFeedback')).max(5, i18next.t('validation.ratingFeedback')), // Must have at least one order
     content: z
       .string()
-      .min(MIN_FEEDBACK_LENGTH, i18next.t('validation.contentFeedback'))
-      .max(MAX_FEEDBACK_LENGTH, i18next.t('validation.contentFeedback')),
+      .min(
+        MIN_FEEDBACK_LENGTH,
+        i18next.t('validation.contentFeedback', { minLength: MIN_FEEDBACK_LENGTH, maxLength: MAX_FEEDBACK_LENGTH }),
+      )
+      .max(
+        MAX_FEEDBACK_LENGTH,
+        i18next.t('validation.contentFeedback', { minLength: MIN_FEEDBACK_LENGTH, maxLength: MAX_FEEDBACK_LENGTH }),
+      ),
     orderDetailId: z.string().uuid(), // uuid
     mediaFiles: z.array(z.instanceof(File)).optional(),
     videos: z.array(z.instanceof(File)).optional(),
@@ -23,8 +29,20 @@ export const getReplyFeedbackSchema = () => {
   return z.object({
     content: z
       .string()
-      .min(MIN_FEEDBACK_LENGTH, i18next.t('validation.contentReplyFeedback'))
-      .max(MAX_FEEDBACK_LENGTH, i18next.t('validation.contentReplyFeedback')),
+      .min(
+        MIN_FEEDBACK_LENGTH,
+        i18next.t('validation.contentReplyFeedback', {
+          minLength: MIN_FEEDBACK_LENGTH,
+          maxLength: MAX_FEEDBACK_LENGTH,
+        }),
+      )
+      .max(
+        MAX_FEEDBACK_LENGTH,
+        i18next.t('validation.contentReplyFeedback', {
+          minLength: MIN_FEEDBACK_LENGTH,
+          maxLength: MAX_FEEDBACK_LENGTH,
+        }),
+      ),
   })
 }
 

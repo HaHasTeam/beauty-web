@@ -1,4 +1,3 @@
-import { Heart } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
@@ -21,6 +20,9 @@ interface ProductCardProps {
 export default function ProductCard({ product, isProductDiscount = false, isInGroupBuying = false }: ProductCardProps) {
   const navigate = useNavigate()
   const { t } = useTranslation()
+  if (isProductDiscount) {
+    console.log(product)
+  }
 
   return (
     <Dialog>
@@ -34,10 +36,10 @@ export default function ProductCard({ product, isProductDiscount = false, isInGr
           >
             <div className="absolute top-3 left-3 z-10">{product?.tag && <ProductTag tag={product?.tag} />}</div>
 
-            <button className="absolute top-3 right-3 z-10 bg-gray-300 bg-opacity-30 rounded-full p-2 flex items-center justify-center hover:opacity-70">
+            {/* <button className="absolute top-3 right-3 z-10 bg-gray-300 bg-opacity-30 rounded-full p-2 flex items-center justify-center hover:opacity-70">
               <Heart fill="white" className="w-5 h-5 focus:text-rose-500 transition-colors text-white opacity-100 " />
-              {/* <Heart fill="red" className="w-5 h-5 hover:w-5 hover:h-5 text-rose-500 transition-colors  " /> */}
-            </button>
+              <Heart fill="red" className="w-5 h-5 hover:w-5 hover:h-5 text-rose-500 transition-colors  " />
+            </button> */}
             <div className="relative aspect-square">
               <ImageWithFallback
                 src={product?.images[0]?.fileUrl}
@@ -50,12 +52,12 @@ export default function ProductCard({ product, isProductDiscount = false, isInGr
               {isProductDiscount && product?.deal && product?.deal > 0 && (
                 <ProductTag tag="DealPercent" text={`-${(product?.deal * 100).toFixed(0)}%`} />
               )}
-              <div className="min-h-[100px]">
-                <span className="text-semibold line-clamp-2">{product?.name}</span>
+              <div className="min-h-[90px]">
+                <span className="text-semibold line-clamp-2 sm:text-sm text-xs">{product?.name}</span>
                 <ProductStar rating={product?.rating} ratingAmount={product?.ratingAmount} />
                 <div className="mt-1 mb-2">
                   <span className="text-gray-500 text-sm line-clamp-1">
-                    {t('productCard.soldInPastMonth', { amount: product?.soldInPastMonth ?? 0 })}
+                    {t('productCard.soldInPastMonth', { amount: product?.salesLast30Days ?? 0 })}
                   </span>
                 </div>
               </div>

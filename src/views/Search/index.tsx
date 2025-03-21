@@ -13,8 +13,7 @@ import ProductCard from '@/components/product/ProductCard'
 import ProductSort from '@/components/sort/ProductSort'
 import { limit, page } from '@/constants/infor'
 import { getProductFilterApi } from '@/network/apis/product'
-import { DiscountTypeEnum, OrderEnum, ProductTagEnum, StatusEnum } from '@/types/enum'
-import { ProductEnum } from '@/types/product'
+import { DiscountTypeEnum, OrderEnum, ProductEnum, ProductTagEnum, StatusEnum } from '@/types/enum'
 import { calculateDiscountPrice } from '@/utils/price'
 import { getCheapestClassification } from '@/utils/product'
 
@@ -131,8 +130,10 @@ const SearchPage = () => {
                         rating: 4.5,
                         ratingAmount: 250,
                         soldInPastMonth: 300,
+
                         classifications: productClassifications,
                         certificates: product.certificates,
+                        salesLast30Days: Number(product.salesLast30Days),
                       }
                       return (
                         <ProductCard

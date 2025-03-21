@@ -14,8 +14,7 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import { getAllCategoryApi } from '@/network/apis/category'
 import { ICategory } from '@/types/category'
-import { ProductTagEnum } from '@/types/enum'
-import { ProductEnum } from '@/types/product'
+import { ProductEnum, ProductTagEnum } from '@/types/enum'
 
 import { Slider } from '../ui/slider'
 

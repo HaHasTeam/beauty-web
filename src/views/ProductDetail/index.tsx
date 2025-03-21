@@ -69,14 +69,18 @@ const ProductDetail = ({ initProductId, isInGroupBuying = false }: ProductDetail
 
     switch (event) {
       case OrderEnum.FLASH_SALE:
-        return useProductData.data.productDiscounts?.[0]?.productClassifications
+        return useProductData.data.productDiscounts?.filter(
+          (product) => product.status === ProductDiscountEnum.ACTIVE,
+        )?.[0]?.productClassifications
       case OrderEnum.PRE_ORDER:
-        return useProductData.data.preOrderProducts?.[0]?.productClassifications
+        return useProductData.data.preOrderProducts?.filter(
+          (product) => product.status === PreOrderProductEnum.ACTIVE,
+        )?.[0]?.productClassifications
       default:
         return useProductData.data.productClassifications
     }
   }, [event, useProductData?.data, isInGroupBuying])
-
+  console.log(productClassifications)
   const cheapestClassification = useMemo(
     () => getCheapestClassification(productClassifications ?? []),
     [productClassifications],
@@ -165,10 +169,27 @@ const ProductDetail = ({ initProductId, isInGroupBuying = false }: ProductDetail
             {/* product reviews */}
             <div className="flex gap-2 bg-white rounded-lg" id="customerReviews" ref={reviewSectionRef}>
               {isFetchingReviewGeneral && <LoadingIcon />}
-              {reviewGeneral && reviewGeneral.data ? <ReviewOverall reviewGeneral={reviewGeneral.data} /> : null}
-              <div>
-                <ReviewFilter productId={productId ?? ''} />
-              </div>
+              {reviewGeneral?.data.totalCount === 0 ? (
+                <div className="p-4 flex flex-col justify-center w-full">
+                  <h2 className="text-xl font-medium mb-4 text-primary">{t('reviews.customerReview')}</h2>
+                  <div className="flex justify-center items-center">
+                    <Empty
+                      title={t('empty.feedback.title')}
+                      description={t('empty.feedback.description', {
+                        filter: '',
+                        filterCallAction: '',
+                      })}
+                    />
+                  </div>
+                </div>
+              ) : (
+                <>
+                  {reviewGeneral && reviewGeneral.data ? <ReviewOverall reviewGeneral={reviewGeneral.data} /> : null}
+                  <div>
+                    <ReviewFilter productId={productId ?? ''} brand={useProductData?.data?.brand} />
+                  </div>
+                </>
+              )}
             </div>
 
             {/* other product in same brand */}

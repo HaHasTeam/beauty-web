@@ -21,6 +21,7 @@ export enum StatusEnum {
   BANNED = 'BANNED',
   DENIED = 'DENIED',
 }
+
 export enum AddressEnum {
   HOME = 'HOME',
   OFFICE = 'OFFICE',
@@ -28,10 +29,13 @@ export enum AddressEnum {
 }
 
 export enum ProductEnum {
-  PRE_ORDER = 'PRE_ORDER',
+  UN_PUBLISHED = 'UN_PUBLISHED',
+  FLASH_SALE = 'FLASH_SALE',
   OFFICIAL = 'OFFICIAL',
   OUT_OF_STOCK = 'OUT_OF_STOCK',
   INACTIVE = 'INACTIVE',
+  BANNED = 'BANNED',
+  PRE_ORDER = 'PRE_ORDER',
 }
 
 export enum FileEnum {
@@ -90,8 +94,12 @@ export enum ShippingStatusEnum {
   DELIVERED = 'DELIVERED', // Đã nhận hàng
   COMPLETED = 'COMPLETED', // Hoàn thành
   RETURNING = 'RETURNING', // Đang trả hàng
+  BRAND_RECEIVED = 'BRAND_RECEIVED',
+  RETURNED_FAIL = 'RETURNED_FAIL',
   REFUNDED = 'REFUNDED', // Đã trả hàng
   CANCELLED = 'CANCELLED', // Đã hủy
+  PENDING_CANCELLATION = 'PENDING_CANCELLATION', // FRONT END
+  PENDING_RETURN_APPROVED = 'PENDING_RETURN_APPROVED', // FRONT END
 }
 
 export enum ProductDiscountEnum {
@@ -115,6 +123,9 @@ export enum VoucherStatusEnum {
 export enum ProductCartStatusEnum {
   HIDDEN = 'HIDDEN',
   SOLD_OUT = 'SOLD_OUT',
+  INACTIVE = 'INACTIVE',
+  BANNED = 'BANNED',
+  UN_PUBLISHED = 'UN_PUBLISHED',
 }
 export enum ClassificationTypeEnum {
   DEFAULT = 'DEFAULT',
@@ -141,17 +152,28 @@ export enum ResultEnum {
   FAILURE = 'FAILURE',
 }
 
-export enum CancelOrderRequestStatusEnum {
-  PENDING = 'PENDING',
-  APPROVED = 'APPROVED',
-  REJECTED = 'REJECTED',
-}
-
 export enum FeedbackFilterEnum {
   ALL = 'ALL',
   RATING = 'RATING',
   IMAGE_VIDEO = 'IMAGE_VIDEO',
   CLASSIFICATION = 'CLASSIFICATION',
+}
+export enum RequestStatusEnum {
+  PENDING = 'PENDING',
+  APPROVED = 'APPROVED',
+  REJECTED = 'REJECTED',
+}
+
+export enum OrderRequestTypeEnum {
+  CANCEL = 'CANCEL',
+  REFUND = 'REFUND',
+  REJECT_REFUND = 'REJECT_REFUND',
+  COMPLAINT = 'COMPLAINT',
+}
+
+export enum ActionReceivedEnum {
+  RECEIVED = 'RECEIVED',
+  NOT_RECEIVED = 'NOT_RECEIVED',
 }
 export enum ProductTagEnum {
   BEST_SELLER = 'BEST_SELLER',

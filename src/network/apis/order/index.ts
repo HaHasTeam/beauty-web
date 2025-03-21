@@ -1,4 +1,5 @@
 import {
+  ICancelAndReturnRequest,
   ICancelOrder,
   ICancelRequestOrder,
   ICreateGroupOrder,
@@ -7,6 +8,9 @@ import {
   IOrder,
   IOrderFilter,
   IOrderItem,
+  IRejectReturnRequestOrder,
+  IRequest,
+  IRequestFilter,
 } from '@/types/order'
 import { TServerResponse } from '@/types/request'
 import { IStatusTracking } from '@/types/status-tracking'
@@ -48,12 +52,37 @@ export const getMyOrdersApi = toMutationFetcher<IOrderFilter, TServerResponse<IO
     })
   },
 )
+export const getMyRequestsApi = toMutationFetcher<IRequestFilter, TServerResponse<IRequest[]>>(
+  'getMyRequestsApi',
+  async (data) => {
+    return privateRequest('/orders/get-my-requests/', {
+      method: 'POST',
+      data,
+    })
+  },
+)
 export const getMyCancelRequestApi = toMutationFetcher<IOrderFilter, TServerResponse<ICancelRequestOrder[]>>(
   'getMyCancelRequestApi',
   async (data) => {
     return privateRequest('/orders/get-my-cancel-requests', {
       method: 'POST',
       data,
+    })
+  },
+)
+export const getCancelAndReturnRequestApi = toQueryFetcher<string, TServerResponse<ICancelAndReturnRequest>>(
+  'getCancelAndReturnRequestApi',
+  async (orderId) => {
+    return privateRequest(`/orders/get-requests-of-order/${orderId}`, {
+      method: 'GET',
+    })
+  },
+)
+export const getRejectReturnRequestApi = toQueryFetcher<string, TServerResponse<IRejectReturnRequestOrder>>(
+  'getRejectReturnRequestApi',
+  async (orderId) => {
+    return privateRequest(`/orders/get-requests-of-order/${orderId}`, {
+      method: 'GET',
     })
   },
 )
@@ -102,5 +131,15 @@ export const updateOrderStatusApi = toMutationFetcher<
   return privateRequest(`/orders/update-status/${id}`, {
     method: 'PUT',
     data: { status: status, mediaFiles: mediaFiles },
+  })
+})
+
+export const requestReturnOrderApi = toMutationFetcher<
+  { orderId: string; reason: string; mediaFiles?: string[] },
+  TServerResponse<IOrder>
+>('requestReturnOrderApi', async ({ orderId, reason, mediaFiles }) => {
+  return privateRequest(`/orders/request-refund/${orderId}`, {
+    method: 'POST',
+    data: { reason: reason, mediaFiles: mediaFiles },
   })
 })

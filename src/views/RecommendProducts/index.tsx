@@ -9,8 +9,8 @@ import ProductCard from '@/components/product/ProductCard'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import { getRecommendProducts } from '@/network/apis/product'
-import { DiscountTypeEnum, OrderEnum, ProductTagEnum, StatusEnum } from '@/types/enum'
-import { IResponseProduct, ProductEnum } from '@/types/product'
+import { DiscountTypeEnum, OrderEnum, ProductEnum, ProductTagEnum, StatusEnum } from '@/types/enum'
+import { IResponseProduct } from '@/types/product'
 import { calculateDiscountPrice } from '@/utils/price'
 import { getCheapestClassification } from '@/utils/product'
 
@@ -95,6 +95,7 @@ export default function RecommendedProductsPage() {
       soldInPastMonth: Number(product.salesLast30Days),
       classifications: productClassifications,
       certificates: product.certificates,
+      salesLast30Days: Number(product.salesLast30Days),
     }
 
     return (

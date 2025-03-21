@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState } from 'react'
+import { Dispatch, SetStateAction, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import fallBackImage from '@/assets/images/fallBackImage.jpg'
@@ -7,6 +7,7 @@ import { DiscountTypeEnum, OrderEnum, ProductDiscountEnum, StatusEnum } from '@/
 import { IFeedbackGeneral } from '@/types/feedback'
 import { IProduct } from '@/types/product'
 import { calculateDiscountPrice } from '@/utils/price'
+import { checkCurrentProductClassificationActive } from '@/utils/product'
 
 import ImageWithFallback from '../ImageFallback'
 import { Button } from '../ui/button'
@@ -49,16 +50,6 @@ const ProductDetailInformation = ({
     other: null,
   })
 
-  const getAllOptions = (key: IClassificationKey): string[] => {
-    return [
-      ...new Set(
-        productClassifications
-          ?.map((classification) => classification[key])
-          .filter((value): value is string => value !== null),
-      ),
-    ]
-  }
-
   const getAvailableOptions = (key: IClassificationKey, selections: IClassificationSelection) => {
     return [
       ...new Set(
@@ -73,17 +64,39 @@ const ProductDetailInformation = ({
     ]
   }
 
-  const allOptions = {
-    color: getAllOptions('color'),
-    size: getAllOptions('size'),
-    other: getAllOptions('other'),
-  }
+  const allOptions = useMemo(() => {
+    const getAllOptions = (key: IClassificationKey): string[] => {
+      return [
+        ...new Set(
+          productClassifications
+            ?.map((classification) => classification[key])
+            .filter((value): value is string => value !== null),
+        ),
+      ]
+    }
+    return {
+      color: getAllOptions('color'),
+      size: getAllOptions('size'),
+      other: getAllOptions('other'),
+    }
+  }, [productClassifications])
+  const getFirstAttributeKey = useCallback(() => {
+    const keys: IClassificationKey[] = ['color', 'size', 'other']
+    for (const key of keys) {
+      if (allOptions[key]?.length > 0) {
+        return key
+      }
+    }
+    return null
+  }, [allOptions])
 
   const availableOptions = {
     color: getAvailableOptions('color', selectedValues),
     size: getAvailableOptions('size', selectedValues),
     other: getAvailableOptions('other', selectedValues),
   }
+
+  const firstAttributeKey = getFirstAttributeKey()
   const handleSelection = (key: IClassificationKey, value: string) => {
     setSelectedValues((prev) => {
       const updatedValues = {
@@ -95,7 +108,6 @@ const ProductDetailInformation = ({
 
       const isComplete = classificationKeys.every((k) => updatedValues[k as IClassificationKey] !== null)
 
-      console.log(isComplete)
       if (isComplete) {
         const matchingClassification = productClassifications?.find((classification) =>
           Object.entries(updatedValues).every(([k, v]) => classification[k as IClassificationKey] === v),
@@ -115,35 +127,50 @@ const ProductDetailInformation = ({
   const renderOptions = (key: IClassificationKey, options: string[]) => {
     if (!options.length) return null
 
-    const showImage = key === 'color' ? allOptions.color.length > 0 : key === 'other' && allOptions.color.length === 0
+    const showImage = key === firstAttributeKey
 
     return (
       <div className="flex gap-2 items-center">
         <span className="text-gray-600">{t(`productDetail.${key.charAt(0).toUpperCase() + key.slice(1)}`)}</span>
         <div className="flex flex-wrap items-start gap-4">
           {options.map((option) => {
-            const classification = productClassifications?.find((c) => c[key] === option)
+            const matchingClassifications = productClassifications?.filter((c) => c[key] === option)
 
+            const isSelectedValue = selectedValues[key] === option
+
+            const matchingClassification = matchingClassifications?.find((c) =>
+              Object.entries(selectedValues)
+                .filter(([k]) => k !== key)
+                .every(([k, v]) => !v || c[k as IClassificationKey] === v),
+            )
+
+            const isActive = matchingClassification
+              ? checkCurrentProductClassificationActive(matchingClassification, productClassifications ?? [])
+              : false
             return (
               <Button
                 onClick={() => handleSelection(key, option)}
                 key={option}
                 variant="outline"
                 className={`w-fit h-fit justify-start px-2 py-2 text-sm ${
-                  selectedValues[key] === option ? 'bg-accent text-accent-foreground' : ''
+                  isSelectedValue ? 'bg-accent text-accent-foreground' : ''
                 }`}
-                disabled={!availableOptions[key].includes(option)}
+                disabled={!availableOptions[key].includes(option) || !isActive}
               >
-                {showImage && classification?.images?.[0]?.fileUrl && (
-                  <div className="w-10 h-10 rounded-md">
-                    <ImageWithFallback
-                      fallback={fallBackImage}
-                      alt={option}
-                      src={classification.images.filter((img) => img.status === StatusEnum.ACTIVE)?.[0].fileUrl}
-                      className="w-full h-full object-cover rounded-md"
-                    />
-                  </div>
-                )}
+                {showImage &&
+                  matchingClassification?.images?.filter((img) => img.status === StatusEnum.ACTIVE)?.[0]?.fileUrl && (
+                    <div className="w-10 h-10 rounded-md">
+                      <ImageWithFallback
+                        fallback={fallBackImage}
+                        alt={option}
+                        src={
+                          matchingClassification?.images?.filter((img) => img.status === StatusEnum.ACTIVE)?.[0]
+                            ?.fileUrl
+                        }
+                        className="w-full h-full object-cover rounded-md"
+                      />
+                    </div>
+                  )}
                 {option}
               </Button>
             )
@@ -173,12 +200,18 @@ const ProductDetailInformation = ({
         {/* rating */}
         <div className="flex gap-2 align-middle items-center">
           <div className="flex gap-2 align-middle items-center hover:cursor-pointer" onClick={scrollToReviews}>
-            <span className="font-semibold">{reviewGeneral?.averageRating ?? 0}</span>
+            <span className="font-semibold">
+              {String(
+                (parseFloat((reviewGeneral?.averageRating ?? 0).toString()) === 0.0
+                  ? 0
+                  : reviewGeneral?.averageRating) ?? 0,
+              )}
+            </span>
             <ProductStar rating={reviewGeneral?.averageRating ?? 0} ratingAmount={reviewGeneral?.totalCount ?? 0} />
           </div>
           <div className="border-l border-gray-300 px-2">
             <span className="text-gray-500 text-sm">
-              {t('productCard.soldInPastMonth', { amount: product?.soldInPastMonth ?? 0 })}
+              {t('productCard.soldInPastMonth', { amount: product?.salesLast30Days ?? 0 })}
             </span>
           </div>
         </div>
@@ -188,6 +221,7 @@ const ProductDetailInformation = ({
         ) : event === OrderEnum.PRE_ORDER ? (
           <SpecialEvent time={product?.preOrderProducts?.[0]?.endTime ?? ''} title={event} />
         ) : null}
+
         {product?.productDiscounts?.[0]?.status === ProductDiscountEnum.WAITING ? (
           <div>{t('flashSale.waiting', { val: new Date(product?.productDiscounts?.[0]?.startTime) })}</div>
         ) : null}
