@@ -1,9 +1,10 @@
 import { MessageCircle, Store, Tag } from 'lucide-react'
-import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import configs from '@/config'
+import useCartStore from '@/store/cart'
 import { IBrand } from '@/types/brand'
 import { ICartItem } from '@/types/cart'
 import { IClassification } from '@/types/classification'
@@ -23,7 +24,6 @@ interface CartItemProps {
   selectedCartItems: string[]
   onSelectBrand: (productIds: string[], isSelected: boolean) => void
   bestVoucherForBrand: IBrandBestVoucher
-  onVoucherSelect: (brandId: string, voucher: TVoucher | null) => void
   brand?: IBrand
   checkoutItems: ICheckoutItem[]
   selectedCheckoutItems: ICheckoutItem[]
@@ -38,7 +38,6 @@ const CartItem = ({
   selectedCartItems,
   onSelectBrand,
   bestVoucherForBrand,
-  onVoucherSelect,
   brand,
   checkoutItems,
   selectedCheckoutItems,
@@ -46,7 +45,8 @@ const CartItem = ({
   isTriggerTotal,
 }: CartItemProps) => {
   const { t } = useTranslation()
-  const [chosenVoucher, setChosenVoucher] = useState<TVoucher | null>(null)
+  const { chosenBrandVouchers, setChosenBrandVouchers } = useCartStore()
+  const chosenVoucher = (brand && chosenBrandVouchers[brand.id]) || null
 
   const cartItemIds = cartBrandItem?.map((cartItem) => cartItem.id)
   const isBrandSelected = cartBrandItem.every((productClassification) =>
@@ -65,21 +65,37 @@ const CartItem = ({
   const handleSelectCartItem = (cartItemId: string, isSelected: boolean) => {
     onSelectBrand([cartItemId], isSelected)
   }
-  const handleVoucherChange = (voucher: TVoucher | null) => {
-    setChosenVoucher(voucher)
-    onVoucherSelect(brand?.id ?? '', voucher)
-  }
+  // const handleVoucherChange = (voucher: TVoucher | null) => {
+  //   setChosenVoucher(voucher)
+  //   onVoucherSelect(brand?.id ?? '', voucher)
+  // }
+  // const voucherDiscount = useMemo(
+  //   () => calculateBrandVoucherDiscount(cartBrandItem, selectedCartItems, chosenVoucher),
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  //   [cartBrandItem, selectedCartItems, chosenVoucher, isTriggerTotal],
+  // )
   const voucherDiscount = useMemo(
     () => calculateBrandVoucherDiscount(cartBrandItem, selectedCartItems, chosenVoucher),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [cartBrandItem, selectedCartItems, chosenVoucher, isTriggerTotal],
   )
+
+  const handleVoucherChange = (voucher: TVoucher | null) => {
+    const newVouchers = { ...chosenBrandVouchers }
+    if (brand) {
+      newVouchers[brand.id] = voucher
+      setChosenBrandVouchers(newVouchers)
+    }
+  }
   useEffect(() => {
     if (selectedCartItems.length === 0 || voucherDiscount === 0) {
-      console.log('testing', 1)
-      setChosenVoucher(null)
+      const newVouchers = { ...chosenBrandVouchers }
+      if (brand) {
+        newVouchers[brand.id] = null
+        setChosenBrandVouchers(newVouchers)
+      }
     }
-  }, [selectedCartItems, voucherDiscount])
+  }, [brand, chosenBrandVouchers, selectedCartItems, setChosenBrandVouchers, voucherDiscount])
   console.log('testing', voucherDiscount)
   return (
     <div className="w-full bg-white p-4 rounded-lg space-y-2 shadow-sm">

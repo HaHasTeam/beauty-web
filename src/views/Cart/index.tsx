@@ -44,8 +44,7 @@ const Cart = ({ isInGroupBuy = false, isInPeriod = false }: CartProps) => {
   const [totalDirectProductsDiscount, setTotalDirectProductsDiscount] = useState<number>(0)
   const [chosenVouchersByBrand, setChosenVouchersByBrand] = useState<{ [brandId: string]: TVoucher | null }>({})
   const [platformChosenVoucher, setPlatformChosenVoucher] = useState<TVoucher | null>(null)
-  const { setChosenBrandVouchers, setChosenPlatformVoucher, setSelectedCartItem, resetSelectedCartItem } =
-    useCartStore()
+  const { setChosenPlatformVoucher, setSelectedCartItem, resetSelectedCartItem } = useCartStore()
   const [bestPlatformVoucher, setBestPlatformVoucher] = useState<IPlatformBestVoucher | null>(null)
 
   const voucherMap = bestBrandVouchers?.reduce<{ [key: string]: IBrandBestVoucher }>((acc, voucher) => {
@@ -109,13 +108,13 @@ const Cart = ({ isInGroupBuy = false, isInPeriod = false }: CartProps) => {
       }
     })
   }
-  const handleVoucherSelection = (brandId: string, voucher: TVoucher | null) => {
-    setChosenVouchersByBrand((prev) => ({
-      ...prev,
-      [brandId]: voucher,
-    }))
-    setChosenBrandVouchers({ ...chosenVouchersByBrand, [brandId]: voucher })
-  }
+  // const handleVoucherSelection = (brandId: string, voucher: TVoucher | null) => {
+  //   setChosenVouchersByBrand((prev) => ({
+  //     ...prev,
+  //     [brandId]: voucher,
+  //   }))
+  //   setChosenBrandVouchers({ ...chosenVouchersByBrand, [brandId]: voucher })
+  // }
 
   useEffect(() => {
     if (cartItems) {
@@ -255,7 +254,7 @@ const Cart = ({ isInGroupBuy = false, isInPeriod = false }: CartProps) => {
                     selectedCartItems={selectedCartItems}
                     onSelectBrand={handleSelectBrand}
                     bestVoucherForBrand={bestVoucherForBrand}
-                    onVoucherSelect={handleVoucherSelection}
+                    // onVoucherSelect={handleVoucherSelection}
                     brand={brand}
                     checkoutItems={checkoutItems}
                     selectedCheckoutItems={selectedCheckoutItems}
