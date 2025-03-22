@@ -57,29 +57,79 @@ const ProductDetailAction = ({
   const navigate = useNavigate()
 
   // when quantity add to cart is greater than product classification quantity
+  // const cartQuantity = useMemo(() => {
+  //   return (
+  //     cartItems[product?.brand?.name ?? '']?.find(
+  //       (cartItem) => cartItem.productClassification.id === chosenClassification?.id,
+  //     )?.quantity ?? 0
+  //   )
+  // }, [cartItems, chosenClassification?.id, product?.brand?.name])
   const cartQuantity = useMemo(() => {
-    return (
-      cartItems[product?.brand?.name ?? ''].find(
-        (cartItem) => cartItem.productClassification.id === chosenClassification?.id,
-      )?.quantity ?? 0
+    const brandName = product?.brand?.name ?? ''
+    if (!cartItems || !cartItems[brandName] || !Array.isArray(cartItems[brandName])) {
+      return 0
+    }
+
+    if (!chosenClassification?.id) {
+      return 0
+    }
+
+    const foundItem = cartItems[brandName].find(
+      (cartItem) => cartItem.productClassification?.id === chosenClassification.id,
     )
+
+    return foundItem?.quantity ?? 0
   }, [cartItems, chosenClassification?.id, product?.brand?.name])
+  // const maxAcceptQuantity = useMemo(() => {
+  //   return (
+  //     MAX_QUANTITY_IN_CART -
+  //     (cartItems[product?.brand?.name ?? '']?.find(
+  //       (cartItem) => cartItem.productClassification.id === chosenClassification?.id,
+  //     )?.quantity ?? 0)
+  //   )
+  // }, [MAX_QUANTITY_IN_CART, cartItems, chosenClassification?.id, product?.brand?.name])
+  // const disabledAddToCartButton = useMemo(() => {
+  //   return (
+  //     (cartItems[product?.brand?.name ?? '']?.find(
+  //       (cartItem) => cartItem.productClassification.id === chosenClassification?.id,
+  //     )?.quantity ?? 0) +
+  //       quantity >
+  //     MAX_QUANTITY_IN_CART
+  //   )
+  // }, [MAX_QUANTITY_IN_CART, cartItems, chosenClassification?.id, product?.brand?.name, quantity])
+
   const maxAcceptQuantity = useMemo(() => {
-    return (
-      MAX_QUANTITY_IN_CART -
-      (cartItems[product?.brand?.name ?? ''].find(
-        (cartItem) => cartItem.productClassification.id === chosenClassification?.id,
-      )?.quantity ?? 0)
+    const brandName = product?.brand?.name ?? ''
+    if (!cartItems || !cartItems[brandName] || !Array.isArray(cartItems[brandName])) {
+      return MAX_QUANTITY_IN_CART
+    }
+
+    if (!chosenClassification?.id) {
+      return MAX_QUANTITY_IN_CART
+    }
+
+    const foundItem = cartItems[brandName].find(
+      (cartItem) => cartItem.productClassification?.id === chosenClassification.id,
     )
+
+    return MAX_QUANTITY_IN_CART - (foundItem?.quantity ?? 0)
   }, [MAX_QUANTITY_IN_CART, cartItems, chosenClassification?.id, product?.brand?.name])
+
   const disabledAddToCartButton = useMemo(() => {
-    return (
-      (cartItems[product?.brand?.name ?? ''].find(
-        (cartItem) => cartItem.productClassification.id === chosenClassification?.id,
-      )?.quantity ?? 0) +
-        quantity >
-      MAX_QUANTITY_IN_CART
+    const brandName = product?.brand?.name ?? ''
+    if (!cartItems || !cartItems[brandName] || !Array.isArray(cartItems[brandName])) {
+      return quantity > MAX_QUANTITY_IN_CART
+    }
+
+    if (!chosenClassification?.id) {
+      return quantity > MAX_QUANTITY_IN_CART
+    }
+
+    const foundItem = cartItems[brandName].find(
+      (cartItem) => cartItem.productClassification?.id === chosenClassification.id,
     )
+
+    return (foundItem?.quantity ?? 0) + quantity > MAX_QUANTITY_IN_CART
   }, [MAX_QUANTITY_IN_CART, cartItems, chosenClassification?.id, product?.brand?.name, quantity])
 
   const { mutateAsync: createCartItemFn } = useMutation({
@@ -168,12 +218,12 @@ const ProductDetailAction = ({
         parsedValue > 0 &&
         parsedValue <= MAX_QUANTITY_IN_CART &&
         maxAcceptQuantity &&
-        parsedValue < maxAcceptQuantity &&
+        parsedValue <= maxAcceptQuantity &&
         maxAcceptQuantity > 1
       ) {
         setInputValue(value)
         setQuantity(parsedValue)
-      } else if (parsedValue >= maxAcceptQuantity) {
+      } else if (parsedValue > maxAcceptQuantity && cartQuantity > 0) {
         errorToast({
           message: t('cart.invalidQuantityMessage', {
             count: chosenClassification?.quantity,
