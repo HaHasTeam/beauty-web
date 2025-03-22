@@ -10,6 +10,7 @@ import ProfileAddress from '@/views/ProfileAddress'
 import ProfileFeedback from '@/views/ProfileFeedback'
 import ProfileOrder from '@/views/ProfileOrder'
 import ProfileVoucher from '@/views/ProfileVoucher'
+import Report from '@/views/report-v2'
 import Wallet from '@/views/Wallet'
 
 import AuthGuard from './guard/AuthGuard'
@@ -75,6 +76,10 @@ const privateRoutes = [
       {
         path: configs.routes.profileWallet,
         element: <Wallet />,
+      },
+      {
+        path: configs.routes.profileReport,
+        element: <Report />,
       },
       {
         path: configs.routes.profileVoucher,

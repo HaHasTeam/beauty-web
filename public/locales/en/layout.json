@@ -836,5 +836,11 @@
   "btn": {
     "copyAndShare": "Copy and Share",
     "cooldown": "Limit ended in {{value}} minutes"
+  },
+  "walletTerm":{
+    "balance": "Balance",
+    "topUp": "Top Up",
+    "withdraw": "Withdraw",
+    "createWallet": "Create Wallet"
   }
 }

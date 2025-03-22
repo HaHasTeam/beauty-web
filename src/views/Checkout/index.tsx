@@ -373,58 +373,13 @@ const Checkout = () => {
                         />
                       </div>
                     )}
-                    <div className="flex items-center gap-4 justify-between p-4 bg-white rounded-md shadow-sm">
-                      <div className="flex gap-2 items-center">
-                        <Ticket className="text-red-500" />
-                        <span className="text-lg font-semibold">
-                          {ProjectInformationEnum.name} {t('cart.voucher')}
-                        </span>
-                      </div>
-                      <VoucherDialog
-                        triggerComponent={
-                          <Button variant="link" className="text-blue-500 h-auto p-0 hover:no-underline">
-                            {chosenPlatformVoucher ? (
-                              chosenPlatformVoucher?.discountType === DiscountTypeEnum.AMOUNT &&
-                              chosenPlatformVoucher?.discountValue ? (
-                                <div className="flex gap-2 items-center">
-                                  {t('voucher.discountAmount', { amount: chosenPlatformVoucher?.discount })}
-                                  <Pen />
-                                </div>
-                              ) : (
-                                <div className="flex gap-2 items-center">
-                                  {t('voucher.discountAmount', { amount: chosenPlatformVoucher?.discount })}
-                                  <Pen />
-                                </div>
-                              )
-                            ) : bestPlatformVoucher?.bestVoucher ? (
-                              bestPlatformVoucher?.bestVoucher?.discountType === DiscountTypeEnum.AMOUNT &&
-                              bestPlatformVoucher?.bestVoucher?.discountValue ? (
-                                t('voucher.bestDiscountAmountDisplay', {
-                                  amount: bestPlatformVoucher?.bestVoucher?.discountValue,
-                                })
-                              ) : (
-                                t('voucher.bestDiscountPercentageDisplay', {
-                                  percentage: bestPlatformVoucher?.bestVoucher?.discountValue * 100,
-                                })
-                              )
-                            ) : (
-                              t('cart.selectVoucher')
-                            )}
-                          </Button>
-                        }
-                        onConfirmVoucher={setChosenPlatformVoucher}
-                        selectedCartItems={selectedCartItems}
-                        chosenPlatformVoucher={chosenPlatformVoucher}
-                        cartByBrand={selectedCartItem}
-                        bestPlatFormVoucher={bestPlatformVoucher}
-                      />
-                    </div>
                     {/* Payment Section */}
                     {!isInGroupBuying && (
                       <div className="w-full">
                         <PaymentSelection
                           form={form}
                           hasPreOrderProduct={hasPreOrderProduct(flattenObject(selectedCartItem))}
+                          totalPayment={totalPayment}
                         />
                       </div>
                     )}
