@@ -95,7 +95,8 @@ const CartItem = ({
         setChosenBrandVouchers(newVouchers)
       }
     }
-  }, [brand, chosenBrandVouchers, selectedCartItems, setChosenBrandVouchers, voucherDiscount])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedCartItems, voucherDiscount])
   console.log('testing', voucherDiscount)
   return (
     <div className="w-full bg-white p-4 rounded-lg space-y-2 shadow-sm">
