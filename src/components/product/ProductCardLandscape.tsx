@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Trash2 } from 'lucide-react'
-import { Dispatch, SetStateAction, useCallback, useState } from 'react'
+import { Dispatch, SetStateAction, useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
@@ -247,10 +247,10 @@ const ProductCardLandscape = ({
     !IN_STOCK_CLASSIFICATION ||
     !(productStatus === ProductEnum.FLASH_SALE || productStatus === ProductEnum.OFFICIAL)
 
-  // useEffect(() => {
-  //   setQuantity(productQuantity ?? 1)
-  //   setInputValue(productQuantity.toString() ?? '1')
-  // }, [productQuantity])
+  useEffect(() => {
+    setQuantity(productQuantity)
+    setInputValue(productQuantity.toString())
+  }, [productQuantity])
   return (
     <div className={`w-full py-4 border-b border-gray-200`}>
       <div className={`w-full flex gap-2 items-center`}>
