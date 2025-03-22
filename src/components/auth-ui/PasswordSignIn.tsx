@@ -25,9 +25,10 @@ import { PasswordInput } from '../ui/password-input'
 // }
 
 export default function PasswordSignIn() {
-  const { authenticate } = useStore(
+  const { authenticate, setFirebaseToken } = useStore(
     useShallow((state) => ({
       authenticate: state.setAuthState,
+      setFirebaseToken: state.setFirebaseToken,
     })),
   )
   const { successToast } = useToast()
@@ -67,12 +68,7 @@ export default function PasswordSignIn() {
       const dataFirebase = await createToken()
 
       await signInWithToken(dataFirebase.data.token)
-      authenticate({
-        authData: {
-          ...data,
-          firebaseToken: dataFirebase.data.token,
-        },
-      })
+      setFirebaseToken(dataFirebase.data.token)
       navigate(configs.routes.home)
     } catch (error) {
       handleServerError({

@@ -38,7 +38,9 @@ export const createChat = async (
 export const getChat = async (chatId: string): Promise<Chat | null> => {
   const chatDoc = await getDoc(doc(db, 'chats', chatId))
   if (!chatDoc.exists()) return null
-
+  console.log('==================chatDoc==================')
+  console.log(chatDoc)
+  console.log('====================================')
   return { id: chatDoc.id, ...chatDoc.data() } as Chat
 }
 

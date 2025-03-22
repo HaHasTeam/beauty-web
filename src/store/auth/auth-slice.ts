@@ -41,6 +41,10 @@ export const createAuthSlice: StateCreator<AuthSlice, [['zustand/immer', never]]
       state.userFireBase = userFireBase ?? state.userFireBase
       state.authData = authData ?? state.authData
     }),
+  setFirebaseToken: (token) =>
+    set((state) => {
+      state.firebaseToken = token ?? state.firebaseToken
+    }),
   resetAuth: () => set(initialState),
-  getFirebaseToken: () => get().authData?.firebaseToken || null,
+  getFirebaseToken: () => get()?.firebaseToken || null,
 })

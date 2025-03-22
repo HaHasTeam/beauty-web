@@ -1,18 +1,28 @@
 import { useQuery } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
+import { useAuthState } from 'react-firebase-hooks/auth'
 import { useNavigate } from 'react-router-dom'
+import { useShallow } from 'zustand/react/shallow'
 
 import LoadingContentLayer from '@/components/loading-icon/LoadingContentLayer'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
-import { useAuth } from '@/hooks/useAuth'
 import { getAllBrandsApi } from '@/network/apis/brand'
+import { useStore } from '@/store/store'
 import { RoleEnum } from '@/types/enum'
+import { auth } from '@/utils/firebase/auth'
 import { createChat, sendMessage } from '@/utils/firebase/chat-service'
 
 export default function NewChat() {
-  const { user, isLoading } = useAuth()
+  const [user] = useAuthState(auth)
+  const { userSystem } = useStore(
+    useShallow((state) => {
+      return {
+        userSystem: state.user,
+      }
+    }),
+  )
   //   const [brands, setBrands] = useState([])
   const [selectedBrand, setSelectedBrand] = useState<string>('')
   const [initialMessage, setInitialMessage] = useState('')
@@ -24,21 +34,19 @@ export default function NewChat() {
     queryFn: getAllBrandsApi.fn,
   })
   useEffect(() => {
-    if (!isLoading) {
-      if (!user) {
-        navigate('/signin')
-      } else if (user.role !== RoleEnum.CUSTOMER) {
-        console.log('====================================')
-        console.log(user)
-        console.log('====================================')
-      }
+    if (!userSystem) {
+      navigate('/signin')
+    } else if (userSystem.role !== RoleEnum.CUSTOMER) {
+      console.log('====================================')
+      console.log(user)
+      console.log('====================================')
     }
-  }, [isLoading, navigate, user])
+  }, [navigate, user, userSystem])
 
   const handleCreateChat = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    if (!selectedBrand || !initialMessage.trim() || !user) return
+    if (!selectedBrand || !initialMessage.trim() || !user || !userSystem) return
 
     setCreating(true)
     try {
@@ -48,13 +56,13 @@ export default function NewChat() {
       }
 
       // Create the chat
-      const chatId = await createChat(user.id, user.email, selectedBrandData.id, selectedBrandData.name)
+      const chatId = await createChat(userSystem.id, userSystem.email, selectedBrandData.id, selectedBrandData.name)
 
       // Send the initial message
-      await sendMessage(chatId, user.id, user.email, user.role, initialMessage.trim())
+      await sendMessage(chatId, userSystem.id, userSystem.email, userSystem.role, initialMessage.trim())
 
       // Navigate to the chat
-      navigate(`/chat/${chatId}`)
+      navigate(`/rooms/${chatId}`)
     } catch (err) {
       console.error('Error creating chat:', err)
       setError('Failed to create chat')
@@ -62,7 +70,7 @@ export default function NewChat() {
     }
   }
 
-  if (isLoading || !user) {
+  if (!user || !userSystem) {
     return <LoadingContentLayer />
   }
 

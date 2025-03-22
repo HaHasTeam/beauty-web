@@ -2,8 +2,8 @@ import BeautyConsulting from '@/components/home/BeautyConsulting'
 import BeautyOffers from '@/components/home/BeautyOffers'
 import FlashSale from '@/components/home/FlashSale'
 import HomeBanner from '@/components/home/HomeBanner'
-import RecommendProduct from '@/components/home/RecommendProduct'
 
+// import RecommendProduct from '@/components/home/RecommendProduct'
 import PreOrderProductSections from '../PreOrderProduct'
 
 function Home() {
@@ -40,7 +40,7 @@ function Home() {
             <BeautyConsulting />
             <BeautyOffers />
             <FlashSale />
-            <RecommendProduct />
+            {/* <RecommendProduct /> */}
             <PreOrderProductSections />
           </div>
         </div>

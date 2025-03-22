@@ -35,6 +35,14 @@ const privateRoutes = [
         element: <Cart />,
       },
       {
+        path: '/rooms/:id',
+        element: <ChatPage />,
+      },
+      {
+        path: '/new-chat',
+        element: <NewChat />,
+      },
+      {
         path: configs.routes.checkout,
         element: <Checkout />,
       },
@@ -71,14 +79,6 @@ const privateRoutes = [
         element: <ProfileOrder />,
       },
 
-      {
-        path: '/chat/:id',
-        element: <ChatPage />,
-      },
-      {
-        path: '/new-chat',
-        element: <NewChat />,
-      },
       {
         path: configs.routes.profileOrderDetail, // user order history detail
         element: <OrderDetail />,
