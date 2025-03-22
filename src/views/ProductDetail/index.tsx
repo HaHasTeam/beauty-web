@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import ReactQuill from 'react-quill-new'
 import { useParams } from 'react-router-dom'
@@ -35,6 +35,8 @@ const ProductDetail = ({ initProductId, isInGroupBuying = false }: ProductDetail
     productId = initProductId
   }
   const { t } = useTranslation()
+  const [chosenClassification, setChosenClassification] = useState<IClassification | null>(null)
+
   const { data: useProductData, isFetching } = useQuery({
     queryKey: [getProductApi.queryKey, productId as string],
     queryFn: getProductApi.fn,
@@ -80,7 +82,7 @@ const ProductDetail = ({ initProductId, isInGroupBuying = false }: ProductDetail
         return useProductData.data.productClassifications
     }
   }, [event, useProductData?.data, isInGroupBuying])
-  console.log(productClassifications)
+
   const cheapestClassification = useMemo(
     () => getCheapestClassification(productClassifications ?? []),
     [productClassifications],
@@ -95,14 +97,15 @@ const ProductDetail = ({ initProductId, isInGroupBuying = false }: ProductDetail
   )
   const inStock = productClassifications?.some((classification) => classification?.quantity > 0) ?? false
 
-  const [chosenClassification, setChosenClassification] = useState<IClassification | null>(
-    !hasCustomType && productClassifications ? productClassifications?.[0] : null,
-  )
   const reviewSectionRef = useRef<HTMLDivElement | null>(null)
-
   const scrollToReviews = () => {
     reviewSectionRef.current?.scrollIntoView({ behavior: 'smooth' })
   }
+  useEffect(() => {
+    if (!hasCustomType && productClassifications?.length) {
+      setChosenClassification(productClassifications[0]) // Set default classification
+    }
+  }, [productClassifications, hasCustomType])
 
   return (
     <div className="w-full mx-auto px-4 py-5">
