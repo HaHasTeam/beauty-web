@@ -9,13 +9,13 @@ const kbdVariants = cva(
     variants: {
       variant: {
         default: 'bg-accent text-accent-foreground',
-        outline: 'bg-background text-foreground'
-      }
+        outline: 'bg-background text-foreground',
+      },
     },
     defaultVariants: {
-      variant: 'default'
-    }
-  }
+      variant: 'default',
+    },
+  },
 )
 
 export interface KbdProps extends React.ComponentPropsWithoutRef<'kbd'>, VariantProps<typeof kbdVariants> {
@@ -33,7 +33,7 @@ const Kbd = React.forwardRef<HTMLUnknownElement, KbdProps>(
     return (
       <kbd className={cn(kbdVariants({ variant, className }))} ref={ref} {...props}>
         {abbrTitle ? (
-          <abbr title={abbrTitle} className='no-underline'>
+          <abbr title={abbrTitle} className="no-underline">
             {children}
           </abbr>
         ) : (
@@ -41,7 +41,7 @@ const Kbd = React.forwardRef<HTMLUnknownElement, KbdProps>(
         )}
       </kbd>
     )
-  }
+  },
 )
 Kbd.displayName = 'Kbd'
 

@@ -15,7 +15,7 @@ interface DataTableColumnHeaderProps<TData, TValue> extends React.HTMLAttributes
 export function DataTableColumnHeader<TData, TValue>({
   column,
   title,
-  className
+  className,
 }: DataTableColumnHeaderProps<TData, TValue>) {
   if (!column.getCanSort() && !column.getCanHide()) {
     return <div className={cn(className)}>{title}</div>
@@ -43,33 +43,33 @@ export function DataTableColumnHeader<TData, TValue>({
                 ? 'Sorted ascending. Click to sort descending.'
                 : 'Not sorted. Click to sort ascending.'
           }
-          className='-ml-3 h-8 w-full border-none text-xs hover:bg-accent hover:text-accent-foreground data-[state=open]:bg-accent [&>svg:last-child]:hidden flex items-center'
+          className="-ml-3 h-8 w-full border-none text-xs hover:bg-accent hover:text-accent-foreground data-[state=open]:bg-accent [&>svg:last-child]:hidden flex items-center"
         >
-          <span className='flex-1 truncate'>{title}</span>
+          <span className="flex-1 truncate">{title}</span>
           <span>
             <SelectIcon asChild>
               {column.getCanSort() && column.getIsSorted() === 'desc' ? (
-                <ArrowDown className='ml-2.5 size-4' aria-hidden='true' />
+                <ArrowDown className="ml-2.5 size-4" aria-hidden="true" />
               ) : column.getIsSorted() === 'asc' ? (
-                <ArrowUp className='ml-2.5 size-4' aria-hidden='true' />
+                <ArrowUp className="ml-2.5 size-4" aria-hidden="true" />
               ) : (
-                <ChevronsUpDown className='ml-2.5 size-4' aria-hidden='true' />
+                <ChevronsUpDown className="ml-2.5 size-4" aria-hidden="true" />
               )}
             </SelectIcon>
           </span>
         </SelectTrigger>
-        <SelectContent align='start'>
+        <SelectContent align="start">
           {column.getCanSort() && (
             <>
               <SelectItem value={ascValue}>
-                <span className='flex items-center'>
-                  <ArrowUp className='mr-2 size-3.5 text-muted-foreground/70' aria-hidden='true' />
+                <span className="flex items-center">
+                  <ArrowUp className="mr-2 size-3.5 text-muted-foreground/70" aria-hidden="true" />
                   Asc
                 </span>
               </SelectItem>
               <SelectItem value={descValue}>
-                <span className='flex items-center'>
-                  <ArrowDown className='mr-2 size-3.5 text-muted-foreground/70' aria-hidden='true' />
+                <span className="flex items-center">
+                  <ArrowDown className="mr-2 size-3.5 text-muted-foreground/70" aria-hidden="true" />
                   Desc
                 </span>
               </SelectItem>
@@ -77,8 +77,8 @@ export function DataTableColumnHeader<TData, TValue>({
           )}
           {column.getCanHide() && (
             <SelectItem value={hideValue}>
-              <span className='flex items-center'>
-                <EyeOff className='mr-2 size-3.5 text-muted-foreground/70' aria-hidden='true' />
+              <span className="flex items-center">
+                <EyeOff className="mr-2 size-3.5 text-muted-foreground/70" aria-hidden="true" />
                 Hide
               </span>
             </SelectItem>

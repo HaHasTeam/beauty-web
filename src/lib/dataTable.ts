@@ -18,7 +18,7 @@ import type { ColumnType, Filter, FilterOperator } from '@/types/table'
  */
 export function getCommonPinningStyles<TData>({
   column,
-  withBorder = false
+  withBorder = false,
 }: {
   column: Column<TData>
   /**
@@ -42,7 +42,7 @@ export function getCommonPinningStyles<TData>({
     right: isPinned === 'right' ? `${column.getAfter('right')}px` : undefined,
     opacity: isPinned ? 0.97 : 1,
     position: isPinned ? 'sticky' : 'relative',
-    width: column.getSize()
+    width: column.getSize(),
   }
 }
 
@@ -81,7 +81,7 @@ export function getFilterOperators(columnType: ColumnType) {
     select: dataTableConfig.selectOperators,
     'multi-select': dataTableConfig.selectOperators,
     boolean: dataTableConfig.booleanOperators,
-    date: dataTableConfig.dateOperators
+    date: dataTableConfig.dateOperators,
   }
 
   return operatorMap[columnType] ?? dataTableConfig.textOperators
@@ -106,6 +106,6 @@ export function getValidFilters<TData>(filters: Filter<TData>[]): Filter<TData>[
       filter.operator === 'isNotEmpty' ||
       (Array.isArray(filter.value)
         ? filter.value.length > 0
-        : filter.value !== '' && filter.value !== null && filter.value !== undefined)
+        : filter.value !== '' && filter.value !== null && filter.value !== undefined),
   )
 }

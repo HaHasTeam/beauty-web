@@ -12,7 +12,7 @@ type Props = HTMLAttributes<HTMLSelectElement> & InputProps
 
 const getItemDisplay = (transaction: ITransaction) => {
   return (
-    <div className='flex items-center gap-1'>
+    <div className="flex items-center gap-1">
       <span>{transaction.id}</span>
     </div>
   )
@@ -23,16 +23,18 @@ const SelectTransaction = forwardRef<HTMLSelectElement, Props>((props) => {
 
   const { data: transactionList, isFetching: isGettingTransactionList } = useQuery({
     queryKey: [getFilteredTransactions.queryKey],
-    queryFn: getFilteredTransactions.fn
+    queryFn: getFilteredTransactions.fn,
   })
 
   const transactionOptions = useMemo(() => {
     if (!transactionList) return []
-    return transactionList?.data.filter(()=>true).map((order) => ({
-      value: order.id,
-      label: order.id,
-      display: getItemDisplay(order)
-    }))
+    return transactionList?.data
+      .filter(() => true)
+      .map((order) => ({
+        value: order.id,
+        label: order.id,
+        display: getItemDisplay(order),
+      }))
   }, [transactionList])
 
   const selectedOptions = useMemo(() => {
@@ -44,7 +46,7 @@ const SelectTransaction = forwardRef<HTMLSelectElement, Props>((props) => {
         return {
           value: transaction?.id,
           label: transaction?.id,
-          display: getItemDisplay(transaction as ITransaction)
+          display: getItemDisplay(transaction as ITransaction),
         }
       })
     } else {
@@ -53,7 +55,7 @@ const SelectTransaction = forwardRef<HTMLSelectElement, Props>((props) => {
       return {
         value: transaction?.id,
         label: transaction?.id,
-        display: getItemDisplay(transaction as ITransaction)
+        display: getItemDisplay(transaction as ITransaction),
       }
     }
   }, [value, transactionList?.data, multiple])

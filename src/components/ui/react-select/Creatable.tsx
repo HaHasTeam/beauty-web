@@ -9,7 +9,7 @@ import {
   Menu,
   MenuList,
   MultiValueRemove,
-  Option
+  Option,
 } from './ReactSelectCustomComponents'
 
 const Creatable = React.forwardRef<
@@ -43,7 +43,7 @@ const Creatable = React.forwardRef<
         Option,
         Menu,
         MenuList,
-        ...components
+        ...components,
       }}
       styles={styles}
       classNames={classNames}

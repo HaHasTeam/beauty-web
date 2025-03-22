@@ -9,7 +9,8 @@ import {
   Menu,
   MenuList,
   MultiValueRemove,
-  Option} from './ReactSelectCustomComponents'
+  Option,
+} from './ReactSelectCustomComponents'
 
 const AsyncSelect = React.forwardRef<
   React.ElementRef<typeof AsyncSelectComponent>,
@@ -43,7 +44,7 @@ const AsyncSelect = React.forwardRef<
         Option,
         Menu,
         MenuList,
-        ...components
+        ...components,
       }}
       styles={styles}
       classNames={classNames}

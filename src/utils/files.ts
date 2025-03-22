@@ -9,21 +9,21 @@ export async function createFiles(files: TFile[] | string[]): Promise<CustomFile
         const data = await response.blob()
         const metadata = {
           type: data.type,
-          name: file.split('/').pop()
+          name: file.split('/').pop(),
         }
         const newFile = new File([data], file.split('/').pop() ?? 'untitled', metadata)
 
         Object.defineProperty(newFile, 'fileUrl', {
           value: file,
-          writable: true
+          writable: true,
         })
         Object.defineProperty(newFile, 'status', {
           value: FileStatusEnum.ACTIVE,
-          writable: true
+          writable: true,
         })
 
         return newFile
-      })
+      }),
     )
     return constructedFiles
   }
@@ -35,25 +35,25 @@ export async function createFiles(files: TFile[] | string[]): Promise<CustomFile
         const data = await response.blob()
         const metadata = {
           type: data.type,
-          name: file.name
+          name: file.name,
         }
         const newFile = new File([data], file.name, metadata)
 
         Object.defineProperty(newFile, 'fileUrl', {
           value: file.fileUrl,
-          writable: true
+          writable: true,
         })
         Object.defineProperty(newFile, 'id', {
           value: file.id,
-          writable: true
+          writable: true,
         })
         Object.defineProperty(newFile, 'status', {
           value: file.status,
-          writable: true
+          writable: true,
         })
 
         return newFile
-      })
+      }),
     )
     return constructedFiles
   }

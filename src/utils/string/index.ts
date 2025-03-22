@@ -10,7 +10,6 @@ export const minifyStringId = (str?: string): string => {
   return str.replace(/-/g, '').toUpperCase().slice(0, 10)
 }
 
-
 export const getDisplayString = (str: string): string => {
   return str.replace(/_/g, ' ').toLowerCase()
 }

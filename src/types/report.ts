@@ -1,4 +1,3 @@
-
 import { IBooking } from './booking'
 import { TFile } from './file'
 import { IOrder } from './order'
@@ -24,12 +23,12 @@ export enum ReportTypeEnum {
   TRANSACTION = 'TRANSACTION',
   BOOKING = 'BOOKING',
   SYSTEM_FEATURE = 'SYSTEM_FEATURE',
-  OTHER = 'OTHER'
+  OTHER = 'OTHER',
 }
 
 export enum ReportStatusEnum {
   PENDING = 'PENDING',
   IN_PROCESSING = 'IN_PROCESSING',
   DONE = 'DONE',
-  CANCELLED = 'CANCELLED'
+  CANCELLED = 'CANCELLED',
 }

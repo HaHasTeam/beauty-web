@@ -10,7 +10,7 @@ export type FormType = Pick<IConsultantService, 'price' | 'serviceBookingFormDat
 
 const optionSchema = z.object({
   label: z.string(),
-  value: z.string()
+  value: z.string(),
 })
 
 const consultantServiceTypeSchema = z
@@ -18,10 +18,10 @@ const consultantServiceTypeSchema = z
     id: z.string().optional(),
     question: z
       .string({
-        message: defaultRequiredRegex.message
+        message: defaultRequiredRegex.message,
       })
       .min(1, {
-        message: defaultRequiredRegex.message
+        message: defaultRequiredRegex.message,
       }),
     orderIndex: z.number().optional(),
     mandatory: z.boolean(),
@@ -30,11 +30,11 @@ const consultantServiceTypeSchema = z
         id: z.string().optional(),
         name: z.string(),
         fileUrl: z.string(),
-        status: z.nativeEnum(FileStatusEnum).optional()
-      })
+        status: z.nativeEnum(FileStatusEnum).optional(),
+      }),
     ),
     type: z.nativeEnum(ConsultantServiceTypeEnum, {
-      message: defaultRequiredRegex.message
+      message: defaultRequiredRegex.message,
     }),
     answers: optionSchema
       .array()
@@ -46,7 +46,7 @@ const consultantServiceTypeSchema = z
           obj[key] = item.label
         })
         return obj
-      })
+      }),
   })
   .superRefine((data, ctx) => {
     if (
@@ -57,7 +57,7 @@ const consultantServiceTypeSchema = z
         return ctx.addIssue({
           message: defaultRequiredRegex.message,
           code: 'custom',
-          path: ['answers']
+          path: ['answers'],
         })
       }
     }
@@ -67,10 +67,10 @@ export const formSchema = z.object({
   id: z.string().optional(),
   price: z.coerce
     .number({
-      message: defaultRequiredRegex.message
+      message: defaultRequiredRegex.message,
     })
     .nonnegative({
-      message: defaultRequiredRegex.message
+      message: defaultRequiredRegex.message,
     }),
   images: z
     .array(
@@ -78,31 +78,31 @@ export const formSchema = z.object({
         id: z.string().optional(),
         name: z.string(),
         fileUrl: z.string(),
-        status: z.nativeEnum(FileStatusEnum).optional()
-      })
+        status: z.nativeEnum(FileStatusEnum).optional(),
+      }),
     )
     .min(1, {
-      message: defaultRequiredRegex.message
+      message: defaultRequiredRegex.message,
     }),
   systemService: z
     .string({
-      message: defaultRequiredRegex.message
+      message: defaultRequiredRegex.message,
     })
     .min(1, {
-      message: defaultRequiredRegex.message
+      message: defaultRequiredRegex.message,
     }),
   serviceBookingFormData: z.object({
     id: z.string().optional(),
     title: z
       .string({
         message: defaultRequiredRegex.message,
-        required_error: defaultRequiredRegex.message
+        required_error: defaultRequiredRegex.message,
       })
       .min(1, {
-        message: defaultRequiredRegex.message
+        message: defaultRequiredRegex.message,
       }),
-    questions: z.array(consultantServiceTypeSchema)
-  })
+    questions: z.array(consultantServiceTypeSchema),
+  }),
 })
 
 export type SchemaType = z.infer<typeof formSchema>
@@ -129,13 +129,13 @@ export const convertConsultantServiceToForm = (data: IConsultantService): FormTy
                 if (question.answers) {
                   return {
                     label: String(question.answers[key as keyof typeof question.answers]),
-                    value: key
+                    value: key,
                   }
                 }
               })
-            : null
+            : null,
         }
-      })
-    }
+      }),
+    },
   } as FormType
 }

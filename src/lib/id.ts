@@ -1,7 +1,7 @@
 import { customAlphabet } from 'nanoid'
 
 const prefixes = {
-  task: 'tsk'
+  task: 'tsk',
 }
 
 interface GenerateIdOptions {
@@ -26,7 +26,7 @@ interface GenerateIdOptions {
  */
 export function generateId(
   prefixOrOptions?: keyof typeof prefixes | GenerateIdOptions,
-  options: GenerateIdOptions = {}
+  options: GenerateIdOptions = {},
 ) {
   if (typeof prefixOrOptions === 'object') {
     options = prefixOrOptions

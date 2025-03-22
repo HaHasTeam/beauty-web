@@ -29,6 +29,6 @@ export const useFormatters = () => {
   )
   return {
     formatCreateLabel,
-    formatGroupLabel
+    formatGroupLabel,
   }
 }

@@ -25,7 +25,7 @@ export function exportTableToCSV<TData>(
      * @default false
      */
     onlySelected?: boolean
-  } = {}
+  } = {},
 ): void {
   const { filename = 'table', excludeColumns = [], onlySelected = false } = opts
 
@@ -45,8 +45,8 @@ export function exportTableToCSV<TData>(
           // Handle values that might contain commas or newlines
           return typeof cellValue === 'string' ? `"${cellValue.replace(/"/g, '""')}"` : cellValue
         })
-        .join(',')
-    )
+        .join(','),
+    ),
   ].join('\n')
 
   // Create a Blob with CSV content

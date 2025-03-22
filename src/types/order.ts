@@ -111,8 +111,6 @@ export type IUpdateGroupOrder = {
   addressId: string
 }
 
-
-
 export type ICancelOrder = {
   orderId: string
   reason: string

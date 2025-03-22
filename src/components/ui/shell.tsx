@@ -9,12 +9,12 @@ const shellVariants = cva('grid items-center gap-8 w-full', {
       default: '',
       sidebar: '',
       centered: 'flex h-dvh max-w-2xl flex-col justify-center',
-      markdown: 'max-w-3xl py-8 md:py-10 lg:py-10'
-    }
+      markdown: 'max-w-3xl py-8 md:py-10 lg:py-10',
+    },
   },
   defaultVariants: {
-    variant: 'default'
-  }
+    variant: 'default',
+  },
 })
 
 interface ShellProps extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof shellVariants> {

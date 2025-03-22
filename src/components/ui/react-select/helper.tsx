@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils'
 const controlStyles = {
   base: 'flex !min-h-9 w-full rounded-md border border-input bg-transparent pl-3 py-1 pr-1 gap-1 text-sm shadow-sm transition-colors hover:cursor-pointer',
   focus: 'outline-none ring-1 ring-ring',
-  disabled: 'cursor-not-allowed opacity-50'
+  disabled: 'cursor-not-allowed opacity-50',
 }
 const placeholderStyles = 'text-sm text-muted-foreground'
 const valueContainerStyles = 'gap-1'
@@ -23,7 +23,7 @@ const optionStyles = {
   base: 'hover:cursor-pointer hover:bg-accent hover:text-accent-foreground px-2 py-1.5 rounded-sm !text-sm !cursor-default !select-none !outline-none font-sans',
   focus: 'active:bg-accent/90 bg-accent text-accent-foreground',
   disabled: 'pointer-events-none opacity-50',
-  selected: ''
+  selected: '',
 }
 const noOptionsMessageStyles = 'text-accent-foreground p-2 bg-accent border border-dashed border-border rounded-sm'
 const loadingIndicatorStyles = 'flex items-center justify-center h-4 w-4 opacity-50'
@@ -41,7 +41,7 @@ export const createClassNames = (classNames: ClassNamesConfig): ClassNamesConfig
         controlStyles.base,
         state.isDisabled && controlStyles.disabled,
         state.isFocused && controlStyles.focus,
-        classNames?.control?.(state)
+        classNames?.control?.(state),
       ),
     dropdownIndicator: (state) => cn(dropdownIndicatorStyles, classNames?.dropdownIndicator?.(state)),
     group: (state) => cn(classNames?.group?.(state)),
@@ -64,11 +64,11 @@ export const createClassNames = (classNames: ClassNamesConfig): ClassNamesConfig
         state.isFocused && optionStyles.focus,
         state.isDisabled && optionStyles.disabled,
         state.isSelected && optionStyles.selected,
-        classNames?.option?.(state)
+        classNames?.option?.(state),
       ),
     placeholder: (state) => cn(placeholderStyles, classNames?.placeholder?.(state)),
     singleValue: (state) => cn(classNames?.singleValue?.(state)),
-    valueContainer: (state) => cn(valueContainerStyles, classNames?.valueContainer?.(state))
+    valueContainer: (state) => cn(valueContainerStyles, classNames?.valueContainer?.(state)),
   }
 }
 export const defaultClassNames = createClassNames({})
@@ -76,32 +76,32 @@ export const defaultStyles: StylesConfig<unknown, boolean, GroupBase<unknown>> =
   input: (base) => ({
     ...base,
     'input:focus': {
-      boxShadow: 'none'
-    }
+      boxShadow: 'none',
+    },
   }),
   multiValueLabel: (base) => ({
     ...base,
     whiteSpace: 'normal',
-    overflow: 'visible'
+    overflow: 'visible',
   }),
   control: (base) => ({
     ...base,
-    transition: 'none'
+    transition: 'none',
     // minHeight: '2.25rem', // we used !min-h-9 instead
   }),
   menuList: (base) => ({
     ...base,
     '::-webkit-scrollbar': {
-      background: 'transparent'
+      background: 'transparent',
     },
     '::-webkit-scrollbar-track': {
-      background: 'transparent'
+      background: 'transparent',
     },
     '::-webkit-scrollbar-thumb': {
-      background: 'hsl(var(--border))'
+      background: 'hsl(var(--border))',
     },
     '::-webkit-scrollbar-thumb:hover': {
-      background: 'transparent'
-    }
-  })
+      background: 'transparent',
+    },
+  }),
 }

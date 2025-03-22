@@ -6,7 +6,7 @@ import type {
   MenuListProps,
   MenuProps,
   MultiValueRemoveProps,
-  OptionProps
+  OptionProps,
 } from 'react-select'
 import { components } from 'react-select'
 import { FixedSizeList as List } from 'react-window'
@@ -39,7 +39,7 @@ export const Option = (props: OptionProps) => {
   const option = props.data as { label: string; display?: React.ReactNode }
   return (
     <components.Option {...props}>
-      <div className='flex items-center justify-between'>
+      <div className="flex items-center justify-between">
         {/* TODO: Figure out the type */}
         {option.display ?? <div>{(props.data as { label: string }).label}</div>}
         {props.isSelected && <CheckIcon />}
@@ -75,7 +75,7 @@ export const MenuList = (props: MenuListProps) => {
       height={height}
       itemCount={childrenArray.length}
       itemSize={35} // Adjust item height if different
-      width='100%'
+      width="100%"
     >
       {({ index, style }) => <div style={style}>{childrenArray[index]}</div>}
     </List>

@@ -50,32 +50,31 @@ export default function ProductCard({ product, isProductDiscount = false, isInGr
               {isProductDiscount && product?.deal && product?.deal > 0 && (
                 <ProductTag tag="DealPercent" text={`-${(product?.deal * 100).toFixed(0)}%`} />
               )}
-   <div className="min-h-[100px]">
-            <span className="text-semibold line-clamp-2">{product?.name}</span>
-            <ProductStar rating={product?.rating} ratingAmount={product?.ratingAmount} />
-            <div className="mt-1 mb-2">
-              <span className="text-gray-500 text-sm line-clamp-1">
-                {t('productCard.soldInPastMonth', { amount: product?.soldInPastMonth ?? 0 })}
-              </span>
-            </div>
-          </div>
-                       <div className="flex justify-between items-center w-full">
-            {product?.deal && product?.deal > 0 ? (
-              <div className="flex gap-1 items-center">
-                <span className="text-red-500 lg:text-base md:text-sm sm:text-xs text-xs font-medium">
-                  {t('productCard.currentPrice', { price: product?.currentPrice })}
-                </span>
-                <span className="text-sm text-muted-foreground line-through">
-                  {t('productCard.price', { price: product?.price })}
-                </span>
+              <div className="min-h-[100px]">
+                <span className="text-semibold line-clamp-2">{product?.name}</span>
+                <ProductStar rating={product?.rating} ratingAmount={product?.ratingAmount} />
+                <div className="mt-1 mb-2">
+                  <span className="text-gray-500 text-sm line-clamp-1">
+                    {t('productCard.soldInPastMonth', { amount: product?.soldInPastMonth ?? 0 })}
+                  </span>
+                </div>
               </div>
-            ) : product?.price >= 0 ? (
-              <span className="lg:text-base md:text-sm sm:text-xs text-xs">
-                {t('productCard.price', { price: product?.price })}
-              </span>
-            ) : null}
-          </div>
-       
+              <div className="flex justify-between items-center w-full">
+                {product?.deal && product?.deal > 0 ? (
+                  <div className="flex gap-1 items-center">
+                    <span className="text-red-500 lg:text-base md:text-sm sm:text-xs text-xs font-medium">
+                      {t('productCard.currentPrice', { price: product?.currentPrice })}
+                    </span>
+                    <span className="text-sm text-muted-foreground line-through">
+                      {t('productCard.price', { price: product?.price })}
+                    </span>
+                  </div>
+                ) : product?.price >= 0 ? (
+                  <span className="lg:text-base md:text-sm sm:text-xs text-xs">
+                    {t('productCard.price', { price: product?.price })}
+                  </span>
+                ) : null}
+              </div>
             </div>
           </CardContent>
           {/* <CardFooter className="flex flex-col gap-3 p-4 p-md-3">

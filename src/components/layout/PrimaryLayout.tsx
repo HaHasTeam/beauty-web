@@ -69,32 +69,30 @@ const PrimaryLayout = ({ children }: { children?: React.ReactNode }) => {
     }
 
     if (myCart && myCart.data) {
-      
       const myFilteredCart: ICartByBrand = {}
       for (const key in myCart.data) {
         if (!myCart.data[key].length) {
           break
         } else {
-          console.log('myCart.data[key]', myCart.data[key]);
-          
-          const cartItems = myCart.data[key].filter((items,) =>{
-            console.log('items', items.groupBuying);
-            
+          console.log('myCart.data[key]', myCart.data[key])
+
+          const cartItems = myCart.data[key].filter((items) => {
+            console.log('items', items.groupBuying)
+
             if (items.groupBuying) {
               return false
             }
             return true
           })
-          
-          console.log('cartItems', cartItems, cartItems.length);
-          
-          
+
+          console.log('cartItems', cartItems, cartItems.length)
+
           if (cartItems.length) {
             myFilteredCart[key] = cartItems
           }
         }
       }
-      
+
       setCartItems(myFilteredCart) // Update Zustand store with fetched cart
     }
     if (isMatchCartPath) {

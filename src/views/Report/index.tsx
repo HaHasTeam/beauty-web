@@ -68,16 +68,18 @@ export default function BalanceOverview() {
                   </Button>
                 </DialogTrigger>
                 <DialogContent className="max-w-2xl max-h-[70%] overflow-auto">
-                  <DialogTitle className='flex items-center gap-2'>
+                  <DialogTitle className="flex items-center gap-2">
                     <Flag className="h-5 w-5" />
                     New Report
                   </DialogTitle>
                   <DialogDescription>
                     <div className="text-gray-600 text-sm">Please fill in the form below to report a new issue.</div>
                   </DialogDescription>
-                  <TopUpModal  setOpen={(open:boolean)=>{
-                    setIsOpened(open)
-                  }}/>
+                  <TopUpModal
+                    setOpen={(open: boolean) => {
+                      setIsOpened(open)
+                    }}
+                  />
                 </DialogContent>
               </Dialog>
             </div>

@@ -35,10 +35,10 @@ interface DialogProps extends React.ComponentPropsWithoutRef<typeof Dialog> {
 const formSchema = z
   .object({
     type: z.string({
-      message: defaultRequiredRegex.message
+      message: defaultRequiredRegex.message,
     }),
     reason: z.string({
-      message: defaultRequiredRegex.message
+      message: defaultRequiredRegex.message,
     }),
     files: z
       .array(
@@ -46,28 +46,28 @@ const formSchema = z
           id: z.string().optional(),
           name: z.string(),
           fileUrl: z.string(),
-          status: z.nativeEnum(FileStatusEnum).optional()
-        })
+          status: z.nativeEnum(FileStatusEnum).optional(),
+        }),
       )
       .min(1, {
-        message: defaultRequiredRegex.message
+        message: defaultRequiredRegex.message,
       }),
     orderId: z.string().optional(),
-    bookingId: z.string().optional()
+    bookingId: z.string().optional(),
   })
   .superRefine((data, ctx) => {
     if (data.type === ReportTypeEnum.ORDER && !data.orderId) {
       return ctx.addIssue({
         code: 'custom',
         path: ['orderId'],
-        message: defaultRequiredRegex.message
+        message: defaultRequiredRegex.message,
       })
     }
     if (data.type === ReportTypeEnum.BOOKING && !data.bookingId) {
       return ctx.addIssue({
         code: 'custom',
         path: ['bookingId'],
-        message: defaultRequiredRegex.message
+        message: defaultRequiredRegex.message,
       })
     }
   })
@@ -82,8 +82,8 @@ export default function Modal({ setOpen, viewOnly = false, Report }: DialogProps
   const form = useForm<formType>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      files: []
-    }
+      files: [],
+    },
   })
 
   const { mutateAsync: createReportFn } = useMutation({
@@ -91,10 +91,10 @@ export default function Modal({ setOpen, viewOnly = false, Report }: DialogProps
     mutationFn: createReport.fn,
     onSuccess: () => {
       successToast({
-        message: 'Report created successfully'
+        message: 'Report created successfully',
       })
       setOpen(false)
-    }
+    },
   })
 
   const onSubmit: SubmitHandler<formType> = async () => {
@@ -107,7 +107,7 @@ export default function Modal({ setOpen, viewOnly = false, Report }: DialogProps
       const value = { ...form.getValues(), files: images }
       await createReportFn(value as TCreateReportRequestParams)
       queryClient.invalidateQueries({
-        queryKey: [getFilteredReports.queryKey, {}]
+        queryKey: [getFilteredReports.queryKey, {}],
       })
     } catch (error) {
       handleServerError({ error, form })
@@ -126,8 +126,8 @@ export default function Modal({ setOpen, viewOnly = false, Report }: DialogProps
           id: file.id,
           name: file.name,
           fileUrl: file.fileUrl,
-          status: file.status
-        }))
+          status: file.status,
+        })),
       })
   }, [Report, form, report])
 
@@ -137,12 +137,12 @@ export default function Modal({ setOpen, viewOnly = false, Report }: DialogProps
       case ReportStatusEnum.DONE:
         return (
           <Alert variant={'success'}>
-            <div className='flex items-center gap-2'>
-              <Siren className='size-4' />
-              <div className='flex flex-col'>
-                <AlertTitle className='flex items-center gap-2'>
-                  <span className='p-0.5 px-2 rounded-lg border border-green-300 bg-green-400 text-white'>Done</span>
-                  <span className='font-bold uppercase text-xs'>status</span>
+            <div className="flex items-center gap-2">
+              <Siren className="size-4" />
+              <div className="flex flex-col">
+                <AlertTitle className="flex items-center gap-2">
+                  <span className="p-0.5 px-2 rounded-lg border border-green-300 bg-green-400 text-white">Done</span>
+                  <span className="font-bold uppercase text-xs">status</span>
                 </AlertTitle>
                 <AlertDescription>Note: {report?.resultNote || 'No note provided by the admin'}</AlertDescription>
               </div>
@@ -152,14 +152,14 @@ export default function Modal({ setOpen, viewOnly = false, Report }: DialogProps
       case ReportStatusEnum.PENDING:
         return (
           <Alert variant={'warning'}>
-            <div className='flex items-center gap-2'>
-              <Siren className='size-4' />
-              <div className='flex flex-col'>
-                <AlertTitle className='flex items-center gap-2'>
-                  <span className='p-0.5 px-2 rounded-lg border border-yellow-300 bg-yellow-400 text-white'>
+            <div className="flex items-center gap-2">
+              <Siren className="size-4" />
+              <div className="flex flex-col">
+                <AlertTitle className="flex items-center gap-2">
+                  <span className="p-0.5 px-2 rounded-lg border border-yellow-300 bg-yellow-400 text-white">
                     Pending
                   </span>
-                  <span className='font-bold uppercase text-xs'>status</span>
+                  <span className="font-bold uppercase text-xs">status</span>
                 </AlertTitle>
                 <AlertDescription>
                   This report will be reviewed soon by the admin. You will be notified once the review is done.
@@ -171,14 +171,14 @@ export default function Modal({ setOpen, viewOnly = false, Report }: DialogProps
       case ReportStatusEnum.IN_PROCESSING:
         return (
           <Alert variant={'information'}>
-            <div className='flex items-center gap-2'>
-              <Siren className='size-4' />
-              <div className='flex flex-col'>
-                <AlertTitle className='flex items-center gap-2'>
-                  <span className='p-0.5 px-2 rounded-lg border border-blue-300 bg-blue-400 text-white'>
+            <div className="flex items-center gap-2">
+              <Siren className="size-4" />
+              <div className="flex flex-col">
+                <AlertTitle className="flex items-center gap-2">
+                  <span className="p-0.5 px-2 rounded-lg border border-blue-300 bg-blue-400 text-white">
                     In Processing
                   </span>
-                  <span className='font-bold uppercase text-xs'>status</span>
+                  <span className="font-bold uppercase text-xs">status</span>
                 </AlertTitle>
                 <AlertDescription>This report is currently in processing</AlertDescription>
               </div>
@@ -188,12 +188,12 @@ export default function Modal({ setOpen, viewOnly = false, Report }: DialogProps
       case ReportStatusEnum.CANCELLED:
         return (
           <Alert variant={'destructive'}>
-            <div className='flex items-center gap-2'>
-              <Siren className='size-4' />
-              <div className='flex flex-col'>
-                <AlertTitle className='flex items-center gap-2'>
-                  <span className='p-0.5 px-2 rounded-lg border border-red-300 bg-red-400  text-white'>Canceled</span>
-                  <span className='font-bold uppercase text-xs'>status</span>
+            <div className="flex items-center gap-2">
+              <Siren className="size-4" />
+              <div className="flex flex-col">
+                <AlertTitle className="flex items-center gap-2">
+                  <span className="p-0.5 px-2 rounded-lg border border-red-300 bg-red-400  text-white">Canceled</span>
+                  <span className="font-bold uppercase text-xs">status</span>
                 </AlertTitle>
                 <AlertDescription>Note: {report?.resultNote || 'No note provided by the admin'}</AlertDescription>
               </div>
@@ -208,20 +208,20 @@ export default function Modal({ setOpen, viewOnly = false, Report }: DialogProps
     <>
       {getHeader()}
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className='w-full flex-col gap-8 flex'>
-          <div className='gap-4 flex w-full flex-col'>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="w-full flex-col gap-8 flex">
+          <div className="gap-4 flex w-full flex-col">
             <FormField
               control={form.control}
-              name='type'
+              name="type"
               render={({ field }) => (
-                <FormItem className='col-span-1'>
+                <FormItem className="col-span-1">
                   <FormLabel required>Type Of Report</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue
-                          placeholder='Select type of report
-                        '
+                          placeholder="Select type of report
+                        "
                         />
                       </SelectTrigger>
                     </FormControl>
@@ -242,7 +242,7 @@ export default function Modal({ setOpen, viewOnly = false, Report }: DialogProps
               <FormField
                 control={form.control}
                 shouldUnregister
-                name='orderId'
+                name="orderId"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel required>Report For Order</FormLabel>
@@ -256,7 +256,7 @@ export default function Modal({ setOpen, viewOnly = false, Report }: DialogProps
               <FormField
                 control={form.control}
                 shouldUnregister
-                name='bookingId'
+                name="bookingId"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel required>Report For Booking</FormLabel>
@@ -271,13 +271,13 @@ export default function Modal({ setOpen, viewOnly = false, Report }: DialogProps
               control={form.control}
               name={`reason`}
               render={({ field }) => (
-                <FormItem className='col-span-1'>
+                <FormItem className="col-span-1">
                   <FormLabel required>Reason Of Report</FormLabel>
                   <FormControl>
                     <Textarea
                       {...field}
-                      placeholder='Explain your reason for reporting...
-                  '
+                      placeholder="Explain your reason for reporting...
+                  "
                       rows={6}
                     />
                   </FormControl>
@@ -287,17 +287,17 @@ export default function Modal({ setOpen, viewOnly = false, Report }: DialogProps
             />
             <FormField
               control={form.control}
-              name='files'
+              name="files"
               render={({ field }) => {
                 return (
-                  <FormItem className='flex flex-col sm:col-span-2 col-span-1'>
+                  <FormItem className="flex flex-col sm:col-span-2 col-span-1">
                     <FormLabel required>Evidence For Report</FormLabel>
                     <UploadFiles
                       triggerRef={triggerRef}
                       form={form}
                       field={field}
                       dropZoneConfigOptions={{
-                        maxFiles: 6
+                        maxFiles: 6,
                       }}
                     />
                     <FormMessage />
@@ -308,8 +308,8 @@ export default function Modal({ setOpen, viewOnly = false, Report }: DialogProps
           </div>
           {!viewOnly && (
             <Button
-              type='submit'
-              className='w-full bg-primary hover:bg-primary/70 text-white'
+              type="submit"
+              className="w-full bg-primary hover:bg-primary/70 text-white"
               loading={form.formState.isSubmitting}
             >
               Submit

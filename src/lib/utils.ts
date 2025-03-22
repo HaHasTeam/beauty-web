@@ -12,7 +12,7 @@ export function formatDate(date: Date | string | number, opts: Intl.DateTimeForm
     month: opts.month ?? 'long',
     day: opts.day ?? 'numeric',
     year: opts.year ?? 'numeric',
-    ...opts
+    ...opts,
   }).format(new Date(date))
 }
 
@@ -32,7 +32,7 @@ export function toSentenceCase(str: string) {
 export function composeEventHandlers<E>(
   originalEventHandler?: (event: E) => void,
   ourEventHandler?: (event: E) => void,
-  { checkForDefaultPrevented = true } = {}
+  { checkForDefaultPrevented = true } = {},
 ) {
   return function handleEvent(event: E) {
     originalEventHandler?.(event)

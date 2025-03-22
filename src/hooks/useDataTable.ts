@@ -15,7 +15,7 @@ import {
   type TableState,
   type Updater,
   useReactTable,
-  type VisibilityState
+  type VisibilityState,
 } from '@tanstack/react-table'
 import {
   parseAsArrayOf,
@@ -24,7 +24,7 @@ import {
   type Parser,
   useQueryState,
   type UseQueryStateOptions,
-  useQueryStates
+  useQueryStates,
 } from 'nuqs'
 import * as React from 'react'
 
@@ -154,7 +154,7 @@ export function useDataTable<TData>({
       throttleMs,
       debounceMs,
       clearOnDefault,
-      startTransition
+      startTransition,
     }
   }, [history, scroll, shallow, throttleMs, debounceMs, clearOnDefault, startTransition])
 
@@ -164,13 +164,13 @@ export function useDataTable<TData>({
   const [page, setPage] = useQueryState('page', parseAsInteger.withOptions(queryStateOptions).withDefault(1))
   const [perPage, setPerPage] = useQueryState(
     'perPage',
-    parseAsInteger.withOptions(queryStateOptions).withDefault(initialState?.pagination?.pageSize ?? 10)
+    parseAsInteger.withOptions(queryStateOptions).withDefault(initialState?.pagination?.pageSize ?? 10),
   )
   const [sorting, setSorting] = useQueryState(
     'sort',
     getSortingStateParser<TData>()
       .withOptions(queryStateOptions)
-      .withDefault(initialState?.sorting ?? [])
+      .withDefault(initialState?.sorting ?? []),
   )
 
   // Create parsers for each filter field
@@ -193,14 +193,14 @@ export function useDataTable<TData>({
     fieldFilters: filterValues as DataTableQueryState<TData>['fieldFilters'],
     page,
     perPage,
-    sort: sorting
+    sort: sorting,
   }
 
   React.useEffect(() => {
     if (!queryStates) return
     queryStates[1]({
       ...queryStates[0],
-      ...internalStateValue
+      ...internalStateValue,
     })
     // eslint-disable-next-line
   }, [JSON.stringify(internalStateValue)])
@@ -210,7 +210,7 @@ export function useDataTable<TData>({
   // Paginate
   const pagination: PaginationState = {
     pageIndex: page - 1, // zero-based index -> one-based index
-    pageSize: perPage
+    pageSize: perPage,
   }
 
   function onPaginationChange(updaterOrValue: Updater<PaginationState>) {
@@ -240,7 +240,7 @@ export function useDataTable<TData>({
           if (value !== null) {
             filters.push({
               id: key,
-              value: Array.isArray(value) ? value : [value]
+              value: Array.isArray(value) ? value : [value],
             })
           }
           return filters
@@ -255,7 +255,7 @@ export function useDataTable<TData>({
       ? { searchableColumns: [], filterableColumns: [] }
       : {
           searchableColumns: filterFields.filter((field) => !field.options),
-          filterableColumns: filterFields.filter((field) => field.options)
+          filterableColumns: filterFields.filter((field) => field.options),
         }
   }, [filterFields, enableAdvancedFilter])
 
@@ -290,7 +290,7 @@ export function useDataTable<TData>({
         return next
       })
     },
-    [debouncedSetFilterValues, enableAdvancedFilter, filterableColumns, searchableColumns, setPage]
+    [debouncedSetFilterValues, enableAdvancedFilter, filterableColumns, searchableColumns, setPage],
   )
 
   const table = useReactTable({
@@ -302,7 +302,7 @@ export function useDataTable<TData>({
       sorting,
       columnVisibility,
       rowSelection,
-      columnFilters: enableAdvancedFilter ? [] : columnFilters
+      columnFilters: enableAdvancedFilter ? [] : columnFilters,
     },
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
@@ -318,7 +318,7 @@ export function useDataTable<TData>({
     getFacetedUniqueValues: enableAdvancedFilter ? undefined : getFacetedUniqueValues(),
     manualPagination: true,
     manualSorting: true,
-    manualFiltering: true
+    manualFiltering: true,
   })
 
   return { table }

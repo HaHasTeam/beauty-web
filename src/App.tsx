@@ -11,15 +11,14 @@ function App() {
   return (
     <>
       <TooltipProvider>
-           <NuqsAdapter>
+        <NuqsAdapter>
+          <QueryClientProvider client={queryClient}>
+            <RouterProvider />
+            {/* <ReactQueryDevtools initialIsOpen={true} /> */}
 
-        <QueryClientProvider client={queryClient}>
-          <RouterProvider />
-          {/* <ReactQueryDevtools initialIsOpen={true} /> */}
-
-          <Toaster closeButton position="top-center" richColors />
-        </QueryClientProvider>
-           </NuqsAdapter>
+            <Toaster closeButton position="top-center" richColors />
+          </QueryClientProvider>
+        </NuqsAdapter>
       </TooltipProvider>
     </>
   )

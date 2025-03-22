@@ -1,16 +1,18 @@
-
-
 import { ISystemServiceFormData } from '@/schemas/system-service.schema'
 
 import { ICategory } from './category'
-import { IResponseConsultationCriteriaData, IUpdateConsultationCriteriaData, IUpdateServerConsultationCriteriaData } from './consultation-criteria'
+import {
+  IResponseConsultationCriteriaData,
+  IUpdateConsultationCriteriaData,
+  IUpdateServerConsultationCriteriaData,
+} from './consultation-criteria'
 import { ServiceTypeEnum } from './enum'
 import { IImage } from './image'
 import { TMetaData } from './request'
 
 export enum SystemServiceStatusEnum {
   ACTIVE = 'ACTIVE',
-  INACTIVE = 'INACTIVE'
+  INACTIVE = 'INACTIVE',
 }
 
 export type IUpdateSystemServiceFormData = ISystemServiceFormData & {

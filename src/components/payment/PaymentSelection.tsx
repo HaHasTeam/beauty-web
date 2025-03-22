@@ -24,43 +24,43 @@ interface PaymentSelectionProps {
   hasPreOrderProduct: boolean
   totalPayment: number
 }
-export default function PaymentSelection({ form, hasPreOrderProduct ,totalPayment}: PaymentSelectionProps) {
+export default function PaymentSelection({ form, hasPreOrderProduct, totalPayment }: PaymentSelectionProps) {
   const { t } = useTranslation()
   const { data: myWallet } = useQuery({
     queryKey: [getMyWalletApi.queryKey],
     queryFn: getMyWalletApi.fn,
   })
 
-  const isWalletAvailable = myWallet?.data 
+  const isWalletAvailable = myWallet?.data
 
-const isEnoughBalance = useMemo(() => {
-  if (!isWalletAvailable) {
-    return false
-  }
-  const balance = myWallet?.data.balance ??0
-  return balance >= totalPayment
-  
-}, [myWallet, isWalletAvailable, totalPayment])
+  const isEnoughBalance = useMemo(() => {
+    if (!isWalletAvailable) {
+      return false
+    }
+    const balance = myWallet?.data.balance ?? 0
+    return balance >= totalPayment
+  }, [myWallet, isWalletAvailable, totalPayment])
 
   const paymentMethods = hasPreOrderProduct
     ? [
-  {
+        {
           id: PaymentMethod.WALLET,
           label: (
             <div className="flex items-center gap-2 w-full justify-between">
-              <div className='flex items-center gap-0.5 '>
-              <span className=''>{t('wallet.WALLET')}</span>
-              <span>/ {t('walletTerm.balance')}:</span>
-              <span className=''>
-                {t('format.currency', {
-                  value: myWallet?.data.balance ?? 0,
-                })}
-              </span>
+              <div className="flex items-center gap-0.5 ">
+                <span className="">{t('wallet.WALLET')}</span>
+                <span>/ {t('walletTerm.balance')}:</span>
+                <span className="">
+                  {t('format.currency', {
+                    value: myWallet?.data.balance ?? 0,
+                  })}
+                </span>
               </div>
             </div>
           ),
-          action:<div>
-             <Dialog>
+          action: (
+            <div>
+              <Dialog>
                 <DialogTrigger>
                   <Button className="bg-primary hover:bg-primary/70 text-white">
                     <Wallet className="h-5 w-5" />
@@ -71,8 +71,9 @@ const isEnoughBalance = useMemo(() => {
                   <TopUpModal />
                 </DialogContent>
               </Dialog>
-          </div>,
-          isDisabled: !isWalletAvailable|| !isEnoughBalance,
+            </div>
+          ),
+          isDisabled: !isWalletAvailable || !isEnoughBalance,
           icon: <WalletMinimal className="text-primary" />,
           isAddMore: false,
         },
@@ -81,7 +82,7 @@ const isEnoughBalance = useMemo(() => {
           label: `${t('wallet.CARD')}`,
           icon: <CreditCard className="text-primary" />,
           isAddMore: true,
-          isDisabled: true
+          isDisabled: true,
         },
       ]
     : [
@@ -96,33 +97,38 @@ const isEnoughBalance = useMemo(() => {
           id: PaymentMethod.WALLET,
           label: (
             <div className="flex items-center gap-2 w-full justify-between">
-              <div className='flex items-center gap-0.5 '>
-              <span className=''>{t('wallet.WALLET')}</span>
-              <span>/ {t('walletTerm.balance')}:</span>
-              <span className=''>
-                {myWallet?.data.balance!==undefined ?t('format.currency', {
-                  value: myWallet?.data.balance ?? 0,
-                }) : "--"}
-              </span>
+              <div className="flex items-center gap-0.5 ">
+                <span className="">{t('wallet.WALLET')}</span>
+                <span>/ {t('walletTerm.balance')}:</span>
+                <span className="">
+                  {myWallet?.data.balance !== undefined
+                    ? t('format.currency', {
+                        value: myWallet?.data.balance ?? 0,
+                      })
+                    : '--'}
+                </span>
               </div>
             </div>
           ),
-          action:<div>
-            {isWalletAvailable && <Dialog>
-                <DialogTrigger>
-                  <Button className="bg-primary hover:bg-primary/70 text-white">
-                    <Wallet className="h-5 w-5" />
-                    {t('walletTerm.topUp')}
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="max-w-xl max-h-[70%] overflow-auto">
-                  <TopUpModal />
-                </DialogContent>
-              </Dialog>}
-             {!isWalletAvailable && <CreateWalletBtn/>}
-
-          </div>,
-          isDisabled: !isWalletAvailable|| !isEnoughBalance,
+          action: (
+            <div>
+              {isWalletAvailable && (
+                <Dialog>
+                  <DialogTrigger>
+                    <Button className="bg-primary hover:bg-primary/70 text-white">
+                      <Wallet className="h-5 w-5" />
+                      {t('walletTerm.topUp')}
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="max-w-xl max-h-[70%] overflow-auto">
+                    <TopUpModal />
+                  </DialogContent>
+                </Dialog>
+              )}
+              {!isWalletAvailable && <CreateWalletBtn />}
+            </div>
+          ),
+          isDisabled: !isWalletAvailable || !isEnoughBalance,
           icon: <WalletMinimal className="text-primary" />,
           isAddMore: false,
         },
@@ -131,7 +137,7 @@ const isEnoughBalance = useMemo(() => {
           label: `${t('wallet.CARD')}`,
           icon: <CreditCard className="text-primary" />,
           isAddMore: true,
-          isDisabled: true
+          isDisabled: true,
         },
       ]
   const creditCards = [{ id: '1', name: 'Visa - TienPhong Commercial Joint Stock Bank' }]
@@ -155,15 +161,21 @@ const isEnoughBalance = useMemo(() => {
                       }`}
                     >
                       <div className="flex gap-4 items-center">
-                        <RadioGroupItem value={method.id} id={method.id}  disabled={method.isDisabled}/>
-                        <div className='flex items-center gap-2 w-full'>
-                        <Label htmlFor={method.id} className={cn("px-4 py-2 h-full flex-1 rounded cursor-pointer",method.isDisabled && 'opacity-50')}>
-                          {method.label}
-                        </Label>
-                        {method.action}
+                        <RadioGroupItem value={method.id} id={method.id} disabled={method.isDisabled} />
+                        <div className="flex items-center gap-2 w-full">
+                          <Label
+                            htmlFor={method.id}
+                            className={cn(
+                              'px-4 py-2 h-full flex-1 rounded cursor-pointer',
+                              method.isDisabled && 'opacity-50',
+                            )}
+                          >
+                            {method.label}
+                          </Label>
+                          {method.action}
                         </div>
                       </div>
-                      {method?.isAddMore&& !method.isDisabled && (
+                      {method?.isAddMore && !method.isDisabled && (
                         <div className="pl-16 flex flex-col gap-2">
                           {creditCards?.length > 0 && (
                             <RadioGroup>

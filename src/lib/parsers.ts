@@ -7,7 +7,7 @@ import type { ExtendedSortingState, Filter } from '@/types/table'
 
 export const sortingItemSchema = z.object({
   id: z.string(),
-  desc: z.boolean()
+  desc: z.boolean(),
 })
 
 /**
@@ -37,7 +37,7 @@ export const getSortingStateParser = <TData>(originalRow?: Row<TData>['original'
     },
     serialize: (value) => JSON.stringify(value),
     eq: (a, b) =>
-      a.length === b.length && a.every((item, index) => item.id === b[index]?.id && item.desc === b[index]?.desc)
+      a.length === b.length && a.every((item, index) => item.id === b[index]?.id && item.desc === b[index]?.desc),
   })
 }
 
@@ -46,7 +46,7 @@ export const filterSchema = z.object({
   value: z.union([z.string(), z.array(z.string())]),
   type: z.enum(dataTableConfig.columnTypes),
   operator: z.enum(dataTableConfig.globalOperators),
-  rowId: z.string()
+  rowId: z.string(),
 })
 
 /**
@@ -82,7 +82,7 @@ export const getFiltersStateParser = <T>(originalRow?: Row<T>['original']) => {
           filter.id === b[index]?.id &&
           filter.value === b[index]?.value &&
           filter.type === b[index]?.type &&
-          filter.operator === b[index]?.operator
-      )
+          filter.operator === b[index]?.operator,
+      ),
   })
 }

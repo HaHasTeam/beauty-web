@@ -8,7 +8,7 @@ export const getConsultationCriteriaSectionSchema = () => {
     section: z.string().min(1, { message: i18next.t('systemService.sectionNameRequired') }),
     orderIndex: z.number().min(1, { message: i18next.t('systemService.orderIndexRequired') }),
     mandatory: z.boolean(),
-    description: z.string().min(1, { message: i18next.t('systemService.sectionDescriptionRequired') })
+    description: z.string().min(1, { message: i18next.t('systemService.sectionDescriptionRequired') }),
   })
 }
 
@@ -20,7 +20,7 @@ export const getConsultationCriteriaDataSchema = () => {
     section: z.string().min(1, { message: i18next.t('systemService.sectionNameRequired') }),
     orderIndex: z.number().min(1, { message: i18next.t('systemService.orderIndexRequired') }),
     mandatory: z.boolean(),
-    description: z.string().min(1, { message: i18next.t('systemService.sectionDescriptionRequired') })
+    description: z.string().min(1, { message: i18next.t('systemService.sectionDescriptionRequired') }),
   })
 
   return z.object({
@@ -28,7 +28,7 @@ export const getConsultationCriteriaDataSchema = () => {
     title: z.string().min(1, { message: i18next.t('systemService.consultationCriteriaTitleRequired') }),
     consultationCriteriaSections: z
       .array(ConsultationCriteriaSectionSchemaData)
-      .min(1, { message: i18next.t('systemService.consultationCriteriaSectionsRequired') })
+      .min(1, { message: i18next.t('systemService.consultationCriteriaSectionsRequired') }),
   })
 }
 

@@ -17,10 +17,8 @@ export function ReportTableToolbarActions({ table }: ReportTableToolbarActionsPr
   const handleAddReport = () => {}
   const [isOpened, setIsOpened] = useState(false)
   return (
-    <div className='flex items-center gap-2'>
-      {table.getFilteredSelectedRowModel().rows.length > 0 ? 
-       null
-       : null}
+    <div className="flex items-center gap-2">
+      {table.getFilteredSelectedRowModel().rows.length > 0 ? null : null}
       <Dialog open={isOpened} onOpenChange={setIsOpened}>
         <DialogTrigger>
           <Button size={'sm'} onClick={handleAddReport}>
@@ -28,13 +26,13 @@ export function ReportTableToolbarActions({ table }: ReportTableToolbarActionsPr
             Add Report
           </Button>
         </DialogTrigger>
-        <DialogContent className='max-w-2xl max-h-[70%] overflow-auto'>
-          <DialogTitle className='flex items-center gap-2'>
-            <Flag className='h-5 w-5' />
+        <DialogContent className="max-w-2xl max-h-[70%] overflow-auto">
+          <DialogTitle className="flex items-center gap-2">
+            <Flag className="h-5 w-5" />
             New Report
           </DialogTitle>
           <DialogDescription>
-            <div className='text-gray-600 text-sm'>Please fill in the form below to report a new issue.</div>
+            <div className="text-gray-600 text-sm">Please fill in the form below to report a new issue.</div>
           </DialogDescription>
           <Modal
             Report={[]}
@@ -46,17 +44,17 @@ export function ReportTableToolbarActions({ table }: ReportTableToolbarActionsPr
       </Dialog>
 
       <Button
-        variant='outline'
-        size='sm'
+        variant="outline"
+        size="sm"
         onClick={() =>
           exportTableToCSV(table, {
             filename: 'Report' + Date.now(),
-            excludeColumns: ['select', 'actions']
+            excludeColumns: ['select', 'actions'],
           })
         }
-        className='gap-2'
+        className="gap-2"
       >
-        <Download className='size-4' aria-hidden='true' />
+        <Download className="size-4" aria-hidden="true" />
         Export
       </Button>
 

@@ -26,7 +26,7 @@ export function DataTable<TData>({ table, floatingBar = null, children, classNam
   return (
     <div className={cn('w-full space-y-2.5 overflow-auto', className)} {...props}>
       {children}
-      <div className='overflow-hidden rounded-md border'>
+      <div className="overflow-hidden rounded-md border">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -37,9 +37,9 @@ export function DataTable<TData>({ table, floatingBar = null, children, classNam
                       key={header.id}
                       colSpan={header.colSpan}
                       style={{
-                        ...getCommonPinningStyles({ column: header.column })
+                        ...getCommonPinningStyles({ column: header.column }),
                       }}
-                      className='bg-[#f9d4e2] dark:bg-[#552b3b] border-r-2 pl-4'
+                      className="bg-[#f9d4e2] dark:bg-[#552b3b] border-r-2 pl-4"
                     >
                       {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                     </TableHead>
@@ -56,12 +56,12 @@ export function DataTable<TData>({ table, floatingBar = null, children, classNam
                     <TableCell
                       key={cell.id}
                       style={{
-                        ...getCommonPinningStyles({ column: cell.column })
+                        ...getCommonPinningStyles({ column: cell.column }),
                       }}
                       className={cn(
                         'pr-2 border border-collapse',
                         row.getIsSelected() && 'border-background',
-                        cell.column.getIsPinned() ? 'bg-[#f9d4e2] dark:bg-[#552b3b]' : 'unset'
+                        cell.column.getIsPinned() ? 'bg-[#f9d4e2] dark:bg-[#552b3b]' : 'unset',
                       )}
                     >
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -71,7 +71,7 @@ export function DataTable<TData>({ table, floatingBar = null, children, classNam
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={table.getAllColumns().length} className='h-24 text-center'>
+                <TableCell colSpan={table.getAllColumns().length} className="h-24 text-center">
                   No results.
                 </TableCell>
               </TableRow>
@@ -79,7 +79,7 @@ export function DataTable<TData>({ table, floatingBar = null, children, classNam
           </TableBody>
         </Table>
       </div>
-      <div className='flex flex-col gap-2.5'>
+      <div className="flex flex-col gap-2.5">
         <DataTablePagination table={table} />
         {table.getFilteredSelectedRowModel().rows.length > 0 && floatingBar}
       </div>

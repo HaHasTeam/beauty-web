@@ -51,14 +51,14 @@ export function DataTableToolbar<TData>({
   const { searchableColumns, filterableColumns } = React.useMemo(() => {
     return {
       searchableColumns: filterFields.filter((field) => !field.options),
-      filterableColumns: filterFields.filter((field) => field.options)
+      filterableColumns: filterFields.filter((field) => field.options),
     }
   }, [filterFields])
   console.log('searchableColumns', searchableColumns)
 
   return (
     <div className={cn('flex w-full items-center justify-between gap-2 overflow-auto p-1', className)} {...props}>
-      <div className='flex flex-1 items-center gap-2'>
+      <div className="flex flex-1 items-center gap-2">
         {searchableColumns.length > 0 &&
           searchableColumns.map(
             (column) =>
@@ -68,9 +68,9 @@ export function DataTableToolbar<TData>({
                   placeholder={column.placeholder}
                   value={(table.getColumn(String(column.id))?.getFilterValue() as string) ?? ''}
                   onChange={(event) => table.getColumn(String(column.id))?.setFilterValue(event.target.value)}
-                  className='h-8 w-40 lg:w-64'
+                  className="h-8 w-40 lg:w-64"
                 />
-              )
+              ),
           )}
         {filterableColumns.length > 0 &&
           filterableColumns.map(
@@ -82,21 +82,21 @@ export function DataTableToolbar<TData>({
                   title={column.label}
                   options={column.options ?? []}
                 />
-              )
+              ),
           )}
         {isFiltered && (
           <Button
-            aria-label='Reset filters'
-            variant='ghost'
-            className='h-8 px-2 lg:px-3'
+            aria-label="Reset filters"
+            variant="ghost"
+            className="h-8 px-2 lg:px-3"
             onClick={() => table.resetColumnFilters()}
           >
             Reset
-            <X className='ml-2 size-4' aria-hidden='true' />
+            <X className="ml-2 size-4" aria-hidden="true" />
           </Button>
         )}
       </div>
-      <div className='flex items-center gap-2'>
+      <div className="flex items-center gap-2">
         {children}
         <DataTableViewOptions table={table} />
       </div>

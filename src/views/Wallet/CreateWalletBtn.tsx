@@ -5,11 +5,9 @@ import Button from '@/components/button'
 import { createWalletApi, getMyWalletApi } from '@/network/apis/wallet'
 import { useStore } from '@/store/store'
 
-
-
 const CreateWalletBtn = () => {
-    const {t}=useTranslation()
-     const user = useStore((state) => state.user)
+  const { t } = useTranslation()
+  const user = useStore((state) => state.user)
   const { mutateAsync: createWalletFn, isPending } = useMutation({
     mutationKey: [createWalletApi.mutationKey],
     mutationFn: createWalletApi.fn,
@@ -24,8 +22,8 @@ const CreateWalletBtn = () => {
   }
 
   return (
-    <Button  onClick={handleCreateWallet} loading={isPending} >
-        {t('walletTerm.createWallet')}
+    <Button onClick={handleCreateWallet} loading={isPending}>
+      {t('walletTerm.createWallet')}
     </Button>
   )
 }

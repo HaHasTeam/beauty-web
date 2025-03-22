@@ -20,55 +20,55 @@ import { TCreateReportRequestParams } from '@/network/apis/report/type'
 import { FileStatusEnum } from '@/types/file'
 import { ReportTypeEnum } from '@/types/report'
 
-const formSchema = z.object({
-  type: z.string({
-    message: defaultRequiredRegex.message,
-  }),
-  reason: z.string({
-    message: defaultRequiredRegex.message,
-  }),
-  files: z
-    .array(
-      z.object({
-        id: z.string().optional(),
-        name: z.string(),
-        fileUrl: z.string(),
-        status: z.nativeEnum(FileStatusEnum).optional(),
-      }),
-    )
-    .min(1, {
+const formSchema = z
+  .object({
+    type: z.string({
       message: defaultRequiredRegex.message,
     }),
-  orderId: z.string().optional(),
-  bookingId: z.string().optional(),
-}).superRefine((data,ctx) => {
-  if (data.type === ReportTypeEnum.ORDER && !data.orderId) {
-    return ctx.addIssue({
-      code:"custom",
-      path: ["orderId"],
-      message:defaultRequiredRegex.message
-    })
-  }
-  if (data.type === ReportTypeEnum.BOOKING && !data.bookingId) {
-    return ctx.addIssue({
-      code:"custom",
-      path: ["bookingId"],
-      message:defaultRequiredRegex.message
-    })
-  }
-})
+    reason: z.string({
+      message: defaultRequiredRegex.message,
+    }),
+    files: z
+      .array(
+        z.object({
+          id: z.string().optional(),
+          name: z.string(),
+          fileUrl: z.string(),
+          status: z.nativeEnum(FileStatusEnum).optional(),
+        }),
+      )
+      .min(1, {
+        message: defaultRequiredRegex.message,
+      }),
+    orderId: z.string().optional(),
+    bookingId: z.string().optional(),
+  })
+  .superRefine((data, ctx) => {
+    if (data.type === ReportTypeEnum.ORDER && !data.orderId) {
+      return ctx.addIssue({
+        code: 'custom',
+        path: ['orderId'],
+        message: defaultRequiredRegex.message,
+      })
+    }
+    if (data.type === ReportTypeEnum.BOOKING && !data.bookingId) {
+      return ctx.addIssue({
+        code: 'custom',
+        path: ['bookingId'],
+        message: defaultRequiredRegex.message,
+      })
+    }
+  })
 
 type formType = z.infer<typeof formSchema>
 
-type Props={
-setOpen:(value:boolean)=>void
+type Props = {
+  setOpen: (value: boolean) => void
 }
 
-export default function Modal({
-  setOpen
-}:Props) {
-  const handleServerError=useHandleServerError()
-  const {successToast}=useToast()
+export default function Modal({ setOpen }: Props) {
+  const handleServerError = useHandleServerError()
+  const { successToast } = useToast()
   const triggerRef = useRef<TriggerUploadRef>(null)
   const queryClient = useQueryClient()
   const form = useForm<formType>({
@@ -78,29 +78,29 @@ export default function Modal({
     },
   })
 
-  const {mutateAsync:createReportFn}=useMutation({
-    mutationKey:[createReport.mutationKey],
-    mutationFn:createReport.fn,
-    onSuccess:()=>{
+  const { mutateAsync: createReportFn } = useMutation({
+    mutationKey: [createReport.mutationKey],
+    mutationFn: createReport.fn,
+    onSuccess: () => {
       successToast({
-        message:"Report created successfully"
+        message: 'Report created successfully',
       })
       setOpen(false)
-    }
+    },
   })
 
   const onSubmit: SubmitHandler<formType> = async () => {
     try {
-     const triggerFns = triggerRef.current?.triggers
-    if (triggerFns) {
-      await Promise.all(triggerFns.map((trigger) => trigger()))
-    }
-    const images= form.getValues().files.map((file)=>file.fileUrl)
-    const value={...form.getValues(),files:images}
-    await createReportFn(value as TCreateReportRequestParams)
-    queryClient.invalidateQueries({
-       queryKey: [getFilteredReports.queryKey,{}],
-    })
+      const triggerFns = triggerRef.current?.triggers
+      if (triggerFns) {
+        await Promise.all(triggerFns.map((trigger) => trigger()))
+      }
+      const images = form.getValues().files.map((file) => file.fileUrl)
+      const value = { ...form.getValues(), files: images }
+      await createReportFn(value as TCreateReportRequestParams)
+      queryClient.invalidateQueries({
+        queryKey: [getFilteredReports.queryKey, {}],
+      })
     } catch (error) {
       handleServerError({ error, form })
     }
@@ -153,7 +153,7 @@ export default function Modal({
                 )}
               />
             )}
-             {form.watch('type') === ReportTypeEnum.BOOKING && (
+            {form.watch('type') === ReportTypeEnum.BOOKING && (
               <FormField
                 control={form.control}
                 shouldUnregister
@@ -167,7 +167,7 @@ export default function Modal({
                 )}
               />
             )}
-            
+
             <FormField
               control={form.control}
               name={`reason`}
@@ -207,7 +207,11 @@ export default function Modal({
               }}
             />
           </div>
-          <Button type="submit" className="w-full bg-primary hover:bg-primary/70 text-white" loading={form.formState.isSubmitting}>
+          <Button
+            type="submit"
+            className="w-full bg-primary hover:bg-primary/70 text-white"
+            loading={form.formState.isSubmitting}
+          >
             Submit
           </Button>
         </form>

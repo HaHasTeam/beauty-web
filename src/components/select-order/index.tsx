@@ -12,7 +12,7 @@ type Props = HTMLAttributes<HTMLSelectElement> & InputProps
 
 const getOrderItemDisplay = (order: IOrder) => {
   return (
-    <div className='flex items-center gap-1'>
+    <div className="flex items-center gap-1">
       <span>{order?.id}</span>
     </div>
   )
@@ -23,16 +23,18 @@ const SelectOrder = forwardRef<HTMLSelectElement, Props>((props) => {
 
   const { data: orderList, isFetching: isGettingOrderList } = useQuery({
     queryKey: [getAllOrderListApi.queryKey],
-    queryFn: getAllOrderListApi.fn
+    queryFn: getAllOrderListApi.fn,
   })
 
   const orderOptions = useMemo(() => {
     if (!orderList) return []
-    return orderList?.data.filter(()=>true).map((order) => ({
-      value: order.id,
-      label: order.id,
-      display: getOrderItemDisplay(order)
-    }))
+    return orderList?.data
+      .filter(() => true)
+      .map((order) => ({
+        value: order.id,
+        label: order.id,
+        display: getOrderItemDisplay(order),
+      }))
   }, [orderList])
 
   const selectedOptions = useMemo(() => {
@@ -44,7 +46,7 @@ const SelectOrder = forwardRef<HTMLSelectElement, Props>((props) => {
         return {
           value: order?.id,
           label: order?.id,
-          display: getOrderItemDisplay(order as IOrder)
+          display: getOrderItemDisplay(order as IOrder),
         }
       })
     } else {
@@ -53,7 +55,7 @@ const SelectOrder = forwardRef<HTMLSelectElement, Props>((props) => {
       return {
         value: order?.id,
         label: order?.id,
-        display: getOrderItemDisplay(order as IOrder)
+        display: getOrderItemDisplay(order as IOrder),
       }
     }
   }, [value, orderList?.data, multiple])

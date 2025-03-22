@@ -838,7 +838,7 @@
     "copyAndShare": "Sao chép và chia sẻ",
     "cooldown": "Giới hạn thời gian kết thúc trong {{value}} phút"
   },
-    "walletTerm":{
+  "walletTerm": {
     "balance": "Số dư",
     "topUp": "Nạp tiền",
     "withdraw": "Rút tiền",

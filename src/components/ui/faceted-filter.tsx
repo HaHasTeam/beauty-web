@@ -11,7 +11,7 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-  CommandShortcut
+  CommandShortcut,
 } from '@/components/ui/command'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { cn } from '@/lib/utils'
@@ -32,7 +32,7 @@ const FacetedFilterContent = React.forwardRef<
   React.ComponentRef<typeof PopoverContent>,
   React.ComponentPropsWithoutRef<typeof PopoverContent>
 >(({ className, children, ...props }, ref) => (
-  <PopoverContent ref={ref} className={cn('w-[12.5rem] p-0', className)} align='start' {...props}>
+  <PopoverContent ref={ref} className={cn('w-[12.5rem] p-0', className)} align="start" {...props}>
     <Command>{children}</Command>
   </PopoverContent>
 ))
@@ -57,15 +57,15 @@ const FacetedFilterItem = React.forwardRef<React.ComponentRef<typeof CommandItem
         <span
           className={cn(
             'mr-2 flex size-4 items-center justify-center rounded-sm border border-primary',
-            selected ? 'bg-primary text-primary-foreground' : 'opacity-50 [&_svg]:invisible'
+            selected ? 'bg-primary text-primary-foreground' : 'opacity-50 [&_svg]:invisible',
           )}
         >
-          <Check className='size-4' />
+          <Check className="size-4" />
         </span>
         {children}
       </CommandItem>
     )
-  }
+  },
 )
 FacetedFilterItem.displayName = 'FacetedFilterItem'
 
@@ -83,4 +83,5 @@ export {
   FacetedFilterList,
   FacetedFilterSeparator,
   FacetedFilterShortcut,
-  FacetedFilterTrigger}
+  FacetedFilterTrigger,
+}

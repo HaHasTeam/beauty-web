@@ -6,7 +6,6 @@ import * as React from 'react'
 
 import { useCallbackRef } from './useCallbackRef'
 
-
 export function useDebouncedCallback<T extends (...args: never[]) => unknown>(callback: T, delay: number) {
   const handleCallback = useCallbackRef(callback)
   const debounceTimerRef = React.useRef(0)
@@ -17,7 +16,7 @@ export function useDebouncedCallback<T extends (...args: never[]) => unknown>(ca
       window.clearTimeout(debounceTimerRef.current)
       debounceTimerRef.current = window.setTimeout(() => handleCallback(...args), delay)
     },
-    [handleCallback, delay]
+    [handleCallback, delay],
   )
 
   return setValue

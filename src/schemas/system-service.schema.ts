@@ -18,7 +18,7 @@ export const getSystemServiceSchema = () => {
       title: z.string().min(1, { message: i18next.t('systemService.consultationCriteriaTitleRequired') }),
       consultationCriteriaSections: z
         .array(ConsultationCriteriaSectionSchema)
-        .min(1, { message: i18next.t('systemService.consultationCriteriaSectionsRequired') })
+        .min(1, { message: i18next.t('systemService.consultationCriteriaSectionsRequired') }),
     })
     .optional()
 
@@ -31,7 +31,7 @@ export const getSystemServiceSchema = () => {
       type: z.enum([ServiceTypeEnum.STANDARD, ServiceTypeEnum.PREMIUM]),
       consultationCriteria: z.string().optional(),
       consultationCriteriaData: consultationCriteriaDataSchema,
-      status: z.nativeEnum(SystemServiceStatusEnum)
+      status: z.nativeEnum(SystemServiceStatusEnum),
     })
     .refine(
       (data) => {
@@ -40,14 +40,14 @@ export const getSystemServiceSchema = () => {
       },
       {
         message: i18next.t('systemService.eitherConsultationCriteriaOrDataRequired'),
-        path: ['consultationCriteriaData']
-      }
+        path: ['consultationCriteriaData'],
+      },
     )
 }
 
 export const getUpdateSystemServiceStatusSchema = () => {
   return z.object({
-    status: z.string().min(1, i18next.t('validation.statusRequired'))
+    status: z.string().min(1, i18next.t('validation.statusRequired')),
   })
 }
 

@@ -1,5 +1,3 @@
-
-
 import { IConsultationCriteriaSectionFormData } from '@/schemas/consultation-criteria.schema'
 
 import { StatusEnum } from './enum'

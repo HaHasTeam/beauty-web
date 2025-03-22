@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { ChangeEvent, forwardRef, HTMLAttributes, useMemo } from 'react'
 
-import {   getMyBookingList } from '@/network/apis/booking'
+import { getMyBookingList } from '@/network/apis/booking'
 import { IBooking } from '@/types/booking'
 
 import { InputProps } from '../ui/input'
@@ -12,7 +12,7 @@ type Props = HTMLAttributes<HTMLSelectElement> & InputProps
 
 const getItemDisplay = (booking: IBooking) => {
   return (
-    <div className='flex items-center gap-1'>
+    <div className="flex items-center gap-1">
       <span>{booking.id}</span>
     </div>
   )
@@ -23,16 +23,18 @@ const SelectBooking = forwardRef<HTMLSelectElement, Props>((props) => {
 
   const { data: myBookingList, isFetching: isGettingMyBookingList } = useQuery({
     queryKey: [getMyBookingList.queryKey],
-    queryFn: getMyBookingList.fn
+    queryFn: getMyBookingList.fn,
   })
 
   const bookingOptions = useMemo(() => {
     if (!myBookingList) return []
-    return myBookingList?.data.filter(()=>true).map((booking) => ({
-      value: booking.id,
-      label: booking.id,
-      display: getItemDisplay(booking)
-    }))
+    return myBookingList?.data
+      .filter(() => true)
+      .map((booking) => ({
+        value: booking.id,
+        label: booking.id,
+        display: getItemDisplay(booking),
+      }))
   }, [myBookingList])
 
   const selectedOptions = useMemo(() => {
@@ -44,7 +46,7 @@ const SelectBooking = forwardRef<HTMLSelectElement, Props>((props) => {
         return {
           value: booking?.id,
           label: booking?.id,
-          display: getItemDisplay(booking as IBooking)
+          display: getItemDisplay(booking as IBooking),
         }
       })
     } else {
@@ -53,7 +55,7 @@ const SelectBooking = forwardRef<HTMLSelectElement, Props>((props) => {
       return {
         value: booking?.id,
         label: booking?.id,
-        display: getItemDisplay(booking as IBooking)
+        display: getItemDisplay(booking as IBooking),
       }
     }
   }, [value, myBookingList?.data, multiple])

@@ -15,7 +15,6 @@ import { DataTableRowAction, getColumns } from './ReportTableColumns'
 import { ReportTableFloatingBar } from './ReportTableFloatingBar'
 import { ReportTableToolbarActions } from './ReportTableToolbarActions'
 
-
 interface ReportTableProps {
   data: IReport[]
   pageCount: number
@@ -27,9 +26,9 @@ export function ReportTable({ data, pageCount, queryStates }: ReportTableProps) 
   const columns = React.useMemo(
     () =>
       getColumns({
-        setRowAction
+        setRowAction,
       }),
-    []
+    [],
   )
 
   /**
@@ -64,11 +63,11 @@ export function ReportTable({ data, pageCount, queryStates }: ReportTableProps) 
     filterFields,
     initialState: {
       sorting: [{ id: 'createdAt', desc: true }],
-      columnPinning: { right: ['actions'] }
+      columnPinning: { right: ['actions'] },
     },
     getRowId: (originalRow, index) => `${originalRow.id}-${index}`,
     shallow: false,
-    clearOnDefault: true
+    clearOnDefault: true,
   })
 
   return (
@@ -79,13 +78,13 @@ export function ReportTable({ data, pageCount, queryStates }: ReportTableProps) 
         </DataTableToolbar>
       </DataTable>
       <Dialog open={rowAction?.type === 'view'} onOpenChange={() => setRowAction(null)}>
-        <DialogContent className='max-w-2xl overflow-auto! max-h-[70%]'>
-          <DialogTitle className='flex items-center gap-2'>
-            <Flag className='h-5 w-5' />
+        <DialogContent className="max-w-2xl overflow-auto! max-h-[70%]">
+          <DialogTitle className="flex items-center gap-2">
+            <Flag className="h-5 w-5" />
             View Report Details
           </DialogTitle>
           <DialogDescription>
-            <div className='text-gray-600 text-sm'>See the details of the report and take necessary actions.</div>
+            <div className="text-gray-600 text-sm">See the details of the report and take necessary actions.</div>
           </DialogDescription>
           <Modal
             viewOnly
