@@ -10,8 +10,10 @@ import configs from '@/config'
 import useHandleServerError from '@/hooks/useHandleServerError'
 import { useToast } from '@/hooks/useToast'
 import { formSignInSchema } from '@/lib/schema'
+import { createFirebaseTokenApi } from '@/network/apis/firebase'
 import { signInWithPasswordApi } from '@/network/apis/user'
 import { useStore } from '@/store/store'
+import { signInWithToken } from '@/utils/firebase/auth-service'
 
 import Button from '../button'
 import { Input } from '../ui/input'
@@ -38,7 +40,10 @@ export default function PasswordSignIn() {
       password: '',
     },
   })
-
+  const { mutateAsync: createToken } = useMutation({
+    mutationFn: createFirebaseTokenApi.fn,
+    mutationKey: [createFirebaseTokenApi.mutationKey],
+  })
   const { mutateAsync: signInWithPasswordFn, isPending: isSignInWithPasswordLoading } = useMutation({
     mutationKey: [signInWithPasswordApi.mutationKey],
     mutationFn: signInWithPasswordApi.fn,
@@ -58,6 +63,15 @@ export default function PasswordSignIn() {
       authenticate({
         isAuthenticated: true,
         authData: data,
+      })
+      const dataFirebase = await createToken()
+
+      await signInWithToken(dataFirebase.data.token)
+      authenticate({
+        authData: {
+          ...data,
+          firebaseToken: dataFirebase.data.token,
+        },
       })
       navigate(configs.routes.home)
     } catch (error) {

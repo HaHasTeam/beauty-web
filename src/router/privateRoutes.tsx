@@ -3,6 +3,8 @@ import PrimaryLayout from '@/components/layout/PrimaryLayout'
 import configs from '@/config'
 import Cart from '@/views/Cart'
 import ChangePassword from '@/views/ChangePassword'
+import ChatPage from '@/views/ChatPage/ChatPage'
+import NewChat from '@/views/ChatPage/NewChat'
 import Checkout from '@/views/Checkout'
 import CheckoutResult from '@/views/CheckoutResult'
 import OrderDetail from '@/views/OrderDetail'
@@ -70,8 +72,12 @@ const privateRoutes = [
       },
 
       {
-        path: 'message', // user order history detail
-        element: <OrderDetail />,
+        path: '/chat/:id',
+        element: <ChatPage />,
+      },
+      {
+        path: '/new-chat',
+        element: <NewChat />,
       },
       {
         path: configs.routes.profileOrderDetail, // user order history detail

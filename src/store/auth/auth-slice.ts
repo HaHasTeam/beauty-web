@@ -10,7 +10,7 @@ const initialState: AuthState = {
   user: null,
 } as AuthState
 
-export const createAuthSlice: StateCreator<AuthSlice, [['zustand/immer', never]], [], AuthSlice> = (set) => ({
+export const createAuthSlice: StateCreator<AuthSlice, [['zustand/immer', never]], [], AuthSlice> = (set, get) => ({
   ...initialState,
   initialize: (isAuthenticated: boolean, user?: TUserPa) =>
     set((state) => {
@@ -33,12 +33,14 @@ export const createAuthSlice: StateCreator<AuthSlice, [['zustand/immer', never]]
       state.user = null
       state.authData = null
     }),
-  setAuthState: ({ user, authData, isAuthenticated, isLoading }) =>
+  setAuthState: ({ user, authData, isAuthenticated, isLoading, userFireBase }) =>
     set((state) => {
       state.isLoading = isLoading ?? state.isLoading
       state.isAuthenticated = isAuthenticated ?? state.isAuthenticated
       state.user = user ?? state.user
+      state.userFireBase = userFireBase ?? state.userFireBase
       state.authData = authData ?? state.authData
     }),
   resetAuth: () => set(initialState),
+  getFirebaseToken: () => get().authData?.firebaseToken || null,
 })
