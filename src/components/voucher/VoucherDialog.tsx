@@ -123,7 +123,7 @@ export default function VoucherDialog({
           <DialogDescription className="text-start"> {t('voucher.description')}</DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-4">
+        <div className="space-y-3">
           <div>
             {/* Warning Message */}
             {selectedCartItems?.length === 0 && (
@@ -150,9 +150,9 @@ export default function VoucherDialog({
             (unAvailableVouchers && unAvailableVouchers?.length > 0) ||
             (unclaimedVouchers && unclaimedVouchers?.length > 0) ? (
             <ScrollArea className="h-72">
-              <div className="px-3 py-2 my-2">
+              <div className="">
                 <RadioGroup value={selectedVoucher} onValueChange={setSelectedVoucher}>
-                  <div className="space-y-4">
+                  <div className="space-y-3">
                     {availableVouchers?.map((voucher) => (
                       <VoucherPlatformItem
                         voucher={voucher}

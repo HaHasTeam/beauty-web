@@ -117,7 +117,7 @@ const VoucherPlatformItem = ({
               </div> */}
             </div>
             <div className="flex gap-1 mt-2 text-sm text-muted-foreground">
-              {t('voucher.used')} {voucher.used}%,
+              {/* {t('voucher.used')} {voucher.used}%, */}
               <div className="mt-1 text-xs text-muted-foreground">
                 {t('date.exp')}: {t('date.toLocaleDateTimeString', { val: new Date(voucher?.endTime) })}
               </div>
