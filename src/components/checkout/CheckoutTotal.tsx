@@ -122,7 +122,7 @@ export default function CheckoutTotal({
             ? groupBuyingOrder
               ? t('cart.updateGroupOrder')
               : t('cart.createGroupOrder')
-            : t('cart.checkout')}
+            : t('cart.placeOrder')}
         </Button>
       </div>
     </div>

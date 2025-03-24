@@ -280,7 +280,7 @@ export default function CartFooter({
                     onClick={() => handleCheckout()}
                     className="text-destructive-foreground px-8 py-2 rounded-lg bg-destructive hover:bg-destructive/80"
                   >
-                    {t('cart.buy')}
+                    {t('cart.checkout')}
                   </Button>
                 )}
               </div>
