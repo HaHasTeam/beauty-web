@@ -7,6 +7,8 @@ export type IFilterFeedbackData = {
 export type IFilterFeedback = {
   params: string
   data: IFilterFeedbackData
+  page?: string
+  limit?: string
 }
 export type IReplyFeedbackData = {
   content: string
