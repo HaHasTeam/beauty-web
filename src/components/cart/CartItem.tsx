@@ -205,7 +205,7 @@ const CartItem = ({
                 : null}
           </span>
           <VoucherCartList
-            triggerText={t('cart.viewMoreVoucher')}
+            triggerText={chosenVoucher ? t('cart.viewMoreVoucher') : t('voucher.chooseVoucher')}
             brandName={brand?.name ?? ''}
             brandId={brand?.id ?? ''}
             brandLogo={brand?.logo ?? ''}
