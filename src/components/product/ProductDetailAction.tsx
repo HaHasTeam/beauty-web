@@ -1,7 +1,7 @@
 import '@/components/product/Product.css'
 
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
@@ -41,7 +41,7 @@ const ProductDetailAction = ({
   inStock,
 }: ProductDetailActionProps) => {
   const { t } = useTranslation()
-  const { setSelectedCartItem } = useCartStore()
+  const { setSelectedCartItem, cartItems } = useCartStore()
   let groupBuying = useParams().groupId
   groupBuying = isInGroupBuying ? groupBuying : undefined
 
@@ -55,6 +55,82 @@ const ProductDetailAction = ({
   const handleServerError = useHandleServerError()
   const queryClient = useQueryClient()
   const navigate = useNavigate()
+
+  // when quantity add to cart is greater than product classification quantity
+  // const cartQuantity = useMemo(() => {
+  //   return (
+  //     cartItems[product?.brand?.name ?? '']?.find(
+  //       (cartItem) => cartItem.productClassification.id === chosenClassification?.id,
+  //     )?.quantity ?? 0
+  //   )
+  // }, [cartItems, chosenClassification?.id, product?.brand?.name])
+  const cartQuantity = useMemo(() => {
+    const brandName = product?.brand?.name ?? ''
+    if (!cartItems || !cartItems[brandName] || !Array.isArray(cartItems[brandName])) {
+      return 0
+    }
+
+    if (!chosenClassification?.id) {
+      return 0
+    }
+
+    const foundItem = cartItems[brandName].find(
+      (cartItem) => cartItem.productClassification?.id === chosenClassification.id,
+    )
+
+    return foundItem?.quantity ?? 0
+  }, [cartItems, chosenClassification?.id, product?.brand?.name])
+  // const maxAcceptQuantity = useMemo(() => {
+  //   return (
+  //     MAX_QUANTITY_IN_CART -
+  //     (cartItems[product?.brand?.name ?? '']?.find(
+  //       (cartItem) => cartItem.productClassification.id === chosenClassification?.id,
+  //     )?.quantity ?? 0)
+  //   )
+  // }, [MAX_QUANTITY_IN_CART, cartItems, chosenClassification?.id, product?.brand?.name])
+  // const disabledAddToCartButton = useMemo(() => {
+  //   return (
+  //     (cartItems[product?.brand?.name ?? '']?.find(
+  //       (cartItem) => cartItem.productClassification.id === chosenClassification?.id,
+  //     )?.quantity ?? 0) +
+  //       quantity >
+  //     MAX_QUANTITY_IN_CART
+  //   )
+  // }, [MAX_QUANTITY_IN_CART, cartItems, chosenClassification?.id, product?.brand?.name, quantity])
+
+  const maxAcceptQuantity = useMemo(() => {
+    const brandName = product?.brand?.name ?? ''
+    if (!cartItems || !cartItems[brandName] || !Array.isArray(cartItems[brandName])) {
+      return MAX_QUANTITY_IN_CART
+    }
+
+    if (!chosenClassification?.id) {
+      return MAX_QUANTITY_IN_CART
+    }
+
+    const foundItem = cartItems[brandName].find(
+      (cartItem) => cartItem.productClassification?.id === chosenClassification.id,
+    )
+
+    return MAX_QUANTITY_IN_CART - (foundItem?.quantity ?? 0)
+  }, [MAX_QUANTITY_IN_CART, cartItems, chosenClassification?.id, product?.brand?.name])
+
+  const disabledAddToCartButton = useMemo(() => {
+    const brandName = product?.brand?.name ?? ''
+    if (!cartItems || !cartItems[brandName] || !Array.isArray(cartItems[brandName])) {
+      return quantity > MAX_QUANTITY_IN_CART
+    }
+
+    if (!chosenClassification?.id) {
+      return quantity > MAX_QUANTITY_IN_CART
+    }
+
+    const foundItem = cartItems[brandName].find(
+      (cartItem) => cartItem.productClassification?.id === chosenClassification.id,
+    )
+
+    return (foundItem?.quantity ?? 0) + quantity > MAX_QUANTITY_IN_CART
+  }, [MAX_QUANTITY_IN_CART, cartItems, chosenClassification?.id, product?.brand?.name, quantity])
 
   const { mutateAsync: createCartItemFn } = useMutation({
     mutationKey: [createCartItemApi.mutationKey],
@@ -138,9 +214,23 @@ const ProductDetailAction = ({
     if (/^\d+$/.test(value)) {
       const parsedValue = parseInt(value, 10)
 
-      if (parsedValue > 0 && parsedValue <= MAX_QUANTITY_IN_CART) {
+      if (
+        parsedValue > 0 &&
+        parsedValue <= MAX_QUANTITY_IN_CART &&
+        maxAcceptQuantity &&
+        parsedValue <= maxAcceptQuantity &&
+        maxAcceptQuantity > 1
+      ) {
         setInputValue(value)
         setQuantity(parsedValue)
+      } else if (parsedValue > maxAcceptQuantity && cartQuantity > 0) {
+        errorToast({
+          message: t('cart.invalidQuantityMessage', {
+            count: chosenClassification?.quantity,
+            itemQuantity: cartQuantity,
+          }),
+          isShowDescription: false,
+        })
       } else if (parsedValue > MAX_QUANTITY_IN_CART) {
         errorToast({
           message: t('cart.maxQuantityError', { maxQuantity: MAX_QUANTITY_IN_CART }),
@@ -153,15 +243,63 @@ const ProductDetailAction = ({
   }
 
   const total = calculateTotalPrice(chosenClassification?.price ?? 0, quantity, discount, discountType)
-
+  // const handleBlur = () => {
+  //   const newQuantity = parseInt(inputValue, 10)
+  //   setQuantity(newQuantity)
+  // }
+  // const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  //   if (e.key === 'Enter') {
+  //     const newQuantity = parseInt(inputValue, 10)
+  //     setQuantity(newQuantity)
+  //   }
+  // }
   const handleBlur = () => {
+    if (inputValue === '' || !/^\d+$/.test(inputValue)) {
+      setInputValue('1')
+      setQuantity(1)
+      return
+    }
+
     const newQuantity = parseInt(inputValue, 10)
-    setQuantity(newQuantity)
+
+    if (newQuantity <= 0 || isNaN(newQuantity)) {
+      setInputValue('1')
+      setQuantity(1)
+    } else if (newQuantity > MAX_QUANTITY_IN_CART) {
+      setInputValue(MAX_QUANTITY_IN_CART.toString())
+      setQuantity(MAX_QUANTITY_IN_CART)
+    } else if (newQuantity > maxAcceptQuantity) {
+      setInputValue(maxAcceptQuantity.toString())
+      setQuantity(maxAcceptQuantity)
+    } else {
+      setInputValue(newQuantity.toString())
+      setQuantity(newQuantity)
+    }
   }
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
+      if (inputValue === '' || !/^\d+$/.test(inputValue)) {
+        setInputValue('1')
+        setQuantity(1)
+        return
+      }
+
       const newQuantity = parseInt(inputValue, 10)
-      setQuantity(newQuantity)
+
+      if (newQuantity <= 0 || isNaN(newQuantity)) {
+        setInputValue('1')
+        setQuantity(1)
+      } else if (newQuantity > MAX_QUANTITY_IN_CART) {
+        setInputValue(MAX_QUANTITY_IN_CART.toString())
+        setQuantity(MAX_QUANTITY_IN_CART)
+      } else if (newQuantity > maxAcceptQuantity) {
+        setInputValue(maxAcceptQuantity.toString())
+        setQuantity(maxAcceptQuantity)
+      } else {
+        setInputValue(newQuantity.toString())
+        setQuantity(newQuantity)
+      }
     }
   }
 
@@ -225,7 +363,7 @@ const ProductDetailAction = ({
           <IncreaseDecreaseButton
             onIncrease={increaseQuantity}
             onDecrease={decreaseQuantity}
-            isIncreaseDisabled={quantity >= MAX_QUANTITY_IN_CART}
+            isIncreaseDisabled={quantity >= MAX_QUANTITY_IN_CART || quantity >= maxAcceptQuantity}
             isDecreaseDisabled={quantity <= 1}
             inputValue={inputValue}
             handleInputChange={handleInputChange}
@@ -250,6 +388,10 @@ const ProductDetailAction = ({
           <span className="text-red-500 text-sm">{t('cart.soldOutMessage')}</span>
         ) : chosenClassification && chosenClassification?.status !== StatusEnum.ACTIVE ? (
           <span className="text-gray-500 text-sm">{t('cart.hiddenMessage')}</span>
+        ) : disabledAddToCartButton ? (
+          <span className="text-red-500 text-sm">
+            {t('cart.invalidQuantityMessage', { count: chosenClassification?.quantity, itemQuantity: cartQuantity })}
+          </span>
         ) : null}
 
         {chosenClassification ? (
@@ -258,6 +400,7 @@ const ProductDetailAction = ({
             <div className="text-2xl font-bold text-red-500">{t('productCard.price', { price: total })}</div>
           </div>
         ) : null}
+
         <div className="space-y-2">
           {!isInGroupBuying && (
             <Button
@@ -283,6 +426,7 @@ const ProductDetailAction = ({
             disabled={
               !(product.status === ProductEnum.OFFICIAL || product.status === ProductEnum.FLASH_SALE) ||
               !inStock ||
+              disabledAddToCartButton ||
               (!chosenClassification && hasCustomType) ||
               (chosenClassification &&
                 (chosenClassification?.quantity <= 0 || chosenClassification?.status !== StatusEnum.ACTIVE))

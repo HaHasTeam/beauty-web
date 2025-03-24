@@ -33,7 +33,6 @@ export default function ClassificationPopover({
   preventAction,
 }: ClassificationPopoverProps) {
   const { t } = useTranslation()
-  console.log(productClassification)
   const [currentSelectClassification, setCurrentSelectClassification] = useState<IClassification | null>(
     productClassification,
   )

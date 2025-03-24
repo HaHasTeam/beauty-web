@@ -534,6 +534,7 @@
     "unPublishMessage": "Sản phẩm này hiện không khả dụng.",
     "hiddenAllMessage": "Sản phẩm này đã bị ẩn.",
     "hiddenMessage": "Phân loại hàng này đã bị ẩn, vui lòng chọn phân loại khác.",
+    "invalidQuantityMessage": " Sản phẩm còn {{count}} cái. Bạn đã có {{itemQuantity}} trong giỏ. Không thể thêm vượt quá số lượng còn lại!",
     "maxQuantityError": "Số lượng còn lại của phân loại sản phẩm này là {{maxQuantity}}.",
     "negativeQuantityError": "Số lượng sản phẩm không thể bé hơn 1.",
     "addToCartSuccess": "Sản phẩm đã được thêm vào giỏ hàng.",
