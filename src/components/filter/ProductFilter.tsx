@@ -14,7 +14,7 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import { getAllCategoryApi } from '@/network/apis/category'
 import { ICategory } from '@/types/category'
-import { ProductEnum, ProductTagEnum } from '@/types/enum'
+import { ProductEnum } from '@/types/enum'
 
 import { Slider } from '../ui/slider'
 
@@ -25,11 +25,10 @@ export interface PriceRange {
 
 interface ProductFilterProps {
   onCategoriesSelect: (categoryIds: string[]) => void
-  onTagsSelect: (tags: ProductTagEnum[]) => void
+
   onStatusSelect: (statuses: ProductEnum[]) => void
   onPriceRangeSelect: (priceRange: PriceRange) => void
   selectedCategoryIds?: string[]
-  selectedTags?: ProductTagEnum[]
   selectedStatuses?: ProductEnum[]
   selectedPriceRange?: PriceRange
 }
@@ -63,11 +62,10 @@ const formatPrice = (price: number | null): string => {
 
 const ProductFilter = ({
   onCategoriesSelect,
-  onTagsSelect,
   onStatusSelect,
   onPriceRangeSelect,
   selectedCategoryIds = [],
-  selectedTags = [],
+
   selectedStatuses = [],
   selectedPriceRange = { min: null, max: null },
 }: ProductFilterProps) => {
@@ -85,7 +83,7 @@ const ProductFilter = ({
   // Consolidated filter state
   const [filters, setFilters] = useState({
     categoryIds: selectedCategoryIds,
-    tags: selectedTags,
+
     statuses: selectedStatuses,
     priceRange: selectedPriceRange,
   })
@@ -101,7 +99,7 @@ const ProductFilter = ({
     setFilters((prev) => ({
       ...prev,
       categoryIds: selectedCategoryIds,
-      tags: selectedTags,
+
       statuses: selectedStatuses,
       priceRange: selectedPriceRange,
     }))
@@ -113,7 +111,7 @@ const ProductFilter = ({
         selectedPriceRange.max !== null ? selectedPriceRange.max : MAX_PRICE,
       ])
     }
-  }, [selectedCategoryIds, selectedTags, selectedStatuses, selectedPriceRange])
+  }, [selectedCategoryIds, selectedStatuses, selectedPriceRange])
 
   const { data: categoryListData, isLoading: isCategoryListLoading } = useQuery({
     queryKey: [getAllCategoryApi.queryKey],
@@ -147,19 +145,6 @@ const ProductFilter = ({
       })
     },
     [onCategoriesSelect],
-  )
-
-  // Handle tag selection
-  const handleTagToggle = useCallback(
-    (tag: ProductTagEnum) => {
-      setFilters((prev) => {
-        const updatedTags = prev.tags.includes(tag) ? prev.tags.filter((t) => t !== tag) : [...prev.tags, tag]
-
-        onTagsSelect(updatedTags)
-        return { ...prev, tags: updatedTags }
-      })
-    },
-    [onTagsSelect],
   )
 
   // Handle status selection
@@ -212,23 +197,6 @@ const ProductFilter = ({
     [onPriceRangeSelect],
   )
 
-  // Get tag display name
-  const getTagDisplayName = useCallback(
-    (tag: ProductTagEnum) => {
-      switch (tag) {
-        case ProductTagEnum.BEST_SELLER:
-          return t('filter.tags.bestSeller', 'Best Seller')
-        case ProductTagEnum.HOT:
-          return t('filter.tags.hot', 'Hot')
-        case ProductTagEnum.NEW:
-          return t('filter.tags.new', 'New')
-        default:
-          return tag
-      }
-    },
-    [t],
-  )
-
   // Get status display name
   const getStatusDisplayName = useCallback(
     (status: ProductEnum) => {
@@ -254,7 +222,6 @@ const ProductFilter = ({
   const hasFilters = useMemo(
     () =>
       filters.categoryIds.length > 0 ||
-      filters.tags.length > 0 ||
       filters.statuses.length > 0 ||
       filters.priceRange.min !== null ||
       filters.priceRange.max !== null,
@@ -264,10 +231,9 @@ const ProductFilter = ({
   // Handle apply filters
   const handleApplyFilters = useCallback(() => {
     onCategoriesSelect(filters.categoryIds)
-    onTagsSelect(filters.tags)
     onStatusSelect(filters.statuses)
     onPriceRangeSelect({ min: sliderValues[0], max: sliderValues[1] })
-  }, [filters, sliderValues, onCategoriesSelect, onTagsSelect, onStatusSelect, onPriceRangeSelect])
+  }, [filters, sliderValues, onCategoriesSelect, onStatusSelect, onPriceRangeSelect])
 
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-100">
@@ -376,32 +342,6 @@ const ProductFilter = ({
                 )}
               </CollapsibleContent>
             </Collapsible>
-            <Separator className="my-2" />
-
-            {/* Product Tags Section */}
-            <Collapsible
-              open={openSections.tags}
-              onOpenChange={(open) => setOpenSections((prev) => ({ ...prev, tags: open }))}
-            >
-              <CollapsibleTrigger className="flex w-full items-center justify-between py-2">
-                <span className="text-sm md:text-base font-medium">{t('filter.productTags', 'Product Tags')}</span>
-                {openSections.tags ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-              </CollapsibleTrigger>
-              <CollapsibleContent className="space-y-2 py-2">
-                {Object.values(ProductTagEnum).map((tag) => (
-                  <div key={tag} className="flex items-center space-x-2">
-                    <Checkbox
-                      id={`tag-${tag}`}
-                      checked={filters.tags.includes(tag)}
-                      onCheckedChange={() => handleTagToggle(tag)}
-                    />
-                    <Label htmlFor={`tag-${tag}`} className="cursor-pointer text-xs md:text-sm">
-                      {getTagDisplayName(tag)}
-                    </Label>
-                  </div>
-                ))}
-              </CollapsibleContent>
-            </Collapsible>
 
             <Separator className="my-2" />
 
@@ -416,7 +356,10 @@ const ProductFilter = ({
               </CollapsibleTrigger>
               <CollapsibleContent className="space-y-2 py-2">
                 {Object.values(ProductEnum)
-                  .filter((item) => item !== ProductEnum.INACTIVE)
+                  .filter(
+                    (item) =>
+                      item == ProductEnum.FLASH_SALE || item == ProductEnum.OFFICIAL || item == ProductEnum.PRE_ORDER,
+                  )
                   .map((status) => (
                     <div key={status} className="flex items-center space-x-2">
                       <Checkbox

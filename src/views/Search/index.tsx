@@ -20,11 +20,10 @@ import { getCheapestClassification } from '@/utils/product'
 const SearchPage = () => {
   const [currentPage, setCurrentPage] = useState(page)
   const { t } = useTranslation()
-  const [sortOption, setSortOption] = useState<null | string>('priceLowToHigh')
+  const [sortOption, setSortOption] = useState<undefined | string>('priceLowToHigh')
   const location = useLocation()
 
   const [selectedCategories, setSelectedCategories] = useState<string[]>([])
-  const [selectedTags, setSelectedTags] = useState<ProductTagEnum[]>([])
   const [selectedStatuses, setSelectedStatuses] = useState<ProductEnum[]>([])
   const [selectedPriceRange, setSelectedPriceRange] = useState<PriceRange>({ min: null, max: null })
   const query = new URLSearchParams(location.search).get('keyword') || ''
@@ -36,6 +35,14 @@ const SearchPage = () => {
         limit: limit,
         search: query,
         order: sortOption == 'priceLowToHigh' ? 'ASC' : 'DESC',
+
+        sortBy:
+          sortOption == 'priceLowToHigh'
+            ? ProductTagEnum.PRICE_ASC.toString()
+            : sortOption == 'priceHighToLow'
+              ? ProductTagEnum.PRICE_DESC.toString()
+              : sortOption,
+
         categoryId: selectedCategories.length > 0 ? selectedCategories.join() : undefined,
         // tags: selectedTags.length > 0 ? selectedTags : undefined,
         statuses: selectedStatuses.length > 0 ? selectedStatuses.join() : undefined,
@@ -65,11 +72,9 @@ const SearchPage = () => {
               <div className="w-full md:w-64 lg:w-72 mb-4 md:mb-0">
                 <ProductFilter
                   onCategoriesSelect={setSelectedCategories}
-                  onTagsSelect={setSelectedTags}
                   onStatusSelect={setSelectedStatuses}
                   onPriceRangeSelect={setSelectedPriceRange}
                   selectedCategoryIds={selectedCategories}
-                  selectedTags={selectedTags}
                   selectedStatuses={selectedStatuses}
                   selectedPriceRange={selectedPriceRange}
                 />
@@ -127,9 +132,9 @@ const SearchPage = () => {
                             : null,
                         description: product.description,
                         detail: product.detail,
-                        rating: 4.5,
-                        ratingAmount: 250,
-                        soldInPastMonth: 300,
+                        rating: Number(product.averageRating),
+                        ratingAmount: Number(product.totalRatings),
+                        soldInPastMonth: Number(product.salesLast30Days),
 
                         classifications: productClassifications,
                         certificates: product.certificates,

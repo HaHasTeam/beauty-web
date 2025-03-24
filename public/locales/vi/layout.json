@@ -212,7 +212,8 @@
     "trend": "Xu hướng",
     "price": "Giá",
     "lowToHigh": "Từ thấp đến cao",
-    "highToLow": "Từ cao đến thấp"
+    "highToLow": "Từ cao đến thấp",
+    "byTag": "Sắp xếp theo {{tag}}"
   },
   "empty": {
     "search": {

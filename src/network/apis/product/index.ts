@@ -53,7 +53,7 @@ interface FilterParamProducts extends TBaseFilterRequestParams {
 
 export const getProductFilterApi = toQueryFetcher<
   FilterParamProducts,
-  TServerResponse<{ total: string }, IResponseProduct[]>
+  TServerResponse<{ total: string; limit: string; page: string }, IResponseProduct[]>
 >('getProductFilterApi', async (params) => {
   return publicRequest(`/products/filter-product`, {
     method: 'GET',

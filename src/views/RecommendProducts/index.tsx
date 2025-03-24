@@ -8,7 +8,7 @@ import APIPagination from '@/components/pagination/Pagination'
 import ProductCard from '@/components/product/ProductCard'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
-import { getRecommendProducts } from '@/network/apis/product'
+import { getProductFilterApi } from '@/network/apis/product'
 import { DiscountTypeEnum, OrderEnum, ProductEnum, ProductTagEnum, StatusEnum } from '@/types/enum'
 import { IResponseProduct } from '@/types/product'
 import { calculateDiscountPrice } from '@/utils/price'
@@ -34,20 +34,20 @@ export default function RecommendedProductsPage() {
   // Fetch products with React Query
   const { data: productData, isLoading } = useQuery({
     queryKey: [
-      getRecommendProducts.queryKey,
+      getProductFilterApi.queryKey,
       {
         search: debouncedSearch,
-        tag: selectedTag,
+        sortBy: selectedTag,
         page: currentPage,
         limit: 10,
       },
     ],
-    queryFn: getRecommendProducts.fn,
+    queryFn: getProductFilterApi.fn,
   })
 
   const products = productData?.data.items || []
   // const totalItems = Number(productData?.data?.total) || 0
-  const totalPages = Number(productData?.data.totalPages) || 0
+  const totalPages = Number(productData?.data.total) || 0
 
   const renderProductCard = (product: IResponseProduct) => {
     const productClassifications = product?.productClassifications?.filter(
