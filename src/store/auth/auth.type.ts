@@ -1,11 +1,13 @@
 import { TAuth } from '@/types'
-import { TUserPa } from '@/types/user'
+import { IUser, TUserPa } from '@/types/user'
 
 export type AuthState = {
   isLoading: boolean
   isAuthenticated: boolean
   user?: TUserPa | null
   authData: TAuth | null
+  userFireBase?: IUser | null
+  firebaseToken: string | null
 }
 
 export type AuthActions = {
@@ -14,6 +16,9 @@ export type AuthActions = {
   unAuthenticate: () => void
   resetAuth: () => void
   setAuthState: (params: Partial<AuthState>) => void
+  setFirebaseToken: (token: string) => void
+
+  getFirebaseToken: () => string | null
 }
 
 export type AuthSlice = AuthState & AuthActions

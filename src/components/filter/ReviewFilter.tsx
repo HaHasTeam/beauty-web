@@ -111,7 +111,11 @@ export default function ReviewFilter({ productId, brand }: ReviewFilterProps) {
         const filterParams = convertFiltersToApiParams()
 
         // Call API with filters and pagination
-        await getFeedbackOfProduct({ params: productId, data: filterParams as IFilterFeedbackData })
+        await getFeedbackOfProduct({
+          params: productId,
+          data: filterParams as IFilterFeedbackData,
+          page: page.toString(),
+        })
 
         setCurrentPage(page)
       } catch (error) {
@@ -164,7 +168,7 @@ export default function ReviewFilter({ productId, brand }: ReviewFilterProps) {
 
   return (
     <div>
-      <div className="border-b border-gray-200">
+      <div className="border-b border-gray-200 ">
         <div className="p-5 flex flex-col gap-2">
           <span className="font-semibold text-primary">{t('filter.filterBy')}</span>
           <div className="flex flex-wrap gap-2">
@@ -229,7 +233,9 @@ export default function ReviewFilter({ productId, brand }: ReviewFilterProps) {
       </div>
       {/* pagination */}
       {reviews && reviews.length > 0 && (
-        <APIPagination currentPage={currentPage} onPageChange={handlePageChange} totalPages={totalPages} />
+        <div className="mb-2">
+          <APIPagination currentPage={currentPage} onPageChange={handlePageChange} totalPages={totalPages} />
+        </div>
       )}
     </div>
   )

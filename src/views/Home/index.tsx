@@ -8,14 +8,18 @@ import PreOrderProductSections from '../PreOrderProduct'
 
 function Home() {
   return (
-    <div className="w-full container mx-auto sm:px-4 px-2 py-8 ">
-      <div className="w-full lg:px-28 md:px-16 sm:px-4 px-0 space-y-12">
-        <HomeBanner />
-        <BeautyConsulting />
-        <BeautyOffers />
-        <FlashSale />
-        <RecommendProduct />
-        <PreOrderProductSections />
+    <div className="w-full min-h-screen bg-background">
+      <div className="container mx-auto sm:px-4 px-2 py-8">
+        <div className="w-full lg:px-28 md:px-16 sm:px-4 px-0 space-y-16">
+          <HomeBanner />
+          <div className="space-y-16 animate-fadeIn">
+            <BeautyConsulting />
+            <BeautyOffers />
+            <FlashSale />
+            <RecommendProduct />
+            <PreOrderProductSections />
+          </div>
+        </div>
       </div>
     </div>
   )

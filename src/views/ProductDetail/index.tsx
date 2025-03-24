@@ -188,7 +188,7 @@ const ProductDetail = ({ initProductId, isInGroupBuying = false }: ProductDetail
               ) : (
                 <>
                   {reviewGeneral && reviewGeneral.data ? <ReviewOverall reviewGeneral={reviewGeneral.data} /> : null}
-                  <div>
+                  <div className="w-full">
                     <ReviewFilter productId={productId ?? ''} brand={useProductData?.data?.brand} />
                   </div>
                 </>

@@ -29,13 +29,13 @@ export enum AddressEnum {
 }
 
 export enum ProductEnum {
-  UN_PUBLISHED = 'UN_PUBLISHED',
   FLASH_SALE = 'FLASH_SALE',
   OFFICIAL = 'OFFICIAL',
+  PRE_ORDER = 'PRE_ORDER',
   OUT_OF_STOCK = 'OUT_OF_STOCK',
+  UN_PUBLISHED = 'UN_PUBLISHED',
   INACTIVE = 'INACTIVE',
   BANNED = 'BANNED',
-  PRE_ORDER = 'PRE_ORDER',
 }
 
 export enum FileEnum {
@@ -174,4 +174,11 @@ export enum OrderRequestTypeEnum {
 export enum ActionReceivedEnum {
   RECEIVED = 'RECEIVED',
   NOT_RECEIVED = 'NOT_RECEIVED',
+}
+export enum ProductTagEnum {
+  BEST_SELLER = 'BEST_SELLER',
+  HOT = 'HOT',
+  NEW = 'NEW',
+  PRICE_ASC = 'PRICE_ASC',
+  PRICE_DESC = 'PRICE_DESC',
 }

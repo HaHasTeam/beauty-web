@@ -49,7 +49,8 @@
     "exclusiveBeautyOffersTitle": "Exclusive Beauty Offers",
     "preOderCardTitle": "Pre-orders",
     "groupBuyingDealsCardTitle": "Group-Buying Deals",
-    "recommendProductsTitle": "Recommend Products"
+    "recommendProductsTitle": "Recommend Products",
+    "preOrderTitle": "Upcoming Products"
   },
   "productCard": {
     "currentPrice": "{{price, currency}}",
@@ -165,7 +166,45 @@
     "filterBy": "Filter by",
     "newest": "Newest",
     "hasImage": "Has videos/images",
-    "numberOfStar": "{{count}} star"
+    "numberOfStar": "{{count}} star",
+    "categories": "Categories",
+    "productTags": "Product Tags",
+    "productStatus": "Product Status",
+    "loading": "Loading categories...",
+    "noCategories": "No categories found",
+
+    "tags": {
+      "bestSeller": "Best Seller",
+      "hot": "Hot",
+      "new": "New"
+    },
+    "status": {
+      "preOrder": "Pre-Order",
+      "official": "Official",
+      "outOfStock": "Out of Stock",
+      "inactive": "Inactive"
+    },
+    "price": {
+      "slider": "Slider",
+      "custom": "Custom Range",
+      "quickRanges": "Quick Ranges",
+      "under": "Under",
+      "over": "Over",
+      "min": "Min",
+      "max": "Max",
+      "minPlaceholder": "Min price",
+      "maxPlaceholder": "Max price",
+      "apply": "Apply Price",
+      "under500k": "Under 500,000đ",
+      "500kto1m": "500,000đ - 1,000,000đ",
+      "1mto2m": "1,000,000đ - 2,000,000đ",
+      "2mto5m": "2,000,000đ - 5,000,000đ",
+      "over5m": "Over 5,000,000đ",
+      "error": {
+        "minGreaterThanMax": "Minimum price cannot be greater than maximum price",
+        "negative": "Price cannot be negative"
+      }
+    }
   },
   "sort": {
     "title": "Sort by",
@@ -184,6 +223,18 @@
     "groupBuying": {
       "title": "No group buying deals available",
       "description": "Please come back later to check out the latest group-buying deals from your favorite brands."
+    },
+    "flashSale": {
+      "title": "No Flash Sale Products",
+      "description": "There are currently no Flash Sale products available. Please check back later for new deals!"
+    },
+    "recommendProducts": {
+      "title": "No Recommended Products",
+      "description": "There are currently no recommended products. Please check back later!"
+    },
+    "preOrder": {
+      "title": "No Pre-order Products",
+      "description": "There are currently no products available for pre-order. Please check back later!"
     },
     "search": {
       "title": "No results found",

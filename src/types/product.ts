@@ -107,10 +107,13 @@ export type IResponseProduct = {
   sku?: string
   menu?: string
   updatedAt: string
+  salesLast30Days: string
+  totalSales: string
+  totalRatings: string
+  averageRating: string
   certificates: TServerFile[]
   average_rating: number
   total_ratings: number
-  salesLast30Days: number
 }
 
 export type IProductTable = {

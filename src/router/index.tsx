@@ -13,6 +13,7 @@ import GroupBuyingOfBrand from '@/views/GroupBuy/GroupBuyingOfBrand'
 import Home from '@/views/Home'
 import NotFound from '@/views/NotFound'
 import ProductDetail from '@/views/ProductDetail'
+import RecommendProducts from '@/views/RecommendProducts'
 // import RecommendProducts from '@/views/RecommendProducts'
 import SearchPage from '@/views/Search'
 import ServerError from '@/views/ServerError'
@@ -60,10 +61,10 @@ export default function RouterProvider() {
           path: configs.routes.brandDetail,
           element: <BrandDetail />,
         },
-        // {
-        //   path: configs.routes.recommendProducts,
-        //   element: <RecommendProducts />,
-        // },
+        {
+          path: configs.routes.recommendProducts,
+          element: <RecommendProducts />,
+        },
       ],
     },
     {
