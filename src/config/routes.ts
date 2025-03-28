@@ -34,6 +34,7 @@ const routes = {
   profileNotification: '/profile/notification',
   profileVoucher: '/profile/vouchers',
   profileWallet: '/profile/wallet',
+  profileReport: '/profile/report',
   blogs: '/blogs',
   privacyPolicy: '/privacy-policy',
   termsAndConditions: '/terms-and-condition',

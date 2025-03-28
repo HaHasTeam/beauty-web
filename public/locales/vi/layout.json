@@ -1454,5 +1454,15 @@
       "ADMIN_REJECTED": "Quản trị viên đã từ chối",
       "BRAND_REJECTED": "Thương hiệu đã từ chối"
     }
+  },
+  "btn": {
+    "copyAndShare": "Sao chép và chia sẻ",
+    "cooldown": "Giới hạn thời gian kết thúc trong {{value}} phút"
+  },
+  "walletTerm": {
+    "balance": "Số dư",
+    "topUp": "Nạp tiền",
+    "withdraw": "Rút tiền",
+    "createWallet": "Tạo ví"
   }
 }
