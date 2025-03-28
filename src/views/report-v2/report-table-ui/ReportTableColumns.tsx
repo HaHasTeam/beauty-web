@@ -73,24 +73,6 @@ export function getColumns({ setRowAction }: GetColumnsProps): ColumnDef<IReport
       size: 180,
     },
     {
-      id: 'Reporter',
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Reporter" />,
-      cell: ({ row }) => {
-        const name = row.original.reporter.username || row.original.reporter.email
-        return <div>{name}</div>
-      },
-      size: 200,
-    },
-    {
-      id: 'Assignee',
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Assignee" />,
-      cell: ({ row }) => {
-        const name = row.original.assignee ? row.original.assignee.email : ''
-        return <div>{name}</div>
-      },
-      size: 200,
-    },
-    {
       id: 'resultNote',
       header: ({ column }) => <DataTableColumnHeader column={column} title="Result Note" />,
       cell: ({ row }) => {

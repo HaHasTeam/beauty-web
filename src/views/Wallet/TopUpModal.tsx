@@ -290,7 +290,13 @@ export default function TopUpModal() {
             <div id="payOs-checkout" ref={checkoutRef} className="mb-20"></div>
           )}
           {!depositRes && !paymentLinkRes?.data.url && (
-            <Button className="w-full" variant={'secondary'} loading={form.formState.isSubmitting}>
+            <Button
+              className="w-full"
+              variant={'secondary'}
+              loading={form.formState.isSubmitting}
+              type="button"
+              onClick={form.handleSubmit(onSubmit)}
+            >
               Continue
             </Button>
           )}
@@ -300,7 +306,7 @@ export default function TopUpModal() {
                 <SuccessContent />
               </div>
               <DialogClose className="w-full">
-                <Button className="w-full" variant={'secondary'}>
+                <Button className="w-full" variant={'secondary'} type="button">
                   Close
                 </Button>
               </DialogClose>

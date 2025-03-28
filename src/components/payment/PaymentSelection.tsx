@@ -62,7 +62,7 @@ export default function PaymentSelection({ form, hasPreOrderProduct, totalPaymen
             <div>
               <Dialog>
                 <DialogTrigger>
-                  <Button className="bg-primary hover:bg-primary/70 text-white">
+                  <Button className="bg-primary hover:bg-primary/70 text-white" type="button">
                     <Wallet className="h-5 w-5" />
                     {t('walletTerm.topUp')}
                   </Button>
@@ -115,7 +115,7 @@ export default function PaymentSelection({ form, hasPreOrderProduct, totalPaymen
               {isWalletAvailable && (
                 <Dialog>
                   <DialogTrigger>
-                    <Button className="bg-primary hover:bg-primary/70 text-white">
+                    <Button className="bg-primary hover:bg-primary/70 text-white" type="button">
                       <Wallet className="h-5 w-5" />
                       {t('walletTerm.topUp')}
                     </Button>

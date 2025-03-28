@@ -3,6 +3,7 @@ import { ChangeEvent, forwardRef, HTMLAttributes, useMemo } from 'react'
 
 import { getAllOrderListApi } from '@/network/apis/order'
 import { IOrder } from '@/types/order'
+import { minifyStringId } from '@/utils/string'
 
 import { InputProps } from '../ui/input'
 import { TOption } from '../ui/react-select'
@@ -13,7 +14,7 @@ type Props = HTMLAttributes<HTMLSelectElement> & InputProps
 const getOrderItemDisplay = (order: IOrder) => {
   return (
     <div className="flex items-center gap-1">
-      <span>{order?.id}</span>
+      <span>{minifyStringId(order?.id)}</span>
     </div>
   )
 }
@@ -32,7 +33,7 @@ const SelectOrder = forwardRef<HTMLSelectElement, Props>((props) => {
       .filter(() => true)
       .map((order) => ({
         value: order.id,
-        label: order.id,
+        label: minifyStringId(order.id),
         display: getOrderItemDisplay(order),
       }))
   }, [orderList])
@@ -45,7 +46,7 @@ const SelectOrder = forwardRef<HTMLSelectElement, Props>((props) => {
         const order = orderList?.data.find((order) => order.id === option)
         return {
           value: order?.id,
-          label: order?.id,
+          label: minifyStringId(order?.id ?? ''),
           display: getOrderItemDisplay(order as IOrder),
         }
       })
@@ -54,7 +55,7 @@ const SelectOrder = forwardRef<HTMLSelectElement, Props>((props) => {
       const order = orderList?.data.find((order) => order.id === value)
       return {
         value: order?.id,
-        label: order?.id,
+        label: minifyStringId(order?.id ?? ''),
         display: getOrderItemDisplay(order as IOrder),
       }
     }
