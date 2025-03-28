@@ -495,6 +495,7 @@
     "total": "Tổng",
     "remove": "Xóa",
     "checkout": "Thanh toán",
+    "placeOrder": "Đặt hàng",
     "confirmGroupOrder": "Xác nhận đơn hàng",
     "editGroupOrder": "Chỉnh sửa đơn hàng",
     "continueShopping": "Tiếp tục mua sắm",
@@ -511,7 +512,7 @@
     "selectAll": "Chọn tất cả",
     "removeAll": "Xóa tất cả",
     "voucher": "Voucher",
-    "selectVoucher": "Chọn hoặc nhập voucher",
+    "selectVoucher": "Chọn voucher",
     "buy": "Mua hàng",
     "action": "Hành động",
     "terms": "Điều khoản và Điều kiện của chúng tôi",
@@ -609,7 +610,7 @@
     "condition": "Điều kiện",
     "chooseProductBrandAlert": "Vui lòng chọn sản phẩm từ thương hiệu để áp dụng voucher.",
     "chooseProductAppAlert": "Vui lòng chọn sản phẩm để sử dụng ưu đãi.",
-    "description": "Nhập hoặc chọn 1 voucher",
+    "description": "Chọn 1 voucher",
     "help": "Trợ giúp",
     "chooseVoucher": "Chọn voucher",
     "howToUse": "Cách Sử Dụng Voucher",
@@ -1453,5 +1454,15 @@
       "ADMIN_REJECTED": "Quản trị viên đã từ chối",
       "BRAND_REJECTED": "Thương hiệu đã từ chối"
     }
+  },
+  "btn": {
+    "copyAndShare": "Sao chép và chia sẻ",
+    "cooldown": "Giới hạn thời gian kết thúc trong {{value}} phút"
+  },
+  "walletTerm": {
+    "balance": "Số dư",
+    "topUp": "Nạp tiền",
+    "withdraw": "Rút tiền",
+    "createWallet": "Tạo ví"
   }
 }

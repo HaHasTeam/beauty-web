@@ -450,6 +450,7 @@ const Checkout = () => {
                         <PaymentSelection
                           form={form}
                           hasPreOrderProduct={hasPreOrderProduct(flattenObject(selectedCartItem))}
+                          totalPayment={totalPayment}
                         />
                       </div>
                     )}
