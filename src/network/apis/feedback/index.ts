@@ -40,9 +40,13 @@ export const getFeedbackGeneralOfProductApi = toQueryFetcher<string, TServerResp
 export const filterFeedbackApi = toMutationFetcher<
   IFilterFeedback,
   TServerResponse<{ total: number; totalPages: number }, IResponseFilterFeedback[]>
->('filterFeedbackApi', async ({ params, data }) => {
+>('filterFeedbackApi', async ({ params, data, page, limit }) => {
   return privateRequest(`/feedbacks/filter/${params}`, {
     method: 'POST',
+    params: {
+      page: page || '1',
+      limit: limit || '2',
+    },
     data: data
       ? {
           type: data?.type,

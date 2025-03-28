@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import useHandleServerError from '@/hooks/useHandleServerError'
 import { getCheckoutListBrandVouchersApi } from '@/network/apis/voucher'
@@ -28,6 +27,7 @@ interface VoucherCartListProps {
   handleVoucherChange: (voucher: TVoucher | null) => void
   bestVoucherForBrand: IBrandBestVoucher
   chosenBrandVoucher: TVoucher | null
+  voucherDiscount: number
 }
 const VoucherCartList = ({
   triggerText,
@@ -40,6 +40,7 @@ const VoucherCartList = ({
   bestVoucherForBrand,
   selectedCheckoutItems,
   chosenBrandVoucher,
+  voucherDiscount,
 }: VoucherCartListProps) => {
   const { t } = useTranslation()
   const handleServerError = useHandleServerError()
@@ -98,10 +99,10 @@ const VoucherCartList = ({
   // }, [useBrandVoucher])
 
   useEffect(() => {
-    if (!hasBrandProductSelected) {
+    if (!hasBrandProductSelected || voucherDiscount === 0) {
       setSelectedVoucher('')
     }
-  }, [hasBrandProductSelected])
+  }, [hasBrandProductSelected, voucherDiscount])
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -127,7 +128,7 @@ const VoucherCartList = ({
             </div>
           )}
           {/* Voucher Input */}
-          <div className="md:flex-row flex-col flex gap-2 mb-6 bg-secondary/40 p-2 rounded-lg md:items-center items-start">
+          {/* <div className="md:flex-row flex-col flex gap-2 mb-6 bg-secondary/40 p-2 rounded-lg md:items-center items-start">
             <label
               htmlFor="voucherInput"
               className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -136,11 +137,11 @@ const VoucherCartList = ({
             </label>
             <div className="flex gap-2 w-full">
               <Input id="voucherInput" placeholder={t('voucher.input')} className="bg-white" />
-              <Button variant="outline" className="w-24">
+              <Button type="button" variant="outline" className="w-24">
                 {t('voucher.apply')}
               </Button>
             </div>
-          </div>
+          </div> */}
 
           {isLoading ? (
             <div className="h-36 flex justify-center items-center">
@@ -197,10 +198,10 @@ const VoucherCartList = ({
                 </RadioGroup>
               </ScrollArea>
               <div className="flex justify-end gap-2 w-full shadow-inner pt-4">
-                <Button variant="outline" onClick={() => setOpen(false)}>
+                <Button type="button" variant="outline" onClick={() => setOpen(false)}>
                   {t('dialog.cancel')}
                 </Button>
-                <Button onClick={handleConfirm} disabled={!hasBrandProductSelected}>
+                <Button type="button" onClick={handleConfirm} disabled={!hasBrandProductSelected}>
                   {t('dialog.ok')}
                 </Button>
               </div>

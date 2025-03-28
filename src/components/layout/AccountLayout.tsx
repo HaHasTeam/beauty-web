@@ -7,7 +7,9 @@ import configs from '@/config'
 import { useStore } from '@/store/store'
 
 function AccountLayout() {
-  const { unAuthenticate } = useStore(useShallow((state) => ({ unAuthenticate: state.unAuthenticate })))
+  const { unAuthenticate, user } = useStore(
+    useShallow((state) => ({ unAuthenticate: state.unAuthenticate, user: state.user })),
+  )
   const navigate = useNavigate()
   return (
     <div className="grid min-h-screen w-full lg:grid-cols-[280px_1fr] max-w-7xl mx-auto">
@@ -16,7 +18,7 @@ function AccountLayout() {
           <div className="flex h-[60px] items-center border-b px-6">
             <Link className="flex items-center gap-2 font-semibold" to={configs.routes.profile}>
               <User className="h-6 w-6" />
-              <span>account name</span>
+              <span>{user?.username}</span>
             </Link>
           </div>
           <div className="flex-1 px-3">
@@ -116,7 +118,7 @@ function AccountLayout() {
               </Button>
 
               <Button
-                variant="destructive"
+                variant="default"
                 className="w-full justify-start"
                 onClick={() => {
                   console.log('đăng xuất')

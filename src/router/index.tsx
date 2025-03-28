@@ -13,10 +13,12 @@ import GroupBuyingOfBrand from '@/views/GroupBuy/GroupBuyingOfBrand'
 import Home from '@/views/Home'
 import NotFound from '@/views/NotFound'
 import ProductDetail from '@/views/ProductDetail'
+import RecommendProducts from '@/views/RecommendProducts'
 // import RecommendProducts from '@/views/RecommendProducts'
 import SearchPage from '@/views/Search'
 import ServerError from '@/views/ServerError'
 
+import PublicGuard from './guard/PublicGuard'
 import privateRoutes from './privateRoutes'
 import publicRoutes from './publicRoutes'
 
@@ -25,7 +27,11 @@ export default function RouterProvider() {
     ...privateRoutes,
     ...publicRoutes,
     {
-      element: <PrimaryLayout />,
+      element: (
+        <PublicGuard>
+          <PrimaryLayout />
+        </PublicGuard>
+      ),
       children: [
         {
           path: configs.routes.home,
@@ -55,10 +61,10 @@ export default function RouterProvider() {
           path: configs.routes.brandDetail,
           element: <BrandDetail />,
         },
-        // {
-        //   path: configs.routes.recommendProducts,
-        //   element: <RecommendProducts />,
-        // },
+        {
+          path: configs.routes.recommendProducts,
+          element: <RecommendProducts />,
+        },
       ],
     },
     {

@@ -11,7 +11,7 @@ import { TUserPa } from '@/types/user'
 // AuthGuard is component that will be used to protect routes
 // that should only be accessed by authenticated users.
 const AuthGuard: FC<PropsWithChildren> = ({ children }) => {
-  const { isAuthenticated, isLoading, authData, setAuthState } = useStore(
+  const { isAuthenticated, isLoading, setAuthState } = useStore(
     useShallow((state) => ({
       isAuthenticated: state.isAuthenticated,
       isLoading: state.isLoading,
@@ -37,7 +37,7 @@ const AuthGuard: FC<PropsWithChildren> = ({ children }) => {
         isLoading: isGettingUserProfile,
       })
     }
-  }, [isAuthenticated, authData, setAuthState, useProfileData, isGettingUserProfile])
+  }, [isAuthenticated, setAuthState, useProfileData, isGettingUserProfile])
 
   if (!isAuthenticated) return <Navigate to={routes.signIn} replace />
 

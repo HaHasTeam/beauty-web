@@ -5,6 +5,8 @@ import { NuqsAdapter } from 'nuqs/adapters/react'
 import { Toaster } from 'sonner'
 
 import RouterProvider from '@/router'
+
+import { ChatPopup } from './components/chat/chat-popup'
 // Create a client
 const queryClient = new QueryClient()
 function App() {
@@ -16,7 +18,8 @@ function App() {
             <RouterProvider />
             {/* <ReactQueryDevtools initialIsOpen={true} /> */}
 
-            <Toaster closeButton position="top-center" richColors />
+          <Toaster closeButton position="top-center" richColors />
+            <ChatPopup />
           </QueryClientProvider>
         </NuqsAdapter>
       </TooltipProvider>

@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import ReactQuill from 'react-quill-new'
 import { useParams } from 'react-router-dom'
@@ -35,6 +35,8 @@ const ProductDetail = ({ initProductId, isInGroupBuying = false }: ProductDetail
     productId = initProductId
   }
   const { t } = useTranslation()
+  const [chosenClassification, setChosenClassification] = useState<IClassification | null>(null)
+
   const { data: useProductData, isFetching } = useQuery({
     queryKey: [getProductApi.queryKey, productId as string],
     queryFn: getProductApi.fn,
@@ -69,9 +71,13 @@ const ProductDetail = ({ initProductId, isInGroupBuying = false }: ProductDetail
 
     switch (event) {
       case OrderEnum.FLASH_SALE:
-        return useProductData.data.productDiscounts?.[0]?.productClassifications
+        return useProductData.data.productDiscounts?.filter(
+          (product) => product.status === ProductDiscountEnum.ACTIVE,
+        )?.[0]?.productClassifications
       case OrderEnum.PRE_ORDER:
-        return useProductData.data.preOrderProducts?.[0]?.productClassifications
+        return useProductData.data.preOrderProducts?.filter(
+          (product) => product.status === PreOrderProductEnum.ACTIVE,
+        )?.[0]?.productClassifications
       default:
         return useProductData.data.productClassifications
     }
@@ -91,14 +97,15 @@ const ProductDetail = ({ initProductId, isInGroupBuying = false }: ProductDetail
   )
   const inStock = productClassifications?.some((classification) => classification?.quantity > 0) ?? false
 
-  const [chosenClassification, setChosenClassification] = useState<IClassification | null>(
-    !hasCustomType && productClassifications ? productClassifications?.[0] : null,
-  )
   const reviewSectionRef = useRef<HTMLDivElement | null>(null)
-
   const scrollToReviews = () => {
     reviewSectionRef.current?.scrollIntoView({ behavior: 'smooth' })
   }
+  useEffect(() => {
+    if (!hasCustomType && productClassifications?.length) {
+      setChosenClassification(productClassifications[0]) // Set default classification
+    }
+  }, [productClassifications, hasCustomType])
 
   return (
     <div className="w-full mx-auto px-4 py-5">
@@ -165,10 +172,27 @@ const ProductDetail = ({ initProductId, isInGroupBuying = false }: ProductDetail
             {/* product reviews */}
             <div className="flex gap-2 bg-white rounded-lg" id="customerReviews" ref={reviewSectionRef}>
               {isFetchingReviewGeneral && <LoadingIcon />}
-              {reviewGeneral && reviewGeneral.data ? <ReviewOverall reviewGeneral={reviewGeneral.data} /> : null}
-              <div>
-                <ReviewFilter productId={productId ?? ''} />
-              </div>
+              {reviewGeneral?.data.totalCount === 0 ? (
+                <div className="p-4 flex flex-col justify-center w-full">
+                  <h2 className="text-xl font-medium mb-4 text-primary">{t('reviews.customerReview')}</h2>
+                  <div className="flex justify-center items-center">
+                    <Empty
+                      title={t('empty.feedback.title')}
+                      description={t('empty.feedback.description', {
+                        filter: '',
+                        filterCallAction: '',
+                      })}
+                    />
+                  </div>
+                </div>
+              ) : (
+                <>
+                  {reviewGeneral && reviewGeneral.data ? <ReviewOverall reviewGeneral={reviewGeneral.data} /> : null}
+                  <div className="w-full">
+                    <ReviewFilter productId={productId ?? ''} brand={useProductData?.data?.brand} />
+                  </div>
+                </>
+              )}
             </div>
 
             {/* other product in same brand */}

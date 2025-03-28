@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { ChevronDown } from 'lucide-react'
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import fallBackImage from '@/assets/images/fallBackImage.jpg'
@@ -33,7 +33,6 @@ export default function ClassificationPopover({
   preventAction,
 }: ClassificationPopoverProps) {
   const { t } = useTranslation()
-  console.log(productClassification)
   const [currentSelectClassification, setCurrentSelectClassification] = useState<IClassification | null>(
     productClassification,
   )
@@ -41,9 +40,9 @@ export default function ClassificationPopover({
   const [isOpen, setIsOpen] = useState(false)
   const [isProcessing, setIsProcessing] = useState(false)
   const [selectedValues, setSelectedValues] = useState<IClassificationSelection>({
-    color: null,
-    size: null,
-    other: null,
+    color: productClassification?.color || null,
+    size: productClassification?.size || null,
+    other: productClassification?.other || null,
   })
 
   // const isProductClassificationActive = checkCurrentProductClassificationActive(productClassification, classifications)
@@ -114,16 +113,6 @@ export default function ClassificationPopover({
   //   setCurrentSelectClassification(option)
   // }
 
-  const getAllOptions = (key: IClassificationKey): string[] => {
-    return [
-      ...new Set(
-        classifications
-          ?.map((classification) => classification[key])
-          .filter((value): value is string => value !== null),
-      ),
-    ]
-  }
-
   const getAvailableOptions = (key: IClassificationKey, selections: IClassificationSelection) => {
     return [
       ...new Set(
@@ -137,18 +126,39 @@ export default function ClassificationPopover({
       ),
     ]
   }
-
-  const allOptions = {
-    color: getAllOptions('color'),
-    size: getAllOptions('size'),
-    other: getAllOptions('other'),
-  }
+  const allOptions = useMemo(() => {
+    const getAllOptions = (key: IClassificationKey): string[] => {
+      return [
+        ...new Set(
+          classifications
+            ?.map((classification) => classification[key])
+            .filter((value): value is string => value !== null),
+        ),
+      ]
+    }
+    return {
+      color: getAllOptions('color'),
+      size: getAllOptions('size'),
+      other: getAllOptions('other'),
+    }
+  }, [classifications])
+  const getFirstAttributeKey = useCallback(() => {
+    const keys: IClassificationKey[] = ['color', 'size', 'other']
+    for (const key of keys) {
+      if (allOptions[key]?.length > 0) {
+        return key
+      }
+    }
+    return null
+  }, [allOptions])
 
   const availableOptions = {
     color: getAvailableOptions('color', selectedValues),
     size: getAvailableOptions('size', selectedValues),
     other: getAvailableOptions('other', selectedValues),
   }
+
+  const firstAttributeKey = getFirstAttributeKey()
   const handleSelection = (key: IClassificationKey, value: string) => {
     setSelectedValues((prev) => {
       const updatedValues = {
@@ -163,7 +173,7 @@ export default function ClassificationPopover({
       console.log(isComplete)
       if (isComplete) {
         const matchingClassification = classifications?.find((classification) =>
-          Object.entries(updatedValues).every(([k, v]) => classification[k as IClassificationKey] === v),
+          Object.entries(updatedValues).every(([k, v]) => !v || classification[k as IClassificationKey] === v),
         )
 
         if (matchingClassification) {
@@ -176,44 +186,77 @@ export default function ClassificationPopover({
       return updatedValues
     })
   }
-  console.log(currentSelectClassification)
 
   const renderOptions = (key: IClassificationKey, options: string[]) => {
     if (!options.length) return null
 
-    const showImage = key === 'color' ? allOptions.color.length > 0 : key === 'other' && allOptions.color.length === 0
-    console.log('op', options)
+    const showImage = key === firstAttributeKey
     return (
       <div className="flex gap-3 items-center w-full">
         <div className="text-gray-600 w-1/5">{t(`productDetail.${key.charAt(0).toUpperCase() + key.slice(1)}`)}</div>
         <div className="w-4/5 flex flex-wrap items-start gap-2">
           {options.map((option) => {
-            const classification = classifications.find((c) => c[key] === option)
-            console.log(
-              currentSelectClassification,
-              classifications,
-              classification,
-              currentSelectClassification?.id === classification?.id,
+            const matchingClassifications = classifications.filter((c) => c[key] === option)
+
+            const isPartOfCurrentClassification = currentSelectClassification
+              ? currentSelectClassification[key] === option
+              : false
+
+            const isSelectedValue = selectedValues[key] === option
+
+            const matchingClassification = matchingClassifications.find((c) =>
+              Object.entries(selectedValues)
+                .filter(([k]) => k !== key)
+                .every(([k, v]) => !v || c[k as IClassificationKey] === v),
             )
+
+            const isActive = matchingClassification
+              ? checkCurrentProductClassificationActive(matchingClassification, classifications)
+              : false
+
             return (
+              // <Button
+              //   onClick={() => handleSelection(key, option)}
+              //   key={option}
+              //   variant="outline"
+              //   className={`w-fit h-fit justify-start px-2 py-2 text-sm ${
+              //     selectedValues[key] === option ? 'bg-accent text-accent-foreground' : ''
+              //   } ${currentSelectClassification?.id === classification?.id ? 'bg-accent text-accent-foreground' : ''}`}
+              //   disabled={
+              //     !availableOptions[key].includes(option) ||
+              //     (classification && !checkCurrentProductClassificationActive(classification, classifications))
+              //   }
+              // >
+              //   {showImage &&
+              //     classification?.images?.filter((img) => img.status === StatusEnum.ACTIVE)?.[0]?.fileUrl && (
+              //       <div className="w-10 h-10 rounded-md">
+              //         <ImageWithFallback
+              //           alt={option}
+              //           src={classification.images?.filter((img) => img.status === StatusEnum.ACTIVE)?.[0].fileUrl}
+              //           fallback={fallBackImage}
+              //           className="w-full h-full object-cover rounded-md"
+              //         />
+              //       </div>
+              //     )}
+              //   {option}
+              // </Button>
               <Button
                 onClick={() => handleSelection(key, option)}
                 key={option}
                 variant="outline"
                 className={`w-fit h-fit justify-start px-2 py-2 text-sm ${
-                  selectedValues[key] === option ? 'bg-accent text-accent-foreground' : ''
-                } ${currentSelectClassification?.id === classification?.id ? 'bg-accent text-accent-foreground' : ''}`}
-                disabled={
-                  !availableOptions[key].includes(option) ||
-                  (classification && !checkCurrentProductClassificationActive(classification, classifications))
-                }
+                  isSelectedValue ? 'bg-accent text-accent-foreground' : ''
+                } ${isPartOfCurrentClassification ? 'bg-accent text-accent-foreground' : ''}`}
+                disabled={!availableOptions[key].includes(option) || !isActive}
               >
                 {showImage &&
-                  classification?.images?.filter((img) => img.status === StatusEnum.ACTIVE)?.[0]?.fileUrl && (
+                  matchingClassification?.images?.filter((img) => img.status === StatusEnum.ACTIVE)?.[0]?.fileUrl && (
                     <div className="w-10 h-10 rounded-md">
                       <ImageWithFallback
                         alt={option}
-                        src={classification.images?.filter((img) => img.status === StatusEnum.ACTIVE)?.[0].fileUrl}
+                        src={
+                          matchingClassification.images?.filter((img) => img.status === StatusEnum.ACTIVE)?.[0].fileUrl
+                        }
                         fallback={fallBackImage}
                         className="w-full h-full object-cover rounded-md"
                       />
@@ -241,6 +284,11 @@ export default function ClassificationPopover({
 
   const handleCancel = () => {
     setCurrentSelectClassification(chosenClassification)
+    setSelectedValues({
+      color: chosenClassification?.color || null,
+      size: chosenClassification?.size || null,
+      other: chosenClassification?.other || null,
+    })
     setIsOpen(false)
   }
   console.log(classifications, classifications.length > 0)

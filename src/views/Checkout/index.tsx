@@ -34,7 +34,12 @@ import { DiscountTypeEnum, PaymentMethod, ProjectInformationEnum, ResultEnum } f
 import { ICreateGroupOrder, ICreateOrder, IUpdateGroupOrder } from '@/types/order'
 import { IBrandBestVoucher, ICheckoutItem, IPlatformBestVoucher, TVoucher } from '@/types/voucher'
 import { createCheckoutItem, createCheckoutItems } from '@/utils/cart'
-import { calculateCartTotals, calculateTotalCheckoutBrandVoucherDiscount } from '@/utils/price'
+import {
+  calculateCartTotals,
+  calculatePlatformVoucherDiscount,
+  calculateTotalBrandVoucherDiscount,
+  calculateTotalCheckoutBrandVoucherDiscount,
+} from '@/utils/price'
 import { minifyStringId } from '@/utils/string'
 
 import { flattenObject, hasPreOrderProduct } from '../../utils/product/index'
@@ -84,10 +89,24 @@ const Checkout = () => {
   // const totalBrandDiscount = useMemo(() => {
   //   return calculateTotalBrandVoucherDiscount(selectedCartItem, selectedCartItems, chosenBrandVouchers)
   // }, [chosenBrandVouchers, selectedCartItems, selectedCartItem])
-  const totalBrandDiscount = useMemo(() => {
+  const totalBrandBEDiscount = useMemo(() => {
     return calculateTotalCheckoutBrandVoucherDiscount(chosenBrandVouchers)
   }, [chosenBrandVouchers])
-
+  const totalBrandDiscount = useMemo(() => {
+    return calculateTotalBrandVoucherDiscount(selectedCartItem, selectedCartItems, chosenBrandVouchers)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedCartItem, chosenBrandVouchers, selectedCartItems])
+  const platformVoucherDiscount = useMemo(() => {
+    return calculatePlatformVoucherDiscount(
+      selectedCartItem,
+      selectedCartItems,
+      chosenPlatformVoucher,
+      chosenBrandVouchers,
+    )
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedCartItem, selectedCartItems, chosenPlatformVoucher, totalBrandDiscount, chosenBrandVouchers])
+  console.log(totalBrandBEDiscount)
+  console.log(platformVoucherDiscount)
   // Calculate platform voucher discount
   // const totalPlatformDiscount = useMemo(() => {
   //   return calculatePlatformVoucherDiscount(chosenPlatformVoucher)
@@ -98,8 +117,8 @@ const Checkout = () => {
   }, [selectedCartItem, selectedCartItems])
 
   // Total saved price (product discounts + brand vouchers + platform voucher)
-  const totalSavings = totalProductDiscount + totalBrandDiscount + (chosenPlatformVoucher?.discount ?? 0)
-  const totalPayment = totalPrice - totalBrandDiscount - (chosenPlatformVoucher?.discount ?? 0)
+  const totalSavings = totalProductDiscount + totalBrandDiscount + (platformVoucherDiscount ?? 0)
+  const totalPayment = totalPrice - totalBrandDiscount - (platformVoucherDiscount ?? 0)
 
   const defaultOrderValues = {
     orders: [],
@@ -191,7 +210,7 @@ const Checkout = () => {
   })
   async function onSubmit(values: z.infer<typeof CreateOrderSchema>) {
     try {
-      setIsLoading(false)
+      setIsLoading(true)
       const orders = OrderItemCreation({ values, selectedCartItem, chosenBrandVouchers })
       if (groupBuying) {
         if (groupBuyingOrder) {
@@ -334,7 +353,7 @@ const Checkout = () => {
                   <div className="w-full md:full lg:w-[calc(35%-6px)] xl:w-[calc(30%-6px)] flex flex-col gap-3">
                     <AddressSection form={form} addresses={myAddresses} />
                     {/* Voucher Section */}
-                    {!isInGroupBuying && (
+                    {/* {!isInGroupBuying && (
                       <div className="flex items-center gap-4 justify-between p-4 bg-white rounded-md shadow-sm">
                         <div className="flex gap-2 items-center">
                           <Ticket className="text-red-500" />
@@ -344,7 +363,11 @@ const Checkout = () => {
                         </div>
                         <VoucherDialog
                           triggerComponent={
-                            <Button variant="link" className="text-blue-500 h-auto p-0 hover:no-underline">
+                            <Button
+                              type="button"
+                              variant="link"
+                              className="text-blue-500 h-auto p-0 hover:no-underline"
+                            >
                               {chosenPlatformVoucher ? (
                                 chosenPlatformVoucher?.discountType === DiscountTypeEnum.AMOUNT &&
                                 chosenPlatformVoucher?.discountValue ? (
@@ -359,6 +382,54 @@ const Checkout = () => {
                                     })}
                                     <Pen />
                                   </div>
+                                )
+                              ) : (
+                                t('cart.selectVoucher')
+                              )}
+                            </Button>
+                          }
+                          onConfirmVoucher={setChosenPlatformVoucher}
+                          selectedCartItems={selectedCartItems}
+                          chosenPlatformVoucher={chosenPlatformVoucher}
+                          cartByBrand={selectedCartItem}
+                          bestPlatFormVoucher={bestPlatformVoucher}
+                        />
+                      </div>
+                    )} */}
+                    {!isInGroupBuying && (
+                      <div className="flex items-center gap-4 justify-between p-4 bg-white rounded-md shadow-sm">
+                        <div className="flex gap-2 items-center">
+                          <Ticket className="text-red-500" />
+                          <span className="text-lg font-semibold">
+                            {ProjectInformationEnum.name} {t('cart.voucher')}
+                          </span>
+                        </div>
+                        <VoucherDialog
+                          triggerComponent={
+                            <Button variant="link" className="text-blue-500 h-auto p-0 hover:no-underline">
+                              {chosenPlatformVoucher ? (
+                                chosenPlatformVoucher?.discountType === DiscountTypeEnum.AMOUNT &&
+                                platformVoucherDiscount > 0 ? (
+                                  <div className="flex gap-2 items-center">
+                                    {t('voucher.discountAmount', { amount: platformVoucherDiscount })}
+                                    <Pen />
+                                  </div>
+                                ) : (
+                                  <div className="flex gap-2 items-center">
+                                    {t('voucher.discountAmount', { amount: platformVoucherDiscount })}
+                                    <Pen />
+                                  </div>
+                                )
+                              ) : bestPlatformVoucher?.bestVoucher ? (
+                                bestPlatformVoucher?.bestVoucher?.discountType === DiscountTypeEnum.AMOUNT &&
+                                bestPlatformVoucher?.bestVoucher?.discountValue ? (
+                                  t('voucher.bestDiscountAmountDisplay', {
+                                    amount: bestPlatformVoucher?.bestVoucher?.discountValue,
+                                  })
+                                ) : (
+                                  t('voucher.bestDiscountPercentageDisplay', {
+                                    percentage: bestPlatformVoucher?.bestVoucher?.discountValue * 100,
+                                  })
                                 )
                               ) : (
                                 t('cart.selectVoucher')
@@ -389,7 +460,7 @@ const Checkout = () => {
                         totalProductDiscount={totalProductDiscount}
                         totalProductCost={totalProductCost}
                         totalBrandDiscount={totalBrandDiscount}
-                        totalPlatformDiscount={chosenPlatformVoucher?.discount ?? 0}
+                        totalPlatformDiscount={platformVoucherDiscount ?? 0}
                         totalSavings={totalSavings}
                         totalPayment={totalPayment}
                         formId={`form-${formId}`}

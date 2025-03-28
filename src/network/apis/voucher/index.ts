@@ -106,7 +106,7 @@ export const getCheckoutListPlatformVouchersApi = toMutationFetcher<
 export const collectVoucherApi = toMutationFetcher<TVoucher, TServerResponse<TVoucher>>(
   'collectVoucher',
   async (params) => {
-    return privateRequest(`/vouchers/collect-voucher/${params?.id}`, {
+    return privateRequest(`/vouchers/collect-voucher/${params?.code}`, {
       method: 'POST',
       data: params,
     })

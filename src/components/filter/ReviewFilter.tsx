@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import useHandleServerError from '@/hooks/useHandleServerError'
 import { filterFeedbackApi } from '@/network/apis/feedback'
 import { IFilterFeedbackData } from '@/network/apis/feedback/type'
+import { IBrand } from '@/types/brand'
 import { FeedbackFilterEnum } from '@/types/enum'
 import { IResponseFeedback, IResponseFeedbackItemInFilter, IResponseFilterFeedback } from '@/types/feedback'
 
@@ -24,8 +25,9 @@ interface FilterOption {
 
 interface ReviewFilterProps {
   productId: string
+  brand?: IBrand
 }
-export default function ReviewFilter({ productId }: ReviewFilterProps) {
+export default function ReviewFilter({ productId, brand }: ReviewFilterProps) {
   const { t } = useTranslation()
   // const [selectedFilters, setSelectedFilters] = useState<Set<string>>(new Set())
   const [selectedFilter, setSelectedFilter] = useState<string>('')
@@ -109,7 +111,11 @@ export default function ReviewFilter({ productId }: ReviewFilterProps) {
         const filterParams = convertFiltersToApiParams()
 
         // Call API with filters and pagination
-        await getFeedbackOfProduct({ params: productId, data: filterParams as IFilterFeedbackData })
+        await getFeedbackOfProduct({
+          params: productId,
+          data: filterParams as IFilterFeedbackData,
+          page: page.toString(),
+        })
 
         setCurrentPage(page)
       } catch (error) {
@@ -162,7 +168,7 @@ export default function ReviewFilter({ productId }: ReviewFilterProps) {
 
   return (
     <div>
-      <div className="border-b border-gray-200">
+      <div className="border-b border-gray-200 ">
         <div className="p-5 flex flex-col gap-2">
           <span className="font-semibold text-primary">{t('filter.filterBy')}</span>
           <div className="flex flex-wrap gap-2">
@@ -171,7 +177,7 @@ export default function ReviewFilter({ productId }: ReviewFilterProps) {
                 key={option.id}
                 variant={selectedFilter === option.id ? 'outline' : 'outline'}
                 onClick={() => toggleFilter(option.id)}
-                className={`h-8 gap-1.5 rounded-full border-gray-300 ${selectedFilter === option.id ? ' border-primary bg-primary/10 hover:bg-primary/15 text-primary hover:text-primary' : 'border-gray-300'}`}
+                className={`h-8 gap-1.5 rounded-full border-gray-300 ${selectedFilter === option.id ? ' border-primary bg-primary/10 hover:bg-primary/15 text-primary hover:text-primary' : 'border-secondary-foreground text-secondary-foreground hover:text-secondary-foreground'}`}
               >
                 {option.type === 'toggle' && selectedFilter === option.id && <Check className="text-primary/80" />}
                 {option.label}
@@ -206,14 +212,11 @@ export default function ReviewFilter({ productId }: ReviewFilterProps) {
                     review?.orderDetail?.order?.productClassification?.preOrderProduct?.product ??
                     review?.orderDetail?.order?.productClassification?.productDiscount?.product ??
                     review?.orderDetail?.order?.productClassification?.product
-                  )?.brand || null
+                  )?.brand ??
+                  (brand || null)
                 }
                 recipientAvatar={review?.orderDetail?.order?.account?.avatar ?? ''}
-                recipientName={
-                  [review?.orderDetail?.order?.account?.lastName, review?.orderDetail?.order?.account?.firstName].join(
-                    ' ',
-                  ) ?? ''
-                }
+                recipientName={review?.orderDetail?.order?.account?.username ?? ''}
                 orderDetailId={review?.orderDetail?.id}
               />
             )
@@ -229,7 +232,11 @@ export default function ReviewFilter({ productId }: ReviewFilterProps) {
         )}
       </div>
       {/* pagination */}
-      <APIPagination currentPage={currentPage} onPageChange={handlePageChange} totalPages={totalPages} />
+      {reviews && reviews.length > 0 && (
+        <div className="mb-2">
+          <APIPagination currentPage={currentPage} onPageChange={handlePageChange} totalPages={totalPages} />
+        </div>
+      )}
     </div>
   )
 }

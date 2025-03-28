@@ -15,15 +15,15 @@ interface ConsultationCardProps {
 const ConsultationCard: React.FC<ConsultationCardProps> = ({ title, description, icon, linkTo }) => {
   return (
     <Link to={linkTo} className="group">
-      <Card className="relative">
-        <CardContent className="p-6">
-          <div className="flex items-start gap-4">
-            <div className="p-2 bg-orange-100 rounded-lg">{icon}</div>
-            <div className="flex-1">
-              <h3 className="font-semibold mb-2">{title}</h3>
-              <p className="text-sm text-muted-foreground">{description}</p>
+      <Card className="relative h-full">
+        <CardContent className="p-4 lg:p-6">
+          <div className="flex flex-col sm:flex-row items-start gap-4">
+            <div className="p-2 bg-orange-100 rounded-lg shrink-0">{icon}</div>
+            <div className="flex-1 min-w-0">
+              <h3 className="font-semibold mb-2 text-base lg:text-lg">{title}</h3>
+              <p className="text-sm text-muted-foreground line-clamp-3">{description}</p>
             </div>
-            <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:translate-x-1 transition-transform" />
+            <ChevronRight className="hidden sm:block w-5 h-5 text-muted-foreground group-hover:translate-x-1 transition-transform shrink-0" />
           </div>
         </CardContent>
       </Card>
@@ -34,10 +34,10 @@ const ConsultationCard: React.FC<ConsultationCardProps> = ({ title, description,
 export default function BeautyConsulting() {
   const { t } = useTranslation()
   return (
-    <section className="container mx-auto">
-      <h1 className="text-2xl font-semibold mb-6 text-primary">{t('home.consultantTitle')}</h1>
+    <section className="container mx-auto px-4">
+      <h1 className="text-xl lg:text-2xl font-semibold mb-6 text-primary">{t('home.consultantTitle')}</h1>
 
-      <div className="grid md:grid-cols-2 gap-4">
+      <div className="grid sm:grid-cols-1 lg:grid-cols-2 gap-4">
         <ConsultationCard
           title={t('home.standardConsultantTitle')}
           description={t('home.standardConsultantDescription')}

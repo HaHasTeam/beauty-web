@@ -65,4 +65,5 @@ export interface ICategory {
   detail?: ICategoryDetail
   parentCategory?: ICategory | null
   subCategories?: ICategory[]
+  level: number
 }

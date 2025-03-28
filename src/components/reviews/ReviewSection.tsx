@@ -74,18 +74,16 @@ const ReviewSection = ({
           brand={brand}
           onReplyClick={handleReplyClick}
         />
-        {feedback.replies && feedback.replies.length > 0 && (
-          <BrandAnswer
-            showRep={showRep}
-            replies={feedback.replies}
-            feedback={feedback}
-            isOpen={true}
-            setShowRep={setShowRep}
-            replyFormRef={replyFormRef}
-            onReplyClick={handleReplyClick}
-            brand={brand}
-          />
-        )}
+        <BrandAnswer
+          showRep={showRep}
+          replies={feedback.replies}
+          feedback={feedback}
+          isOpen={true}
+          setShowRep={setShowRep}
+          replyFormRef={replyFormRef}
+          onReplyClick={handleReplyClick}
+          brand={brand}
+        />
       </div>
     </div>
   )

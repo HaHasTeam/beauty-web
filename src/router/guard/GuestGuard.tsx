@@ -2,7 +2,7 @@ import { FC, PropsWithChildren } from 'react'
 import { Navigate, Outlet } from 'react-router-dom'
 import { useShallow } from 'zustand/react/shallow'
 
-import LoadingIcon from '@/components/Loading'
+import LoadingContentLayer from '@/components/loading-icon/LoadingContentLayer'
 import configs from '@/config'
 import { useStore } from '@/store/store'
 
@@ -17,7 +17,7 @@ const GuestGuard: FC<PropsWithChildren> = ({ children }) => {
   )
   console.log('isAuthenticated', isAuthenticated)
 
-  if (isLoading) return <LoadingIcon />
+  if (isLoading) return <LoadingContentLayer />
 
   if (isAuthenticated) return <Navigate to={configs.routes.home} replace />
   return <>{children || <Outlet />}</>

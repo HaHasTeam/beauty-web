@@ -1,3 +1,4 @@
+import { ProductTagEnum } from '@/types/enum'
 import { IProduct, IResponseProduct, IServerCreateProduct, TProduct } from '@/types/product'
 import { TServerResponse } from '@/types/request'
 import { TBaseFilterRequestParams } from '@/types/types'
@@ -44,13 +45,50 @@ export const updateProductApi = toMutationFetcher<UpdateProductParams, TServerRe
     })
   },
 )
+interface FilterParamProducts extends TBaseFilterRequestParams {
+  minPrice?: number
+  maxPrice?: number
+  statuses?: string
+}
 
 export const getProductFilterApi = toQueryFetcher<
-  TBaseFilterRequestParams,
-  TServerResponse<{ total: string }, IResponseProduct[]>
+  FilterParamProducts,
+  TServerResponse<{ total: string; limit: string; page: string }, IResponseProduct[]>
 >('getProductFilterApi', async (params) => {
   return publicRequest(`/products/filter-product`, {
     method: 'GET',
     params: params,
+  })
+})
+export const getRecommendProductsMutation = toMutationFetcher<
+  { search: string; tag: ProductTagEnum; page?: string | number; limit?: string | number },
+  TServerResponse<{ total: string }, IResponseProduct[]>
+>('getRecommendProducts', async (data) => {
+  return publicRequest('/products/get', {
+    method: 'POST',
+    data: {
+      search: data.search,
+      tag: data.tag,
+    },
+    params: {
+      page: data.page,
+      limit: data.limit,
+    },
+  })
+})
+export const getRecommendProducts = toQueryFetcher<
+  { search: string; tag: ProductTagEnum; page: string | number; limit: string | number },
+  TServerResponse<{ total: string; totalPages: number }, IResponseProduct[]>
+>('getRecommendProducts', async (params) => {
+  return publicRequest('/products/get', {
+    method: 'POST',
+    data: {
+      search: params?.search || '',
+      tag: params?.tag,
+    },
+    params: {
+      page: params?.page,
+      limit: params?.limit,
+    },
   })
 })

@@ -53,7 +53,7 @@ export default function SearchOrders({ onSearch }: SearchOrdersProps) {
           type="button"
           variant="outline"
           onClick={handleReset}
-          className="ml-2 text-muted-foreground hover:text-muted-foreground/80 hover:bg-red-50 px-4 font-medium"
+          className="border border-primary/40 hover:bg-primary/10 text-primary hover:text-primary ml-2 hover:bg-red-50 px-4 font-medium"
         >
           {t('search.reset')}
         </Button>

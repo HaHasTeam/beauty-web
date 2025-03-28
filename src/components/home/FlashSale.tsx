@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom'
 import configs from '@/config'
 import { getFlashSaleProductFilterApi } from '@/network/apis/flash-sale'
 
+import Empty from '../empty/Empty'
 import LoadingIcon from '../loading-icon'
 import SaleProductCard from '../product/SaleProductCard'
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '../ui/carousel'
@@ -17,7 +18,6 @@ const FlashSale = () => {
     queryFn: getFlashSaleProductFilterApi.fn,
     select: (data) => data.data,
   })
-  console.log('flashSaleProductData', flashSaleProductData)
 
   // const [time, setTime] = useState({
   //   hours: 1,
@@ -81,11 +81,22 @@ const FlashSale = () => {
           <ArrowRight className="w-4 h-4" />
         </Link>
       </div>
-      {!isFetching && flashSaleProductData && (
+
+      {isFetching && (
+        <div className="w-full flex justify-center items-center">
+          <LoadingIcon color="primaryBackground" />
+        </div>
+      )}
+
+      {!isFetching && (!flashSaleProductData || flashSaleProductData.items.length === 0) && (
+        <Empty title={t('empty.flashSale.title')} description={t('empty.flashSale.description')} />
+      )}
+
+      {!isFetching && flashSaleProductData && flashSaleProductData.items.length > 0 && (
         <div className="relative">
           <Carousel className="w-full">
             <CarouselContent className="w-full m-0">
-              {flashSaleProductData?.items.map((product) => (
+              {flashSaleProductData.items.map((product) => (
                 <CarouselItem key={product?.id} className="pl-1 basis-1/2 sm:basis-1/3 lg:basis-1/5">
                   <div className="p-1">
                     <SaleProductCard product={product} />
@@ -100,11 +111,6 @@ const FlashSale = () => {
               <CarouselNext />
             </div>
           </Carousel>
-        </div>
-      )}
-      {isFetching && (
-        <div className="w-full flex justify-center items-center">
-          <LoadingIcon color="primaryBackground" />
         </div>
       )}
     </div>

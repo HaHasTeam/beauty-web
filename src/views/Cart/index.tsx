@@ -44,8 +44,7 @@ const Cart = ({ isInGroupBuy = false, isInPeriod = false }: CartProps) => {
   const [totalDirectProductsDiscount, setTotalDirectProductsDiscount] = useState<number>(0)
   const [chosenVouchersByBrand, setChosenVouchersByBrand] = useState<{ [brandId: string]: TVoucher | null }>({})
   const [platformChosenVoucher, setPlatformChosenVoucher] = useState<TVoucher | null>(null)
-  const { setChosenBrandVouchers, setChosenPlatformVoucher, setSelectedCartItem, resetSelectedCartItem } =
-    useCartStore()
+  const { setChosenPlatformVoucher, setSelectedCartItem, resetSelectedCartItem } = useCartStore()
   const [bestPlatformVoucher, setBestPlatformVoucher] = useState<IPlatformBestVoucher | null>(null)
 
   const voucherMap = bestBrandVouchers?.reduce<{ [key: string]: IBrandBestVoucher }>((acc, voucher) => {
@@ -58,12 +57,11 @@ const Cart = ({ isInGroupBuy = false, isInPeriod = false }: CartProps) => {
     return calculateTotalBrandVoucherDiscount(cartItems, selectedCartItems, chosenVouchersByBrand)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cartItems, chosenVouchersByBrand, selectedCartItems, isTriggerTotal])
-
   // Calculate platform voucher discount
   const platformVoucherDiscount = useMemo(() => {
-    return calculatePlatformVoucherDiscount(cartItems, selectedCartItems, platformChosenVoucher)
+    return calculatePlatformVoucherDiscount(cartItems, selectedCartItems, platformChosenVoucher, chosenVouchersByBrand)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cartItems, selectedCartItems, isTriggerTotal, platformChosenVoucher])
+  }, [cartItems, selectedCartItems, isTriggerTotal, platformChosenVoucher, totalVoucherDiscount, chosenVouchersByBrand])
 
   // Total saved price (product discounts + brand vouchers + platform voucher)
   const savedPrice = totalDirectProductsDiscount + totalVoucherDiscount + platformVoucherDiscount
@@ -78,7 +76,6 @@ const Cart = ({ isInGroupBuy = false, isInPeriod = false }: CartProps) => {
     mutationKey: [getBestShopVouchersApi.mutationKey],
     mutationFn: getBestShopVouchersApi.fn,
     onSuccess: (data) => {
-      console.log(data)
       setBestBrandVouchers(data?.data)
     },
   })
@@ -86,7 +83,6 @@ const Cart = ({ isInGroupBuy = false, isInPeriod = false }: CartProps) => {
     mutationKey: [getBestPlatformVouchersApi.mutationKey],
     mutationFn: getBestPlatformVouchersApi.fn,
     onSuccess: (data) => {
-      console.log(data)
       setBestPlatformVoucher(data?.data)
     },
   })
@@ -112,13 +108,13 @@ const Cart = ({ isInGroupBuy = false, isInPeriod = false }: CartProps) => {
       }
     })
   }
-  const handleVoucherSelection = (brandId: string, voucher: TVoucher | null) => {
-    setChosenVouchersByBrand((prev) => ({
-      ...prev,
-      [brandId]: voucher,
-    }))
-    setChosenBrandVouchers({ ...chosenVouchersByBrand, [brandId]: voucher })
-  }
+  // const handleVoucherSelection = (brandId: string, voucher: TVoucher | null) => {
+  //   setChosenVouchersByBrand((prev) => ({
+  //     ...prev,
+  //     [brandId]: voucher,
+  //   }))
+  //   setChosenBrandVouchers({ ...chosenVouchersByBrand, [brandId]: voucher })
+  // }
 
   useEffect(() => {
     if (cartItems) {
@@ -190,7 +186,6 @@ const Cart = ({ isInGroupBuy = false, isInPeriod = false }: CartProps) => {
       setTotalPrice(calculateCartTotals(selectedCartItems, cartItems).totalPrice)
       setTotalOriginalPrice(calculateCartTotals(selectedCartItems, cartItems).totalProductCost)
       setTotalDirectProductsDiscount(calculateCartTotals(selectedCartItems, cartItems).totalProductDiscount)
-      console.log(calculateCartTotals(selectedCartItems, cartItems).totalPrice, cartItems)
     } else {
       setTotalPrice(0)
       setTotalOriginalPrice(0)
@@ -202,10 +197,19 @@ const Cart = ({ isInGroupBuy = false, isInPeriod = false }: CartProps) => {
       resetSelectedCartItem()
     }
   }, [cartItems, resetSelectedCartItem, selectedCartItems, setChosenPlatformVoucher, isTriggerTotal])
-
   useEffect(() => {
     setChosenPlatformVoucher(platformChosenVoucher)
   }, [platformChosenVoucher, setChosenPlatformVoucher])
+
+  useEffect(() => {
+    if (totalVoucherDiscount === 0) {
+      setChosenVouchersByBrand({})
+    }
+    if (platformVoucherDiscount === 0) {
+      setPlatformChosenVoucher(null)
+    }
+  }, [platformVoucherDiscount, totalVoucherDiscount, isTriggerTotal, selectedCartItems])
+
   return (
     <>
       {isMyCartFetching && <LoadingContentLayer />}
@@ -250,7 +254,7 @@ const Cart = ({ isInGroupBuy = false, isInPeriod = false }: CartProps) => {
                     selectedCartItems={selectedCartItems}
                     onSelectBrand={handleSelectBrand}
                     bestVoucherForBrand={bestVoucherForBrand}
-                    onVoucherSelect={handleVoucherSelection}
+                    // onVoucherSelect={handleVoucherSelection}
                     brand={brand}
                     checkoutItems={checkoutItems}
                     selectedCheckoutItems={selectedCheckoutItems}

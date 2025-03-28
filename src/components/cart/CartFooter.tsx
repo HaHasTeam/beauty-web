@@ -17,6 +17,7 @@ import { IPlatformBestVoucher, TVoucher } from '@/types/voucher'
 import DeleteConfirmationDialog from '../dialog/DeleteConfirmationDialog'
 import WarningDialog from '../dialog/WarningDialog'
 import TotalPriceDetail from '../price/TotalPriceDetail'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip'
 import VoucherDialog from '../voucher/VoucherDialog'
 
 interface CartFooterProps {
@@ -78,7 +79,6 @@ export default function CartFooter({
           cartItem.quantity > cartItem.productClassification.quantity,
       )
   }, [cartByBrand, selectedCartItems])
-  console.log(insufficientStockItems)
   const soldOutItems = useMemo(() => {
     return Object.values(cartByBrand)
       .flat()
@@ -175,12 +175,12 @@ export default function CartFooter({
                       platformChosenVoucher?.discountType === DiscountTypeEnum.AMOUNT &&
                       platformChosenVoucher?.discountValue ? (
                         <div className="flex gap-2 items-center">
-                          {t('voucher.discountAmount', { amount: platformChosenVoucher?.discountValue })}
+                          {t('voucher.discountAmount', { amount: platformVoucherDiscount })}
                           <Pen />
                         </div>
                       ) : (
                         <div className="flex gap-2 items-center">
-                          {t('voucher.discountAmount', { amount: platformChosenVoucher?.discount })}
+                          {t('voucher.discountAmount', { amount: platformVoucherDiscount })}
                           <Pen />
                         </div>
                       )
@@ -225,10 +225,19 @@ export default function CartFooter({
                   </span>
                 </Button>
                 {selectedCartItems && selectedCartItems?.length > 0 && (
-                  <Trash2
-                    className="text-destructive w-7 h-7 cursor-pointer transition-colors hover:text-red-500"
-                    onClick={() => setOpenConfirmDeleteMultipleCartDialog(true)}
-                  />
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Trash2
+                          className="text-destructive w-7 h-7 cursor-pointer transition-colors hover:text-red-500"
+                          onClick={() => setOpenConfirmDeleteMultipleCartDialog(true)}
+                        />
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>{t('cart.deleteItem', { count: selectedCartItems.length })}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
                 )}
               </div>
             </div>
@@ -271,7 +280,7 @@ export default function CartFooter({
                     onClick={() => handleCheckout()}
                     className="text-destructive-foreground px-8 py-2 rounded-lg bg-destructive hover:bg-destructive/80"
                   >
-                    {t('cart.buy')}
+                    {t('cart.checkout')}
                   </Button>
                 )}
               </div>

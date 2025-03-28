@@ -14,7 +14,7 @@ import { ICartItem } from '@/types/cart'
 import { ClassificationTypeEnum, DiscountTypeEnum, OrderEnum, StatusEnum } from '@/types/enum'
 import { IBrandBestVoucher, ICheckoutItem, TVoucher } from '@/types/voucher'
 import { formatCurrency, formatNumber } from '@/utils/number'
-import { getTotalBrandProductsPrice } from '@/utils/price'
+import { calculateCheckoutBrandVoucherDiscount, getTotalBrandProductsPrice } from '@/utils/price'
 
 import ProductCheckoutLandscape from '../product/ProductCheckoutLandscape'
 import { Button } from '../ui/button'
@@ -59,11 +59,10 @@ const CheckoutItem = ({
   const handleVoucherChange = (voucher: TVoucher | null) => {
     onVoucherSelect(brand?.id ?? '', voucher)
   }
-  // const voucherDiscount = useMemo(
-  //   () => calculateCheckoutBrandVoucherDiscount(cartBrandItem, chosenBrandVoucher),
-  //   [cartBrandItem, chosenBrandVoucher],
-  // )
-
+  const voucherDiscount = useMemo(
+    () => calculateCheckoutBrandVoucherDiscount(cartBrandItem, chosenBrandVoucher),
+    [cartBrandItem, chosenBrandVoucher],
+  )
   const { groupBuying } = useCartStore()
   const criteria = groupBuying?.groupProduct.criterias[0]
   return (
@@ -75,7 +74,7 @@ const CheckoutItem = ({
         <Link to={configs.routes.brands + `/${brand?.id ?? ''}`}>
           <span className="font-medium">{brandName}</span>
         </Link>
-        <Button className="p-2 bg-primary hover:bg-primary/80" variant="default">
+        <Button type="button" className="p-2 bg-primary hover:bg-primary/80" variant="default">
           <MessageCircle className="w-4 h-4" />
           {t('brand.chatNow')}
         </Button>
@@ -173,9 +172,9 @@ const CheckoutItem = ({
             <Tag className="w-4 h-4 text-red-500" />
             <span>
               {chosenBrandVoucher
-                ? chosenBrandVoucher?.discountType === DiscountTypeEnum.AMOUNT && chosenBrandVoucher?.discountValue
-                  ? t('voucher.discountAmount', { amount: chosenBrandVoucher?.discount })
-                  : t('voucher.discountAmount', { amount: chosenBrandVoucher?.discount })
+                ? chosenBrandVoucher?.discountType === DiscountTypeEnum.AMOUNT && voucherDiscount
+                  ? t('voucher.discountAmount', { amount: voucherDiscount })
+                  : t('voucher.discountAmount', { amount: voucherDiscount })
                 : bestVoucherForBrand?.bestVoucher
                   ? bestVoucherForBrand?.bestVoucher?.discountType === DiscountTypeEnum.AMOUNT &&
                     bestVoucherForBrand?.bestVoucher?.discountValue
@@ -199,6 +198,7 @@ const CheckoutItem = ({
               handleVoucherChange={handleVoucherChange}
               bestVoucherForBrand={bestVoucherForBrand}
               chosenBrandVoucher={chosenBrandVoucher}
+              voucherDiscount={voucherDiscount}
             />
           </div>
         </div>
@@ -214,7 +214,7 @@ const CheckoutItem = ({
             isInGroupBuying && 'text-gray-800 text-sm',
           )}
         >
-          {t('productCard.currentPrice', { price: totalBrandPrice - (chosenBrandVoucher?.discount ?? 0) })}
+          {t('productCard.currentPrice', { price: totalBrandPrice - (voucherDiscount ?? 0) })}
         </span>
       </div>
       {groupBuying && (
