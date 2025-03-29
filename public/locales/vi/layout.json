@@ -843,6 +843,61 @@
     },
     "processSuccess": "Yêu cầu hủy đơn đã được xử lý thành công!"
   },
+  "chat": {
+    "inbox": "Hộp thư đến",
+    "search": {
+      "placeholder": "Tìm kiếm trò chuyện..."
+    },
+    "empty": {
+      "noChats": "Không tìm thấy cuộc trò chuyện nào",
+      "selectChat": "Chọn một cuộc trò chuyện",
+      "selectChatDescription": "Chọn một cuộc hội thoại từ danh sách để bắt đầu trò chuyện",
+      "backToDashboard": "Quay lại Bảng điều khiển"
+    },
+    "newChat": {
+      "startConversation": "Bắt đầu cuộc trò chuyện",
+      "sendMessageToBegin": "Gửi tin nhắn để bắt đầu trò chuyện với bộ phận hỗ trợ của {{brandName}}.",
+      "newMessage": "Tin nhắn mới"
+    },
+    "noMessages": {
+      "title": "Chưa có tin nhắn nào",
+      "description": "Bắt đầu cuộc trò chuyện bằng cách gửi tin nhắn.",
+      "newMessage": "Tin nhắn mới"
+    },
+    "input": {
+      "placeholder": "Nhập tin nhắn của bạn..."
+    },
+    "roles": {
+      "brandSupport": "Hỗ trợ thương hiệu",
+      "customer": "Khách hàng"
+    },
+    "messageStatus": {
+      "you": "Bạn"
+    },
+    "fullscreen": {
+      "enter": "Toàn màn hình",
+      "exit": "Thoát toàn màn hình"
+    },
+    "settings": "Cài đặt trò chuyện",
+    "recentConversations": "Cuộc trò chuyện gần đây",
+    "expand": "Mở rộng",
+    "minimize": "Thu nhỏ",
+    "close": "Đóng",
+    "openFullChat": "Mở trò chuyện đầy đủ",
+    "new": "Mới",
+    "enablePopup": "Bật cửa sổ trò chuyện",
+    "enablePopupDescription": "Hiển thị nút cửa sổ trò chuyện trên tất cả các trang",
+    "backToChats": "Quay lại trò chuyện",
+    "noConversations": "Chưa có cuộc trò chuyện nào với thương hiệu này",
+    "startNewChat": "Bắt đầu trò chuyện mới",
+    "viewFullConversation": "Xem toàn bộ cuộc trò chuyện",
+    "noMessagesYet": "Chưa có tin nhắn nào. Bắt đầu cuộc trò chuyện!",
+    "manager": "Quản lý",
+    "staff": "Nhân viên",
+    "typePlaceholder": "Nhập tin nhắn...",
+    "welcome": "Chào mừng đến với Trò chuyện",
+    "selectBrandToChat": "Chọn một thương hiệu từ thanh bên trái để bắt đầu trò chuyện hoặc xem các cuộc hội thoại của bạn."
+  },
   "toast": {
     "success": "Yêu cầu của bạn đã được xử lý thành công, tiếp tục công việc của bạn.",
     "error": "Đã xảy ra lỗi khi xử lý yêu cầu của bạn, vui lòng thử lại sau. Nếu vấn đề vẫn tiếp diễn, vui lòng liên hệ với đội ngũ hỗ trợ.",

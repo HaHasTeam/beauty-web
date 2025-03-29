@@ -42,7 +42,7 @@ export default function BrandSection({ brand }: BrandSectionProps) {
               </Link>
             </div>
           </div> */}
-          <BrandHeader brandId={brand?.id ?? ''} brandName={brand?.name ?? ''} />
+          <BrandHeader brandId={brand?.id ?? ''} brandName={brand?.name ?? ''} brandLogo={brand?.logo} />
         </div>
         <div className="flex-1 grid grid-cols-2 md:grid-cols-4 gap-4 w-full place-items-center">
           {/* <div className="space-y-1">

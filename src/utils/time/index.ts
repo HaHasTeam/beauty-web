@@ -1,4 +1,5 @@
 import { formatDate, formatDistanceToNow } from 'date-fns'
+import type { Timestamp } from 'firebase/firestore'
 
 /**
  * Converts milliseconds to days, rounding up to the next whole number
@@ -13,8 +14,40 @@ export const millisecondsToRoundedDays = (milliseconds: number): number => {
   return Math.ceil(days)
 }
 
-export const formatMessageTime = (timestamp: number): string => {
-  const date = new Date(timestamp)
+// Define a union type for all possible timestamp formats
+type TimestampType = Timestamp | Date | number | string | undefined | null
+
+/**
+ * Safely converts any timestamp format to a Date object
+ * @param timestamp The timestamp to convert (can be Firestore Timestamp, number, Date, or string)
+ * @returns A JavaScript Date object
+ */
+const getDateFromTimestamp = (timestamp: TimestampType): Date => {
+  if (!timestamp) return new Date()
+
+  if (typeof timestamp === 'object' && 'toDate' in timestamp) {
+    return timestamp.toDate()
+  }
+
+  if (timestamp instanceof Date) {
+    return timestamp
+  }
+
+  if (typeof timestamp === 'number') {
+    // If timestamp is in seconds (Firestore sometimes uses seconds), convert to milliseconds
+    return new Date(timestamp > 9999999999 ? timestamp : timestamp * 1000)
+  }
+
+  return new Date(timestamp)
+}
+
+/**
+ * Formats a timestamp based on how recent it is
+ * @param timestamp The timestamp to format (can be Firestore Timestamp, number, Date, or string)
+ * @returns A formatted time string
+ */
+export const formatMessageTime = (timestamp: TimestampType): string => {
+  const date = getDateFromTimestamp(timestamp)
   const now = new Date()
 
   // If the message is from today, show the time
@@ -32,6 +65,12 @@ export const formatMessageTime = (timestamp: number): string => {
   return formatDate(date, 'MMM d, yyyy')
 }
 
-export const formatRelativeTime = (timestamp: number): string => {
-  return formatDistanceToNow(new Date(timestamp), { addSuffix: true })
+/**
+ * Formats a timestamp into a relative time string (e.g., "2 hours ago")
+ * @param timestamp The timestamp to format (can be Firestore Timestamp, number, Date, or string)
+ * @returns A relative time string
+ */
+export const formatRelativeTime = (timestamp: TimestampType): string => {
+  const date = getDateFromTimestamp(timestamp)
+  return formatDistanceToNow(date, { addSuffix: true })
 }

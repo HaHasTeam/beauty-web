@@ -375,6 +375,61 @@
       "button": "Go back"
     }
   },
+  "chat": {
+    "inbox": "Inbox",
+    "search": {
+      "placeholder": "Search chat..."
+    },
+    "empty": {
+      "noChats": "No chats found",
+      "selectChat": "Select a chat",
+      "selectChatDescription": "Choose a conversation from the list to start chatting",
+      "backToDashboard": "Back to Dashboard"
+    },
+    "newChat": {
+      "startConversation": "Start a conversation",
+      "sendMessageToBegin": "Send a message to begin chatting with {{brandName}} support.",
+      "newMessage": "New Message"
+    },
+    "noMessages": {
+      "title": "No messages yet",
+      "description": "Start the conversation by sending a message.",
+      "newMessage": "New Message"
+    },
+    "input": {
+      "placeholder": "Type your messages..."
+    },
+    "roles": {
+      "brandSupport": "Brand Support",
+      "customer": "Customer"
+    },
+    "messageStatus": {
+      "you": "You"
+    },
+    "fullscreen": {
+      "enter": "Enter fullscreen",
+      "exit": "Exit fullscreen"
+    },
+    "settings": "Chat Settings",
+    "recentConversations": "Recent Conversations",
+    "expand": "Expand",
+    "minimize": "Minimize",
+    "close": "Close",
+    "openFullChat": "Open full chat",
+    "new": "New",
+    "enablePopup": "Enable Chat Popup",
+    "enablePopupDescription": "Show the chat popup button on all pages",
+    "backToChats": "Back to Chats",
+    "noConversations": "No conversations yet with this brand",
+    "startNewChat": "Start New Chat",
+    "viewFullConversation": "View full conversation",
+    "noMessagesYet": "No messages yet. Start the conversation!",
+    "manager": "Manager",
+    "staff": "Staff",
+    "typePlaceholder": "Type a message...",
+    "welcome": "Welcome to Chat",
+    "selectBrandToChat": "Select a brand from the left sidebar to start chatting or view your conversations."
+  },
   "productDetail": {
     "addToCart": "Add to Cart",
     "buyNow": "Buy Now",

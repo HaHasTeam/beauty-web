@@ -185,7 +185,7 @@ export enum ProductTagEnum {
 
 export enum ServiceTypeEnum {
   STANDARD = 'STANDARD',
-  PREMIUM = 'PREMIUM'
+  PREMIUM = 'PREMIUM',
 }
 export enum WeekDay {
   MONDAY = 2,
@@ -194,5 +194,5 @@ export enum WeekDay {
   THURSDAY = 5,
   FRIDAY = 6,
   SATURDAY = 7,
-  SUNDAY = 8
+  SUNDAY = 8,
 }
