@@ -1,6 +1,6 @@
 export const minifyString = (str: string, length: number = 8) => {
   if (str.length > length) {
-    return str.slice(0, length) + '...'
+    return str.slice(0, length)
   }
   return str
 }

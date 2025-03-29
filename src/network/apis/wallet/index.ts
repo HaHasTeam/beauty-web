@@ -7,11 +7,11 @@ import { TCreateWalletRequestParams } from './type'
 
 export const depositToWallet = toMutationFetcher<
   {
-    id: string
+    orderId: string
   },
   unknown
 >('depositToWallet', async (data) => {
-  return privateRequest('wallets/deposit', {
+  return privateRequest('transactions/deposit', {
     method: 'POST',
     data: data,
   })
