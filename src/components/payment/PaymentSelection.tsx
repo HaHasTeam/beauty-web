@@ -174,19 +174,8 @@ export default function PaymentSelection({ form, hasPreOrderProduct, totalPaymen
                           </Label>
                           {method.action}
                         </div>
-                        <RadioGroupItem value={method.id} id={method.id} disabled={method.isDisabled} />
-                        <div className="flex items-center gap-2 w-full">
-                          <Label
-                            htmlFor={method.id}
-                            className={cn(
-                              'px-4 py-2 h-full flex-1 rounded cursor-pointer',
-                              method.isDisabled && 'opacity-50',
-                            )}
-                          >
-                            {method.label}
-                          </Label>
-                          {method.action}
-                        </div>
+                   
+                      
                       </div>
                       {method?.isAddMore && !method.isDisabled && (
                         <div className="pl-16 flex flex-col gap-2">
