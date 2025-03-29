@@ -112,10 +112,7 @@ export default function PasswordSignIn() {
               </FormItem>
             )}
           />
-          <Link
-            to="/forgot-password"
-            className="text-xs sm:text-sm text-[#FFA07A] hover:underline block text-right mt-1"
-          >
+          <Link to="/forgot-password" className="text-xs sm:text-sm text-primary hover:underline block text-right mt-1">
             Forgot your password?
           </Link>
           <Button disabled={isSignInWithPasswordLoading} className="w-full">
