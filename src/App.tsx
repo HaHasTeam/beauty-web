@@ -18,7 +18,7 @@ function App() {
             <RouterProvider />
             {/* <ReactQueryDevtools initialIsOpen={true} /> */}
 
-          <Toaster closeButton position="top-center" richColors />
+            <Toaster closeButton position="top-center" richColors />
             <ChatPopup />
           </QueryClientProvider>
         </NuqsAdapter>
