@@ -22,7 +22,6 @@ const PrimaryLayout = ({ children }: { children?: React.ReactNode }) => {
   const { isCurrentPath: isMatchGroupBuyPath } = useCurrentPath(routes.groupBuyDetail)
   const { isCurrentPath: isMatchCartPath } = useCurrentPath(routes.cart)
   const groupId = useParams().groupId
-  console.log('groupId', groupId)
 
   const brandId = useParams().brandId
   const { data: brand } = useQuery({
@@ -75,12 +74,25 @@ const PrimaryLayout = ({ children }: { children?: React.ReactNode }) => {
         if (!myCart.data[key].length) {
           break
         } else {
-          const cartItems = myCart.data[key].filter((items) => !items.groupBuying)
+          console.log('myCart.data[key]', myCart.data[key])
+
+          const cartItems = myCart.data[key].filter((items) => {
+            console.log('items', items.groupBuying)
+
+            if (items.groupBuying) {
+              return false
+            }
+            return true
+          })
+
+          console.log('cartItems', cartItems, cartItems.length)
+
           if (cartItems.length) {
             myFilteredCart[key] = cartItems
           }
         }
       }
+
       setCartItems(myFilteredCart) // Update Zustand store with fetched cart
     }
     if (isMatchCartPath) {

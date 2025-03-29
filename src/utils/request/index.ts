@@ -8,7 +8,7 @@ import { getAuthData } from '../auth'
 const GET_SESSION_CACHE_TIME = 1_000
 
 const getAccessToken = mem(
-  async (keepPrevious = true) => {
+  async (keepPrevious = false) => {
     const authData = await getAuthData({ keepPrevious })
     return authData.accessToken
   },
@@ -19,7 +19,6 @@ const getAccessToken = mem(
 
 export const privateRequest = async <R>(url: string, options?: AxiosRequestConfig): Promise<R> => {
   const accessToken = await getAccessToken()
-  console.log('go here')
 
   return axiosRequest({
     ...options,

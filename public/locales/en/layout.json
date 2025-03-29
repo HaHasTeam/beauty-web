@@ -1454,5 +1454,47 @@
       "ADMIN_REJECTED": "Rejected by Admin",
       "BRAND_REJECTED": "Rejected by Brand"
     }
+  },
+  "time": {
+    "day": "day",
+    "hour": "hour",
+    "minute": "minute",
+    "second": "second",
+    "expired": "Expired",
+    "ended": "Ended",
+    "startAfter": "Start After",
+    "endsIn": "Ends In"
+  },
+  "store": {
+    "logo": "Store Logo",
+    "name": "Minh Khoi Wholesale",
+    "online_status": "Online 24 minutes ago",
+    "follow": "Follow",
+    "following": "Following",
+    "chat": "Chat",
+    "products": "Products:",
+    "followers": "Followers:",
+    "rating": "Rating:",
+    "reviews": "Reviews",
+    "response_rate": "Chat Response Rate:",
+    "response_time": "Within a Few Hours",
+    "categories": {
+      "featured": "Featured",
+      "all": "All Products",
+      "new": "New Products",
+      "sale": "Sale Products",
+      "best_selling": "Best Selling",
+      "group_buying": "Group Buying"
+    }
+  },
+  "btn": {
+    "copyAndShare": "Copy and Share",
+    "cooldown": "Limit ended in {{value}} minutes"
+  },
+  "walletTerm": {
+    "balance": "Balance",
+    "topUp": "Top Up",
+    "withdraw": "Withdraw",
+    "createWallet": "Create Wallet"
   }
 }

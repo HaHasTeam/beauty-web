@@ -1,4 +1,4 @@
-import { Bell, Home, Lock, LogOutIcon, Package, Ticket, User, Wallet } from 'lucide-react'
+import { Bell, Flag, Home, Lock, LogOutIcon, Package, Ticket, User, Wallet } from 'lucide-react'
 import { Link, Outlet, useNavigate } from 'react-router-dom'
 import { useShallow } from 'zustand/react/shallow'
 
@@ -43,6 +43,16 @@ function AccountLayout() {
               >
                 <Wallet className="mr-2 h-4 w-4" />
                 Ví Tiền
+              </Button>
+              <Button
+                variant="ghost"
+                className="w-full justify-start"
+                onClick={() => {
+                  navigate(configs.routes.profileReport)
+                }}
+              >
+                <Flag className="mr-2 h-4 w-4" />
+                Báo Cáo
               </Button>
               <Button
                 variant="ghost"

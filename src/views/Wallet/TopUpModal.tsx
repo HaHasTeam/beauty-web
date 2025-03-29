@@ -96,12 +96,12 @@ export default function TopUpModal() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       amount: 0,
-      method: PaymentMethodEnum.BankTransfer,
+      method: PaymentMethodEnum.BANK_TRANSFER,
     },
   })
 
   const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = async (data) => {
-    if (data.method === PaymentMethodEnum.BankTransfer) {
+    if (data.method === PaymentMethodEnum.BANK_TRANSFER) {
       await generatePaymentLink({
         amount: data.amount,
         description: 'TOP UP ACTION',
@@ -196,11 +196,11 @@ export default function TopUpModal() {
                       <div className="flex items-center justify-between border-b border-gray-200 pb-4">
                         <div className="flex items-start gap-2">
                           <RadioGroupItem
-                            value={PaymentMethodEnum.BankTransfer}
-                            key={PaymentMethodEnum.BankTransfer}
-                            id={PaymentMethodEnum.BankTransfer}
+                            value={PaymentMethodEnum.BANK_TRANSFER}
+                            key={PaymentMethodEnum.BANK_TRANSFER}
+                            id={PaymentMethodEnum.BANK_TRANSFER}
                           />
-                          <Label htmlFor={PaymentMethodEnum.BankTransfer} className="flex flex-col gap-6">
+                          <Label htmlFor={PaymentMethodEnum.BANK_TRANSFER} className="flex flex-col gap-6">
                             <div className="flex items-center gap-2">
                               Pay by bank
                               <div className="flex gap-1">
@@ -226,7 +226,7 @@ export default function TopUpModal() {
                                 />
                               </div>
                             </div>
-                            {field.value === PaymentMethodEnum.BankTransfer && (
+                            {field.value === PaymentMethodEnum.BANK_TRANSFER && (
                               <div className="flex items-center font-light ">
                                 <img
                                   src={'https://payos.vn/wp-content/uploads/sites/13/2023/07/payos-logo.svg'}
@@ -243,12 +243,12 @@ export default function TopUpModal() {
                       <div className="flex items-center justify-between border-b border-gray-200 pb-4">
                         <div className="flex items-start gap-2">
                           <RadioGroupItem
-                            value={PaymentMethodEnum.VisaCard}
-                            key={PaymentMethodEnum.VisaCard}
-                            id={PaymentMethodEnum.VisaCard}
+                            value={PaymentMethodEnum.VISA_CARD}
+                            key={PaymentMethodEnum.VISA_CARD}
+                            id={PaymentMethodEnum.VISA_CARD}
                             disabled
                           />
-                          <Label htmlFor={PaymentMethodEnum.VisaCard} className="flex flex-col gap-6">
+                          <Label htmlFor={PaymentMethodEnum.VISA_CARD} className="flex flex-col gap-6">
                             <div className="flex items-center gap-2">
                               Card
                               <div className="flex gap-2">
@@ -269,7 +269,7 @@ export default function TopUpModal() {
                                 />
                               </div>
                             </div>
-                            {field.value === PaymentMethodEnum.VisaCard && (
+                            {field.value === PaymentMethodEnum.VISA_CARD && (
                               <div className="flex items-center font-light">
                                 <img src={StripeLogo} alt="Stripe" className="h-8 mr-2" />
                                 We collaborate with Stripe to provide you with the best payment experience with 4% fee.
@@ -290,7 +290,13 @@ export default function TopUpModal() {
             <div id="payOs-checkout" ref={checkoutRef} className="mb-20"></div>
           )}
           {!depositRes && !paymentLinkRes?.data.url && (
-            <Button className="w-full" variant={'secondary'} loading={form.formState.isSubmitting}>
+            <Button
+              className="w-full"
+              variant={'secondary'}
+              loading={form.formState.isSubmitting}
+              type="button"
+              onClick={form.handleSubmit(onSubmit)}
+            >
               Continue
             </Button>
           )}
@@ -300,7 +306,7 @@ export default function TopUpModal() {
                 <SuccessContent />
               </div>
               <DialogClose className="w-full">
-                <Button className="w-full" variant={'secondary'}>
+                <Button className="w-full" variant={'secondary'} type="button">
                   Close
                 </Button>
               </DialogClose>
