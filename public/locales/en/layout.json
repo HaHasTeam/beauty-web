@@ -50,7 +50,7 @@
     "preOderCardTitle": "Pre-orders",
     "groupBuyingDealsCardTitle": "Group-Buying Deals",
     "recommendProductsTitle": "Recommend Products",
-    "preOrderTitle": "Upcoming Products"
+    "preOrderTitle": "Pre-order products"
   },
   "productCard": {
     "currentPrice": "{{price, currency}}",

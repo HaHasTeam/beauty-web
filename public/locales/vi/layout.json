@@ -50,7 +50,7 @@
     "preOderCardTitle": "Đơn đặt trước",
     "groupBuyingDealsCardTitle": "Ưu đãi mua chung",
     "recommendProductsTitle": "Gợi ý sản phẩm",
-    "preOrderTitle": "Sản phẩm sắp ra mắt"
+    "preOrderTitle": "Sản phẩm đặt trước"
   },
   "productCard": {
     "currentPrice": "{{price, currency}}",
