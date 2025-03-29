@@ -16,6 +16,7 @@ import { Form, FormField, FormItem } from '@/components/ui/form'
 import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { generatePaymentLinkApi } from '@/network/apis/payment'
+import { filterTransactions } from '@/network/apis/transaction'
 import { depositToWallet, getMyWalletApi } from '@/network/apis/wallet'
 import { PaymentMethodEnum } from '@/types/payment'
 import { basePayOSConfig } from '@/utils/payOs'
@@ -51,9 +52,12 @@ export default function TopUpModal() {
   const queryClient = useQueryClient()
   useEffect(() => {
     if (paidId) {
-      depositToWalletFn({ id: paidId }).then(() => {
+      depositToWalletFn({ orderId: paidId }).then(() => {
         queryClient.invalidateQueries({
           queryKey: [getMyWalletApi.queryKey],
+        })
+        queryClient.invalidateQueries({
+          queryKey: [filterTransactions.queryKey],
         })
       })
     }

@@ -82,6 +82,7 @@ export enum PaymentMethod {
   CASH = 'CASH',
   CARD = 'CARD',
   WALLET = 'WALLET',
+  BANK_TRANSFER = 'BANK_TRANSFER',
 }
 
 export enum ShippingStatusEnum {
