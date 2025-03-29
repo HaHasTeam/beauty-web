@@ -176,13 +176,9 @@ const Checkout = () => {
 
     resetCart()
     handleReset()
-    console.log('payment success')
-    console.log(orderData, 'orderData')
 
     navigate(configs.routes.checkoutResult, { state: { orderData, status: ResultEnum.SUCCESS } })
   }, [navigate, orderData, resetCart, handleReset, t, successToast])
-
-  console.log(orderData, 'orderData')
 
   const { mutateAsync: createOrderFn } = useMutation({
     mutationKey: [createOderApi.mutationKey],
