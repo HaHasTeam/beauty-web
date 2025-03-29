@@ -10,9 +10,9 @@ interface CountdownProps {
 const labels = {
   en: {
     days: 'days',
-    hours: 'hours',
-    minutes: 'minutes',
-    seconds: 'seconds',
+    hours: 'hrs',
+    minutes: 'min',
+    seconds: 'sec',
   },
   vi: {
     days: 'ngày',
@@ -26,13 +26,13 @@ export function Countdown({ targetDate, language = 'en' }: CountdownProps) {
   const timeLeft = useCountdown(targetDate)
 
   return (
-    <div className="flex items-center gap-2 justify-center">
+    <div className="flex items-center justify-center gap-1 w-full flex-wrap xs:flex-nowrap">
       <TimeUnit value={timeLeft.days} label={labels[language].days} />
-      <div className="text-2xl font-bold">:</div>
+      <div className="text-base font-bold">:</div>
       <TimeUnit value={timeLeft.hours} label={labels[language].hours} />
-      <div className="text-2xl font-bold">:</div>
+      <div className="text-base font-bold">:</div>
       <TimeUnit value={timeLeft.minutes} label={labels[language].minutes} />
-      <div className="text-2xl font-bold">:</div>
+      <div className="text-base font-bold">:</div>
       <TimeUnit value={timeLeft.seconds} label={labels[language].seconds} />
     </div>
   )

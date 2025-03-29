@@ -4,7 +4,6 @@ import configs from '@/config'
 import Cart from '@/views/Cart'
 import ChangePassword from '@/views/ChangePassword'
 import ChatPage from '@/views/ChatPage/ChatPage'
-import NewChat from '@/views/ChatPage/NewChat'
 import Checkout from '@/views/Checkout'
 import CheckoutResult from '@/views/CheckoutResult'
 import OrderDetail from '@/views/OrderDetail'
@@ -35,14 +34,7 @@ const privateRoutes = [
         path: configs.routes.cart,
         element: <Cart />,
       },
-      {
-        path: '/rooms/:id',
-        element: <ChatPage />,
-      },
-      {
-        path: '/new-chat',
-        element: <NewChat />,
-      },
+
       {
         path: configs.routes.checkout,
         element: <Checkout />,
@@ -52,6 +44,10 @@ const privateRoutes = [
         element: <CheckoutResult />,
       },
     ],
+  },
+  {
+    path: '/chat/:id',
+    element: <ChatPage />,
   },
   {
     element: (

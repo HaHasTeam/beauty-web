@@ -1,18 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-'use client'
 
-import { ChevronDown, ChevronUp, MessageCircle, Plus, Send, Settings, X } from 'lucide-react'
+import { ChevronDown, ChevronUp, Maximize, MessageCircle, Send, Settings, X } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { useShallow } from 'zustand/react/shallow'
 
 import { useStore } from '@/store/store'
-import { TBrand } from '@/types/brand'
-import { Chat, Message } from '@/types/chat'
-import { RoleEnum } from '@/types/enum'
+import type { TBrand } from '@/types/brand'
+import type { Chat, Message } from '@/types/chat'
 import { listenToChatMessages, listenToChats, sendMessage } from '@/utils/firebase/chat-service'
-import { formatRelativeTime } from '@/utils/time'
+import { formatMessageTime } from '@/utils/time'
 
+import { Avatar, AvatarFallback } from '../ui/avatar'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
 import { Label } from '../ui/label'
@@ -42,6 +42,7 @@ export function ChatPopup() {
   const [selectedBrandId, setSelectedBrandId] = useState<string | null>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const navigate = useNavigate()
+  const { t } = useTranslation()
 
   // Get user from Zustand store
   const { currentUser } = useStore(
@@ -77,9 +78,26 @@ export function ChatPopup() {
         (updatedChats) => {
           // Sort chats by last message time (newest first)
           const sortedChats = [...updatedChats].sort((a, b) => {
+            // Use the timestamp directly, formatRelativeTime will handle conversion
             const timeA = a.lastMessageTime || 0
             const timeB = b.lastMessageTime || 0
-            return timeB - timeA
+
+            // Convert to comparable numbers if they're not already
+            const numA =
+              typeof timeA === 'number'
+                ? timeA
+                : typeof timeA === 'object' && 'toDate' in timeA
+                  ? timeA.toDate().getTime()
+                  : new Date(timeA).getTime()
+
+            const numB =
+              typeof timeB === 'number'
+                ? timeB
+                : typeof timeB === 'object' && 'toDate' in timeB
+                  ? timeB.toDate().getTime()
+                  : new Date(timeB).getTime()
+
+            return numB - numA
           })
           setChats(sortedChats)
 
@@ -198,12 +216,12 @@ export function ChatPopup() {
     setSelectedChat(null)
   }
 
-  const toggleSettings = () => {
-    setShowSettings(!showSettings)
-    if (showSettings) {
-      setSelectedChat(null)
-    }
-  }
+  // const toggleSettings = () => {
+  //   setShowSettings(!showSettings)
+  //   if (showSettings) {
+  //     setSelectedChat(null)
+  //   }
+  // }
 
   const togglePopupEnabled = () => {
     setSettings((prev) => ({
@@ -214,7 +232,14 @@ export function ChatPopup() {
 
   const selectBrand = (brandId: string) => {
     setSelectedBrandId(brandId)
-    setSelectedChat(null)
+
+    // If there are chats for this brand, select the most recent one
+    if (chatsByBrand[brandId] && chatsByBrand[brandId].length > 0) {
+      selectChat(chatsByBrand[brandId][0])
+    } else {
+      // If no chats exist for this brand, just show the brand selected but no chat
+      setSelectedChat(null)
+    }
   }
 
   // Don't show the chat popup on the chat page
@@ -250,7 +275,7 @@ export function ChatPopup() {
       {isOpen && (
         <div
           className={`bg-white dark:bg-gray-800 rounded-lg shadow-lg mb-2 transition-all duration-300 overflow-hidden ${
-            isMinimized ? 'h-14' : 'w-80 sm:w-96'
+            isMinimized ? 'h-14' : 'w-[400px] sm:w-[500px]'
           }`}
           style={{ maxHeight: isMinimized ? '3.5rem' : '500px' }}
         >
@@ -258,7 +283,7 @@ export function ChatPopup() {
           <div className="bg-primary text-primary-foreground p-3 flex justify-between items-center">
             <div className="font-medium truncate flex items-center">
               {showSettings ? (
-                'Chat Settings'
+                t('chat.settings')
               ) : selectedChat ? (
                 <>
                   <button
@@ -270,182 +295,193 @@ export function ChatPopup() {
                   {currentUser.role === 'customer' ? selectedChat.brandName : selectedChat.customerName}
                 </>
               ) : (
-                (selectedBrandId && brands.find((b) => b.id === selectedBrandId)?.name) || 'Recent Conversations'
+                (selectedBrandId && brands.find((b) => b.id === selectedBrandId)?.name) || t('chat.recentConversations')
               )}
             </div>
             <div className="flex items-center space-x-1">
-              <button
+              {/* <button
                 onClick={toggleSettings}
                 className="p-1 rounded-full hover:bg-primary-foreground/20 transition-colors"
+                title={t('chat.settings')}
               >
                 <Settings size={16} />
-              </button>
+              </button> */}
               <button
                 onClick={toggleChat}
                 className="p-1 rounded-full hover:bg-primary-foreground/20 transition-colors"
+                title={isMinimized ? t('chat.expand') : t('chat.minimize')}
               >
                 {isMinimized ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
               </button>
-              <button onClick={closeChat} className="p-1 rounded-full hover:bg-primary-foreground/20 transition-colors">
+              <button
+                onClick={closeChat}
+                className="p-1 rounded-full hover:bg-primary-foreground/20 transition-colors"
+                title={t('chat.close')}
+              >
                 <X size={16} />
+              </button>
+              <button
+                onClick={() => (selectedChat ? navigate(`/chat/${selectedChat.id}`) : navigate('/chat'))}
+                className="p-1 rounded-full hover:bg-primary-foreground/20 transition-colors"
+                title={t('chat.openFullChat')}
+              >
+                <Maximize size={16} />
               </button>
             </div>
           </div>
 
           {/* Chat content - only shown when not minimized */}
           {!isMinimized && (
-            <div className="flex flex-col h-[calc(500px-3.5rem)]">
-              {showSettings ? (
-                // Settings panel
-                <div className="flex-1 overflow-y-auto p-4">
-                  <div className="space-y-6">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <Label htmlFor="popup-enabled" className="text-base font-medium">
-                          Enable Chat Popup
-                        </Label>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                          Show the chat popup button on all pages
-                        </p>
-                      </div>
-                      <Switch id="popup-enabled" checked={settings.enabled} onCheckedChange={togglePopupEnabled} />
-                    </div>
-
-                    <div>
-                      <h3 className="text-base font-medium mb-2">Available Brands</h3>
-                      <div className="space-y-2 mt-3">
-                        {brands.length === 0 ? (
-                          <p className="text-sm text-gray-500 dark:text-gray-400">
-                            No brands available. Start a chat with a brand first.
-                          </p>
-                        ) : (
-                          brands.map((brand) => (
-                            <div
-                              key={brand.id}
-                              onClick={() => selectBrand(brand.id)}
-                              className={`p-2 rounded cursor-pointer flex items-center justify-between ${
-                                selectedBrandId === brand.id
-                                  ? 'bg-primary/10 border border-primary/30'
-                                  : 'hover:bg-gray-100 dark:hover:bg-gray-700'
-                              }`}
-                            >
-                              <span>{brand.name}</span>
-                              {selectedBrandId === brand.id && <div className="w-2 h-2 rounded-full bg-primary"></div>}
-                            </div>
-                          ))
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="pt-4 border-t">
-                      <Button
-                        onClick={() => {
-                          setShowSettings(false)
-                          setSelectedChat(null)
-                        }}
-                        className="w-full"
+            <div className="flex h-[calc(500px-3.5rem)]">
+              {/* Left sidebar with chat icons */}
+              <div className="w-16 border-r border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 flex flex-col">
+                {brands.map((brand) => (
+                  <div
+                    key={brand.id}
+                    onClick={() => selectBrand(brand.id)}
+                    className={`p-2 cursor-pointer flex flex-col items-center justify-center h-16 ${
+                      selectedBrandId === brand.id
+                        ? 'bg-primary/10 border-l-2 border-l-primary'
+                        : 'hover:bg-gray-100 dark:hover:bg-gray-800'
+                    }`}
+                    title={brand.name}
+                  >
+                    <Avatar className="h-8 w-8">
+                      <AvatarFallback
+                        className={selectedBrandId === brand.id ? 'bg-primary text-primary-foreground' : ''}
                       >
-                        Back to Chats
-                      </Button>
-                    </div>
+                        {brand.name.charAt(0)}
+                      </AvatarFallback>
+                    </Avatar>
+                    <span className="text-xs mt-1 truncate w-full text-center">
+                      {brand.name.length > 6 ? `${brand.name.substring(0, 6)}...` : brand.name}
+                    </span>
                   </div>
-                </div>
-              ) : !selectedChat ? (
-                // Brand chats list
-                <div className="flex-1 overflow-y-auto p-2">
-                  {!selectedBrandId || !chatsByBrand[selectedBrandId] || chatsByBrand[selectedBrandId].length === 0 ? (
-                    <div className="text-center text-gray-500 dark:text-gray-400 py-4">
-                      No conversations yet with this brand
-                      <div className="mt-4">
-                        <Button onClick={() => navigate('/new-chat')} size="sm" className="flex items-center">
-                          <Plus size={16} className="mr-1" />
-                          Start New Chat
+                ))}
+              </div>
+
+              {/* Right side with chat content */}
+              <div className="flex-1 flex flex-col">
+                {showSettings ? (
+                  // Settings panel
+                  <div className="flex-1 overflow-y-auto p-4">
+                    <div className="space-y-6">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <Label htmlFor="popup-enabled" className="text-base font-medium">
+                            {t('chat.enablePopup')}
+                          </Label>
+                          <p className="text-sm text-gray-500 dark:text-gray-400">{t('chat.enablePopupDescription')}</p>
+                        </div>
+                        <Switch id="popup-enabled" checked={settings.enabled} onCheckedChange={togglePopupEnabled} />
+                      </div>
+
+                      <div className="pt-4 border-t">
+                        <Button
+                          onClick={() => {
+                            setShowSettings(false)
+                            setSelectedChat(null)
+                          }}
+                          className="w-full"
+                        >
+                          {t('chat.backToChats')}
                         </Button>
                       </div>
                     </div>
-                  ) : (
-                    <div className="space-y-2">
-                      {chatsByBrand[selectedBrandId].map((chat) => (
-                        <div
-                          key={chat.id}
-                          onClick={() => selectChat(chat)}
-                          className="p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
-                        >
-                          <div className="font-medium">
-                            {currentUser.role === 'customer' ? chat.brandName : chat.customerName}
-                          </div>
-                          {chat.lastMessage && (
-                            <div className="text-sm text-gray-500 dark:text-gray-400 truncate">{chat.lastMessage}</div>
-                          )}
-                          {chat.lastMessageTime && (
-                            <div className="text-xs text-gray-400 dark:text-gray-500">
-                              {formatRelativeTime(chat.lastMessageTime)}
-                            </div>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              ) : (
-                // Chat messages
-                <>
-                  <div className="flex-1 overflow-y-auto p-3 space-y-3">
-                    <div className="text-center">
-                      <Button variant="link" size="sm" onClick={viewFullChat}>
-                        View full conversation
-                      </Button>
-                    </div>
-                    {messages.length === 0 ? (
-                      <div className="text-center text-gray-500 dark:text-gray-400 py-4">
-                        No messages yet. Start the conversation!
-                      </div>
-                    ) : (
-                      <div className="space-y-3">
-                        {messages.map((message) => (
-                          <div
-                            key={message.id}
-                            className={`flex ${message.senderId === currentUser.id ? 'justify-end' : 'justify-start'}`}
-                          >
-                            <div
-                              className={`max-w-[80%] rounded-lg p-2 ${
-                                message.senderId === currentUser.id
-                                  ? 'bg-primary text-primary-foreground'
-                                  : 'bg-gray-200 dark:bg-gray-700'
-                              }`}
-                            >
-                              <div className="text-xs font-medium mb-1">
-                                {message.senderName}
-                                {message.senderRole !== RoleEnum.CUSTOMER &&
-                                  ` (${message.senderRole === RoleEnum.MANAGER ? 'Manager' : 'Staff'})`}
-                              </div>
-                              <div className="text-sm">{message.content}</div>
-                              <div className="text-xs mt-1 opacity-70">{formatRelativeTime(message.timestamp)}</div>
-                            </div>
-                          </div>
-                        ))}
-                        <div ref={messagesEndRef} />
-                      </div>
-                    )}
                   </div>
-
-                  {/* Message input */}
-                  <form onSubmit={handleSendMessage} className="p-2 border-t">
-                    <div className="flex space-x-2">
-                      <Input
-                        value={newMessage}
-                        onChange={(e) => setNewMessage(e.target.value)}
-                        placeholder="Type a message..."
-                        disabled={sending}
-                        className="flex-1"
-                      />
-                      <Button type="submit" size="icon" disabled={sending || !newMessage.trim()} className="h-10 w-10">
-                        <Send size={16} />
-                      </Button>
+                ) : !selectedChat ? (
+                  // Welcome message when no chat is selected
+                  <div className="flex-1 flex flex-col items-center justify-center p-4 text-center">
+                    <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">
+                      <MessageCircle className="h-8 w-8 text-primary" />
                     </div>
-                  </form>
-                </>
-              )}
+                    <h3 className="text-lg font-medium mb-2">{t('chat.welcome')}</h3>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mb-4 max-w-xs">
+                      {t('chat.selectBrandToChat')}
+                    </p>
+                    {/* {brands.length > 0 && (
+                      <div className="flex flex-wrap justify-center gap-2 mt-2">
+                        {brands.slice(0, 3).map((brand) => (
+                          <Button
+                            key={brand.id}
+                            variant="outline"
+                            size="sm"
+                            onClick={() => selectBrand(brand.id)}
+                            className="flex items-center gap-2"
+                          >
+                            <Avatar className="h-5 w-5">
+                              <AvatarFallback className="text-xs">{brand.name.charAt(0)}</AvatarFallback>
+                            </Avatar>
+                            <span>{brand.name}</span>
+                          </Button>
+                        ))}
+                      </div>
+                    )} */}
+                    <Button onClick={() => navigate('/chat/new')} className="mt-4">
+                      {t('chat.startNewChat')}
+                    </Button>
+                  </div>
+                ) : (
+                  // Chat messages
+                  <>
+                    <div className="flex-1 overflow-y-auto p-3 space-y-3">
+                      <div className="text-center">
+                        <Button variant="link" size="sm" onClick={viewFullChat}>
+                          {t('chat.viewFullConversation')}
+                        </Button>
+                      </div>
+                      {messages.length === 0 ? (
+                        <div className="text-center text-gray-500 dark:text-gray-400 py-4">
+                          {t('chat.noMessagesYet')}
+                        </div>
+                      ) : (
+                        <div className="space-y-3">
+                          {messages.map((message) => (
+                            <div
+                              key={message.id}
+                              className={`flex ${message.senderId === currentUser.id ? 'justify-end' : 'justify-start'}`}
+                            >
+                              <div
+                                className={`max-w-[80%] rounded-lg p-2 ${
+                                  message.senderId === currentUser.id
+                                    ? 'bg-primary text-primary-foreground'
+                                    : 'bg-gray-200 dark:bg-gray-700'
+                                }`}
+                              >
+                                <div className="text-xs font-medium mb-1">{message.senderName}</div>
+                                <div className="text-sm">{message.content}</div>
+                                <div className="text-xs mt-1 opacity-70">{formatMessageTime(message.timestamp)}</div>
+                              </div>
+                            </div>
+                          ))}
+                          <div ref={messagesEndRef} />
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Message input */}
+                    <form onSubmit={handleSendMessage} className="p-2 border-t">
+                      <div className="flex space-x-2">
+                        <Input
+                          value={newMessage}
+                          onChange={(e) => setNewMessage(e.target.value)}
+                          placeholder={t('chat.typePlaceholder')}
+                          disabled={sending}
+                          className="flex-1"
+                        />
+                        <Button
+                          type="submit"
+                          size="icon"
+                          disabled={sending || !newMessage.trim()}
+                          className="h-10 w-10"
+                        >
+                          <Send size={16} />
+                        </Button>
+                      </div>
+                    </form>
+                  </>
+                )}
+              </div>
             </div>
           )}
         </div>

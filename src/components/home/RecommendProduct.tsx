@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom'
 
 import configs from '@/config'
 import { getProductFilterApi } from '@/network/apis/product'
-import { buildOneWayResource } from '@/router'
 import { DiscountTypeEnum, OrderEnum, ProductEnum, StatusEnum } from '@/types/enum'
 import { IResponseProduct } from '@/types/product'
 import { calculateDiscountPrice } from '@/utils/price'
@@ -94,10 +93,10 @@ const RecommendProduct = () => {
           </h2>
         </div>
         <Link
-          to={buildOneWayResource(configs.routes.recommendProducts)}
+          to={configs.routes.recommendProducts}
           className="text-primary hover:opacity-80 transition-opacity flex items-center gap-1"
         >
-          {t('button.seeAll')}
+          {t('button.viewAll')}
           <ArrowRight className="w-4 h-4" />
         </Link>
       </div>
@@ -116,15 +115,6 @@ const RecommendProduct = () => {
         <>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
             {products.data.items.map(renderProductCard)}
-          </div>
-
-          <div className="flex justify-center mt-4">
-            <Link
-              to={configs.routes.recommendProducts}
-              className="py-2 rounded-md bg-primary hover:bg-primary/70 text-primary-foreground px-12"
-            >
-              {t('button.viewAll')}
-            </Link>
           </div>
         </>
       )}

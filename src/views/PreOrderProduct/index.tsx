@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next'
 import Empty from '@/components/empty/Empty'
 import LoadingIcon from '@/components/loading-icon'
 import PreOrderProductCard from '@/components/product/PreOrderProductCard'
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
 import { getPreOrderProductFilterApi } from '@/network/apis/pre-order'
 
 function PreOrderProductSections() {
@@ -19,7 +18,7 @@ function PreOrderProductSections() {
   const hasProducts = preOrderProductData?.items && preOrderProductData.items.length > 0
 
   return (
-    <section className="py-12 px-4 ">
+    <section className="py-12 px-4">
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center gap-2 mb-8">
           <Clock className="w-6 h-6 text-emerald-500" />
@@ -37,27 +36,13 @@ function PreOrderProductSections() {
         )}
 
         {!isLoading && hasProducts && (
-          <Carousel
-            opts={{
-              align: 'start',
-              loop: true,
-            }}
-            className="w-full"
-          >
-            <CarouselContent className="-ml-2 md:-ml-4">
-              {preOrderProductData.items.map((preOrderProduct) => (
-                <CarouselItem key={preOrderProduct.id} className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3 xl:basis-1/3">
-                  <div className="h-full">
-                    <PreOrderProductCard preOrderProduct={preOrderProduct} />
-                  </div>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <div className="hidden md:block">
-              <CarouselPrevious className="left-0 -translate-x-1/2" />
-              <CarouselNext className="right-0 translate-x-1/2" />
-            </div>
-          </Carousel>
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            {preOrderProductData.items.map((preOrderProduct) => (
+              <div key={preOrderProduct.id} className="h-full">
+                <PreOrderProductCard preOrderProduct={preOrderProduct} />
+              </div>
+            ))}
+          </div>
         )}
       </div>
     </section>
