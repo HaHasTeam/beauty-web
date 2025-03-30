@@ -376,7 +376,7 @@ export default function ChatPage() {
     <div
       ref={chatContainerRef}
       className={cn(
-        'flex flex-col bg-gray-50 dark:bg-gray-900',
+        'flex flex-col bg-gray-50 dark:bg-gray-900 primary-layout',
         isFullscreen ? 'fixed inset-0 z-50' : 'h-[calc(100vh-4rem)]',
       )}
     >
