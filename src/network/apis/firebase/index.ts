@@ -1,5 +1,5 @@
 import { TServerResponse } from '@/types/request'
-import { toMutationFetcher } from '@/utils/query'
+import { toMutationFetcher, toQueryFetcher } from '@/utils/query'
 import { privateRequest } from '@/utils/request'
 
 interface RegisterUserDeviceRequest {
@@ -24,3 +24,6 @@ export const createFCMTokenApi = toMutationFetcher<RegisterUserDeviceRequest, TS
     })
   },
 )
+export const getFCMTokenApi = toQueryFetcher<void, TServerResponse<string>>('getFCMTokenApi', async () => {
+  return privateRequest('/fcm/get-token')
+})

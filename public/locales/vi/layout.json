@@ -304,8 +304,8 @@
       "button": "Khám phá sản phẩm"
     },
     "notification": {
-      "title": "Không có thông báo",
-      "description": "Chưa bật thông báo.",
+      "title": "Chưa có thông báo nào",
+      "description": "Chúng tôi sẽ thông báo cho bạn khi có điều gì đó quan trọng xảy ra",
       "button": "Đồng ý"
     },
     "schedule": {
@@ -479,9 +479,18 @@
     "expiredDate": "Hạn sử dụng",
     "exp": "HSD"
   },
+
   "notification": {
+    "title": "Thông báo",
     "viewAll": "Xem tất cả",
-    "viewNotification": "Xem thông báo"
+    "viewNotification": "Xem thông báo",
+    "loginRequired": "Vui lòng đăng nhập để xem thông báo của bạn",
+    "markAsRead": "Đánh dấu đã đọc",
+    "markAllAsRead": "Đánh dấu tất cả đã đọc",
+    "noNotifications": "Chưa có thông báo nào",
+    "today": "Hôm nay",
+    "yesterday": "Hôm qua",
+    "earlier": "Trước đó"
   },
   "cart": {
     "brannedAllMessage": "Sản phẩm này bị cấm.",
