@@ -967,6 +967,8 @@
     "quantity": "Quantity",
     "products": "Products",
     "status": "Status",
+    "classification": "Classification",
+    "price": "Price",
     "cancelBy": "Canceled by",
     "cancelByDate": "Canceled at",
     "cancelReason": "Cancellation reason",

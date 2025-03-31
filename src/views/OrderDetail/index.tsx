@@ -180,7 +180,9 @@ const OrderDetail = () => {
           <div className="flex gap-2 items-center">
             <span className="text-lg text-muted-foreground font-medium">{t('orderDetail.title')}</span>
             {!isFetching && useOrderData?.data && (
-              <span className="text-lg text-muted-foreground">#{useOrderData?.data?.id?.substring(0, 8)}</span>
+              <span className="text-lg text-muted-foreground">
+                #{useOrderData?.data?.id?.substring(0, 8).toUpperCase()}
+              </span>
             )}
           </div>
           {!isFetching && useOrderData?.data && (
