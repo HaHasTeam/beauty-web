@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { CreditCard, HandCoins, Wallet, WalletMinimal } from 'lucide-react'
+import { HandCoins, QrCode, Wallet, WalletMinimal } from 'lucide-react'
 import { useMemo } from 'react'
 import { UseFormReturn } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -78,11 +78,11 @@ export default function PaymentSelection({ form, hasPreOrderProduct, totalPaymen
           isAddMore: false,
         },
         {
-          id: PaymentMethod.CARD,
-          label: `${t('wallet.CARD')}`,
-          icon: <CreditCard className="text-primary" />,
-          isAddMore: true,
-          isDisabled: true,
+          id: PaymentMethod.BANK_TRANSFER,
+          label: `${t('wallet.BANK_TRANSFER')}`,
+          icon: <QrCode className="text-primary" />,
+          isAddMore: false,
+          isDisabled: false,
         },
       ]
     : [
@@ -133,11 +133,11 @@ export default function PaymentSelection({ form, hasPreOrderProduct, totalPaymen
           isAddMore: false,
         },
         {
-          id: PaymentMethod.CARD,
-          label: `${t('wallet.CARD')}`,
-          icon: <CreditCard className="text-primary" />,
-          isAddMore: true,
-          isDisabled: true,
+          id: PaymentMethod.BANK_TRANSFER,
+          label: `${t('wallet.BANK_TRANSFER')}`,
+          icon: <QrCode className="text-primary" />,
+          isAddMore: false,
+          isDisabled: false,
         },
       ]
   const creditCards = [{ id: '1', name: 'Visa - TienPhong Commercial Joint Stock Bank' }]

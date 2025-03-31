@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Pen, Ticket } from 'lucide-react'
-import { useEffect, useId, useMemo, useState } from 'react'
+import { useCallback, useEffect, useId, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -14,6 +14,7 @@ import CheckoutTotal from '@/components/checkout/CheckoutTotal'
 import { OrderItemCreation } from '@/components/checkout/OrderItemsCreation'
 import Empty from '@/components/empty/Empty'
 import LoadingContentLayer from '@/components/loading-icon/LoadingContentLayer'
+import { QRCodeAlertDialog } from '@/components/payment'
 import PaymentSelection from '@/components/payment/PaymentSelection'
 import { Button } from '@/components/ui/button'
 import { Form } from '@/components/ui/form'
@@ -25,13 +26,14 @@ import { getMyAddressesApi } from '@/network/apis/address'
 import { getMyCartApi } from '@/network/apis/cart'
 import { updateOrderGroupBuyingApi } from '@/network/apis/group-buying'
 import { createGroupOderApi, createOderApi } from '@/network/apis/order'
+import { PAY_TYPE } from '@/network/apis/transaction/type'
 import { getUserProfileApi } from '@/network/apis/user'
 import { getBestPlatformVouchersApi, getBestShopVouchersApi } from '@/network/apis/voucher'
 import { getCreateOrderSchema } from '@/schemas/order.schema'
 import useCartStore from '@/store/cart'
 import { IAddress } from '@/types/address'
 import { DiscountTypeEnum, PaymentMethod, ProjectInformationEnum, ResultEnum } from '@/types/enum'
-import { ICreateGroupOrder, ICreateOrder, IUpdateGroupOrder } from '@/types/order'
+import { ICreateGroupOrder, ICreateOrder, IOrder, IUpdateGroupOrder } from '@/types/order'
 import { IBrandBestVoucher, ICheckoutItem, IPlatformBestVoucher, TVoucher } from '@/types/voucher'
 import { createCheckoutItem, createCheckoutItems } from '@/utils/cart'
 import {
@@ -127,9 +129,6 @@ const Checkout = () => {
     platformVoucherId: '', // Optional field, default to an empty string
   }
 
-  const handleReset = () => {
-    form.reset()
-  }
   const form = useForm<z.infer<typeof CreateOrderSchema>>({
     resolver: zodResolver(CreateOrderSchema),
     defaultValues: defaultOrderValues,
@@ -164,14 +163,42 @@ const Checkout = () => {
     },
   })
 
+  const [isOpenQRCodePayment, setIsOpenQRCodePayment] = useState(false)
+  const [paymentId, setPaymentId] = useState<string | undefined>(undefined)
+  const [orderData, setOrderData] = useState<IOrder | undefined>(undefined)
+  const handleReset = useCallback(() => {
+    form.reset()
+  }, [form])
+  const onPaymentSuccess = useCallback(() => {
+    successToast({
+      message: t('order.success'),
+    })
+
+    resetCart()
+    handleReset()
+    console.log('payment success')
+    console.log(orderData, 'orderData')
+
+    navigate(configs.routes.checkoutResult, { state: { orderData, status: ResultEnum.SUCCESS } })
+  }, [navigate, orderData, resetCart, handleReset, t, successToast])
+
+  console.log(orderData, 'orderData')
+
   const { mutateAsync: createOrderFn } = useMutation({
     mutationKey: [createOderApi.mutationKey],
     mutationFn: createOderApi.fn,
     onSuccess: (orderData) => {
+      if (orderData.data.paymentMethod === PaymentMethod.BANK_TRANSFER) {
+        setIsOpenQRCodePayment(true)
+        setPaymentId(orderData.data.id)
+        setOrderData(orderData.data as IOrder)
+        return
+      }
       successToast({
         message: t('order.success'),
       })
       resetCart()
+
       handleReset()
       navigate(configs.routes.checkoutResult, { state: { orderData, status: ResultEnum.SUCCESS } })
     },
@@ -296,6 +323,14 @@ const Checkout = () => {
 
   return (
     <>
+      <QRCodeAlertDialog
+        amount={totalPayment}
+        open={isOpenQRCodePayment}
+        onOpenChange={setIsOpenQRCodePayment}
+        type={PAY_TYPE.ORDER}
+        paymentId={paymentId}
+        onSuccess={onPaymentSuccess}
+      />
       {(isGettingProfile || isGettingAddress) && <LoadingContentLayer />}
       {selectedCartItem && Object.keys(selectedCartItem)?.length > 0 && (
         <div className="relative w-full mx-auto py-5 ">

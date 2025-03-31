@@ -299,7 +299,7 @@
     },
     "address": {
       "title": "No Address Found",
-      "description": "It looks like you haven’t added any addresses yet. Add one now to make your shopping experience seamless!",
+      "description": "It looks like you haven't added any addresses yet. Add one now to make your shopping experience seamless!",
       "button": "Add Address"
     },
     "favorite": {
@@ -744,7 +744,19 @@
     "CARD": "Credit Card/Debit Card",
     "WALLET": "Wallet",
     "CASH": "Cash on Delivery",
-    "BANK_TRANSFER": "Credit Card/Debit Card"
+    "BANK_TRANSFER": "Bank Transfer",
+    "scanAndPay": "Scan to Pay",
+    "scanToPayDescription": "Scan this QR code with your banking app to complete payment",
+    "paymentSuccessful": "Payment Successful",
+    "transactionCompleted": "Your transaction has been completed successfully",
+    "amount": "Amount",
+    "transactionId": "Transaction ID",
+    "securePaymentNote": "Secure payment powered by PayOS",
+    "close": "Close",
+    "paymentError": "Payment Error",
+    "paymentFailed": "Payment processing failed",
+    "tryAgain": "Try Again",
+    "cancel": "Cancel"
   },
   "order": {
     "requestManagement": "Request Management",
@@ -848,7 +860,7 @@
       "shipping": "The order is packed and ready for shipment. Awaiting carrier pickup.",
       "preparingOrder": "The order has been confirmed, and the warehouse is currently processing and packing the items.",
       "delivering": "The order has been shipped and is in transit to the customer.",
-      "delivered": "The order has been successfully delivered to the customer’s address.",
+      "delivered": "The order has been successfully delivered to the customer's address.",
       "completed": "The customer has confirmed receipt of the order, and the transaction is finalized.",
       "cancelled": "The refund has been processed and issued to the customer.",
       "returning": "The customer has requested a return, and the order is in the process of being returned to the seller.",
@@ -1282,7 +1294,7 @@
       "REFUNDED": "Upload proof of return completion and refund."
     },
     "videosHint": {
-      "TO_SHIP": "A 360° view of the package to confirm it’s properly sealed.",
+      "TO_SHIP": "A 360° view of the package to confirm it's properly sealed.",
       "SHIPPING": "Record handover moment or a short clip of the sealed package before shipping.",
       "DELIVERED": "Unboxing video to capture package condition & item accuracy.",
       "RETURNING": "Record defect/missing parts/issues clearly for verification.",
