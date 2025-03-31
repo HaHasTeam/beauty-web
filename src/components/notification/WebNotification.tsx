@@ -1,4 +1,14 @@
-import { collection, doc, limit, onSnapshot, orderBy, query, Timestamp, updateDoc, where } from 'firebase/firestore'
+import {
+  collection,
+  doc,
+  limit,
+  onSnapshot,
+  orderBy,
+  query,
+  type Timestamp,
+  updateDoc,
+  where,
+} from 'firebase/firestore'
 import { Bell, LogIn } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -8,9 +18,9 @@ import { useShallow } from 'zustand/react/shallow'
 import emptyNotification from '@/assets/images/EmptyInbox.png'
 import fallBackImage from '@/assets/images/fallBackImage.jpg'
 import logo from '@/assets/images/logo.png'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import configs from '@/config'
 import { useStore } from '@/store/store'
-// import { onMessageListener } from '@/utils/firebase/cloud'
 import { db } from '@/utils/firebase/firestore'
 
 import Empty from '../empty/Empty'
@@ -101,9 +111,6 @@ const WebNotification: React.FC<WebNotificationProps> = ({ className, style }) =
     }
   }, [loadNotification])
 
-  // Toggle dropdown visibility
-  const toggleDropdown = () => setDropdownOpen(!isDropdownOpen)
-
   // Handle click on individual notification
   const handleNotificationClick = (id: string) => {
     markAsRead(id)
@@ -145,25 +152,23 @@ const WebNotification: React.FC<WebNotificationProps> = ({ className, style }) =
 
   return (
     <div className={`relative z-50 ${className}`} style={style}>
-      {/* Bell Icon with Badge */}
-      <div className="relative cursor-pointer" onClick={toggleDropdown}>
-        <Bell className="text-gray-700" />
-        {isAuthenticated && notificationCount > 0 && (
-          <span className="absolute -top-1 -right-1 rounded-full bg-primary text-white text-xs w-4 h-4 flex items-center justify-center">
-            {notificationCount}
-          </span>
-        )}
-      </div>
-
-      {/* Notification Dropdown */}
-      {isDropdownOpen && (
-        <div className="absolute right-0 mt-2 w-80 bg-white border border-gray-200 shadow-lg rounded-md z-10 max-h-[80vh] overflow-y-auto">
+      <DropdownMenu open={isDropdownOpen} onOpenChange={setDropdownOpen}>
+        <DropdownMenuTrigger asChild>
+          <div className="relative cursor-pointer">
+            <Bell className="text-gray-700" />
+            {isAuthenticated && notificationCount > 0 && (
+              <span className="absolute -top-1 -right-1 rounded-full bg-primary text-white text-xs w-4 h-4 flex items-center justify-center">
+                {notificationCount}
+              </span>
+            )}
+          </div>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="w-80 p-0 max-h-[80vh] overflow-y-auto">
           <div className="p-3 border-b border-gray-200">
             <h3 className="font-semibold">{t('notification.title')}</h3>
           </div>
 
           {!isAuthenticated ? (
-            // Login prompt for unauthenticated users
             <div className="p-6 flex flex-col items-center justify-center">
               <LogIn className="h-12 w-12 text-gray-400 mb-3" />
               <p className="text-center text-gray-600 mb-4">{t('notification.loginRequired')}</p>
@@ -176,7 +181,6 @@ const WebNotification: React.FC<WebNotificationProps> = ({ className, style }) =
               </Link>
             </div>
           ) : notifications.length > 0 ? (
-            // Notifications list for authenticated users
             <>
               <div className="max-h-[60vh] overflow-y-auto">
                 {notifications.map((notification) => (
@@ -211,15 +215,14 @@ const WebNotification: React.FC<WebNotificationProps> = ({ className, style }) =
               </Link>
             </>
           ) : (
-            // Empty state for authenticated users with no notifications
             <Empty
               title={t('empty.notification.title')}
               description={t('empty.notification.description')}
               icon={emptyNotification}
             />
           )}
-        </div>
-      )}
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   )
 }
