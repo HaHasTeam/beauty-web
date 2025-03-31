@@ -1,4 +1,4 @@
-import { getMessaging, getToken } from 'firebase/messaging'
+import { getMessaging, getToken, onMessage } from 'firebase/messaging'
 
 import { app } from '../firebase'
 
@@ -42,3 +42,10 @@ export const getRegistrationToken = async () => {
     return null
   }
 }
+export const onMessageListener = () =>
+  new Promise((resolve) => {
+    onMessage(messaging, (payload) => {
+      console.log('payload', payload)
+      resolve(payload)
+    })
+  })
