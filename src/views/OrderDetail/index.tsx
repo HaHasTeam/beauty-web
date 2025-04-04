@@ -495,8 +495,11 @@ const OrderDetail = () => {
             isRejectRequest={cancelAndReturnRequestData?.data?.refundRequest?.rejectedRefundRequest !== null}
             status={cancelAndReturnRequestData?.data?.refundRequest?.status}
             rejectStatus={cancelAndReturnRequestData?.data?.refundRequest?.rejectedRefundRequest?.status}
-            reasonRejected={cancelAndReturnRequestData?.data?.refundRequest?.reasonRejected}
+            reasonRejected={cancelAndReturnRequestData?.data?.refundRequest?.rejectedRefundRequest?.reasonRejected}
             //  returnRequest={cancelAndReturnRequestData?.data?.refundRequest}
+            rejectTime={cancelAndReturnRequestData?.data?.refundRequest?.rejectedRefundRequest?.createdAt}
+            reviewTime={cancelAndReturnRequestData?.data?.refundRequest?.rejectedRefundRequest?.updatedAt}
+            returnTime={cancelAndReturnRequestData?.data?.refundRequest?.createdAt}
           />
         )}
         {!isFetching && useOrderData?.data && cancelAndReturnRequestData?.data?.complaintRequest && (
@@ -517,6 +520,8 @@ const OrderDetail = () => {
             rejectStatus={cancelAndReturnRequestData?.data?.complaintRequest?.status}
             status={cancelAndReturnRequestData?.data?.complaintRequest?.status}
             reasonRejected={cancelAndReturnRequestData?.data?.complaintRequest?.reasonRejected}
+            reviewTime={cancelAndReturnRequestData?.data?.complaintRequest?.updatedAt}
+            returnTime={cancelAndReturnRequestData?.data?.complaintRequest.createdAt}
           />
         )}
       </div>

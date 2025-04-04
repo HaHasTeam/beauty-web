@@ -152,6 +152,7 @@ export interface IReturnRequestOrder extends ICancelRequestOrder {
 }
 export interface IRejectReturnRequestOrder extends ICancelRequestOrder {
   mediaFiles: TServerFile[]
+  reasonRejected: string | null
 }
 
 export interface ICancelAndReturnRequest {
