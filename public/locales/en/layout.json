@@ -308,9 +308,9 @@
       "button": "Discover Products"
     },
     "notification": {
-      "title": "No Notifications",
-      "description": "No notifications enabled",
-      "button": "Confirm"
+      "button": "Confirm",
+      "title": "No notifications yet",
+      "description": "We'll notify you when something important happens"
     },
     "schedule": {
       "title": "Your schedule is empty",
@@ -535,8 +535,16 @@
     "exp": "Exp"
   },
   "notification": {
+    "title": "Notifications",
     "viewAll": "View All",
-    "viewNotification": "View Notifications"
+    "loginRequired": "Please login to view your notifications",
+    "viewNotification": "View Notifications",
+    "markAsRead": "Mark as read",
+    "markAllAsRead": "Mark all as read",
+    "noNotifications": "No notifications yet",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "earlier": "Earlier"
   },
   "cart": {
     "brannedAllMessage": "This product is banned.",

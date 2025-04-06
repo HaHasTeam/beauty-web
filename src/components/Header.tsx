@@ -16,16 +16,6 @@ import SearchBar from './search-bar/SearchBar'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 
 export default function Header() {
-  const notifications = [
-    { id: 1, message: 'New comment on your post', url: 'post/:123' },
-    { id: 2, message: 'You have a new follower', url: 'post/:123' },
-    { id: 3, message: 'Your order has been shipped', url: 'post/:123' },
-  ]
-
-  const handleNotificationClick = (id: number) => {
-    console.log(`Notification ${id} clicked`)
-    // Perform any other action like marking as read or navigating
-  }
   const { t } = useTranslation()
   const [menuOpen, setMenuOpen] = useState(false)
   const { isAuthenticated, isLoading, authData, user } = useStore(
@@ -38,7 +28,7 @@ export default function Header() {
   )
   const { cartItems } = useCartStore()
   const totalItems = Object.values(cartItems).reduce((acc, items) => acc + items.length, 0)
-  console.log(user)
+
   return (
     <header className="w-full bg-white relative shadow-lg">
       <div className="">
@@ -74,9 +64,9 @@ export default function Header() {
           {/* desktop menu */}
           <div className="md:flex gap-3 hidden items-center justify-center">
             <WebNotification
-              notifications={notifications}
-              notificationCount={notifications.length}
-              onNotificationClick={handleNotificationClick}
+            // notifications={notifications}
+            // notificationCount={notifications.length}
+            // onNotificationClick={handleNotificationClick}
             />
             {!isLoading && isAuthenticated ? (
               <Link
@@ -128,11 +118,7 @@ export default function Header() {
           <div className="p-4 space-y-2">
             <div className="p-2 flex gap-2 items-center hover:bg-primary/10 rounded-md">
               <Link className="w-full flex gap-2" to={configs.routes.notification}>
-                <WebNotification
-                  notifications={notifications}
-                  notificationCount={notifications.length}
-                  onNotificationClick={handleNotificationClick}
-                />
+                <WebNotification />
                 <span> {t('header.notification')}</span>
               </Link>
             </div>
