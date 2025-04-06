@@ -18,7 +18,7 @@ type OfferCardProps = {
 
 const OfferCard = ({ title, imgSrc, linkTo, buttonText }: OfferCardProps) => (
   <Link to={linkTo} className="group">
-    <Card className="bg-peach-50 bg-card cursor-pointer hover:shadow-lg transition-shadow">
+    <Card className="bg-card cursor-pointer hover:shadow-lg transition-shadow">
       <CardContent className="p-6 space-y-4">
         <h3 className="font-semibold">{title}</h3>
         <ImageWithFallback

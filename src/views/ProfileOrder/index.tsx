@@ -213,7 +213,10 @@ export default function ProfileOrder() {
   //   )
   // }
   const renderOrders = () => {
-    if ((activeTab === 'request' && requests?.length === 0) || (activeTab !== 'request' && orders?.length === 0)) {
+    if (
+      (activeTab === 'request' && !isLoading && requests?.length === 0) ||
+      (activeTab !== 'request' && !isLoading && orders?.length === 0)
+    ) {
       return (
         <div className="flex flex-col items-center justify-center min-h-[400px] text-center">
           <Empty

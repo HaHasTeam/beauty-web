@@ -50,7 +50,7 @@
     "preOderCardTitle": "Đơn đặt trước",
     "groupBuyingDealsCardTitle": "Ưu đãi mua chung",
     "recommendProductsTitle": "Gợi ý sản phẩm",
-    "preOrderTitle": "Sản phẩm sắp ra mắt"
+    "preOrderTitle": "Sản phẩm đặt trước"
   },
   "productCard": {
     "currentPrice": "{{price, currency}}",
@@ -854,7 +854,7 @@
     },
     "proof": "Hình ảnh và video bằng chứng",
     "returnRequestApprovedTitle": "Yêu Cầu Trả Hàng Đã Được Chấp Thuận",
-    "returnRequestApprovedMessage": "Yêu cầu trả hàng của bạn đã được chấp thuận. Vui lòng chuẩn bị, đóng gói và gửi hàng trong vòng {{count}} ngày. Hãy nhớ chụp ảnh và quay video rõ ràng để làm bằng chứng về tình trạng sản phẩm và bao bì nhé.",
+    "returnRequestApprovedMessage": "Yêu cầu trả hàng của bạn đã được chấp thuận. Vui lòng chuẩn bị và đóng gói hàng trong vòng {{count}} ngày. Shipper của thương hiệu chúng tôi sẽ liên hệ bạn để sắp xếp lấy hàng. Hãy nhớ chụp ảnh và quay video rõ ràng để làm bằng chứng về tình trạng sản phẩm và bao bì nhé.",
     "rejectCancelOrderReason": {
       "SHIPPED": "Đơn hàng đã được giao cho đơn vị vận chuyển và không thể hủy.",
       "PROCESSED": "Đơn hàng đã được xử lý và sẵn sàng giao hàng.",
@@ -862,7 +862,9 @@
       "SUSPICIOUS_ACTIVITY": "Yêu cầu hủy đơn hàng có dấu hiệu gian lận hoặc đáng ngờ.",
       "OTHER": "Khác"
     },
-    "processSuccess": "Yêu cầu hủy đơn đã được xử lý thành công!"
+    "processSuccess": "Yêu cầu hủy đơn đã được xử lý thành công!",
+    "time": "Lúc",
+    "by": "Bởi"
   },
   "chat": {
     "inbox": "Hộp thư đến",
@@ -972,10 +974,12 @@
     "no": "Không",
     "message": "Tin nhắn",
     "timeline": "Tiến trình",
-    "subTotal": "Tạm Tính",
-    "quantity": "Số lượng",
-    "products": "Sản phẩm",
+    "subTotal": "Thành Tiền",
+    "quantity": "Số Lượng",
+    "products": "Sản Phẩm",
     "status": "Trạng thái",
+    "classification": "Phân Loại",
+    "price": "Giá",
     "cancelBy": "Hủy bởi",
     "cancelByDate": "Hủy vào lúc",
     "cancelReason": "Lý do hủy",
@@ -1155,7 +1159,7 @@
     "OUT_OF_STOCK": "Hết hàng",
     "SOLD_OUT": "Hết hàng",
     "ALMOST_OUT": "Sắp hết hàng",
-    "button_INACTIVE": "Ngừng hiển thị",
+    "button_INACTIVE": "Ngừng hoạt động",
     "button_ACTIVE": "Kích hoạt",
     "button_OFFICIAL": "Kích hoạt"
   },

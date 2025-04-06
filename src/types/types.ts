@@ -55,7 +55,7 @@ export type TBaseFilterRequestParams = {
   search?: string
   brandId?: string
   categoryId?: string
-  status?: string
+  statuses?: string
   sortBy?: string
   order?: string
   page?: string | number
