@@ -85,8 +85,8 @@ export const OrderRequestFilter = ({ onFilterChange }: FilterProps) => {
         ))}
 
         {(typeFilters.length > 0 || statusFilters.length > 0) && (
-          <Button variant="ghost" size="sm" onClick={clearFilters} className="h-6 px-2 text-destructive/80">
-            {t('request.clearAll')}
+          <Button variant="ghost" size="sm" onClick={clearFilters} className="h-6 px-2 text-gray-500">
+            {t('filter.reset')}
           </Button>
         )}
       </div>

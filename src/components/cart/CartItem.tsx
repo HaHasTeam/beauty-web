@@ -1,4 +1,4 @@
-import { MessageCircle, Store, Tag } from 'lucide-react'
+import { MessageCircle, Tag } from 'lucide-react'
 import { Dispatch, SetStateAction, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
@@ -14,6 +14,7 @@ import { IBrandBestVoucher, ICheckoutItem, TVoucher } from '@/types/voucher'
 import { calculateBrandVoucherDiscount } from '@/utils/price'
 
 import ProductCardLandscape from '../product/ProductCardLandscape'
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 import { Button } from '../ui/button'
 import { Checkbox } from '../ui/checkbox'
 import VoucherCartList from '../voucher/VoucherCartList'
@@ -104,7 +105,11 @@ const CartItem = ({
       <div className="flex items-center gap-2 mb-4">
         {/* group product of brand checkbox */}
         <Checkbox id={brand?.id} checked={isBrandSelected} onClick={handleBrandSelect} />
-        <Store className="w-5 h-5 text-red-500" />
+        {/* <Store className="w-5 h-5 text-red-500" /> */}
+        <Avatar className="w-10 h-10">
+          <AvatarImage src={brand?.logo} alt={brand?.name} />
+          <AvatarFallback>{brand?.name?.charAt(0).toUpperCase() ?? 'A'}</AvatarFallback>
+        </Avatar>
         <Link to={configs.routes.brands + `/${brand?.id}`}>
           <span className="font-medium">{brandName}</span>
         </Link>

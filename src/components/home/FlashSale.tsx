@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 
 import configs from '@/config'
 import { getFlashSaleProductFilterApi } from '@/network/apis/flash-sale'
+import { FlashSaleStatusEnum } from '@/types/flash-sale'
 
 import Empty from '../empty/Empty'
 import LoadingIcon from '../loading-icon'
@@ -14,7 +15,10 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 const FlashSale = () => {
   const { t } = useTranslation()
   const { data: flashSaleProductData, isFetching } = useQuery({
-    queryKey: [getFlashSaleProductFilterApi.queryKey, { page: 1, limit: 10 }],
+    queryKey: [
+      getFlashSaleProductFilterApi.queryKey,
+      { page: 1, limit: 10, statuses: `${FlashSaleStatusEnum.ACTIVE}` },
+    ],
     queryFn: getFlashSaleProductFilterApi.fn,
     select: (data) => data.data,
   })
