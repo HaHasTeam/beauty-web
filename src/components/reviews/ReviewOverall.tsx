@@ -31,14 +31,17 @@ export default function ReviewOverall({ reviewGeneral }: ReviewOverallProps) {
       </div>
 
       <div className="space-y-2">
-        {ratings.map(({ stars, count }) => (
-          <div key={stars} className="flex items-center gap-2">
-            <Ratings rating={stars} size={13} variant="yellow" />
+        {ratings.map(({ stars, count }) => {
+          const percentage = (count / reviewGeneral.totalCount) * 100;
+          return (
+            <div key={stars} className="flex items-center gap-2">
+              <Ratings rating={stars} size={13} variant="yellow" />
 
-            <Progress value={(count / reviewGeneral.totalCount) * 100} className="h-2 w-48" />
-            <span className="text-sm text-gray-600 w-8">{(count / reviewGeneral.totalCount) * 100}%</span>
-          </div>
-        ))}
+              <Progress value={percentage} className="h-2 w-48" />
+              <span className="text-sm text-gray-600 w-8">{percentage.toFixed(2)}%</span>
+            </div>
+          );
+        })}
       </div>
     </div>
   )

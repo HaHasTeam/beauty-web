@@ -15,12 +15,12 @@ type Option = Record<string, string>
 export enum ConsultantServiceTypeEnum {
   Text = 'TEXT',
   SingleChoice = 'SINGLE_CHOICE',
-  MultipleChoice = 'MULTIPLE_CHOICE',
+  MultipleChoice = 'MULTIPLE_CHOICE'
 }
 
 export const ConsultantServiceTypeOptions = Object.keys(ConsultantServiceTypeEnum).map((key) => ({
   label: key.toUpperCase(),
-  value: ConsultantServiceTypeEnum[key as keyof typeof ConsultantServiceTypeEnum],
+  value: ConsultantServiceTypeEnum[key as keyof typeof ConsultantServiceTypeEnum]
 }))
 
 export type ConsultantServiceType = BaseConsultantServiceField &
@@ -57,5 +57,5 @@ export interface IConsultantService extends TMetaData {
 export enum ConsultantServiceStatusEnum {
   ACTIVE = 'ACTIVE',
   INACTIVE = 'INACTIVE',
-  BANNED = 'BANNED',
+  BANNED = 'BANNED'
 }

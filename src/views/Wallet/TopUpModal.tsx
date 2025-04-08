@@ -7,7 +7,7 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { z } from 'zod'
 
-import StripeLogo from '@/assets/images/stripe.png'
+// import StripeLogo from '@/assets/images/stripe.png'
 import Button from '@/components/button'
 import { Badge } from '@/components/ui/badge'
 import { CustomInput } from '@/components/ui/custom-input'
@@ -149,12 +149,12 @@ export default function TopUpModal() {
                     <div className="bg-gray-50 p-4 rounded-lg shadow-sm border-2">
                       <div className="flex justify-between mb-2">
                         <span className="text-sm text-gray-600">
-                          Amount
-                          <Badge className="ml-2 text-white">Top Up</Badge>
+                          {t('wallet.amount', 'Amount')}
+                          <Badge className="ml-2 text-white">{t('wallet.topUp', 'Top Up')}</Badge>
                         </span>
                         <span className="text-sm text-gray-600 flex items-center gap-1">
                           <span className="text-lg font-semibold">VND</span>|{' '}
-                          <span className="text-sm font-light ">Viet Nam Dong</span>
+                          <span className="text-sm font-light ">{t('currency.vnd', 'Viet Nam Dong')}</span>
                         </span>
                       </div>
                       <CustomInput
@@ -206,7 +206,7 @@ export default function TopUpModal() {
                           />
                           <Label htmlFor={PaymentMethodEnum.BANK_TRANSFER} className="flex flex-col gap-6">
                             <div className="flex items-center gap-2">
-                              Pay by bank
+                              {t('wallet.payByBank', 'Pay by bank')}
                               <div className="flex gap-1">
                                 <img
                                   src="https://cdn.haitrieu.com/wp-content/uploads/2022/02/Logo-Vietcombank.png"
@@ -237,14 +237,14 @@ export default function TopUpModal() {
                                   alt="PayOS"
                                   className="h-8 mr-2"
                                 />
-                                We collaborate with PayOS to provide you with the best payment experience with free fee.
+                                {t('wallet.paymentProviderInfo', 'We collaborate with PayOS to provide you with the best payment experience with free fee.')}
                               </div>
                             )}
                           </Label>
                         </div>
                         <ChevronRight className="h-4 w-4 text-gray-400" />
                       </div>
-                      <div className="flex items-center justify-between border-b border-gray-200 pb-4">
+                      {/* <div className="flex items-center justify-between border-b border-gray-200 pb-4">
                         <div className="flex items-start gap-2">
                           <RadioGroupItem
                             value={PaymentMethodEnum.VISA_CARD}
@@ -282,7 +282,7 @@ export default function TopUpModal() {
                           </Label>
                         </div>
                         <ChevronRight className="h-4 w-4 text-gray-400" />
-                      </div>
+                      </div> */}
                     </RadioGroup>
                   </FormItem>
                 )}
@@ -301,7 +301,7 @@ export default function TopUpModal() {
               type="button"
               onClick={form.handleSubmit(onSubmit)}
             >
-              Continue
+              {t('common.continue', 'Continue')}
             </Button>
           )}
           {!!depositRes && (
@@ -311,7 +311,7 @@ export default function TopUpModal() {
               </div>
               <DialogClose className="w-full">
                 <Button className="w-full" variant={'secondary'} type="button">
-                  Close
+                  {t('wallet.close', 'Close')}
                 </Button>
               </DialogClose>
             </>

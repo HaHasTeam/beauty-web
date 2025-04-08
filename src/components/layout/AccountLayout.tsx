@@ -1,9 +1,13 @@
-import { Bell, Flag, Home, Lock, LogOutIcon, Package, Ticket, User, Wallet } from 'lucide-react'
-import { Link, Outlet, useNavigate } from 'react-router-dom'
+import { Bell, Calendar, Flag, Home, Lock, LogOutIcon, Package, Ticket, User, Wallet } from 'lucide-react'
+import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { useShallow } from 'zustand/react/shallow'
 
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import { Separator } from '@/components/ui/separator'
 import configs from '@/config'
+import { cn } from '@/lib/utils'
 import { useStore } from '@/store/store'
 
 function AccountLayout() {
@@ -11,128 +15,246 @@ function AccountLayout() {
     useShallow((state) => ({ unAuthenticate: state.unAuthenticate, user: state.user })),
   )
   const navigate = useNavigate()
-  return (
-    <div className="grid min-h-screen w-full lg:grid-cols-[280px_1fr] max-w-7xl mx-auto">
-      <div className="hidden border-r  md:block">
-        <div className="flex h-full flex-col gap-2">
-          <div className="flex h-[60px] items-center border-b px-6">
-            <Link className="flex items-center gap-2 font-semibold" to={configs.routes.profile}>
-              <User className="h-6 w-6" />
-              <span>{user?.username}</span>
-            </Link>
-          </div>
-          <div className="flex-1 px-3">
-            <div className="space-y-1 py-2">
-              <h2 className="mb-2 px-4 text-lg font-semibold">Tài Khoản Của Tôi</h2>
-              <Button
-                variant="ghost"
-                className="w-full justify-start font-semibold text-primary"
-                onClick={() => {
-                  navigate(configs.routes.profile)
-                }}
-              >
-                <User className="mr-2 h-4 w-4" />
-                Hồ Sơ
-              </Button>
-              <Button
-                variant="ghost"
-                className="w-full justify-start"
-                onClick={() => {
-                  navigate(configs.routes.profileWallet)
-                }}
-              >
-                <Wallet className="mr-2 h-4 w-4" />
-                Ví Tiền
-              </Button>
-              <Button
-                variant="ghost"
-                className="w-full justify-start"
-                onClick={() => {
-                  navigate(configs.routes.profileReport)
-                }}
-              >
-                <Flag className="mr-2 h-4 w-4" />
-                Báo Cáo
-              </Button>
-              <Button
-                variant="ghost"
-                className="w-full justify-start"
-                onClick={() => {
-                  navigate(configs.routes.profileAddress)
-                }}
-              >
-                <Home className="mr-2 h-4 w-4" />
-                Địa Chỉ
-              </Button>
-              <Button
-                variant="ghost"
-                className="w-full justify-start"
-                onClick={() => {
-                  navigate(configs.routes.profilePassword)
-                }}
-              >
-                <Lock className="mr-2 h-4 w-4" />
-                Đổi Mật Khẩu
-              </Button>
-              {/* <Button
-                variant="ghost"
-                className="w-full justify-start"
-                onClick={() => {
-                  navigate(configs.routes.profileFeedback)
-                }}
-              >
-                <Star className="mr-2 h-4 w-4" />
-                My Feedbacks
-              </Button> */}
-            </div>
-            <div className="space-y-1 py-2">
-              <Button
-                variant="ghost"
-                className="w-full justify-start"
-                onClick={() => {
-                  navigate(configs.routes.profileOrder)
-                }}
-              >
-                <Package className="mr-2 h-4 w-4" />
-                Đơn Hàng Của Tôi
-              </Button>
-              <Button
-                variant="ghost"
-                className="w-full justify-start"
-                onClick={() => {
-                  navigate(configs.routes.profileNotification)
-                }}
-              >
-                <Bell className="mr-2 h-4 w-4" />
-                Thông Báo
-              </Button>
-              <Button
-                variant="ghost"
-                className="w-full justify-start"
-                onClick={() => {
-                  navigate(configs.routes.profileVoucher)
-                }}
-              >
-                <Ticket className="mr-2 h-4 w-4" />
-                Kho Voucher
-              </Button>
-
-              <Button
-                variant="default"
-                className="w-full justify-start"
-                onClick={() => {
-                  console.log('đăng xuất')
-                  unAuthenticate()
-                }}
-              >
-                <LogOutIcon className="mr-2 h-4 w-4" />
-                Đăng xuất
-              </Button>
-            </div>
+  const location = useLocation()
+  
+  // Define navigation items
+  const accountMenuItems = [
+    {
+      title: 'Hồ Sơ',
+      icon: <User className="mr-3 h-5 w-5" />,
+      path: configs.routes.profile
+    },
+    {
+      title: 'Ví & Giao Dịch',
+      icon: <Wallet className="mr-3 h-5 w-5" />,
+      path: configs.routes.profileWallet
+    },
+    {
+      title: 'Báo Cáo',
+      icon: <Flag className="mr-3 h-5 w-5" />,
+      path: configs.routes.profileReport
+    },
+    {
+      title: 'Địa Chỉ',
+      icon: <Home className="mr-3 h-5 w-5" />,
+      path: configs.routes.profileAddress
+    },
+    {
+      title: 'Đổi Mật Khẩu',
+      icon: <Lock className="mr-3 h-5 w-5" />,
+      path: configs.routes.profilePassword
+    }
+  ]
+  
+  const serviceMenuItems = [
+    {
+      title: 'Đơn Hàng Của Tôi',
+      icon: <Package className="mr-3 h-5 w-5" />,
+      path: configs.routes.profileOrder
+    },
+    {
+      title: 'Lịch Hẹn Của Tôi',
+      icon: <Calendar className="mr-3 h-5 w-5" />,
+      path: configs.routes.profileBookings
+    },
+    {
+      title: 'Thông Báo',
+      icon: <Bell className="mr-3 h-5 w-5" />,
+      path: configs.routes.profileNotification
+    },
+    {
+      title: 'Kho Voucher',
+      icon: <Ticket className="mr-3 h-5 w-5" />,
+      path: configs.routes.profileVoucher
+    }
+  ]
+  
+  // Check if a menu item is active
+  const isActive = (path: string) => location.pathname === path
+  
+  // Navigation component for both desktop and mobile
+  const AccountNavigation = () => (
+    <ScrollArea className="flex h-full flex-col pb-4">
+      <div className="flex h-[70px] items-center px-5 bg-gradient-to-r from-primary/80 to-primary/50 shadow-md">
+        <div className="flex items-center gap-2.5">
+          <Avatar className="h-10 w-10 border-2 border-white">
+            <AvatarImage src={user?.avatar || undefined} alt={user?.username || 'User'} />
+            <AvatarFallback className="bg-white text-primary font-bold">{user?.username?.charAt(0).toUpperCase() || 'U'}</AvatarFallback>
+          </Avatar>
+          <div>
+            <p className="text-sm font-medium text-white">{user?.username}</p>
+            <p className="text-xs text-white/80">{user?.email}</p>
           </div>
         </div>
       </div>
-      <Outlet />
+      
+      <div className="flex-1 p-4">
+        <div className="space-y-1 py-1">
+          <h3 className="text-xs font-semibold text-primary mb-2 uppercase tracking-wider px-1">Tài khoản</h3>
+          {accountMenuItems.map((item) => (
+            <Button
+              key={item.path}
+              variant="ghost"
+              className={cn(
+                "w-full justify-start text-sm font-medium px-3 py-2.5 mb-0.5 relative rounded-md transition-all duration-200 hover:bg-muted/50",
+                isActive(item.path) 
+                  ? "bg-gradient-to-r from-primary/10 to-transparent text-primary font-semibold" 
+                  : "hover:translate-x-0.5"
+              )}
+              onClick={() => navigate(item.path)}
+            >
+              <span className={cn(
+                "relative z-10 flex items-center transition-transform duration-200",
+                isActive(item.path) ? "scale-105" : "group-hover:scale-105"
+              )}>
+                <span className={cn(
+                  "flex-shrink-0 mr-2.5 transition-colors duration-200", 
+                  isActive(item.path) ? "text-primary" : ""
+                )}>
+                  {item.icon}
+                </span>
+                {item.title}
+              </span>
+              {isActive(item.path) && (
+                <div className="absolute right-2 h-full flex items-center">
+                  <div className="w-1 h-1 rounded-full bg-primary"></div>
+                </div>
+              )}
+            </Button>
+          ))}
+        </div>
+        
+        <Separator className="my-3 bg-muted/60" />
+        
+        <div className="space-y-1 py-1">
+          <h3 className="text-xs font-semibold text-primary mb-2 uppercase tracking-wider px-1">Dịch vụ</h3>
+          {serviceMenuItems.map((item) => (
+            <Button
+              key={item.path}
+              variant="ghost"
+              className={cn(
+                "w-full justify-start text-sm font-medium px-3 py-2.5 mb-0.5 relative rounded-md transition-all duration-200 hover:bg-muted/50",
+                isActive(item.path) 
+                  ? "bg-gradient-to-r from-primary/10 to-transparent text-primary font-semibold" 
+                  : "hover:translate-x-0.5"
+              )}
+              onClick={() => navigate(item.path)}
+            >
+              <span className={cn(
+                "relative z-10 flex items-center transition-transform duration-200",
+                isActive(item.path) ? "scale-105" : "group-hover:scale-105"
+              )}>
+                <span className={cn(
+                  "flex-shrink-0 mr-2.5 transition-colors duration-200", 
+                  isActive(item.path) ? "text-primary" : ""
+                )}>
+                  {item.icon}
+                </span>
+                {item.title}
+              </span>
+              {isActive(item.path) && (
+                <div className="absolute right-2 h-full flex items-center">
+                  <div className="w-1 h-1 rounded-full bg-primary"></div>
+                </div>
+              )}
+            </Button>
+          ))}
+        </div>
+        
+        <Separator className="my-3 bg-muted/60" />
+        
+        <Button
+          variant="ghost"
+          className="w-full justify-start text-sm font-medium px-3 py-2.5 mt-2 text-destructive hover:bg-destructive/10 transition-colors duration-200 rounded-md"
+          onClick={() => {
+            unAuthenticate()
+          }}
+        >
+          <span className="flex-shrink-0 mr-2.5 text-destructive">
+            <LogOutIcon className="h-5 w-5" />
+          </span>
+          Đăng xuất
+        </Button>
+      </div>
+    </ScrollArea>
+  )
+  
+  return (
+    <div className="flex min-h-screen bg-background max-w-7xl mx-auto w-full">
+      {/* Desktop sidebar - hidden on mobile */}
+      <div className="hidden lg:block lg:w-[260px] sticky top-0 h-screen">
+        <div className="h-full bg-card mr-4 shadow-lg rounded-r-lg overflow-hidden">
+          <AccountNavigation />
+        </div>
+      </div>
+      
+      {/* Mobile navigation */}
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-card border-t shadow-md">
+        <div className="flex justify-between items-center p-2 px-4">
+          <Button 
+            variant="ghost"
+            className={cn(
+              "flex flex-col items-center py-1.5 h-auto text-xs rounded-md transition-all duration-200",
+              isActive(configs.routes.profile) 
+                ? "text-primary font-medium" 
+                : "hover:text-primary"
+            )}
+            onClick={() => navigate(configs.routes.profile)}
+          >
+            <User className="h-5 w-5 mb-1" />
+            Tài khoản
+          </Button>
+          
+          <Button 
+            variant="ghost"
+            className={cn(
+              "flex flex-col items-center py-1.5 h-auto text-xs rounded-md transition-all duration-200",
+              isActive(configs.routes.profileOrder) 
+                ? "text-primary font-medium" 
+                : "hover:text-primary"
+            )}
+            onClick={() => navigate(configs.routes.profileOrder)}
+          >
+            <Package className="h-5 w-5 mb-1" />
+            Đơn hàng
+          </Button>
+          
+          <Button 
+            variant="ghost"
+            className={cn(
+              "flex flex-col items-center py-1.5 h-auto text-xs rounded-md transition-all duration-200",
+              isActive(configs.routes.profileNotification) 
+                ? "text-primary font-medium" 
+                : "hover:text-primary"
+            )}
+            onClick={() => navigate(configs.routes.profileNotification)}
+          >
+            <Bell className="h-5 w-5 mb-1" />
+            Thông báo
+          </Button>
+          
+          <Button 
+            variant="ghost"
+            className={cn(
+              "flex flex-col items-center py-1.5 h-auto text-xs rounded-md transition-all duration-200",
+              isActive(configs.routes.profileVoucher) 
+                ? "text-primary font-medium" 
+                : "hover:text-primary"
+            )}
+            onClick={() => navigate(configs.routes.profileVoucher)}
+          >
+            <Ticket className="h-5 w-5 mb-1" />
+            Voucher
+          </Button>
+        </div>
+      </div>
+      
+      {/* Main content */}
+      <div className="flex-1 lg:pl-0 pb-16 lg:pb-0">
+        <div className="p-4 md:p-6">
+          <Outlet />
+        </div>
+      </div>
     </div>
   )
 }

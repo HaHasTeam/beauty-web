@@ -1,6 +1,6 @@
 import { StateCreator } from 'zustand'
 
-import { TUserPa } from '@/types/user'
+import { TUser } from '@/types/user'
 
 import { AuthSlice, AuthState } from './auth.type'
 
@@ -12,14 +12,14 @@ const initialState: AuthState = {
 
 export const createAuthSlice: StateCreator<AuthSlice, [['zustand/immer', never]], [], AuthSlice> = (set, get) => ({
   ...initialState,
-  initialize: (isAuthenticated: boolean, user?: TUserPa) =>
+  initialize: (isAuthenticated: boolean, user?: TUser) =>
     set((state) => {
       state.isLoading = true
       state.isAuthenticated = isAuthenticated
       state.user = user
       state.isLoading = false
     }),
-  authenticate: (user: TUserPa) =>
+  authenticate: (user: TUser) =>
     set((state) => {
       state.isLoading = true
       state.isAuthenticated = true

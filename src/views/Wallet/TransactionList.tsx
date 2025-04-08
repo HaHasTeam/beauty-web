@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { DataTableSkeleton } from '@/components/ui/data-table/data-table-skeleton'
@@ -14,6 +15,7 @@ import { TransactionTable } from './TransactionTable'
 type TransactionQueryState = DataTableQueryState<ITransaction>
 
 export default function TransactionList() {
+  const { t } = useTranslation()
   // Set up URL query states for pagination, filters, and sorting
 
   // Set up query states for data table
@@ -39,7 +41,9 @@ export default function TransactionList() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-gray-600 text-lg font-normal">Transaction History</CardTitle>
+        <CardTitle className="text-gray-600 text-lg font-normal">
+          {t('transaction.history', 'Transaction History')}
+        </CardTitle>
       </CardHeader>
       <CardContent>
         <Shell className="p-0">

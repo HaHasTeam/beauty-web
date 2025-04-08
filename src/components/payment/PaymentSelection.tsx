@@ -174,8 +174,6 @@ export default function PaymentSelection({ form, hasPreOrderProduct, totalPaymen
                           </Label>
                           {method.action}
                         </div>
-                   
-                      
                       </div>
                       {method?.isAddMore && !method.isDisabled && (
                         <div className="pl-16 flex flex-col gap-2">
