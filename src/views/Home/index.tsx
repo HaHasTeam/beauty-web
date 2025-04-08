@@ -16,8 +16,8 @@ function Home() {
             <BeautyConsulting />
             <BeautyOffers />
             <FlashSale />
-            <RecommendProduct />
             <PreOrderProductSections />
+            <RecommendProduct />
           </div>
         </div>
       </div>
