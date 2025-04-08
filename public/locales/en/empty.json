@@ -1,0 +1,7 @@
+{
+  "bookingDetail": {
+    "title": "Booking not found",
+    "description": "The booking you are looking for does not exist or may have been cancelled.",
+    "button": "View All Bookings"
+  }
+}

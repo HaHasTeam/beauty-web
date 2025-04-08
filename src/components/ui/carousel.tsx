@@ -10,11 +10,10 @@ import { cn } from '@/lib/utils'
 type CarouselApi = UseEmblaCarouselType[1]
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>
 type CarouselOptions = UseCarouselParameters[0]
-type CarouselPlugin = UseCarouselParameters[1]
 
 type CarouselProps = {
   opts?: CarouselOptions
-  plugins?: CarouselPlugin
+  plugins?: unknown // Use unknown instead of any - safer but still flexible
   orientation?: 'horizontal' | 'vertical'
   setApi?: (api: CarouselApi) => void
 }
@@ -47,7 +46,7 @@ const Carousel = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivEl
         ...opts,
         axis: orientation === 'horizontal' ? 'x' : 'y',
       },
-      plugins,
+      plugins as unknown as Parameters<typeof useEmblaCarousel>[1],
     )
     const [canScrollPrev, setCanScrollPrev] = React.useState(false)
     const [canScrollNext, setCanScrollNext] = React.useState(false)

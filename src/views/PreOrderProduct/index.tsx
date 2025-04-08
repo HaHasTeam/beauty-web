@@ -21,8 +21,8 @@ function PreOrderProductSections() {
     <section className="py-12 px-4">
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center gap-2 mb-8">
-          <Clock className="w-6 h-6 text-emerald-500" />
-          <h2 className="text-2xl font-bold">{t('home.preOrderTitle')}</h2>
+          <Clock className="w-6 h-6 text-primary" />
+          <h2 className="text-2xl font-bold text-primary">{t('home.preOrderTitle')}</h2>
         </div>
 
         {isLoading && (

@@ -9,7 +9,7 @@ import importPlugin from 'eslint-plugin-import'
 import unusedImports from 'eslint-plugin-unused-imports'
 
 export default tseslint.config(
-  { ignores: ['dist/**/*', '/node_modules'] },
+  { ignores: ['dist/**/*', '/node_modules', 'reference/**/*'] },
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended, importPlugin.flatConfigs.recommended],
     files: ['**/*.{ts,tsx}'],

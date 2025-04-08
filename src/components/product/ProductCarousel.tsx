@@ -33,25 +33,11 @@ const ProductCarousel = ({ product, activeClassification }: ProductCarouselProps
   }, [product?.images, activeClassification, imageSource])
   const [currentImage, setCurrentImage] = useState(activeImages[0].fileUrl ?? '')
 
-  // useEffect(() => {
-  //   if (!api) return
-
-  //   // Set current index when carousel is initialized
-  //   const updateCurrentImage = () => {
-  //     const newIndex = api.selectedScrollSnap()
-  //     setCurrent(newIndex)
-  //     setCurrentImage(activeImages[newIndex]?.fileUrl ?? '')
-  //   }
-
-  //   updateCurrentImage()
-  //   api.on('select', updateCurrentImage)
-
-  //   return () => api.off('select', updateCurrentImage)
-  // }, [api, activeImages])
   useEffect(() => {
     if (!api) return
 
     // Set current index when carousel is initialized
+    api.scrollTo(0)
     setCurrent(api.selectedScrollSnap())
     setCurrentImage(activeImages[api.selectedScrollSnap()]?.fileUrl ?? '')
 
@@ -68,7 +54,7 @@ const ProductCarousel = ({ product, activeClassification }: ProductCarouselProps
     setCurrentImage(activeImages[0]?.fileUrl ?? '')
     api?.scrollTo(0)
   }, [imageSource, activeImages, api])
-
+  console.log('Initial scroll to:', api?.selectedScrollSnap())
   useEffect(() => {
     if (activeClassification !== null) {
       setImageSource('classification')
@@ -83,7 +69,7 @@ const ProductCarousel = ({ product, activeClassification }: ProductCarouselProps
 
   const thumbnailWidth = useMemo(() => {
     const count = activeImages.length
-    if (count >= 5) return 'basis-[calc(20%-8px)]'
+    if (count > 4) return 'basis-[calc(25%-8px)]'
     if (count === 4) return 'basis-[calc(25%-8px)]'
     if (count === 3) return 'basis-[calc(33%-8px)]'
     if (count === 2) return 'basis-[calc(50%-8px)]'
@@ -127,14 +113,23 @@ const ProductCarousel = ({ product, activeClassification }: ProductCarouselProps
             fallback={fallBackImage}
             className="w-full h-full object-cover object-center rounded-lg"
             src={currentImage}
+            key={currentImage}
             alt={`${imageSource === 'product' ? 'Product' : 'Classification'} view ${current + 1}`}
           />
         </div>
       </div>
-      <Carousel className="w-full flex justify-center items-center" setApi={setApi}>
-        <CarouselContent className="w-full ml-0 flex gap-2 items-center justify-center">
+      <Carousel
+        opts={{
+          align: 'start',
+          startIndex: 0,
+          loop: false,
+        }}
+        className="w-full flex justify-center items-center"
+        setApi={setApi}
+      >
+        <CarouselContent className="w-full ml-0 flex gap-2 items-center justify-start overflow-visible">
           {activeImages.map((img, index) => (
-            <CarouselItem key={img?.id} className={`p-0 ${thumbnailWidth} flex-grow flex-shrink-0`}>
+            <CarouselItem key={index} className={`p-0 ${thumbnailWidth} flex-grow flex-shrink-0`}>
               <Button
                 key={img?.id}
                 variant="outline"
