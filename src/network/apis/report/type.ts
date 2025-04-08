@@ -4,6 +4,8 @@ export type TGetFilteredReportRequestParams = {
   type?: ReportTypeEnum
   status?: ReportTypeEnum
   assigneeId?: string
+  page?: number
+  pageSize?: number
 }
 
 export type TCreateReportRequestParams = Pick<IReport, 'type' | 'reason'> & {

@@ -3,7 +3,7 @@ import { ITransaction } from '@/types/transaction'
 import { toMutationFetcher, toQueryFetcher } from '@/utils/query'
 import { privateRequest } from '@/utils/request'
 
-import { PAY_TYPE, TGetFilteredTransactionsParams } from './type'
+import { IFinancialSummary, PAY_TYPE, TGetFilteredTransactionsParams } from './type'
 
 export const getFilteredTransactions = toQueryFetcher<TGetFilteredTransactionsParams, TServerResponse<ITransaction[]>>(
   'getAllTransactions',
@@ -41,3 +41,13 @@ export const payTransactionApi = toMutationFetcher<
     data: params,
   })
 })
+
+// Financial summary API
+export const getFinancialSummary = toQueryFetcher<void, TServerResponse<IFinancialSummary>>(
+  'getFinancialSummary',
+  async () => {
+    return privateRequest('/transactions/get-financial-summary', {
+      method: 'GET',
+    })
+  },
+)

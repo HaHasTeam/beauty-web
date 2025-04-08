@@ -5,7 +5,7 @@ import { useShallow } from 'zustand/react/shallow'
 // import LoadingLayer from '@/components/loading-icon/LoadingLayer'
 import { getUserProfileApi } from '@/network/apis/user'
 import { useStore } from '@/store/store'
-import { TUserPa } from '@/types/user'
+import { TUser } from '@/types/user'
 
 const PublicGuard: FC<PropsWithChildren> = ({ children }) => {
   const { isAuthenticated, setAuthState } = useStore(
@@ -24,7 +24,7 @@ const PublicGuard: FC<PropsWithChildren> = ({ children }) => {
   useEffect(() => {
     if (isAuthenticated && useProfileData?.data) {
       setAuthState({
-        user: useProfileData.data as unknown as TUserPa,
+        user: useProfileData.data as unknown as TUser,
       })
     }
 
