@@ -545,7 +545,19 @@
     "noNotifications": "No notifications yet",
     "today": "Today",
     "yesterday": "Yesterday",
-    "earlier": "Earlier"
+    "earlier": "Earlier",
+    "list": "List Notification",
+    "total": "Total",
+    "read": "Read",
+    "unread": "Unread",
+    "types": {
+      "orderCancelled": "Order Cancelled",
+      "groupBuyingSuccess": "Group Buying Success",
+      "groupBuyingFailed": "Group Buying Failed",
+      "refundApproved": "Refund Approved",
+      "refundSuccess": "Refund Successful",
+      "brandReceivedReturn": "Return Received"
+    }
   },
   "cart": {
     "brannedAllMessage": "This product is banned.",

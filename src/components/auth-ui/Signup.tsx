@@ -41,8 +41,7 @@ export default function SignUp() {
     resolver: zodResolver(formRegisterSchema),
     defaultValues: {
       email: '',
-      firstName: '',
-      lastName: '',
+      username: '',
       gender: '',
       phone: '',
       password: '',
@@ -67,7 +66,7 @@ export default function SignUp() {
       const formateData = {
         ...values,
         role: getRoleIdByEnumData?.CUSTOMER.id || '',
-        username: values.firstName + ' ' + values.lastName,
+        username: values.username,
       }
       await createUserFn(formateData)
     } catch (error) {
@@ -86,38 +85,20 @@ export default function SignUp() {
       <p className="mb-2.5 mt-2.5 font-normal text-zinc-950 dark:text-zinc-400 text-center">Enter your information</p>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          <div className="flex gap-4">
-            <FormField
-              control={form.control}
-              name="firstName"
-              render={({ field }) => (
-                <FormItem className="flex-1">
-                  <FormLabel>First Name</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Please enter your first name" type="text" {...field} />
-                  </FormControl>
+          <FormField
+            control={form.control}
+            name="username"
+            render={({ field }) => (
+              <FormItem className="flex-1">
+                <FormLabel>Username</FormLabel>
+                <FormControl>
+                  <Input placeholder="Please enter your username" type="text" {...field} />
+                </FormControl>
 
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="lastName"
-              render={({ field }) => (
-                <FormItem className="flex-1">
-                  <FormLabel>Last Name</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Please enter your last name" type="text" {...field} />
-                  </FormControl>
-
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <FormField
             control={form.control}
             name="email"
@@ -226,7 +207,7 @@ export default function SignUp() {
             )}
           />
           <Button type="submit" loading={isSubmitting} disabled={isSubmitting} className="w-full  text-white">
-            Sign In
+            Sign Up
           </Button>
         </form>
       </Form>
