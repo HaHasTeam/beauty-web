@@ -22,9 +22,6 @@ const PublicGuard: FC<PropsWithChildren> = ({ children }) => {
   })
 
   useEffect(() => {
-    // fetch user profile if user is authenticated on first load
-    console.log('check Public Guard', useProfileData, isAuthenticated)
-
     if (isAuthenticated && useProfileData?.data) {
       setAuthState({
         user: useProfileData.data as unknown as TUser,

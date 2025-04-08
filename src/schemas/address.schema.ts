@@ -8,7 +8,7 @@ export const getCreateAddressSchema = () => {
   return z.object({
     fullName: z.string().min(1, i18next.t('validation.required')),
     account: z.string().optional(),
-    phone: z.string().refine(phoneRegex.pattern, phoneRegex.message),
+    phone: z.string().refine(phoneRegex.pattern, phoneRegex.message()),
     detailAddress: z.string().min(1, i18next.t('validation.required')),
     ward: z.string().min(1, i18next.t('validation.required')),
     district: z.string().min(1, i18next.t('validation.required')),

@@ -29,6 +29,9 @@ interface ConfirmDecisionDialogProps {
   mediaFiles?: TServerFile[]
   rejectMediaFiles?: TServerFile[]
   // returnRequest: IReturnRequestOrder
+  rejectTime?: string
+  returnTime?: string
+  reviewTime?: string
 }
 
 export default function ConfirmDecisionDialog({
@@ -50,6 +53,9 @@ export default function ConfirmDecisionDialog({
   rejectStatus,
   status,
   reasonRejected,
+  rejectTime,
+  returnTime,
+  reviewTime,
 }: ConfirmDecisionDialogProps) {
   const { t } = useTranslation()
   // const [openRejectDialog, setOpenRejectDialog] = useState<boolean>(false)
@@ -78,6 +84,12 @@ export default function ConfirmDecisionDialog({
                   }
                   content={
                     <div className="space-y-2">
+                      {returnTime && (
+                        <div className="flex gap-2 items-center">
+                          <h3 className="font-medium text-primary">{t('order.time')}:</h3>
+                          <span>{t('date.toLocaleDateTimeString', { val: new Date(returnTime) })}</span>
+                        </div>
+                      )}
                       {reason && (
                         <div className="flex gap-2 items-center">
                           <h3 className="font-medium text-primary">{t('order.cancelOrderReason.reason')}:</h3>
@@ -112,6 +124,12 @@ export default function ConfirmDecisionDialog({
                                 ? t('requestStatus.approved')
                                 : t('requestStatus.rejected')}
                             </span>
+                          </div>
+                        )}
+                        {rejectTime && (
+                          <div className="flex gap-2 items-center">
+                            <h3 className="font-medium text-primary">{t('order.time')}:</h3>
+                            <span>{t('date.toLocaleDateTimeString', { val: new Date(rejectTime) })}</span>
                           </div>
                         )}
                         {rejectReason && (
@@ -149,6 +167,12 @@ export default function ConfirmDecisionDialog({
                                 ? t('requestStatus.approved')
                                 : t('requestStatus.rejected')}
                             </span>
+                          </div>
+                        )}
+                        {reviewTime && (
+                          <div className="flex gap-2 items-center">
+                            <h3 className="font-medium text-primary">{t('order.time')}:</h3>
+                            <span>{t('date.toLocaleDateTimeString', { val: new Date(reviewTime) })}</span>
                           </div>
                         )}
                         {reasonRejected && (

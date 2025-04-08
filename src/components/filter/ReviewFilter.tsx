@@ -204,6 +204,7 @@ export default function ReviewFilter({ productId, brand }: ReviewFilterProps) {
             }
             return (
               <ReviewSection
+                key={feedback.id}
                 productQuantity={review?.orderDetail?.quantity ?? 0}
                 productClassification={review?.orderDetail?.productClassification || null}
                 feedback={feedback as IResponseFeedback}

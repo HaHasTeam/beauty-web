@@ -1,4 +1,4 @@
-import { MessageCircle, Store, Tag } from 'lucide-react'
+import { MessageCircle, Tag } from 'lucide-react'
 import { useMemo } from 'react'
 import { UseFormReturn } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -17,6 +17,7 @@ import { formatCurrency, formatNumber } from '@/utils/number'
 import { calculateCheckoutBrandVoucherDiscount, getTotalBrandProductsPrice } from '@/utils/price'
 
 import ProductCheckoutLandscape from '../product/ProductCheckoutLandscape'
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 import { Button } from '../ui/button'
 import { FormControl, FormField, FormItem, FormMessage } from '../ui/form'
 import { Input } from '../ui/input'
@@ -70,7 +71,11 @@ const CheckoutItem = ({
       {/* Brand Header */}
       <div className="flex items-center gap-2 mb-4">
         {/* group product of brand checkbox */}
-        <Store className="w-5 h-5 text-red-500" />
+        {/* <Store className="w-5 h-5 text-red-500" /> */}
+        <Avatar className="w-10 h-10">
+          <AvatarImage src={brand?.logo} alt={brand?.name} />
+          <AvatarFallback>{brand?.name?.charAt(0).toUpperCase() ?? 'A'}</AvatarFallback>
+        </Avatar>
         <Link to={configs.routes.brands + `/${brand?.id ?? ''}`}>
           <span className="font-medium">{brandName}</span>
         </Link>

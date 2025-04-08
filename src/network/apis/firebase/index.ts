@@ -1,7 +1,12 @@
 import { TServerResponse } from '@/types/request'
-import { toMutationFetcher } from '@/utils/query'
+import { toMutationFetcher, toQueryFetcher } from '@/utils/query'
 import { privateRequest } from '@/utils/request'
 
+interface RegisterUserDeviceRequest {
+  token: string
+  browser: string
+  os: string
+}
 export const createFirebaseTokenApi = toMutationFetcher<void, TServerResponse<{ token: string }>>(
   'createFirebaseTokenApi',
   async () => {
@@ -10,3 +15,15 @@ export const createFirebaseTokenApi = toMutationFetcher<void, TServerResponse<{ 
     })
   },
 )
+export const createFCMTokenApi = toMutationFetcher<RegisterUserDeviceRequest, TServerResponse<{ token: string }>>(
+  'createFCMTokenApi',
+  async (params) => {
+    return privateRequest('/fcm/create-token', {
+      method: 'POST',
+      data: { token: params.token },
+    })
+  },
+)
+export const getFCMTokenApi = toQueryFetcher<void, TServerResponse<string>>('getFCMTokenApi', async () => {
+  return privateRequest('/fcm/get-token')
+})

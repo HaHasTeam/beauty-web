@@ -50,7 +50,7 @@
     "preOderCardTitle": "Pre-orders",
     "groupBuyingDealsCardTitle": "Group-Buying Deals",
     "recommendProductsTitle": "Recommend Products",
-    "preOrderTitle": "Upcoming Products"
+    "preOrderTitle": "Pre-order products"
   },
   "productCard": {
     "currentPrice": "{{price, currency}}",
@@ -121,8 +121,8 @@
     "goToHome": "Go to Home",
     "approved": "Approve",
     "rejected": "Reject",
-    "submitAndShow": "Submit and Show",
-    "submitAndHide": "Submit and Hide",
+    "submitAndShow": "Submit and Publish",
+    "submitAndHide": "Submit and Unpublish",
     "deselect": "Deselect",
     "select": "Select",
     "edit": "Edit",
@@ -309,9 +309,9 @@
       "button": "Discover Products"
     },
     "notification": {
-      "title": "No Notifications",
-      "description": "No notifications enabled",
-      "button": "Confirm"
+      "button": "Confirm",
+      "title": "No notifications yet",
+      "description": "We'll notify you when something important happens"
     },
     "schedule": {
       "title": "Your schedule is empty",
@@ -536,8 +536,16 @@
     "exp": "Exp"
   },
   "notification": {
+    "title": "Notifications",
     "viewAll": "View All",
-    "viewNotification": "View Notifications"
+    "loginRequired": "Please login to view your notifications",
+    "viewNotification": "View Notifications",
+    "markAsRead": "Mark as read",
+    "markAllAsRead": "Mark all as read",
+    "noNotifications": "No notifications yet",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "earlier": "Earlier"
   },
   "cart": {
     "brannedAllMessage": "This product is banned.",
@@ -1010,7 +1018,7 @@
     },
     "proof": "Images and videos proof",
     "returnRequestApprovedTitle": "Return Request Approved",
-    "returnRequestApprovedMessage": "Your return request has been approved. Please prepare, pack, and ship the item within {{count}} days. Remember to keep clear photos and videos as proof of the product's condition and packaging.",
+    "returnRequestApprovedMessage": "Your return request has been approved. Please prepare and pack the item within {{count}} days. A shipper from our brand will contact you to arrange the pickup. Remember to keep clear photos and videos as proof of the product's condition and packaging.",
     "rejectCancelOrderReason": {
       "SHIPPED": "The order is in transit and cannot be canceled.",
       "PROCESSED": "The order has already been processed and is ready for shipment.",
@@ -1018,7 +1026,9 @@
       "SUSPICIOUS_ACTIVITY": "This cancellation request appears to be fraudulent or suspicious.",
       "OTHER": "Other"
     },
-    "processSuccess": "Cancellation request processed successfully!"
+    "processSuccess": "Cancellation request processed successfully!",
+    "time": "Time",
+    "by": "By"
   },
   "toast": {
     "success": "Your request has been successfully processed, continue with your work.",
@@ -1077,6 +1087,8 @@
     "quantity": "Quantity",
     "products": "Products",
     "status": "Status",
+    "classification": "Classification",
+    "price": "Price",
     "cancelBy": "Canceled by",
     "cancelByDate": "Canceled at",
     "cancelReason": "Cancellation reason",
@@ -1087,6 +1099,8 @@
   "validation": {
     "emailValid": "Please enter a valid email address",
     "required": "Please fill out this field",
+    "usernameValid": "Please enter a valid username",
+    "usernameHelper": "Username must start with a letter, be 3–20 characters, and use only letters, numbers, or underscores",
     "paymentRequired": "Please choose a payment method",
     "reasonRequired": "Please choose a reason",
     "statusRequired": "Please select a status",
