@@ -55,7 +55,7 @@ export default function BalanceOverview() {
                 <div className="flex items-center gap-4">
                   <span className="text-2xl font-bold">
                     {t('format.number', {
-                      value: reportList?.data.items.length ?? 0,
+                      value: reportList?.data.length ?? 0,
                     })}
                   </span>
                 </div>

@@ -77,6 +77,8 @@ const AddAddressDialog = ({ triggerComponent }: AddAddressDialogProps) => {
           account: useProfileData?.data?.id,
           fullAddress: `${values.detailAddress}, ${values.ward}, ${values.district}, ${values.province}`,
         }
+
+        console.log(transformedValues)
         await createAddressFn(transformedValues)
       }
 
