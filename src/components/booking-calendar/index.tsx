@@ -1,123 +1,113 @@
-"use client";
+'use client'
 
-import {
-	type CalendarDate,
-	getLocalTimeZone,
-	getWeeksInMonth,
-	parseDate,
-	today,
-} from "@internationalized/date";
-import type { DateValue } from "@react-aria/calendar";
-import { useLocale } from "@react-aria/i18n";
-import * as React from "react";
+import { type CalendarDate, getLocalTimeZone, getWeeksInMonth, parseDate, today } from '@internationalized/date'
+import type { DateValue } from '@react-aria/calendar'
+import { useLocale } from '@react-aria/i18n'
+import * as React from 'react'
 
-import { Calendar } from "@/components/calendar";
+import { Calendar } from '@/components/calendar'
 
-import { FormPanel } from "./form-panel";
-import { RightPanel } from "./right-panel";
+import { FormPanel } from './form-panel'
+import { RightPanel } from './right-panel'
 
 export interface BookingCalendarProps {
-	onDateTimeSelect?: (dateTime: string) => void;
-	onClose?: () => void;
-	selectedDateTime?: string;
+  onDateTimeSelect?: (dateTime: string) => void
+  onClose?: () => void
+  selectedDateTime?: string
 }
 
-export function BookingCalendar({ 
-	onDateTimeSelect, 
-	onClose, 
-	selectedDateTime 
-}: BookingCalendarProps) {
-	const { locale } = useLocale();
-	const localTimeZone = getLocalTimeZone();
-	
-	// Initialize state from selectedDateTime prop if available
-	const [date, setDate] = React.useState<CalendarDate>(() => {
-		if (selectedDateTime) {
-			const dateObj = new Date(selectedDateTime);
-			return parseDate(dateObj.toISOString().split('T')[0]);
-		}
-		return today(localTimeZone);
-	});
-	
-	const [focusedDate, setFocusedDate] = React.useState<CalendarDate | null>(date);
-	
-	// Extract time from selectedDateTime if available - using 24h format
-	const [selectedTime, setSelectedTime] = React.useState<string | null>(() => {
-		if (selectedDateTime) {
-			const dateObj = new Date(selectedDateTime);
-			const hours = dateObj.getHours();
-			const minutes = dateObj.getMinutes();
-			
-			// Format with leading zeros for 24-hour time
-			const formattedHours = hours < 10 ? `0${hours}` : `${hours}`;
-			const formattedMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`;
-			
-			return `${formattedHours}:${formattedMinutes}`;
-		}
-		return null;
-	});
-	
-	// Update internal state when selectedDateTime prop changes
-	React.useEffect(() => {
-		if (selectedDateTime) {
-			const dateObj = new Date(selectedDateTime);
-			setDate(parseDate(dateObj.toISOString().split('T')[0]));
-			
-			const hours = dateObj.getHours();
-			const minutes = dateObj.getMinutes();
-			
-			// Format with leading zeros for 24-hour time
-			const formattedHours = hours < 10 ? `0${hours}` : `${hours}`;
-			const formattedMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`;
-			
-			setSelectedTime(`${formattedHours}:${formattedMinutes}`);
-		}
-	}, [selectedDateTime]);
-	
-	const weeksInMonth = getWeeksInMonth(focusedDate as DateValue, locale);
+export function BookingCalendar({ onDateTimeSelect, onClose, selectedDateTime }: BookingCalendarProps) {
+  const { locale } = useLocale()
+  const localTimeZone = getLocalTimeZone()
 
-	const handleChangeDate = (date: DateValue) => {
-		setDate(date as CalendarDate);
-		if (selectedTime) {
-			handleDateTimeSelection(date as CalendarDate, selectedTime);
-		}
-	};
+  // Initialize state from selectedDateTime prop if available
+  const [date, setDate] = React.useState<CalendarDate>(() => {
+    if (selectedDateTime) {
+      const dateObj = new Date(selectedDateTime)
+      return parseDate(dateObj.toISOString().split('T')[0])
+    }
+    return today(localTimeZone)
+  })
 
-	const handleChangeAvailableTime = (time: string) => {
-		setSelectedTime(time);
-		handleDateTimeSelection(date, time);
-	};
-	
-	// Tạo datetime string từ ngày và giờ đã chọn (định dạng 24h)
-	const handleDateTimeSelection = (selectedDate: CalendarDate, time: string) => {
-		// Tách thời gian định dạng 24h (ví dụ: "14:30")
-		const [hoursStr, minutesStr] = time.split(":");
-		if (!hoursStr || !minutesStr) return;
-		
-		const hours = Number.parseInt(hoursStr);
-		const minutes = Number.parseInt(minutesStr);
-		
-		if (isNaN(hours) || isNaN(minutes)) return;
+  const [focusedDate, setFocusedDate] = React.useState<CalendarDate | null>(date)
 
-		const currentDate = selectedDate.toDate(localTimeZone);
-		currentDate.setHours(hours, minutes);
-		
-		// Trả về ISO string
-		const dateTimeString = currentDate.toISOString();
-		
-		if (onDateTimeSelect) {
-			onDateTimeSelect(dateTimeString);
-			if (onClose) {
-				onClose();
-			}
-		}
-	};
+  // Extract time from selectedDateTime if available - using 24h format
+  const [selectedTime, setSelectedTime] = React.useState<string | null>(() => {
+    if (selectedDateTime) {
+      const dateObj = new Date(selectedDateTime)
+      const hours = dateObj.getHours()
+      const minutes = dateObj.getMinutes()
 
-	// CSS styles to highlight selected items
-	React.useEffect(() => {
-		// Add custom styling for selected dates and times
-		const style = document.createElement("style");
-		style.textContent = `
+      // Format with leading zeros for 24-hour time
+      const formattedHours = hours < 10 ? `0${hours}` : `${hours}`
+      const formattedMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`
+
+      return `${formattedHours}:${formattedMinutes}`
+    }
+    return null
+  })
+
+  // Update internal state when selectedDateTime prop changes
+  React.useEffect(() => {
+    if (selectedDateTime) {
+      const dateObj = new Date(selectedDateTime)
+      setDate(parseDate(dateObj.toISOString().split('T')[0]))
+
+      const hours = dateObj.getHours()
+      const minutes = dateObj.getMinutes()
+
+      // Format with leading zeros for 24-hour time
+      const formattedHours = hours < 10 ? `0${hours}` : `${hours}`
+      const formattedMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`
+
+      setSelectedTime(`${formattedHours}:${formattedMinutes}`)
+    }
+  }, [selectedDateTime])
+
+  const weeksInMonth = getWeeksInMonth(focusedDate as DateValue, locale)
+
+  const handleChangeDate = (date: DateValue) => {
+    setDate(date as CalendarDate)
+    if (selectedTime) {
+      handleDateTimeSelection(date as CalendarDate, selectedTime)
+    }
+  }
+
+  const handleChangeAvailableTime = (time: string) => {
+    setSelectedTime(time)
+    handleDateTimeSelection(date, time)
+  }
+
+  // Tạo datetime string từ ngày và giờ đã chọn (định dạng 24h)
+  const handleDateTimeSelection = (selectedDate: CalendarDate, time: string) => {
+    // Tách thời gian định dạng 24h (ví dụ: "14:30")
+    const [hoursStr, minutesStr] = time.split(':')
+    if (!hoursStr || !minutesStr) return
+
+    const hours = Number.parseInt(hoursStr)
+    const minutes = Number.parseInt(minutesStr)
+
+    if (isNaN(hours) || isNaN(minutes)) return
+
+    const currentDate = selectedDate.toDate(localTimeZone)
+    currentDate.setHours(hours, minutes)
+
+    // Trả về ISO string
+    const dateTimeString = currentDate.toISOString()
+
+    if (onDateTimeSelect) {
+      onDateTimeSelect(dateTimeString)
+      if (onClose) {
+        onClose()
+      }
+    }
+  }
+
+  // CSS styles to highlight selected items
+  React.useEffect(() => {
+    // Add custom styling for selected dates and times
+    const style = document.createElement('style')
+    style.textContent = `
 			/* Highlight selected date with strong background and border */
 			.calendar-container .react-aria-Cell[aria-selected="true"] {
 				background-color: var(--primary) !important;
@@ -233,48 +223,48 @@ export function BookingCalendar({
 			.custom-scrollbar::-webkit-scrollbar-thumb:hover {
 				background: #aaaaaa;
 			}
-		`;
-		document.head.appendChild(style);
-		
-		return () => {
-			document.head.removeChild(style);
-		};
-	}, []);
+		`
+    document.head.appendChild(style)
 
-	const showForm = false;
+    return () => {
+      document.head.removeChild(style)
+    }
+  }, [])
 
-	return (
-		<div className="w-full bg-background px-4 sm:px-8 py-6 rounded-md shadow-sm border border-border/50">
-			<div className="flex flex-col md:flex-row gap-6">
-				{!showForm ? (
-					<>
-						<div className="calendar-container">
-							<Calendar
-								minValue={today(localTimeZone)}
-								defaultValue={today(localTimeZone)}
-								value={date}
-								onChange={handleChangeDate}
-								onFocusChange={(focused) => setFocusedDate(focused)}
-							/>
-						</div>
-						
-						<div className="time-selection-container w-fit">
-							<h3 className="text-lg font-medium mb-3">Chọn thời gian</h3>
-							<div className="max-h-[320px] overflow-y-auto pr-2 custom-scrollbar">
-								<RightPanel
-									date={date}
-									timeZone={localTimeZone}
-									weeksInMonth={weeksInMonth}
-									handleChangeAvailableTime={handleChangeAvailableTime}
-									selectedTime={selectedTime}
-								/>
-							</div>
-						</div>
-					</>
-				) : (
-					<FormPanel />
-				)}
-			</div>
-		</div>
-	);
+  const showForm = false
+
+  return (
+    <div className="w-full bg-background px-4 sm:px-8 py-6 rounded-md shadow-sm border border-border/50">
+      <div className="flex flex-col md:flex-row gap-6">
+        {!showForm ? (
+          <>
+            <div className="calendar-container">
+              <Calendar
+                minValue={today(localTimeZone)}
+                defaultValue={today(localTimeZone)}
+                value={date}
+                onChange={handleChangeDate}
+                onFocusChange={(focused) => setFocusedDate(focused)}
+              />
+            </div>
+
+            <div className="time-selection-container w-fit">
+              <h3 className="text-lg font-medium mb-3">Chọn thời gian</h3>
+              <div className="max-h-[320px] overflow-y-auto pr-2 custom-scrollbar">
+                <RightPanel
+                  date={date}
+                  timeZone={localTimeZone}
+                  weeksInMonth={weeksInMonth}
+                  handleChangeAvailableTime={handleChangeAvailableTime}
+                  selectedTime={selectedTime}
+                />
+              </div>
+            </div>
+          </>
+        ) : (
+          <FormPanel />
+        )}
+      </div>
+    </div>
+  )
 }

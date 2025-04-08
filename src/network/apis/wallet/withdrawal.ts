@@ -19,32 +19,32 @@ export interface ICreateWithdrawalRequestParams {
 }
 
 // API functions as individual exports
-export const createWithdrawalRequestApi = toMutationFetcher<ICreateWithdrawalRequestParams, TServerResponse<IWithdrawalRequest>>(
-  'createWithdrawalRequestApi',
-  async (data: ICreateWithdrawalRequestParams) => {
-    return privateRequest('/withdrawal-requests', {
-      method: 'POST',
-      data,
-    })
-  }
-)
+export const createWithdrawalRequestApi = toMutationFetcher<
+  ICreateWithdrawalRequestParams,
+  TServerResponse<IWithdrawalRequest>
+>('createWithdrawalRequestApi', async (data: ICreateWithdrawalRequestParams) => {
+  return privateRequest('/withdrawal-requests', {
+    method: 'POST',
+    data,
+  })
+})
 
 export const getWithdrawalRequestsApi = toQueryFetcher<void, TServerResponse<IWithdrawalRequest[]>>(
-  'getWithdrawalRequestsApi', 
+  'getWithdrawalRequestsApi',
   async () => {
     return privateRequest('/withdrawal-requests', {
       method: 'GET',
     })
-  }
+  },
 )
 
 // If you need a specific withdrawal request by ID
 export const getWithdrawalRequestByIdApi = toQueryFetcher<string, TServerResponse<IWithdrawalRequest>>(
   'getWithdrawalRequestByIdApi',
   async (params?: string) => {
-    if (!params) throw new Error('Withdrawal request ID is required');
+    if (!params) throw new Error('Withdrawal request ID is required')
     return privateRequest(`/withdrawal-requests/${params}`, {
       method: 'GET',
     })
-  }
-) 
+  },
+)

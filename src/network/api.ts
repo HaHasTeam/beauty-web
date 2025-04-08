@@ -17,11 +17,11 @@ axiosWithToken.interceptors.request.use(
     }
     return config
   },
-  (error) => Promise.reject(error)
+  (error) => Promise.reject(error),
 )
 
 // Handle response and error
 axiosWithToken.interceptors.response.use(
   (response) => response,
-  (error) => Promise.reject(error)
+  (error) => Promise.reject(error),
 )

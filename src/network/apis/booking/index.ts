@@ -7,8 +7,11 @@ export const getMyBookingList = toQueryFetcher<void, TServerResponse<IBooking[]>
   return privateRequest('/bookings/get-my-bookings')
 })
 
-export const getMyBookingsApi = toQueryFetcher<IBookingFilter, TServerResponse<IBooking[]>>('getMyBookingsApi', async (filter) => {
-  return privateRequest('/bookings/get-my-bookings', {
-    params: filter,
-  })
-})
+export const getMyBookingsApi = toQueryFetcher<IBookingFilter, TServerResponse<IBooking[]>>(
+  'getMyBookingsApi',
+  async (filter) => {
+    return privateRequest('/bookings/get-my-bookings', {
+      params: filter,
+    })
+  },
+)

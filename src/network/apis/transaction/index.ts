@@ -47,7 +47,7 @@ export const getFinancialSummary = toQueryFetcher<void, TServerResponse<IFinanci
   'getFinancialSummary',
   async () => {
     return privateRequest('/transactions/get-financial-summary', {
-      method: 'GET'
+      method: 'GET',
     })
-  }
+  },
 )

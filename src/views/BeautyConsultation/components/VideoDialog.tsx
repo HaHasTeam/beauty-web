@@ -1,18 +1,13 @@
 import { Dialog, DialogContent } from '@/components/ui/dialog'
 
 interface VideoDialogProps {
-  isOpen: boolean;
-  onOpenChange: (isOpen: boolean) => void;
-  videoUrl: string;
-  title: string;
+  isOpen: boolean
+  onOpenChange: (isOpen: boolean) => void
+  videoUrl: string
+  title: string
 }
 
-export default function VideoDialog({
-  isOpen,
-  onOpenChange,
-  videoUrl,
-  title
-}: VideoDialogProps) {
+export default function VideoDialog({ isOpen, onOpenChange, videoUrl, title }: VideoDialogProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-4xl p-0 overflow-hidden">
@@ -29,4 +24,4 @@ export default function VideoDialog({
       </DialogContent>
     </Dialog>
   )
-} 
+}

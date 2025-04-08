@@ -5,19 +5,14 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Card } from '@/components/ui/card'
 
 interface ExpertSectionProps {
-  name: string;
-  title: string;
-  imageUrl: string;
-  certificateUrl?: string;
+  name: string
+  title: string
+  imageUrl: string
+  certificateUrl?: string
 }
 
-export default function ExpertSection({
-  name,
-  title,
-  imageUrl,
-  certificateUrl = '#'
-}: ExpertSectionProps) {
-  const { t } = useTranslation();
+export default function ExpertSection({ name, title, imageUrl, certificateUrl = '#' }: ExpertSectionProps) {
+  const { t } = useTranslation()
 
   return (
     <Card className="mt-4 border border-border shadow-sm">
@@ -39,12 +34,9 @@ export default function ExpertSection({
               <div className="text-xs text-muted-foreground">{title}</div>
             </div>
           </div>
-          
+
           {/* Expert Documents - link on the same row */}
-          <a 
-            href={certificateUrl} 
-            className="text-sm text-primary flex items-center gap-1.5 hover:underline"
-          >
+          <a href={certificateUrl} className="text-sm text-primary flex items-center gap-1.5 hover:underline">
             <DownloadIcon className="h-3.5 w-3.5" />
             {t('beautyConsultation.downloadCertificates', 'Chứng chỉ')}
           </a>
@@ -52,4 +44,4 @@ export default function ExpertSection({
       </div>
     </Card>
   )
-} 
+}

@@ -74,4 +74,4 @@ export default function BookingStatus({ status, size = 'medium' }: BookingStatus
       {tagText}
     </span>
   )
-} 
+}

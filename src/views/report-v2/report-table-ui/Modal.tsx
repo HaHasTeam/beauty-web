@@ -127,7 +127,7 @@ export default function Modal({ setOpen, viewOnly = false, Report }: DialogProps
         await Promise.all(triggerFns.map((trigger) => trigger()))
       }
       const images = form.getValues().files.map((file) => file.fileUrl)
-      
+
       // Process reason field
       let finalReason = form.getValues().reason
       if (finalReason === 'OTHER' && form.getValues().customReason) {
@@ -136,17 +136,17 @@ export default function Modal({ setOpen, viewOnly = false, Report }: DialogProps
         // Replace underscores with spaces in predefined reasons
         finalReason = finalReason.replace(/_/g, ' ')
       }
-      
+
       // Remove customReason from payload
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const {  ...valueWithoutCustomReason } = form.getValues();
-      
-      const value = { 
-        ...valueWithoutCustomReason, 
+      const { ...valueWithoutCustomReason } = form.getValues()
+
+      const value = {
+        ...valueWithoutCustomReason,
         files: images,
-        reason: finalReason 
+        reason: finalReason,
       }
-      
+
       await createReportFn(value as TCreateReportRequestParams)
       queryClient.invalidateQueries({
         queryKey: [getFilteredReports.queryKey, {}],
@@ -189,7 +189,8 @@ export default function Modal({ setOpen, viewOnly = false, Report }: DialogProps
                   <span className="font-bold uppercase text-xs">{t('report.status.label', 'status')}</span>
                 </AlertTitle>
                 <AlertDescription>
-                  {t('report.status.note', 'Note')}: {report?.resultNote || t('report.status.noNote', 'No note provided by the admin')}
+                  {t('report.status.note', 'Note')}:{' '}
+                  {report?.resultNote || t('report.status.noNote', 'No note provided by the admin')}
                 </AlertDescription>
               </div>
             </div>
@@ -208,7 +209,10 @@ export default function Modal({ setOpen, viewOnly = false, Report }: DialogProps
                   <span className="font-bold uppercase text-xs">{t('report.status.label', 'status')}</span>
                 </AlertTitle>
                 <AlertDescription>
-                  {t('report.status.pendingDescription', 'This report will be reviewed soon by the admin. You will be notified once the review is done.')}
+                  {t(
+                    'report.status.pendingDescription',
+                    'This report will be reviewed soon by the admin. You will be notified once the review is done.',
+                  )}
                 </AlertDescription>
               </div>
             </div>
@@ -226,7 +230,9 @@ export default function Modal({ setOpen, viewOnly = false, Report }: DialogProps
                   </span>
                   <span className="font-bold uppercase text-xs">{t('report.status.label', 'status')}</span>
                 </AlertTitle>
-                <AlertDescription>{t('report.status.inProcessingDescription', 'This report is currently in processing')}</AlertDescription>
+                <AlertDescription>
+                  {t('report.status.inProcessingDescription', 'This report is currently in processing')}
+                </AlertDescription>
               </div>
             </div>
           </Alert>
@@ -244,7 +250,8 @@ export default function Modal({ setOpen, viewOnly = false, Report }: DialogProps
                   <span className="font-bold uppercase text-xs">{t('report.status.label', 'status')}</span>
                 </AlertTitle>
                 <AlertDescription>
-                  {t('report.status.note', 'Note')}: {report?.resultNote || t('report.status.noNote', 'No note provided by the admin')}
+                  {t('report.status.note', 'Note')}:{' '}
+                  {report?.resultNote || t('report.status.noNote', 'No note provided by the admin')}
                 </AlertDescription>
               </div>
             </div>
@@ -269,9 +276,7 @@ export default function Modal({ setOpen, viewOnly = false, Report }: DialogProps
                   <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value}>
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue
-                          placeholder={t('report.form.typePlaceholder', 'Select type of report')}
-                        />
+                        <SelectValue placeholder={t('report.form.typePlaceholder', 'Select type of report')} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -325,9 +330,7 @@ export default function Modal({ setOpen, viewOnly = false, Report }: DialogProps
                   <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value}>
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue
-                          placeholder={t('report.form.reasonPlaceholder', 'Select reason for reporting')}
-                        />
+                        <SelectValue placeholder={t('report.form.reasonPlaceholder', 'Select reason for reporting')} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -342,7 +345,7 @@ export default function Modal({ setOpen, viewOnly = false, Report }: DialogProps
                 </FormItem>
               )}
             />
-            
+
             {form.watch('reason') === 'OTHER' && (
               <FormField
                 control={form.control}
@@ -353,7 +356,10 @@ export default function Modal({ setOpen, viewOnly = false, Report }: DialogProps
                     <FormControl>
                       <Textarea
                         {...field}
-                        placeholder={t('report.form.otherReasonPlaceholder', 'Please explain your reason for reporting in detail...')}
+                        placeholder={t(
+                          'report.form.otherReasonPlaceholder',
+                          'Please explain your reason for reporting in detail...',
+                        )}
                         rows={4}
                       />
                     </FormControl>

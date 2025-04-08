@@ -8,11 +8,7 @@ import { BookingCalendar } from '@/components/booking-calendar'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import {
-  Dialog,
-  DialogContent,
-  DialogTrigger,
-} from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import { FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form'
 import { cn } from '@/lib/utils'
 import { formatCurrency } from '@/views/BeautyConsultation/data/mockData'
@@ -56,16 +52,16 @@ const ServiceCheckoutItem = ({ service, form }: ServiceCheckoutItemProps) => {
   }
 
   // Hiển thị ngày giờ đã chọn dưới dạng text khi người dùng đã chọn
-  const formattedDateTime = selectedDateTime 
+  const formattedDateTime = selectedDateTime
     ? format(new Date(selectedDateTime), 'EEEE, dd/MM/yyyy - HH:mm', { locale: vi })
     : null
 
   // Nút chọn ngày giờ cho desktop
   const desktopButton = (
-    <Button 
-      variant={selectedDateTime ? "default" : "outline"} 
-      size="sm" 
-      className={cn(selectedDateTime && "bg-primary text-white font-semibold")}
+    <Button
+      variant={selectedDateTime ? 'default' : 'outline'}
+      size="sm"
+      className={cn(selectedDateTime && 'bg-primary text-white font-semibold')}
     >
       {formattedDateTime || t('booking.selectDateTime', 'Chọn ngày và giờ')}
     </Button>
@@ -73,10 +69,10 @@ const ServiceCheckoutItem = ({ service, form }: ServiceCheckoutItemProps) => {
 
   // Nút chọn ngày giờ cho mobile
   const mobileButton = (
-    <Button 
-      variant={selectedDateTime ? "default" : "outline"} 
-      size="sm" 
-      className={cn("w-full", selectedDateTime && "bg-primary text-white font-semibold")}
+    <Button
+      variant={selectedDateTime ? 'default' : 'outline'}
+      size="sm"
+      className={cn('w-full', selectedDateTime && 'bg-primary text-white font-semibold')}
     >
       {formattedDateTime || t('booking.selectDateTime', 'Chọn ngày và giờ')}
     </Button>
@@ -139,7 +135,7 @@ const ServiceCheckoutItem = ({ service, form }: ServiceCheckoutItemProps) => {
                 </div>
               </div>
             </div>
-            
+
             <div className="flex justify-between items-center">
               <div className="flex gap-2 items-center">
                 <Avatar className="h-8 w-8">
@@ -151,11 +147,9 @@ const ServiceCheckoutItem = ({ service, form }: ServiceCheckoutItemProps) => {
                   <p className="text-xs text-muted-foreground line-clamp-1">{service.consultant.title}</p>
                 </div>
               </div>
-              <div className="font-medium">
-                {formatCurrency(service.price)}
-              </div>
+              <div className="font-medium">{formatCurrency(service.price)}</div>
             </div>
-            
+
             <div>
               <FormField
                 control={form.control}
@@ -163,9 +157,7 @@ const ServiceCheckoutItem = ({ service, form }: ServiceCheckoutItemProps) => {
                 render={() => (
                   <FormItem>
                     <FormControl>
-                      <DialogTrigger asChild>
-                        {mobileButton}
-                      </DialogTrigger>
+                      <DialogTrigger asChild>{mobileButton}</DialogTrigger>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -208,9 +200,7 @@ const ServiceCheckoutItem = ({ service, form }: ServiceCheckoutItemProps) => {
                 render={() => (
                   <FormItem>
                     <FormControl>
-                      <DialogTrigger asChild>
-                        {desktopButton}
-                      </DialogTrigger>
+                      <DialogTrigger asChild>{desktopButton}</DialogTrigger>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -237,10 +227,10 @@ const ServiceCheckoutItem = ({ service, form }: ServiceCheckoutItemProps) => {
           </div>
         </div>
       </div>
-      
+
       {/* Shared Dialog Content */}
       <DialogContent className="p-0 border rounded-lg  max-w-fit">
-        <BookingCalendar 
+        <BookingCalendar
           onDateTimeSelect={handleDateTimeSelect}
           onClose={() => setIsDialogOpen(false)}
           selectedDateTime={selectedDateTime || undefined}

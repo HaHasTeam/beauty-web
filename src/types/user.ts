@@ -7,21 +7,21 @@ import { TRoleResponse } from './role'
 export enum UserGenderEnum {
   MALE = 'MALE',
   FEMALE = 'FEMALE',
-  OTHER = 'OTHER'
+  OTHER = 'OTHER',
 }
 
 export enum UserStatusEnum {
   ACTIVE = 'ACTIVE',
   INACTIVE = 'INACTIVE',
   PENDING = 'PENDING',
-  BANNED = 'BANNED'
+  BANNED = 'BANNED',
 }
 
 export enum UserRoleEnum {
   ADMIN = 'ADMIN',
   MANAGER = 'MANAGER',
   CONSULTANT = 'CONSULTANT',
-  CUSTOMER = 'CUSTOMER'
+  CUSTOMER = 'CUSTOMER',
 }
 
 // Interface cho user trong web
@@ -52,7 +52,7 @@ export type TUser = TMetaData & {
   majorTitle?: string
   introduceVideo?: string
   yoe?: number
-  brand?: IBrand[],
+  brand?: IBrand[]
   addresses?: IAddress[]
 }
 

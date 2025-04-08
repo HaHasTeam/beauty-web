@@ -16,62 +16,62 @@ function AccountLayout() {
   )
   const navigate = useNavigate()
   const location = useLocation()
-  
+
   // Define navigation items
   const accountMenuItems = [
     {
       title: 'Hồ Sơ',
       icon: <User className="mr-3 h-5 w-5" />,
-      path: configs.routes.profile
+      path: configs.routes.profile,
     },
     {
       title: 'Ví & Giao Dịch',
       icon: <Wallet className="mr-3 h-5 w-5" />,
-      path: configs.routes.profileWallet
+      path: configs.routes.profileWallet,
     },
     {
       title: 'Báo Cáo',
       icon: <Flag className="mr-3 h-5 w-5" />,
-      path: configs.routes.profileReport
+      path: configs.routes.profileReport,
     },
     {
       title: 'Địa Chỉ',
       icon: <Home className="mr-3 h-5 w-5" />,
-      path: configs.routes.profileAddress
+      path: configs.routes.profileAddress,
     },
     {
       title: 'Đổi Mật Khẩu',
       icon: <Lock className="mr-3 h-5 w-5" />,
-      path: configs.routes.profilePassword
-    }
+      path: configs.routes.profilePassword,
+    },
   ]
-  
+
   const serviceMenuItems = [
     {
       title: 'Đơn Hàng Của Tôi',
       icon: <Package className="mr-3 h-5 w-5" />,
-      path: configs.routes.profileOrder
+      path: configs.routes.profileOrder,
     },
     {
       title: 'Lịch Hẹn Của Tôi',
       icon: <Calendar className="mr-3 h-5 w-5" />,
-      path: configs.routes.profileBookings
+      path: configs.routes.profileBookings,
     },
     {
       title: 'Thông Báo',
       icon: <Bell className="mr-3 h-5 w-5" />,
-      path: configs.routes.profileNotification
+      path: configs.routes.profileNotification,
     },
     {
       title: 'Kho Voucher',
       icon: <Ticket className="mr-3 h-5 w-5" />,
-      path: configs.routes.profileVoucher
-    }
+      path: configs.routes.profileVoucher,
+    },
   ]
-  
+
   // Check if a menu item is active
   const isActive = (path: string) => location.pathname === path
-  
+
   // Navigation component for both desktop and mobile
   const AccountNavigation = () => (
     <ScrollArea className="flex h-full flex-col pb-4">
@@ -79,7 +79,9 @@ function AccountLayout() {
         <div className="flex items-center gap-2.5">
           <Avatar className="h-10 w-10 border-2 border-white">
             <AvatarImage src={user?.avatar || undefined} alt={user?.username || 'User'} />
-            <AvatarFallback className="bg-white text-primary font-bold">{user?.username?.charAt(0).toUpperCase() || 'U'}</AvatarFallback>
+            <AvatarFallback className="bg-white text-primary font-bold">
+              {user?.username?.charAt(0).toUpperCase() || 'U'}
+            </AvatarFallback>
           </Avatar>
           <div>
             <p className="text-sm font-medium text-white">{user?.username}</p>
@@ -87,7 +89,7 @@ function AccountLayout() {
           </div>
         </div>
       </div>
-      
+
       <div className="flex-1 p-4">
         <div className="space-y-1 py-1">
           <h3 className="text-xs font-semibold text-primary mb-2 uppercase tracking-wider px-1">Tài khoản</h3>
@@ -96,21 +98,25 @@ function AccountLayout() {
               key={item.path}
               variant="ghost"
               className={cn(
-                "w-full justify-start text-sm font-medium px-3 py-2.5 mb-0.5 relative rounded-md transition-all duration-200 hover:bg-muted/50",
-                isActive(item.path) 
-                  ? "bg-gradient-to-r from-primary/10 to-transparent text-primary font-semibold" 
-                  : "hover:translate-x-0.5"
+                'w-full justify-start text-sm font-medium px-3 py-2.5 mb-0.5 relative rounded-md transition-all duration-200 hover:bg-muted/50',
+                isActive(item.path)
+                  ? 'bg-gradient-to-r from-primary/10 to-transparent text-primary font-semibold'
+                  : 'hover:translate-x-0.5',
               )}
               onClick={() => navigate(item.path)}
             >
-              <span className={cn(
-                "relative z-10 flex items-center transition-transform duration-200",
-                isActive(item.path) ? "scale-105" : "group-hover:scale-105"
-              )}>
-                <span className={cn(
-                  "flex-shrink-0 mr-2.5 transition-colors duration-200", 
-                  isActive(item.path) ? "text-primary" : ""
-                )}>
+              <span
+                className={cn(
+                  'relative z-10 flex items-center transition-transform duration-200',
+                  isActive(item.path) ? 'scale-105' : 'group-hover:scale-105',
+                )}
+              >
+                <span
+                  className={cn(
+                    'flex-shrink-0 mr-2.5 transition-colors duration-200',
+                    isActive(item.path) ? 'text-primary' : '',
+                  )}
+                >
                   {item.icon}
                 </span>
                 {item.title}
@@ -123,9 +129,9 @@ function AccountLayout() {
             </Button>
           ))}
         </div>
-        
+
         <Separator className="my-3 bg-muted/60" />
-        
+
         <div className="space-y-1 py-1">
           <h3 className="text-xs font-semibold text-primary mb-2 uppercase tracking-wider px-1">Dịch vụ</h3>
           {serviceMenuItems.map((item) => (
@@ -133,21 +139,25 @@ function AccountLayout() {
               key={item.path}
               variant="ghost"
               className={cn(
-                "w-full justify-start text-sm font-medium px-3 py-2.5 mb-0.5 relative rounded-md transition-all duration-200 hover:bg-muted/50",
-                isActive(item.path) 
-                  ? "bg-gradient-to-r from-primary/10 to-transparent text-primary font-semibold" 
-                  : "hover:translate-x-0.5"
+                'w-full justify-start text-sm font-medium px-3 py-2.5 mb-0.5 relative rounded-md transition-all duration-200 hover:bg-muted/50',
+                isActive(item.path)
+                  ? 'bg-gradient-to-r from-primary/10 to-transparent text-primary font-semibold'
+                  : 'hover:translate-x-0.5',
               )}
               onClick={() => navigate(item.path)}
             >
-              <span className={cn(
-                "relative z-10 flex items-center transition-transform duration-200",
-                isActive(item.path) ? "scale-105" : "group-hover:scale-105"
-              )}>
-                <span className={cn(
-                  "flex-shrink-0 mr-2.5 transition-colors duration-200", 
-                  isActive(item.path) ? "text-primary" : ""
-                )}>
+              <span
+                className={cn(
+                  'relative z-10 flex items-center transition-transform duration-200',
+                  isActive(item.path) ? 'scale-105' : 'group-hover:scale-105',
+                )}
+              >
+                <span
+                  className={cn(
+                    'flex-shrink-0 mr-2.5 transition-colors duration-200',
+                    isActive(item.path) ? 'text-primary' : '',
+                  )}
+                >
                   {item.icon}
                 </span>
                 {item.title}
@@ -160,9 +170,9 @@ function AccountLayout() {
             </Button>
           ))}
         </div>
-        
+
         <Separator className="my-3 bg-muted/60" />
-        
+
         <Button
           variant="ghost"
           className="w-full justify-start text-sm font-medium px-3 py-2.5 mt-2 text-destructive hover:bg-destructive/10 transition-colors duration-200 rounded-md"
@@ -178,7 +188,7 @@ function AccountLayout() {
       </div>
     </ScrollArea>
   )
-  
+
   return (
     <div className="flex min-h-screen bg-background max-w-7xl mx-auto w-full">
       {/* Desktop sidebar - hidden on mobile */}
@@ -187,59 +197,51 @@ function AccountLayout() {
           <AccountNavigation />
         </div>
       </div>
-      
+
       {/* Mobile navigation */}
       <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-card border-t shadow-md">
         <div className="flex justify-between items-center p-2 px-4">
-          <Button 
+          <Button
             variant="ghost"
             className={cn(
-              "flex flex-col items-center py-1.5 h-auto text-xs rounded-md transition-all duration-200",
-              isActive(configs.routes.profile) 
-                ? "text-primary font-medium" 
-                : "hover:text-primary"
+              'flex flex-col items-center py-1.5 h-auto text-xs rounded-md transition-all duration-200',
+              isActive(configs.routes.profile) ? 'text-primary font-medium' : 'hover:text-primary',
             )}
             onClick={() => navigate(configs.routes.profile)}
           >
             <User className="h-5 w-5 mb-1" />
             Tài khoản
           </Button>
-          
-          <Button 
+
+          <Button
             variant="ghost"
             className={cn(
-              "flex flex-col items-center py-1.5 h-auto text-xs rounded-md transition-all duration-200",
-              isActive(configs.routes.profileOrder) 
-                ? "text-primary font-medium" 
-                : "hover:text-primary"
+              'flex flex-col items-center py-1.5 h-auto text-xs rounded-md transition-all duration-200',
+              isActive(configs.routes.profileOrder) ? 'text-primary font-medium' : 'hover:text-primary',
             )}
             onClick={() => navigate(configs.routes.profileOrder)}
           >
             <Package className="h-5 w-5 mb-1" />
             Đơn hàng
           </Button>
-          
-          <Button 
+
+          <Button
             variant="ghost"
             className={cn(
-              "flex flex-col items-center py-1.5 h-auto text-xs rounded-md transition-all duration-200",
-              isActive(configs.routes.profileNotification) 
-                ? "text-primary font-medium" 
-                : "hover:text-primary"
+              'flex flex-col items-center py-1.5 h-auto text-xs rounded-md transition-all duration-200',
+              isActive(configs.routes.profileNotification) ? 'text-primary font-medium' : 'hover:text-primary',
             )}
             onClick={() => navigate(configs.routes.profileNotification)}
           >
             <Bell className="h-5 w-5 mb-1" />
             Thông báo
           </Button>
-          
-          <Button 
+
+          <Button
             variant="ghost"
             className={cn(
-              "flex flex-col items-center py-1.5 h-auto text-xs rounded-md transition-all duration-200",
-              isActive(configs.routes.profileVoucher) 
-                ? "text-primary font-medium" 
-                : "hover:text-primary"
+              'flex flex-col items-center py-1.5 h-auto text-xs rounded-md transition-all duration-200',
+              isActive(configs.routes.profileVoucher) ? 'text-primary font-medium' : 'hover:text-primary',
             )}
             onClick={() => navigate(configs.routes.profileVoucher)}
           >
@@ -248,7 +250,7 @@ function AccountLayout() {
           </Button>
         </div>
       </div>
-      
+
       {/* Main content */}
       <div className="flex-1 lg:pl-0 pb-16 lg:pb-0">
         <div className="p-4 md:p-6">

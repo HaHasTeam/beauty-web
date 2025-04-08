@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { ArrowLeftIcon} from 'lucide-react'
+import { ArrowLeftIcon } from 'lucide-react'
 import { useCallback, useEffect, useId, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -22,39 +22,39 @@ import { getUserProfileApi } from '@/network/apis/user'
 import { PaymentMethod, ResultEnum } from '@/types/enum'
 
 // Import service details related components
-import {  ServiceCheckoutItem, ServiceCheckoutTotal } from './components'
+import { ServiceCheckoutItem, ServiceCheckoutTotal } from './components'
 
 // Define interfaces for service booking
 interface ServiceConsultant {
-  id: string;
-  name: string;
-  imageUrl: string;
-  title: string;
-  experience: number;
+  id: string
+  name: string
+  imageUrl: string
+  title: string
+  experience: number
 }
 
 interface Service {
-  id: string;
-  title: string;
-  description: string;
-  price: number;
-  duration: number;
-  consultant: ServiceConsultant;
-  category: string;
-  type: string;
-  imageUrl: string;
+  id: string
+  title: string
+  description: string
+  price: number
+  duration: number
+  consultant: ServiceConsultant
+  category: string
+  type: string
+  imageUrl: string
 }
 
 interface ServiceBookingData {
-  id: string;
-  serviceId: string;
-  consultantId: string;
-  bookingDateTime: string; // Combined date and time field
-  paymentMethod: PaymentMethod;
-  note?: string;
-  createdAt: string;
-  status: string;
-  paymentStatus: string;
+  id: string
+  serviceId: string
+  consultantId: string
+  bookingDateTime: string // Combined date and time field
+  paymentMethod: PaymentMethod
+  note?: string
+  createdAt: string
+  status: string
+  paymentStatus: string
 }
 
 // Get an array of values from PaymentMethod enum
@@ -77,51 +77,51 @@ const ServiceCheckout = () => {
   const { successToast } = useToast()
   const handleServerError = useHandleServerError()
   const navigate = useNavigate()
-  
+
   // Log the service ID to verify it's being passed correctly
   console.log('Service ID in checkout:', serviceId)
-  
+
   // States
   const [isLoading, setIsLoading] = useState(false)
   const [serviceDetails, setServiceDetails] = useState<Service | null>(null)
-  const [selectedDate, setSelectedDate] = useState<string>("")
-  const [selectedTime, setSelectedTime] = useState<string>("")
-  const [bookingDateTime, setBookingDateTime] = useState<string>("")
-  
+  const [selectedDate, setSelectedDate] = useState<string>('')
+  const [selectedTime, setSelectedTime] = useState<string>('')
+  const [bookingDateTime, setBookingDateTime] = useState<string>('')
+
   // Update the booking date time whenever date or time changes
   useEffect(() => {
     if (selectedDate && selectedTime) {
       try {
         // Validate format
-        const datePart = selectedDate; // Already in ISO format: YYYY-MM-DD
-        const timePart = selectedTime; // Format: HH:MM
-        
+        const datePart = selectedDate // Already in ISO format: YYYY-MM-DD
+        const timePart = selectedTime // Format: HH:MM
+
         // Create a valid ISO datetime string
-        const dateTimeStr = `${datePart}T${timePart}:00`;
-        const dateObj = new Date(dateTimeStr);
-        
+        const dateTimeStr = `${datePart}T${timePart}:00`
+        const dateObj = new Date(dateTimeStr)
+
         // Check if valid date
         if (!isNaN(dateObj.getTime())) {
-          setBookingDateTime(dateTimeStr);
+          setBookingDateTime(dateTimeStr)
         } else {
-          console.error('Invalid date/time combination');
+          console.error('Invalid date/time combination')
         }
       } catch (error) {
-        console.error('Error parsing date/time:', error);
+        console.error('Error parsing date/time:', error)
       }
     }
   }, [selectedDate, selectedTime])
-  
+
   // QR code payment state
   const [isOpenQRCodePayment, setIsOpenQRCodePayment] = useState(false)
   const [paymentId, setPaymentId] = useState<string | undefined>(undefined)
   const [bookingData, setBookingData] = useState<ServiceBookingData | undefined>(undefined)
 
-  // Calculate service price 
+  // Calculate service price
   const servicePrice = useMemo(() => {
     return serviceDetails?.price || 0
   }, [serviceDetails])
-  
+
   // Total payment calculation - no discount now that vouchers are removed
   const totalPayment = useMemo(() => {
     return servicePrice
@@ -143,13 +143,13 @@ const ServiceCheckout = () => {
   // Update form value when bookingDateTime changes
   useEffect(() => {
     if (bookingDateTime) {
-      form.setValue('bookingDateTime', bookingDateTime);
+      form.setValue('bookingDateTime', bookingDateTime)
     }
   }, [bookingDateTime, form])
 
   // Watch for form value changes
   const paymentMethod = form.watch('paymentMethod')
-  
+
   // Update form values when dependencies change
   useEffect(() => {
     form.setValue('serviceId', serviceId || '')
@@ -180,12 +180,12 @@ const ServiceCheckout = () => {
         name: 'Dr. Nguyễn Thị Minh',
         imageUrl: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?q=80&w=1740&auto=format&fit=crop',
         title: 'Bác sĩ Da liễu',
-        experience: 5
-      }
-    };
-    
-    setServiceDetails(mockServiceData);
-  }, [serviceId]);
+        experience: 5,
+      },
+    }
+
+    setServiceDetails(mockServiceData)
+  }, [serviceId])
 
   // Simulated booking service mutation
   const { mutateAsync: bookServiceFn } = useMutation({
@@ -206,10 +206,10 @@ const ServiceCheckout = () => {
               createdAt: new Date().toISOString(),
               status: 'PENDING',
               paymentStatus: 'PENDING',
-            }
-          });
-        }, 1000);
-      });
+            },
+          })
+        }, 1000)
+      })
     },
     onSuccess: (response: any) => {
       if (paymentMethod === PaymentMethod.BANK_TRANSFER) {
@@ -218,23 +218,23 @@ const ServiceCheckout = () => {
         setBookingData(response.data)
         return
       }
-      
+
       successToast({
         message: t('booking.success'),
       })
-      
+
       handleReset()
-      navigate(configs.routes.checkoutResult, { 
-        state: { orderData: response, status: ResultEnum.SUCCESS } 
+      navigate(configs.routes.checkoutResult, {
+        state: { orderData: response, status: ResultEnum.SUCCESS },
       })
     },
   })
 
   const handleReset = useCallback(() => {
     form.reset()
-    setSelectedDate("")
-    setSelectedTime("")
-    setBookingDateTime("")
+    setSelectedDate('')
+    setSelectedTime('')
+    setBookingDateTime('')
   }, [form])
 
   const onPaymentSuccess = useCallback(() => {
@@ -243,8 +243,8 @@ const ServiceCheckout = () => {
     })
 
     handleReset()
-    navigate(configs.routes.checkoutResult, { 
-      state: { orderData: bookingData, status: ResultEnum.SUCCESS } 
+    navigate(configs.routes.checkoutResult, {
+      state: { orderData: bookingData, status: ResultEnum.SUCCESS },
     })
   }, [navigate, bookingData, handleReset, t, successToast])
 
@@ -252,13 +252,13 @@ const ServiceCheckout = () => {
   async function onSubmit(values: BookingServiceFormValues) {
     try {
       setIsLoading(true)
-      
+
       const formData = {
         ...values,
       }
-      
+
       await bookServiceFn(formData)
-      
+
       setIsLoading(false)
     } catch (error) {
       setIsLoading(false)
@@ -281,23 +281,23 @@ const ServiceCheckout = () => {
         paymentId={paymentId}
         onSuccess={onPaymentSuccess}
       />
-      
+
       {(isGettingProfile || isLoading) && <LoadingContentLayer />}
-      
+
       {serviceDetails && (
         <div className="relative w-full mx-auto py-5">
           <div className="w-full xl:px-28 lg:px-12 sm:px-2 px-1 space-y-3">
             {/* Back Button */}
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              className="mb-4" 
+            <Button
+              variant="ghost"
+              size="sm"
+              className="mb-4"
               onClick={() => navigate(configs.routes.beautyConsultationDetail.replace(':serviceId', serviceId || ''))}
             >
               <ArrowLeftIcon className="h-4 w-4 mr-2" />
               {t('booking.backToService', 'Quay lại dịch vụ')}
             </Button>
-            
+
             <Form {...form}>
               <form
                 noValidate
@@ -308,34 +308,24 @@ const ServiceCheckout = () => {
                 <h2 className="uppercase font-bold text-xl">
                   {t('booking.checkout', 'Đặt lịch dịch vụ')}
                   {serviceDetails && (
-                    <span className="ml-2 text-primary font-normal text-base">
-                      #{serviceDetails.id}
-                    </span>
+                    <span className="ml-2 text-primary font-normal text-base">#{serviceDetails.id}</span>
                   )}
                 </h2>
-                
+
                 <div className="w-full flex gap-3 lg:flex-row md:flex-col flex-col">
                   {/* Left column - Service details and booking options */}
                   <div className="w-full md:w-full lg:w-[calc(65%-6px)] xl:w-[calc(70%-6px)]">
                     {/* Service details section */}
-                    <ServiceCheckoutItem 
-                      service={serviceDetails}
-                      form={form}
-                
-                    />
+                    <ServiceCheckoutItem service={serviceDetails} form={form} />
                   </div>
-                  
+
                   {/* Right column - Booking summary */}
                   <div className="w-full md:full lg:w-[calc(35%-6px)] xl:w-[calc(30%-6px)] flex flex-col gap-3">
                     {/* Payment Method Section - Using the layout from Checkout/index.tsx */}
                     <div className="w-full">
-                      <PaymentSelection
-                        form={form as any}
-                        hasPreOrderProduct={true}
-                        totalPayment={totalPayment}
-                      />
+                      <PaymentSelection form={form as any} hasPreOrderProduct={true} totalPayment={totalPayment} />
                     </div>
-                    
+
                     {/* Order Total */}
                     <ServiceCheckoutTotal
                       isLoading={isLoading}
@@ -346,18 +336,19 @@ const ServiceCheckout = () => {
                     />
                   </div>
                 </div>
-
               </form>
             </Form>
           </div>
         </div>
       )}
-      
+
       {!serviceDetails && !isLoading && (
         <div className="my-10 w-full h-full flex flex-col justify-center">
           <div className="text-center">
             <h2 className="text-2xl font-bold mb-4">{t('booking.serviceNotFound', 'Không tìm thấy dịch vụ')}</h2>
-            <p className="text-muted-foreground mb-6">{t('booking.serviceNotFoundDesc', 'Dịch vụ bạn đang tìm kiếm không tồn tại hoặc đã bị xóa.')}</p>
+            <p className="text-muted-foreground mb-6">
+              {t('booking.serviceNotFoundDesc', 'Dịch vụ bạn đang tìm kiếm không tồn tại hoặc đã bị xóa.')}
+            </p>
             <Button onClick={() => navigate(configs.routes.beautyConsultation)}>
               {t('booking.backToServices', 'Quay lại danh sách dịch vụ')}
             </Button>
@@ -368,4 +359,4 @@ const ServiceCheckout = () => {
   )
 }
 
-export default ServiceCheckout 
+export default ServiceCheckout

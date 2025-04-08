@@ -26,68 +26,68 @@ import { ConsultantInfo, ConsultationService, DetailData } from './data/types'
 // Sample consultant certificates (in a real app, this would come from the API/database)
 const SAMPLE_CERTIFICATES = [
   {
-    id: "cert1",
-    name: "Chứng chỉ trang điểm chuyên nghiệp",
-    issuer: "Học viện Làm đẹp Quốc tế",
+    id: 'cert1',
+    name: 'Chứng chỉ trang điểm chuyên nghiệp',
+    issuer: 'Học viện Làm đẹp Quốc tế',
     year: 2020,
-    imageUrl: "https://images.unsplash.com/photo-1584069793933-a152d4b3b168?q=80&w=200&auto=format&fit=crop"
+    imageUrl: 'https://images.unsplash.com/photo-1584069793933-a152d4b3b168?q=80&w=200&auto=format&fit=crop',
   },
   {
-    id: "cert2",
-    name: "Giải thưởng Nghệ sĩ trang điểm của năm",
-    issuer: "Hiệp hội Làm đẹp Việt Nam",
+    id: 'cert2',
+    name: 'Giải thưởng Nghệ sĩ trang điểm của năm',
+    issuer: 'Hiệp hội Làm đẹp Việt Nam',
     year: 2022,
-    imageUrl: "https://images.unsplash.com/photo-1607600588000-bb444b8e215b?q=80&w=200&auto=format&fit=crop"
+    imageUrl: 'https://images.unsplash.com/photo-1607600588000-bb444b8e215b?q=80&w=200&auto=format&fit=crop',
   },
   {
-    id: "cert3",
-    name: "Chứng nhận kỹ thuật trang điểm cô dâu",
-    issuer: "Học viện Trang điểm Sài Gòn",
+    id: 'cert3',
+    name: 'Chứng nhận kỹ thuật trang điểm cô dâu',
+    issuer: 'Học viện Trang điểm Sài Gòn',
     year: 2021,
-    imageUrl: "https://images.unsplash.com/photo-1610299738866-b8c301ff1898?q=80&w=200&auto=format&fit=crop"
+    imageUrl: 'https://images.unsplash.com/photo-1610299738866-b8c301ff1898?q=80&w=200&auto=format&fit=crop',
   },
   {
-    id: "cert4",
-    name: "Chứng nhận đào tạo màu sắc và kỹ thuật nâng cao",
-    issuer: "Đại học Mỹ thuật TP.HCM",
+    id: 'cert4',
+    name: 'Chứng nhận đào tạo màu sắc và kỹ thuật nâng cao',
+    issuer: 'Đại học Mỹ thuật TP.HCM',
     year: 2019,
-    imageUrl: "https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?q=80&w=200&auto=format&fit=crop"
-  }
-];
+    imageUrl: 'https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?q=80&w=200&auto=format&fit=crop',
+  },
+]
 
 // Sample portfolio images (in a real app, this would come from the API/database)
 const SAMPLE_PORTFOLIO = [
   {
-    id: "portfolio1",
-    title: "Trang điểm cô dâu",
-    imageUrl: "https://images.unsplash.com/photo-1566616213894-2d4e1baee5d8?q=80&w=200&auto=format&fit=crop"
+    id: 'portfolio1',
+    title: 'Trang điểm cô dâu',
+    imageUrl: 'https://images.unsplash.com/photo-1566616213894-2d4e1baee5d8?q=80&w=200&auto=format&fit=crop',
   },
   {
-    id: "portfolio2",
-    title: "Trang điểm sự kiện",
-    imageUrl: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?q=80&w=200&auto=format&fit=crop"
+    id: 'portfolio2',
+    title: 'Trang điểm sự kiện',
+    imageUrl: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?q=80&w=200&auto=format&fit=crop',
   },
   {
-    id: "portfolio3",
-    title: "Làm đẹp tự nhiên",
-    imageUrl: "https://images.unsplash.com/photo-1512257639384-2dab4d1b2e2a?q=80&w=200&auto=format&fit=crop"
+    id: 'portfolio3',
+    title: 'Làm đẹp tự nhiên',
+    imageUrl: 'https://images.unsplash.com/photo-1512257639384-2dab4d1b2e2a?q=80&w=200&auto=format&fit=crop',
   },
   {
-    id: "portfolio4",
-    title: "Phong cách thời trang",
-    imageUrl: "https://images.unsplash.com/photo-1519682577862-22b62b24e493?q=80&w=200&auto=format&fit=crop"
+    id: 'portfolio4',
+    title: 'Phong cách thời trang',
+    imageUrl: 'https://images.unsplash.com/photo-1519682577862-22b62b24e493?q=80&w=200&auto=format&fit=crop',
   },
   {
-    id: "portfolio5",
-    title: "Trang điểm dạ hội",
-    imageUrl: "https://images.unsplash.com/photo-1526045478516-99145907023c?q=80&w=200&auto=format&fit=crop"
+    id: 'portfolio5',
+    title: 'Trang điểm dạ hội',
+    imageUrl: 'https://images.unsplash.com/photo-1526045478516-99145907023c?q=80&w=200&auto=format&fit=crop',
   },
   {
-    id: "portfolio6",
-    title: "Phong cách nghệ thuật",
-    imageUrl: "https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?q=80&w=200&auto=format&fit=crop"
-  }
-];
+    id: 'portfolio6',
+    title: 'Phong cách nghệ thuật',
+    imageUrl: 'https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?q=80&w=200&auto=format&fit=crop',
+  },
+]
 
 export default function ServiceDetail() {
   const { t } = useTranslation()
@@ -100,11 +100,11 @@ export default function ServiceDetail() {
   const [videoOpen, setVideoOpen] = useState(false)
   const [consultantVideoOpen, setConsultantVideoOpen] = useState(false)
   const [consultant, setConsultant] = useState<ConsultantInfo | null>(null)
-  const [activeTab, setActiveTab] = useState<string>("services")
+  const [activeTab, setActiveTab] = useState<string>('services')
   const [showAllCertificates, setShowAllCertificates] = useState(false)
   const [enlargedImage, setEnlargedImage] = useState<string | null>(null)
   const [activeConsultantImage, setActiveConsultantImage] = useState<string | null>(null)
-  
+
   // Refs for scrolling into view
   const selectedCardRef = useRef<HTMLDivElement>(null)
   const serviceDetailRef = useRef<HTMLDivElement>(null)
@@ -112,33 +112,31 @@ export default function ServiceDetail() {
 
   useEffect(() => {
     // Reset states when service changes
-    setVideoOpen(false);
-    setConsultantVideoOpen(false);
-    
+    setVideoOpen(false)
+    setConsultantVideoOpen(false)
+
     // Initialize selected service from URL or current service ID
     if (!selectedServiceId) {
-      setSelectedServiceId(serviceId || null);
+      setSelectedServiceId(serviceId || null)
     }
-    
-    setActiveTab("services");
-    setShowAllCertificates(false);
-    setEnlargedImage(null);
-    setActiveConsultantImage(null);
-    
+
+    setActiveTab('services')
+    setShowAllCertificates(false)
+    setEnlargedImage(null)
+    setActiveConsultantImage(null)
+
     // Simulate API call to fetch service details
     setTimeout(() => {
-      const foundService = consultationServices.find(s => s.id === serviceId)
+      const foundService = consultationServices.find((s) => s.id === serviceId)
       if (foundService) {
         setService(foundService)
         setDetailData(serviceDetailAdditions[serviceId as keyof typeof serviceDetailAdditions])
-        
+
         // Find the consultant who offers this service
-        const foundConsultant = consultantInfo.find(c => 
-          c.services.some(s => s.id === serviceId)
-        );
+        const foundConsultant = consultantInfo.find((c) => c.services.some((s) => s.id === serviceId))
         if (foundConsultant) {
-          setConsultant(foundConsultant);
-          setActiveConsultantImage(foundConsultant.imageUrl);
+          setConsultant(foundConsultant)
+          setActiveConsultantImage(foundConsultant.imageUrl)
         }
       }
       setLoading(false)
@@ -155,10 +153,10 @@ export default function ServiceDetail() {
           selectedCardRef.current.scrollIntoView({
             behavior: 'smooth',
             block: 'nearest',
-            inline: 'nearest'
-          });
+            inline: 'nearest',
+          })
         }
-        
+
         // Then scroll service detail into view with a slight delay
         setTimeout(() => {
           if (serviceDetailRef.current) {
@@ -166,13 +164,13 @@ export default function ServiceDetail() {
             serviceDetailRef.current.scrollIntoView({
               behavior: 'smooth',
               block: 'nearest',
-              inline: 'nearest'
-            });
+              inline: 'nearest',
+            })
           }
-        }, 100);
-      }, 50);
+        }, 100)
+      }, 50)
     }
-  }, [selectedServiceId]);
+  }, [selectedServiceId])
 
   // Handle back navigation
   const handleBack = () => {
@@ -181,80 +179,80 @@ export default function ServiceDetail() {
 
   // Handle video play for service
   const handleVideoPlay = () => {
-    setVideoOpen(true);
+    setVideoOpen(true)
   }
 
   // Handle video play for consultant intro
   const handleConsultantVideoPlay = () => {
-    setConsultantVideoOpen(true);
+    setConsultantVideoOpen(true)
   }
 
   // Handle service click in consultant services
   const handleServiceClick = (id: string) => {
     if (id === serviceId) {
       // If clicking the current service, just update the query param
-      setSelectedServiceId(id);
-      return;
+      setSelectedServiceId(id)
+      return
     }
     // Navigate to the new service while preserving the selected service state
-    navigate(`${configs.routes.beautyConsultation}/${id}`);
-    setSelectedServiceId(id);
+    navigate(`${configs.routes.beautyConsultation}/${id}`)
+    setSelectedServiceId(id)
   }
 
   // Toggle showing all certificates
   const toggleCertificates = () => {
-    setShowAllCertificates(prev => !prev);
+    setShowAllCertificates((prev) => !prev)
   }
 
   // Get certificates to display
   const getCertificatesToDisplay = () => {
-    return showAllCertificates ? SAMPLE_CERTIFICATES : SAMPLE_CERTIFICATES.slice(0, 2);
+    return showAllCertificates ? SAMPLE_CERTIFICATES : SAMPLE_CERTIFICATES.slice(0, 2)
   }
 
   // Handle thumbnail click to replace main image
   const handleThumbnailClick = (imageUrl: string) => {
-    setActiveConsultantImage(imageUrl);
+    setActiveConsultantImage(imageUrl)
   }
 
   // Close enlarged image
   const closeEnlargedImage = () => {
-    setEnlargedImage(null);
+    setEnlargedImage(null)
   }
 
   // Get selected service details from consultant
   const getSelectedService = () => {
-    if (!consultant || !selectedServiceId) return null;
-    
-    const consultantService = consultant.services.find(s => s.id === selectedServiceId);
-    if (!consultantService) return null;
-    
-    const fullService = consultationServices.find(s => s.id === selectedServiceId);
-    return fullService || null;
+    if (!consultant || !selectedServiceId) return null
+
+    const consultantService = consultant.services.find((s) => s.id === selectedServiceId)
+    if (!consultantService) return null
+
+    const fullService = consultationServices.find((s) => s.id === selectedServiceId)
+    return fullService || null
   }
 
   // Mock video URL based on service type
   const getVideoUrl = () => {
-    return service?.type === 'PREMIUM' 
-      ? 'https://www.youtube.com/embed/dQw4w9WgXcQ' 
-      : 'https://www.youtube.com/embed/KYz2wyBy3kc';
+    return service?.type === 'PREMIUM'
+      ? 'https://www.youtube.com/embed/dQw4w9WgXcQ'
+      : 'https://www.youtube.com/embed/KYz2wyBy3kc'
   }
 
   // Get consultant intro video URL (mock)
   const getConsultantVideoUrl = () => {
-    return 'https://www.youtube.com/embed/jfKfPfyJRdk';
+    return 'https://www.youtube.com/embed/jfKfPfyJRdk'
   }
 
   // Get all services offered by consultant
   const getConsultantServices = () => {
-    if (!consultant || !service) return [];
-    
+    if (!consultant || !service) return []
+
     return consultant.services
-      .map(s => {
-        const fullService = consultationServices.find(cs => cs.id === s.id);
-        return fullService;
+      .map((s) => {
+        const fullService = consultationServices.find((cs) => cs.id === s.id)
+        return fullService
       })
-      .filter(Boolean) as ConsultationService[];
-  };
+      .filter(Boolean) as ConsultationService[]
+  }
 
   if (loading) {
     return (
@@ -263,7 +261,9 @@ export default function ServiceDetail() {
           <div className="flex items-center justify-center min-h-[60vh]">
             <div className="text-center">
               <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-              <p className="text-muted-foreground">{t('beautyConsultation.loading', 'Đang tải thông tin dịch vụ...')}</p>
+              <p className="text-muted-foreground">
+                {t('beautyConsultation.loading', 'Đang tải thông tin dịch vụ...')}
+              </p>
             </div>
           </div>
         </div>
@@ -277,8 +277,12 @@ export default function ServiceDetail() {
         <div className="container mx-auto lg:px-28 md:px-3 sm:px-4 px-2 py-8">
           <div className="flex flex-col items-center justify-center min-h-[50vh]">
             <div className="text-center">
-              <h2 className="text-2xl font-bold mb-4">{t('beautyConsultation.serviceNotFound', 'Không tìm thấy dịch vụ')}</h2>
-              <p className="text-muted-foreground mb-6">{t('beautyConsultation.serviceNotFoundDesc', 'Dịch vụ bạn đang tìm kiếm không tồn tại hoặc đã bị xóa.')}</p>
+              <h2 className="text-2xl font-bold mb-4">
+                {t('beautyConsultation.serviceNotFound', 'Không tìm thấy dịch vụ')}
+              </h2>
+              <p className="text-muted-foreground mb-6">
+                {t('beautyConsultation.serviceNotFoundDesc', 'Dịch vụ bạn đang tìm kiếm không tồn tại hoặc đã bị xóa.')}
+              </p>
               <Button onClick={handleBack}>
                 <ArrowLeftIcon className="h-4 w-4 mr-2" />
                 {t('beautyConsultation.backToServices', 'Quay lại danh sách dịch vụ')}
@@ -290,19 +294,14 @@ export default function ServiceDetail() {
     )
   }
 
-  const selectedService = getSelectedService() || service;
-  const serviceImages = [selectedService.imageUrl, ...(detailData?.additionalImages || [])];
+  const selectedService = getSelectedService() || service
+  const serviceImages = [selectedService.imageUrl, ...(detailData?.additionalImages || [])]
 
   return (
     <div className="w-full min-h-screen bg-background">
       <div className="container mx-auto lg:px-28 md:px-3 sm:px-4 px-2 py-8">
         {/* Back Button */}
-        <Button 
-          variant="ghost" 
-          size="sm" 
-          className="mb-4" 
-          onClick={handleBack}
-        >
+        <Button variant="ghost" size="sm" className="mb-4" onClick={handleBack}>
           <ArrowLeftIcon className="h-4 w-4 mr-2" />
           {t('beautyConsultation.backToServices', 'Quay lại')}
         </Button>
@@ -313,15 +312,22 @@ export default function ServiceDetail() {
             {/* Consultant Image Section - 1/2 width */}
             <div className="bg-white border border-border rounded-lg shadow-sm overflow-hidden h-fit">
               {/* Main Consultant Image with Video Trigger - 16:9 aspect ratio */}
-              <div className="relative group cursor-pointer overflow-hidden" onClick={activeConsultantImage === consultant.imageUrl ? handleConsultantVideoPlay : () => setEnlargedImage(activeConsultantImage)}>
+              <div
+                className="relative group cursor-pointer overflow-hidden"
+                onClick={
+                  activeConsultantImage === consultant.imageUrl
+                    ? handleConsultantVideoPlay
+                    : () => setEnlargedImage(activeConsultantImage)
+                }
+              >
                 <div className="aspect-video relative">
-                  <img 
-                    src={activeConsultantImage || consultant.imageUrl} 
+                  <img
+                    src={activeConsultantImage || consultant.imageUrl}
                     alt={consultant.name}
                     className="w-full h-full object-cover"
                     onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.src = DEFAULT_IMAGE;
+                      const target = e.target as HTMLImageElement
+                      target.src = DEFAULT_IMAGE
                     }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent p-4 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
@@ -347,39 +353,49 @@ export default function ServiceDetail() {
                   </div>
                 </div>
               </div>
-              
+
               {/* Portfolio Thumbnails Carousel - Compact with 16:9 aspect ratio */}
               <div className="p-1 border-t border-border">
-                <Carousel 
+                <Carousel
                   opts={{
-                    align: "start",
+                    align: 'start',
                     loop: true,
                   }}
                   className="w-full"
                 >
                   <CarouselContent className="ml-1">
                     <CarouselItem className="basis-1/4 pl-1">
-                      <div 
+                      <div
                         className={`aspect-video cursor-pointer relative overflow-hidden rounded-md`}
                         onClick={() => handleThumbnailClick(consultant.imageUrl)}
                       >
-                        <img 
-                          src={consultant.imageUrl} 
+                        <img
+                          src={consultant.imageUrl}
                           alt={consultant.name}
-                          className={cn("w-full h-full object-cover transition-transform duration-300 hover:scale-110", consultant.imageUrl === activeConsultantImage ? "border-2  border-primary p-1 rounded-lg opacity-50" : "")} 
+                          className={cn(
+                            'w-full h-full object-cover transition-transform duration-300 hover:scale-110',
+                            consultant.imageUrl === activeConsultantImage
+                              ? 'border-2  border-primary p-1 rounded-lg opacity-50'
+                              : '',
+                          )}
                         />
                       </div>
                     </CarouselItem>
                     {SAMPLE_PORTFOLIO.map((item) => (
                       <CarouselItem key={item.id} className="basis-1/4 pl-1">
-                        <div 
+                        <div
                           className={`aspect-video cursor-pointer relative overflow-hidden rounded-md`}
                           onClick={() => handleThumbnailClick(item.imageUrl)}
                         >
-                          <img 
-                            src={item.imageUrl} 
+                          <img
+                            src={item.imageUrl}
                             alt={item.title}
-                            className={cn("w-full h-full object-cover transition-transform duration-300 hover:scale-110", item.imageUrl === activeConsultantImage ? "border-2 border-primary p-1 rounded-lg opacity-50" : "")} 
+                            className={cn(
+                              'w-full h-full object-cover transition-transform duration-300 hover:scale-110',
+                              item.imageUrl === activeConsultantImage
+                                ? 'border-2 border-primary p-1 rounded-lg opacity-50'
+                                : '',
+                            )}
                           />
                         </div>
                       </CarouselItem>
@@ -390,34 +406,33 @@ export default function ServiceDetail() {
                 </Carousel>
               </div>
             </div>
-            
+
             {/* Consultant Information Section - 1/2 width */}
             <div className="bg-gradient-to-br from-white via-white to-muted/10 border border-border rounded-lg shadow-sm overflow-hidden h-fit">
               {/* Consultant Header - Modern Card Style */}
               <div className="relative">
                 {/* Header Background with Gradient Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-primary/10 opacity-70" />
-                
+
                 <div className="relative p-4 flex items-center gap-3">
                   {/* Avatar with Ring Effect */}
                   <div className="h-16 w-16 rounded-full border-2 border-primary p-0.5 overflow-hidden flex-shrink-0 shadow-md bg-gradient-to-br from-primary/20 to-white">
-                    <img 
-                      src={consultant.imageUrl} 
+                    <img
+                      src={consultant.imageUrl}
                       alt={consultant.name}
                       className="w-full h-full object-cover rounded-full"
                       onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.src = DEFAULT_IMAGE;
+                        const target = e.target as HTMLImageElement
+                        target.src = DEFAULT_IMAGE
                       }}
                     />
-              
                   </div>
-                  
+
                   {/* Consultant Main Info */}
                   <div className="flex-1 min-w-0">
                     <h1 className="text-xl font-bold text-foreground line-clamp-1">{consultant.name}</h1>
                     <p className="text-sm text-muted-foreground line-clamp-1">{consultant.title}</p>
-                    
+
                     {/* Stats as Pills */}
                     <div className="flex items-center gap-1.5 mt-2 flex-wrap">
                       <div className="px-2 py-0.5 bg-primary/10 text-primary text-xs font-medium rounded-full flex items-center">
@@ -436,7 +451,7 @@ export default function ServiceDetail() {
                   </div>
                 </div>
               </div>
-              
+
               {/* Consultant Content - Clean Tabbed Layout */}
               <div className="p-3">
                 {/* Description Section - Card with Quote Style */}
@@ -445,17 +460,15 @@ export default function ServiceDetail() {
                     {/* Quote Icon */}
                     <div className="absolute top-1 left-1 text-primary/50 font-serif text-4xl -mt-2 -ml-1">"</div>
                     <div className="absolute bottom-1 right-1 text-primary/50 font-serif text-4xl -mb-3 -mr-1">"</div>
-                    
+
                     {/* Description with styled first letter */}
                     <p className="text-sm leading-relaxed text-muted-foreground relative z-10">
-                      <span className="text-primary text-lg font-medium">
-                        {consultant.description.charAt(0)}
-                      </span>
+                      <span className="text-primary text-lg font-medium">{consultant.description.charAt(0)}</span>
                       {consultant.description.substring(1)}
                     </p>
                   </div>
                 </div>
-                
+
                 {/* Certificates Section - Modern List */}
                 <div className="bg-white rounded-md border border-muted/70 shadow-sm">
                   <div className="flex items-center justify-between p-3 border-b border-muted/50">
@@ -464,22 +477,22 @@ export default function ServiceDetail() {
                       {t('beautyConsultation.certificates', 'Chứng chỉ & Giải thưởng')}
                     </h3>
                     {SAMPLE_CERTIFICATES.length > 2 && (
-                      <Button 
-                        variant="ghost" 
-                        size="sm" 
-                        className="h-6 text-xs font-normal hover:bg-primary/5 hover:text-primary" 
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-6 text-xs font-normal hover:bg-primary/5 hover:text-primary"
                         onClick={toggleCertificates}
                       >
-                        {showAllCertificates 
-                          ? t('beautyConsultation.showLess', 'Thu gọn') 
+                        {showAllCertificates
+                          ? t('beautyConsultation.showLess', 'Thu gọn')
                           : t('beautyConsultation.showMore', `Xem tất cả (${SAMPLE_CERTIFICATES.length})`)}
                       </Button>
                     )}
                   </div>
-                  
+
                   <div className="divide-y divide-muted/20">
                     <TooltipProvider>
-                      {getCertificatesToDisplay().map(cert => (
+                      {getCertificatesToDisplay().map((cert) => (
                         <Tooltip key={cert.id}>
                           <TooltipTrigger asChild>
                             <div className="hover:bg-muted/5 transition-colors cursor-help p-2.5 flex items-center">
@@ -487,7 +500,10 @@ export default function ServiceDetail() {
                                 {cert.year.toString().substring(2)}
                               </div>
                               <div className="flex-1">
-                                <a href="#" className="text-sm font-medium text-foreground hover:text-primary transition-colors block leading-tight">
+                                <a
+                                  href="#"
+                                  className="text-sm font-medium text-foreground hover:text-primary transition-colors block leading-tight"
+                                >
                                   {cert.name}
                                 </a>
                                 <p className="text-xs text-muted-foreground mt-0.5">{cert.issuer}</p>
@@ -498,13 +514,11 @@ export default function ServiceDetail() {
                             <div className="space-y-2">
                               <div className="font-medium">{cert.name}</div>
                               <div className="text-xs">{cert.issuer}</div>
-                              <div className="text-xs">{t('beautyConsultation.yearObtained', 'Năm nhận')}: {cert.year}</div>
+                              <div className="text-xs">
+                                {t('beautyConsultation.yearObtained', 'Năm nhận')}: {cert.year}
+                              </div>
                               <div className="h-24 w-full overflow-hidden rounded-md mt-2">
-                                <img 
-                                  src={cert.imageUrl} 
-                                  alt={cert.name}
-                                  className="w-full h-full object-cover" 
-                                />
+                                <img src={cert.imageUrl} alt={cert.name} className="w-full h-full object-cover" />
                               </div>
                             </div>
                           </TooltipContent>
@@ -516,41 +530,35 @@ export default function ServiceDetail() {
               </div>
             </div>
           </div>
-          
+
           {/* Main Content Tabs - Line style */}
-          <Tabs 
-            value={activeTab} 
-            onValueChange={setActiveTab} 
-            className="w-full"
-            ref={tabsRef}
-          >
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full" ref={tabsRef}>
             <div className="border-b border-border mb-6">
               <TabsList className="bg-transparent h-10">
-                <TabsTrigger 
-                  value="services" 
+                <TabsTrigger
+                  value="services"
                   className="text-sm data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:shadow-none rounded-none bg-transparent h-10 px-4"
                 >
                   {t('beautyConsultation.services', 'Dịch vụ')}
                 </TabsTrigger>
-                <TabsTrigger 
-                  value="reviews" 
+                <TabsTrigger
+                  value="reviews"
                   className="text-sm data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:shadow-none rounded-none bg-transparent h-10 px-4"
                 >
                   {t('beautyConsultation.consultantReviews', 'Đánh giá chuyên gia')}
                 </TabsTrigger>
               </TabsList>
             </div>
-            
+
             {/* Services Tab Content */}
             <TabsContent value="services" className="mt-0">
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
                 {/* Left: Service List from Consultant */}
                 <div className="lg:col-span-4 space-y-4">
-                  
                   <div className="grid grid-cols-2 lg:grid-cols-1 gap-3">
                     {getConsultantServices().map((consultantService) => (
-                      <Card 
-                        key={consultantService.id} 
+                      <Card
+                        key={consultantService.id}
                         ref={consultantService.id === selectedServiceId ? selectedCardRef : null}
                         className={`overflow-hidden cursor-pointer ${consultantService.id === selectedServiceId ? 'ring-2 ring-primary' : ''}`}
                         onClick={() => handleServiceClick(consultantService.id)}
@@ -563,18 +571,23 @@ export default function ServiceDetail() {
                               alt={consultantService.title}
                               className="w-full h-full object-cover"
                               onError={(e) => {
-                                const target = e.target as HTMLImageElement;
-                                target.src = DEFAULT_IMAGE;
+                                const target = e.target as HTMLImageElement
+                                target.src = DEFAULT_IMAGE
                               }}
                             />
                           </div>
-                          
+
                           {/* Service info */}
                           <div className="flex-1 p-3 flex flex-col justify-between">
                             <div>
                               <div className="mb-1">
-                                <Badge variant={consultantService.type === "PREMIUM" ? "destructive" : "secondary"} className="text-[10px]">
-                                  {consultantService.type === "PREMIUM" ? t('beautyConsultation.premiumShort', 'Premium') : t('beautyConsultation.standardShort', 'Standard')}
+                                <Badge
+                                  variant={consultantService.type === 'PREMIUM' ? 'destructive' : 'secondary'}
+                                  className="text-[10px]"
+                                >
+                                  {consultantService.type === 'PREMIUM'
+                                    ? t('beautyConsultation.premiumShort', 'Premium')
+                                    : t('beautyConsultation.standardShort', 'Standard')}
                                 </Badge>
                               </div>
                               <h3 className="text-sm font-medium line-clamp-1">{consultantService.title}</h3>
@@ -594,18 +607,17 @@ export default function ServiceDetail() {
                     ))}
                   </div>
                 </div>
-                
+
                 {/* Right: Selected Service Details */}
                 <div ref={serviceDetailRef} className="lg:col-span-8 space-y-6">
-                  
                   {/* Selected Service Hero - Image and Info in vertical layout */}
                   <div className="bg-white border border-border rounded-lg shadow-sm overflow-hidden">
                     <div className="flex flex-col">
                       {/* Service Images Carousel */}
                       <div className="w-full">
-                        <Carousel 
+                        <Carousel
                           opts={{
-                            align: "start",
+                            align: 'start',
                             loop: true,
                           }}
                           className="w-full"
@@ -614,17 +626,17 @@ export default function ServiceDetail() {
                             {serviceImages.map((image, index) => (
                               <CarouselItem key={index}>
                                 <div className="relative aspect-video overflow-hidden">
-                                  <img 
-                                    src={image} 
-                                    alt={`${selectedService.title} - ${index + 1}`} 
+                                  <img
+                                    src={image}
+                                    alt={`${selectedService.title} - ${index + 1}`}
                                     className="w-full h-full object-cover"
                                     onError={(e) => {
-                                      const target = e.target as HTMLImageElement;
-                                      target.src = DEFAULT_IMAGE;
+                                      const target = e.target as HTMLImageElement
+                                      target.src = DEFAULT_IMAGE
                                     }}
                                   />
                                   {index === 0 && (
-                                    <div 
+                                    <div
                                       className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 hover:opacity-100 transition-opacity cursor-pointer group"
                                       onClick={handleVideoPlay}
                                     >
@@ -641,11 +653,11 @@ export default function ServiceDetail() {
                           <CarouselNext className="right-2" />
                         </Carousel>
                       </div>
-                      
+
                       {/* Service Info Card */}
                       <div className="p-5 border-t border-border">
                         <div className="flex items-center gap-2 mb-3">
-                          <Badge 
+                          <Badge
                             variant={selectedService.type === 'PREMIUM' ? 'destructive' : 'secondary'}
                             className="uppercase"
                           >
@@ -668,31 +680,33 @@ export default function ServiceDetail() {
                             </Badge>
                           )}
                         </div>
-                        
+
                         <h1 className="text-xl font-bold mb-2">{selectedService.title}</h1>
                         <p className="text-sm text-muted-foreground mb-4">{selectedService.description}</p>
-                        
+
                         <div className="flex justify-between items-center mb-4">
-                          <div className="text-xl font-bold text-primary">
-                            {formatCurrency(selectedService.price)}
-                          </div>
+                          <div className="text-xl font-bold text-primary">{formatCurrency(selectedService.price)}</div>
                           <div className="flex items-center text-muted-foreground">
                             <CalendarIcon className="h-4 w-4 mr-1" />
                             {selectedService.duration} {t('beautyConsultation.minutes', 'phút')}
                           </div>
                         </div>
-                        
-                        <ActionButton 
-                          onBookNow={() => navigate(configs.routes.serviceCheckout.replace(':serviceId', selectedService.id))}
+
+                        <ActionButton
+                          onBookNow={() =>
+                            navigate(configs.routes.serviceCheckout.replace(':serviceId', selectedService.id))
+                          }
                         />
                       </div>
                     </div>
                   </div>
-                  
+
                   {/* Service Description */}
                   <Card className="border border-border shadow-sm overflow-hidden">
                     <CardHeader>
-                      <CardTitle className="text-lg">{t('beautyConsultation.aboutService', 'Về dịch vụ này')}</CardTitle>
+                      <CardTitle className="text-lg">
+                        {t('beautyConsultation.aboutService', 'Về dịch vụ này')}
+                      </CardTitle>
                     </CardHeader>
                     <CardContent>
                       {detailData?.longDescription ? (
@@ -707,7 +721,7 @@ export default function ServiceDetail() {
                 </div>
               </div>
             </TabsContent>
-            
+
             {/* Reviews Tab Content */}
             <TabsContent value="reviews" className="mt-0">
               <div className="bg-white border border-border rounded-lg shadow-sm overflow-hidden">
@@ -715,13 +729,13 @@ export default function ServiceDetail() {
                   <h2 className="text-lg font-medium mb-4">
                     {t('beautyConsultation.consultantReviews', 'Đánh giá về chuyên gia')} {consultant.name}
                   </h2>
-                  
+
                   <div className="flex flex-col lg:flex-row gap-6">
                     {/* Review Overview Component */}
                     <div className="lg:w-1/3 bg-muted/5 rounded-lg p-4">
                       <ReviewOverall reviewGeneral={mockReviewData} />
                     </div>
-                    
+
                     {/* Review Filter and List */}
                     <div className="lg:w-2/3">
                       <ReviewFilter productId={consultant.id} />
@@ -737,20 +751,17 @@ export default function ServiceDetail() {
             <h2 className="text-lg font-medium mb-4">{t('beautyConsultation.relatedServices', 'Dịch vụ tương tự')}</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
               {consultationServices
-                .filter(s => 
-                  s.id !== selectedService.id && 
-                  s.category === selectedService.category
-                )
+                .filter((s) => s.id !== selectedService.id && s.category === selectedService.category)
                 .slice(0, 3)
                 .map((relatedService) => {
                   // Find the consultant for this service
-                  const serviceConsultant = consultantInfo.find(c => 
-                    c.services.some(s => s.id === relatedService.id)
-                  );
-                  
+                  const serviceConsultant = consultantInfo.find((c) =>
+                    c.services.some((s) => s.id === relatedService.id),
+                  )
+
                   return (
-                    <Card 
-                      key={relatedService.id} 
+                    <Card
+                      key={relatedService.id}
                       className="overflow-hidden flex flex-col transition-all hover:shadow-md group cursor-pointer"
                       onClick={() => handleServiceClick(relatedService.id)}
                     >
@@ -760,12 +771,17 @@ export default function ServiceDetail() {
                           alt={relatedService.title}
                           className="w-full h-full object-cover transition-transform group-hover:scale-105"
                           onError={(e) => {
-                            const target = e.target as HTMLImageElement;
-                            target.src = DEFAULT_IMAGE;
+                            const target = e.target as HTMLImageElement
+                            target.src = DEFAULT_IMAGE
                           }}
                         />
-                        <Badge variant={relatedService.type === "PREMIUM" ? "destructive" : "secondary"} className="absolute bottom-2 right-2">
-                          {relatedService.type === "PREMIUM" ? t('beautyConsultation.premiumShort', 'Premium') : t('beautyConsultation.standardShort', 'Standard')}
+                        <Badge
+                          variant={relatedService.type === 'PREMIUM' ? 'destructive' : 'secondary'}
+                          className="absolute bottom-2 right-2"
+                        >
+                          {relatedService.type === 'PREMIUM'
+                            ? t('beautyConsultation.premiumShort', 'Premium')
+                            : t('beautyConsultation.standardShort', 'Standard')}
                         </Badge>
                       </div>
                       <CardContent className="p-4">
@@ -777,80 +793,84 @@ export default function ServiceDetail() {
                             {relatedService.duration} {t('beautyConsultation.min', 'phút')}
                           </div>
                         </div>
-                        
+
                         {/* Consultant information */}
                         {serviceConsultant && (
                           <div className="flex items-center gap-2 mt-2 pt-2 border-t border-border">
                             <div className="h-8 w-8 rounded-full overflow-hidden flex-shrink-0">
-                              <img 
-                                src={serviceConsultant.imageUrl} 
+                              <img
+                                src={serviceConsultant.imageUrl}
                                 alt={serviceConsultant.name}
                                 className="w-full h-full object-cover"
                                 onError={(e) => {
-                                  const target = e.target as HTMLImageElement;
-                                  target.src = DEFAULT_IMAGE;
+                                  const target = e.target as HTMLImageElement
+                                  target.src = DEFAULT_IMAGE
                                 }}
                               />
                             </div>
                             <div className="flex-1 min-w-0">
                               <p className="text-xs font-medium line-clamp-1">{serviceConsultant.name}</p>
                               <div className="flex items-center text-[10px] text-muted-foreground">
-                                <span>{serviceConsultant.experience} {t('beautyConsultation.yearsExp', 'Năm KN')}</span>
+                                <span>
+                                  {serviceConsultant.experience} {t('beautyConsultation.yearsExp', 'Năm KN')}
+                                </span>
                                 <span className="mx-1">•</span>
-                                <span>{serviceConsultant.reviewCount} {t('beautyConsultation.reviewsShort', 'Đánh giá')}</span>
+                                <span>
+                                  {serviceConsultant.reviewCount} {t('beautyConsultation.reviewsShort', 'Đánh giá')}
+                                </span>
                               </div>
                             </div>
                           </div>
                         )}
                       </CardContent>
                     </Card>
-                  );
+                  )
                 })}
             </div>
           </div>
 
           {/* CTA Section */}
-          <ServiceCTA 
+          <ServiceCTA
             onBookNow={() => navigate(configs.routes.serviceCheckout.replace(':serviceId', service.id))}
             onExploreMore={handleBack}
           />
         </div>
 
         {/* Service Video Dialog */}
-        <VideoDialog 
+        <VideoDialog
           isOpen={videoOpen}
           onOpenChange={setVideoOpen}
           videoUrl={getVideoUrl()}
           title={selectedService.title}
         />
-        
+
         {/* Consultant Video Dialog */}
-        <VideoDialog 
+        <VideoDialog
           isOpen={consultantVideoOpen}
           onOpenChange={setConsultantVideoOpen}
           videoUrl={getConsultantVideoUrl()}
           title={`${t('beautyConsultation.introVideo', 'Giới thiệu về')} ${consultant.name}`}
         />
-        
+
         {/* Enlarged Portfolio Image Viewer */}
         {enlargedImage && (
-          <div 
+          <div
             className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4"
             onClick={closeEnlargedImage}
           >
             <div className="relative max-w-3xl max-h-[80vh] w-full">
-              <Button 
-                variant="ghost" 
-                size="icon" 
+              <Button
+                variant="ghost"
+                size="icon"
                 className="absolute top-2 right-2 bg-black/50 text-white hover:bg-black/70 z-10"
                 onClick={closeEnlargedImage}
               >
                 <XIcon className="h-5 w-5" />
               </Button>
-              <img 
-                src={enlargedImage} 
+              <img
+                src={enlargedImage}
                 alt={t('beautyConsultation.portfolioItem', 'Tác phẩm')}
-                className="w-full h-full object-contain rounded-lg" 
+                className="w-full h-full object-contain rounded-lg"
               />
             </div>
           </div>
@@ -858,4 +878,4 @@ export default function ServiceDetail() {
       </div>
     </div>
   )
-} 
+}

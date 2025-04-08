@@ -9,4 +9,4 @@ import { toQueryFetcher } from '@/utils/query'
 export const getBanksApi = toQueryFetcher<void, BankApiResponse>('get-banks', async () => {
   const response = await axios.get('https://api.vietqr.io/v2/banks')
   return response.data
-}) 
+})

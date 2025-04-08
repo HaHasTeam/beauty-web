@@ -36,16 +36,11 @@ const SearchBookings = ({ onSearch }: SearchBookingsProps) => {
           onKeyDown={handleKeyDown}
         />
       </div>
-      <Button
-        onClick={handleSearch}
-        variant="default"
-        size="sm"
-        className="h-10"
-      >
+      <Button onClick={handleSearch} variant="default" size="sm" className="h-10">
         {t('common.search', 'Tìm kiếm')}
       </Button>
     </div>
   )
 }
 
-export default SearchBookings 
+export default SearchBookings

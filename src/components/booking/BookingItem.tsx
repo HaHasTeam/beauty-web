@@ -34,7 +34,7 @@ const BookingItem: React.FC<BookingItemProps> = ({ booking, setIsTrigger }) => {
   const handleCancelBooking = () => {
     // Implementation for cancel booking
     console.log('Cancel booking', booking.id)
-    setIsTrigger(prev => !prev)
+    setIsTrigger((prev) => !prev)
   }
 
   const canCancel = ['TO_PAY', 'WAIT_FOR_CONFIRMATION'].includes(booking.status)
@@ -44,10 +44,9 @@ const BookingItem: React.FC<BookingItemProps> = ({ booking, setIsTrigger }) => {
   const consultantId = booking.account?.id || ''
   const consultantAvatar = booking.account?.avatar || undefined
   const consultantEmail = booking.account?.email || ''
-  
+
   // Check if booking has results available based on status
-  const hasResults = booking.status === 'SENDED_RESULT_SHEET' || 
-                     booking.status === 'COMPLETED'
+  const hasResults = booking.status === 'SENDED_RESULT_SHEET' || booking.status === 'COMPLETED'
 
   // Format payment method for display
   const getPaymentMethodTranslation = (method: string) => {
@@ -68,7 +67,10 @@ const BookingItem: React.FC<BookingItemProps> = ({ booking, setIsTrigger }) => {
           </Avatar>
           <div className="flex flex-col">
             <div className="flex items-center gap-2">
-              <Link to={`/consultant/${consultantId}`} className="font-medium text-base hover:text-primary transition-colors">
+              <Link
+                to={`/consultant/${consultantId}`}
+                className="font-medium text-base hover:text-primary transition-colors"
+              >
                 {consultantUsername}
               </Link>
             </div>
@@ -114,24 +116,26 @@ const BookingItem: React.FC<BookingItemProps> = ({ booking, setIsTrigger }) => {
       <div className="border-b mb-4 pb-4">
         <div className="flex gap-4 items-start">
           <div className="w-24 h-24 rounded-md overflow-hidden flex-shrink-0 bg-primary/5">
-            <img 
-              src="https://placehold.co/96x96/png" 
-              alt={booking.consultantService.systemService.name} 
-              className="w-full h-full object-cover" 
+            <img
+              src="https://placehold.co/96x96/png"
+              alt={booking.consultantService.systemService.name}
+              className="w-full h-full object-cover"
             />
           </div>
-          
+
           <div className="flex-1">
-            <h3 className="font-medium text-lg mb-2 text-gray-800">
-              {booking.consultantService.systemService.name}
-            </h3>
+            <h3 className="font-medium text-lg mb-2 text-gray-800">{booking.consultantService.systemService.name}</h3>
             <p className="text-base text-muted-foreground line-clamp-2 mb-2">
               {booking.consultantService.systemService.description}
             </p>
-            
+
             <div className="flex gap-2">
-              <Badge variant={booking.consultantService.systemService.type === 'PREMIUM' ? 'default' : 'secondary'} 
-                     className={booking.consultantService.systemService.type === 'PREMIUM' ? 'bg-primary/90 text-sm' : 'text-sm'}>
+              <Badge
+                variant={booking.consultantService.systemService.type === 'PREMIUM' ? 'default' : 'secondary'}
+                className={
+                  booking.consultantService.systemService.type === 'PREMIUM' ? 'bg-primary/90 text-sm' : 'text-sm'
+                }
+              >
                 {booking.consultantService.systemService.type}
               </Badge>
             </div>
@@ -147,14 +151,15 @@ const BookingItem: React.FC<BookingItemProps> = ({ booking, setIsTrigger }) => {
               <div className="flex items-center gap-2 text-base">
                 <Clock className="h-4 w-4 text-primary" />
                 <span>
-                  {format(new Date(String(booking.startTime)), 'HH:mm')} - {format(new Date(String(booking.endTime)), 'HH:mm')}
+                  {format(new Date(String(booking.startTime)), 'HH:mm')} -{' '}
+                  {format(new Date(String(booking.endTime)), 'HH:mm')}
                 </span>
               </div>
               <div className="flex items-center gap-2 text-base">
                 <CreditCard className="h-4 w-4 text-primary" />
                 <span>{getPaymentMethodTranslation(String(booking.paymentMethod))}</span>
               </div>
-              
+
               {/* Show result icon for bookings with sent results or completed status */}
               {hasResults && (
                 <div className="flex items-center gap-2 text-base">
@@ -163,7 +168,7 @@ const BookingItem: React.FC<BookingItemProps> = ({ booking, setIsTrigger }) => {
                 </div>
               )}
             </div>
-            
+
             {/* Price info */}
             <div className="md:w-[140px] flex-shrink-0 text-right">
               <div className="text-xl font-semibold text-primary">{formatCurrency(booking.totalPrice)}</div>
@@ -171,20 +176,25 @@ const BookingItem: React.FC<BookingItemProps> = ({ booking, setIsTrigger }) => {
           </div>
         </div>
       </div>
-      
+
       {/* Footer with action buttons */}
       <div className="flex flex-col-reverse md:flex-row md:items-center justify-between gap-2 pt-1">
         {/* Last update information */}
         <div className="text-sm text-muted-foreground mt-2 md:mt-0">
           {t('booking.lastUpdate')}: {format(new Date(booking.updatedAt), 'dd/MM/yyyy HH:mm')}
         </div>
-        
+
         {/* Action buttons */}
         <div className="flex justify-end gap-2">
-          <Button variant="outline" size="sm" onClick={handleViewDetail} className="border-primary/30 text-primary hover:text-primary hover:bg-primary/5 text-sm">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleViewDetail}
+            className="border-primary/30 text-primary hover:text-primary hover:bg-primary/5 text-sm"
+          >
             {t('booking.viewDetail')}
           </Button>
-          
+
           {canCancel && (
             <Button variant="destructive" size="sm" onClick={handleCancelBooking} className="text-sm">
               {t('booking.cancel')}
@@ -196,4 +206,4 @@ const BookingItem: React.FC<BookingItemProps> = ({ booking, setIsTrigger }) => {
   )
 }
 
-export default BookingItem 
+export default BookingItem

@@ -55,7 +55,10 @@ export default function NoWalletFound() {
 
       <h1 className="text-2xl font-semibold mb-4 text-primary">{t('wallet.noWalletFound', 'No Wallet Found!')}</h1>
       <p className="text-muted-foreground text-center mb-8 max-w-md">
-        {t('wallet.noWalletDescription', 'You haven\'t created any wallet yet. Start managing your finances by creating a new wallet.')}
+        {t(
+          'wallet.noWalletDescription',
+          "You haven't created any wallet yet. Start managing your finances by creating a new wallet.",
+        )}
       </p>
 
       <div className="flex flex-wrap gap-4 justify-center">

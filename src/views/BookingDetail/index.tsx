@@ -22,13 +22,19 @@ import { IStatusTracking } from '@/types/statusTracking'
 import { formatCurrency } from '@/views/BeautyConsultation/data/mockData'
 
 // Booking General section for timeline, consultant info, etc.
-const BookingGeneral = ({ title, icon, content }: { title: string; icon: React.ReactNode; content: React.ReactNode }) => {
+const BookingGeneral = ({
+  title,
+  icon,
+  content,
+}: {
+  title: string
+  icon: React.ReactNode
+  content: React.ReactNode
+}) => {
   return (
     <Card className="w-full bg-white rounded-lg p-4 shadow-sm">
       <div className="flex items-center gap-2 border-b border-border pb-3 mb-3">
-        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 text-primary">
-          {icon}
-        </div>
+        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 text-primary">{icon}</div>
         <h3 className="font-medium text-lg">{title}</h3>
       </div>
       <div>{content}</div>
@@ -37,17 +43,17 @@ const BookingGeneral = ({ title, icon, content }: { title: string; icon: React.R
 }
 
 // Booking Summary section for payment details
-const BookingSummary = ({ 
-  totalPrice, 
-  voucherDiscount = 0, 
-  paymentMethod 
-}: { 
-  totalPrice: number; 
-  voucherDiscount?: number; 
-  paymentMethod: string 
+const BookingSummary = ({
+  totalPrice,
+  voucherDiscount = 0,
+  paymentMethod,
+}: {
+  totalPrice: number
+  voucherDiscount?: number
+  paymentMethod: string
 }) => {
   const { t } = useTranslation()
-  
+
   const getPaymentMethodTranslation = (method: string) => {
     return t(`payment.${method.toLowerCase()}`, String(method).replace('_', ' '))
   }
@@ -60,21 +66,21 @@ const BookingSummary = ({
           <span className="text-muted-foreground">{t('booking.serviceFee')}</span>
           <span>{formatCurrency(totalPrice + voucherDiscount)}</span>
         </div>
-        
+
         {voucherDiscount > 0 && (
           <div className="flex justify-between">
             <span className="text-muted-foreground">{t('booking.voucherDiscount')}</span>
             <span className="text-destructive">-{formatCurrency(voucherDiscount)}</span>
           </div>
         )}
-        
+
         <Separator className="my-2" />
-        
+
         <div className="flex justify-between font-medium">
           <span>{t('booking.totalPayment')}</span>
           <span className="text-primary text-lg">{formatCurrency(totalPrice)}</span>
         </div>
-        
+
         <div className="flex justify-between pt-2">
           <span className="text-muted-foreground">{t('booking.paymentMethod')}</span>
           <span className="font-medium">{getPaymentMethodTranslation(paymentMethod)}</span>
@@ -91,50 +97,50 @@ const BookingStatusTracking = ({ statusTrackingData }: { statusTrackingData: ISt
   // Map booking statuses to display names and icons
   const getStatusDisplayInfo = (status: string) => {
     const statusMap: Record<string, { text: string; icon: React.ReactNode }> = {
-      [BookingStatusEnum.TO_PAY]: { 
-        text: t('booking.status.toPay'), 
-        icon: <CreditCard className="w-5 h-5" /> 
+      [BookingStatusEnum.TO_PAY]: {
+        text: t('booking.status.toPay'),
+        icon: <CreditCard className="w-5 h-5" />,
       },
-      [BookingStatusEnum.WAIT_FOR_CONFIRMATION]: { 
-        text: t('booking.status.waitForConfirmation'), 
-        icon: <Clock className="w-5 h-5" /> 
+      [BookingStatusEnum.WAIT_FOR_CONFIRMATION]: {
+        text: t('booking.status.waitForConfirmation'),
+        icon: <Clock className="w-5 h-5" />,
       },
-      [BookingStatusEnum.BOOKING_CONFIRMED]: { 
-        text: t('booking.status.bookingConfirmed'), 
-        icon: <Calendar className="w-5 h-5" /> 
+      [BookingStatusEnum.BOOKING_CONFIRMED]: {
+        text: t('booking.status.bookingConfirmed'),
+        icon: <Calendar className="w-5 h-5" />,
       },
-      [BookingStatusEnum.SERVICE_BOOKING_FORM_SUBMITED]: { 
-        text: t('booking.status.formSubmitted'), 
-        icon: <MessageSquare className="w-5 h-5" /> 
+      [BookingStatusEnum.SERVICE_BOOKING_FORM_SUBMITED]: {
+        text: t('booking.status.formSubmitted'),
+        icon: <MessageSquare className="w-5 h-5" />,
       },
-      [BookingStatusEnum.SENDED_RESULT_SHEET]: { 
-        text: t('booking.status.resultSent'), 
-        icon: <MessageSquare className="w-5 h-5" /> 
+      [BookingStatusEnum.SENDED_RESULT_SHEET]: {
+        text: t('booking.status.resultSent'),
+        icon: <MessageSquare className="w-5 h-5" />,
       },
-      [BookingStatusEnum.COMPLETED]: { 
-        text: t('booking.status.completed'), 
-        icon: <MessageSquare className="w-5 h-5" /> 
+      [BookingStatusEnum.COMPLETED]: {
+        text: t('booking.status.completed'),
+        icon: <MessageSquare className="w-5 h-5" />,
       },
-      [BookingStatusEnum.REFUNDED]: { 
-        text: t('booking.status.refunded'), 
-        icon: <CreditCard className="w-5 h-5" /> 
+      [BookingStatusEnum.REFUNDED]: {
+        text: t('booking.status.refunded'),
+        icon: <CreditCard className="w-5 h-5" />,
       },
-      [BookingStatusEnum.CANCELLED]: { 
-        text: t('booking.status.cancelled'), 
-        icon: <Calendar className="w-5 h-5" /> 
+      [BookingStatusEnum.CANCELLED]: {
+        text: t('booking.status.cancelled'),
+        icon: <Calendar className="w-5 h-5" />,
       },
     }
-    
+
     return statusMap[status] || { text: status, icon: <Calendar className="w-5 h-5" /> }
   }
 
   // Create timeline based on statusTrackingData
-  const timeline = statusTrackingData.map(tracking => ({
+  const timeline = statusTrackingData.map((tracking) => ({
     status: tracking.status,
     text: getStatusDisplayInfo(tracking.status).text,
     icon: getStatusDisplayInfo(tracking.status).icon,
     createdAt: tracking.createdAt,
-    isActive: true
+    isActive: true,
   }))
 
   return (
@@ -142,7 +148,9 @@ const BookingStatusTracking = ({ statusTrackingData }: { statusTrackingData: ISt
       <div className="flex flex-col sm:flex-row gap-4 relative">
         {timeline.map((step, index) => (
           <div key={index} className="flex-1 flex flex-col items-center relative z-10">
-            <div className={`flex items-center justify-center w-12 h-12 rounded-full ${step.isActive ? 'bg-primary text-white' : 'bg-muted text-muted-foreground'}`}>
+            <div
+              className={`flex items-center justify-center w-12 h-12 rounded-full ${step.isActive ? 'bg-primary text-white' : 'bg-muted text-muted-foreground'}`}
+            >
               {step.icon}
             </div>
             <div className="text-center mt-2">
@@ -157,7 +165,7 @@ const BookingStatusTracking = ({ statusTrackingData }: { statusTrackingData: ISt
             </div>
           </div>
         ))}
-        
+
         {/* Status line connecting the steps */}
         <div className="hidden sm:block absolute top-6 left-0 w-full h-[2px] bg-muted z-0" />
       </div>
@@ -181,7 +189,7 @@ const BookingStatusTrackingDetail = ({ statusTrackingData }: { statusTrackingDat
       [BookingStatusEnum.REFUNDED]: t('booking.status.refunded'),
       [BookingStatusEnum.CANCELLED]: t('booking.status.cancelled'),
     }
-    
+
     return statusMap[status] || status
   }
 
@@ -194,23 +202,25 @@ const BookingStatusTrackingDetail = ({ statusTrackingData }: { statusTrackingDat
     updatedBy?: string
   }
 
-  const defaultTimeline: TimelineItem[] = [{
-    status: 'BOOKING_CREATED',
-    createdAt: statusTrackingData[0]?.createdAt || new Date().toISOString(),
-    text: t('booking.created'),
-    icon: <Calendar className="w-5 h-5" />,
-  }]
+  const defaultTimeline: TimelineItem[] = [
+    {
+      status: 'BOOKING_CREATED',
+      createdAt: statusTrackingData[0]?.createdAt || new Date().toISOString(),
+      text: t('booking.created'),
+      icon: <Calendar className="w-5 h-5" />,
+    },
+  ]
 
   const timeline: TimelineItem[] = [
     ...defaultTimeline,
-    ...statusTrackingData.map(tracking => ({
+    ...statusTrackingData.map((tracking) => ({
       status: tracking.status,
       createdAt: tracking.createdAt,
       text: getStatusDisplayName(tracking.status),
       icon: <Calendar className="w-5 h-5" />,
       reason: tracking.reason || '',
-      updatedBy: tracking.updatedBy?.username || t('booking.system')
-    }))
+      updatedBy: tracking.updatedBy?.username || t('booking.system'),
+    })),
   ]
 
   return (
@@ -221,14 +231,18 @@ const BookingStatusTrackingDetail = ({ statusTrackingData }: { statusTrackingDat
           <div className="flex flex-wrap gap-1 items-center">
             <h3 className="text-base font-medium text-gray-900">{item.text}</h3>
             {item.updatedBy && item.status !== 'BOOKING_CREATED' && (
-              <span className="text-xs text-muted-foreground">({t('booking.by')} {item.updatedBy})</span>
+              <span className="text-xs text-muted-foreground">
+                ({t('booking.by')} {item.updatedBy})
+              </span>
             )}
           </div>
           <time className="block text-sm text-muted-foreground">
             {format(new Date(item.createdAt), 'dd/MM/yyyy HH:mm')}
           </time>
           {item.reason && (
-            <p className="mt-1 text-sm text-muted-foreground">{t('booking.reason')}: {item.reason}</p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              {t('booking.reason')}: {item.reason}
+            </p>
           )}
         </li>
       ))}
@@ -247,25 +261,20 @@ const BookingDetail = () => {
   // const handleServerError = useHandleServerError()
 
   // Use React Query hooks for data fetching
-  const { 
-    data: bookingData, 
-    isFetching: isFetchingBooking,
-  } = useQuery({
+  const { data: bookingData, isFetching: isFetchingBooking } = useQuery({
     queryKey: [getBookingByIdApi.queryKey, bookingId ?? ''],
     queryFn: () => getBookingByIdApi.fn({ queryKey: [getBookingByIdApi.queryKey, bookingId ?? ''] }),
     enabled: !!bookingId,
   })
 
-  const { 
-    data: statusTrackingData, 
-    isFetching: isFetchingStatusTracking,
-  } = useQuery({
+  const { data: statusTrackingData, isFetching: isFetchingStatusTracking } = useQuery({
     queryKey: [getBookingStatusTrackingApi.queryKey, bookingId ?? ''],
-    queryFn: () => getBookingStatusTrackingApi.fn({ queryKey: [getBookingStatusTrackingApi.queryKey, bookingId ?? ''] }),
+    queryFn: () =>
+      getBookingStatusTrackingApi.fn({ queryKey: [getBookingStatusTrackingApi.queryKey, bookingId ?? ''] }),
     enabled: !!bookingId,
   })
 
-  const isFetching = isFetchingBooking || isFetchingStatusTracking;
+  const isFetching = isFetchingBooking || isFetchingStatusTracking
 
   useEffect(() => {
     if (isTrigger && queryClient) {
@@ -276,15 +285,16 @@ const BookingDetail = () => {
     }
   }, [isTrigger, queryClient])
 
-  const canCancel = bookingData?.data?.status === BookingStatusEnum.TO_PAY || 
-                    bookingData?.data?.status === BookingStatusEnum.WAIT_FOR_CONFIRMATION;
-  
-  const isMeetingJoinable = bookingData?.data?.status === BookingStatusEnum.BOOKING_CONFIRMED && 
-                           bookingData?.data?.meetUrl;
+  const canCancel =
+    bookingData?.data?.status === BookingStatusEnum.TO_PAY ||
+    bookingData?.data?.status === BookingStatusEnum.WAIT_FOR_CONFIRMATION
+
+  const isMeetingJoinable =
+    bookingData?.data?.status === BookingStatusEnum.BOOKING_CONFIRMED && bookingData?.data?.meetUrl
 
   const getFormattedDateTime = (dateTimeString: string) => {
-    if (!dateTimeString) return '';
-    const date = parseISO(dateTimeString);
+    if (!dateTimeString) return ''
+    const date = parseISO(dateTimeString)
     return format(date, 'dd/MM/yyyy - HH:mm')
   }
 
@@ -316,7 +326,7 @@ const BookingDetail = () => {
             </div>
           )}
         </div>
-        
+
         {!isFetching && bookingData?.data && (
           <>
             <div className="space-y-6 w-full">
@@ -348,14 +358,17 @@ const BookingDetail = () => {
                       <div className="flex flex-col gap-3">
                         <div className="flex items-center gap-3">
                           <Avatar className="h-16 w-16 border border-primary/20">
-                            <AvatarImage src={bookingData?.data?.account?.avatar} alt={bookingData?.data?.account?.username} />
+                            <AvatarImage
+                              src={bookingData?.data?.account?.avatar}
+                              alt={bookingData?.data?.account?.username}
+                            />
                             <AvatarFallback className="bg-primary/10 text-primary text-lg">
                               {bookingData?.data?.account?.username?.charAt(0).toUpperCase()}
                             </AvatarFallback>
                           </Avatar>
                           <div>
-                            <Link 
-                              to={`/consultant/${bookingData?.data?.account?.id}`} 
+                            <Link
+                              to={`/consultant/${bookingData?.data?.account?.id}`}
                               className="font-medium text-lg hover:text-primary transition-colors"
                             >
                               {bookingData?.data?.account?.username}
@@ -364,7 +377,7 @@ const BookingDetail = () => {
                             <p className="text-sm text-muted-foreground">{bookingData?.data?.account?.phone}</p>
                           </div>
                         </div>
-                        
+
                         <div className="mt-2 flex gap-3">
                           <Button className="flex items-center gap-1 bg-primary hover:bg-primary/90" variant="default">
                             <MessageSquare className="w-4 h-4" />
@@ -381,7 +394,7 @@ const BookingDetail = () => {
                       </div>
                     }
                   />
-                  
+
                   <BookingGeneral
                     title={t('booking.appointmentDetails')}
                     icon={<Calendar className="w-5 h-5" />}
@@ -389,26 +402,28 @@ const BookingDetail = () => {
                       <div className="flex flex-col gap-2 text-base">
                         <div className="grid grid-cols-2 gap-1">
                           <p className="text-muted-foreground">{t('booking.date')}:</p>
-                          <p className="font-medium">{getFormattedDateTime(bookingData?.data?.startTime as string || '')}</p>
+                          <p className="font-medium">
+                            {getFormattedDateTime((bookingData?.data?.startTime as string) || '')}
+                          </p>
                         </div>
-                        
+
                         <div className="grid grid-cols-2 gap-1">
                           <p className="text-muted-foreground">{t('booking.duration')}:</p>
                           <p className="font-medium">60 {t('booking.minutes')}</p>
                         </div>
-                        
+
                         {bookingData?.data?.notes && (
                           <div className="grid grid-cols-1 gap-1 mt-2">
                             <p className="text-muted-foreground">{t('booking.notes')}:</p>
                             <p className="font-medium bg-muted/30 p-2 rounded-md">{bookingData?.data?.notes}</p>
                           </div>
                         )}
-                        
+
                         {isMeetingJoinable && (
                           <div className="mt-3">
-                            <a 
-                              href={bookingData?.data?.meetUrl} 
-                              target="_blank" 
+                            <a
+                              href={bookingData?.data?.meetUrl}
+                              target="_blank"
                               rel="noopener noreferrer"
                               className="bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md inline-flex items-center gap-2 w-full justify-center"
                             >
@@ -428,27 +443,35 @@ const BookingDetail = () => {
                 <h3 className="font-medium text-lg border-b border-border pb-3 mb-4">{t('booking.serviceDetails')}</h3>
                 <div className="flex gap-6 items-start">
                   <div className="w-28 h-28 rounded-md overflow-hidden flex-shrink-0 bg-primary/5">
-                    <img 
-                      src="https://placehold.co/112x112/png" 
-                      alt={bookingData?.data?.consultantService?.systemService?.name} 
-                      className="w-full h-full object-cover" 
+                    <img
+                      src="https://placehold.co/112x112/png"
+                      alt={bookingData?.data?.consultantService?.systemService?.name}
+                      className="w-full h-full object-cover"
                     />
                   </div>
-                  
+
                   <div className="flex-1">
                     <div className="flex justify-between items-start">
                       <div>
                         <h3 className="font-medium text-lg mb-2 text-gray-800">
                           {bookingData?.data?.consultantService?.systemService?.name}
                         </h3>
-                        <Badge 
-                          variant={bookingData?.data?.consultantService?.systemService?.type === 'PREMIUM' ? 'default' : 'secondary'} 
-                          className={bookingData?.data?.consultantService?.systemService?.type === 'PREMIUM' ? 'bg-primary/90 text-sm' : 'text-sm'}
+                        <Badge
+                          variant={
+                            bookingData?.data?.consultantService?.systemService?.type === 'PREMIUM'
+                              ? 'default'
+                              : 'secondary'
+                          }
+                          className={
+                            bookingData?.data?.consultantService?.systemService?.type === 'PREMIUM'
+                              ? 'bg-primary/90 text-sm'
+                              : 'text-sm'
+                          }
                         >
                           {bookingData?.data?.consultantService?.systemService?.type}
                         </Badge>
                       </div>
-                      
+
                       {/* Price info */}
                       <div className="flex-shrink-0 text-right">
                         <div className="text-xl font-semibold text-primary">
@@ -456,23 +479,23 @@ const BookingDetail = () => {
                         </div>
                       </div>
                     </div>
-                    
+
                     <Separator className="my-3" />
-                    
+
                     <p className="text-base text-muted-foreground mb-3">
                       {bookingData?.data?.consultantService?.systemService?.description}
                     </p>
                   </div>
                 </div>
               </Card>
-              
+
               {/* Payment summary */}
-              <BookingSummary 
-                totalPrice={bookingData?.data?.totalPrice} 
+              <BookingSummary
+                totalPrice={bookingData?.data?.totalPrice}
                 voucherDiscount={0} // Replace with actual value when available
-                paymentMethod={bookingData?.data?.paymentMethod} 
+                paymentMethod={bookingData?.data?.paymentMethod}
               />
-              
+
               {/* Action buttons */}
               <div className="w-full flex items-center gap-2 mt-6">
                 {canCancel && (
@@ -484,11 +507,11 @@ const BookingDetail = () => {
                     {t('booking.cancelBooking')}
                   </Button>
                 )}
-                
+
                 {isMeetingJoinable && (
-                  <a 
-                    href={bookingData?.data?.meetUrl} 
-                    target="_blank" 
+                  <a
+                    href={bookingData?.data?.meetUrl}
+                    target="_blank"
                     rel="noopener noreferrer"
                     className="w-full bg-primary hover:bg-primary/90 text-white py-2 px-4 rounded-md inline-flex items-center justify-center gap-2"
                   >
@@ -525,4 +548,4 @@ const BookingDetail = () => {
   )
 }
 
-export default BookingDetail 
+export default BookingDetail

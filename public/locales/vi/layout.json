@@ -216,7 +216,8 @@
     "highToLow": "Từ cao đến thấp",
     "byTag": "Sắp xếp theo {{tag}}"
   },
-  "empty": {    "report": {
+  "empty": {
+    "report": {
       "title": "Không tìm thấy báo cáo",
       "description": "Chưa có báo cáo nào trong hệ thống",
       "statusDescription": "Không tìm thấy báo cáo phù hợp với tiêu chí"

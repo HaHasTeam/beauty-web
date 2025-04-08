@@ -9,29 +9,22 @@ import { consultationServices, formatCurrency } from '../data/mockData'
 import { ConsultationService } from '../data/types'
 
 // Default image to use when an image fails to load
-const DEFAULT_IMAGE = 'https://placehold.co/400x300/e2e8f0/64748b?text=Image+Not+Found';
+const DEFAULT_IMAGE = 'https://placehold.co/400x300/e2e8f0/64748b?text=Image+Not+Found'
 
 interface RelatedServicesProps {
-  currentServiceId: string;
-  category: string;
-  services: ConsultationService[];
-  onServiceClick: (id: string) => void;
-  onViewAll: () => void;
+  currentServiceId: string
+  category: string
+  services: ConsultationService[]
+  onServiceClick: (id: string) => void
+  onViewAll: () => void
 }
 
-export default function RelatedServices({
-  currentServiceId,
-  onServiceClick,
-  onViewAll
-}: RelatedServicesProps) {
-  const { t } = useTranslation();
-  
+export default function RelatedServices({ currentServiceId, onServiceClick, onViewAll }: RelatedServicesProps) {
+  const { t } = useTranslation()
+
   // Force display at least 2 services (excluding current) for testing purposes
-  const relatedServices = consultationServices
-    .filter(s => s.id !== currentServiceId)
-    .slice(0, 2);
-  
-  
+  const relatedServices = consultationServices.filter((s) => s.id !== currentServiceId).slice(0, 2)
+
   return (
     <section className="mb-8 border border-primary/20 rounded-lg p-4">
       <div className="flex items-center justify-between mb-4">
@@ -40,11 +33,11 @@ export default function RelatedServices({
           {t('beautyConsultation.viewAll', 'Xem tất cả')} →
         </Button>
       </div>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {relatedServices.map(service => (
-          <Card 
-            key={service.id} 
+        {relatedServices.map((service) => (
+          <Card
+            key={service.id}
             className="overflow-hidden h-full flex flex-col transition-all duration-200 hover:shadow-md group cursor-pointer border-border"
             onClick={() => onServiceClick(service.id)}
           >
@@ -54,13 +47,13 @@ export default function RelatedServices({
                 alt={service.title}
                 className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                 onError={(e) => {
-                  const target = e.target as HTMLImageElement;
-                  target.src = DEFAULT_IMAGE;
+                  const target = e.target as HTMLImageElement
+                  target.src = DEFAULT_IMAGE
                 }}
               />
               <div className="absolute top-2 right-2">
-                <Badge variant={service.type === "PREMIUM" ? "destructive" : "secondary"} className="shadow-sm">
-                  {service.type === "PREMIUM" ? (
+                <Badge variant={service.type === 'PREMIUM' ? 'destructive' : 'secondary'} className="shadow-sm">
+                  {service.type === 'PREMIUM' ? (
                     <div className="flex items-center gap-1">
                       <VideoIcon className="h-3 w-3" />
                       <span>{t('beautyConsultation.premiumShort', 'Cao cấp')}</span>
@@ -90,4 +83,4 @@ export default function RelatedServices({
       </div>
     </section>
   )
-} 
+}

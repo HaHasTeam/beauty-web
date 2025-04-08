@@ -17,4 +17,4 @@ const ServiceCheckoutHeader = () => {
   )
 }
 
-export default ServiceCheckoutHeader 
+export default ServiceCheckoutHeader

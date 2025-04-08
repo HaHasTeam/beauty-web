@@ -1,6 +1,6 @@
 import { TBrand } from './brand'
 import { IConsultantService } from './consultant-service'
-import { BookingStatusEnum, BookingTypeEnum } from "./enum"
+import { BookingStatusEnum, BookingTypeEnum } from './enum'
 import { PaymentMethodEnum } from './payment'
 import { TMetaData } from './request'
 import { ISlot } from './slot'

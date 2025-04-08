@@ -8,21 +8,9 @@ import FormLabel from '@/components/form-label'
 import LoadingContentLayer from '@/components/loading-icon/LoadingContentLayer'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from '@/components/ui/form'
+import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { getBanksApi } from '@/network/apis/bank'
 import { IBank } from '@/types/bank'
 
@@ -30,24 +18,24 @@ const bankAccountSchema = z.object({
   bankCode: z.string({
     required_error: 'Please select a bank',
   }),
-  accountNumber: z.string()
+  accountNumber: z
+    .string()
     .min(5, 'Account number must be at least 5 characters')
     .max(20, 'Account number must not exceed 20 characters'),
-  accountName: z.string()
-    .min(2, 'Account name must be at least 2 characters'),
+  accountName: z.string().min(2, 'Account name must be at least 2 characters'),
   isDefault: z.boolean().default(false),
 })
 
 type BankAccountFormValues = z.infer<typeof bankAccountSchema>
 
 interface NewBankAccountFormProps {
-  onSubmit: (data: { 
-    bankName: string;
-    accountNumber: string;
-    accountName: string;
-    isDefault?: boolean;
-  }) => Promise<void>;
-  isLoading: boolean;
+  onSubmit: (data: {
+    bankName: string
+    accountNumber: string
+    accountName: string
+    isDefault?: boolean
+  }) => Promise<void>
+  isLoading: boolean
 }
 
 const NewBankAccountForm = ({ onSubmit, isLoading }: NewBankAccountFormProps) => {
@@ -58,9 +46,9 @@ const NewBankAccountForm = ({ onSubmit, isLoading }: NewBankAccountFormProps) =>
     queryKey: [getBanksApi.queryKey],
     queryFn: getBanksApi.fn,
   })
-  
+
   const banks = banksData?.data || []
-  
+
   // Form definition with React Hook Form
   const form = useForm<BankAccountFormValues>({
     resolver: zodResolver(bankAccountSchema),
@@ -71,40 +59,39 @@ const NewBankAccountForm = ({ onSubmit, isLoading }: NewBankAccountFormProps) =>
       isDefault: false,
     },
   })
-  console.log(form.formState.errors,"SDal");
-  console.log(form.getValues(),"DS");
-  
-  
+  console.log(form.formState.errors, 'SDal')
+  console.log(form.getValues(), 'DS')
+
   const handleFormSubmit = async (values: BankAccountFormValues) => {
     try {
       // Find the selected bank to get its name
-      const selectedBank = banks.find(bank => bank.code === values.bankCode)
-      
+      const selectedBank = banks.find((bank) => bank.code === values.bankCode)
+
       if (!selectedBank) {
         form.setError('bankCode', { message: 'Invalid bank selection' })
         return
       }
-      
+
       await onSubmit({
         bankName: selectedBank.name,
         accountNumber: values.accountNumber,
         accountName: values.accountName,
         isDefault: values.isDefault,
       })
-      
+
       // Reset form after successful submission
       form.reset()
     } catch (error) {
       console.error('Form submission error:', error)
     }
   }
-  
+
   const showLoading = isLoading || isBanksLoading
-  
+
   return (
     <div className="relative">
       {showLoading && <LoadingContentLayer />}
-      
+
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-5">
           <FormField
@@ -115,37 +102,23 @@ const NewBankAccountForm = ({ onSubmit, isLoading }: NewBankAccountFormProps) =>
                 <FormLabel required className="text-gray-700">
                   {t('wallet.bankAccounts.bankName')}
                 </FormLabel>
-                <Select 
-                  onValueChange={field.onChange} 
-                  defaultValue={field.value}
-                  disabled={showLoading}
-                >
+                <Select onValueChange={field.onChange} defaultValue={field.value} disabled={showLoading}>
                   <FormControl>
                     <SelectTrigger className="border-gray-300 focus:border-primary focus:ring-primary/30">
                       <SelectValue placeholder={t('wallet.bankAccounts.enterBankName')} />
                     </SelectTrigger>
                   </FormControl>
-                  <SelectContent 
+                  <SelectContent
                     className="max-h-[200px] overflow-y-auto w-[var(--radix-select-trigger-width)]"
                     position="popper"
                     side="bottom"
                     align="start"
                   >
                     {banks.map((bank: IBank) => (
-                      <SelectItem
-                        key={bank.code}
-                        value={bank.code}
-                        className='flex items-center gap-2 w-full'
-                      >
-                        <div className='w-full flex items-center gap-2'>
-                            <img 
-                            src={bank.logo} 
-                            alt={bank.shortName} 
-                            className="w-16 h-auto object-contain"
-                          />
-                          {
-                            bank.name
-                          }
+                      <SelectItem key={bank.code} value={bank.code} className="flex items-center gap-2 w-full">
+                        <div className="w-full flex items-center gap-2">
+                          <img src={bank.logo} alt={bank.shortName} className="w-16 h-auto object-contain" />
+                          {bank.name}
                         </div>
                       </SelectItem>
                     ))}
@@ -155,13 +128,13 @@ const NewBankAccountForm = ({ onSubmit, isLoading }: NewBankAccountFormProps) =>
               </FormItem>
             )}
           />
-          
+
           <FormField
             control={form.control}
             name="accountNumber"
             render={({ field }) => (
               <FormItem>
-                <FormLabel  required className="text-gray-700">
+                <FormLabel required className="text-gray-700">
                   {t('wallet.bankAccounts.accountNumber')}
                 </FormLabel>
                 <FormControl>
@@ -176,9 +149,8 @@ const NewBankAccountForm = ({ onSubmit, isLoading }: NewBankAccountFormProps) =>
               </FormItem>
             )}
           />
-          
+
           <FormField
-          
             control={form.control}
             name="accountName"
             render={({ field }) => (
@@ -198,7 +170,7 @@ const NewBankAccountForm = ({ onSubmit, isLoading }: NewBankAccountFormProps) =>
               </FormItem>
             )}
           />
-          
+
           <FormField
             control={form.control}
             name="isDefault"
@@ -212,18 +184,12 @@ const NewBankAccountForm = ({ onSubmit, isLoading }: NewBankAccountFormProps) =>
                     disabled={showLoading}
                   />
                 </FormControl>
-                <FormLabel className="cursor-pointer text-gray-700">
-                  {t('wallet.bankAccounts.setAsDefault')}
-                </FormLabel>
+                <FormLabel className="cursor-pointer text-gray-700">{t('wallet.bankAccounts.setAsDefault')}</FormLabel>
               </FormItem>
             )}
           />
-          
-          <Button 
-            type="submit" 
-            className="w-full bg-primary hover:bg-primary/90 text-white" 
-            disabled={showLoading}
-          >
+
+          <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-white" disabled={showLoading}>
             {t('wallet.bankAccounts.addAccount')}
           </Button>
         </form>
@@ -232,4 +198,4 @@ const NewBankAccountForm = ({ onSubmit, isLoading }: NewBankAccountFormProps) =>
   )
 }
 
-export default NewBankAccountForm 
+export default NewBankAccountForm

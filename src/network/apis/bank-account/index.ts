@@ -9,7 +9,7 @@ export const getBankAccountsApi = toQueryFetcher<void, TServerResponse<IBankAcco
   'getBankAccountsApi',
   async () => {
     return privateRequest('/bank-accounts')
-  }
+  },
 )
 
 // Tạo tài khoản ngân hàng mới
@@ -20,7 +20,7 @@ export const createBankAccountApi = toMutationFetcher<TCreateBankAccountParams, 
       method: 'POST',
       data,
     })
-  }
+  },
 )
 
 /**
@@ -31,9 +31,9 @@ export const deleteBankAccountApi = toMutationFetcher<string, TServerResponse<vo
   async (bankAccountId) => {
     return privateRequest(`/bank-accounts/${bankAccountId}`, {
       method: 'DELETE',
-    });
-  }
-);
+    })
+  },
+)
 
 /**
  * Updates a bank account
@@ -41,15 +41,12 @@ export const deleteBankAccountApi = toMutationFetcher<string, TServerResponse<vo
 export const updateBankAccountApi = toMutationFetcher<
   { id: string; data: Omit<IBankAccount, 'id'> },
   TServerResponse<IBankAccount>
->(
-  'update-bank-account',
-  async ({ id, data }) => {
-    return privateRequest(`/bank-accounts/${id}`, {
-      method: 'PUT',
-      data,
-    });
-  }
-);
+>('update-bank-account', async ({ id, data }) => {
+  return privateRequest(`/bank-accounts/${id}`, {
+    method: 'PUT',
+    data,
+  })
+})
 
 /**
  * Sets a bank account as default
@@ -62,6 +59,6 @@ export const setDefaultBankAccountApi = toMutationFetcher<string, TServerRespons
       data: {
         isDefault: true,
       },
-    });
-  }
-); 
+    })
+  },
+)

@@ -32,7 +32,7 @@ export default function BeautyConsultation() {
                   <p className="text-sm md:text-base text-white/90 mb-5 max-w-xl line-clamp-2 md:line-clamp-none">
                     {t(
                       'beautyConsultation.heroDescription',
-                      'Kết nối với các chuyên gia trang điểm hàng đầu cho vẻ đẹp riêng của bạn.'
+                      'Kết nối với các chuyên gia trang điểm hàng đầu cho vẻ đẹp riêng của bạn.',
                     )}
                   </p>
                   <Button className="bg-white text-primary hover:bg-white/90 hover:text-primary/90">
@@ -49,7 +49,7 @@ export default function BeautyConsultation() {
               <h2 className="text-xl font-bold mb-6 text-center">
                 {t('beautyConsultation.introTitle', 'Lựa chọn dịch vụ phù hợp')}
               </h2>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Standard Service Card */}
                 <div className="bg-card border border-border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
@@ -58,27 +58,27 @@ export default function BeautyConsultation() {
                       <FormInputIcon className="h-5 w-5 text-secondary-foreground/80" />
                     </div>
                     <h3 className="font-medium">
-                      <Badge variant="secondary" className="whitespace-nowrap mr-2">TIÊU CHUẨN</Badge>
+                      <Badge variant="secondary" className="whitespace-nowrap mr-2">
+                        TIÊU CHUẨN
+                      </Badge>
                       {t('beautyConsultation.standardTitle', 'Tư vấn Cơ bản')}
                     </h3>
                   </div>
-                  
-                  <div className="p-4">              
+
+                  <div className="p-4">
                     <p className="text-sm text-muted-foreground mb-4">
-                      {t('beautyConsultation.standardDescription', 'Tư vấn trang điểm cơ bản trực tuyến thông qua form đặt lịch, phù hợp theo đặc điểm khuôn mặt và màu da với mức giá hợp lý.')}
+                      {t(
+                        'beautyConsultation.standardDescription',
+                        'Tư vấn trang điểm cơ bản trực tuyến thông qua form đặt lịch, phù hợp theo đặc điểm khuôn mặt và màu da với mức giá hợp lý.',
+                      )}
                     </p>
-                    
-                    <Button 
-                      variant="secondary" 
-                      size="sm" 
-                      className="w-full"
-                      onClick={() => setActiveTab('standard')}
-                    >
+
+                    <Button variant="secondary" size="sm" className="w-full" onClick={() => setActiveTab('standard')}>
                       {t('beautyConsultation.learnMore', 'Tìm hiểu thêm')}
                     </Button>
                   </div>
                 </div>
-                
+
                 {/* Premium Service Card */}
                 <div className="bg-card border border-border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
                   <div className="bg-destructive/10 p-4 flex items-center">
@@ -86,22 +86,22 @@ export default function BeautyConsultation() {
                       <VideoIcon className="h-5 w-5 text-destructive-foreground" />
                     </div>
                     <h3 className="font-medium">
-                      <Badge variant="destructive" className="whitespace-nowrap mr-2">CAO CẤP</Badge>
+                      <Badge variant="destructive" className="whitespace-nowrap mr-2">
+                        CAO CẤP
+                      </Badge>
                       {t('beautyConsultation.premiumTitle', 'Tư vấn Chuyên sâu')}
                     </h3>
                   </div>
-                  
-                  <div className="p-4">              
+
+                  <div className="p-4">
                     <p className="text-sm text-muted-foreground mb-4">
-                      {t('beautyConsultation.premiumDescription', 'Tư vấn trang điểm cao cấp với video call 1:1 cùng chuyên gia, thời gian cố định 60 phút, bao gồm bộ sản phẩm mẫu cao cấp.')}
+                      {t(
+                        'beautyConsultation.premiumDescription',
+                        'Tư vấn trang điểm cao cấp với video call 1:1 cùng chuyên gia, thời gian cố định 60 phút, bao gồm bộ sản phẩm mẫu cao cấp.',
+                      )}
                     </p>
-                    
-                    <Button 
-                      variant="destructive" 
-                      size="sm" 
-                      className="w-full"
-                      onClick={() => setActiveTab('premium')}
-                    >
+
+                    <Button variant="destructive" size="sm" className="w-full" onClick={() => setActiveTab('premium')}>
                       {t('beautyConsultation.learnMore', 'Tìm hiểu thêm')}
                     </Button>
                   </div>
@@ -114,8 +114,12 @@ export default function BeautyConsultation() {
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-xl font-bold">{t('beautyConsultation.ourExperts', 'Đội ngũ Chuyên gia')}</h2>
               </div>
-              
-              <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as 'all' | 'standard' | 'premium')} className="w-full">    
+
+              <Tabs
+                value={activeTab}
+                onValueChange={(value) => setActiveTab(value as 'all' | 'standard' | 'premium')}
+                className="w-full"
+              >
                 <div className="flex justify-center mb-5">
                   <TabsList className="grid grid-cols-3 w-full max-w-xs">
                     <TabsTrigger value="all" className="rounded-full">
@@ -131,7 +135,7 @@ export default function BeautyConsultation() {
                     </TabsTrigger>
                   </TabsList>
                 </div>
-                
+
                 <TabsContent value="all" className="mt-0">
                   <ConsultantList filter="all" />
                 </TabsContent>
@@ -153,7 +157,7 @@ export default function BeautyConsultation() {
                 <p className="text-muted-foreground mb-5 max-w-lg mx-auto">
                   {t(
                     'beautyConsultation.ctaDescription',
-                    'Đặt lịch tư vấn với các chuyên gia trang điểm ngay hôm nay.'
+                    'Đặt lịch tư vấn với các chuyên gia trang điểm ngay hôm nay.',
                   )}
                 </p>
                 <Button className="px-6 whitespace-nowrap">
@@ -166,4 +170,4 @@ export default function BeautyConsultation() {
       </div>
     </div>
   )
-} 
+}

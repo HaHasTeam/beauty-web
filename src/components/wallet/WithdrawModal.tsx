@@ -13,12 +13,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Badge } from '@/components/ui/badge'
 import { CustomInput } from '@/components/ui/custom-input'
 import { DialogClose } from '@/components/ui/dialog'
-import {
-  Form,
-  FormField,
-  FormItem,
-  FormMessage,
-} from '@/components/ui/form'
+import { Form, FormField, FormItem, FormMessage } from '@/components/ui/form'
 import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { useToast } from '@/hooks/useToast'
@@ -30,7 +25,10 @@ import { getWithdrawalRequestsApi } from '@/network/apis/wallet/withdrawal-reque
 import { formatCurrency } from '@/utils/number'
 
 // Simple success content component
-const SuccessContent = ({ title = 'Success!', message = 'Your withdrawal request has been successfully submitted.' }) => {
+const SuccessContent = ({
+  title = 'Success!',
+  message = 'Your withdrawal request has been successfully submitted.',
+}) => {
   return (
     <div className="w-full flex flex-col items-center justify-center p-4 py-10">
       <div className="relative z-0 animate-pulse">
@@ -44,16 +42,14 @@ const SuccessContent = ({ title = 'Success!', message = 'Your withdrawal request
 
       <h1 className="text-3xl font-bold text-gray-900 mb-4 z-20">{title}</h1>
 
-      <p className="text-center text-gray-500 max-w-md">
-        {message}
-      </p>
+      <p className="text-center text-gray-500 max-w-md">{message}</p>
     </div>
   )
 }
 
 type WithdrawalFormValues = {
-  amount: number;
-  bankAccountId: string;
+  amount: number
+  bankAccountId: string
 }
 
 const WithdrawModal = () => {
@@ -63,41 +59,42 @@ const WithdrawModal = () => {
   const [withdrawalSuccess, setWithdrawalSuccess] = useState(false)
   const queryClient = useQueryClient()
   const successRef = useRef<HTMLDivElement>(null)
-  
+
   // Get wallet balance
   const { data: walletData, isLoading: isLoadingWallet } = useQuery({
     queryKey: [getMyWalletApi.queryKey],
     queryFn: getMyWalletApi.fn,
   })
-  
+
   // Get bank accounts
   const { data: bankAccountsData, isLoading: isLoadingAccounts } = useQuery({
     queryKey: [getBankAccountsApi.queryKey],
     queryFn: getBankAccountsApi.fn,
   })
-  
+
   // Fetch banks to get logos
   const { data: banksData } = useQuery({
     queryKey: [getBanksApi.queryKey],
     queryFn: getBanksApi.fn,
     staleTime: 1000 * 60 * 60, // Cache for 1 hour
   })
-  
+
   const defaultBankAccount = bankAccountsData?.data?.find((account) => account.isDefault)
   const bankAccounts = bankAccountsData?.data || []
   const banks = banksData?.data || []
   const walletBalance = walletData?.data?.balance || 0
-  
+
   // Function to find bank logo
   const getBankLogo = (bankName: string): string | undefined => {
     // Try to find the bank by name (partial match)
-    const bank = banks.find((bank) => 
-      bankName.toLowerCase().includes(bank.shortName.toLowerCase()) || 
-      bank.name.toLowerCase().includes(bankName.toLowerCase())
+    const bank = banks.find(
+      (bank) =>
+        bankName.toLowerCase().includes(bank.shortName.toLowerCase()) ||
+        bank.name.toLowerCase().includes(bankName.toLowerCase()),
     )
     return bank?.logo
   }
-  
+
   // Predefined amounts for quick selection
   const predefinedAmounts = [
     { value: 50000, label: formatCurrency(50000) },
@@ -105,20 +102,20 @@ const WithdrawModal = () => {
     { value: 200000, label: formatCurrency(200000) },
     { value: 500000, label: formatCurrency(500000) },
   ]
-  
+
   // Validation schema with translations
   const withdrawalSchema = z.object({
     amount: z.coerce
-      .number({ 
-        required_error: t('validation.withdrawal.amountRequired')
+      .number({
+        required_error: t('validation.withdrawal.amountRequired'),
       })
       .positive(t('validation.withdrawal.amountPositive'))
       .min(10000, t('validation.withdrawal.amountMinimum')),
     bankAccountId: z.string({
-      required_error: t('validation.withdrawal.bankAccountRequired')
+      required_error: t('validation.withdrawal.bankAccountRequired'),
     }),
   })
-  
+
   // Set up form
   const form = useForm<WithdrawalFormValues>({
     resolver: zodResolver(withdrawalSchema),
@@ -128,35 +125,34 @@ const WithdrawModal = () => {
     },
   })
 
-  console.log(form.getValues(),"SD");
-  console.log(form.formState.errors,"error");
-  
-  
- useEffect(() => {
-  if (defaultBankAccount) {
-    form.setValue('bankAccountId', defaultBankAccount.id)
-  }
- }, [defaultBankAccount, form])
-  
+  console.log(form.getValues(), 'SD')
+  console.log(form.formState.errors, 'error')
+
+  useEffect(() => {
+    if (defaultBankAccount) {
+      form.setValue('bankAccountId', defaultBankAccount.id)
+    }
+  }, [defaultBankAccount, form])
+
   // Withdrawal mutation
   const withdrawalMutation = useMutation({
     mutationFn: createWithdrawalRequestApi.fn,
     onSuccess: () => {
       successToast({
         message: t('wallet.withdraw.success'),
-        description: t('wallet.withdraw.successMessage')
+        description: t('wallet.withdraw.successMessage'),
       })
-      
+
       // Update wallet balance and transaction list
       queryClient.invalidateQueries({
         queryKey: [getMyWalletApi.queryKey],
       })
-      
+
       // Invalidate withdrawal requests query to refresh the list
       queryClient.invalidateQueries({
         queryKey: [getWithdrawalRequestsApi.queryKey],
       })
-      
+
       setWithdrawalSuccess(true)
       setIsProcessing(false)
     },
@@ -164,41 +160,40 @@ const WithdrawModal = () => {
       console.error('Withdrawal error:', error)
       errorToast({
         message: t('wallet.withdraw.error'),
-        description: t('wallet.withdraw.errorMessage')
+        description: t('wallet.withdraw.errorMessage'),
       })
       setIsProcessing(false)
     },
   })
-  
+
   const onSubmit = (values: WithdrawalFormValues) => {
-    
     if (values.amount > walletBalance) {
-      form.setError('amount', { 
-        message: t('validation.withdrawal.insufficientBalance')
+      form.setError('amount', {
+        message: t('validation.withdrawal.insufficientBalance'),
       })
       return
     }
-    
+
     setIsProcessing(true)
     withdrawalMutation.mutate({
       amount: values.amount,
       bankAccountId: values.bankAccountId,
     })
   }
-  
+
   // Scroll to success message when withdrawal is successful
   useEffect(() => {
     if (successRef.current && withdrawalSuccess) {
       successRef.current.scrollIntoView({ behavior: 'smooth' })
     }
   }, [withdrawalSuccess])
-  
+
   const isLoading = isLoadingWallet || isLoadingAccounts || isProcessing
 
   return (
     <div className="w-full mx-auto p-4 space-y-6 relative">
       {isLoading && <LoadingContentLayer />}
-      
+
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           {!withdrawalSuccess && (
@@ -251,7 +246,7 @@ const WithdrawModal = () => {
                   </FormItem>
                 )}
               />
-              
+
               {bankAccounts.length === 0 ? (
                 <Alert>
                   <Info className="h-4 w-4" />
@@ -263,7 +258,7 @@ const WithdrawModal = () => {
                   control={form.control}
                   name="bankAccountId"
                   render={({ field }) => (
-                    <FormItem className='max-h-[200px] overflow-y-auto'>
+                    <FormItem className="max-h-[200px] overflow-y-auto">
                       <div className="mb-2">
                         <Label className="text-sm text-gray-600">{t('wallet.withdraw.selectBankAccount')}</Label>
                       </div>
@@ -272,13 +267,12 @@ const WithdrawModal = () => {
                         className="space-y-2"
                         onValueChange={field.onChange}
                         disabled={isProcessing}
-                        
                       >
                         {bankAccounts.map((account) => {
-                          const bankLogo = getBankLogo(account.bankName);
-                          
+                          const bankLogo = getBankLogo(account.bankName)
+
                           return (
-                            <div 
+                            <div
                               key={account.id}
                               className={`flex items-center justify-between border border-gray-200 rounded-lg p-3 ${
                                 field.value === account.id ? 'border-primary bg-primary/5' : 'bg-white'
@@ -290,11 +284,7 @@ const WithdrawModal = () => {
                                   <div className="flex items-center gap-2">
                                     <div className="h-6 w-6 rounded-full bg-primary/10 flex items-center justify-center mr-1">
                                       {bankLogo ? (
-                                        <img 
-                                          src={bankLogo} 
-                                          alt={account.bankName}
-                                          className="h-4 w-4 object-contain" 
-                                        />
+                                        <img src={bankLogo} alt={account.bankName} className="h-4 w-4 object-contain" />
                                       ) : (
                                         <IconBuildingBank size={12} className="text-primary" />
                                       )}
@@ -316,7 +306,7 @@ const WithdrawModal = () => {
                               </div>
                               <ChevronRight className="h-4 w-4 text-gray-400" />
                             </div>
-                          );
+                          )
                         })}
                       </RadioGroup>
                       <FormMessage />
@@ -324,24 +314,24 @@ const WithdrawModal = () => {
                   )}
                 />
               )}
-              
+
               <div className="flex justify-end">
-                <Button 
-                  className="w-full" 
-                  variant="secondary" 
-                  type="submit" 
-                  disabled={isProcessing || bankAccounts.length === 0 || !form.watch("amount")}
+                <Button
+                  className="w-full"
+                  variant="secondary"
+                  type="submit"
+                  disabled={isProcessing || bankAccounts.length === 0 || !form.watch('amount')}
                 >
                   {t('wallet.withdraw.submitButton', 'Submit Withdrawal Request')}
                 </Button>
               </div>
-              
+
               <div className="text-sm text-muted-foreground text-center">
                 <p>{t('wallet.withdraw.withdrawalNote')}</p>
               </div>
             </>
           )}
-          
+
           {withdrawalSuccess && (
             <>
               <div ref={successRef}>
@@ -360,4 +350,4 @@ const WithdrawModal = () => {
   )
 }
 
-export default WithdrawModal 
+export default WithdrawModal

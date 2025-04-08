@@ -10,11 +10,12 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle} from '@/components/ui/dialog'
+  DialogTitle,
+} from '@/components/ui/dialog'
 import { Textarea } from '@/components/ui/textarea'
 import useHandleServerError from '@/hooks/useHandleServerError'
 import { useToast } from '@/hooks/useToast'
-import { cancelBookingApi , getBookingByIdApi, getBookingStatusTrackingApi } from '@/network/apis/booking/details'
+import { cancelBookingApi, getBookingByIdApi, getBookingStatusTrackingApi } from '@/network/apis/booking/details'
 
 interface CancelBookingDialogProps {
   open: boolean
@@ -24,13 +25,7 @@ interface CancelBookingDialogProps {
   bookingId: string
 }
 
-const CancelBookingDialog = ({
-  open,
-  setOpen,
-  onOpenChange,
-  setIsTrigger,
-  bookingId,
-}: CancelBookingDialogProps) => {
+const CancelBookingDialog = ({ open, setOpen, onOpenChange, setIsTrigger, bookingId }: CancelBookingDialogProps) => {
   const { t } = useTranslation()
   const { successToast } = useToast()
   const handleServerError = useHandleServerError()
@@ -52,7 +47,7 @@ const CancelBookingDialog = ({
     },
     onError: (error) => {
       handleServerError({
-        error
+        error,
       })
     },
   })
@@ -61,7 +56,7 @@ const CancelBookingDialog = ({
     if (reason.trim().length < 3) {
       return
     }
-    
+
     cancelBookingFn({
       bookingId,
       reason,
@@ -89,23 +84,13 @@ const CancelBookingDialog = ({
             onChange={(e) => setReason(e.target.value)}
             className="min-h-[100px]"
           />
-          {reason.trim().length < 3 && (
-            <p className="text-sm text-destructive">{t('booking.cancelReasonRequired')}</p>
-          )}
+          {reason.trim().length < 3 && <p className="text-sm text-destructive">{t('booking.cancelReasonRequired')}</p>}
         </div>
         <DialogFooter>
-          <Button
-            variant="outline"
-            onClick={() => setOpen(false)}
-            disabled={isPending}
-          >
+          <Button variant="outline" onClick={() => setOpen(false)} disabled={isPending}>
             {t('common.cancel')}
           </Button>
-          <Button
-            variant="destructive"
-            onClick={handleCancelBooking}
-            disabled={isPending || reason.trim().length < 3}
-          >
+          <Button variant="destructive" onClick={handleCancelBooking} disabled={isPending || reason.trim().length < 3}>
             {isPending ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -121,4 +106,4 @@ const CancelBookingDialog = ({
   )
 }
 
-export default CancelBookingDialog 
+export default CancelBookingDialog

@@ -237,7 +237,10 @@ export default function TopUpModal() {
                                   alt="PayOS"
                                   className="h-8 mr-2"
                                 />
-                                {t('wallet.paymentProviderInfo', 'We collaborate with PayOS to provide you with the best payment experience with free fee.')}
+                                {t(
+                                  'wallet.paymentProviderInfo',
+                                  'We collaborate with PayOS to provide you with the best payment experience with free fee.',
+                                )}
                               </div>
                             )}
                           </Label>

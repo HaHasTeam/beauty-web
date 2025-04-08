@@ -7,4 +7,4 @@ export interface IBankAccount {
   createdAt: string
 }
 
-export type TCreateBankAccountParams = Omit<IBankAccount, 'id' | 'createdAt'> 
+export type TCreateBankAccountParams = Omit<IBankAccount, 'id' | 'createdAt'>

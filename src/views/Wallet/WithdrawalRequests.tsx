@@ -7,7 +7,16 @@ import { useSearchParams } from 'react-router-dom'
 import { useShallow } from 'zustand/react/shallow'
 
 import LoadingContentLayer from '@/components/loading-icon/LoadingContentLayer'
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -30,7 +39,7 @@ import { minifyString } from '@/utils/string'
 // Badge for withdrawal request status
 const StatusBadge = ({ status }: { status: WithdrawalRequestStatusEnum }) => {
   const { t } = useTranslation()
-  
+
   // Set badge style based on status
   const getStatusStyle = () => {
     switch (status) {
@@ -56,28 +65,26 @@ const StatusBadge = ({ status }: { status: WithdrawalRequestStatusEnum }) => {
   }
 
   return (
-    <Badge className={`${getStatusStyle()} border px-2 py-1 h-6 font-medium rounded-md`}>
-      {getTranslatedStatus()}
-    </Badge>
+    <Badge className={`${getStatusStyle()} border px-2 py-1 h-6 font-medium rounded-md`}>{getTranslatedStatus()}</Badge>
   )
 }
 
 // Withdrawal request item component
-const WithdrawalRequestItem = ({ 
+const WithdrawalRequestItem = ({
   request,
   onCancel,
-  isCanceling
-}: { 
-  request: IWithdrawalRequest,
-  onCancel: (id: string) => void,
+  isCanceling,
+}: {
+  request: IWithdrawalRequest
+  onCancel: (id: string) => void
   isCanceling: boolean
 }) => {
   const { t } = useTranslation()
   const [showCancelDialog, setShowCancelDialog] = useState(false)
   const { user } = useStore(
     useShallow((state) => ({
-      user: state.user
-    }))
+      user: state.user,
+    })),
   )
   const currentUserId = user?.id
   const canCancel = request.status === WithdrawalRequestStatusEnum.PENDING
@@ -143,12 +150,14 @@ const WithdrawalRequestItem = ({
 
   return (
     <>
-      <div className={`border border-border bg-gradient-to-r ${getGradientBg()} rounded-xl p-3 mb-3 transition-all duration-200 shadow-sm hover:shadow-lg relative overflow-hidden group`}>
+      <div
+        className={`border border-border bg-gradient-to-r ${getGradientBg()} rounded-xl p-3 mb-3 transition-all duration-200 shadow-sm hover:shadow-lg relative overflow-hidden group`}
+      >
         {/* Decorative pattern */}
         <div className="absolute top-0 right-0 w-24 h-24 opacity-5 rounded-full -mt-8 -mr-8 bg-black transform rotate-45 group-hover:scale-110 transition-transform duration-300"></div>
         {/* Decorative dots pattern */}
         <div className="absolute w-full h-full opacity-[0.03] -z-10 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjIiIGZpbGw9ImN1cnJlbnRDb2xvciIvPjwvc3ZnPg==')]"></div>
-        
+
         <div className="flex flex-col sm:flex-row gap-3 relative">
           {/* Left side with icon and type */}
           <div className="flex items-center gap-3">
@@ -162,7 +171,7 @@ const WithdrawalRequestItem = ({
               </span>
             </div>
           </div>
-          
+
           {/* Center with ID and bank details */}
           <div className="flex-grow flex flex-col justify-center my-1 sm:my-0">
             <div className="flex items-center gap-2">
@@ -170,7 +179,7 @@ const WithdrawalRequestItem = ({
                 {'#' + minifyString(request.id)}
               </div>
             </div>
-            
+
             <div className="text-sm flex flex-wrap items-center mt-1 gap-x-3 gap-y-1">
               <div className="flex items-center">
                 <span className="text-slate-500 mr-1">{t('wallet.withdrawalRequests.bank', 'Bank')}:</span>
@@ -184,10 +193,12 @@ const WithdrawalRequestItem = ({
                 <span className="text-slate-500 mr-1">{t('wallet.withdrawalRequests.accountName', 'Name')}:</span>
                 <span className="font-medium">{getAccountName()}</span>
               </div>
-              
+
               {showProcessedBy && (
                 <div className="flex items-center">
-                  <span className="text-slate-500 mr-1">{t('wallet.withdrawalRequests.processedBy', 'Processed by')}:</span>
+                  <span className="text-slate-500 mr-1">
+                    {t('wallet.withdrawalRequests.processedBy', 'Processed by')}:
+                  </span>
                   <span className="font-medium">Admin</span>
                 </div>
               )}
@@ -204,15 +215,15 @@ const WithdrawalRequestItem = ({
               </div>
             )}
           </div>
-          
+
           {/* Right side with amount and actions */}
           <div className="flex flex-col items-end justify-center gap-2 min-w-[120px]">
             <div className="text-red-600 font-semibold text-base md:text-lg px-3 py-1.5 rounded-lg backdrop-blur-sm bg-rose-100/80 shadow-sm">
               {formatCurrency(request.amount)}
             </div>
             {canCancel && (
-              <Button 
-                variant="destructive" 
+              <Button
+                variant="destructive"
                 size="sm"
                 onClick={() => setShowCancelDialog(true)}
                 className="h-8"
@@ -229,17 +240,20 @@ const WithdrawalRequestItem = ({
       <AlertDialog open={showCancelDialog} onOpenChange={setShowCancelDialog}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>{t('wallet.withdrawalRequests.cancelConfirmTitle', 'Cancel Withdrawal Request')}</AlertDialogTitle>
+            <AlertDialogTitle>
+              {t('wallet.withdrawalRequests.cancelConfirmTitle', 'Cancel Withdrawal Request')}
+            </AlertDialogTitle>
             <AlertDialogDescription>
-              {t('wallet.withdrawalRequests.cancelConfirmDescription', 'Are you sure you want to cancel this withdrawal request? This action cannot be undone.')}
+              {t(
+                'wallet.withdrawalRequests.cancelConfirmDescription',
+                'Are you sure you want to cancel this withdrawal request? This action cannot be undone.',
+              )}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={isCanceling}>
-              {t('common.cancel', 'Cancel')}
-            </AlertDialogCancel>
-            <AlertDialogAction 
-              onClick={handleCancelRequest} 
+            <AlertDialogCancel disabled={isCanceling}>{t('common.cancel', 'Cancel')}</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleCancelRequest}
               disabled={isCanceling}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
@@ -253,15 +267,15 @@ const WithdrawalRequestItem = ({
 }
 
 // Status filter component
-const StatusFilters = ({ 
-  selectedStatus, 
-  onStatusChange
-}: { 
+const StatusFilters = ({
+  selectedStatus,
+  onStatusChange,
+}: {
   selectedStatus: WithdrawalRequestStatusEnum | 'ALL'
-  onStatusChange: (status: WithdrawalRequestStatusEnum | 'ALL') => void 
+  onStatusChange: (status: WithdrawalRequestStatusEnum | 'ALL') => void
 }) => {
   const { t } = useTranslation()
-  
+
   // Get translated status text
   const getTranslatedStatus = (status: WithdrawalRequestStatusEnum | 'ALL') => {
     if (status === 'ALL') {
@@ -270,13 +284,13 @@ const StatusFilters = ({
     const statusKey = `wallet.withdrawalRequests.status.${status.toLowerCase()}`
     return t(statusKey, status)
   }
-  
+
   // Get style based on selected status
   const getStatusStyle = (status: WithdrawalRequestStatusEnum | 'ALL') => {
     if (selectedStatus === status) {
       return 'bg-primary text-white border-primary hover:bg-primary/90'
     }
-    
+
     switch (status) {
       case WithdrawalRequestStatusEnum.PENDING:
         return 'bg-amber-50 text-amber-700 hover:bg-amber-100 border-amber-200'
@@ -294,7 +308,7 @@ const StatusFilters = ({
         return 'bg-white hover:bg-gray-50 text-gray-700 border-gray-200'
     }
   }
-  
+
   // Array of all statuses to filter by
   const statuses: (WithdrawalRequestStatusEnum | 'ALL')[] = [
     'ALL',
@@ -304,32 +318,46 @@ const StatusFilters = ({
     WithdrawalRequestStatusEnum.REJECTED,
     WithdrawalRequestStatusEnum.CANCELLED,
   ]
-  
+
   return (
     <div className="bg-white/80 backdrop-blur-sm p-3 rounded-xl border border-border shadow-md mb-3 relative overflow-hidden group">
       {/* Decorative circle */}
-      <div className="absolute w-32 h-32 -right-12 -top-12 rounded-full opacity-10 transform group-hover:scale-110 transition-transform duration-300" style={{ backgroundColor: 'var(--primary)' }}></div>
-      
+      <div
+        className="absolute w-32 h-32 -right-12 -top-12 rounded-full opacity-10 transform group-hover:scale-110 transition-transform duration-300"
+        style={{ backgroundColor: 'var(--primary)' }}
+      ></div>
+
       {/* Decorative dots pattern */}
       <div className="absolute w-full h-full opacity-[0.03] -z-10 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjIiIGZpbGw9ImN1cnJlbnRDb2xvciIvPjwvc3ZnPg==')]"></div>
-      
+
       <div className="flex items-center gap-2 mb-2 text-sm font-medium text-primary relative">
         <div className="p-1.5 rounded-lg bg-primary/10">
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+          <svg
+            className="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
+            />
           </svg>
         </div>
         {t('wallet.withdrawalRequests.filterByStatus', 'Filter by status')}
       </div>
-      
+
       <div className="flex flex-wrap gap-1.5">
         {statuses.map((status) => (
           <Badge
             key={status}
-            variant={selectedStatus === status ? "default" : "outline"}
+            variant={selectedStatus === status ? 'default' : 'outline'}
             className={cn(
               'cursor-pointer py-1 px-3 rounded-full text-xs',
-              selectedStatus !== status ? getStatusStyle(status) : ''
+              selectedStatus !== status ? getStatusStyle(status) : '',
             )}
             onClick={() => onStatusChange(status)}
           >
@@ -347,11 +375,11 @@ const WithdrawalRequests = () => {
   const [searchParams, setSearchParams] = useSearchParams()
   const { successToast, errorToast } = useToast()
   const queryClient = useQueryClient()
-  
+
   // Get status filter from URL or default to 'ALL'
-  const statusParam = searchParams.get('status') as WithdrawalRequestStatusEnum | 'ALL' || 'ALL'
+  const statusParam = (searchParams.get('status') as WithdrawalRequestStatusEnum | 'ALL') || 'ALL'
   const pageParam = searchParams.get('page') || '1'
-  
+
   const [selectedStatus, setSelectedStatus] = useState<WithdrawalRequestStatusEnum | 'ALL'>(statusParam)
   const [currentPage, setCurrentPage] = useState(parseInt(pageParam, 10))
   const limit = 10
@@ -359,13 +387,13 @@ const WithdrawalRequests = () => {
   // Update URL when filters change
   useEffect(() => {
     const params = new URLSearchParams(searchParams)
-    
+
     if (selectedStatus !== 'ALL') {
       params.set('status', selectedStatus)
     } else {
       params.delete('status')
     }
-    
+
     params.set('page', currentPage.toString())
     setSearchParams(params)
   }, [selectedStatus, currentPage, setSearchParams, searchParams])
@@ -382,11 +410,11 @@ const WithdrawalRequests = () => {
       page: currentPage,
       limit,
     }
-    
+
     if (selectedStatus !== 'ALL') {
       params.statuses = [selectedStatus as WithdrawalRequestStatusEnum]
     }
-    
+
     return params
   }
 
@@ -403,16 +431,22 @@ const WithdrawalRequests = () => {
     onSuccess: () => {
       successToast({
         message: t('wallet.withdrawalRequests.cancelSuccess', 'Request cancelled successfully'),
-        description: t('wallet.withdrawalRequests.cancelSuccessDescription', 'Your withdrawal request has been cancelled')
+        description: t(
+          'wallet.withdrawalRequests.cancelSuccessDescription',
+          'Your withdrawal request has been cancelled',
+        ),
       })
       queryClient.invalidateQueries({ queryKey: [getWithdrawalRequestsApi.queryKey] })
     },
     onError: () => {
       errorToast({
         message: t('wallet.withdrawalRequests.cancelError', 'Failed to cancel request'),
-        description: t('wallet.withdrawalRequests.cancelErrorDescription', 'There was a problem cancelling your withdrawal request')
+        description: t(
+          'wallet.withdrawalRequests.cancelErrorDescription',
+          'There was a problem cancelling your withdrawal request',
+        ),
       })
-    }
+    },
   })
 
   // Handle pagination
@@ -427,7 +461,7 @@ const WithdrawalRequests = () => {
 
   // Extract data from the response
   const totalPages = requestsData?.data?.totalPages || 1
-  
+
   // Handle both data formats: array or items object inside data
   const withdrawalRequests: IWithdrawalRequest[] = (() => {
     if (!requestsData?.data) return []
@@ -446,7 +480,10 @@ const WithdrawalRequests = () => {
             {t('wallet.withdrawalRequests.empty.title', 'No withdrawal requests found')}
           </h3>
           <p className="text-muted-foreground">
-            {t('wallet.withdrawalRequests.empty.description', 'You haven\'t made any withdrawal requests that match the current filters.')}
+            {t(
+              'wallet.withdrawalRequests.empty.description',
+              "You haven't made any withdrawal requests that match the current filters.",
+            )}
           </p>
         </div>
       )
@@ -470,19 +507,14 @@ const WithdrawalRequests = () => {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <StatusFilters 
-          selectedStatus={selectedStatus}
-          onStatusChange={handleStatusChange}
-        />
-        
+        <StatusFilters selectedStatus={selectedStatus} onStatusChange={handleStatusChange} />
+
         {isLoading ? (
           <LoadingContentLayer label={t('wallet.withdrawalRequests.loading', 'Loading requests...')} />
         ) : (
           <>
-            <div className="mb-4">
-              {renderWithdrawalRequests(withdrawalRequests)}
-            </div>
-            
+            <div className="mb-4">{renderWithdrawalRequests(withdrawalRequests)}</div>
+
             {totalPages > 1 && (
               <Pagination className="mt-4">
                 <PaginationContent>
@@ -491,25 +523,22 @@ const WithdrawalRequests = () => {
                       <PaginationPrevious onClick={() => handlePageChange(currentPage - 1)} />
                     </PaginationItem>
                   )}
-                  
+
                   {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
                     // Show pages around current page
                     let pageNum = currentPage - 2 + i
                     if (pageNum <= 0) pageNum = i + 1
                     if (pageNum > totalPages) return null
-                    
+
                     return (
                       <PaginationItem key={pageNum}>
-                        <PaginationLink
-                          isActive={pageNum === currentPage}
-                          onClick={() => handlePageChange(pageNum)}
-                        >
+                        <PaginationLink isActive={pageNum === currentPage} onClick={() => handlePageChange(pageNum)}>
                           {pageNum}
                         </PaginationLink>
                       </PaginationItem>
                     )
                   })}
-                  
+
                   {currentPage < totalPages && (
                     <PaginationItem>
                       <PaginationNext onClick={() => handlePageChange(currentPage + 1)} />
@@ -525,4 +554,4 @@ const WithdrawalRequests = () => {
   )
 }
 
-export default WithdrawalRequests 
+export default WithdrawalRequests
