@@ -56,9 +56,9 @@ const FlexDatePicker = forwardRef<HTMLButtonElement, Props<any>>(
                     !field.value && 'text-muted-foreground',
                   )}
                 >
-                  <div className='w-full flex items-center justify-between gap-2'>
-                  {date ? `${format(date, 'PPP')} ` : <span>{'Select Date'}</span>}
-                  <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                  <div className="w-full flex items-center justify-between gap-2">
+                    {date ? `${format(date, 'PPP')} ` : <span>{'Select Date'}</span>}
+                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                   </div>
                 </Button>
               </FormControl>

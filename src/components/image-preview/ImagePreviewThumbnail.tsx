@@ -42,17 +42,17 @@ export function ImagePreviewThumbnail({ imageUrl, alt, fileType }: ImagePreviewT
 
   return (
     <>
-      <div className='relative group rounded-md border border-gray-200 overflow-hidden bg-gray-50'>
+      <div className="relative group rounded-md border border-gray-200 overflow-hidden bg-gray-50">
         <button
           onClick={() => (isImage || isVideo) && setShowPreview(true)}
-          className='w-full cursor-pointer aspect-square relative'
+          className="w-full cursor-pointer aspect-square relative"
         >
           {isImage ? (
-            <div className='relative w-full h-full'>
+            <div className="relative w-full h-full">
               <img
                 src={imageUrl}
                 alt={alt}
-                className='w-full h-full object-cover'
+                className="w-full h-full object-cover"
                 onError={(e) => {
                   // Fallback if image fails to load
                   const target = e.target as HTMLImageElement
@@ -62,41 +62,41 @@ export function ImagePreviewThumbnail({ imageUrl, alt, fileType }: ImagePreviewT
               />
             </div>
           ) : isVideo ? (
-            <div className='relative w-full h-full bg-black'>
+            <div className="relative w-full h-full bg-black">
               <video
                 src={imageUrl}
-                className='w-full h-full object-cover opacity-70'
+                className="w-full h-full object-cover opacity-70"
                 muted
                 playsInline
-                preload='metadata'
+                preload="metadata"
               />
-              <div className='absolute inset-0 flex items-center justify-center'>
-                <PlayIcon className='h-10 w-10 text-white opacity-90' />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <PlayIcon className="h-10 w-10 text-white opacity-90" />
               </div>
             </div>
           ) : (
-            <div className='w-full h-full flex items-center justify-center'>
-              <FileImageIcon className='h-8 w-8 text-gray-400' />
+            <div className="w-full h-full flex items-center justify-center">
+              <FileImageIcon className="h-8 w-8 text-gray-400" />
             </div>
           )}
 
-          <div className='absolute bottom-0 left-0 right-0 bg-black bg-opacity-60 p-1 text-xs truncate text-white'>
+          <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-60 p-1 text-xs truncate text-white">
             {alt.length > 20 ? `${alt.slice(0, 18)}...` : alt}
           </div>
         </button>
       </div>
 
       <Dialog open={showPreview} onOpenChange={setShowPreview}>
-        <DialogContent className='sm:max-w-2xl max-h-[90vh] overflow-y-auto'>
+        <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>{alt}</DialogTitle>
           </DialogHeader>
-          <div className='flex items-center justify-center p-2'>
+          <div className="flex items-center justify-center p-2">
             {isImage ? (
               <img
                 src={imageUrl}
                 alt={alt}
-                className='max-h-[70vh] max-w-full object-contain'
+                className="max-h-[70vh] max-w-full object-contain"
                 onError={(e) => {
                   const target = e.target as HTMLImageElement
                   target.style.display = 'none'
@@ -108,21 +108,21 @@ export function ImagePreviewThumbnail({ imageUrl, alt, fileType }: ImagePreviewT
                 src={imageUrl}
                 controls
                 autoPlay
-                className='max-h-[70vh] max-w-full'
+                className="max-h-[70vh] max-w-full"
                 onError={() => setShowPreview(false)}
               />
             ) : (
-              <div className='flex flex-col items-center gap-2'>
-                <FileVideoIcon className='h-16 w-16 text-gray-400' />
-                <p className='text-gray-500'>Unable to preview this file</p>
+              <div className="flex flex-col items-center gap-2">
+                <FileVideoIcon className="h-16 w-16 text-gray-400" />
+                <p className="text-gray-500">Unable to preview this file</p>
               </div>
             )}
           </div>
-          <div className='flex justify-end gap-2 mt-4'>
-            <Button type='button' variant='outline' size='sm' onClick={() => setShowPreview(false)}>
+          <div className="flex justify-end gap-2 mt-4">
+            <Button type="button" variant="outline" size="sm" onClick={() => setShowPreview(false)}>
               Close
             </Button>
-            <Button type='button' variant='default' size='sm' onClick={() => window.open(imageUrl, '_blank')}>
+            <Button type="button" variant="default" size="sm" onClick={() => window.open(imageUrl, '_blank')}>
               Open in new tab
             </Button>
           </div>
@@ -130,4 +130,4 @@ export function ImagePreviewThumbnail({ imageUrl, alt, fileType }: ImagePreviewT
       </Dialog>
     </>
   )
-} 
+}

@@ -28,5 +28,8 @@
       "linkInviteLabel": "Invite link",
       "goToGroupBuy": "Go to group"
     }
+  },
+  "cart": {
+    "finalPrice": "Total Payment (Discount {{discount}})"
   }
 }

@@ -588,6 +588,7 @@
     }
   },
   "cart": {
+    "finalPrice": "Giá tối đa",
     "brannedAllMessage": "Sản phẩm này bị cấm.",
     "unPublishAllMessage": "Sản phẩm này không có sẵn để mua.",
     "deleteItem": "Xóa {{count}} sản phẩm",
