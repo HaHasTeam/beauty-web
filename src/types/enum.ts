@@ -13,6 +13,11 @@ export enum GenderEnum {
   FEMALE = 'FEMALE',
   OTHER = 'OTHER',
 }
+export enum BlogEnum {
+  UN_PUBLISHED = 'UN_PUBLISHED',
+  PUBLISHED = 'PUBLISHED',
+  INACTIVE = 'INACTIVE',
+}
 
 export enum StatusEnum {
   PENDING = 'PENDING',
@@ -188,18 +193,6 @@ export enum ServiceTypeEnum {
   STANDARD = 'STANDARD',
   PREMIUM = 'PREMIUM',
 }
-
-export enum BookingStatusEnum {
-  TO_PAY = 'TO_PAY',
-  WAIT_FOR_CONFIRMATION = 'WAIT_FOR_CONFIRMATION',
-  BOOKING_CONFIRMED = 'BOOKING_CONFIRMED',
-  SERVICE_BOOKING_FORM_SUBMITED = 'SERVICE_BOOKING_FORM_SUBMITED',
-  SENDED_RESULT_SHEET = 'SENDED_RESULT_SHEET',
-  COMPLETED = 'COMPLETED',
-  REFUNDED = 'REFUNDED',
-  CANCELLED = 'CANCELLED',
-}
-
 export enum WeekDay {
   MONDAY = 2,
   TUESDAY = 3,
@@ -208,9 +201,4 @@ export enum WeekDay {
   FRIDAY = 6,
   SATURDAY = 7,
   SUNDAY = 8,
-}
-
-export enum BookingTypeEnum {
-  SERVICE = 'SERVICE',
-  INTERVIEW = 'INTERVIEW',
 }

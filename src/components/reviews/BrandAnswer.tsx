@@ -165,7 +165,7 @@ const BrandAnswer = ({
           isOpen={isOpen}
           feedback={feedback}
           setShowRep={setShowRep}
-          brand={user?.brands?.some((br: IBrand) => br.id === brand?.id) ? brand : null}
+          brand={user?.brands?.some((br) => br.id === brand?.id) ? brand : null}
         />
       )}
     </div>

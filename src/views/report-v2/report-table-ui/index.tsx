@@ -29,11 +29,7 @@ export default function IndexPage() {
               shrinkZero
             />
           ) : (
-            <ReportTable
-              data={reportList?.data?.items ?? []}
-              pageCount={(reportList?.data?.totalPages ?? 1) / (queryStates[0].perPage ?? 10)}
-              queryStates={queryStates}
-            />
+            <ReportTable data={reportList?.data ?? []} pageCount={1} queryStates={queryStates} />
           )}
         </Shell>
       </div>

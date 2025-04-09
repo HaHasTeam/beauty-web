@@ -1,7 +1,9 @@
+import { useQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import configs from '@/config'
+import { getAllBlogApi } from '@/network/apis/blog'
 import useCartStore from '@/store/cart'
 import { DiscountTypeEnum } from '@/types/enum'
 import { formatCurrency, formatNumber } from '@/utils/number'
@@ -31,6 +33,11 @@ export default function CheckoutTotal({
   const { t } = useTranslation()
   const { groupBuying, groupBuyingOrder } = useCartStore()
   const criteria = groupBuying?.groupProduct.criterias[0]
+  const { data: blogData } = useQuery({
+    queryKey: [getAllBlogApi.queryKey],
+    queryFn: getAllBlogApi.fn,
+  })
+
   return (
     <div className="w-full bg-white rounded-md shadow-sm p-4">
       <div>
@@ -108,7 +115,10 @@ export default function CheckoutTotal({
         <p className="text-sm text-muted-foreground my-3 text-right">{t('cart.checkoutDescription')}</p>
         <p className="text-sm text-muted-foreground my-1">
           {t('cart.acceptCondition')}
-          <Link to={configs.routes.termsAndConditions} className="text-sm text-blue-500 hover:underline font-medium">
+          <Link
+            to={`${configs.routes.blogs}/${blogData?.data[0].id}`}
+            className="text-sm text-blue-500 hover:underline font-medium"
+          >
             {t('cart.terms')}
           </Link>
         </p>
