@@ -1,3 +1,6 @@
+import 'react-quill-new/dist/quill.snow.css'
+import './index.css'
+
 import { useQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import ReactQuill from 'react-quill-new'
@@ -36,21 +39,27 @@ const BlogDetail = () => {
     blogData &&
     blogData.data &&
     blogData.data.status === BlogEnum.PUBLISHED && (
-      <div className="container mx-auto py-3 flex flex-col gap-2">
-        <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-bold text-primary">{blogData.data.title}</h2>
-          {/* <BlogState state={blogData.data.status} /> */}
-        </div>
-        <div className="text-sm text-muted-foreground ">
-          <p>
-            {t('blogDetails.createdAt')}: {t('date.toLocaleDateTimeString', { val: new Date(blogData.data.createdAt) })}
-          </p>
-          <p>
-            {t('blogDetails.updatedAt')}: {t('date.toLocaleDateTimeString', { val: new Date(blogData.data.updatedAt) })}
-          </p>
-        </div>
+      <div className="w-full min-h-screen bg-background">
+        <div className="container mx-auto sm:px-4 px-2 py-8">
+          <div className="w-full lg:px-28 md:px-3 sm:px-4 px-0 space-y-3">
+            <div className="flex justify-between items-center">
+              <h2 className="text-2xl font-bold text-primary">{blogData.data.title}</h2>
+              {/* <BlogState state={blogData.data.status} /> */}
+            </div>
+            <div className="text-sm text-muted-foreground ">
+              <p>
+                {t('blogDetails.createdAt')}:{' '}
+                {t('date.toLocaleDateTimeString', { val: new Date(blogData.data.createdAt) })}
+              </p>
+              <p>
+                {t('blogDetails.updatedAt')}:{' '}
+                {t('date.toLocaleDateTimeString', { val: new Date(blogData.data.updatedAt) })}
+              </p>
+            </div>
 
-        <ReactQuill value={blogData.data.content} readOnly={true} theme={'bubble'} />
+            <ReactQuill value={blogData.data.content} readOnly={true} theme={'bubble'} />
+          </div>
+        </div>
       </div>
     )
   )
