@@ -490,7 +490,19 @@
     "noNotifications": "Chưa có thông báo nào",
     "today": "Hôm nay",
     "yesterday": "Hôm qua",
-    "earlier": "Trước đó"
+    "earlier": "Trước đó",
+    "list": "Danh sách thông báo",
+    "total": "Tổng cộng",
+    "read": "Đã đọc",
+    "unread": "Chưa đọc",
+    "types": {
+      "orderCancelled": "Đơn hàng đã hủy",
+      "groupBuyingSuccess": "Mua nhóm thành công",
+      "groupBuyingFailed": "Mua nhóm thất bại",
+      "refundApproved": "Hoàn tiền được chấp nhận",
+      "refundSuccess": "Hoàn tiền thành công",
+      "brandReceivedReturn": "Đã nhận hàng trả lại"
+    }
   },
   "cart": {
     "brannedAllMessage": "Sản phẩm này bị cấm.",
