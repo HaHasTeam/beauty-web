@@ -155,9 +155,9 @@ const OrderDetail = () => {
     useOrderData?.data?.status,
     useStatusTrackingData?.data,
   ])
-  const pendingRequestCancelTime = useMemo(() => {
-    return millisecondsToRoundedDays(parseInt(masterConfig?.data[0].autoApprovedRequestCancelTime ?? ''))
-  }, [masterConfig?.data])
+  // const pendingRequestCancelTime = useMemo(() => {
+  //   return millisecondsToRoundedDays(parseInt(masterConfig?.data[0].autoApprovedRequestCancelTime ?? ''))
+  // }, [masterConfig?.data])
 
   const pendingRequestReturnTime = useMemo(() => {
     return (
@@ -204,7 +204,7 @@ const OrderDetail = () => {
               {!isLoading && cancelAndReturnRequestData?.data?.cancelRequest?.status === RequestStatusEnum.PENDING && (
                 <AlertMessage
                   title={t('order.cancelRequestPendingTitle')}
-                  message={t('order.cancelRequestPendingMessage', { count: pendingRequestCancelTime })}
+                  message={t('order.cancelRequestPendingMessage')}
                   isShowIcon={false}
                 />
               )}

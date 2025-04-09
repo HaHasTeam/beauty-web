@@ -6,6 +6,8 @@ import externalLink from '@/config/externalLink'
 import About from '@/views/About'
 import BeautyConsultation from '@/views/BeautyConsultation'
 import ServiceDetail from '@/views/BeautyConsultation/ServiceDetail'
+import Blog from '@/views/Blog'
+import BlogDetail from '@/views/BlogDetails'
 import BookingDetail from '@/views/BookingDetail'
 import BrandDetail from '@/views/Brand'
 import Contact from '@/views/Contact'
@@ -42,12 +44,20 @@ export default function RouterProvider() {
           element: <Home />,
         },
         {
+          path: configs.routes.blogs,
+          element: <Blog />,
+        },
+        {
           path: configs.routes.search,
           element: <SearchPage />,
         },
         {
           path: configs.routes.productDetail,
           element: <ProductDetail />,
+        },
+        {
+          path: configs.routes.blogDetail,
+          element: <BlogDetail />,
         },
         {
           path: configs.routes.groupBuy,

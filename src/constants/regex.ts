@@ -1,6 +1,11 @@
 import i18next from 'i18next'
 import { isValidPhoneNumber } from 'libphonenumber-js'
 
+export const usernameRegex = {
+  pattern: /^[a-zA-Z][a-zA-Z0-9_]{2,19}$/,
+  message: () => i18next.t('validation.usernameValid'),
+}
+
 export const emailRegex = {
   pattern: /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/,
   message: () => i18next.t('validation.emailValid'),

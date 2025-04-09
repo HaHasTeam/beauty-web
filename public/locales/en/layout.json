@@ -217,6 +217,11 @@
     "highToLow": "High to Low"
   },
   "empty": {
+    "blog": {
+      "title": "No Blog Found",
+      "description": "The blog you're looking for either does not exist, has been removed, or is currently unavailable.",
+      "button": "Browse Other Blog"
+    },
     "brandHasGroupProduct": {
       "title": "There no brands selling group-buying products",
       "description": "Please come back later to check out the latest group-buying deals from your favorite brands."
@@ -545,7 +550,19 @@
     "noNotifications": "No notifications yet",
     "today": "Today",
     "yesterday": "Yesterday",
-    "earlier": "Earlier"
+    "earlier": "Earlier",
+    "list": "List Notification",
+    "total": "Total",
+    "read": "Read",
+    "unread": "Unread",
+    "types": {
+      "orderCancelled": "Order Cancelled",
+      "groupBuyingSuccess": "Group Buying Success",
+      "groupBuyingFailed": "Group Buying Failed",
+      "refundApproved": "Refund Approved",
+      "refundSuccess": "Refund Successful",
+      "brandReceivedReturn": "Return Received"
+    }
   },
   "cart": {
     "brannedAllMessage": "This product is banned.",
@@ -969,7 +986,7 @@
     "requestCancelSuccess": "Request cancel order successfully!",
     "cancelRequestPendingTitle": "Cancellation Request Pending Confirmation",
     "cancelRequestRejectedTitle": "Cancellation Request Rejected",
-    "cancelRequestPendingMessage": "Your cancellation request has been submitted and is awaiting confirmation. The order will remain active until the brand reviews and approves the request. We will update you with the result within {{count}} days. If your request is approved, we will process a refund (if applicable).",
+    "cancelRequestPendingMessage": "Your cancellation request has been submitted and is awaiting confirmation. The order will remain active until the brand reviews and approves the request. If your request is approved, we will process a refund (if applicable).",
     "cancelRequestRejectedMessage": "Your cancellation request has been rejected. The order will continue to be processed as usual. You can click \"Return order\" after receiving the item if needed. Please contact customer support if you need further assistance.",
     "statusDescription": {
       "joinGroupBuying": "The customer has joined a group-buying deal. The order will be processed once the required number of participants is reached.",
@@ -2030,5 +2047,18 @@
   },
   "currency": {
     "vnd": "Vietnam Dong"
+  },
+  "blog": {
+    "title": "Blogs",
+    "createdAt": "Created At"
+  },
+  "blogDetails": {
+    "createdAt": "Created at",
+    "updatedAt": "Updated at",
+    "status": {
+      "published": "Published",
+      "un_published": "Unpublished",
+      "inactive": "Inactive"
+    }
   }
 }

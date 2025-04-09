@@ -48,6 +48,7 @@ const routes = {
   search: '/search',
   brands: '/brands',
   brandDetail: '/brands/:brandId',
+  blogDetail: '/blogs/:id',
   groupBuy: '/products/group-buying',
   groupBuyByBrand: '/products/group-buying/:brandId',
   groupBuyDetail: '/products/group-buying/:brandId/:groupId',

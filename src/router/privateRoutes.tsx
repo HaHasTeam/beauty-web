@@ -7,6 +7,7 @@ import ChangePassword from '@/views/ChangePassword'
 import ChatPage from '@/views/ChatPage/ChatPage'
 import Checkout from '@/views/Checkout'
 import CheckoutResult from '@/views/CheckoutResult'
+import NotificationsPage from '@/views/Notification'
 import OrderDetail from '@/views/OrderDetail'
 import Profile from '@/views/Profile'
 import ProfileAddress from '@/views/ProfileAddress'
@@ -71,7 +72,7 @@ const privateRoutes = [
       },
       {
         path: configs.routes.profileNotification,
-        element: <div className=""> profileNotification</div>,
+        element: <NotificationsPage />,
       },
       {
         path: configs.routes.profileOrder, // user order history
