@@ -108,13 +108,13 @@ const Cart = ({ isInGroupBuy = false, isInPeriod = false }: CartProps) => {
       }
     })
   }
-  // const handleVoucherSelection = (brandId: string, voucher: TVoucher | null) => {
-  //   setChosenVouchersByBrand((prev) => ({
-  //     ...prev,
-  //     [brandId]: voucher,
-  //   }))
-  //   setChosenBrandVouchers({ ...chosenVouchersByBrand, [brandId]: voucher })
-  // }
+  const handleVoucherSelection = (brandId: string, voucher: TVoucher | null) => {
+    setChosenVouchersByBrand((prev) => ({
+      ...prev,
+      [brandId]: voucher,
+    }))
+    // setChosenBrandVouchers({ ...chosenVouchersByBrand, [brandId]: voucher })
+  }
 
   useEffect(() => {
     if (cartItems) {
@@ -254,7 +254,7 @@ const Cart = ({ isInGroupBuy = false, isInPeriod = false }: CartProps) => {
                     selectedCartItems={selectedCartItems}
                     onSelectBrand={handleSelectBrand}
                     bestVoucherForBrand={bestVoucherForBrand}
-                    // onVoucherSelect={handleVoucherSelection}
+                    onVoucherSelect={handleVoucherSelection}
                     brand={brand}
                     checkoutItems={checkoutItems}
                     selectedCheckoutItems={selectedCheckoutItems}

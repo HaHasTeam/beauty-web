@@ -31,6 +31,7 @@ interface CartItemProps {
   isTriggerTotal: boolean
   setIsTriggerTotal: Dispatch<SetStateAction<boolean>>
   isInGroupBuying?: boolean
+  onVoucherSelect: (brandId: string, voucher: TVoucher | null) => void
 }
 const CartItem = ({
   isInGroupBuying = false,
@@ -44,6 +45,7 @@ const CartItem = ({
   selectedCheckoutItems,
   setIsTriggerTotal,
   isTriggerTotal,
+  onVoucherSelect,
 }: CartItemProps) => {
   const { t } = useTranslation()
   const { chosenBrandVouchers, setChosenBrandVouchers } = useCartStore()
@@ -85,9 +87,11 @@ const CartItem = ({
     const newVouchers = { ...chosenBrandVouchers }
     if (brand) {
       newVouchers[brand.id] = voucher
-      setChosenBrandVouchers(newVouchers)
+      setChosenBrandVouchers({ ...chosenBrandVouchers, [brand.id]: voucher })
+      onVoucherSelect(brand.id, voucher)
     }
   }
+  console.log('chosenvoucher', chosenBrandVouchers)
   useEffect(() => {
     if (selectedCartItems.length === 0 || voucherDiscount === 0) {
       const newVouchers = { ...chosenBrandVouchers }

@@ -27,7 +27,7 @@ const Blog = () => {
       <div className="container mx-auto sm:px-4 px-2 py-8">
         <div className="w-full lg:px-28 md:px-3 sm:px-4 px-0 space-y-3">
           <h3 className="text-2xl font-bold text-primary">{t('blog.title')}</h3>
-          <div className="flex flex-wrap">
+          <div className="flex flex-wrap gap-3">
             {!isBlogLoading && blogData && blogData.data && blogData.data.length > 0 ? (
               blogData.data
                 ?.filter((blog) => blog.status === BlogEnum.PUBLISHED)
