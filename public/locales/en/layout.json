@@ -565,6 +565,7 @@
     }
   },
   "cart": {
+    "finalPrice": "Maximum Price",
     "brannedAllMessage": "This product is banned.",
     "unPublishAllMessage": "This product is not available for purchase.",
     "deleteItem": "Delete {{count}} item(s)",
@@ -805,7 +806,11 @@
       "refresh": "Refresh",
       "viewAccounts": "View Accounts",
       "bankName": "Bank Name",
-      "enterBankName": "Select your bank"
+      "enterBankName": "Select your bank",
+      "accountNumber": "Account Number",
+      "enterAccountNumber": "Enter your account number",
+      "enterAccountName": "Enter your account name",
+      "setAsDefault": "Set as Default Bank Account"
     },
     "transaction": {
       "history": "Transaction History",

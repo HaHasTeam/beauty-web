@@ -684,10 +684,10 @@ const TransactionDetail = () => {
             </div>
           </CardHeader>
           <CardContent className="p-3 pt-2">
-            <Tabs defaultValue={selectedTab || 'all'} onValueChange={handleTabChange} className="w-full">
+            <Tabs defaultValue={selectedTab || ''} onValueChange={handleTabChange} className="w-full">
               <TabsList className="flex flex-wrap h-auto p-1 mb-3 bg-gradient-to-r from-slate-100/90 to-indigo-50/50 rounded-lg">
                 <TabsTrigger
-                  value="all"
+                  value=""
                   className="text-xs whitespace-nowrap h-7 px-3 data-[state=active]:shadow-md data-[state=active]:bg-white rounded-md"
                 >
                   {t('wallet.transaction.tabs.all', 'Tất cả')}
@@ -742,7 +742,7 @@ const TransactionDetail = () => {
                 </TabsTrigger>
               </TabsList>
 
-              <TabsContent value="all">{renderTransactions(transactions)}</TabsContent>
+              <TabsContent value="">{renderTransactions(transactions)}</TabsContent>
               <TabsContent value="deposit">
                 {renderTransactions(transactions.filter((t) => t.type === TransactionTypeEnum.DEPOSIT))}
               </TabsContent>
