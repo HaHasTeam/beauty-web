@@ -28,6 +28,7 @@ const PrimaryLayout = ({ children }: { children?: React.ReactNode }) => {
       authData: state.authData,
     })),
   )
+
   const { isCurrentPath: isMatchGroupBuyPath } = useCurrentPath(routes.groupBuyDetail)
   const { isCurrentPath: isMatchCartPath } = useCurrentPath(routes.cart)
   const { isCurrentPath: isMatchProductDetailPath } = useCurrentPath(routes.productDetail)
@@ -64,7 +65,9 @@ const PrimaryLayout = ({ children }: { children?: React.ReactNode }) => {
     // Handle group buy cart items
     if (isMatchGroupBuyPath && brand?.data && groupId) {
       setGroupBuyingOrder(groupBuyingOrder?.data)
+
       const cartItems = myCart?.data?.[brand.data.name] || []
+      console.log('cartItems', cartItems)
       setGroupBuying(groupBuying?.data)
 
       // Filter cart items for this specific group buy
@@ -85,7 +88,7 @@ const PrimaryLayout = ({ children }: { children?: React.ReactNode }) => {
     }
 
     // Handle normal cart items (when not in group buy or checkout)
-    if (!isMatchCartPath && !isMatchGroupBuyPath && !isMatchProductDetailPath && myCart && myCart.data) {
+    if (isMatchCartPath && !isMatchGroupBuyPath && !isMatchProductDetailPath && myCart && myCart.data) {
       const myFilteredCart: ICartByBrand = {}
       for (const key in myCart.data) {
         if (myCart.data[key].length) {
@@ -102,6 +105,8 @@ const PrimaryLayout = ({ children }: { children?: React.ReactNode }) => {
           }
         }
       }
+      console.log('myFilteredCart', myFilteredCart)
+
       setCartItems(myFilteredCart)
     }
 

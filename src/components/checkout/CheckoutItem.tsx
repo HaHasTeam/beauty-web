@@ -135,6 +135,7 @@ const CheckoutItem = ({
             eventType={eventType}
             productQuantity={productQuantity}
             productClassification={productClassification}
+            livestreamDiscount={cartItem?.livestreamDiscount}
           />
         )
       })}
