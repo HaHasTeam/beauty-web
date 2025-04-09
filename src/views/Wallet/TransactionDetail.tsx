@@ -83,7 +83,7 @@ const TransactionItem = ({ transaction }: { transaction: ITransaction }) => {
     TransactionTypeEnum.BOOKING_REFUND,
     TransactionTypeEnum.ORDER_REFUND,
     TransactionTypeEnum.ORDER_CANCEL,
-    TransactionTypeEnum.BOOKING_CANCEL
+    TransactionTypeEnum.BOOKING_CANCEL,
   ].includes(transaction.type)
 
   // Function to get translated payment method

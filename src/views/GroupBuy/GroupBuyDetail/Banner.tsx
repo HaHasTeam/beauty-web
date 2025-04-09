@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useShallow } from 'zustand/react/shallow'
 
-import bannerImg from "@/assets/images/group-bg.webp"
+import bannerImg from '@/assets/images/group-bg.webp'
 import Button from '@/components/button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Dialog, DialogContent, DialogHeader, DialogTrigger } from '@/components/ui/dialog'
@@ -114,10 +114,11 @@ const Banner = ({ brand, groupBuyingInfo }: BannerProps) => {
   }, [calculateTimeLeft])
   const { successToast } = useToast()
   const tiers = groupBuyingInfo.groupProduct.criterias.map((criteria) => {
-    const discountValue = criteria.voucher.discountType === DiscountTypeEnum.PERCENTAGE
-      ? criteria.voucher.discountValue * 100
-      : criteria.voucher.discountValue
-    
+    const discountValue =
+      criteria.voucher.discountType === DiscountTypeEnum.PERCENTAGE
+        ? criteria.voucher.discountValue * 100
+        : criteria.voucher.discountValue
+
     return {
       id: criteria.id,
       count: criteria.threshold,
@@ -131,11 +132,7 @@ const Banner = ({ brand, groupBuyingInfo }: BannerProps) => {
     <div className="bg-gray-50 dark:bg-gray-900 rounded-xl overflow-hidden h-fit shadow-md">
       {/* Main Banner */}
       <div className="relative h-96">
-        <img
-          src={bannerImg}
-          alt="Store Banner"
-          className="w-full h-full object-cover object-bottom"
-        />
+        <img src={bannerImg} alt="Store Banner" className="w-full h-full object-cover object-bottom" />
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-transparent">
           <div className="max-w-7xl mx-auto h-full flex flex-col justify-center px-6">
             <div className="flex justify-between items-start">
