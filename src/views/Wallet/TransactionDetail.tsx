@@ -63,7 +63,7 @@ const TransactionTypeBadge = ({ type }: { type: TransactionTypeEnum }) => {
   // Get translation for transaction type
   const getTranslatedType = () => {
     const typeKey = `wallet.transaction.types.${type.toLowerCase()}`
-    return t(typeKey, getDisplayString(type))
+    return t(typeKey, getDisplayString(type)).charAt(0).toUpperCase() + t(typeKey, getDisplayString(type)).slice(1)
   }
 
   return (
@@ -82,6 +82,8 @@ const TransactionItem = ({ transaction }: { transaction: ITransaction }) => {
     TransactionTypeEnum.DEPOSIT,
     TransactionTypeEnum.BOOKING_REFUND,
     TransactionTypeEnum.ORDER_REFUND,
+    TransactionTypeEnum.ORDER_CANCEL,
+    TransactionTypeEnum.BOOKING_CANCEL
   ].includes(transaction.type)
 
   // Function to get translated payment method
@@ -395,7 +397,9 @@ const TransactionItem = ({ transaction }: { transaction: ITransaction }) => {
                 #{minifyString(transaction.order.id)}
               </span>
               <Button variant="link" className="h-auto p-0 text-primary font-medium text-xs" asChild>
-                <a href={`/orders/${transaction.order.id}`}>{t('wallet.transaction.viewOrder', 'Xem đơn hàng')}</a>
+                <a href={`/profile/orders/${transaction.order.id}`} target="_blank" rel="noopener noreferrer">
+                  {t('wallet.transaction.viewOrder', 'Xem đơn hàng')}
+                </a>
               </Button>
             </div>
           </div>

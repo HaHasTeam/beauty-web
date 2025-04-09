@@ -1079,7 +1079,8 @@
     },
     "processSuccess": "Yêu cầu hủy đơn đã được xử lý thành công!",
     "time": "Lúc",
-    "by": "Bởi"
+    "by": "Bởi",
+    "estimatedPriceNote": "Đây là giá dự tính, giá có thể thay đổi sau khi sự kiện kết thúc"
   },
   "chat": {
     "inbox": "Hộp thư đến",

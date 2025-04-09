@@ -1028,7 +1028,8 @@
     },
     "processSuccess": "Cancellation request processed successfully!",
     "time": "Time",
-    "by": "By"
+    "by": "By",
+    "estimatedPriceNote": "This is an estimated price, the price may change after the event ends"
   },
   "toast": {
     "success": "Your request has been successfully processed, continue with your work.",

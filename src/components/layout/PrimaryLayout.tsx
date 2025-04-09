@@ -30,6 +30,7 @@ const PrimaryLayout = ({ children }: { children?: React.ReactNode }) => {
   )
   const { isCurrentPath: isMatchGroupBuyPath } = useCurrentPath(routes.groupBuyDetail)
   const { isCurrentPath: isMatchCartPath } = useCurrentPath(routes.cart)
+  const { isCurrentPath: isMatchProductDetailPath } = useCurrentPath(routes.productDetail)
   const groupId = useParams().groupId
   const { data: tokenFCM, isLoading: isLoadingToken } = useQuery({
     queryKey: [getFCMTokenApi.queryKey],
@@ -60,10 +61,13 @@ const PrimaryLayout = ({ children }: { children?: React.ReactNode }) => {
   })
 
   useEffect(() => {
+    // Handle group buy cart items
     if (isMatchGroupBuyPath && brand?.data && groupId) {
       setGroupBuyingOrder(groupBuyingOrder?.data)
       const cartItems = myCart?.data?.[brand.data.name] || []
       setGroupBuying(groupBuying?.data)
+      
+      // Filter cart items for this specific group buy
       const filteredCartItems = cartItems.filter((item) => {
         if (item.groupBuying) {
           return item.groupBuying.id === groupId
@@ -77,41 +81,35 @@ const PrimaryLayout = ({ children }: { children?: React.ReactNode }) => {
           [brand.data.name]: filteredCartItems,
         }
       }
-      return setCartItems(cardItemsData) // Clear cart when user is in group buy page
+      return setCartItems(cardItemsData)
     }
 
-    if (myCart && myCart.data) {
+    // Handle normal cart items (when not in group buy or checkout)
+    if ((!isMatchCartPath && !isMatchGroupBuyPath && !isMatchProductDetailPath) && myCart && myCart.data) {
       const myFilteredCart: ICartByBrand = {}
       for (const key in myCart.data) {
-        if (!myCart.data[key].length) {
-          break
-        } else {
-          console.log('myCart.data[key]', myCart.data[key])
-
+        if (myCart.data[key].length) {
+          // Filter out group buy items
           const cartItems = myCart.data[key].filter((items) => {
-            console.log('items', items.groupBuying)
-
             if (items.groupBuying) {
               return false
             }
             return true
           })
 
-          console.log('cartItems', cartItems, cartItems.length)
-
           if (cartItems.length) {
             myFilteredCart[key] = cartItems
           }
         }
       }
-
-      setCartItems(myFilteredCart) // Update Zustand store with fetched cart
+      setCartItems(myFilteredCart)
     }
-    if (isMatchCartPath) {
+
+    // Clear group buy data when in cart page or product detail page
+    if (isMatchCartPath || isMatchProductDetailPath) {
       setGroupBuying(undefined)
       setGroupBuyingOrder(undefined)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     myCart,
     setCartItems,
@@ -124,6 +122,7 @@ const PrimaryLayout = ({ children }: { children?: React.ReactNode }) => {
     isMatchCartPath,
     groupBuyingOrder?.data,
     setGroupBuyingOrder,
+    isMatchProductDetailPath,
   ])
 
   // Handle FCM token registration

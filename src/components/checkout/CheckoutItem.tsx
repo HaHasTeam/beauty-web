@@ -228,17 +228,17 @@ const CheckoutItem = ({
             {t('cart.wishDiscount') + ':'}
             <div className="text-lg w-[68px] text-end">
               {criteria?.voucher.discountType === DiscountTypeEnum.PERCENTAGE
-                ? formatNumber(String(criteria?.voucher?.discountValue ?? 0), '%')
+                ? formatNumber(String((criteria?.voucher?.discountValue ?? 0) * 100), '%')
                 : formatCurrency(criteria?.voucher.discountValue ?? 0)}
             </div>
           </div>
           <div className="flex items-center gap-1">
-            {t('cart.maxPrice') + ':'}
-            <div className=" w-[68px] text-red-500 lg:text-lg  font-medium text-end text-lg">
+            {t('cart.finalPrice') + ':'}
+            <div className="w-[68px] text-red-500 lg:text-lg font-medium text-end text-lg">
               {t('format.currency', {
                 value:
                   criteria?.voucher.discountType === DiscountTypeEnum.PERCENTAGE
-                    ? (totalBrandPrice * (100 - criteria?.voucher.discountValue)) / 100
+                    ? (totalBrandPrice * (100 - (criteria?.voucher?.discountValue ?? 0) * 100)) / 100
                     : totalBrandPrice - (criteria?.voucher?.discountValue ?? 0) <= 0
                       ? 0
                       : totalBrandPrice - (criteria?.voucher?.discountValue ?? 0),

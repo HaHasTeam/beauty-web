@@ -44,7 +44,7 @@ export default function CheckoutTotal({
               <span className="text-sm text-muted-foreground">{t('cart.wishDiscount')}</span>
               <span className="font-medium">
                 {criteria?.voucher.discountType === DiscountTypeEnum.PERCENTAGE
-                  ? formatNumber(String(criteria?.voucher?.discountValue ?? 0), '%')
+                  ? formatNumber(String((criteria?.voucher?.discountValue ?? 0) * 100), '%')
                   : formatCurrency(criteria?.voucher.discountValue ?? 0)}
               </span>
             </div>
@@ -75,12 +75,12 @@ export default function CheckoutTotal({
           ) : null}
           {groupBuying ? (
             <div className="flex justify-between items-center pt-3 border-t text-base font-medium">
-              <span>{t('cart.maxPrice')}</span>
+              <span>{t('cart.finalPrice')}</span>
               <span className="font-semibold text-red-500 text-lg">
                 {t('productCard.price', {
                   price:
                     criteria?.voucher.discountType === DiscountTypeEnum.PERCENTAGE
-                      ? (totalPayment * (100 - criteria?.voucher.discountValue)) / 100
+                      ? (totalPayment * (100 - (criteria?.voucher?.discountValue ?? 0) * 100)) / 100
                       : totalPayment - (criteria?.voucher?.discountValue ?? 0) <= 0
                         ? 0
                         : totalPayment - (criteria?.voucher?.discountValue ?? 0),

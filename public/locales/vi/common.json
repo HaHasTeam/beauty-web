@@ -1,0 +1,32 @@
+{
+  "groupBuy": {
+    "tierTitle": "Bậc giảm giá",
+    "createBtn": "Tạo nhóm",
+    "noDiscount": "Không giảm giá",
+    "noDescription": "Không có mô tả",
+    "discountTitle": "Được giảm giá đến {{maxDiscount}}",
+    "inviteMembers": "Mời thêm thành viên để hưởng mức giảm giá hấp dẫn hơn",
+    "people": "người",
+    "products": "Sản phẩm",
+    "individualPayment": "Mọi người tự thanh toán",
+    "separatePayment": "Mỗi thành viên thanh toán phần của mình",
+    "purchaseLimit": "Giới hạn mua",
+    "tiers": "{{count}} bậc giảm giá có sẵn",
+    "when": "khi có",
+    "details": "Thông tin chi tiết",
+    "programName": "Tên chương trình",
+    "description": "Mô tả",
+    "brandName": "Thương hiệu",
+    "item": {
+      "productAmount": "{{amount}} sản phẩm",
+      "limitAmount": "Tối đa {{amount}} sản phẩm mỗi người",
+      "maxDiscount": "Giảm đến {{discount}}",
+      "dialogTitle": "Tạo nhóm mua cho {{event}}",
+      "dialogDescription": "Mời bạn bè cùng tham gia để nhận được mức giảm giá cao hơn",
+      "endTimeLabel": "Thời gian kết thúc",
+      "createBtn": "Tạo nhóm mua",
+      "linkInviteLabel": "Link mời bạn",
+      "goToGroupBuy": "Đi đến nhóm mua"
+    }
+  }
+}
