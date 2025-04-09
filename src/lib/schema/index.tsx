@@ -1,10 +1,14 @@
 import { z } from 'zod'
 
+import { defaultRequiredRegex, usernameRegex } from '@/constants/regex'
+
 const phoneRegex = new RegExp(/^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/)
 export const formRegisterSchema = z
   .object({
-    firstName: z.string().min(0).max(50),
-    lastName: z.string().max(50),
+    username: z
+      .string()
+      .regex(defaultRequiredRegex.pattern, defaultRequiredRegex.message())
+      .regex(usernameRegex.pattern, usernameRegex.message()),
     email: z.string().email(),
     password: z.string().min(8).max(20),
     gender: z.string().optional(),

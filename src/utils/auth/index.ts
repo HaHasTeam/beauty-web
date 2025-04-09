@@ -32,9 +32,6 @@ export const getAuthData = async (params?: TGetAuthDataParams) => {
           refreshToken: authData.refreshToken,
         },
       })
-      console.log('====================================')
-      console.log(response)
-      console.log('====================================')
       // Extract new tokens from response
       const { accessToken, refreshToken } = response.data
 
