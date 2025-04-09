@@ -216,6 +216,11 @@
     "byTag": "Sắp xếp theo {{tag}}"
   },
   "empty": {
+    "blog": {
+      "title": "Không tìm thấy blog",
+      "description": "Blog bạn đang tìm kiếm không tồn tại, đã bị xóa hoặc hiện không khả dụng.",
+      "button": "Xem các blog khác"
+    },
     "search": {
       "title": "Không tìm thấy kết quả",
       "description": "Hãy thử điều chỉnh tìm kiếm của bạn để tìm những gì bạn đang tìm.",
@@ -805,7 +810,7 @@
     "requestCancelSuccess": "Yêu cầu hủy đơn hàng thành công!",
     "cancelRequestPendingTitle": "Yêu Cầu Hủy Đơn Đang Chờ Xác Nhận",
     "cancelRequestRejectedTitle": "Yêu Cầu Hủy Đơn Bị Từ Chối",
-    "cancelRequestPendingMessage": "Yêu cầu hủy đơn hàng của bạn đã được gửi và đang chờ xác nhận. Đơn hàng sẽ vẫn được xử lý cho đến khi thương hiệu xem xét và phê duyệt yêu cầu. Chúng tôi sẽ cập nhật kết quả trong vòng {{count}} ngày. Nếu yêu cầu được chấp nhận, chúng tôi sẽ hoàn tiền cho bạn (nếu có).",
+    "cancelRequestPendingMessage": "Yêu cầu hủy đơn hàng của bạn đã được gửi và đang chờ xác nhận. Đơn hàng sẽ vẫn được xử lý cho đến khi thương hiệu xem xét và phê duyệt yêu cầu. Nếu yêu cầu được chấp nhận, chúng tôi sẽ hoàn tiền cho bạn (nếu có).",
     "cancelRequestRejectedMessage": "Yêu cầu hủy đơn hàng của bạn đã bị từ chối. Đơn hàng sẽ tiếp tục được xử lý như bình thường. Bạn có thể nhấn \"Trả hàng\" sau khi nhận được sản phẩm nếu có nhu cầu. Vui lòng liên hệ bộ phận hỗ trợ khách hàng nếu cần thêm trợ giúp.",
     "statusDescription": {
       "joinGroupBuying": "Khách hàng đã tham gia chương trình mua chung. Đơn hàng sẽ được xử lý khi đủ số lượng người tham gia.",
@@ -1546,5 +1551,18 @@
     "topUp": "Nạp tiền",
     "withdraw": "Rút tiền",
     "createWallet": "Tạo ví"
+  },
+  "blog": {
+    "title": "Danh sách bài viết",
+    "createdAt": "Ngày tạo"
+  },
+  "blogDetails": {
+    "createdAt": "Ngày tạo",
+    "updatedAt": "Ngày cập nhật",
+    "status": {
+      "published": "Đã xuất bản",
+      "un_published": "Chưa xuất bản",
+      "inactive": "Không hoạt động"
+    }
   }
 }

@@ -13,6 +13,11 @@ export enum GenderEnum {
   FEMALE = 'FEMALE',
   OTHER = 'OTHER',
 }
+export enum BlogEnum {
+  UN_PUBLISHED = 'UN_PUBLISHED',
+  PUBLISHED = 'PUBLISHED',
+  INACTIVE = 'INACTIVE',
+}
 
 export enum StatusEnum {
   PENDING = 'PENDING',

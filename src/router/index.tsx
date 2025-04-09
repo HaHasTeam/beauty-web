@@ -4,6 +4,8 @@ import PrimaryLayout from '@/components/layout/PrimaryLayout'
 import configs from '@/config'
 import externalLink from '@/config/externalLink'
 import About from '@/views/About'
+import Blog from '@/views/Blog'
+import BlogDetail from '@/views/BlogDetails'
 import BrandDetail from '@/views/Brand'
 import Contact from '@/views/Contact'
 import Forbidden from '@/views/Forbidden'
@@ -38,12 +40,20 @@ export default function RouterProvider() {
           element: <Home />,
         },
         {
+          path: configs.routes.blogs,
+          element: <Blog />,
+        },
+        {
           path: configs.routes.search,
           element: <SearchPage />,
         },
         {
           path: configs.routes.productDetail,
           element: <ProductDetail />,
+        },
+        {
+          path: configs.routes.blogDetail,
+          element: <BlogDetail />,
         },
         {
           path: configs.routes.groupBuy,
