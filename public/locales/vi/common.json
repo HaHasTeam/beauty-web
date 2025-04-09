@@ -28,5 +28,8 @@
       "linkInviteLabel": "Link mời bạn",
       "goToGroupBuy": "Đi đến nhóm mua"
     }
+  },
+  "cart": {
+    "finalPrice": "Tổng thanh toán (Giảm {{discount}})"
   }
 }
