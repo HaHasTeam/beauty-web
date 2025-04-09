@@ -19,7 +19,7 @@ export interface IMasterConfig extends TMetaData {
   status: StatusEnum
   banners: TServerFile[]
   expiredCustomerReceivedTime: string // fe add
-  autoApprovedRequestCancelTime: string // fe add
+  // autoApprovedRequestCancelTime: string // fe add
   pendingAdminCheckRejectRefundRequestTime: string // fe add
   pendingCustomerShippingReturnTime: string // fe add
 }

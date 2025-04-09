@@ -4,9 +4,8 @@ import PrimaryLayout from '@/components/layout/PrimaryLayout'
 import configs from '@/config'
 import externalLink from '@/config/externalLink'
 import About from '@/views/About'
-import BeautyConsultation from '@/views/BeautyConsultation'
-import ServiceDetail from '@/views/BeautyConsultation/ServiceDetail'
-import BookingDetail from '@/views/BookingDetail'
+import Blog from '@/views/Blog'
+import BlogDetail from '@/views/BlogDetails'
 import BrandDetail from '@/views/Brand'
 import Contact from '@/views/Contact'
 import Forbidden from '@/views/Forbidden'
@@ -20,7 +19,6 @@ import RecommendProducts from '@/views/RecommendProducts'
 // import RecommendProducts from '@/views/RecommendProducts'
 import SearchPage from '@/views/Search'
 import ServerError from '@/views/ServerError'
-import ServiceCheckout from '@/views/ServiceCheckout'
 
 import PublicGuard from './guard/PublicGuard'
 import privateRoutes from './privateRoutes'
@@ -42,12 +40,20 @@ export default function RouterProvider() {
           element: <Home />,
         },
         {
+          path: configs.routes.blogs,
+          element: <Blog />,
+        },
+        {
           path: configs.routes.search,
           element: <SearchPage />,
         },
         {
           path: configs.routes.productDetail,
           element: <ProductDetail />,
+        },
+        {
+          path: configs.routes.blogDetail,
+          element: <BlogDetail />,
         },
         {
           path: configs.routes.groupBuy,
@@ -68,22 +74,6 @@ export default function RouterProvider() {
         {
           path: configs.routes.recommendProducts,
           element: <RecommendProducts />,
-        },
-        {
-          path: configs.routes.beautyConsultation,
-          element: <BeautyConsultation />,
-        },
-        {
-          path: configs.routes.beautyConsultationDetail,
-          element: <ServiceDetail />,
-        },
-        {
-          path: configs.routes.serviceCheckout,
-          element: <ServiceCheckout />,
-        },
-        {
-          path: configs.routes.bookingDetail,
-          element: <BookingDetail />,
         },
       ],
     },

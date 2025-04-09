@@ -43,11 +43,6 @@ export function ReportTableToolbarActions({ table }: ReportTableToolbarActionsPr
         </DialogContent>
       </Dialog>
 
-      <Button size={'sm'} variant="secondary" onClick={() => setIsOpened(true)}>
-        <Flag className="mr-2 h-4 w-4" />
-        Create Issue Report
-      </Button>
-
       <Button
         variant="outline"
         size="sm"
