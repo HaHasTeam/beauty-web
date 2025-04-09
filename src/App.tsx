@@ -7,6 +7,7 @@ import { Toaster } from 'sonner'
 import RouterProvider from '@/router'
 
 import { ChatPopup } from './components/chat/chat-popup'
+
 // Create a client
 const queryClient = new QueryClient()
 function App() {

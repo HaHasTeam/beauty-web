@@ -12,3 +12,10 @@ export enum PAY_TYPE {
   ORDER = 'ORDER',
   BOOKING = 'BOOKING',
 }
+
+export interface IFinancialSummary {
+  totalAmountFromDeposit: number
+  totalAmountFromWithDrawal: number
+  balance: number
+  // Add any other fields returned by the API
+}

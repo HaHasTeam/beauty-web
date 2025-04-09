@@ -1,7 +1,7 @@
 import { TServerFile } from './file'
 import { IOrderDetailFeedback } from './order'
 import { TMetaData } from './request'
-import { TUser } from './user'
+import { TUserFull } from './user'
 
 export type ISubmitFeedbackScheme = {
   rating: number
@@ -37,7 +37,7 @@ export type IFeedbackGeneral = {
 }
 export type IReplyFeedback = TMetaData & {
   content: string
-  account: TUser
+  account: TUserFull
 }
 
 export type IResponseFilterFeedback = TMetaData & {

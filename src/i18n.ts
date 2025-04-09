@@ -17,10 +17,10 @@ i18n
     backend: {
       loadPath: '/locales/{{lng}}/{{ns}}.json',
     },
-    ns: ['layout'],
+    ns: ['layout', 'common'],
     defaultNS: 'layout',
-    fallbackLng: ['vi'],
-    lng: 'vi',
+    fallbackLng: ['en'],
+    lng: 'en',
     interpolation: {
       escapeValue: false,
       format: (value, format, lng) => {
