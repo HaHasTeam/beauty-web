@@ -35,6 +35,8 @@ const routes = {
   profileVoucher: '/profile/vouchers',
   profileWallet: '/profile/wallet',
   profileReport: '/profile/report',
+  profileBookings: '/profile/bookings',
+  profileBookingDetail: '/profile/bookings/:bookingId',
   blogs: '/blogs',
   privacyPolicy: '/privacy-policy',
   termsAndConditions: '/terms-and-condition',
@@ -50,7 +52,11 @@ const routes = {
   groupBuy: '/products/group-buying',
   groupBuyByBrand: '/products/group-buying/:brandId',
   groupBuyDetail: '/products/group-buying/:brandId/:groupId',
+  beautyConsultation: '/beauty-consultation',
+  beautyConsultationDetail: '/beauty-consultation/:serviceId',
+  serviceCheckout: '/beauty-consultation/:serviceId/checkout',
   notFound: '*',
+  bookingDetail: '/booking/:bookingId',
 }
 
 export default routes

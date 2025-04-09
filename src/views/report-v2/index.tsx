@@ -1,5 +1,5 @@
-import ReportTable from './report-table-ui'
+import ReportList from './ReportList'
 
 export default function index() {
-  return <ReportTable />
+  return <ReportList />
 }
