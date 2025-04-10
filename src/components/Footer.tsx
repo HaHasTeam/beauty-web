@@ -99,7 +99,7 @@ export default function Footer() {
         <p>{ProjectInformationEnum.copyRight}</p>
         <div className="mt-2 space-x-4">
           <Link to={configs.routes.privacyPolicy}>{t('layout.privacyPolicy')}</Link>
-          <Link to={configs.routes.termsAndConditions}>{t('layout.termsAndConditions')}</Link>
+          <Link to={configs.routes.blogs}>{t('layout.termsAndConditions')}</Link>
         </div>
       </div>
     </footer>
