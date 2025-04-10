@@ -594,7 +594,7 @@
     }
   },
   "cart": {
-    "finalPrice": "Giá tối đa",
+    "finalPrice": "Giá tạm tính",
     "brannedAllMessage": "Sản phẩm này bị cấm.",
     "unPublishAllMessage": "Sản phẩm này không có sẵn để mua.",
     "deleteItem": "Xóa {{count}} sản phẩm",
@@ -771,6 +771,7 @@
     "message": "Tin nhắn"
   },
   "wallet": {
+    "choosePaymentMethod": "Chọn phương thức thanh toán",
     "title": "Ví",
     "description": "Ví của bạn trống. Vui lòng thêm phương thức thanh toán trước.",
     "addCard": "Thêm Thẻ Mới",

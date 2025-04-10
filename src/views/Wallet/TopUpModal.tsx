@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { ChevronRight } from 'lucide-react'
 import { PayOSConfig, usePayOS } from 'payos-checkout'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { KeyboardEvent, useEffect, useMemo, useRef, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { z } from 'zod'
@@ -135,10 +135,18 @@ export default function TopUpModal() {
   })
 
   const readOnlyForm = !!paymentLinkRes?.data.url
+
+  // Prevent form submission when pressing Enter
+  const handleKeyDown = (e: KeyboardEvent<HTMLFormElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault()
+    }
+  }
+
   return (
     <div className="w-full mx-auto p-4 space-y-6">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8" onKeyDown={handleKeyDown}>
           {!depositRes && (
             <>
               <FormField
