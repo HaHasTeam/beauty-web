@@ -264,9 +264,7 @@ const BookingDetail = () => {
     queryKey: [getBookingByIdApi.queryKey, bookingId ?? ''],
     queryFn: getBookingByIdApi.fn,
     enabled: !!bookingId,
-
   })
-
 
   const { data: statusTrackingData, isFetching: isFetchingStatusTracking } = useQuery({
     queryKey: [getBookingStatusTrackingApi.queryKey, bookingId ?? ''],

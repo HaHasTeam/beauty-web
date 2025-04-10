@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { HandCoins, QrCode, Wallet, WalletMinimal } from 'lucide-react'
-import { KeyboardEvent,useMemo } from 'react'
+import { KeyboardEvent, useMemo } from 'react'
 import { UseFormReturn } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { z } from 'zod'
@@ -71,12 +71,19 @@ export default function PaymentSelection({ form, hasPreOrderProduct, totalPaymen
             <div className="ml-auto">
               <Dialog>
                 <DialogTrigger>
-                  <Button className="bg-primary hover:bg-primary/70 text-white text-xs sm:text-sm whitespace-nowrap" type="button">
+                  <Button
+                    className="bg-primary hover:bg-primary/70 text-white text-xs sm:text-sm whitespace-nowrap"
+                    type="button"
+                  >
                     <Wallet className="h-4 w-4 sm:h-5 sm:w-5 mr-1" />
                     {t('walletTerm.topUp')}
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="max-w-xl max-h-[70%] overflow-auto" onKeyDown={handleDialogKeyDown} preventEscapeClose>
+                <DialogContent
+                  className="max-w-xl max-h-[70%] overflow-auto"
+                  onKeyDown={handleDialogKeyDown}
+                  preventEscapeClose
+                >
                   <TopUpModal />
                 </DialogContent>
               </Dialog>
@@ -126,12 +133,19 @@ export default function PaymentSelection({ form, hasPreOrderProduct, totalPaymen
               {isWalletAvailable && (
                 <Dialog>
                   <DialogTrigger>
-                    <Button className="bg-primary hover:bg-primary/70 text-white text-xs sm:text-sm whitespace-nowrap" type="button">
+                    <Button
+                      className="bg-primary hover:bg-primary/70 text-white text-xs sm:text-sm whitespace-nowrap"
+                      type="button"
+                    >
                       <Wallet className="h-4 w-4 sm:h-5 sm:w-5 mr-1" />
                       {t('walletTerm.topUp')}
                     </Button>
                   </DialogTrigger>
-                  <DialogContent className="max-w-xl max-h-[70%] overflow-auto" onKeyDown={handleDialogKeyDown} preventEscapeClose>
+                  <DialogContent
+                    className="max-w-xl max-h-[70%] overflow-auto"
+                    onKeyDown={handleDialogKeyDown}
+                    preventEscapeClose
+                  >
                     <TopUpModal />
                   </DialogContent>
                 </Dialog>
@@ -163,7 +177,11 @@ export default function PaymentSelection({ form, hasPreOrderProduct, totalPaymen
           <FormItem className="w-full">
             <div className="w-full space-y-1">
               <FormControl>
-                <RadioGroup value={field.value} onValueChange={field.onChange} className='w-full relative flex flex-col gap-2'>
+                <RadioGroup
+                  value={field.value}
+                  onValueChange={field.onChange}
+                  className="w-full relative flex flex-col gap-2"
+                >
                   {paymentMethods.map((method) => (
                     <div
                       key={method.id}
@@ -172,7 +190,12 @@ export default function PaymentSelection({ form, hasPreOrderProduct, totalPaymen
                       }`}
                     >
                       <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 sm:items-center">
-                        <RadioGroupItem value={method.id} id={method.id} disabled={method.isDisabled} className="mt-1 " />
+                        <RadioGroupItem
+                          value={method.id}
+                          id={method.id}
+                          disabled={method.isDisabled}
+                          className="mt-1 "
+                        />
                         <div className="flex flex-row items-center gap-2 w-full justify-between flex-wrap">
                           <Label
                             htmlFor={method.id}

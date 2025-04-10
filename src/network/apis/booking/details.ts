@@ -605,10 +605,9 @@ export const getBookingByIdApi = toQueryFetcher<string, TServerResponse<IBooking
   async (bookingId) => {
     return {
       message: 'success',
-      data:mockBookings[3]
+      data: mockBookings[3],
     }
     return privateRequest(`/bookings/${bookingId}`)
-   
   },
 )
 
@@ -616,7 +615,7 @@ export const getBookingByIdApi = toQueryFetcher<string, TServerResponse<IBooking
 export const getBookingStatusTrackingApi = toQueryFetcher<string, TServerResponse<IStatusTracking[]>>(
   'getBookingStatusTracking',
   async (bookingId) => {
-  return  await privateRequest(`/bookings/status-tracking/${bookingId}`)
+    return await privateRequest(`/bookings/status-tracking/${bookingId}`)
   },
 )
 
@@ -629,11 +628,10 @@ interface UpdateBookingStatusParams {
 export const updateBookingStatusApi = toMutationFetcher<UpdateBookingStatusParams, TServerResponse<IBooking>>(
   'updateBookingStatus',
   async ({ id, status }) => {
-    return privateRequest(`/bookings/${id}/status`, { 
+    return privateRequest(`/bookings/${id}/status`, {
       method: 'PATCH',
-      data: { status }
-     })
-
+      data: { status },
+    })
   },
 )
 
