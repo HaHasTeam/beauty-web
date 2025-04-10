@@ -22,7 +22,7 @@ const RecommendProduct = () => {
       getProductFilterApi.queryKey,
       {
         page: 1,
-        limit: 3,
+        limit: 20,
       },
     ],
     queryFn: getProductFilterApi.fn,
@@ -36,6 +36,8 @@ const RecommendProduct = () => {
     const isActive = productClassification?.status === StatusEnum.ACTIVE
     const hasDiscount = isActive && productClassification?.productDiscount
     const hasPreOrder = isActive && productClassification?.preOrderProduct
+
+    console.log('discount', hasDiscount, productClassification, isActive && productClassification?.productDiscount)
 
     const currentPrice = calculateDiscountPrice(
       productClassification?.price ?? 0,

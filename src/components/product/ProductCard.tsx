@@ -48,10 +48,10 @@ export default function ProductCard({ product, isProductDiscount = false, isInGr
                 className="object-cover w-full h-full rounded-tl-xl rounded-tr-xl"
               />
             </div>
-            <div className="w-full h-lg-[130px] h-[150px]  p-2 p-md-3">
-              {isProductDiscount && product?.deal && product?.deal > 0 && (
+            <div className="w-full h-lg-[130px] h-[150px] p-2 p-md-3">
+              {isProductDiscount && product?.deal && product?.deal > 0 ? (
                 <ProductTag tag="DealPercent" text={`-${(product?.deal * 100).toFixed(0)}%`} />
-              )}
+              ) : null}
               <div className="min-h-[90px]">
                 <span className="text-semibold line-clamp-2 sm:text-sm text-xs">{product?.name}</span>
                 <ProductStar rating={product?.rating} ratingAmount={product?.ratingAmount} />
