@@ -348,16 +348,18 @@ const OrderItem = ({ brand, orderItem, setIsTrigger }: OrderItemProps) => {
               {t('order.viewDetail')}
             </Button>
             {(orderItem?.status === ShippingStatusEnum.TO_PAY ||
-              orderItem?.status === ShippingStatusEnum.WAIT_FOR_CONFIRMATION) && (
-              <Button
-                variant="outline"
-                className="border border-primary text-primary hover:text-primary hover:bg-primary/10"
-                onClick={() => setOpenCancelOrderDialog(true)}
-              >
-                {t('order.cancelOrder')}
-              </Button>
-            )}
+              orderItem?.status === ShippingStatusEnum.WAIT_FOR_CONFIRMATION) &&
+              orderItem?.type !== OrderEnum.GROUP_BUYING && (
+                <Button
+                  variant="outline"
+                  className="border border-primary text-primary hover:text-primary hover:bg-primary/10"
+                  onClick={() => setOpenCancelOrderDialog(true)}
+                >
+                  {t('order.cancelOrder')}
+                </Button>
+              )}
             {orderItem?.status === ShippingStatusEnum.PREPARING_ORDER &&
+              orderItem?.type !== OrderEnum.GROUP_BUYING &&
               !cancelAndReturnRequestData?.data?.cancelRequest && (
                 <Button
                   variant="outline"
