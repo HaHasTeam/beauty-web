@@ -149,7 +149,7 @@ const VoucherCartItem = ({
                 }}
                 loading={isCollecting}
               >
-                {t('button.save')}
+                {t('button.collect')}
               </Button>
             ) : (
               (status === VoucherUsedStatusEnum?.UNAVAILABLE || status === VoucherUsedStatusEnum?.AVAILABLE) && (

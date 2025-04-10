@@ -31,7 +31,7 @@ import {
   getStatusTrackingByIdApi,
   updateOrderStatusApi,
 } from '@/network/apis/order'
-import { RequestStatusEnum, ShippingStatusEnum } from '@/types/enum'
+import { PaymentMethod, RequestStatusEnum, ShippingStatusEnum } from '@/types/enum'
 import { millisecondsToRoundedDays } from '@/utils/time'
 
 const OrderDetail = () => {
@@ -199,6 +199,18 @@ const OrderDetail = () => {
               {!isFetchingStatusTracking && useStatusTrackingData && useStatusTrackingData?.data && (
                 <OrderStatusTracking statusTrackingData={useStatusTrackingData?.data} />
               )}
+
+              {/* payment */}
+              {useOrderData.data.paymentMethod === PaymentMethod.WALLET &&
+                useOrderData.data.status === ShippingStatusEnum.TO_PAY && (
+                  <AlertMessage
+                    title={t('order.paymentTitle')}
+                    message={t('order.paymentMessage')}
+                    isShowIcon={false}
+                    buttonText={t('order.payment')}
+                    onClick={() => {}}
+                  />
+                )}
 
               {/* cancel request information */}
               {!isLoading && cancelAndReturnRequestData?.data?.cancelRequest?.status === RequestStatusEnum.PENDING && (

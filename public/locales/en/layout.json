@@ -102,6 +102,7 @@
   "loginRcm": "Log in to update your skills!",
   "facebook": "Facebook",
   "button": {
+    "collect": "Collect",
     "received": "Received",
     "notReceived": "Haven't received",
     "complaint": "Complaint",
@@ -899,6 +900,9 @@
     }
   },
   "order": {
+    "paymentTitle": "Payment Incomplete",
+    "paymentMessage": "It looks like your order hasn’t been paid yet. Please complete the payment soon to avoid any delays in processing.",
+    "payment": "Payment",
     "requestManagement": "Request Management",
     "loading": "Loading order...",
     "viewDetail": "View details",

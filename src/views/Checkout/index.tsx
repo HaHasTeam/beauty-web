@@ -351,7 +351,7 @@ const Checkout = () => {
                   )}
                 </h2>
                 <div className="w-full flex gap-3 lg:flex-row md:flex-col flex-col">
-                  <div className="w-full md:w-full lg:w-[calc(65%-6px)] xl:w-[calc(70%-6px)]">
+                  <div className="space-y-2 w-full md:w-full lg:w-[calc(65%-6px)] xl:w-[calc(70%-6px)]">
                     <CheckoutHeader />
                     {selectedCartItem &&
                       Object.keys(selectedCartItem).map((brandName, index) => {
