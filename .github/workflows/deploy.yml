@@ -22,7 +22,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          cp .env.example .env
+          cp .env.production .env
           npm install
 
       - name: Build application in production mode
