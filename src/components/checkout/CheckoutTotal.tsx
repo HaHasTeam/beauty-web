@@ -93,11 +93,14 @@ export default function CheckoutTotal({
           ) : null}
           {groupBuying ? (
             <div className="flex justify-between items-center pt-3 border-t text-base font-medium">
-              <span>{t('cart.finalPrice', {
-                discount: criteria?.voucher.discountType === DiscountTypeEnum.PERCENTAGE
-                  ? `${criteria?.voucher?.discountValue * 100}%`
-                  : t('productCard.price', { price: criteria?.voucher?.discountValue })
-              })}</span>
+              <span>
+                {t('cart.finalPrice', {
+                  discount:
+                    criteria?.voucher.discountType === DiscountTypeEnum.PERCENTAGE
+                      ? `${criteria?.voucher?.discountValue * 100}%`
+                      : t('productCard.price', { price: criteria?.voucher?.discountValue }),
+                })}
+              </span>
               <span className="font-semibold text-red-500 text-lg">
                 {t('productCard.price', {
                   price:
