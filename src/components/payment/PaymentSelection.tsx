@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { HandCoins, QrCode, Wallet, WalletMinimal } from 'lucide-react'
-import { useMemo } from 'react'
+import { KeyboardEvent,useMemo } from 'react'
 import { UseFormReturn } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { z } from 'zod'
@@ -41,33 +41,42 @@ export default function PaymentSelection({ form, hasPreOrderProduct, totalPaymen
     return balance >= totalPayment
   }, [myWallet, isWalletAvailable, totalPayment])
 
+  // Prevent form submission when pressing Enter in dialog
+  const handleDialogKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === 'Enter') {
+      e.stopPropagation()
+    }
+  }
+
   const paymentMethods = hasPreOrderProduct
     ? [
         {
           id: PaymentMethod.WALLET,
           label: (
-            <div className="flex items-center gap-2 w-full justify-between">
-              <div className="flex items-center gap-0.5 ">
-                <span className="">{t('wallet.WALLET')}</span>
-                <span>/ {t('walletTerm.balance')}:</span>
-                <span className="">
-                  {t('format.currency', {
-                    value: myWallet?.data.balance ?? 0,
-                  })}
-                </span>
+            <div className="flex items-center w-full">
+              <div className="flex flex-col">
+                <span className="font-medium">{t('wallet.WALLET')}</span>
+                <div className="flex items-center text-sm text-gray-600 space-x-1 max-w-[180px] sm:max-w-[220px]">
+                  <span>{t('walletTerm.balance')}:</span>
+                  <span className="font-medium text-primary truncate">
+                    {t('format.currency', {
+                      value: myWallet?.data.balance ?? 0,
+                    })}
+                  </span>
+                </div>
               </div>
             </div>
           ),
           action: (
-            <div>
+            <div className="ml-auto">
               <Dialog>
                 <DialogTrigger>
-                  <Button className="bg-primary hover:bg-primary/70 text-white" type="button">
-                    <Wallet className="h-5 w-5" />
+                  <Button className="bg-primary hover:bg-primary/70 text-white text-xs sm:text-sm whitespace-nowrap" type="button">
+                    <Wallet className="h-4 w-4 sm:h-5 sm:w-5 mr-1" />
                     {t('walletTerm.topUp')}
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="max-w-xl max-h-[70%] overflow-auto">
+                <DialogContent className="max-w-xl max-h-[70%] overflow-auto" onKeyDown={handleDialogKeyDown} preventEscapeClose>
                   <TopUpModal />
                 </DialogContent>
               </Dialog>
@@ -96,31 +105,33 @@ export default function PaymentSelection({ form, hasPreOrderProduct, totalPaymen
         {
           id: PaymentMethod.WALLET,
           label: (
-            <div className="flex items-center gap-2 w-full justify-between">
-              <div className="flex items-center gap-0.5 ">
-                <span className="">{t('wallet.WALLET')}</span>
-                <span>/ {t('walletTerm.balance')}:</span>
-                <span className="">
-                  {myWallet?.data.balance !== undefined
-                    ? t('format.currency', {
-                        value: myWallet?.data.balance ?? 0,
-                      })
-                    : '--'}
-                </span>
+            <div className="flex items-center w-full">
+              <div className="flex flex-col">
+                <span className="font-medium">{t('wallet.WALLET')}</span>
+                <div className="flex items-center text-sm text-gray-600 space-x-1 max-w-[180px] sm:max-w-[220px]">
+                  <span>{t('walletTerm.balance')}:</span>
+                  <span className="font-medium text-primary truncate">
+                    {myWallet?.data.balance !== undefined
+                      ? t('format.currency', {
+                          value: myWallet?.data.balance ?? 0,
+                        })
+                      : '--'}
+                  </span>
+                </div>
               </div>
             </div>
           ),
           action: (
-            <div>
+            <div className="ml-auto">
               {isWalletAvailable && (
                 <Dialog>
                   <DialogTrigger>
-                    <Button className="bg-primary hover:bg-primary/70 text-white" type="button">
-                      <Wallet className="h-5 w-5" />
+                    <Button className="bg-primary hover:bg-primary/70 text-white text-xs sm:text-sm whitespace-nowrap" type="button">
+                      <Wallet className="h-4 w-4 sm:h-5 sm:w-5 mr-1" />
                       {t('walletTerm.topUp')}
                     </Button>
                   </DialogTrigger>
-                  <DialogContent className="max-w-xl max-h-[70%] overflow-auto">
+                  <DialogContent className="max-w-xl max-h-[70%] overflow-auto" onKeyDown={handleDialogKeyDown} preventEscapeClose>
                     <TopUpModal />
                   </DialogContent>
                 </Dialog>
@@ -152,21 +163,21 @@ export default function PaymentSelection({ form, hasPreOrderProduct, totalPaymen
           <FormItem className="w-full">
             <div className="w-full space-y-1">
               <FormControl>
-                <RadioGroup value={field.value} onValueChange={field.onChange}>
+                <RadioGroup value={field.value} onValueChange={field.onChange} className='w-full relative flex flex-col gap-2'>
                   {paymentMethods.map((method) => (
                     <div
                       key={method.id}
-                      className={`flex flex-col gap-3 border border-gray-300 justify-center rounded-lg p-4 ${
+                      className={`flex flex-col gap-3 border border-gray-300 justify-center rounded-lg p-2 sm:p-4 ${
                         field.value === method.id ? 'border-red-500 text-red-500' : 'border-gray-300'
                       }`}
                     >
-                      <div className="flex gap-4 items-center">
-                        <RadioGroupItem value={method.id} id={method.id} disabled={method.isDisabled} />
-                        <div className="flex items-center gap-2 w-full">
+                      <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 sm:items-center">
+                        <RadioGroupItem value={method.id} id={method.id} disabled={method.isDisabled} className="mt-1 " />
+                        <div className="flex flex-row items-center gap-2 w-full justify-between flex-wrap">
                           <Label
                             htmlFor={method.id}
                             className={cn(
-                              'px-4 py-2 h-full flex-1 rounded cursor-pointer',
+                              'px-2 sm:px-4 py-1 sm:py-2 h-full flex-1 rounded cursor-pointer',
                               method.isDisabled && 'opacity-50',
                             )}
                           >
@@ -176,13 +187,13 @@ export default function PaymentSelection({ form, hasPreOrderProduct, totalPaymen
                         </div>
                       </div>
                       {method?.isAddMore && !method.isDisabled && (
-                        <div className="pl-16 flex flex-col gap-2">
+                        <div className="pl-4 sm:pl-16 flex flex-col gap-2">
                           {creditCards?.length > 0 && (
                             <RadioGroup>
                               {creditCards?.map((card) => (
                                 <div key={card?.id} className="flex items-center gap-2">
                                   <RadioGroupItem value="visa" id="visa" />
-                                  <Label htmlFor="visa" className="ml-2">
+                                  <Label htmlFor="visa" className="ml-2 text-sm sm:text-base truncate">
                                     {card?.name}
                                   </Label>
                                 </div>

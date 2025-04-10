@@ -249,7 +249,6 @@ const BookingStatusTrackingDetail = ({ statusTrackingData }: { statusTrackingDat
     </ol>
   )
 }
-
 // Main BookingDetail component
 const BookingDetail = () => {
   const { bookingId } = useParams()
@@ -263,9 +262,11 @@ const BookingDetail = () => {
   // Use React Query hooks for data fetching
   const { data: bookingData, isFetching: isFetchingBooking } = useQuery({
     queryKey: [getBookingByIdApi.queryKey, bookingId ?? ''],
-    queryFn: () => getBookingByIdApi.fn({ queryKey: [getBookingByIdApi.queryKey, bookingId ?? ''] }),
+    queryFn: getBookingByIdApi.fn,
     enabled: !!bookingId,
+
   })
+
 
   const { data: statusTrackingData, isFetching: isFetchingStatusTracking } = useQuery({
     queryKey: [getBookingStatusTrackingApi.queryKey, bookingId ?? ''],
