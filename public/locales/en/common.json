@@ -1,0 +1,35 @@
+{
+  "groupBuy": {
+    "tierTitle": "Discount tiers",
+    "createBtn": "Create Group",
+    "noDiscount": "No discount",
+    "noDescription": "No description",
+    "discountTitle": "Get up to {{maxDiscount}} discount",
+    "inviteMembers": "Invite more members for better discounts",
+    "people": "people",
+    "products": "Products",
+    "individualPayment": "Individual Payment",
+    "separatePayment": "Each member pays for their own items",
+    "purchaseLimit": "Purchase Limit",
+    "tiers": "{{count}} discount tiers available",
+    "when": "when",
+    "details": "Detailed Information",
+    "programName": "Program Name",
+    "description": "Description",
+    "brandName": "Brand",
+    "item": {
+      "productAmount": "{{amount}} products",
+      "limitAmount": "Max {{amount}} items per person",
+      "maxDiscount": "Up to {{discount}}",
+      "dialogTitle": "Create group for {{event}}",
+      "dialogDescription": "Invite friends to join and get higher discounts",
+      "endTimeLabel": "End time",
+      "createBtn": "Create group",
+      "linkInviteLabel": "Invite link",
+      "goToGroupBuy": "Go to group"
+    }
+  },
+  "cart": {
+    "finalPrice": "Total Payment (Discount {{discount}})"
+  }
+}

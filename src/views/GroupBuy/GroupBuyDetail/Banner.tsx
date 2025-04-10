@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useShallow } from 'zustand/react/shallow'
 
+import bannerImg from '@/assets/images/group-bg.webp'
 import Button from '@/components/button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Dialog, DialogContent, DialogHeader, DialogTrigger } from '@/components/ui/dialog'
@@ -113,24 +114,25 @@ const Banner = ({ brand, groupBuyingInfo }: BannerProps) => {
   }, [calculateTimeLeft])
   const { successToast } = useToast()
   const tiers = groupBuyingInfo.groupProduct.criterias.map((criteria) => {
+    const discountValue =
+      criteria.voucher.discountType === DiscountTypeEnum.PERCENTAGE
+        ? criteria.voucher.discountValue * 100
+        : criteria.voucher.discountValue
+
     return {
       id: criteria.id,
       count: criteria.threshold,
       discount:
         criteria.voucher.discountType === DiscountTypeEnum.PERCENTAGE
-          ? formatNumber(criteria.voucher.discountValue, '%')
-          : formatCurrency(criteria.voucher.discountValue),
+          ? formatNumber(discountValue, '%')
+          : formatCurrency(discountValue),
     }
   })
   return (
     <div className="bg-gray-50 dark:bg-gray-900 rounded-xl overflow-hidden h-fit shadow-md">
       {/* Main Banner */}
       <div className="relative h-96">
-        <img
-          src="https://img.freepik.com/free-photo/assortment-black-friday-elements-with-copy-space_23-2148665525.jpg?t=st=1740814994~exp=1740818594~hmac=5e2391fa0a16ce6cbf489c540120bb4ddc10d09f64e326c2fb536772964e010e&w=2000"
-          alt="Store Banner"
-          className="w-full h-full object-cover object-bottom"
-        />
+        <img src={bannerImg} alt="Store Banner" className="w-full h-full object-cover object-bottom" />
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-transparent">
           <div className="max-w-7xl mx-auto h-full flex flex-col justify-center px-6">
             <div className="flex justify-between items-start">
@@ -139,30 +141,32 @@ const Banner = ({ brand, groupBuyingInfo }: BannerProps) => {
                 <p className="text-xl text-gray-200 mb-8 max-w-xl">{groupBuyingInfo.groupProduct.description}</p>
                 <div className="flex items-center gap-2"></div>
               </div>
-              <div className="p-4 overflow-auto rounded-3xl backdrop-blur-2xl border-2 shadow-md bg-gray-900 bg-opacity-70">
-                <Timeline className="flex-1">
-                  {tiers.map((tier, index) => (
-                    <TimelineItem status={'done'} key={index}>
-                      <TimelineHeading>
-                        <span className="flex items-center font-bold text-xl">
-                          {tier.count} <User size={14} strokeWidth={'4'} />- {`${tier.discount}`}
-                        </span>
-                      </TimelineHeading>
-                      <TimelineDot status={'done'} />
-                      {index + 1 < tiers.length && <TimelineLine className="max-h-4" />}
-                      <TimelineContent className="text-sm text-white">
-                        {t('groupBuy.item.tierDescription', {
-                          count: tier.count,
-                          discount: tier.discount,
-                        })}
-                      </TimelineContent>
-                    </TimelineItem>
-                  ))}
-                </Timeline>
+              <div className="p-4 flex flex-col gap-4 rounded-3xl backdrop-blur-2xl border-2 shadow-md bg-gray-900 bg-opacity-70 h-[300px]">
+                <div className="flex-1 overflow-auto scrollbar-hide">
+                  <Timeline>
+                    {tiers.map((tier, index) => (
+                      <TimelineItem status={'done'} key={index}>
+                        <TimelineHeading>
+                          <span className="flex items-center font-bold text-xl">
+                            {tier.count} <User size={14} strokeWidth={'4'} />- {`${tier.discount}`}
+                          </span>
+                        </TimelineHeading>
+                        <TimelineDot status={'done'} />
+                        {index + 1 < tiers.length && <TimelineLine className="max-h-4" />}
+                        <TimelineContent className="text-sm text-white">
+                          {t('groupBuy.item.tierDescription', {
+                            count: tier.count,
+                            discount: tier.discount,
+                          })}
+                        </TimelineContent>
+                      </TimelineItem>
+                    ))}
+                  </Timeline>
+                </div>
                 {coolDownable && (
                   <Button
                     variant={'destructive'}
-                    className="bg-red-600 hover:bg-red-700 w-full"
+                    className="bg-red-600 hover:bg-red-700 w-full mt-auto"
                     onClick={handleCoolDownEnTime}
                     loading={isCoolDowning}
                   >

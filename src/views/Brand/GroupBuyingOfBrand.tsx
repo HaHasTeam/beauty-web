@@ -7,6 +7,7 @@ import LoadingContentLayer from '@/components/loading-icon/LoadingContentLayer'
 import { getBrandByIdApi } from '@/network/apis/brand'
 import { getGroupProductByBrandIdApi } from '@/network/apis/group-product'
 import { IBranch } from '@/types/brand'
+import { GroupProductStatusEnum } from '@/types/group-product'
 
 import GroupBuyingCard from './GroupBuyingCard'
 
@@ -33,13 +34,10 @@ const GroupBuyingOfBrand = () => {
             brand: brand?.data.name,
           })}
         </h1>
-        <div
-          className="
-        grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-8"
-        >
-          {groupProducts?.data.map((group, index) => (
-            <GroupBuyingCard key={index} brand={brand?.data as IBranch} groupProduct={group} />
-          ))}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6">
+          {groupProducts?.data
+            .filter((group) => group.status === GroupProductStatusEnum.ACTIVE)
+            .map((group, index) => <GroupBuyingCard key={index} brand={brand?.data as IBranch} groupProduct={group} />)}
         </div>
         {!isFetching && !groupProducts?.data.length && (
           <Empty title={t('groupBuy.noGroupBuy')} description="groupBuy.noGroupBuyDes" />

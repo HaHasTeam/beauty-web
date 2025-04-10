@@ -1,47 +1,97 @@
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { jwtDecode } from 'jwt-decode'
 import { CircleHelpIcon, LoaderCircle } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import { MdMarkEmailRead } from 'react-icons/md'
 import { SiMinutemailer } from 'react-icons/si'
-import { Navigate } from 'react-router-dom'
+import { Navigate, useNavigate } from 'react-router-dom'
 
-import { emailContact } from '@/config/contants'
+import { Button } from '@/components/ui/button'
 import routes from '@/config/routes'
-import { activateAccountApi } from '@/network/apis/auth'
-import { TEmailDecoded } from '@/types'
+import { emailContact } from '@/constants/infor'
+import { useToast } from '@/hooks/useToast'
+import { activateAccountApi, resendMutateApi } from '@/network/apis/auth'
+import type { TEmailDecoded } from '@/types/auth'
 
 const EmailVerification = () => {
+  const navigate = useNavigate()
   const queryParams = new URLSearchParams(window.location.search)
   const email = queryParams.get('email')
   const code = queryParams.get('code')
-  // const { authData } = useStore(
-  //   useShallow((state) => ({
-  //     authData: state.authData,
-  //   })),
-  // )
+  const { successToast } = useToast()
   const accountId = code ? jwtDecode<TEmailDecoded>(code).accountId : undefined
+
+  const verifyEmailRedirectUrl = import.meta.env.VITE_SITE_URL + routes.checkEmail
+
+  // Add state for countdown timer
+  const [isCountdownActive, setIsCountdownActive] = useState(false)
+  const [countdown, setCountdown] = useState(60)
+
+  // Handle countdown timer
+  useEffect(() => {
+    let timer: number | undefined
+
+    if (isCountdownActive && countdown > 0) {
+      timer = window.setInterval(() => {
+        setCountdown((prevCount) => prevCount - 1)
+      }, 1000)
+    } else if (countdown === 0) {
+      setIsCountdownActive(false)
+      setCountdown(60)
+    }
+
+    return () => {
+      if (timer) clearInterval(timer)
+    }
+  }, [isCountdownActive, countdown])
+
+  const { mutateAsync, isPending } = useMutation({
+    mutationKey: [resendMutateApi.mutationKey],
+    mutationFn: resendMutateApi.fn,
+  })
 
   const { data: activateAccountData, isFetching: isActivatingAccount } = useQuery({
     queryKey: [activateAccountApi.queryKey, accountId as string],
     queryFn: activateAccountApi.fn,
     enabled: !!accountId,
   })
-  console.log('activateAccountData', activateAccountData, 'accountId', accountId)
 
-  // if (!authData && !email && !code) {
-  //   return <Navigate to={routes.signIn} replace />
-  // }
+  // Update the handleResend function to handle the case where email could be null
+  const handleResend = async () => {
+    if (!isCountdownActive && !isPending && email) {
+      await mutateAsync({
+        email: email,
+        url: verifyEmailRedirectUrl,
+      })
+      // Start countdown after successful resend
+      setIsCountdownActive(true)
+    }
+  }
+
+  if (!email && !code) {
+    return <Navigate to={routes.home} replace />
+  }
   // if (!authData) {
-  //   return <Navigate to={routes.signIn} replace />
+  //   return (
+  //     <Navigate
+  //       to={routesConfig[Routes.AUTH_LOGIN].getPath({
+  //         returnUrl: currentUrl
+  //       })}
+  //       replace
+  //     />
+  //   )
   // }
 
   if (activateAccountData) {
+    successToast({
+      message: 'Activate account successfully',
+    })
     return <Navigate to={routes.home} replace />
   }
 
   if (accountId) {
     return (
-      <div className="my-auto mb-auto  flex flex-col  md:max-w-full lg:max-w-[420px] items-center gap-4 ">
+      <div className="my-auto mb-auto mt-8 flex flex-col md:mt-[70px] md:max-w-full lg:mt-[130px] lg:max-w-[420px] items-center gap-4 an">
         {!isActivatingAccount ? (
           <LoaderCircle size={150} className="p-4 rounded-full bg-green-100 text-green-500 animate-spin" />
         ) : (
@@ -71,7 +121,7 @@ const EmailVerification = () => {
   }
   if (email) {
     return (
-      <div className="my-auto mb-auto  flex flex-col  md:max-w-full lg:max-w-[420px] items-center gap-4 ">
+      <div className="my-auto mb-auto mt-8 flex flex-col md:mt-[70px] md:max-w-full lg:mt-[130px] lg:max-w-[420px] items-center gap-4 an">
         <MdMarkEmailRead size={150} className="p-4 rounded-full bg-green-100 text-green-500 shadow-xl" />
         <a
           className="text-2xl flex items-center gap-2 font-thin py-2 bg-green-100 rounded-3xl px-8 cursor-pointer flex-col"
@@ -96,6 +146,19 @@ const EmailVerification = () => {
             </a>{' '}
             if you need help.
           </h2>
+        </div>
+        <div className="flex items-center gap-2 mt-5">
+          <Button
+            variant={'outline'}
+            onClick={() => {
+              navigate(routes.home)
+            }}
+          >
+            Home
+          </Button>
+          <Button variant={'default'} onClick={handleResend} disabled={isCountdownActive || isPending}>
+            {isPending ? 'Sending...' : isCountdownActive ? `Resend (${countdown}s)` : 'Resend'}
+          </Button>
         </div>
       </div>
     )

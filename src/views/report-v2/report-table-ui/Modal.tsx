@@ -4,6 +4,7 @@ import { Row } from '@tanstack/react-table'
 import { Siren } from 'lucide-react'
 import { useEffect, useRef } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { z } from 'zod'
 
 import Button from '@/components/button'
@@ -40,6 +41,7 @@ const formSchema = z
     reason: z.string({
       message: defaultRequiredRegex.message(),
     }),
+    customReason: z.string().optional(),
     files: z
       .array(
         z.object({
@@ -70,11 +72,19 @@ const formSchema = z
         message: defaultRequiredRegex.message(),
       })
     }
+    if (data.reason === 'OTHER' && (!data.customReason || data.customReason.trim() === '')) {
+      return ctx.addIssue({
+        code: 'custom',
+        path: ['customReason'],
+        message: defaultRequiredRegex.message(),
+      })
+    }
   })
 
 type formType = z.infer<typeof formSchema>
 
 export default function Modal({ setOpen, viewOnly = false, Report }: DialogProps) {
+  const { t } = useTranslation()
   const handleServerError = useHandleServerError()
   const { successToast } = useToast()
   const triggerRef = useRef<TriggerUploadRef>(null)
@@ -83,6 +93,8 @@ export default function Modal({ setOpen, viewOnly = false, Report }: DialogProps
     resolver: zodResolver(formSchema),
     defaultValues: {
       files: [],
+      reason: '',
+      customReason: '',
     },
   })
 
@@ -91,11 +103,22 @@ export default function Modal({ setOpen, viewOnly = false, Report }: DialogProps
     mutationFn: createReport.fn,
     onSuccess: () => {
       successToast({
-        message: 'Report created successfully',
+        message: t('report.createSuccess', 'Report created successfully'),
       })
       setOpen(false)
     },
   })
+
+  // Predefined reason options
+  const reasonOptions = [
+    { value: 'INCORRECT_ITEM', label: t('report.reasonOptions.incorrectItem', 'Incorrect item received') },
+    { value: 'DAMAGED_ITEM', label: t('report.reasonOptions.damagedItem', 'Damaged item received') },
+    { value: 'LATE_DELIVERY', label: t('report.reasonOptions.lateDelivery', 'Late delivery') },
+    { value: 'QUALITY_ISSUE', label: t('report.reasonOptions.qualityIssue', 'Quality issue with product/service') },
+    { value: 'PAYMENT_PROBLEM', label: t('report.reasonOptions.paymentProblem', 'Payment problem') },
+    { value: 'APP_ERROR', label: t('report.reasonOptions.appError', 'Application error') },
+    { value: 'OTHER', label: t('report.reasonOptions.other', 'Other reason') },
+  ]
 
   const onSubmit: SubmitHandler<formType> = async () => {
     try {
@@ -104,7 +127,26 @@ export default function Modal({ setOpen, viewOnly = false, Report }: DialogProps
         await Promise.all(triggerFns.map((trigger) => trigger()))
       }
       const images = form.getValues().files.map((file) => file.fileUrl)
-      const value = { ...form.getValues(), files: images }
+
+      // Process reason field
+      let finalReason = form.getValues().reason
+      if (finalReason === 'OTHER' && form.getValues().customReason) {
+        finalReason = form.getValues().customReason ?? ''
+      } else {
+        // Replace underscores with spaces in predefined reasons
+        finalReason = finalReason.replace(/_/g, ' ')
+      }
+
+      // Remove customReason from payload
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { ...valueWithoutCustomReason } = form.getValues()
+
+      const value = {
+        ...valueWithoutCustomReason,
+        files: images,
+        reason: finalReason,
+      }
+
       await createReportFn(value as TCreateReportRequestParams)
       queryClient.invalidateQueries({
         queryKey: [getFilteredReports.queryKey, {}],
@@ -141,10 +183,15 @@ export default function Modal({ setOpen, viewOnly = false, Report }: DialogProps
               <Siren className="size-4" />
               <div className="flex flex-col">
                 <AlertTitle className="flex items-center gap-2">
-                  <span className="p-0.5 px-2 rounded-lg border border-green-300 bg-green-400 text-white">Done</span>
-                  <span className="font-bold uppercase text-xs">status</span>
+                  <span className="p-0.5 px-2 rounded-lg border border-green-300 bg-green-400 text-white">
+                    {t('report.status.done', 'Done')}
+                  </span>
+                  <span className="font-bold uppercase text-xs">{t('report.status.label', 'status')}</span>
                 </AlertTitle>
-                <AlertDescription>Note: {report?.resultNote || 'No note provided by the admin'}</AlertDescription>
+                <AlertDescription>
+                  {t('report.status.note', 'Note')}:{' '}
+                  {report?.resultNote || t('report.status.noNote', 'No note provided by the admin')}
+                </AlertDescription>
               </div>
             </div>
           </Alert>
@@ -157,12 +204,15 @@ export default function Modal({ setOpen, viewOnly = false, Report }: DialogProps
               <div className="flex flex-col">
                 <AlertTitle className="flex items-center gap-2">
                   <span className="p-0.5 px-2 rounded-lg border border-yellow-300 bg-yellow-400 text-white">
-                    Pending
+                    {t('report.status.pending', 'Pending')}
                   </span>
-                  <span className="font-bold uppercase text-xs">status</span>
+                  <span className="font-bold uppercase text-xs">{t('report.status.label', 'status')}</span>
                 </AlertTitle>
                 <AlertDescription>
-                  This report will be reviewed soon by the admin. You will be notified once the review is done.
+                  {t(
+                    'report.status.pendingDescription',
+                    'This report will be reviewed soon by the admin. You will be notified once the review is done.',
+                  )}
                 </AlertDescription>
               </div>
             </div>
@@ -176,11 +226,13 @@ export default function Modal({ setOpen, viewOnly = false, Report }: DialogProps
               <div className="flex flex-col">
                 <AlertTitle className="flex items-center gap-2">
                   <span className="p-0.5 px-2 rounded-lg border border-blue-300 bg-blue-400 text-white">
-                    In Processing
+                    {t('report.status.inProcessing', 'In Processing')}
                   </span>
-                  <span className="font-bold uppercase text-xs">status</span>
+                  <span className="font-bold uppercase text-xs">{t('report.status.label', 'status')}</span>
                 </AlertTitle>
-                <AlertDescription>This report is currently in processing</AlertDescription>
+                <AlertDescription>
+                  {t('report.status.inProcessingDescription', 'This report is currently in processing')}
+                </AlertDescription>
               </div>
             </div>
           </Alert>
@@ -192,10 +244,15 @@ export default function Modal({ setOpen, viewOnly = false, Report }: DialogProps
               <Siren className="size-4" />
               <div className="flex flex-col">
                 <AlertTitle className="flex items-center gap-2">
-                  <span className="p-0.5 px-2 rounded-lg border border-red-300 bg-red-400  text-white">Canceled</span>
-                  <span className="font-bold uppercase text-xs">status</span>
+                  <span className="p-0.5 px-2 rounded-lg border border-red-300 bg-red-400  text-white">
+                    {t('report.status.cancelled', 'Canceled')}
+                  </span>
+                  <span className="font-bold uppercase text-xs">{t('report.status.label', 'status')}</span>
                 </AlertTitle>
-                <AlertDescription>Note: {report?.resultNote || 'No note provided by the admin'}</AlertDescription>
+                <AlertDescription>
+                  {t('report.status.note', 'Note')}:{' '}
+                  {report?.resultNote || t('report.status.noNote', 'No note provided by the admin')}
+                </AlertDescription>
               </div>
             </div>
           </Alert>
@@ -215,20 +272,17 @@ export default function Modal({ setOpen, viewOnly = false, Report }: DialogProps
               name="type"
               render={({ field }) => (
                 <FormItem className="col-span-1">
-                  <FormLabel required>Type Of Report</FormLabel>
+                  <FormLabel required>{t('report.form.typeLabel', 'Type Of Report')}</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value}>
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue
-                          placeholder="Select type of report
-                        "
-                        />
+                        <SelectValue placeholder={t('report.form.typePlaceholder', 'Select type of report')} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
                       {Object.values(ReportTypeEnum).map((item) => (
                         <SelectItem key={item} value={ReportTypeEnum[item]}>
-                          {item.replace(/_/g, ' ')}
+                          {t(`report.type.${item.toLowerCase()}`, item.replace(/_/g, ' '))}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -245,7 +299,7 @@ export default function Modal({ setOpen, viewOnly = false, Report }: DialogProps
                 name="orderId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel required>Report For Order</FormLabel>
+                    <FormLabel required>{t('report.form.orderLabel', 'Report For Order')}</FormLabel>
                     <SelectOrder {...field} />
                     <FormMessage />
                   </FormItem>
@@ -259,7 +313,7 @@ export default function Modal({ setOpen, viewOnly = false, Report }: DialogProps
                 name="bookingId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel required>Report For Booking</FormLabel>
+                    <FormLabel required>{t('report.form.bookingLabel', 'Report For Booking')}</FormLabel>
                     <SelectBooking {...field} />
                     <FormMessage />
                   </FormItem>
@@ -269,29 +323,59 @@ export default function Modal({ setOpen, viewOnly = false, Report }: DialogProps
 
             <FormField
               control={form.control}
-              name={`reason`}
+              name="reason"
               render={({ field }) => (
                 <FormItem className="col-span-1">
-                  <FormLabel required>Reason Of Report</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      {...field}
-                      placeholder="Explain your reason for reporting...
-                  "
-                      rows={6}
-                    />
-                  </FormControl>
+                  <FormLabel required>{t('report.form.reasonLabel', 'Reason Of Report')}</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder={t('report.form.reasonPlaceholder', 'Select reason for reporting')} />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {reasonOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
             />
+
+            {form.watch('reason') === 'OTHER' && (
+              <FormField
+                control={form.control}
+                name="customReason"
+                render={({ field }) => (
+                  <FormItem className="col-span-1">
+                    <FormLabel required>{t('report.form.otherReasonLabel', 'Other Reason')}</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        {...field}
+                        placeholder={t(
+                          'report.form.otherReasonPlaceholder',
+                          'Please explain your reason for reporting in detail...',
+                        )}
+                        rows={4}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+
             <FormField
               control={form.control}
               name="files"
               render={({ field }) => {
                 return (
                   <FormItem className="flex flex-col sm:col-span-2 col-span-1">
-                    <FormLabel required>Evidence For Report</FormLabel>
+                    <FormLabel required>{t('report.form.evidenceLabel', 'Evidence For Report')}</FormLabel>
                     <UploadFiles
                       triggerRef={triggerRef}
                       form={form}
@@ -312,7 +396,7 @@ export default function Modal({ setOpen, viewOnly = false, Report }: DialogProps
               className="w-full bg-primary hover:bg-primary/70 text-white"
               loading={form.formState.isSubmitting}
             >
-              Submit
+              {t('common.submit', 'Submit')}
             </Button>
           )}
         </form>

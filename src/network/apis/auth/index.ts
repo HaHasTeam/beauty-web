@@ -28,3 +28,13 @@ export const requestResetPasswordApi = toMutationFetcher<string, TServerError>(
     })
   },
 )
+
+export const resendMutateApi = toMutationFetcher<{ email: string; url: string }, TServerError>(
+  'resendMutateApi',
+  async (params) => {
+    return publicRequest(`/accounts/resend-verify-email`, {
+      method: 'POST',
+      data: params,
+    })
+  },
+)

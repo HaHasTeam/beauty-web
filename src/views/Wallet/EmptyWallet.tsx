@@ -1,11 +1,13 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { ArrowRightLeft, Banknote, Coins, CreditCard, DollarSign, PiggyBank, Wallet } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 import Button from '@/components/button'
 import { createWalletApi, getMyWalletApi } from '@/network/apis/wallet'
 import { useStore } from '@/store/store'
 
 export default function NoWalletFound() {
+  const { t } = useTranslation()
   const user = useStore((state) => state.user)
   const { mutateAsync: createWalletFn, isPending } = useMutation({
     mutationKey: [createWalletApi.mutationKey],
@@ -51,14 +53,17 @@ export default function NoWalletFound() {
         </div>
       </div>
 
-      <h1 className="text-2xl font-semibold mb-4 text-primary">No Wallet Found!</h1>
+      <h1 className="text-2xl font-semibold mb-4 text-primary">{t('wallet.noWalletFound', 'No Wallet Found!')}</h1>
       <p className="text-muted-foreground text-center mb-8 max-w-md">
-        You haven't created any wallet yet. Start managing your finances by creating a new wallet.
+        {t(
+          'wallet.noWalletDescription',
+          "You haven't created any wallet yet. Start managing your finances by creating a new wallet.",
+        )}
       </p>
 
       <div className="flex flex-wrap gap-4 justify-center">
         <Button className="px-6 " loading={isPending} onClick={handleCreateWallet}>
-          Create Your Own Wallet
+          {t('walletTerm.createWallet', 'Create Your Own Wallet')}
         </Button>
       </div>
     </div>

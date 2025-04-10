@@ -4,8 +4,11 @@ import PrimaryLayout from '@/components/layout/PrimaryLayout'
 import configs from '@/config'
 import externalLink from '@/config/externalLink'
 import About from '@/views/About'
+import BeautyConsultation from '@/views/BeautyConsultation'
+import ServiceDetail from '@/views/BeautyConsultation/ServiceDetail'
 import Blog from '@/views/Blog'
 import BlogDetail from '@/views/BlogDetails'
+import BookingDetail from '@/views/BookingDetail'
 import BrandDetail from '@/views/Brand'
 import Contact from '@/views/Contact'
 import Forbidden from '@/views/Forbidden'
@@ -19,6 +22,7 @@ import RecommendProducts from '@/views/RecommendProducts'
 // import RecommendProducts from '@/views/RecommendProducts'
 import SearchPage from '@/views/Search'
 import ServerError from '@/views/ServerError'
+import ServiceCheckout from '@/views/ServiceCheckout'
 
 import PublicGuard from './guard/PublicGuard'
 import privateRoutes from './privateRoutes'
@@ -74,6 +78,22 @@ export default function RouterProvider() {
         {
           path: configs.routes.recommendProducts,
           element: <RecommendProducts />,
+        },
+        {
+          path: configs.routes.beautyConsultation,
+          element: <BeautyConsultation />,
+        },
+        {
+          path: configs.routes.beautyConsultationDetail,
+          element: <ServiceDetail />,
+        },
+        {
+          path: configs.routes.serviceCheckout,
+          element: <ServiceCheckout />,
+        },
+        {
+          path: configs.routes.bookingDetail,
+          element: <BookingDetail />,
         },
       ],
     },

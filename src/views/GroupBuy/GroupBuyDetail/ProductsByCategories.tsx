@@ -44,10 +44,10 @@ const ProductsByCategories = ({ groupBuyingInfo }: ProductsByCategoriesProps) =>
               id: product.id,
               name: product.name,
               tag: 'Best Seller',
-              price: 20.09,
+              price: product.productClassifications[0].price,
               currentPrice: product.productClassifications[0].price,
               images: productImages,
-              deal: 0.33,
+              deal: 0,
               flashSale: {
                 productAmount: 100,
                 soldAmount: 65,
