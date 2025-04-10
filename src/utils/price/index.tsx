@@ -168,18 +168,27 @@ export const calculateTotalProductDiscount = (selectedCartItems: string[], cartB
  * @param cartByBrand - Cart data grouped by brand.
  * @returns An object containing totalProductCost, totalProductDiscount, and totalPrice.
  */
+
 export const calculateCartTotals = (
   selectedCartItems: string[],
   cartByBrand?: ICartByBrand | null,
 ): {
   totalProductCost: number
   totalProductDiscount: number
+  totalLivestreamDiscount: number
   totalPrice: number
 } => {
-  if (!cartByBrand) return { totalProductCost: 0, totalProductDiscount: 0, totalPrice: 0 }
+  if (!cartByBrand)
+    return {
+      totalProductCost: 0,
+      totalProductDiscount: 0,
+      totalLivestreamDiscount: 0,
+      totalPrice: 0,
+    }
 
   let totalProductCost = 0
   let totalProductDiscount = 0
+  let totalLivestreamDiscount = 0
   let totalPrice = 0
 
   selectedCartItems?.forEach((itemId) => {
@@ -195,6 +204,8 @@ export const calculateCartTotals = (
             : 0
         const discountType = DiscountTypeEnum.PERCENTAGE
 
+        // Check if livestream discount exists
+        const hasLivestreamDiscount = (cartItem.livestreamDiscount ?? 0) > 0
         // Calculate total product cost (price without discount)
         const itemTotalCost = productPrice * cartItemQuantity
         totalProductCost += itemTotalCost
@@ -206,9 +217,24 @@ export const calculateCartTotals = (
           totalProductDiscount += itemTotalDiscount
         }
 
-        // Calculate total price after applying discount
-        const discountedPrice = calculateDiscountPrice(productPrice, discount, discountType)
-        const itemTotalPrice = discountedPrice * cartItemQuantity
+        // Calculate livestream discount if it exists
+        let livestreamDiscountAmount = 0
+        if (hasLivestreamDiscount) {
+          // Apply livestream discount on top of any existing discount
+          const priceAfterDiscount = calculateDiscountPrice(productPrice, discount, discountType)
+          livestreamDiscountAmount = priceAfterDiscount * (cartItem.livestreamDiscount ?? 0)
+          totalLivestreamDiscount += livestreamDiscountAmount * cartItemQuantity
+        }
+
+        // Calculate total price after applying all discounts
+        let finalPrice = calculateDiscountPrice(productPrice, discount, discountType)
+
+        // Apply livestream discount if it exists
+        if (hasLivestreamDiscount) {
+          finalPrice -= livestreamDiscountAmount
+        }
+
+        const itemTotalPrice = finalPrice * cartItemQuantity
         totalPrice += itemTotalPrice
       }
     })
@@ -217,6 +243,7 @@ export const calculateCartTotals = (
   return {
     totalProductCost,
     totalProductDiscount,
+    totalLivestreamDiscount,
     totalPrice,
   }
 }
@@ -323,8 +350,22 @@ export const getTotalBrandProductsPrice = (cartBrandItem?: ICartItem[]): number 
       const discount = cartBrand?.productClassification?.productDiscount?.discount ?? 0
       const discountType = DiscountTypeEnum.PERCENTAGE
       const cartItemQuantity = cartBrand?.quantity ?? 0
+      const livestreamDiscount = cartBrand.livestreamDiscount ?? 0
 
-      total += calculateTotalPrice(productPrice, cartItemQuantity, discount, discountType)
+      const basePrice = calculateTotalPrice(productPrice, cartItemQuantity, discount, discountType)
+      if (livestreamDiscount > 0) {
+        // Check if the discount is in decimal format (less than or equal to 1)
+        const discountRate = livestreamDiscount <= 1 ? livestreamDiscount : livestreamDiscount / 100
+
+        // Calculate the livestream discount amount
+        const livestreamDiscountAmount = basePrice * discountRate
+
+        // Subtract the livestream discount from the base price
+        total += basePrice - livestreamDiscountAmount
+      } else {
+        // No livestream discount, just add the base price
+        total += basePrice
+      }
     }
   })
 

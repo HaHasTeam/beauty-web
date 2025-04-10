@@ -54,7 +54,7 @@ export default function SignUp() {
     mutationKey: [createUserApi.mutationKey],
     mutationFn: createUserApi.fn,
     onSuccess: () => {
-      navigate(configs.routes.signIn)
+      navigate(configs.routes.checkEmail + '?' + new URLSearchParams({ email: form.getValues('email') }).toString())
       successToast({
         message: `Sign In success`,
       })

@@ -1,16 +1,18 @@
-import { MessageCircle, Tag } from 'lucide-react'
-import { Dispatch, SetStateAction, useEffect, useMemo } from 'react'
+'use client'
+
+import { MessageCircle, Tag, Zap } from 'lucide-react'
+import { type Dispatch, type SetStateAction, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import configs from '@/config'
 import useCartStore from '@/store/cart'
-import { IBrand } from '@/types/brand'
-import { ICartItem } from '@/types/cart'
-import { IClassification } from '@/types/classification'
+import type { IBrand } from '@/types/brand'
+import type { ICartItem } from '@/types/cart'
+import type { IClassification } from '@/types/classification'
 import { ClassificationTypeEnum, DiscountTypeEnum, OrderEnum, ProductDiscountEnum, StatusEnum } from '@/types/enum'
 import { PreOrderProductEnum } from '@/types/pre-order'
-import { IBrandBestVoucher, ICheckoutItem, TVoucher } from '@/types/voucher'
+import type { IBrandBestVoucher, ICheckoutItem, TVoucher } from '@/types/voucher'
 import { calculateBrandVoucherDiscount } from '@/utils/price'
 
 import ProductCardLandscape from '../product/ProductCardLandscape'
@@ -31,6 +33,7 @@ interface CartItemProps {
   isTriggerTotal: boolean
   setIsTriggerTotal: Dispatch<SetStateAction<boolean>>
   isInGroupBuying?: boolean
+  onVoucherSelect: (brandId: string, voucher: TVoucher | null) => void
 }
 const CartItem = ({
   isInGroupBuying = false,
@@ -44,6 +47,7 @@ const CartItem = ({
   selectedCheckoutItems,
   setIsTriggerTotal,
   isTriggerTotal,
+  onVoucherSelect,
 }: CartItemProps) => {
   const { t } = useTranslation()
   const { chosenBrandVouchers, setChosenBrandVouchers } = useCartStore()
@@ -57,6 +61,11 @@ const CartItem = ({
     selectedCartItems?.includes(productClassification.id),
   )
 
+  // Check if any items in this brand have livestream discounts
+  const hasLivestreamItems = useMemo(() => {
+    return cartBrandItem.some((item) => item.livestream || (item.livestreamDiscount && item.livestreamDiscount > 0))
+  }, [cartBrandItem])
+
   // Handler for brand-level checkbox
   const handleBrandSelect = () => {
     onSelectBrand(cartItemIds, !isBrandSelected)
@@ -66,15 +75,6 @@ const CartItem = ({
   const handleSelectCartItem = (cartItemId: string, isSelected: boolean) => {
     onSelectBrand([cartItemId], isSelected)
   }
-  // const handleVoucherChange = (voucher: TVoucher | null) => {
-  //   setChosenVoucher(voucher)
-  //   onVoucherSelect(brand?.id ?? '', voucher)
-  // }
-  // const voucherDiscount = useMemo(
-  //   () => calculateBrandVoucherDiscount(cartBrandItem, selectedCartItems, chosenVoucher),
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  //   [cartBrandItem, selectedCartItems, chosenVoucher, isTriggerTotal],
-  // )
   const voucherDiscount = useMemo(
     () => calculateBrandVoucherDiscount(cartBrandItem, selectedCartItems, chosenVoucher),
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -85,9 +85,11 @@ const CartItem = ({
     const newVouchers = { ...chosenBrandVouchers }
     if (brand) {
       newVouchers[brand.id] = voucher
-      setChosenBrandVouchers(newVouchers)
+      setChosenBrandVouchers({ ...chosenBrandVouchers, [brand.id]: voucher })
+      onVoucherSelect(brand.id, voucher)
     }
   }
+  console.log('chosenvoucher', chosenBrandVouchers)
   useEffect(() => {
     if (selectedCartItems.length === 0 || voucherDiscount === 0) {
       const newVouchers = { ...chosenBrandVouchers }
@@ -117,6 +119,14 @@ const CartItem = ({
           <MessageCircle className="w-4 h-4" />
           {t('brand.chatNow')}
         </Button>
+
+        {/* Display livestream indicator if any items in this brand are from a livestream */}
+        {hasLivestreamItems && (
+          <div className="flex items-center gap-1 text-yellow-600 text-xs bg-yellow-50 px-2 py-1 rounded-full">
+            <Zap className="h-3 w-3" />
+            <span>{t('cart.livestream')}</span>
+          </div>
+        )}
       </div>
 
       {/* Product Cards */}
@@ -145,15 +155,27 @@ const CartItem = ({
         const productQuantity = cartItem?.quantity ?? 0
         // const selectedClassification = cartItem?.classification ?? ''
 
-        const eventType = isInGroupBuying
-          ? ''
-          : cartItem?.productClassification?.preOrderProduct &&
-              cartItem?.productClassification?.preOrderProduct?.status === PreOrderProductEnum.ACTIVE
-            ? OrderEnum.PRE_ORDER
-            : cartItem?.productClassification?.productDiscount &&
-                cartItem?.productClassification?.productDiscount?.status === ProductDiscountEnum.ACTIVE
-              ? OrderEnum.FLASH_SALE
-              : ''
+        // Check if this item is from a livestream
+        const isLivestreamItem = cartItem.livestream || (cartItem.livestreamDiscount && cartItem.livestreamDiscount > 0)
+
+        // Determine event type, adding LIVESTREAM as a new option
+        let eventType = ''
+        if (isInGroupBuying) {
+          eventType = ''
+        } else if (isLivestreamItem) {
+          eventType = 'LIVESTREAM' // Use OrderEnum.LIVESTREAM if defined
+        } else if (
+          cartItem?.productClassification?.preOrderProduct &&
+          cartItem?.productClassification?.preOrderProduct?.status === PreOrderProductEnum.ACTIVE
+        ) {
+          eventType = OrderEnum.PRE_ORDER
+        } else if (
+          cartItem?.productClassification?.productDiscount &&
+          cartItem?.productClassification?.productDiscount?.status === ProductDiscountEnum.ACTIVE
+        ) {
+          eventType = OrderEnum.FLASH_SALE
+        }
+
         const discount = isInGroupBuying
           ? null
           : eventType === OrderEnum.FLASH_SALE
@@ -222,6 +244,14 @@ const CartItem = ({
             chosenBrandVoucher={chosenVoucher}
             voucherDiscount={voucherDiscount}
           />
+        </div>
+      )}
+
+      {/* Livestream Discount Indicator */}
+      {hasLivestreamItems && (
+        <div className="flex items-center gap-3 text-sm">
+          <Zap className="w-4 h-4 text-yellow-500" />
+          <span className="text-yellow-600">{t('cart.livestreamDiscount')}</span>
         </div>
       )}
     </div>

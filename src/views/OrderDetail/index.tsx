@@ -31,7 +31,7 @@ import {
   getStatusTrackingByIdApi,
   updateOrderStatusApi,
 } from '@/network/apis/order'
-import { RequestStatusEnum, ShippingStatusEnum } from '@/types/enum'
+import { OrderEnum, PaymentMethod, RequestStatusEnum, ShippingStatusEnum } from '@/types/enum'
 import { millisecondsToRoundedDays } from '@/utils/time'
 
 const OrderDetail = () => {
@@ -199,6 +199,18 @@ const OrderDetail = () => {
               {!isFetchingStatusTracking && useStatusTrackingData && useStatusTrackingData?.data && (
                 <OrderStatusTracking statusTrackingData={useStatusTrackingData?.data} />
               )}
+
+              {/* payment */}
+              {useOrderData.data.paymentMethod === PaymentMethod.WALLET &&
+                useOrderData.data.status === ShippingStatusEnum.TO_PAY && (
+                  <AlertMessage
+                    title={t('order.paymentTitle')}
+                    message={t('order.paymentMessage')}
+                    isShowIcon={false}
+                    buttonText={t('order.payment')}
+                    onClick={() => {}}
+                  />
+                )}
 
               {/* cancel request information */}
               {!isLoading && cancelAndReturnRequestData?.data?.cancelRequest?.status === RequestStatusEnum.PENDING && (
@@ -398,19 +410,21 @@ const OrderDetail = () => {
                   />
                 </div>
                 {(useOrderData?.data?.status === ShippingStatusEnum.TO_PAY ||
-                  useOrderData?.data?.status === ShippingStatusEnum.WAIT_FOR_CONFIRMATION) && (
-                  <div className="w-full">
-                    <Button
-                      variant="outline"
-                      className="w-full border border-primary text-primary hover:text-primary hover:bg-primary/10"
-                      onClick={() => setOpenCancelOrderDialog(true)}
-                    >
-                      {t('order.cancelOrder')}
-                    </Button>
-                  </div>
-                )}
+                  useOrderData?.data?.status === ShippingStatusEnum.WAIT_FOR_CONFIRMATION) &&
+                  useOrderData?.data?.type !== OrderEnum.GROUP_BUYING && (
+                    <div className="w-full">
+                      <Button
+                        variant="outline"
+                        className="w-full border border-primary text-primary hover:text-primary hover:bg-primary/10"
+                        onClick={() => setOpenCancelOrderDialog(true)}
+                      >
+                        {t('order.cancelOrder')}
+                      </Button>
+                    </div>
+                  )}
                 <div className="w-full flex items-center flex-1 gap-2">
                   {useOrderData?.data?.status === ShippingStatusEnum.PREPARING_ORDER &&
+                    useOrderData?.data?.type !== OrderEnum.GROUP_BUYING &&
                     !cancelAndReturnRequestData?.data?.cancelRequest && (
                       <div className="w-full">
                         <Button

@@ -15,12 +15,15 @@ export const OrderItemCreation = ({ values, selectedCartItem, chosenBrandVoucher
   const orders: ICreateOrderItem[] = selectedCartItem
     ? Object.keys(selectedCartItem).map((brandName, index) => {
         const cartBrandItems = selectedCartItem[brandName]
+        console.log('cartBrandItems', cartBrandItems)
 
         // Map items to the required structure
         const items =
           cartBrandItems?.map((item) => ({
             productClassificationId: item?.productClassification?.id ?? '',
             quantity: item?.quantity,
+            livestreamId:
+              typeof item?.livestream === 'object' && 'id' in item.livestream ? item.livestream.id : undefined,
           })) ?? []
 
         // Use the brandId to find the corresponding voucher

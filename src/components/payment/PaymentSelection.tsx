@@ -37,8 +37,8 @@ export default function PaymentSelection({ form, hasPreOrderProduct, totalPaymen
     if (!isWalletAvailable) {
       return false
     }
-    const balance = myWallet?.data.balance ?? 0
-    return balance >= totalPayment
+    const availableBalance = myWallet?.data.availableBalance ?? 0
+    return availableBalance >= totalPayment
   }, [myWallet, isWalletAvailable, totalPayment])
 
   // Prevent form submission when pressing Enter in dialog
@@ -60,7 +60,7 @@ export default function PaymentSelection({ form, hasPreOrderProduct, totalPaymen
                   <span>{t('walletTerm.balance')}:</span>
                   <span className="font-medium text-primary truncate">
                     {t('format.currency', {
-                      value: myWallet?.data.balance ?? 0,
+                      value: myWallet?.data.availableBalance ?? 0,
                     })}
                   </span>
                 </div>
@@ -118,9 +118,9 @@ export default function PaymentSelection({ form, hasPreOrderProduct, totalPaymen
                 <div className="flex items-center text-sm text-gray-600 space-x-1 max-w-[180px] sm:max-w-[220px]">
                   <span>{t('walletTerm.balance')}:</span>
                   <span className="font-medium text-primary truncate">
-                    {myWallet?.data.balance !== undefined
+                    {myWallet?.data.availableBalance !== undefined
                       ? t('format.currency', {
-                          value: myWallet?.data.balance ?? 0,
+                          value: myWallet?.data.availableBalance ?? 0,
                         })
                       : '--'}
                   </span>

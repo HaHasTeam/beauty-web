@@ -1,3 +1,5 @@
+'use client'
+
 import { useMutation } from '@tanstack/react-query'
 import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -13,8 +15,8 @@ import { cn } from '@/lib/utils'
 // import { getMyCartApi } from '@/network/apis/cart'
 import { getBestPlatformVouchersApi, getBestShopVouchersApi } from '@/network/apis/voucher'
 import useCartStore from '@/store/cart'
-import { ICartByBrand } from '@/types/cart'
-import { IBrandBestVoucher, ICheckoutItem, IPlatformBestVoucher, TVoucher } from '@/types/voucher'
+import type { ICartByBrand } from '@/types/cart'
+import type { IBrandBestVoucher, ICheckoutItem, IPlatformBestVoucher, TVoucher } from '@/types/voucher'
 import { createCheckoutItem, createCheckoutItems } from '@/utils/cart'
 import {
   calculateCartTotals,
@@ -46,6 +48,7 @@ const Cart = ({ isInGroupBuy = false, isInPeriod = false }: CartProps) => {
   const [platformChosenVoucher, setPlatformChosenVoucher] = useState<TVoucher | null>(null)
   const { setChosenPlatformVoucher, setSelectedCartItem, resetSelectedCartItem } = useCartStore()
   const [bestPlatformVoucher, setBestPlatformVoucher] = useState<IPlatformBestVoucher | null>(null)
+  const [totalLivestreamDiscount, setTotalLivestreamDiscount] = useState<number>(0)
 
   const voucherMap = bestBrandVouchers?.reduce<{ [key: string]: IBrandBestVoucher }>((acc, voucher) => {
     acc[voucher?.brandId] = voucher
@@ -63,9 +66,10 @@ const Cart = ({ isInGroupBuy = false, isInPeriod = false }: CartProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cartItems, selectedCartItems, isTriggerTotal, platformChosenVoucher, totalVoucherDiscount, chosenVouchersByBrand])
 
-  // Total saved price (product discounts + brand vouchers + platform voucher)
-  const savedPrice = totalDirectProductsDiscount + totalVoucherDiscount + platformVoucherDiscount
-  const totalFinalPrice = totalPrice - totalVoucherDiscount - platformVoucherDiscount
+  // Total saved price (product discounts + brand vouchers + platform voucher + livestream discount)
+  const savedPrice =
+    totalDirectProductsDiscount + totalVoucherDiscount + platformVoucherDiscount + totalLivestreamDiscount
+  const totalFinalPrice = totalPrice - totalVoucherDiscount - platformVoucherDiscount - totalLivestreamDiscount
 
   // const { data: useMyCartData, isFetching } = useQuery({
   //   queryKey: [getMyCartApi.queryKey],
@@ -108,13 +112,13 @@ const Cart = ({ isInGroupBuy = false, isInPeriod = false }: CartProps) => {
       }
     })
   }
-  // const handleVoucherSelection = (brandId: string, voucher: TVoucher | null) => {
-  //   setChosenVouchersByBrand((prev) => ({
-  //     ...prev,
-  //     [brandId]: voucher,
-  //   }))
-  //   setChosenBrandVouchers({ ...chosenVouchersByBrand, [brandId]: voucher })
-  // }
+  const handleVoucherSelection = (brandId: string, voucher: TVoucher | null) => {
+    setChosenVouchersByBrand((prev) => ({
+      ...prev,
+      [brandId]: voucher,
+    }))
+    // setChosenBrandVouchers({ ...chosenVouchersByBrand, [brandId]: voucher })
+  }
 
   useEffect(() => {
     if (cartItems) {
@@ -164,8 +168,7 @@ const Cart = ({ isInGroupBuy = false, isInPeriod = false }: CartProps) => {
           if (cartItems) {
             checkoutItems = Object.entries(cartItems)
               // eslint-disable-next-line @typescript-eslint/no-unused-vars
-              .map(([_brandName, cartItems]) => createCheckoutItem(cartItems, selectedCartItems))
-              .flat()
+              .flatMap(([_brandName, cartItems]) => createCheckoutItem(cartItems, selectedCartItems))
           }
 
           await callBestPlatformVouchersFn({
@@ -183,13 +186,16 @@ const Cart = ({ isInGroupBuy = false, isInPeriod = false }: CartProps) => {
 
   useEffect(() => {
     if (selectedCartItems?.length > 0) {
-      setTotalPrice(calculateCartTotals(selectedCartItems, cartItems).totalPrice)
-      setTotalOriginalPrice(calculateCartTotals(selectedCartItems, cartItems).totalProductCost)
-      setTotalDirectProductsDiscount(calculateCartTotals(selectedCartItems, cartItems).totalProductDiscount)
+      const cartTotals = calculateCartTotals(selectedCartItems, cartItems)
+      setTotalPrice(cartTotals.totalPrice)
+      setTotalOriginalPrice(cartTotals.totalProductCost)
+      setTotalDirectProductsDiscount(cartTotals.totalProductDiscount)
+      setTotalLivestreamDiscount(cartTotals.totalLivestreamDiscount)
     } else {
       setTotalPrice(0)
       setTotalOriginalPrice(0)
       setTotalDirectProductsDiscount(0)
+      setTotalLivestreamDiscount(0)
       setChosenVouchersByBrand({})
 
       setPlatformChosenVoucher(null)
@@ -254,7 +260,7 @@ const Cart = ({ isInGroupBuy = false, isInPeriod = false }: CartProps) => {
                     selectedCartItems={selectedCartItems}
                     onSelectBrand={handleSelectBrand}
                     bestVoucherForBrand={bestVoucherForBrand}
-                    // onVoucherSelect={handleVoucherSelection}
+                    onVoucherSelect={handleVoucherSelection}
                     brand={brand}
                     checkoutItems={checkoutItems}
                     selectedCheckoutItems={selectedCheckoutItems}
@@ -276,6 +282,7 @@ const Cart = ({ isInGroupBuy = false, isInPeriod = false }: CartProps) => {
               selectedCartItems={selectedCartItems}
               totalProductDiscount={totalDirectProductsDiscount}
               totalVoucherDiscount={totalVoucherDiscount}
+              totalLivestreamDiscount={totalLivestreamDiscount}
               savedPrice={savedPrice}
               totalFinalPrice={totalFinalPrice}
               platformChosenVoucher={platformChosenVoucher}

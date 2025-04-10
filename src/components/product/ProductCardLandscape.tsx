@@ -1,6 +1,8 @@
+'use client'
+
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Trash2 } from 'lucide-react'
-import { Dispatch, SetStateAction, useCallback, useEffect, useState } from 'react'
+import { Trash2, Zap } from 'lucide-react'
+import { type Dispatch, type SetStateAction, useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
@@ -10,10 +12,10 @@ import useHandleServerError from '@/hooks/useHandleServerError'
 import { useToast } from '@/hooks/useToast'
 import { deleteCartItemApi, getCartByIdApi, getMyCartApi, updateCartItemApi } from '@/network/apis/cart'
 import useCartStore from '@/store/cart'
-import { ICartByBrand, ICartItem } from '@/types/cart'
-import { IClassification } from '@/types/classification'
+import type { ICartByBrand, ICartItem } from '@/types/cart'
+import type { IClassification } from '@/types/classification'
 import { ClassificationTypeEnum, DiscountTypeEnum, ProductCartStatusEnum, ProductEnum } from '@/types/enum'
-import { DiscountType } from '@/types/product-discount'
+import type { DiscountType } from '@/types/product-discount'
 import { calculateDiscountPrice, calculateTotalPrice } from '@/utils/price'
 import {
   checkCurrentProductClassificationActive,
@@ -82,6 +84,16 @@ const ProductCardLandscape = ({
   const OUT_OF_STOCK = PRODUCT_STOCK_COUNT <= 0
   const HIDDEN = checkCurrentProductClassificationHide(productClassification, classifications)
   const IS_ACTIVE = checkCurrentProductClassificationActive(productClassification, classifications)
+
+  // Check if the item has a livestream discount
+  const hasLivestreamDiscount = (cartItem.livestreamDiscount ?? 0) > 0
+
+  // Format the livestream discount percentage (multiply by 100 if it's in decimal format)
+  const formattedLivestreamDiscount = hasLivestreamDiscount
+    ? (cartItem.livestreamDiscount ?? 0) <= 1
+      ? (cartItem.livestreamDiscount ?? 0) * 100
+      : cartItem.livestreamDiscount
+    : 0
 
   const { mutateAsync: deleteCartItemFn } = useMutation({
     mutationKey: [deleteCartItemApi.mutationKey, cartItemId as string],
@@ -167,7 +179,7 @@ const ProductCardLandscape = ({
       handleServerError,
     ],
   )
-  console.log(selectedCartItem)
+
   const handleDeleteCartItem = async () => {
     try {
       await deleteCartItemFn(cartItemId)
@@ -208,7 +220,7 @@ const ProductCardLandscape = ({
 
     // Allow only valid positive integers
     if (/^\d+$/.test(value)) {
-      const parsedValue = parseInt(value, 10)
+      const parsedValue = Number.parseInt(value, 10)
 
       if (parsedValue > 0 && parsedValue <= MAX_QUANTITY_IN_CART) {
         setInputValue(value)
@@ -225,20 +237,33 @@ const ProductCardLandscape = ({
   }
 
   const handleBlur = () => {
-    const newQuantity = parseInt(inputValue, 10) || productQuantity
+    const newQuantity = Number.parseInt(inputValue, 10) || productQuantity
     setQuantity(newQuantity)
     handleQuantityUpdate(newQuantity)
   }
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      const newQuantity = parseInt(inputValue, 10) || productQuantity
+      const newQuantity = Number.parseInt(inputValue, 10) || productQuantity
       setQuantity(newQuantity)
       handleQuantityUpdate(newQuantity)
     }
   }
 
+  // Calculate prices including livestream discount if applicable
   const totalPrice = calculateTotalPrice(price, quantity, discount, discountType)
   const discountPrice = calculateDiscountPrice(price, discount, discountType)
+
+  // Calculate livestream discount amount if applicable - use the original value for calculation
+  const livestreamDiscountAmount = hasLivestreamDiscount
+    ? totalPrice *
+      ((cartItem.livestreamDiscount ?? 0) <= 1
+        ? (cartItem.livestreamDiscount ?? 0)
+        : (cartItem.livestreamDiscount ?? 0) / 100)
+    : 0
+
+  // Final price after all discounts
+  const finalPrice = totalPrice - livestreamDiscountAmount
+
   const HAS_ACTIVE_CLASSIFICATION = hasActiveClassification(classifications)
   const IN_STOCK_CLASSIFICATION = hasClassificationWithQuantity(classifications)
 
@@ -280,7 +305,7 @@ const ProductCardLandscape = ({
             <div className="lg:w-20 lg:h-20 md:w-14 md:h-14 sm:h-14 sm:w-14 w-10 h-13">
               <ImageWithFallback
                 fallback={fallBackImage}
-                src={productImage}
+                src={productImage || '/placeholder.svg'}
                 alt={productName}
                 className="object-cover w-full h-full rounded-md"
               />
@@ -298,7 +323,15 @@ const ProductCardLandscape = ({
               <Link to={configs.routes.products + '/' + productId}>
                 <span className="lg:text-sm text-xs line-clamp-2">{productName}</span>
               </Link>
-              <div>{eventType && eventType !== '' && <ProductTag tag={eventType} size="small" />}</div>
+              <div className="flex gap-1 items-center">
+                {eventType && eventType !== '' && <ProductTag tag={eventType} size="small" />}
+                {hasLivestreamDiscount && (
+                  <div className="flex items-center gap-1 text-yellow-600 text-xs">
+                    <Zap className="h-3 w-3" />
+                    <span>{formattedLivestreamDiscount}%</span>
+                  </div>
+                )}
+              </div>
               {productStatus === ProductEnum.BANNED ? (
                 <AlertMessage
                   className="w-fit border-0 outline-none rounded-md p-1 px-2 bg-red-50"
@@ -380,7 +413,9 @@ const ProductCardLandscape = ({
             <div className="order-2 md:order-3 w-full md:w-[25%] lg:w-[20%] flex-col md:items-center sm:items-start items-start">
               <div className="flex gap-1 items-center">
                 <span className="text-red-500 lg:text-base md:text-sm sm:text-xs text-xs">
-                  {t('productCard.currentPrice', { price: discountPrice })}
+                  {hasLivestreamDiscount
+                    ? t('productCard.currentPrice', { price: finalPrice })
+                    : t('productCard.currentPrice', { price: discountPrice })}
                 </span>
                 <span className="text-gray-400 lg:text-sm text-xs line-through">
                   {t('productCard.price', { price: price })}
@@ -391,12 +426,26 @@ const ProductCardLandscape = ({
                   {t('voucher.off.numberPercentage', { percentage: discount * 100 })}
                 </span>
               </div>
+              {hasLivestreamDiscount && (
+                <div>
+                  <span className="text-yellow-600 lg:text-sm md:text-xs sm:text-xs text-xs">
+                    {formattedLivestreamDiscount}%
+                  </span>
+                </div>
+              )}
             </div>
           ) : (
-            <div className="order-2 md:order-3 w-full md:w-[25%] lg:w-[20%] flex gap-1 items-center md:justify-center justify-start">
+            <div className="order-2 md:order-3 w-full md:w-[25%] lg:w-[20%] flex flex-col items-start md:items-center">
               <span className="lg:text-base md:text-sm sm:text-xs text-xs">
-                {t('productCard.price', { price: price })}
+                {hasLivestreamDiscount
+                  ? t('productCard.currentPrice', { price: finalPrice })
+                  : t('productCard.price', { price: price })}
               </span>
+              {hasLivestreamDiscount && (
+                <span className="text-yellow-600 lg:text-sm md:text-xs sm:text-xs text-xs">
+                  {formattedLivestreamDiscount}%
+                </span>
+              )}
             </div>
           )}
         </div>
@@ -433,7 +482,9 @@ const ProductCardLandscape = ({
         <span
           className={`text-red-500 lg:text-base md:text-sm sm:text-xs text-xs w-[16%] md:w-[8%] sm:w-[12%] flex flex-col items-center ${PREVENT_ACTION ? 'opacity-40' : ''}`}
         >
-          {t('productCard.currentPrice', { price: totalPrice })}
+          {hasLivestreamDiscount
+            ? t('productCard.currentPrice', { price: finalPrice })
+            : t('productCard.currentPrice', { price: totalPrice })}
         </span>
 
         {/* delete action */}

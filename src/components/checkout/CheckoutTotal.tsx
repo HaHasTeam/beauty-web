@@ -17,6 +17,7 @@ interface CheckoutTotalProps {
   totalPlatformDiscount: number
   totalSavings: number
   totalPayment: number
+  totalLivestreamDiscount?: number
   isLoading: boolean
   formId: string
 }
@@ -26,6 +27,8 @@ export default function CheckoutTotal({
   totalBrandDiscount,
   totalPlatformDiscount,
   totalSavings,
+  totalLivestreamDiscount = 0,
+
   isLoading,
   totalPayment,
   formId,
@@ -80,6 +83,14 @@ export default function CheckoutTotal({
               </span>
             </div>
           ) : null}
+          {totalLivestreamDiscount && totalLivestreamDiscount > 0 ? (
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-muted-foreground">Tiết kiệm</span>
+              <span className="text-green-700 font-medium">
+                -{t('productCard.price', { price: totalLivestreamDiscount })}
+              </span>
+            </div>
+          ) : null}
           {groupBuying ? (
             <div className="flex justify-between items-center pt-3 border-t text-base font-medium">
               <span>
@@ -123,7 +134,7 @@ export default function CheckoutTotal({
         <p className="text-sm text-muted-foreground my-1">
           {t('cart.acceptCondition')}
           <Link
-            to={`${configs.routes.blogs}/${blogData?.data[0].id}`}
+            to={`${configs.routes.blogs}/${blogData?.data[0]?.id ?? '1'}`}
             className="text-sm text-blue-500 hover:underline font-medium"
           >
             {t('cart.terms')}

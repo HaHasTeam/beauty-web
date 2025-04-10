@@ -79,14 +79,11 @@ const Checkout = () => {
     acc[voucher.brandId] = voucher
     return acc
   }, {})
-  console.log(groupBuyingOrder, 'PPPP')
 
-  const totalProductCost = useMemo(() => {
-    return calculateCartTotals(selectedCartItems, selectedCartItem).totalProductCost
+  const { totalProductCost, totalProductDiscount, totalLivestreamDiscount, totalPrice } = useMemo(() => {
+    return calculateCartTotals(selectedCartItems, selectedCartItem)
   }, [selectedCartItem, selectedCartItems])
-  const totalPrice = useMemo(() => {
-    return calculateCartTotals(selectedCartItems, selectedCartItem).totalPrice
-  }, [selectedCartItem, selectedCartItems])
+
   // Calculate total voucher discount
   // const totalBrandDiscount = useMemo(() => {
   //   return calculateTotalBrandVoucherDiscount(selectedCartItem, selectedCartItems, chosenBrandVouchers)
@@ -114,12 +111,9 @@ const Checkout = () => {
   //   return calculatePlatformVoucherDiscount(chosenPlatformVoucher)
   // }, [chosenPlatformVoucher])
 
-  const totalProductDiscount = useMemo(() => {
-    return calculateCartTotals(selectedCartItems, selectedCartItem).totalProductDiscount
-  }, [selectedCartItem, selectedCartItems])
-
   // Total saved price (product discounts + brand vouchers + platform voucher)
-  const totalSavings = totalProductDiscount + totalBrandDiscount + (platformVoucherDiscount ?? 0)
+  const totalSavings =
+    totalProductDiscount + totalBrandDiscount + (platformVoucherDiscount ?? 0) + totalLivestreamDiscount
   const totalPayment = totalPrice - totalBrandDiscount - (platformVoucherDiscount ?? 0)
 
   const defaultOrderValues = {
@@ -357,7 +351,7 @@ const Checkout = () => {
                   )}
                 </h2>
                 <div className="w-full flex gap-3 lg:flex-row md:flex-col flex-col">
-                  <div className="w-full md:w-full lg:w-[calc(65%-6px)] xl:w-[calc(70%-6px)]">
+                  <div className="space-y-2 w-full md:w-full lg:w-[calc(65%-6px)] xl:w-[calc(70%-6px)]">
                     <CheckoutHeader />
                     {selectedCartItem &&
                       Object.keys(selectedCartItem).map((brandName, index) => {
@@ -496,6 +490,7 @@ const Checkout = () => {
                         totalProductCost={totalProductCost}
                         totalBrandDiscount={totalBrandDiscount}
                         totalPlatformDiscount={platformVoucherDiscount ?? 0}
+                        totalLivestreamDiscount={totalLivestreamDiscount}
                         totalSavings={totalSavings}
                         totalPayment={totalPayment}
                         formId={`form-${formId}`}

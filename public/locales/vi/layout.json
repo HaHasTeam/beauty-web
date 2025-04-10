@@ -102,6 +102,7 @@
   "loginRcm": "Đăng nhập để cập nhật kỹ năng của bạn!",
   "facebook": "Facebook",
   "button": {
+    "collect": "Thu thập",
     "received": "Đã nhận",
     "notReceived": "Chưa nhận",
     "complaint": "Khiếu nại",
@@ -947,6 +948,9 @@
     "paymentProviderInfo": "Chúng tôi hợp tác với PayOS để cung cấp cho bạn trải nghiệm thanh toán tốt nhất với phí miễn phí."
   },
   "order": {
+    "paymentTitle": "Thanh toán chưa hoàn tất",
+    "paymentMessage": "Bạn vẫn chưa thanh toán cho đơn hàng. Vui lòng hoàn tất thanh toán sớm để tránh chậm trễ trong quá trình xử lý.",
+    "payment": "Thanh toán",
     "requestManagement": "Quản Lý Yêu Cầu",
     "loading": "Đang tải đơn hàng...",
     "viewDetail": "Xem chi tiết",
