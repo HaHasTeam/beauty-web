@@ -7,6 +7,7 @@ const ItemSchema = z.object({
 })
 
 const OrderSchema = z.object({
+  brandId: z.string().optional(), // Optional
   shopVoucherId: z.string().optional(), // Optional
   // items: z.array(ItemSchema).min(1), // Must have at least one item
   items: z.array(ItemSchema).optional(), // Create items manually
