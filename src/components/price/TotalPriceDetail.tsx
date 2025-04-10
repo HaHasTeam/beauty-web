@@ -1,4 +1,4 @@
-import { ReactElement } from 'react'
+import type { ReactElement } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
@@ -9,6 +9,7 @@ interface TotalPriceDetailProps {
   totalProductDiscount: number
   totalBrandDiscount: number
   totalPlatformDiscount: number
+  totalLivestreamDiscount?: number
   totalPayment: number
   totalSavings: number
   totalProductCost: number
@@ -19,6 +20,7 @@ const TotalPriceDetail = ({
   totalPayment,
   totalPlatformDiscount,
   totalProductDiscount,
+  totalLivestreamDiscount = 0,
   totalSavings,
   totalProductCost,
 }: TotalPriceDetailProps) => {
@@ -55,6 +57,14 @@ const TotalPriceDetail = ({
                 <span className="text-sm">{t('cart.discountPlatform')}</span>
                 <span className="font-medium text-sm text-green-700">
                   -{t('productCard.price', { price: totalPlatformDiscount })}
+                </span>
+              </div>
+            ) : null}
+            {totalLivestreamDiscount && totalLivestreamDiscount > 0 ? (
+              <div className="flex items-center justify-between">
+                <span className="text-sm">{t('cart.livestreamDiscount')}</span>
+                <span className="font-medium text-sm text-yellow-600">
+                  -{t('productCard.price', { price: totalLivestreamDiscount })}
                 </span>
               </div>
             ) : null}

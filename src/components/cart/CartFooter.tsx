@@ -31,6 +31,7 @@ interface CartFooterProps {
   totalVoucherDiscount: number
   totalOriginalPrice: number
   totalFinalPrice: number
+  totalLivestreamDiscount: number
   savedPrice: number
   platformChosenVoucher: TVoucher | null
   setPlatformChosenVoucher: Dispatch<SetStateAction<TVoucher | null>>
@@ -52,6 +53,7 @@ export default function CartFooter({
   setSelectedCartItems,
   totalProductDiscount,
   totalVoucherDiscount,
+  totalLivestreamDiscount,
   savedPrice,
   platformChosenVoucher,
   setPlatformChosenVoucher,
@@ -261,6 +263,7 @@ export default function CartFooter({
                           totalProductDiscount={totalProductDiscount}
                           totalBrandDiscount={totalVoucherDiscount}
                           totalPlatformDiscount={platformVoucherDiscount}
+                          totalLivestreamDiscount={totalLivestreamDiscount}
                           totalPayment={totalFinalPrice}
                           totalSavings={savedPrice}
                           totalProductCost={totalOriginalPrice}
