@@ -566,7 +566,7 @@
     }
   },
   "cart": {
-    "finalPrice": "Maximum Price",
+    "finalPrice": "Estimated Price",
     "brannedAllMessage": "This product is banned.",
     "unPublishAllMessage": "This product is not available for purchase.",
     "deleteItem": "Delete {{count}} item(s)",
@@ -747,6 +747,7 @@
       "transactions": "Transactions",
       "withdrawalRequests": "Withdrawal Requests"
     },
+    "choosePaymentMethod": "Choose payment method",
     "balanceOverview": "Balance Overview",
     "balance": "Balance",
     "availableBalance": "Available Balance",
