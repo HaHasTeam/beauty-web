@@ -262,6 +262,9 @@ const Checkout = () => {
       setIsLoading(false)
     } catch (error) {
       setIsLoading(false)
+
+      console.log('error', error)
+
       handleServerError({
         error,
         form,

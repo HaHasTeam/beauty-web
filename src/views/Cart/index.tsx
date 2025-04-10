@@ -69,6 +69,12 @@ const Cart = ({ isInGroupBuy = false, isInPeriod = false }: CartProps) => {
   // Total saved price (product discounts + brand vouchers + platform voucher + livestream discount)
   const savedPrice =
     totalDirectProductsDiscount + totalVoucherDiscount + platformVoucherDiscount + totalLivestreamDiscount
+
+  console.log('totalLivestreamDiscount', totalLivestreamDiscount)
+  console.log('platformVoucherDiscount', platformVoucherDiscount)
+  console.log('totalVoucherDiscount', totalVoucherDiscount)
+  console.log('totalDirectProductsDiscount', totalDirectProductsDiscount)
+
   const totalFinalPrice = totalPrice - totalVoucherDiscount - platformVoucherDiscount - totalLivestreamDiscount
 
   // const { data: useMyCartData, isFetching } = useQuery({

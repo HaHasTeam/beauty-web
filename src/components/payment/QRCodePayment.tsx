@@ -54,6 +54,7 @@ export function QRCodePayment({
   const [paidId, setPaidId] = useState()
   const checkoutRef = useRef<HTMLDivElement>(null)
   const [completed, setCompleted] = useState(false)
+  console.log('paymentLinkRes', paymentLinkRes)
 
   const payOsConfig: PayOSConfig = useMemo<PayOSConfig>(() => {
     return {

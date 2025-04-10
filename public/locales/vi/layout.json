@@ -50,7 +50,11 @@
     "preOderCardTitle": "Đơn đặt trước",
     "groupBuyingDealsCardTitle": "Ưu đãi mua chung",
     "recommendProductsTitle": "Gợi ý sản phẩm",
-    "preOrderTitle": "Sản phẩm đặt trước"
+    "preOrderTitle": "Sản phẩm đặt trước",
+    "status": {
+      "active": "Đang diễn ra",
+      "waiting": "Sắp diễn ra"
+    }
   },
   "productCard": {
     "currentPrice": "{{price, currency}}",
@@ -235,7 +239,8 @@
     },
     "preOrder": {
       "title": "Không có sản phẩm đặt trước",
-      "description": "Hiện tại không có sản phẩm nào đang trong giai đoạn đặt trước. Vui lòng quay lại sau!"
+      "description": "Hiện tại không có sản phẩm nào đang trong giai đoạn đặt trước. Vui lòng quay lại sau!",
+      "waitingDescription": "Hiện tại không có sản phẩm đặt trước nào đang chờ xử lý."
     },
     "groupBuying": {
       "title": "Không có sản phẩm mua chung",
@@ -726,7 +731,7 @@
     "off": {
       "amount": "Giảm {{amount, currency}}",
       "percentage": "Giảm {{percentage}}%",
-      "numberPercentage": "Giảm {{percentage}}%",
+      "numberPercentage": "{{percentage}}%",
       "minOrder": "Đơn tối thiểu {{amount, currency}}",
       "maxDiscount": "Giảm tối đa {{amount, currency}}",
       "specific": "Sản phẩm nhất định",
@@ -796,6 +801,7 @@
     "cancel": "Hủy",
     "noWalletFound": "Không Tìm Thấy Ví!",
     "noWalletDescription": "Bạn chưa tạo ví nào. Hãy bắt đầu quản lý tài chính của bạn bằng cách tạo một ví mới.",
+    "choosePaymentMethod": "Chọn Phương thức thanh toán",
     "bankAccounts": {
       "title": "Tài Khoản Ngân Hàng",
       "manage": "Quản Lý Tài Khoản Ngân Hàng",

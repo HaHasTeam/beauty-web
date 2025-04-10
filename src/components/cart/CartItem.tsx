@@ -1,6 +1,6 @@
 'use client'
 
-import { MessageCircle, Tag, Zap } from 'lucide-react'
+import { MessageCircle, Tag } from 'lucide-react'
 import { type Dispatch, type SetStateAction, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
@@ -61,11 +61,6 @@ const CartItem = ({
     selectedCartItems?.includes(productClassification.id),
   )
 
-  // Check if any items in this brand have livestream discounts
-  const hasLivestreamItems = useMemo(() => {
-    return cartBrandItem.some((item) => item.livestream || (item.livestreamDiscount && item.livestreamDiscount > 0))
-  }, [cartBrandItem])
-
   // Handler for brand-level checkbox
   const handleBrandSelect = () => {
     onSelectBrand(cartItemIds, !isBrandSelected)
@@ -89,7 +84,6 @@ const CartItem = ({
       onVoucherSelect(brand.id, voucher)
     }
   }
-  console.log('chosenvoucher', chosenBrandVouchers)
   useEffect(() => {
     if (selectedCartItems.length === 0 || voucherDiscount === 0) {
       const newVouchers = { ...chosenBrandVouchers }
@@ -100,7 +94,6 @@ const CartItem = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCartItems, voucherDiscount])
-  console.log('testing', voucherDiscount)
   return (
     <div className="w-full bg-white p-4 rounded-lg space-y-2 shadow-sm">
       {/* Brand Header */}
@@ -121,12 +114,6 @@ const CartItem = ({
         </Button>
 
         {/* Display livestream indicator if any items in this brand are from a livestream */}
-        {hasLivestreamItems && (
-          <div className="flex items-center gap-1 text-yellow-600 text-xs bg-yellow-50 px-2 py-1 rounded-full">
-            <Zap className="h-3 w-3" />
-            <span>{t('cart.livestream')}</span>
-          </div>
-        )}
       </div>
 
       {/* Product Cards */}
@@ -180,13 +167,17 @@ const CartItem = ({
           ? null
           : eventType === OrderEnum.FLASH_SALE
             ? cartItem?.productClassification?.productDiscount?.discount
-            : null
+            : eventType == 'LIVESTREAM'
+              ? cartItem.livestreamDiscount
+              : null
 
         const discountType = isInGroupBuying
           ? null
           : eventType === OrderEnum.FLASH_SALE
             ? DiscountTypeEnum.PERCENTAGE
-            : null
+            : isLivestreamItem
+              ? DiscountTypeEnum.PERCENTAGE
+              : null
         const productStatus = product.status
 
         return (
@@ -244,14 +235,6 @@ const CartItem = ({
             chosenBrandVoucher={chosenVoucher}
             voucherDiscount={voucherDiscount}
           />
-        </div>
-      )}
-
-      {/* Livestream Discount Indicator */}
-      {hasLivestreamItems && (
-        <div className="flex items-center gap-3 text-sm">
-          <Zap className="w-4 h-4 text-yellow-500" />
-          <span className="text-yellow-600">{t('cart.livestreamDiscount')}</span>
         </div>
       )}
     </div>
