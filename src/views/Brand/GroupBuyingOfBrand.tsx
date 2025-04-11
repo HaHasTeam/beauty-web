@@ -19,12 +19,16 @@ const GroupBuyingOfBrand = () => {
     queryKey: [getGroupProductByBrandIdApi.queryKey, brandId as string],
     queryFn: getGroupProductByBrandIdApi.fn,
   })
+
+  console.log();
+  
   const { data: brand, isLoading: isGettingBrand } = useQuery({
     queryKey: [getBrandByIdApi.queryKey, brandId as string],
     queryFn: getBrandByIdApi.fn,
   })
 
   const isFetching = isGettingGroupProducts || isGettingBrand
+  
   return (
     <div className="w-full ">
       {isFetching && <LoadingContentLayer />}

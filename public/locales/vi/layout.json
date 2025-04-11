@@ -1553,13 +1553,15 @@
     "videosFile": "video"
   },
   "groupBuy": {
+    "noGroupBuyDes": "Không có sự kiện mua chung nào",
     "productListLabel": "Danh sách sản phẩm mua chung ({{amount}})",
     "title": " Nhãn hiệu hỗ trợ mua nhóm",
+    "getUpToDiscount": "Giảm giá đến {{discount}}",
     "item": {
       "notice": "Điểm nổi bật:",
       "maxDiscount": "Giảm tối đa {{discount}}",
-      "limitAmount": "Mỗi người chỉ được mua tối đa {{amount}} sản phẩm",
-      "productAmount": "Có lên đến {{amount}} sản phẩm được áp dụng cho đơn hàng chung",
+      "limitAmount": "Mỗi người chỉ được mua tối đa {{amount}} sản phẩm",
+      "productAmount": "Có lên đến {{amount}} sản phẩm được áp dụng cho đơn hàng chung",
       "tierDescription": "Giảm ngay {{discount}} với {{count}} người cùng mua chung cùng một chương trình",
       "dialogTitle": "Tạo chương trình mua chung cho sự kiện {{event}}",
       "dialogDescription": "Chương trình mua chung sẽ được tạo ra và chia sẻ với bạn bè của bạn. Khi đủ số lượng người tham gia, bạn sẽ nhận được giảm giá đặc biệt cho đơn hàng của mình.",
@@ -1574,10 +1576,16 @@
     "otherEvent": "Sự kiện khác ({{amount}})",
     "viewAll": "Xem tất cả",
     "noGroupBuy": "Hiện tại không có sự kiện mua chung nào",
-    "noGroupBuyDes": "Khám phá những chương trình khác ngay!",
     "brandGroupBuy": {
       "title": "Chương trình mua chung của {{brand}}"
-    }
+    },
+    "status": {
+      "inProgress": "Đang diễn ra",
+      "ended": "Đã kết thúc"
+    },
+    "eventEndedTitle": "Sự kiện đã kết thúc",
+    "eventEndedDescription": "Sự kiện mua chung này đã kết thúc. Bạn không thể tham gia sự kiện này nữa. Bạn có muốn quay về trang chủ để khám phá các sự kiện khác không?",
+    "returnToHome": "Quay về trang chủ"
   },
   "time": {
     "day": "Ngày",

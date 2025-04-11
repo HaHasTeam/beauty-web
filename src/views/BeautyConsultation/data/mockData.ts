@@ -276,4 +276,4 @@ export const formatCurrency = (amount: number) => {
 }
 
 // Default image for fallback
-export const DEFAULT_IMAGE = 'https://placehold.co/400x300/e2e8f0/64748b?text=Image+Not+Found'
+

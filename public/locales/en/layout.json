@@ -902,7 +902,7 @@
   },
   "order": {
     "paymentTitle": "Payment Incomplete",
-    "paymentMessage": "It looks like your order hasn’t been paid yet. Please complete the payment soon to avoid any delays in processing.",
+    "paymentMessage": "It looks like your order hasn't been paid yet. Please complete the payment soon to avoid any delays in processing.",
     "payment": "Payment",
     "requestManagement": "Request Management",
     "loading": "Loading order...",
@@ -1312,6 +1312,7 @@
   "groupBuy": {
     "productListLabel": "Product available in this deal ({{amount}})",
     "title": "Brands with Group Buy Deals",
+    "getUpToDiscount": "Get up to {{discount}} discount",
     "item": {
       "maxDiscount": "Up to {{discount}} off",
       "limitAmount": "Each person can buy up to {{amount}} items",
@@ -1334,7 +1335,14 @@
     "noGroupBuyDes": "Explore other event in platform!",
     "brandGroupBuy": {
       "title": "Group Buy Deals of {{brand}}"
-    }
+    },
+    "status": {
+      "inProgress": "In progress",
+      "ended": "Ended"
+    },
+    "eventEndedTitle": "Event Ended",
+    "eventEndedDescription": "This group buying event has ended. You can no longer participate in this event. Would you like to return to the home page to explore other events?",
+    "returnToHome": "Return to Home"
   },
   "systemService": {
     "generalInformation": "General Information",

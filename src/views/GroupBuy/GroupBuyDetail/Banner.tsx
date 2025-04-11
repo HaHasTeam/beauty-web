@@ -1,11 +1,21 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Clock1, Copy, ImageIcon, ShoppingCart, User } from 'lucide-react'
+import { Clock1, Copy, Home, ShoppingCart, User } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 import { useShallow } from 'zustand/react/shallow'
 
 import bannerImg from '@/assets/images/group-bg.webp'
 import Button from '@/components/button'
+import { 
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Dialog, DialogContent, DialogHeader, DialogTrigger } from '@/components/ui/dialog'
 import {
@@ -34,6 +44,7 @@ type BannerProps = {
 const COOLDOWNLIMIT = 5
 const Banner = ({ brand, groupBuyingInfo }: BannerProps) => {
   const { t } = useTranslation()
+  const navigate = useNavigate()
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
@@ -108,11 +119,21 @@ const Banner = ({ brand, groupBuyingInfo }: BannerProps) => {
     return endtime.getTime() > new Date().getTime()
   }, [groupBuyingInfo.endTime])
 
+  const [showEndedAlert, setShowEndedAlert] = useState(false)
+
   useEffect(() => {
     const timer = setInterval(calculateTimeLeft, 1000)
     return () => clearInterval(timer)
   }, [calculateTimeLeft])
+
+  useEffect(() => {
+    if (!inProgress) {
+      setShowEndedAlert(true)
+    }
+  }, [inProgress])
+  
   const { successToast } = useToast()
+  
   const tiers = groupBuyingInfo.groupProduct.criterias.map((criteria) => {
     const discountValue =
       criteria.voucher.discountType === DiscountTypeEnum.PERCENTAGE
@@ -128,138 +149,204 @@ const Banner = ({ brand, groupBuyingInfo }: BannerProps) => {
           : formatCurrency(discountValue),
     }
   })
+  
   return (
-    <div className="bg-gray-50 dark:bg-gray-900 rounded-xl overflow-hidden h-fit shadow-md">
-      {/* Main Banner */}
-      <div className="relative h-96">
-        <img src={bannerImg} alt="Store Banner" className="w-full h-full object-cover object-bottom" />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-transparent">
-          <div className="max-w-7xl mx-auto h-full flex flex-col justify-center px-6">
-            <div className="flex justify-between items-start">
-              <div>
-                <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">{groupBuyingInfo.groupProduct.name}</h1>
-                <p className="text-xl text-gray-200 mb-8 max-w-xl">{groupBuyingInfo.groupProduct.description}</p>
-                <div className="flex items-center gap-2"></div>
-              </div>
-              <div className="p-4 flex flex-col gap-4 rounded-3xl backdrop-blur-2xl border-2 shadow-md bg-gray-900 bg-opacity-70 h-[300px]">
-                <div className="flex-1 overflow-auto scrollbar-hide">
-                  <Timeline>
-                    {tiers.map((tier, index) => (
-                      <TimelineItem status={'done'} key={index}>
-                        <TimelineHeading>
-                          <span className="flex items-center font-bold text-xl">
-                            {tier.count} <User size={14} strokeWidth={'4'} />- {`${tier.discount}`}
-                          </span>
-                        </TimelineHeading>
-                        <TimelineDot status={'done'} />
-                        {index + 1 < tiers.length && <TimelineLine className="max-h-4" />}
-                        <TimelineContent className="text-sm text-white">
-                          {t('groupBuy.item.tierDescription', {
-                            count: tier.count,
-                            discount: tier.discount,
-                          })}
-                        </TimelineContent>
-                      </TimelineItem>
-                    ))}
-                  </Timeline>
+    <>
+      <AlertDialog open={showEndedAlert} onOpenChange={setShowEndedAlert}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t('groupBuy.eventEndedTitle', 'Event Ended')}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {t('groupBuy.eventEndedDescription', 'This group buying event has ended. You can no longer participate in this event. Would you like to return to the home page to explore other events?')}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogAction 
+              onClick={() => navigate('/')}
+              className="bg-rose-500 hover:bg-rose-600 text-white"
+            >
+              <Home className="mr-2 h-4 w-4" />
+              {t('groupBuy.returnToHome', 'Return to Home')}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+      
+      <div className="bg-white rounded-xl overflow-hidden shadow-lg border border-rose-50">
+        {/* Main Banner */}
+        <div className="relative h-[360px]">
+          <img 
+            src={bannerImg} 
+            alt="Store Banner" 
+            className="w-full h-full object-cover object-center" 
+          />
+          <div className="absolute inset-0 bg-gradient-to-br from-black/80 via-black/60 to-black/30">
+            <div className="h-full flex flex-col justify-center px-8">
+              <div className="flex items-start gap-8">
+                {/* Left Side - Event Info */}
+                <div className="flex-1">
+                  <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 leading-tight">
+                    {groupBuyingInfo.groupProduct.name}
+                  </h1>
+                  <p className="text-base text-gray-200 mb-6 max-w-2xl leading-relaxed">
+                    {groupBuyingInfo.groupProduct.description}
+                  </p>
+                  
+                  {/* Status Label */}
+                  <span className="inline-flex items-center px-3 py-1 rounded-full bg-rose-500 text-white text-sm font-medium mb-4">
+                    <span className="w-2 h-2 bg-white rounded-full animate-pulse mr-2"></span>
+                    {inProgress ? t('groupBuy.status.inProgress') : t('groupBuy.status.ended')}
+                  </span>
                 </div>
-                {coolDownable && (
-                  <Button
-                    variant={'destructive'}
-                    className="bg-red-600 hover:bg-red-700 w-full mt-auto"
-                    onClick={handleCoolDownEnTime}
-                    loading={isCoolDowning}
-                  >
-                    <Clock1 />
-                    {t('btn.cooldown', {
-                      value: COOLDOWNLIMIT,
-                    })}
-                  </Button>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      {/* Event Bar */}
-      <div className="bg-red-600 dark:bg-red-800 top-2">
-        <div className="max-w-7xl mx-auto p-4">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-4">
-              <Avatar className="w-16 h-16 rounded-lg overflow-hidden">
-                <AvatarImage src={brand.logo} className="w-full h-full object-cover rounded-md" />
-                <AvatarFallback className="w-full h-full object-contain rounded-md">
-                  <ImageIcon />
-                </AvatarFallback>
-              </Avatar>
-              <div>
-                <h3 className="text-white font-bold text-lg">{brand.name}</h3>
-                <p className="text-red-100">{brand.description}</p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-6">
-              <h1 className="text-white uppercase font-extrabold text-xl">{timeLeft.term} :</h1>
-              <div className="flex items-center gap-4">
-                <div className="text-center">
-                  <div className="bg-white dark:bg-gray-800 rounded-lg p-2 min-w-16">
-                    <span className="text-2xl font-bold text-red-600 dark:text-red-400">{timeLeft.days}</span>
+                
+                {/* Right Side - Discount Tiers */}
+                <div className="bg-white/10 backdrop-blur-xl p-5 rounded-2xl border border-white/20 w-[280px] shadow-xl">
+                  <h3 className="text-white font-bold mb-4 text-lg flex items-center">
+                    <span className="w-2 h-6 bg-rose-500 rounded-sm mr-2"></span>
+                    Mức giảm giá theo nhóm
+                  </h3>
+                  
+                  <div className="max-h-[200px] overflow-auto scrollbar-hide pr-2">
+                    <Timeline>
+                      {tiers.map((tier, index) => (
+                        <TimelineItem status={'done'} key={index}>
+                          <TimelineHeading>
+                            <span className="flex items-center font-bold text-lg text-white gap-1">
+                              <span className="bg-rose-500 rounded-lg px-2 py-0.5 flex items-center gap-1">
+                                {tier.count} <User size={14} className="text-white" />
+                              </span>
+                              <span className="text-rose-400">-</span>
+                              <span className="text-rose-300">{tier.discount}</span>
+                            </span>
+                          </TimelineHeading>
+                          <TimelineDot status={'done'} className="bg-rose-500" />
+                          {index + 1 < tiers.length && <TimelineLine className="max-h-4 bg-rose-500/30" />}
+                          <TimelineContent className="text-sm text-gray-300 ml-1">
+                            {t('groupBuy.item.tierDescription', {
+                              count: tier.count,
+                              discount: tier.discount,
+                            })}
+                          </TimelineContent>
+                        </TimelineItem>
+                      ))}
+                    </Timeline>
                   </div>
-                  <span className="text-xs text-white mt-1">{t('time.day')}</span>
-                </div>
-                <div className="text-center">
-                  <div className="bg-white dark:bg-gray-800 rounded-lg p-2 min-w-16">
-                    <span className="text-2xl font-bold text-red-600 dark:text-red-400">{timeLeft.hours}</span>
-                  </div>
-                  <span className="text-xs text-white mt-1">{t('time.hour')}</span>
-                </div>
-                <div className="text-center">
-                  <div className="bg-white dark:bg-gray-800 rounded-lg p-2 min-w-16">
-                    <span className="text-2xl font-bold text-red-600 dark:text-red-400">{timeLeft.minutes}</span>
-                  </div>
-                  <span className="text-xs text-white mt-1">{t('time.minute')}</span>
-                </div>
-                <div className="text-center">
-                  <div className="bg-white dark:bg-gray-800 rounded-lg p-2 min-w-16">
-                    <span className="text-2xl font-bold text-red-600 dark:text-red-400">{timeLeft.seconds}</span>
-                  </div>
-                  <span className="text-xs text-white mt-1">{t('time.second')}</span>
-                </div>
-              </div>
-              <div className="flex flex-col gap-2">
-                <Dialog>
-                  <DialogTrigger>
-                    <Button variant="secondary" className="bg-white text-red-600 hover:bg-gray-100 w-full">
-                      <ShoppingCart className="size-10" strokeWidth={'4'} />
-                      {t('header.shoppingCart')} (
-                      {cartItems[brand?.name]?.reduce((acc, item) => acc + item.quantity, 0) ?? 0})
+                  
+                  {coolDownable && (
+                    <Button
+                      variant={'destructive'}
+                      className="bg-rose-500 hover:bg-rose-600 w-full mt-4 shadow-md text-xs px-2 h-auto py-2 whitespace-normal"
+                      onClick={handleCoolDownEnTime}
+                      loading={isCoolDowning}
+                    >
+                      <Clock1 className="mr-1 flex-shrink-0" size={16} />
+                      <span className="text-center">
+                        {t('btn.cooldown', {
+                          value: COOLDOWNLIMIT,
+                        })}
+                      </span>
                     </Button>
-                  </DialogTrigger>
-                  <DialogContent className="max-w-7xl max-h-[80%] overflow-auto">
-                    <DialogHeader>
-                      <Cart isInGroupBuy isInPeriod={inProgress} />
-                    </DialogHeader>
-                  </DialogContent>
-                </Dialog>
-                <Button
-                  variant={'outline'}
-                  className="bg-white text-red-600 hover:bg-gray-100 w-fit"
-                  onClick={() => {
-                    navigator.clipboard.writeText(window.location.href)
-                    successToast({
-                      message: t('toast.copied'),
-                    })
-                  }}
-                >
-                  <Copy className="size-10" strokeWidth={'4'} />
-                  {t('btn.copyAndShare')}
-                </Button>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        {/* Event Bar - Bottom Section */}
+        <div className="bg-gradient-to-r from-rose-600 to-rose-500">
+          <div className="container mx-auto py-5 px-8">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-5">
+              {/* Brand Information */}
+              <div className="flex items-center gap-4">
+                <Avatar className="w-14 h-14 rounded-xl overflow-hidden border-2 border-white shadow-md">
+                  <AvatarImage src={brand.logo} className="w-full h-full object-cover" />
+                  <AvatarFallback className="w-full h-full bg-gradient-to-br from-rose-400 to-rose-600 text-white font-bold text-lg">
+                    {brand.name.substring(0, 2).toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+                <div>
+                  <h3 className="text-white font-bold text-lg">{brand.name}</h3>
+                  <p className="text-rose-100 text-sm">{brand.description}</p>
+                </div>
+              </div>
+
+              {/* Countdown Timer */}
+              <div className="flex items-center gap-4">
+                <div className="text-white font-bold text-lg tracking-wide uppercase">{timeLeft.term}</div>
+                <div className="flex items-center gap-2">
+                  {/* Days */}
+                  <div className="text-center">
+                    <div className="bg-white rounded-lg p-1.5 min-w-12 shadow-md">
+                      <span className="text-xl font-bold text-rose-600">{timeLeft.days.toString().padStart(2, '0')}</span>
+                    </div>
+                    <span className="text-xs text-white mt-1 block">{t('time.day')}</span>
+                  </div>
+                  <span className="text-white text-2xl font-light -mt-5">:</span>
+                  {/* Hours */}
+                  <div className="text-center">
+                    <div className="bg-white rounded-lg p-1.5 min-w-12 shadow-md">
+                      <span className="text-xl font-bold text-rose-600">{timeLeft.hours.toString().padStart(2, '0')}</span>
+                    </div>
+                    <span className="text-xs text-white mt-1 block">{t('time.hour')}</span>
+                  </div>
+                  <span className="text-white text-2xl font-light -mt-5">:</span>
+                  {/* Minutes */}
+                  <div className="text-center">
+                    <div className="bg-white rounded-lg p-1.5 min-w-12 shadow-md">
+                      <span className="text-xl font-bold text-rose-600">{timeLeft.minutes.toString().padStart(2, '0')}</span>
+                    </div>
+                    <span className="text-xs text-white mt-1 block">{t('time.minute')}</span>
+                  </div>
+                  <span className="text-white text-2xl font-light -mt-5">:</span>
+                  {/* Seconds */}
+                  <div className="text-center">
+                    <div className="bg-white rounded-lg p-1.5 min-w-12 shadow-md">
+                      <span className="text-xl font-bold text-rose-600">{timeLeft.seconds.toString().padStart(2, '0')}</span>
+                    </div>
+                    <span className="text-xs text-white mt-1 block">{t('time.second')}</span>
+                  </div>
+                </div>
+                
+                {/* Action Buttons */}
+                <div className="flex items-center gap-2">
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button variant="secondary" className="bg-white text-rose-600 hover:bg-gray-100 shadow-md px-3">
+                        <ShoppingCart className="size-5 mr-2" />
+                        {t('header.shoppingCart')}
+                        <span className="ml-1 bg-rose-600 text-white px-1.5 py-0.5 rounded-full text-xs font-bold">
+                          {cartItems[brand?.name]?.reduce((acc, item) => acc + item.quantity, 0) ?? 0}
+                        </span>
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-7xl max-h-[80%] overflow-auto">
+                      <DialogHeader>
+                        <Cart isInGroupBuy isInPeriod={inProgress} />
+                      </DialogHeader>
+                    </DialogContent>
+                  </Dialog>
+                  
+                  <Button
+                    variant="outline"
+                    className="bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 border-white/30 shadow-md"
+                    onClick={() => {
+                      navigator.clipboard.writeText(window.location.href)
+                      successToast({
+                        message: t('toast.copied'),
+                      })
+                    }}
+                  >
+                    <Copy className="size-4 mr-2" />
+                    {t('btn.copyAndShare')}
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
 

@@ -1,9 +1,10 @@
 import { useTranslation } from 'react-i18next'
 
+import DEFAULT_IMAGE from '@/assets/images/consultant-default.jpg'
 import { Button } from '@/components/ui/button'
 
 // Default image to use when an image fails to load
-const DEFAULT_IMAGE = 'https://placehold.co/400x300/e2e8f0/64748b?text=Image+Not+Found'
+
 
 interface ServiceCTAProps {
   onBookNow: () => void
