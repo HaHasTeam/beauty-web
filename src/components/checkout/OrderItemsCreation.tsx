@@ -22,8 +22,7 @@ export const OrderItemCreation = ({ values, selectedCartItem, chosenBrandVoucher
           cartBrandItems?.map((item) => ({
             productClassificationId: item?.productClassification?.id ?? '',
             quantity: item?.quantity,
-            livestreamId:
-              typeof item?.livestream === 'object' && 'id' in item.livestream ? item.livestream.id : undefined,
+            livestreamId: typeof item?.livestream === 'object' ? item?.livestream?.id : item?.livestream,
           })) ?? []
 
         // Use the brandId to find the corresponding voucher

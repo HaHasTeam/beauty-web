@@ -243,6 +243,9 @@ const Checkout = () => {
           await updateGroupOrder(formData)
           return
         }
+        if (!groupBuying.id) {
+          throw new Error('Group buying ID is missing')
+        }
         const formData: ICreateGroupOrder = {
           addressId: values.addressId,
           groupBuyingId: groupBuying.id,
@@ -261,6 +264,7 @@ const Checkout = () => {
 
       setIsLoading(false)
     } catch (error) {
+      console.log(error, 'error')
       setIsLoading(false)
       handleServerError({
         error,
