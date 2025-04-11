@@ -1,15 +1,15 @@
 import { FormInputIcon, StarIcon, VideoIcon } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
+import fallBackImage from '@/assets/images/consultant-default.jpg'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 
 import { consultationServices, formatCurrency } from '../data/mockData'
 import { ConsultationService } from '../data/types'
-
 // Default image to use when an image fails to load
-const DEFAULT_IMAGE = 'https://placehold.co/400x300/e2e8f0/64748b?text=Image+Not+Found'
+const DEFAULT_IMAGE = fallBackImage
 
 interface RelatedServicesProps {
   currentServiceId: string

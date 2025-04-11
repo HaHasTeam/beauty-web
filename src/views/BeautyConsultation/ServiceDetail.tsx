@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
+import DEFAULT_IMAGE from '@/assets/images/consultant-default.jpg'
 import ReviewFilter from '@/components/filter/ReviewFilter'
 import ReviewOverall from '@/components/reviews/ReviewOverall'
 import { Badge } from '@/components/ui/badge'
@@ -19,10 +20,9 @@ import ActionButton from './components/ActionButton'
 import ServiceCTA from './components/ServiceCTA'
 import VideoDialog from './components/VideoDialog'
 import { consultantInfo } from './data/consultantInfo'
-import { consultationServices, DEFAULT_IMAGE, formatCurrency, mockReviewData } from './data/mockData'
+import { consultationServices, formatCurrency, mockReviewData } from './data/mockData'
 import { serviceDetailAdditions } from './data/serviceDetailData'
 import { ConsultantInfo, ConsultationService, DetailData } from './data/types'
-
 // Sample consultant certificates (in a real app, this would come from the API/database)
 const SAMPLE_CERTIFICATES = [
   {
