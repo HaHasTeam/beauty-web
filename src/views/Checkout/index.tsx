@@ -244,7 +244,7 @@ const Checkout = () => {
           return
         }
         if (!groupBuying.id) {
-          throw new Error("Group buying ID is missing");
+          throw new Error('Group buying ID is missing')
         }
         const formData: ICreateGroupOrder = {
           addressId: values.addressId,

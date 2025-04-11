@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button'
 
 // Default image to use when an image fails to load
 
-
 interface ServiceCTAProps {
   onBookNow: () => void
   onExploreMore: () => void

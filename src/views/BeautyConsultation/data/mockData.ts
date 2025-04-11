@@ -276,4 +276,3 @@ export const formatCurrency = (amount: number) => {
 }
 
 // Default image for fallback
-

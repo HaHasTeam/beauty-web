@@ -7,7 +7,7 @@ import { useShallow } from 'zustand/react/shallow'
 
 import bannerImg from '@/assets/images/group-bg.webp'
 import Button from '@/components/button'
-import { 
+import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogContent,
@@ -131,9 +131,9 @@ const Banner = ({ brand, groupBuyingInfo }: BannerProps) => {
       setShowEndedAlert(true)
     }
   }, [inProgress])
-  
+
   const { successToast } = useToast()
-  
+
   const tiers = groupBuyingInfo.groupProduct.criterias.map((criteria) => {
     const discountValue =
       criteria.voucher.discountType === DiscountTypeEnum.PERCENTAGE
@@ -149,7 +149,7 @@ const Banner = ({ brand, groupBuyingInfo }: BannerProps) => {
           : formatCurrency(discountValue),
     }
   })
-  
+
   return (
     <>
       <AlertDialog open={showEndedAlert} onOpenChange={setShowEndedAlert}>
@@ -157,29 +157,25 @@ const Banner = ({ brand, groupBuyingInfo }: BannerProps) => {
           <AlertDialogHeader>
             <AlertDialogTitle>{t('groupBuy.eventEndedTitle', 'Event Ended')}</AlertDialogTitle>
             <AlertDialogDescription>
-              {t('groupBuy.eventEndedDescription', 'This group buying event has ended. You can no longer participate in this event. Would you like to return to the home page to explore other events?')}
+              {t(
+                'groupBuy.eventEndedDescription',
+                'This group buying event has ended. You can no longer participate in this event. Would you like to return to the home page to explore other events?',
+              )}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogAction 
-              onClick={() => navigate('/')}
-              className="bg-rose-500 hover:bg-rose-600 text-white"
-            >
+            <AlertDialogAction onClick={() => navigate('/')} className="bg-rose-500 hover:bg-rose-600 text-white">
               <Home className="mr-2 h-4 w-4" />
               {t('groupBuy.returnToHome', 'Return to Home')}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-      
+
       <div className="bg-white rounded-xl overflow-hidden shadow-lg border border-rose-50">
         {/* Main Banner */}
         <div className="relative h-[360px]">
-          <img 
-            src={bannerImg} 
-            alt="Store Banner" 
-            className="w-full h-full object-cover object-center" 
-          />
+          <img src={bannerImg} alt="Store Banner" className="w-full h-full object-cover object-center" />
           <div className="absolute inset-0 bg-gradient-to-br from-black/80 via-black/60 to-black/30">
             <div className="h-full flex flex-col justify-center px-8">
               <div className="flex items-start gap-8">
@@ -191,21 +187,21 @@ const Banner = ({ brand, groupBuyingInfo }: BannerProps) => {
                   <p className="text-base text-gray-200 mb-6 max-w-2xl leading-relaxed">
                     {groupBuyingInfo.groupProduct.description}
                   </p>
-                  
+
                   {/* Status Label */}
                   <span className="inline-flex items-center px-3 py-1 rounded-full bg-rose-500 text-white text-sm font-medium mb-4">
                     <span className="w-2 h-2 bg-white rounded-full animate-pulse mr-2"></span>
                     {inProgress ? t('groupBuy.status.inProgress') : t('groupBuy.status.ended')}
                   </span>
                 </div>
-                
+
                 {/* Right Side - Discount Tiers */}
                 <div className="bg-white/10 backdrop-blur-xl p-5 rounded-2xl border border-white/20 w-[280px] shadow-xl">
                   <h3 className="text-white font-bold mb-4 text-lg flex items-center">
                     <span className="w-2 h-6 bg-rose-500 rounded-sm mr-2"></span>
                     Mức giảm giá theo nhóm
                   </h3>
-                  
+
                   <div className="max-h-[200px] overflow-auto scrollbar-hide pr-2">
                     <Timeline>
                       {tiers.map((tier, index) => (
@@ -231,7 +227,7 @@ const Banner = ({ brand, groupBuyingInfo }: BannerProps) => {
                       ))}
                     </Timeline>
                   </div>
-                  
+
                   {coolDownable && (
                     <Button
                       variant={'destructive'}
@@ -252,7 +248,7 @@ const Banner = ({ brand, groupBuyingInfo }: BannerProps) => {
             </div>
           </div>
         </div>
-        
+
         {/* Event Bar - Bottom Section */}
         <div className="bg-gradient-to-r from-rose-600 to-rose-500">
           <div className="container mx-auto py-5 px-8">
@@ -278,7 +274,9 @@ const Banner = ({ brand, groupBuyingInfo }: BannerProps) => {
                   {/* Days */}
                   <div className="text-center">
                     <div className="bg-white rounded-lg p-1.5 min-w-12 shadow-md">
-                      <span className="text-xl font-bold text-rose-600">{timeLeft.days.toString().padStart(2, '0')}</span>
+                      <span className="text-xl font-bold text-rose-600">
+                        {timeLeft.days.toString().padStart(2, '0')}
+                      </span>
                     </div>
                     <span className="text-xs text-white mt-1 block">{t('time.day')}</span>
                   </div>
@@ -286,7 +284,9 @@ const Banner = ({ brand, groupBuyingInfo }: BannerProps) => {
                   {/* Hours */}
                   <div className="text-center">
                     <div className="bg-white rounded-lg p-1.5 min-w-12 shadow-md">
-                      <span className="text-xl font-bold text-rose-600">{timeLeft.hours.toString().padStart(2, '0')}</span>
+                      <span className="text-xl font-bold text-rose-600">
+                        {timeLeft.hours.toString().padStart(2, '0')}
+                      </span>
                     </div>
                     <span className="text-xs text-white mt-1 block">{t('time.hour')}</span>
                   </div>
@@ -294,7 +294,9 @@ const Banner = ({ brand, groupBuyingInfo }: BannerProps) => {
                   {/* Minutes */}
                   <div className="text-center">
                     <div className="bg-white rounded-lg p-1.5 min-w-12 shadow-md">
-                      <span className="text-xl font-bold text-rose-600">{timeLeft.minutes.toString().padStart(2, '0')}</span>
+                      <span className="text-xl font-bold text-rose-600">
+                        {timeLeft.minutes.toString().padStart(2, '0')}
+                      </span>
                     </div>
                     <span className="text-xs text-white mt-1 block">{t('time.minute')}</span>
                   </div>
@@ -302,12 +304,14 @@ const Banner = ({ brand, groupBuyingInfo }: BannerProps) => {
                   {/* Seconds */}
                   <div className="text-center">
                     <div className="bg-white rounded-lg p-1.5 min-w-12 shadow-md">
-                      <span className="text-xl font-bold text-rose-600">{timeLeft.seconds.toString().padStart(2, '0')}</span>
+                      <span className="text-xl font-bold text-rose-600">
+                        {timeLeft.seconds.toString().padStart(2, '0')}
+                      </span>
                     </div>
                     <span className="text-xs text-white mt-1 block">{t('time.second')}</span>
                   </div>
                 </div>
-                
+
                 {/* Action Buttons */}
                 <div className="flex items-center gap-2">
                   <Dialog>
@@ -326,7 +330,7 @@ const Banner = ({ brand, groupBuyingInfo }: BannerProps) => {
                       </DialogHeader>
                     </DialogContent>
                   </Dialog>
-                  
+
                   <Button
                     variant="outline"
                     className="bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 border-white/30 shadow-md"

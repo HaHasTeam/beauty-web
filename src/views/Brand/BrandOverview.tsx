@@ -20,7 +20,7 @@ export default function BrandOverview({ brand }: Props) {
       {/* Brand Header Card */}
       <div className="bg-white rounded-xl shadow-md border border-rose-100 overflow-hidden">
         {/* Banner with gradient overlay */}
-        <div 
+        <div
           className="relative h-48 w-full bg-cover bg-center overflow-hidden"
           style={{
             backgroundImage: `url(${fallBackImage})`,
@@ -66,11 +66,15 @@ export default function BrandOverview({ brand }: Props) {
           {/* Statistics Section */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-5 py-4 border-t border-gray-100">
             <div className="text-center">
-              <div className="text-gray-500 text-xs font-medium uppercase tracking-wide mb-1">{t('store.products')}</div>
+              <div className="text-gray-500 text-xs font-medium uppercase tracking-wide mb-1">
+                {t('store.products')}
+              </div>
               <div className="font-semibold text-lg">1,1k</div>
             </div>
             <div className="text-center">
-              <div className="text-gray-500 text-xs font-medium uppercase tracking-wide mb-1">{t('store.followers')}</div>
+              <div className="text-gray-500 text-xs font-medium uppercase tracking-wide mb-1">
+                {t('store.followers')}
+              </div>
               <div className="font-semibold text-lg">52,9k</div>
             </div>
             <div className="text-center">
@@ -82,7 +86,9 @@ export default function BrandOverview({ brand }: Props) {
               </div>
             </div>
             <div className="text-center">
-              <div className="text-gray-500 text-xs font-medium uppercase tracking-wide mb-1">{t('store.response_rate')}</div>
+              <div className="text-gray-500 text-xs font-medium uppercase tracking-wide mb-1">
+                {t('store.response_rate')}
+              </div>
               <div className="font-semibold text-lg text-rose-500">84%</div>
               <div className="text-xs text-gray-500 -mt-1">{t('store.response_time')}</div>
             </div>
@@ -95,38 +101,38 @@ export default function BrandOverview({ brand }: Props) {
         <Tabs defaultValue="group_buying" className="w-full">
           <div className="border-b border-gray-200 mb-4">
             <TabsList className="justify-start bg-transparent p-0 h-auto">
-              <TabsTrigger 
-                value="featured" 
+              <TabsTrigger
+                value="featured"
                 className="data-[state=active]:text-rose-500 data-[state=active]:border-rose-500 data-[state=active]:shadow-none border-b-2 border-transparent rounded-none px-4 py-2"
               >
                 {t('store.categories.featured')}
               </TabsTrigger>
-              <TabsTrigger 
-                value="all" 
+              <TabsTrigger
+                value="all"
                 className="data-[state=active]:text-rose-500 data-[state=active]:border-rose-500 data-[state=active]:shadow-none border-b-2 border-transparent rounded-none px-4 py-2"
               >
                 {t('store.categories.all')}
               </TabsTrigger>
-              <TabsTrigger 
-                value="new" 
+              <TabsTrigger
+                value="new"
                 className="data-[state=active]:text-rose-500 data-[state=active]:border-rose-500 data-[state=active]:shadow-none border-b-2 border-transparent rounded-none px-4 py-2"
               >
                 {t('store.categories.new')}
               </TabsTrigger>
-              <TabsTrigger 
-                value="sale" 
+              <TabsTrigger
+                value="sale"
                 className="data-[state=active]:text-rose-500 data-[state=active]:border-rose-500 data-[state=active]:shadow-none border-b-2 border-transparent rounded-none px-4 py-2"
               >
                 {t('store.categories.sale')}
               </TabsTrigger>
-              <TabsTrigger 
-                value="best_selling" 
+              <TabsTrigger
+                value="best_selling"
                 className="data-[state=active]:text-rose-500 data-[state=active]:border-rose-500 data-[state=active]:shadow-none border-b-2 border-transparent rounded-none px-4 py-2"
               >
                 {t('store.categories.best_selling')}
               </TabsTrigger>
-              <TabsTrigger 
-                value="group_buying" 
+              <TabsTrigger
+                value="group_buying"
                 className="data-[state=active]:text-rose-500 data-[state=active]:border-rose-500 data-[state=active]:shadow-none border-b-2 border-transparent rounded-none px-4 py-2"
               >
                 {t('store.categories.group_buying')}

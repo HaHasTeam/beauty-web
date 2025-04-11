@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
-import { BoxIcon, LockIcon,TagIcon, User2Icon, Users2Icon,UsersIcon } from 'lucide-react'
+import { BoxIcon, LockIcon, TagIcon, User2Icon, Users2Icon, UsersIcon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -104,14 +104,14 @@ export default function GroupBuyingCard({ brand, groupProduct }: GroupBuyingCard
           <CardContent className="p-0 relative cursor-pointer overflow-hidden h-full flex flex-col">
             {/* Discount badge in top left corner */}
             <div className="absolute top-3 left-3 z-10">
-              <Badge 
+              <Badge
                 className="bg-gradient-to-r from-rose-500 to-red-500 text-white px-2.5 py-1 text-xs font-medium rounded-md shadow-sm"
                 variant="outline"
               >
                 {t('layout:groupBuy.getUpToDiscount', { discount: maxDiscount })}
               </Badge>
             </div>
-            
+
             {/* Brand badge in top right corner */}
             <div className="absolute top-3 right-3 z-10 flex items-center gap-1.5 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-full shadow-lg border border-primary/10">
               <div className="w-5 h-5 bg-primary/10 rounded-full flex items-center justify-center overflow-hidden shadow-sm">
@@ -136,7 +136,7 @@ export default function GroupBuyingCard({ brand, groupProduct }: GroupBuyingCard
               </div>
               <span className="text-xs font-medium truncate max-w-[80px]">{brand.name}</span>
             </div>
-            
+
             {/* Masonry image layout - reduced height from 400px to 350px */}
             <div className="relative h-[320px] overflow-hidden">
               {products.length > 0 ? (
@@ -153,7 +153,7 @@ export default function GroupBuyingCard({ brand, groupProduct }: GroupBuyingCard
                           className="object-cover w-full h-full rounded-tl-xl"
                         />
                       </div>
-                      
+
                       {/* Sản phẩm 2: chiếm 1/3 góc phải trên */}
                       <div className="col-span-1 row-span-2">
                         <ImageWithFallback
@@ -163,7 +163,7 @@ export default function GroupBuyingCard({ brand, groupProduct }: GroupBuyingCard
                           className="object-cover w-full h-full rounded-tr-xl"
                         />
                       </div>
-                      
+
                       {/* Sản phẩm 3: chiếm 1/3 góc phải giữa */}
                       <div className="col-span-1 row-span-1">
                         <ImageWithFallback
@@ -173,7 +173,7 @@ export default function GroupBuyingCard({ brand, groupProduct }: GroupBuyingCard
                           className="object-cover w-full h-full"
                         />
                       </div>
-                      
+
                       {/* Sản phẩm 4: chiếm 1/3 góc trái dưới */}
                       <div className="col-span-1 row-span-1">
                         <ImageWithFallback
@@ -183,7 +183,7 @@ export default function GroupBuyingCard({ brand, groupProduct }: GroupBuyingCard
                           className="object-cover w-full h-full"
                         />
                       </div>
-                      
+
                       {/* Sản phẩm 5 hoặc nhiều hơn: chiếm 2/3 góc phải dưới */}
                       <div className="col-span-3 row-span-1 relative">
                         {products.length > 4 ? (
@@ -280,15 +280,13 @@ export default function GroupBuyingCard({ brand, groupProduct }: GroupBuyingCard
             <div className="w-full p-3">
               <div>
                 <div className="line-clamp-2 text-sm font-semibold mb-1">{groupProduct.name}</div>
-                
+
                 {/* Description */}
-                <div className="mt-1 text-xs text-gray-700 line-clamp-2 h-[32px]">
-                  {groupProduct.description}
-                </div>
-                
+                <div className="mt-1 text-xs text-gray-700 line-clamp-2 h-[32px]">{groupProduct.description}</div>
+
                 {/* Divider */}
                 <div className="border-t border-gray-100 my-2"></div>
-                
+
                 {/* Tiers display */}
                 <div className="mb-2">
                   <div className="text-xs font-medium text-gray-700 mb-1 flex items-center gap-1.5">
@@ -303,9 +301,13 @@ export default function GroupBuyingCard({ brand, groupProduct }: GroupBuyingCard
                             <Badge
                               variant="outline"
                               className={`
-                                ${index === 0 ? 'bg-gradient-to-r from-rose-400 to-pink-400 border-rose-400 text-white' : 
-                                  index === 1 ? 'bg-gradient-to-r from-rose-500 to-pink-500 border-rose-500 text-white' : 
-                                  'bg-gradient-to-r from-rose-600 to-pink-600 border-rose-600 text-white'}
+                                ${
+                                  index === 0
+                                    ? 'bg-gradient-to-r from-rose-400 to-pink-400 border-rose-400 text-white'
+                                    : index === 1
+                                      ? 'bg-gradient-to-r from-rose-500 to-pink-500 border-rose-500 text-white'
+                                      : 'bg-gradient-to-r from-rose-600 to-pink-600 border-rose-600 text-white'
+                                }
                                 px-2.5 py-1.5 text-xs font-medium rounded-md whitespace-nowrap cursor-help
                                 shadow hover:shadow-md transition-all
                               `}
@@ -338,7 +340,7 @@ export default function GroupBuyingCard({ brand, groupProduct }: GroupBuyingCard
                     ))}
                   </div>
                 </div>
-                
+
                 {/* Group info */}
                 <div className="flex flex-col gap-1.5 mt-2 text-xs text-gray-600">
                   <div className="flex items-center gap-1.5">
@@ -349,27 +351,27 @@ export default function GroupBuyingCard({ brand, groupProduct }: GroupBuyingCard
                       })}
                     </span>
                   </div>
-                  
+
                   <div className="flex items-center gap-1.5">
                     <LockIcon className="w-3.5 h-3.5 text-rose-500" />
                     <span className="line-clamp-1">
                       {t('groupBuy.maxLimit', {
-                        count: groupProduct.maxBuyAmountEachPerson || 1
+                        count: groupProduct.maxBuyAmountEachPerson || 1,
                       })}
                     </span>
                   </div>
-                  
+
                   <div className="flex items-center gap-1.5">
                     <BoxIcon className="w-3.5 h-3.5 text-rose-600" />
                     <span className="line-clamp-1">
                       {t('groupBuy.productsCount', {
-                        count: products.length
+                        count: products.length,
                       })}
                     </span>
                   </div>
                 </div>
               </div>
-              
+
               <div className="flex justify-between items-center w-full mt-3 pt-2 border-t border-gray-100">
                 <div className="flex gap-1 items-center">
                   <span className="text-red-500 text-xs font-medium">
@@ -384,7 +386,7 @@ export default function GroupBuyingCard({ brand, groupProduct }: GroupBuyingCard
           </CardContent>
         </Card>
       </DialogTrigger>
-      
+
       <DialogContent className="max-w-screen-sm">
         <DialogHeader>
           <DialogTitle>
