@@ -261,6 +261,8 @@ const ProductCardLandscape = ({
         : (cartItem.livestreamDiscount ?? 0) / 100)
     : 0
 
+  console.log('discount', discount)
+
   // Final price after all discounts
   const finalPrice = totalPrice - livestreamDiscountAmount
 
@@ -325,12 +327,6 @@ const ProductCardLandscape = ({
               </Link>
               <div className="flex gap-1 items-center">
                 {eventType && eventType !== '' && <ProductTag tag={eventType} size="small" />}
-                {hasLivestreamDiscount && (
-                  <div className="flex items-center gap-1 text-yellow-600 text-xs">
-                    <Zap className="h-3 w-3" />
-                    <span>{formattedLivestreamDiscount}%</span>
-                  </div>
-                )}
               </div>
               {productStatus === ProductEnum.BANNED ? (
                 <AlertMessage
@@ -422,17 +418,11 @@ const ProductCardLandscape = ({
                 </span>
               </div>
               <div>
-                <span className="text-red-500 lg:text-sm md:text-xs sm:text-xs text-xs">
+                <span className="text-red-500 flex gap-1 items-center lg:text-sm md:text-xs sm:text-xs text-xs">
+                  <Zap className="h-3 w-3" />
                   {t('voucher.off.numberPercentage', { percentage: discount * 100 })}
                 </span>
               </div>
-              {hasLivestreamDiscount && (
-                <div>
-                  <span className="text-yellow-600 lg:text-sm md:text-xs sm:text-xs text-xs">
-                    {formattedLivestreamDiscount}%
-                  </span>
-                </div>
-              )}
             </div>
           ) : (
             <div className="order-2 md:order-3 w-full md:w-[25%] lg:w-[20%] flex flex-col items-start md:items-center">

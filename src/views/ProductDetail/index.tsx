@@ -147,6 +147,7 @@ const ProductDetail = ({ initProductId, isInGroupBuying = false }: ProductDetail
               {/* call to action */}
               <div className="shadow-sm p-3 bg-white rounded-lg w-full md:w-[calc(20%-8px)] md:sticky md:top-0 md:max-h-fit">
                 <ProductDetailAction
+                  event={event}
                   product={useProductData?.data}
                   chosenClassification={chosenClassification}
                   discount={

@@ -15,10 +15,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 const FlashSale = () => {
   const { t } = useTranslation()
   const { data: flashSaleProductData, isFetching } = useQuery({
-    queryKey: [
-      getFlashSaleProductFilterApi.queryKey,
-      { page: 1, limit: 10, statuses: `${FlashSaleStatusEnum.ACTIVE}` },
-    ],
+    queryKey: [getFlashSaleProductFilterApi.queryKey, { page: 1, limit: 10, statuses: FlashSaleStatusEnum.ACTIVE }],
     queryFn: getFlashSaleProductFilterApi.fn,
     select: (data) => data.data,
   })

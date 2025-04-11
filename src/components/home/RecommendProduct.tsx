@@ -98,7 +98,7 @@ const RecommendProduct = () => {
           to={configs.routes.recommendProducts}
           className="text-primary hover:opacity-80 transition-opacity flex items-center gap-1"
         >
-          {t('button.viewAll')}
+          {t('button.seeAll')}
           <ArrowRight className="w-4 h-4" />
         </Link>
       </div>

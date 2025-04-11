@@ -219,8 +219,10 @@ export const calculateCartTotals = (
 
         // Calculate livestream discount if it exists
         let livestreamDiscountAmount = 0
+        console.log('discount 224', discount)
         if (hasLivestreamDiscount) {
           // Apply livestream discount on top of any existing discount
+
           const priceAfterDiscount = calculateDiscountPrice(productPrice, discount, discountType)
           livestreamDiscountAmount = priceAfterDiscount * (cartItem.livestreamDiscount ?? 0)
           totalLivestreamDiscount += livestreamDiscountAmount * cartItemQuantity
