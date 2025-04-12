@@ -154,6 +154,10 @@
     "vietnamese": "VN"
   },
   "search": {
+    "mask": "mask",
+    "toner": "toner",
+    "cushion": "cushion",
+    "lipstick": "lipstick",
     "result": "Search results for {{keyword}}: {{total}} data",
     "reset": "Reset",
     "orderPlaceholder": "Search for orders by Order ID, Product Name, or Brand Name",
@@ -184,7 +188,8 @@
       "preOrder": "Pre-Order",
       "official": "Official",
       "outOfStock": "Out of Stock",
-      "inactive": "Inactive"
+      "inactive": "Inactive",
+      "flashSale": "Flash sale"
     },
     "price": {
       "slider": "Slider",
@@ -2070,5 +2075,8 @@
       "un_published": "Unpublished",
       "inactive": "Inactive"
     }
+  },
+  "backendError": {
+    "invalidEmail": "Email is invalid"
   }
 }

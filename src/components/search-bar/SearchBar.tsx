@@ -1,11 +1,13 @@
 import { Search } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
 
 const SearchBar = () => {
+  const { t } = useTranslation()
   const [query, setQuery] = useState('')
   const navigate = useNavigate()
   const location = useLocation()
@@ -29,7 +31,7 @@ const SearchBar = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.search])
-  const suggestions = ['mask', 'toner', 'cushion', 'lipstick']
+  const suggestions = [t('search.mask'), t('search.toner'), t('search.cushion'), t('search.lipstick')]
   return (
     <div className="flex-1 px-2 md:px-12">
       <div className="flex w-full">

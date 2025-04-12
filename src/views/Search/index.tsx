@@ -62,7 +62,7 @@ const SearchPage = () => {
           <div className="flex flex-col gap-2">
             <CustomBreadcrumb
               customSegments={{
-                search: t('search.result', { total: productData?.total, keyword: query }),
+                search: t('search.result', { total: productData?.total ?? 0, keyword: query }),
               }}
             />
 
@@ -84,7 +84,7 @@ const SearchPage = () => {
               <div className="flex-1">
                 <ProductSort setSortOption={setSortOption} sortOption={sortOption} />
 
-                {productData && productData.items?.length > 0 ? (
+                {productData && productData.items?.length > 0 && (
                   <div className="w-full p-4 mt-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-2 md:gap-4">
                     {productData.items?.map((product) => {
                       const productClassifications = product?.productClassifications.filter(
@@ -149,14 +149,14 @@ const SearchPage = () => {
                       )
                     })}
                   </div>
-                ) : (
+                )}
+                {!isFetching && (!productData || (productData && productData?.items?.length > 0)) && (
                   <Empty
                     title={t('empty.search.title')}
                     description={t('empty.search.description')}
                     icon={emptySearch}
                   />
                 )}
-
                 <div className="my-6">
                   <APIPagination
                     totalPages={productData?.total ? Math.ceil(Number(productData.total) / limit) : 0}

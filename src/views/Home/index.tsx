@@ -1,5 +1,3 @@
-import BeautyConsulting from '@/components/home/BeautyConsulting'
-import BeautyOffers from '@/components/home/BeautyOffers'
 import FlashSale from '@/components/home/FlashSale'
 import HomeBanner from '@/components/home/HomeBanner'
 import RecommendProduct from '@/components/home/RecommendProduct'
@@ -13,8 +11,8 @@ function Home() {
         <div className="w-full lg:px-28 md:px-3 sm:px-4 px-0 space-y-16">
           <HomeBanner />
           <div className="space-y-16 animate-fadeIn">
-            <BeautyConsulting />
-            <BeautyOffers />
+            {/* <BeautyConsulting /> */}
+            {/* <BeautyOffers /> */}
             <FlashSale />
             <PreOrderProductSections />
             <RecommendProduct />

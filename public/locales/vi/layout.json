@@ -154,6 +154,10 @@
     "vietnamese": "VN"
   },
   "search": {
+    "mask": "mặt nạ",
+    "toner": "nước cân bằng",
+    "cushion": "phấn nước",
+    "lipstick": "son môi",
     "result": "Kết quả tìm kiếm cho từ khóa {{keyword}}: {{total}} dữ liệu",
     "reset": "Đặt lại",
     "orderPlaceholder": "Tìm đơn hàng theo Mã đơn hàng, Tên sản phẩm hoặc Tên thương hiệu",
@@ -183,7 +187,8 @@
       "preOrder": "Đặt trước",
       "official": "Chính hãng",
       "outOfStock": "Hết hàng",
-      "inactive": "Không hoạt động"
+      "inactive": "Không hoạt động",
+      "flashSale": "Flash sale"
     },
     "price": {
       "slider": "Thanh trượt",
@@ -2072,5 +2077,8 @@
   },
   "currency": {
     "vnd": "Đồng Việt Nam"
+  },
+  "backendError": {
+    "invalidEmail": "Email is invalid"
   }
 }

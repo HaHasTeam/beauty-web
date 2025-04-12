@@ -16,6 +16,7 @@ import { getAllCategoryApi } from '@/network/apis/category'
 import { ICategory } from '@/types/category'
 import { ProductEnum } from '@/types/enum'
 
+import LoadingIcon from '../loading-icon'
 import { Slider } from '../ui/slider'
 
 export interface PriceRange {
@@ -42,12 +43,19 @@ const MAX_PRICE = 10000000 // 10 million VND
 const STEP_PRICE = 100000 // 100,000 VND steps
 
 // Price range presets for quick selection
+// const PRICE_PRESETS = [
+//   { label: 'filter.price.under500k', min: 0, max: 500000 },
+//   { label: 'filter.price.500kto1m', min: 500000, max: 1000000 },
+//   { label: 'filter.price.1mto2m', min: 1000000, max: 2000000 },
+//   { label: 'filter.price.2mto5m', min: 2000000, max: 5000000 },
+//   { label: 'filter.price.over5m', min: 5000000, max: MAX_PRICE },
+// ]
 const PRICE_PRESETS = [
-  { label: 'filter.price.under500k', min: 0, max: 500000 },
+  { label: 'filter.price.under200k', min: 0, max: 200000 },
+  { label: 'filter.price.200kto500k', min: 200000, max: 500000 },
   { label: 'filter.price.500kto1m', min: 500000, max: 1000000 },
   { label: 'filter.price.1mto2m', min: 1000000, max: 2000000 },
-  { label: 'filter.price.2mto5m', min: 2000000, max: 5000000 },
-  { label: 'filter.price.over5m', min: 5000000, max: MAX_PRICE },
+  { label: 'filter.price.over2m', min: 2000000, max: MAX_PRICE },
 ]
 
 // Format price with currency
@@ -254,19 +262,19 @@ const ProductFilter = ({
         onOpenChange={(open) => setOpenSections((prev) => ({ ...prev, main: open }))}
       >
         <CollapsibleContent>
-          <CardContent className="space-y-4 p-3 md:p-4">
+          <CardContent className="space-y-2 ">
             {/* Price Range Section */}
             <Collapsible
               open={openSections.price}
               onOpenChange={(open) => setOpenSections((prev) => ({ ...prev, price: open }))}
             >
-              <CollapsibleTrigger className="flex w-full items-center justify-between py-2">
+              <CollapsibleTrigger className="flex w-full items-center justify-between">
                 <span className="text-sm md:text-base font-medium">{t('filter.priceRange', 'Price Range')}</span>
                 {openSections.price ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
               </CollapsibleTrigger>
-              <CollapsibleContent className="space-y-3 py-2">
+              <CollapsibleContent className="space-y-3">
                 {/* Price slider */}
-                <div className="space-y-5 pt-4">
+                <div className="space-y-3">
                   <Slider
                     defaultValue={sliderValues}
                     value={sliderValues}
@@ -286,14 +294,14 @@ const ProductFilter = ({
                 {/* Quick presets */}
                 <div className="space-y-2">
                   <p className="text-xs md:text-sm font-medium">{t('filter.price.quickRanges', 'Quick Ranges')}</p>
-                  <div className="grid grid-cols-1 xs:grid-cols-2 gap-2">
+                  <div className="flex flex-col flex-wrap gap-3">
                     {PRICE_PRESETS.map((preset, index) => (
                       <Button
                         key={index}
                         variant="outline"
                         size="sm"
                         onClick={() => handlePresetSelect(preset)}
-                        className="text-xs h-auto py-1 px-2"
+                        className="text-xs h-auto py-1 px-2 w-fit"
                       >
                         {preset.min === 0
                           ? t('filter.price.under', 'Under') + ' ' + formatPrice(preset.max)
@@ -319,7 +327,9 @@ const ProductFilter = ({
               </CollapsibleTrigger>
               <CollapsibleContent>
                 {isCategoryListLoading ? (
-                  <div className="py-4 text-center text-sm">Loading categories...</div>
+                  <div className="py-4 text-center text-sm">
+                    <LoadingIcon color="primaryBackground" />
+                  </div>
                 ) : level1Categories.length > 0 ? (
                   <ScrollArea className="max-h-[200px] md:max-h-[300px] pr-4 py-2">
                     <div className="space-y-2">

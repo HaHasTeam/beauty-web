@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, Star } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
@@ -90,7 +90,8 @@ const RecommendProduct = () => {
     <div>
       <div className="flex items-center justify-between w-full max-w-screen-xl mx-auto">
         <div className="flex items-center gap-2 mb-4">
-          <h2 className="text-xl font-semibold flex items-center gap-1 text-primary">
+          <Star className="w-6 h-6 text-primary" />
+          <h2 className="text-2xl font-bold flex items-center gap-1 text-primary">
             {t('home.recommendProductsTitle')}
           </h2>
         </div>

@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { Clock } from 'lucide-react'
+import { CalendarClock } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
 import Empty from '@/components/empty/Empty'
@@ -18,10 +18,10 @@ function PreOrderProductSections() {
   const hasProducts = preOrderProductData?.items && preOrderProductData.items.length > 0
 
   return (
-    <section className="py-12 px-4">
-      <div className="max-w-7xl mx-auto">
+    <div>
+      <div className="flex flex-col w-full max-w-screen-xl mx-auto">
         <div className="flex items-center gap-2 mb-8">
-          <Clock className="w-6 h-6 text-primary" />
+          <CalendarClock className="w-6 h-6 text-primary" />
           <h2 className="text-2xl font-bold text-primary">{t('home.preOrderTitle')}</h2>
         </div>
 
@@ -45,7 +45,7 @@ function PreOrderProductSections() {
           </div>
         )}
       </div>
-    </section>
+    </div>
   )
 }
 
