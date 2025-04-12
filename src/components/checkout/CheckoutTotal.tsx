@@ -35,7 +35,7 @@ export default function CheckoutTotal({
 }: CheckoutTotalProps) {
   const { t } = useTranslation()
   const { groupBuying, groupBuyingOrder } = useCartStore()
-  const criteria = groupBuying?.groupProduct.criterias[0]
+  const criteria = groupBuying?.groupProduct?.criterias?.[0]
   const { data: blogData } = useQuery({
     queryKey: [getAllBlogApi.queryKey],
     queryFn: getAllBlogApi.fn,

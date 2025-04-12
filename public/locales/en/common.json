@@ -17,6 +17,15 @@
     "programName": "Program Name",
     "description": "Description",
     "brandName": "Brand",
+    "minPeople": "Minimum {{count}} people to activate",
+    "maxLimit": "Limit {{count}} items per person",
+    "productsCount": "{{count}} products included",
+    "maxDiscount": "maximum discount",
+    "discountAppliedWith": "{{discount}} discount with {{count}} or more people",
+    "status": {
+      "inProgress": "In progress",
+      "ended": "Ended"
+    },
     "item": {
       "productAmount": "{{amount}} products",
       "limitAmount": "Max {{amount}} items per person",

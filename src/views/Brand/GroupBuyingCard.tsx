@@ -1,18 +1,19 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
-import { BoxIcon, InfoIcon } from 'lucide-react'
+import { BoxIcon, LockIcon, TagIcon, User2Icon, Users2Icon, UsersIcon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { z } from 'zod'
 
+import fallBackImage from '@/assets/images/fallBackImage.jpg'
 import Button from '@/components/button'
 import Copyable from '@/components/copyable'
 import { FlexDatePicker } from '@/components/flexible-date-picker/FlexDatePicker'
 import FormLabel from '@/components/form-label'
-import { ImagePreviewThumbnail } from '@/components/image-preview/ImagePreviewThumbnail'
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
+import ImageWithFallback from '@/components/ImageFallback'
 import { Badge } from '@/components/ui/badge'
+import { Card, CardContent } from '@/components/ui/card'
 import {
   Dialog,
   DialogContent,
@@ -22,6 +23,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { Form, FormField, FormItem, FormMessage } from '@/components/ui/form'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import routes from '@/config/routes'
 import useHandleServerError from '@/hooks/useHandleServerError'
 import { createGroupBuyingApi } from '@/network/apis/group-product'
@@ -92,18 +94,27 @@ export default function GroupBuyingCard({ brand, groupProduct }: GroupBuyingCard
     }
   }
 
-  return (
-    <div className="w-full border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden bg-white relative">
-      {/* Card header with name and max discount */}
+  // Get the maximum discount tier for display
+  const maxDiscount = tiers.length > 0 ? tiers[tiers.length - 1].discount : '0%'
 
-      {/* Main content area with tiers and products */}
-      <div className="flex flex-col">
-        {/* Discount tier panel */}
-        <div className="p-3">
-          <div className="bg-gradient-to-r from-primary/5 via-primary/10 to-purple-100/30 rounded-xl p-4 mb-3 relative">
-            {/* Brand badge in top right corner of the discount card */}
-            <div className="absolute top-2 right-2 z-10 flex items-center gap-1.5 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-full shadow-sm border border-primary/10">
-              <div className="w-5 h-5 bg-primary/10 rounded-full flex items-center justify-center overflow-hidden">
+  return (
+    <Dialog>
+      <DialogTrigger className="text-start w-full">
+        <Card className="h-full border border-rose-100 shadow-md hover:shadow-xl hover:border-rose-200 transition-all duration-300 rounded-xl overflow-hidden">
+          <CardContent className="p-0 relative cursor-pointer overflow-hidden h-full flex flex-col">
+            {/* Discount badge in top left corner */}
+            <div className="absolute top-3 left-3 z-10">
+              <Badge
+                className="bg-gradient-to-r from-rose-500 to-red-500 text-white px-2.5 py-1 text-xs font-medium rounded-md shadow-sm"
+                variant="outline"
+              >
+                {t('layout:groupBuy.getUpToDiscount', { discount: maxDiscount })}
+              </Badge>
+            </div>
+
+            {/* Brand badge in top right corner */}
+            <div className="absolute top-3 right-3 z-10 flex items-center gap-1.5 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-full shadow-lg border border-primary/10">
+              <div className="w-5 h-5 bg-primary/10 rounded-full flex items-center justify-center overflow-hidden shadow-sm">
                 {brand.logo ? (
                   <img
                     src={brand.logo}
@@ -126,287 +137,326 @@ export default function GroupBuyingCard({ brand, groupProduct }: GroupBuyingCard
               <span className="text-xs font-medium truncate max-w-[80px]">{brand.name}</span>
             </div>
 
-            {/* Discount title */}
-            <div className="flex items-start justify-between mb-5">
-              <div>
-                <h3 className="text-xl font-bold text-primary mb-1">
-                  {t('groupBuy.discountTitle', {
-                    maxDiscount: tiers.length > 0 ? tiers[tiers.length - 1].discount : '0%',
-                  })}
-                </h3>
-                <p className="text-sm text-gray-600 font-medium">{t('groupBuy.inviteMembers')}</p>
-              </div>
-            </div>
-
-            {/* Enhanced Tier stepper */}
-            <div className="relative mt-4">
-              {/* Tier indicators as text row */}
-              <div className="flex items-center overflow-x-auto no-scrollbar gap-1.5 py-1">
-                {tiers.map((tier, index) => (
-                  <Badge
-                    key={index}
-                    variant="outline"
-                    className="bg-green-50 border-green-200 text-green-700 px-1.5 py-0.5 text-[9px]"
-                  >
-                    <span className="font-semibold max-w-[60px] truncate" title={tier.discount}>
-                      {tier.discount}
-                    </span>
-                    <div className="flex items-center gap-0.5">
-                      <span className="text-[10px] text-gray-500">{t('groupBuy.when')}</span>
-                      <div className="flex items-center justify-center min-w-[18px] h-[18px]  rounded-full text-[9px] font-semibold flex-shrink-0">
-                        {tier.count}
-                      </div>
-                      <span className="text-[10px] text-gray-500">{t('groupBuy.people')}</span>
-                    </div>
-                  </Badge>
-                ))}
-              </div>
-
-              {/* Mini description */}
-              <div className="mt-2 text-xs text-gray-500 flex items-center justify-between">
-                <span>{t('groupBuy.tierTitle')}</span>
-                <Badge variant="outline" className="bg-gray-50 border-gray-200 text-gray-700 px-1.5 py-0.5 text-[9px]">
-                  {t('groupBuy.tiers', { count: tiers.length })}
-                </Badge>
-              </div>
-            </div>
-          </div>
-          <div className=" mb-3">
-            <Accordion type="single" collapsible className="w-full rounded-lg border border-gray-100 overflow-hidden">
-              <AccordionItem value="details" className="border-0 bg-gray-50/50">
-                <AccordionTrigger className="px-3 py-2 text-sm hover:no-underline">
-                  <div className="flex items-center gap-2 text-gray-700">
-                    <InfoIcon className="w-4 h-4 text-primary/70" />
-                    <span className="font-medium">{t('groupBuy.details')}</span>
-                  </div>
-                </AccordionTrigger>
-                <AccordionContent className="px-3 text-sm">
-                  <div className="space-y-2">
-                    <div>
-                      <h4 className="font-semibold text-gray-800">{t('groupBuy.programName')}:</h4>
-                      <p className="text-gray-600">{groupProduct.name}</p>
-                    </div>
-
-                    {groupProduct.description && (
-                      <div>
-                        <h4 className="font-semibold text-gray-800">{t('groupBuy.description')}:</h4>
-                        <p className="text-gray-600 whitespace-pre-line">{groupProduct.description}</p>
-                      </div>
-                    )}
-
-                    {brand.id && (
-                      <div>
-                        <h4 className="font-semibold text-gray-800">{t('groupBuy.brandName')}:</h4>
-                        <p className="text-gray-600">{brand.name}</p>
-                      </div>
-                    )}
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
-          </div>
-          {/* Product thumbnails */}
-          <div className="mb-4 border border-gray-100 rounded-xl p-3 shadow-sm bg-gray-50/50">
-            <div className="flex items-center gap-2 mb-3">
-              <div className="w-8 h-8 bg-primary/10 flex items-center justify-center rounded-md">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    d="M20 3H4C2.89543 3 2 3.89543 2 5V15C2 16.1046 2.89543 17 4 17H20C21.1046 17 22 16.1046 22 15V5C22 3.89543 21.1046 3 20 3Z"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                  />
-                  <path d="M2 7H22" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                  <path d="M8 21H16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                  <path d="M12 17V21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                </svg>
-              </div>
-              <span className="text-sm font-semibold text-gray-800">
-                {t('groupBuy.products')} ({products.length})
-              </span>
-            </div>
-            <div className="flex gap-2 overflow-x-auto pb-1 custom-scrollbar">
-              {products.slice(0, 6).map((product) => (
-                <div key={product.id} className="flex-shrink-0">
-                  <div className="relative aspect-square overflow-hidden rounded-md border border-gray-200 h-[60px] w-[60px]">
-                    <ImagePreviewThumbnail imageUrl={product.images[0]?.fileUrl || ''} alt={product.name} />
-                    {!product.images[0]?.fileUrl && (
-                      <div className="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
-                        <div className="w-8 h-8 rounded-full bg-white/80 flex items-center justify-center">
-                          <BoxIcon className="w-4 h-4 text-gray-400" />
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              ))}
-              {products.length > 6 && (
-                <div className="flex items-center justify-center bg-gray-100 rounded-md border border-gray-200 h-[60px] w-[60px] text-xs font-medium text-gray-500">
-                  +{products.length - 6}
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div className="flex flex-col gap-3">
-            {/* Purchase limit indicator */}
-            <div className="flex items-center gap-3 p-3 rounded-xl bg-pink-50 border border-pink-100">
-              <div className="w-10 h-10 bg-pink-100 flex items-center justify-center rounded-xl text-pink-600">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    d="M19 11H5C3.89543 11 3 11.8954 3 13V20C3 21.1046 3.89543 22 5 22H19C20.1046 22 21 21.1046 21 20V13C21 11.8954 20.1046 11 19 11Z"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <path
-                    d="M7 11V7C7 5.93913 7.42143 4.92172 8.17157 4.17157C8.92172 3.42143 9.93913 3 11 3H13C14.0609 3 15.0783 3.42143 15.8284 4.17157C16.5786 4.92172 17 5.93913 17 7V11"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <path
-                    d="M12 16V17"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </div>
-              <div className="flex-1">
-                <span className="text-sm font-semibold text-gray-800">{t('groupBuy.purchaseLimit')}</span>
-                <div className="text-xs text-gray-500">
-                  {t('groupBuy.item.limitAmount', { amount: groupProduct.maxBuyAmountEachPerson || 1 })}
-                </div>
-              </div>
-              <div className="flex items-center justify-center min-w-[32px] h-8 bg-pink-100 rounded-full px-3 text-sm font-bold text-pink-600">
-                {groupProduct.maxBuyAmountEachPerson || 1}
-              </div>
-            </div>
-
-            {/* Individual payment indicator */}
-            <div className="flex items-center gap-3 p-3 rounded-xl bg-green-50 border border-green-100">
-              <div className="w-10 h-10 bg-green-100 flex items-center justify-center rounded-xl text-green-600">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    d="M12 4C11.1109 4 10.2355 4.20693 9.45863 4.5941C8.68179 4.98127 8.02334 5.53582 7.5359 6.20845C7.04846 6.88108 6.75138 7.65394 6.67197 8.46249C6.59256 9.27104 6.73344 10.0858 7.08117 10.8197C7.4289 11.5537 7.97109 12.1818 8.65404 12.6418C9.33699 13.1019 10.1351 13.3773 10.9625 13.4332C11.79 13.4891 12.6178 13.3234 13.3596 12.9551C14.1013 12.5867 14.7391 12.0277 15.2073 11.333"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <path
-                    d="M14.472 7.33301C14.8347 7.14767 15.241 7.05063 15.6534 7.05063C16.0658 7.05063 16.4721 7.14767 16.8347 7.33301C17.1973 7.51836 17.5046 7.78608 17.7323 8.11329C17.96 8.4405 18.1011 8.81763 18.1437 9.20871C18.1864 9.5998 18.1291 9.99578 17.9767 10.3583C17.8243 10.7209 17.5799 11.0387 17.2689 11.2789C16.958 11.5191 16.5901 11.6742 16.2005 11.7316C15.8109 11.7889 15.4136 11.7468 15.0474 11.6086C14.6812 11.4704 14.3577 11.24 14.108 10.9404"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <path
-                    d="M6 19.6897C6.50412 18.4918 7.33637 17.4492 8.39897 16.6953C9.46158 15.9414 10.7119 15.5043 12 15.4376M18 19.6897C17.4959 18.4918 16.6636 17.4492 15.601 16.6953C14.5384 15.9414 13.2881 15.5043 12 15.4376M12 15.4376V20.9996"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </div>
-              <div className="flex-1">
-                <span className="text-sm font-semibold text-gray-800">{t('groupBuy.individualPayment')}</span>
-                <div className="text-xs text-gray-500">
-                  {t('groupBuy.separatePayment', 'Mỗi thành viên thanh toán phần của mình')}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Details accordion */}
-
-        {/* Action button */}
-        <div className="px-3 pb-3">
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button className="w-full h-12 text-base bg-primary hover:bg-primary/90 text-white rounded-xl font-medium shadow-sm">
-                {t('groupBuy.createBtn')}
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-screen-sm">
-              <DialogHeader>
-                <DialogTitle>
-                  {t('groupBuy.item.dialogTitle', {
-                    event: groupProduct.name,
-                  })}
-                </DialogTitle>
-                <DialogDescription>{t('groupBuy.item.dialogDescription')}</DialogDescription>
-                <div className="pt-2">
-                  <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
-                      <div className="col-span-1 sm:col-span-2 gap-4 grid grid-flow-row grid-cols-1">
-                        <FormField
-                          control={form.control}
-                          name="endTime"
-                          render={({ field, formState }) => {
-                            return (
-                              <FormItem>
-                                <FormLabel required>{t('groupBuy.item.endTimeLabel')}</FormLabel>
-                                <FlexDatePicker
-                                  showTime
-                                  onlyFutureDates
-                                  field={field}
-                                  formState={{
-                                    ...formState,
-                                    ...form,
-                                  }}
-                                />
-                                <FormMessage />
-                              </FormItem>
-                            )
-                          }}
+            {/* Masonry image layout - reduced height from 400px to 350px */}
+            <div className="relative h-[320px] overflow-hidden">
+              {products.length > 0 ? (
+                <div className="grid grid-cols-4 grid-rows-4 h-full gap-0.5 p-0.5">
+                  {/* Layout với nhiều sản phẩm */}
+                  {products.length >= 4 ? (
+                    <>
+                      {/* Sản phẩm 1: chiếm 2/3 trên cùng */}
+                      <div className="col-span-3 row-span-3">
+                        <ImageWithFallback
+                          src={products[0]?.images[0]?.fileUrl}
+                          fallback={fallBackImage}
+                          alt={products[0]?.name}
+                          className="object-cover w-full h-full rounded-tl-xl"
                         />
                       </div>
 
-                      {!groupBuyingInfo?.data.id ? (
-                        <Button type="submit" className="w-full" loading={isCreatingGroupBuying}>
-                          {t('groupBuy.item.createBtn')}
-                        </Button>
-                      ) : (
-                        <div className="flex items-end gap-2">
-                          <Copyable
-                            className="flex-1"
-                            content={
-                              window.origin +
-                              routes.groupBuyDetail
-                                .replace(':groupId', groupBuyingInfo?.data.id as string)
-                                .replace(':brandId', brand.id as string)
-                            }
-                            label={t('groupBuy.item.linkInviteLabel')}
-                          />
-                          <Button
-                            type="button"
-                            onClick={() => {
-                              navigate(
-                                routes.groupBuyDetail
-                                  .replace(':groupId', groupBuyingInfo?.data.id as string)
-                                  .replace(':brandId', brand.id as string),
-                              )
-                            }}
-                          >
-                            {t('groupBuy.item.goToGroupBuy')}
-                          </Button>
-                        </div>
-                      )}
-                    </form>
-                  </Form>
+                      {/* Sản phẩm 2: chiếm 1/3 góc phải trên */}
+                      <div className="col-span-1 row-span-2">
+                        <ImageWithFallback
+                          src={products[1]?.images[0]?.fileUrl}
+                          fallback={fallBackImage}
+                          alt={products[1]?.name}
+                          className="object-cover w-full h-full rounded-tr-xl"
+                        />
+                      </div>
+
+                      {/* Sản phẩm 3: chiếm 1/3 góc phải giữa */}
+                      <div className="col-span-1 row-span-1">
+                        <ImageWithFallback
+                          src={products[2]?.images[0]?.fileUrl}
+                          fallback={fallBackImage}
+                          alt={products[2]?.name}
+                          className="object-cover w-full h-full"
+                        />
+                      </div>
+
+                      {/* Sản phẩm 4: chiếm 1/3 góc trái dưới */}
+                      <div className="col-span-1 row-span-1">
+                        <ImageWithFallback
+                          src={products[3]?.images[0]?.fileUrl}
+                          fallback={fallBackImage}
+                          alt={products[3]?.name}
+                          className="object-cover w-full h-full"
+                        />
+                      </div>
+
+                      {/* Sản phẩm 5 hoặc nhiều hơn: chiếm 2/3 góc phải dưới */}
+                      <div className="col-span-3 row-span-1 relative">
+                        {products.length > 4 ? (
+                          <>
+                            <ImageWithFallback
+                              src={products[4]?.images[0]?.fileUrl}
+                              fallback={fallBackImage}
+                              alt={products[4]?.name}
+                              className="object-cover w-full h-full"
+                            />
+                            {/* Nếu có hơn 5 sản phẩm, hiển thị overlay */}
+                            {products.length > 5 && (
+                              <div className="absolute inset-0 bg-black/50 flex items-center justify-center text-white font-medium">
+                                +{products.length - 5} {t('groupBuy.moreProducts')}
+                              </div>
+                            )}
+                          </>
+                        ) : (
+                          <div className="w-full h-full bg-gradient-to-r from-gray-100 to-gray-200 flex items-center justify-center">
+                            <BoxIcon className="w-6 h-6 text-gray-400" />
+                          </div>
+                        )}
+                      </div>
+                    </>
+                  ) : products.length === 3 ? (
+                    <>
+                      {/* Layout với 3 sản phẩm */}
+                      <div className="col-span-4 row-span-2">
+                        <ImageWithFallback
+                          src={products[0]?.images[0]?.fileUrl}
+                          fallback={fallBackImage}
+                          alt={products[0]?.name}
+                          className="object-cover w-full h-full rounded-t-xl"
+                        />
+                      </div>
+                      <div className="col-span-2 row-span-2">
+                        <ImageWithFallback
+                          src={products[1]?.images[0]?.fileUrl}
+                          fallback={fallBackImage}
+                          alt={products[1]?.name}
+                          className="object-cover w-full h-full"
+                        />
+                      </div>
+                      <div className="col-span-2 row-span-2">
+                        <ImageWithFallback
+                          src={products[2]?.images[0]?.fileUrl}
+                          fallback={fallBackImage}
+                          alt={products[2]?.name}
+                          className="object-cover w-full h-full"
+                        />
+                      </div>
+                    </>
+                  ) : products.length === 2 ? (
+                    <>
+                      {/* Layout với 2 sản phẩm */}
+                      <div className="col-span-4 row-span-2">
+                        <ImageWithFallback
+                          src={products[0]?.images[0]?.fileUrl}
+                          fallback={fallBackImage}
+                          alt={products[0]?.name}
+                          className="object-cover w-full h-full rounded-t-xl"
+                        />
+                      </div>
+                      <div className="col-span-4 row-span-2">
+                        <ImageWithFallback
+                          src={products[1]?.images[0]?.fileUrl}
+                          fallback={fallBackImage}
+                          alt={products[1]?.name}
+                          className="object-cover w-full h-full"
+                        />
+                      </div>
+                    </>
+                  ) : (
+                    // Chỉ 1 sản phẩm
+                    <div className="col-span-4 row-span-4">
+                      <ImageWithFallback
+                        src={products[0]?.images[0]?.fileUrl}
+                        fallback={fallBackImage}
+                        alt={products[0]?.name}
+                        className="object-cover w-full h-full rounded-t-xl"
+                      />
+                    </div>
+                  )}
                 </div>
-              </DialogHeader>
-            </DialogContent>
-          </Dialog>
-        </div>
-      </div>
-    </div>
+              ) : (
+                // Không có sản phẩm
+                <div className="w-full h-full flex items-center justify-center">
+                  <BoxIcon className="w-12 h-12 text-gray-400" />
+                </div>
+              )}
+            </div>
+
+            {/* Card content with info similar to ProductCard but with group buying info */}
+            <div className="w-full p-3">
+              <div>
+                <div className="line-clamp-2 text-sm font-semibold mb-1">{groupProduct.name}</div>
+
+                {/* Description */}
+                <div className="mt-1 text-xs text-gray-700 line-clamp-2 h-[32px]">{groupProduct.description}</div>
+
+                {/* Divider */}
+                <div className="border-t border-gray-100 my-2"></div>
+
+                {/* Tiers display */}
+                <div className="mb-2">
+                  <div className="text-xs font-medium text-gray-700 mb-1 flex items-center gap-1.5">
+                    <TagIcon className="w-3.5 h-3.5 text-primary" />
+                    {t('groupBuy.tierTitle')}
+                  </div>
+                  <div className="flex items-center flex-wrap gap-2 py-1">
+                    {tiers.map((tier, index) => (
+                      <TooltipProvider key={index}>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Badge
+                              variant="outline"
+                              className={`
+                                ${
+                                  index === 0
+                                    ? 'bg-gradient-to-r from-rose-400 to-pink-400 border-rose-400 text-white'
+                                    : index === 1
+                                      ? 'bg-gradient-to-r from-rose-500 to-pink-500 border-rose-500 text-white'
+                                      : 'bg-gradient-to-r from-rose-600 to-pink-600 border-rose-600 text-white'
+                                }
+                                px-2.5 py-1.5 text-xs font-medium rounded-md whitespace-nowrap cursor-help
+                                shadow hover:shadow-md transition-all
+                              `}
+                            >
+                              <div className="flex items-center gap-2">
+                                {index === 0 ? (
+                                  <User2Icon className="w-4 h-4" />
+                                ) : index === 1 ? (
+                                  <UsersIcon className="w-4 h-4" />
+                                ) : (
+                                  <Users2Icon className="w-4 h-4" />
+                                )}
+                                <div className="flex items-center gap-1">
+                                  <span className="font-bold">{tier.discount}</span>
+                                  <span className="font-bold">{tier.count}+</span>
+                                </div>
+                              </div>
+                            </Badge>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p className="text-xs">
+                              {t('groupBuy.discountAppliedWith', {
+                                discount: tier.discount,
+                                count: tier.count,
+                              })}
+                            </p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Group info */}
+                <div className="flex flex-col gap-1.5 mt-2 text-xs text-gray-600">
+                  <div className="flex items-center gap-1.5">
+                    <User2Icon className="w-3.5 h-3.5 text-rose-400" />
+                    <span className="line-clamp-1">
+                      {t('groupBuy.minPeople', {
+                        count: tiers.length > 0 ? tiers[0].count : 1,
+                      })}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-1.5">
+                    <LockIcon className="w-3.5 h-3.5 text-rose-500" />
+                    <span className="line-clamp-1">
+                      {t('groupBuy.maxLimit', {
+                        count: groupProduct.maxBuyAmountEachPerson || 1,
+                      })}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-1.5">
+                    <BoxIcon className="w-3.5 h-3.5 text-rose-600" />
+                    <span className="line-clamp-1">
+                      {t('groupBuy.productsCount', {
+                        count: products.length,
+                      })}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex justify-between items-center w-full mt-3 pt-2 border-t border-gray-100">
+                <div className="flex gap-1 items-center">
+                  <span className="text-red-500 text-xs font-medium">
+                    {tiers.length > 0 ? tiers[tiers.length - 1].discount : '0%'} {t('groupBuy.maxDiscount')}
+                  </span>
+                </div>
+                <Button size="sm" variant="outline" className="px-2.5 py-1 h-auto text-xs border-primary text-primary">
+                  {t('groupBuy.createBtn')}
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </DialogTrigger>
+
+      <DialogContent className="max-w-screen-sm">
+        <DialogHeader>
+          <DialogTitle>
+            {t('groupBuy.item.dialogTitle', {
+              event: groupProduct.name,
+            })}
+          </DialogTitle>
+          <DialogDescription>{t('groupBuy.item.dialogDescription')}</DialogDescription>
+          <div className="pt-2">
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
+                <div className="col-span-1 sm:col-span-2 gap-4 grid grid-flow-row grid-cols-1">
+                  <FormField
+                    control={form.control}
+                    name="endTime"
+                    render={({ field, formState }) => {
+                      return (
+                        <FormItem>
+                          <FormLabel required>{t('groupBuy.item.endTimeLabel')}</FormLabel>
+                          <FlexDatePicker
+                            showTime
+                            onlyFutureDates
+                            field={field}
+                            formState={{
+                              ...formState,
+                              ...form,
+                            }}
+                          />
+                          <FormMessage />
+                        </FormItem>
+                      )
+                    }}
+                  />
+                </div>
+
+                {!groupBuyingInfo?.data.id ? (
+                  <Button type="submit" className="w-full" loading={isCreatingGroupBuying}>
+                    {t('groupBuy.item.createBtn')}
+                  </Button>
+                ) : (
+                  <div className="flex items-end gap-2">
+                    <Copyable
+                      className="flex-1"
+                      content={
+                        window.origin +
+                        routes.groupBuyDetail
+                          .replace(':groupId', groupBuyingInfo?.data.id as string)
+                          .replace(':brandId', brand.id as string)
+                      }
+                      label={t('groupBuy.item.linkInviteLabel')}
+                    />
+                    <Button
+                      type="button"
+                      onClick={() => {
+                        navigate(
+                          routes.groupBuyDetail
+                            .replace(':groupId', groupBuyingInfo?.data.id as string)
+                            .replace(':brandId', brand.id as string),
+                        )
+                      }}
+                    >
+                      {t('groupBuy.item.goToGroupBuy')}
+                    </Button>
+                  </div>
+                )}
+              </form>
+            </Form>
+          </div>
+        </DialogHeader>
+      </DialogContent>
+    </Dialog>
   )
 }

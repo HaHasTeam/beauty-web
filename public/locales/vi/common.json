@@ -17,6 +17,15 @@
     "programName": "Tên chương trình",
     "description": "Mô tả",
     "brandName": "Thương hiệu",
+    "minPeople": "Cần tối thiểu {{count}} người để kích hoạt",
+    "maxLimit": "Giới hạn {{count}} sản phẩm mỗi người",
+    "productsCount": "Gồm {{count}} sản phẩm",
+    "maxDiscount": "giảm giá tối đa",
+    "discountAppliedWith": "Giảm {{discount}} khi có {{count}} người trở lên",
+    "status": {
+      "inProgress": "Đang diễn ra",
+      "ended": "Đã kết thúc"
+    },
     "item": {
       "productAmount": "{{amount}} sản phẩm",
       "limitAmount": "Tối đa {{amount}} sản phẩm mỗi người",
