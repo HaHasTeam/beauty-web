@@ -112,8 +112,7 @@ const Checkout = () => {
   // }, [chosenPlatformVoucher])
 
   // Total saved price (product discounts + brand vouchers + platform voucher)
-  const totalSavings =
-    totalProductDiscount + totalBrandDiscount + (platformVoucherDiscount ?? 0) + totalLivestreamDiscount
+  const totalSavings = totalProductDiscount + totalBrandDiscount + (platformVoucherDiscount ?? 0)
   const totalPayment = totalPrice - totalBrandDiscount - (platformVoucherDiscount ?? 0)
 
   const defaultOrderValues = {
@@ -243,6 +242,9 @@ const Checkout = () => {
           await updateGroupOrder(formData)
           return
         }
+        if (!groupBuying.id) {
+          throw new Error('Group buying ID is missing')
+        }
         const formData: ICreateGroupOrder = {
           addressId: values.addressId,
           groupBuyingId: groupBuying.id,
@@ -261,7 +263,11 @@ const Checkout = () => {
 
       setIsLoading(false)
     } catch (error) {
+      console.log(error, 'error')
       setIsLoading(false)
+
+      console.log('error', error)
+
       handleServerError({
         error,
         form,

@@ -67,9 +67,14 @@ const Cart = ({ isInGroupBuy = false, isInPeriod = false }: CartProps) => {
   }, [cartItems, selectedCartItems, isTriggerTotal, platformChosenVoucher, totalVoucherDiscount, chosenVouchersByBrand])
 
   // Total saved price (product discounts + brand vouchers + platform voucher + livestream discount)
-  const savedPrice =
-    totalDirectProductsDiscount + totalVoucherDiscount + platformVoucherDiscount + totalLivestreamDiscount
-  const totalFinalPrice = totalPrice - totalVoucherDiscount - platformVoucherDiscount - totalLivestreamDiscount
+  const savedPrice = totalDirectProductsDiscount + totalVoucherDiscount + platformVoucherDiscount
+
+  console.log('totalLivestreamDiscount', totalLivestreamDiscount)
+  console.log('platformVoucherDiscount', platformVoucherDiscount)
+  console.log('totalVoucherDiscount', totalVoucherDiscount)
+  console.log('totalDirectProductsDiscount', totalDirectProductsDiscount)
+
+  const totalFinalPrice = totalPrice - totalVoucherDiscount - platformVoucherDiscount
 
   // const { data: useMyCartData, isFetching } = useQuery({
   //   queryKey: [getMyCartApi.queryKey],

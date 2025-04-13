@@ -50,7 +50,11 @@
     "preOderCardTitle": "Pre-orders",
     "groupBuyingDealsCardTitle": "Group-Buying Deals",
     "recommendProductsTitle": "Recommend Products",
-    "preOrderTitle": "Pre-order products"
+    "preOrderTitle": "Pre-order products",
+    "status": {
+      "active": "Active",
+      "waiting": "Waiting"
+    }
   },
   "productCard": {
     "currentPrice": "{{price, currency}}",
@@ -213,6 +217,12 @@
       }
     }
   },
+
+  "bookingDetail": {
+    "title": "Booking not found",
+    "description": "The booking you are looking for does not exist or may have been cancelled.",
+    "button": "View All Bookings"
+  },
   "sort": {
     "title": "Sort by",
     "related": "Related",
@@ -246,7 +256,8 @@
     },
     "preOrder": {
       "title": "No Pre-order Products",
-      "description": "There are currently no products available for pre-order. Please check back later!"
+      "description": "There are currently no products available for pre-order. Please check back later!",
+      "waitingDescription": "There are no waiting pre-order products available at the moment."
     },
     "search": {
       "title": "No results found",
@@ -708,7 +719,7 @@
     "off": {
       "amount": "Discount of {{amount, currency}}",
       "percentage": "Discount of {{percentage}}%",
-      "numberPercentage": "Off {{percentage}}%",
+      "numberPercentage": "{{percentage}}%",
       "minOrder": "Minimum order of {{amount, currency}}",
       "maxDiscount": "Maximum discount of {{amount, currency}}",
       "specific": "Specific products",
@@ -1317,6 +1328,7 @@
   "groupBuy": {
     "productListLabel": "Product available in this deal ({{amount}})",
     "title": "Brands with Group Buy Deals",
+    "getUpToDiscount": "Get up to {{discount}} discount",
     "item": {
       "maxDiscount": "Up to {{discount}} off",
       "limitAmount": "Each person can buy up to {{amount}} items",
@@ -1339,7 +1351,14 @@
     "noGroupBuyDes": "Explore other event in platform!",
     "brandGroupBuy": {
       "title": "Group Buy Deals of {{brand}}"
-    }
+    },
+    "status": {
+      "inProgress": "In progress",
+      "ended": "Ended"
+    },
+    "eventEndedTitle": "Event Ended",
+    "eventEndedDescription": "This group buying event has ended. You can no longer participate in this event. Would you like to return to the home page to explore other events?",
+    "returnToHome": "Return to Home"
   },
   "systemService": {
     "generalInformation": "General Information",

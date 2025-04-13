@@ -20,7 +20,7 @@ export interface ICartItem {
   status: StatusEnum.ACTIVE | StatusEnum.INACTIVE
   productClassification: IClassification
   livestreamDiscount?: number
-  livestream?: string | ILivestream
+  livestream?: ILivestream
 }
 
 export type ICreateCartItem = Omit<

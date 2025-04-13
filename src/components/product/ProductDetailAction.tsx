@@ -12,7 +12,7 @@ import { useToast } from '@/hooks/useToast'
 import { createCartItemApi, getMyCartApi } from '@/network/apis/cart'
 import useCartStore from '@/store/cart'
 import { IClassification } from '@/types/classification'
-import { DiscountTypeEnum, ProductDiscountEnum, ProductEnum, StatusEnum } from '@/types/enum'
+import { DiscountTypeEnum, OrderEnum, ProductDiscountEnum, ProductEnum, StatusEnum } from '@/types/enum'
 import { IProduct } from '@/types/product'
 import { createCartFromProduct } from '@/utils/cart'
 import { calculateDiscountPrice, calculateTotalPrice } from '@/utils/price'
@@ -29,6 +29,7 @@ interface ProductDetailActionProps {
   hasCustomType?: boolean
   inStock: boolean
   isInGroupBuying?: boolean
+  event: OrderEnum
 }
 
 const ProductDetailAction = ({
@@ -39,6 +40,7 @@ const ProductDetailAction = ({
   discountType,
   hasCustomType,
   inStock,
+  event,
 }: ProductDetailActionProps) => {
   const { t } = useTranslation()
   const { setSelectedCartItem, cartItems } = useCartStore()
@@ -378,9 +380,13 @@ const ProductDetailAction = ({
           <span className="text-red-500 text-sm">{t('cart.brannedAllMessage')}</span>
         ) : product?.status === ProductEnum.UN_PUBLISHED ? (
           <span className="text-red-500 text-sm">{t('cart.unPublishAllMessage')}</span>
-        ) : product?.status === ProductEnum.OUT_OF_STOCK ? (
+        ) : product?.status === ProductEnum.OUT_OF_STOCK && event !== OrderEnum.PRE_ORDER ? (
           <span className="text-red-500 text-sm">{t('cart.soldOutAllMessage')}</span>
-        ) : !inStock && !chosenClassification && (product?.productClassifications ?? [])?.length === 0 ? (
+        ) : !inStock &&
+          !chosenClassification &&
+          (product?.productClassifications ?? [])?.length === 0 &&
+          event !== OrderEnum.PRE_ORDER &&
+          event !== OrderEnum.FLASH_SALE ? (
           <span className="text-red-500 text-sm">{t('cart.soldOutAllMessage')}</span>
         ) : !chosenClassification && hasCustomType ? (
           <span className="text-yellow-500 text-sm">{t('cart.chooseClassification')}</span>
@@ -405,8 +411,9 @@ const ProductDetailAction = ({
           {!isInGroupBuying && (
             <Button
               disabled={
-                !(product.status === ProductEnum.OFFICIAL || product.status === ProductEnum.FLASH_SALE) ||
-                !inStock ||
+                (!(product.status === ProductEnum.OFFICIAL || product.status === ProductEnum.FLASH_SALE) &&
+                  event !== OrderEnum.PRE_ORDER) ||
+                (!inStock && event !== OrderEnum.PRE_ORDER) ||
                 (!chosenClassification && hasCustomType) ||
                 (chosenClassification &&
                   (chosenClassification?.quantity <= 0 || chosenClassification?.status !== StatusEnum.ACTIVE))
@@ -424,8 +431,9 @@ const ProductDetailAction = ({
             className="w-full border-primary text-primary hover:text-primary hover:bg-primary/10"
             onClick={() => handleCreateCartItem()}
             disabled={
-              !(product.status === ProductEnum.OFFICIAL || product.status === ProductEnum.FLASH_SALE) ||
-              !inStock ||
+              (!(product.status === ProductEnum.OFFICIAL || product.status === ProductEnum.FLASH_SALE) &&
+                event !== OrderEnum.PRE_ORDER) ||
+              (!inStock && event !== OrderEnum.PRE_ORDER) ||
               disabledAddToCartButton ||
               (!chosenClassification && hasCustomType) ||
               (chosenClassification &&

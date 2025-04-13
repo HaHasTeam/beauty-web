@@ -88,7 +88,7 @@ const PrimaryLayout = ({ children }: { children?: React.ReactNode }) => {
     }
 
     // Handle normal cart items (when not in group buy or checkout)
-    if (!isMatchCartPath && !isMatchGroupBuyPath && !isMatchProductDetailPath && myCart && myCart.data) {
+    if (isMatchCartPath && !isMatchGroupBuyPath && !isMatchProductDetailPath && myCart && myCart.data) {
       const myFilteredCart: ICartByBrand = {}
       for (const key in myCart.data) {
         if (myCart.data[key].length) {
@@ -142,6 +142,7 @@ const PrimaryLayout = ({ children }: { children?: React.ReactNode }) => {
 
           // Check if the current device token matches the one in the database
           const tokenExistsInDB = tokenFCM && tokenFCM.data === deviceToken
+          console.log('tokenExistsInDB', tokenExistsInDB, tokenFCM, deviceToken)
 
           // Register only if token is new or different from the one in database
           if (!tokenExistsInDB) {
