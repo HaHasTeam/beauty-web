@@ -35,7 +35,7 @@ const UpdateAddressDialog = ({ address, triggerComponent }: UpdateAddressDialogP
 
   const defaultValues = {
     fullName: address?.fullName ?? '',
-    phoneNumber: address?.phone ?? '',
+    phone: address?.phone ?? '',
     detailAddress: address?.detailAddress ?? '',
     ward: address?.ward ?? '',
     district: address?.district ?? '',

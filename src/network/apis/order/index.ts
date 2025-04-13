@@ -7,12 +7,14 @@ import {
   ICreatePreOrder,
   IOrder,
   IOrderFilter,
+  IOrderFilterFilter,
   IOrderItem,
   IRejectReturnRequestOrder,
   IRequest,
   IRequestFilter,
+  IRequestFilterFilter,
 } from '@/types/order'
-import { TServerResponse } from '@/types/request'
+import { TServerResponse, TServerResponseWithPagination } from '@/types/request'
 import { IStatusTracking } from '@/types/status-tracking'
 import { toMutationFetcher, toQueryFetcher } from '@/utils/query'
 import { privateRequest } from '@/utils/request'
@@ -49,6 +51,101 @@ export const getMyOrdersApi = toMutationFetcher<IOrderFilter, TServerResponse<IO
     return privateRequest('/orders/get-my-orders/', {
       method: 'POST',
       data,
+    })
+  },
+)
+export const filterOrdersApi = toQueryFetcher<IOrderFilterFilter, TServerResponseWithPagination<IOrder[]>>(
+  'filterOrdersApi',
+  async (filterData) => {
+    const { page, limit, sortBy, order, ...rest } = filterData || {}
+
+    const body: IOrderFilterFilter = {}
+    if (rest.search) {
+      body.search = rest.search
+    }
+    if (rest.statuses?.length) {
+      body.statuses = rest.statuses
+    }
+    if (rest.types?.length) {
+      body.types = rest.types
+    }
+    if (rest.paymentMethods?.length) {
+      body.paymentMethods = rest.paymentMethods
+    }
+    if (rest.productIds?.length) {
+      body.productIds = rest.productIds
+    }
+
+    return privateRequest('/orders/filter', {
+      method: 'POST',
+      data: body,
+      params: {
+        page,
+        limit,
+        sortBy,
+        order,
+      },
+    })
+  },
+)
+
+export const filterOrdersParentApi = toQueryFetcher<IOrderFilterFilter, TServerResponseWithPagination<IOrder[]>>(
+  'filterOrdersParentApi',
+  async (filterData) => {
+    const { page, limit, sortBy, order, ...rest } = filterData || {}
+
+    const body: IOrderFilterFilter = {}
+    if (rest.search) {
+      body.search = rest.search
+    }
+    if (rest.statuses?.length) {
+      body.statuses = rest.statuses
+    }
+    if (rest.types?.length) {
+      body.types = rest.types
+    }
+    if (rest.paymentMethods?.length) {
+      body.paymentMethods = rest.paymentMethods
+    }
+    if (rest.productIds?.length) {
+      body.productIds = rest.productIds
+    }
+
+    return privateRequest('/orders/filter-parent', {
+      method: 'POST',
+      data: body,
+      params: {
+        page,
+        limit,
+        sortBy,
+        order,
+      },
+    })
+  },
+)
+export const filterRequestApi = toQueryFetcher<IRequestFilterFilter, TServerResponseWithPagination<IRequest[]>>(
+  'filterRequestApi',
+  async (filterData) => {
+    const { page, limit, sortBy, order, ...rest } = filterData || {}
+
+    const body: IRequestFilterFilter = {}
+
+    if (rest.statuses?.length) {
+      body.statuses = rest.statuses
+    }
+    if (rest.types?.length) {
+      body.types = rest.types
+    }
+
+    return privateRequest('/orders/filter-parent', {
+      method: 'POST',
+      data: body,
+      params: {
+        page,
+        limit,
+        sortBy,
+        order,
+      },
     })
   },
 )
@@ -93,6 +190,12 @@ export const getOrderByIdApi = toQueryFetcher<string, TServerResponse<IOrderItem
     return privateRequest(`/orders/get-by-id/${orderId}`)
   },
 )
+export const getParentOrderByIdApi = toQueryFetcher<string, TServerResponse<IOrder>>(
+  'getParentOrderByIdApi',
+  async (orderId) => {
+    return privateRequest(`/orders/get-parent-by-id/${orderId}`)
+  },
+)
 
 export const getStatusTrackingByIdApi = toQueryFetcher<string, TServerResponse<IStatusTracking[]>>(
   'getStatusTrackingByIdApi',
@@ -118,6 +221,15 @@ export const cancelOrderApi = toMutationFetcher<ICancelOrder, TServerResponse<IO
   'cancelOrderApi',
   async ({ orderId, reason }) => {
     return privateRequest(`/orders/customer-cancel-order/${orderId}`, {
+      method: 'POST',
+      data: { reason },
+    })
+  },
+)
+export const cancelParentOrderApi = toMutationFetcher<ICancelOrder, TServerResponse<IOrder>>(
+  'cancelParentOrderApi',
+  async ({ orderId, reason }) => {
+    return privateRequest(`/orders/cancel-parent-order/${orderId}`, {
       method: 'POST',
       data: { reason },
     })

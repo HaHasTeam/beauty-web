@@ -66,11 +66,11 @@ export default function ProductTag({ tag, text, size = 'medium' }: ProductTagPro
       tagText = t('productTag.outOfStock')
       break
     case OrderEnum.FLASH_SALE:
-      tagColorClass = 'bg-orange-200 text-orange-800'
+      tagColorClass = 'bg-rose-500 text-white border border-rose-500'
       tagText = t('productTag.flashSale')
       break
-    case 'LiveStream':
-      tagColorClass = 'bg-white text-red-500 border border-red-500'
+    case OrderEnum.LIVE_STREAM:
+      tagColorClass = 'bg-purple-500 text-white border border-purple-500'
       tagText = t('productTag.liveStream')
       break
     case OrderEnum.GROUP_BUYING:
@@ -78,7 +78,7 @@ export default function ProductTag({ tag, text, size = 'medium' }: ProductTagPro
       tagText = t('productTag.groupBuying')
       break
     case OrderEnum.PRE_ORDER:
-      tagColorClass = 'bg-white text-yellow-500 border border-yellow-500'
+      tagColorClass = 'bg-yellow-500 text-white border border-yellow-500'
       tagText = t('productTag.preOrder')
       break
     case PreOrderProductEnum.WAITING:

@@ -9,6 +9,7 @@ import Checkout from '@/views/Checkout'
 import CheckoutResult from '@/views/CheckoutResult'
 import NotificationsPage from '@/views/Notification'
 import OrderDetail from '@/views/OrderDetail'
+import OrderParentDetail from '@/views/OrderParentDetail'
 import Profile from '@/views/Profile'
 import ProfileAddress from '@/views/ProfileAddress'
 import ProfileBookings from '@/views/ProfileBookings'
@@ -85,6 +86,10 @@ const privateRoutes = [
       {
         path: configs.routes.profileOrderDetail, // user order history detail
         element: <OrderDetail />,
+      },
+      {
+        path: configs.routes.profileOrderParentDetail, // user order history detail
+        element: <OrderParentDetail />,
       },
       {
         path: configs.routes.bookingDetail, // user booking detail

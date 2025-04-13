@@ -102,6 +102,7 @@
   "loginRcm": "Đăng nhập để cập nhật kỹ năng của bạn!",
   "facebook": "Facebook",
   "button": {
+    "payment": "Thanh toán",
     "collect": "Thu thập",
     "received": "Đã nhận",
     "notReceived": "Chưa nhận",
@@ -1982,7 +1983,9 @@
       "stripe": "Stripe",
       "visa_card": "Visa/Mastercard",
       "none": "Không có"
-    }
+    },
+    "notifyPayment": "Đơn hàng của bạn chưa được thanh toán. Vui lòng hoàn tất thanh toán bằng {{method}} trong {{val}}.",
+    "changePaymentMethod": "Đổi phương thức thanh toán"
   },
   "bookingStatus": {
     "pending": "Đang chờ",

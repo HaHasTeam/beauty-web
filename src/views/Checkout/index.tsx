@@ -69,7 +69,7 @@ const Checkout = () => {
   const [bestPlatformVoucher, setBestPlatformVoucher] = useState<IPlatformBestVoucher | null>(null)
   const queryClient = useQueryClient()
   const CreateOrderSchema = getCreateOrderSchema()
-
+  console.log(groupBuying)
   const selectedCartItems = useMemo(() => {
     return selectedCartItem
       ? Object.values(selectedCartItem).flatMap((cartBrandItems) => cartBrandItems.map((item) => item.id))

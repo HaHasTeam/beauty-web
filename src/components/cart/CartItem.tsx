@@ -163,7 +163,7 @@ const CartItem = ({
         if (isInGroupBuying) {
           eventType = ''
         } else if (isLivestreamItem) {
-          eventType = 'LIVESTREAM' // Use OrderEnum.LIVESTREAM if defined
+          eventType = OrderEnum.LIVE_STREAM
         } else if (
           cartItem?.productClassification?.preOrderProduct &&
           cartItem?.productClassification?.preOrderProduct?.status === PreOrderProductEnum.ACTIVE

@@ -34,7 +34,7 @@ const AddAddressDialog = ({ triggerComponent }: AddAddressDialogProps) => {
 
   const defaultValues = {
     fullName: '',
-    phoneNumber: '',
+    phone: '',
     detailAddress: '',
     ward: '',
     district: '',
