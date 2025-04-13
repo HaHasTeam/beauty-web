@@ -48,18 +48,14 @@ const ProductCheckoutLandscape = ({
       ? livestreamDiscount! * 100
       : livestreamDiscount
     : 0
+  console.log('discountType22', discountType)
 
   // Calculate base price after regular discounts
   const basePrice = calculateTotalPrice(price, productQuantity, discount, discountType)
   const discountPrice = calculateDiscountPrice(price, discount, discountType)
 
-  // Calculate livestream discount amount if applicable
-  const livestreamDiscountAmount = hasLivestreamDiscount
-    ? basePrice * (livestreamDiscount! <= 1 ? livestreamDiscount! : livestreamDiscount! / 100)
-    : 0
-
   // Final price after all discounts
-  const finalPrice = basePrice - livestreamDiscountAmount
+  const finalPrice = basePrice
 
   return (
     <div className="w-full py-4 border-b border-gray-200">
@@ -85,12 +81,6 @@ const ProductCheckoutLandscape = ({
               </Link>
               <div className="flex gap-1 items-center">
                 {eventType && eventType !== '' && <ProductTag tag={eventType} size="small" />}
-                {hasLivestreamDiscount && (
-                  <div className="flex items-center gap-1 text-yellow-600 text-xs">
-                    <Zap className="h-3 w-3" />
-                    <span>{formattedLivestreamDiscount}%</span>
-                  </div>
-                )}
               </div>
             </div>
           </div>
@@ -111,22 +101,23 @@ const ProductCheckoutLandscape = ({
           {discount &&
           discount > 0 &&
           (discountType === DiscountTypeEnum.AMOUNT || discountType === DiscountTypeEnum.PERCENTAGE) ? (
-            <div className="order-2 sm:order-3 w-full md:w-[25%] lg:w-[25%] xl:w-[20%] flex flex-col items-start sm:items-center">
+            <div className="order-2 md:order-3 w-full md:w-[25%] lg:w-[20%] flex-col md:items-center sm:items-start items-start">
               <div className="flex gap-1 items-center">
-                <span className="text-red-500 xl:text-base lg:text-sm md:text-sm sm:text-xs text-xs">
+                <span className="text-red-500 lg:text-base md:text-sm sm:text-xs text-xs">
                   {hasLivestreamDiscount
                     ? t('productCard.currentPrice', { price: finalPrice })
                     : t('productCard.currentPrice', { price: discountPrice })}
                 </span>
-                <span className="text-gray-400 xl:text-base lg:text-sm text-xs line-through">
+                <span className="text-gray-400 lg:text-sm text-xs line-through">
                   {t('productCard.price', { price: price })}
                 </span>
               </div>
-              {hasLivestreamDiscount && (
-                <span className="text-yellow-600 lg:text-sm md:text-xs sm:text-xs text-xs">
-                  {formattedLivestreamDiscount}%
+              <div>
+                <span className="text-red-500 flex gap-1 items-center lg:text-sm md:text-xs sm:text-xs text-xs">
+                  <Zap className="h-3 w-3" />
+                  {t('voucher.off.numberPercentage', { percentage: discount * 100 })}
                 </span>
-              )}
+              </div>
             </div>
           ) : (
             <div className="order-2 sm:order-3 w-full md:w-[25%] lg:w-[25%] xl:w-[20%] flex flex-col items-start sm:items-center">

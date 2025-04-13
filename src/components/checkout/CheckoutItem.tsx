@@ -109,16 +109,24 @@ const CheckoutItem = ({
             ? OrderEnum.PRE_ORDER
             : cartItem?.productClassification?.productDiscount || (product?.productDiscounts ?? [])[0]?.discount
               ? OrderEnum.FLASH_SALE
-              : ''
+              : cartItem.livestreamDiscount
+                ? 'LIVESTREAM'
+                : ''
         const discount = isInGroupBuying
           ? null
           : eventType === OrderEnum.FLASH_SALE
             ? cartItem?.productClassification?.productDiscount?.discount
-            : ((product?.productDiscounts ?? [])[0]?.discount ?? null)
+            : (product?.productDiscounts ?? [])[0]?.discount
+              ? (product?.productDiscounts ?? [])[0]?.discount
+              : cartItem.livestreamDiscount
+                ? cartItem.livestreamDiscount
+                : null
 
         const discountType = isInGroupBuying
           ? null
-          : eventType === OrderEnum.FLASH_SALE || (product?.productDiscounts ?? [])[0]?.discount
+          : eventType === OrderEnum.FLASH_SALE ||
+              (product?.productDiscounts ?? [])[0]?.discount ||
+              cartItem.livestreamDiscount
             ? DiscountTypeEnum.PERCENTAGE
             : null
 

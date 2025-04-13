@@ -112,8 +112,7 @@ const Checkout = () => {
   // }, [chosenPlatformVoucher])
 
   // Total saved price (product discounts + brand vouchers + platform voucher)
-  const totalSavings =
-    totalProductDiscount + totalBrandDiscount + (platformVoucherDiscount ?? 0) + totalLivestreamDiscount
+  const totalSavings = totalProductDiscount + totalBrandDiscount + (platformVoucherDiscount ?? 0)
   const totalPayment = totalPrice - totalBrandDiscount - (platformVoucherDiscount ?? 0)
 
   const defaultOrderValues = {

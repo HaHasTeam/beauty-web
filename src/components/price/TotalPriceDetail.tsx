@@ -20,7 +20,6 @@ const TotalPriceDetail = ({
   totalPayment,
   totalPlatformDiscount,
   totalProductDiscount,
-  totalLivestreamDiscount = 0,
   totalSavings,
   totalProductCost,
 }: TotalPriceDetailProps) => {
@@ -60,14 +59,7 @@ const TotalPriceDetail = ({
                 </span>
               </div>
             ) : null}
-            {totalLivestreamDiscount && totalLivestreamDiscount > 0 ? (
-              <div className="flex items-center justify-between">
-                <span className="text-sm">{t('cart.livestreamDiscount')}</span>
-                <span className="font-medium text-sm text-yellow-600">
-                  -{t('productCard.price', { price: totalLivestreamDiscount })}
-                </span>
-              </div>
-            ) : null}
+
             <Separator />
 
             <div className="flex items-center justify-between">

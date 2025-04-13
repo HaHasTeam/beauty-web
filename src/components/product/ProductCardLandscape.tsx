@@ -253,18 +253,10 @@ const ProductCardLandscape = ({
   const totalPrice = calculateTotalPrice(price, quantity, discount, discountType)
   const discountPrice = calculateDiscountPrice(price, discount, discountType)
 
-  // Calculate livestream discount amount if applicable - use the original value for calculation
-  const livestreamDiscountAmount = hasLivestreamDiscount
-    ? totalPrice *
-      ((cartItem.livestreamDiscount ?? 0) <= 1
-        ? (cartItem.livestreamDiscount ?? 0)
-        : (cartItem.livestreamDiscount ?? 0) / 100)
-    : 0
-
   console.log('discount', discount)
 
   // Final price after all discounts
-  const finalPrice = totalPrice - livestreamDiscountAmount
+  const finalPrice = totalPrice
 
   const HAS_ACTIVE_CLASSIFICATION = hasActiveClassification(classifications)
   const IN_STOCK_CLASSIFICATION = hasClassificationWithQuantity(classifications)
@@ -409,9 +401,7 @@ const ProductCardLandscape = ({
             <div className="order-2 md:order-3 w-full md:w-[25%] lg:w-[20%] flex-col md:items-center sm:items-start items-start">
               <div className="flex gap-1 items-center">
                 <span className="text-red-500 lg:text-base md:text-sm sm:text-xs text-xs">
-                  {hasLivestreamDiscount
-                    ? t('productCard.currentPrice', { price: finalPrice })
-                    : t('productCard.currentPrice', { price: discountPrice })}
+                  {t('productCard.currentPrice', { price: discountPrice })}
                 </span>
                 <span className="text-gray-400 lg:text-sm text-xs line-through">
                   {t('productCard.price', { price: price })}
@@ -427,9 +417,7 @@ const ProductCardLandscape = ({
           ) : (
             <div className="order-2 md:order-3 w-full md:w-[25%] lg:w-[20%] flex flex-col items-start md:items-center">
               <span className="lg:text-base md:text-sm sm:text-xs text-xs">
-                {hasLivestreamDiscount
-                  ? t('productCard.currentPrice', { price: finalPrice })
-                  : t('productCard.price', { price: price })}
+                {t('productCard.price', { price: price })}
               </span>
               {hasLivestreamDiscount && (
                 <span className="text-yellow-600 lg:text-sm md:text-xs sm:text-xs text-xs">
