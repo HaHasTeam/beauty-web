@@ -9,7 +9,6 @@ interface TotalPriceDetailProps {
   totalProductDiscount: number
   totalBrandDiscount: number
   totalPlatformDiscount: number
-  totalLivestreamDiscount?: number
   totalPayment: number
   totalSavings: number
   totalProductCost: number

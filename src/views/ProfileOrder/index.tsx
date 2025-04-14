@@ -290,7 +290,7 @@ export default function ProfileOrder() {
                 ) : (
                   <div className="space-y-4">
                     {order.children?.map((orderItem) => (
-                      <div key={order?.id} className="bg-white border rounded-md">
+                      <div key={orderItem?.id} className="bg-white border rounded-md">
                         <OrderItem
                           brand={
                             orderItem?.orderDetails[0]?.productClassification?.preOrderProduct?.product?.brand ??

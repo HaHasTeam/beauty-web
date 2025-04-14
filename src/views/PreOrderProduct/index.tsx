@@ -29,25 +29,27 @@ function PreOrderProductSections() {
   return (
     <div>
       <div className="flex flex-col w-full max-w-screen-xl mx-auto">
-        <div className="flex items-center gap-2 mb-8">
-          <CalendarClock className="w-6 h-6 text-primary" />
-          <h2 className="text-2xl font-bold text-primary">{t('home.preOrderTitle')}</h2>
-        </div>
+        <div className="flex items-center gap-2 justify-between">
+          <div className="flex items-center gap-2 mb-8">
+            <CalendarClock className="w-6 h-6 text-primary" />
+            <h2 className="text-2xl font-bold text-primary">{t('home.preOrderTitle')}</h2>
+          </div>
 
-        <Link to="/pre-orders" className="flex items-center text-primary hover:underline">
-          {t('button.seeAll')}
-          <ArrowRight className="w-4 h-4" />
-        </Link>
+          <Link to="/pre-orders" className="flex items-center text-primary hover:no-underline">
+            {t('button.seeAll')}
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
       </div>
 
       <div className="flex mb-6">
-        <div className="flex items-center border rounded-lg overflow-hidden">
+        <div className="flex items-center rounded-lg overflow-hidden">
           <button
             onClick={() => handleStatusChange(PreOrderProductEnum.ACTIVE)}
             className={`px-4 py-2 text-sm font-medium ${
               activeStatus === PreOrderProductEnum.ACTIVE
-                ? 'bg-primary text-white'
-                : 'bg-white text-gray-700 hover:bg-gray-50'
+                ? 'bg-primary text-white border border-primary'
+                : 'bg-white text-primary border-primary border rounded-tl-lg rounded-bl-lg hover:bg-primary/10'
             }`}
           >
             {t('home.status.active')}
@@ -56,8 +58,8 @@ function PreOrderProductSections() {
             onClick={() => handleStatusChange(PreOrderProductEnum.WAITING)}
             className={`px-4 py-2 text-sm font-medium ${
               activeStatus === PreOrderProductEnum.WAITING
-                ? 'bg-primary text-white'
-                : 'bg-white text-gray-700 hover:bg-gray-50'
+                ? 'bg-primary text-white border border-primary'
+                : 'bg-white text-primary border-primary border rounded-tr-lg rounded-br-lg hover:bg-primary/10'
             }`}
           >
             {t('home.status.waiting')}

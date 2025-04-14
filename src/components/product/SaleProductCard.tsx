@@ -44,7 +44,7 @@ export default function SaleProductCard({ product }: ProductCardProps) {
           </div>
         </CardContent>
         <CardFooter className="flex flex-col gap-3 sm:p-4 px-2 py-4">
-          <div className="flex sm:flex-row flex-col sm:justify-between sm:items-center items-end w-full">
+          <div className="flex sm:flex-row flex-col sm:justify-between sm:items-center items-end w-full flex-wrap">
             <div className="sm:order-1 order-2 flex items-baseline gap-2">
               <span className="text-xl font-semibold">
                 {t('productCard.currentPrice', {

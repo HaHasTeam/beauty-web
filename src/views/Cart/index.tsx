@@ -17,7 +17,7 @@ import { getBestPlatformVouchersApi, getBestShopVouchersApi } from '@/network/ap
 import useCartStore from '@/store/cart'
 import type { ICartByBrand } from '@/types/cart'
 import type { IBrandBestVoucher, ICheckoutItem, IPlatformBestVoucher, TVoucher } from '@/types/voucher'
-import { createCheckoutItem, createCheckoutItems } from '@/utils/cart'
+import { checkPreventAction, createCheckoutItem, createCheckoutItems, findCartItemById } from '@/utils/cart'
 import {
   calculateCartTotals,
   calculatePlatformVoucherDiscount,
@@ -33,6 +33,7 @@ const Cart = ({ isInGroupBuy = false, isInPeriod = false }: CartProps) => {
   const { t } = useTranslation()
   const [selectedCartItems, setSelectedCartItems] = useState<string[]>([])
   const [allCartItemIds, setAllCartItemIds] = useState<string[]>([])
+  const [allValidCartItemIds, setAllValidCartItemIds] = useState<string[]>([])
   const [isAllSelected, setIsAllSelected] = useState<boolean>(false)
   const { cartItems } = useCartStore()
   const { isMyCartFetching } = useCart()
@@ -48,7 +49,6 @@ const Cart = ({ isInGroupBuy = false, isInPeriod = false }: CartProps) => {
   const [platformChosenVoucher, setPlatformChosenVoucher] = useState<TVoucher | null>(null)
   const { setChosenPlatformVoucher, setSelectedCartItem, resetSelectedCartItem } = useCartStore()
   const [bestPlatformVoucher, setBestPlatformVoucher] = useState<IPlatformBestVoucher | null>(null)
-  const [totalLivestreamDiscount, setTotalLivestreamDiscount] = useState<number>(0)
 
   const voucherMap = bestBrandVouchers?.reduce<{ [key: string]: IBrandBestVoucher }>((acc, voucher) => {
     acc[voucher?.brandId] = voucher
@@ -69,13 +69,13 @@ const Cart = ({ isInGroupBuy = false, isInPeriod = false }: CartProps) => {
   // Total saved price (product discounts + brand vouchers + platform voucher + livestream discount)
   const savedPrice = totalDirectProductsDiscount + totalVoucherDiscount + platformVoucherDiscount
 
-  console.log('totalLivestreamDiscount', totalLivestreamDiscount)
-  console.log('platformVoucherDiscount', platformVoucherDiscount)
-  console.log('totalVoucherDiscount', totalVoucherDiscount)
-  console.log('totalDirectProductsDiscount', totalDirectProductsDiscount)
+  const totalFinalPrice = Math.floor(totalPrice - totalVoucherDiscount - platformVoucherDiscount)
 
-  const totalFinalPrice = totalPrice - totalVoucherDiscount - platformVoucherDiscount
-
+  console.log('checkcart platformVoucherDiscount', platformVoucherDiscount)
+  console.log('checkcart totalVoucherDiscount', totalVoucherDiscount)
+  console.log('checkcart totalDirectProductsDiscount', totalDirectProductsDiscount)
+  console.log('checkcart totalPrice', totalPrice)
+  console.log('checkcart totalFinalPrice', totalFinalPrice)
   // const { data: useMyCartData, isFetching } = useQuery({
   //   queryKey: [getMyCartApi.queryKey],
   //   queryFn: getMyCartApi.fn,
@@ -101,7 +101,13 @@ const Cart = ({ isInGroupBuy = false, isInPeriod = false }: CartProps) => {
     if (isAllSelected) {
       setSelectedCartItems([]) // Deselect all
     } else {
-      setSelectedCartItems(allCartItemIds) // Select all
+      // Only select cart items where PREVENT_ACTION is false
+      const validCartItemIds = allCartItemIds.filter((id) => {
+        const cartItem = findCartItemById(id, cartItems)
+        return cartItem && !checkPreventAction(cartItem)
+      })
+
+      setSelectedCartItems(validCartItemIds) // Select all
     }
   }
 
@@ -147,9 +153,20 @@ const Cart = ({ isInGroupBuy = false, isInPeriod = false }: CartProps) => {
         cartBrand.map((cartItem) => cartItem.id),
       )
       setAllCartItemIds(tmpAllCartItemIds)
-      setIsAllSelected(tmpAllCartItemIds.every((id) => selectedCartItems.includes(id)))
+      // Filter out valid cart items (where PREVENT_ACTION is false)
+      const validCartItemIds = tmpAllCartItemIds.filter((id) => {
+        const cartItem = findCartItemById(id, cartItems)
+        return cartItem && !checkPreventAction(cartItem)
+      })
+      // Check if all valid items are selected
+      const isAllValid = validCartItemIds.length > 0 && validCartItemIds.every((id) => selectedCartItems.includes(id))
 
+      // Check if selection includes only valid items
       const validSelectedCartItems = selectedCartItems.filter((id) => tmpAllCartItemIds.includes(id))
+
+      setIsAllSelected(isAllValid && validSelectedCartItems.length === validCartItemIds.length)
+      setAllValidCartItemIds(validCartItemIds)
+
       if (validSelectedCartItems.length !== selectedCartItems.length) {
         setSelectedCartItems(validSelectedCartItems)
       }
@@ -195,12 +212,10 @@ const Cart = ({ isInGroupBuy = false, isInPeriod = false }: CartProps) => {
       setTotalPrice(cartTotals.totalPrice)
       setTotalOriginalPrice(cartTotals.totalProductCost)
       setTotalDirectProductsDiscount(cartTotals.totalProductDiscount)
-      setTotalLivestreamDiscount(cartTotals.totalLivestreamDiscount)
     } else {
       setTotalPrice(0)
       setTotalOriginalPrice(0)
       setTotalDirectProductsDiscount(0)
-      setTotalLivestreamDiscount(0)
       setChosenVouchersByBrand({})
 
       setPlatformChosenVoucher(null)
@@ -278,7 +293,7 @@ const Cart = ({ isInGroupBuy = false, isInPeriod = false }: CartProps) => {
             <CartFooter
               isInPeriod={isInPeriod}
               isInGroupBuying={isInGroupBuy}
-              cartItemCountAll={allCartItemIds?.length}
+              cartItemCountAll={allValidCartItemIds?.length}
               cartItemCount={selectedCartItems?.length}
               setSelectedCartItems={setSelectedCartItems}
               onCheckAll={handleSelectAll}
@@ -287,7 +302,6 @@ const Cart = ({ isInGroupBuy = false, isInPeriod = false }: CartProps) => {
               selectedCartItems={selectedCartItems}
               totalProductDiscount={totalDirectProductsDiscount}
               totalVoucherDiscount={totalVoucherDiscount}
-              totalLivestreamDiscount={totalLivestreamDiscount}
               savedPrice={savedPrice}
               totalFinalPrice={totalFinalPrice}
               platformChosenVoucher={platformChosenVoucher}

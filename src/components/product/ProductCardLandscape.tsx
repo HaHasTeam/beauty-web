@@ -14,7 +14,16 @@ import { deleteCartItemApi, getCartByIdApi, getMyCartApi, updateCartItemApi } fr
 import useCartStore from '@/store/cart'
 import type { ICartByBrand, ICartItem } from '@/types/cart'
 import type { IClassification } from '@/types/classification'
-import { ClassificationTypeEnum, DiscountTypeEnum, ProductCartStatusEnum, ProductEnum } from '@/types/enum'
+import {
+  ClassificationTypeEnum,
+  DiscountTypeEnum,
+  LiveStreamEnum,
+  OrderEnum,
+  ProductCartStatusEnum,
+  ProductDiscountEnum,
+  ProductEnum,
+} from '@/types/enum'
+import { PreOrderProductEnum } from '@/types/pre-order'
 import type { DiscountType } from '@/types/product-discount'
 import { calculateDiscountPrice, calculateTotalPrice } from '@/utils/price'
 import {
@@ -84,16 +93,6 @@ const ProductCardLandscape = ({
   const OUT_OF_STOCK = PRODUCT_STOCK_COUNT <= 0
   const HIDDEN = checkCurrentProductClassificationHide(productClassification, classifications)
   const IS_ACTIVE = checkCurrentProductClassificationActive(productClassification, classifications)
-
-  // Check if the item has a livestream discount
-  const hasLivestreamDiscount = (cartItem.livestreamDiscount ?? 0) > 0
-
-  // Format the livestream discount percentage (multiply by 100 if it's in decimal format)
-  const formattedLivestreamDiscount = hasLivestreamDiscount
-    ? (cartItem.livestreamDiscount ?? 0) <= 1
-      ? (cartItem.livestreamDiscount ?? 0) * 100
-      : cartItem.livestreamDiscount
-    : 0
 
   const { mutateAsync: deleteCartItemFn } = useMutation({
     mutationKey: [deleteCartItemApi.mutationKey, cartItemId as string],
@@ -253,23 +252,51 @@ const ProductCardLandscape = ({
   const totalPrice = calculateTotalPrice(price, quantity, discount, discountType)
   const discountPrice = calculateDiscountPrice(price, discount, discountType)
 
-  console.log('discount', discount)
-
-  // Final price after all discounts
-  const finalPrice = totalPrice
-
   const HAS_ACTIVE_CLASSIFICATION = hasActiveClassification(classifications)
   const IN_STOCK_CLASSIFICATION = hasClassificationWithQuantity(classifications)
 
+  // check event status
+  const EVENT_CANCELLED =
+    (cartItem.livestream && cartItem.livestream.status === LiveStreamEnum.CANCELLED) ||
+    (cartItem?.productClassification?.productDiscount &&
+      cartItem?.productClassification?.productDiscount?.status === ProductDiscountEnum.CANCELLED) ||
+    (cartItem?.productClassification?.preOrderProduct &&
+      cartItem?.productClassification?.preOrderProduct?.status === PreOrderProductEnum.CANCELLED)
+  const EVENT_ENDED = cartItem.livestream && cartItem.livestream.status === LiveStreamEnum.ENDED
+  const EVENT_INACTIVE =
+    (cartItem?.productClassification?.productDiscount &&
+      cartItem?.productClassification?.productDiscount?.status === ProductDiscountEnum.INACTIVE) ||
+    (cartItem?.productClassification?.preOrderProduct &&
+      cartItem?.productClassification?.preOrderProduct?.status === PreOrderProductEnum.INACTIVE) ||
+    false
+  const EVENT_SOLD_OUT =
+    (cartItem?.productClassification?.productDiscount &&
+      cartItem?.productClassification?.productDiscount?.status === ProductDiscountEnum.SOLD_OUT) ||
+    (cartItem?.productClassification?.preOrderProduct &&
+      cartItem?.productClassification?.preOrderProduct?.status === PreOrderProductEnum.SOLD_OUT) ||
+    false
+
+  const eventName = cartItem?.productClassification?.preOrderProduct
+    ? t(`event.status.${OrderEnum.PRE_ORDER}`)
+    : cartItem?.productClassification?.productDiscount
+      ? t(`event.status.${OrderEnum.FLASH_SALE}`)
+      : cartItem.livestream
+        ? t(`event.status.${OrderEnum.LIVE_STREAM}`)
+        : null
   const PREVENT_ACTION =
     !HAS_ACTIVE_CLASSIFICATION ||
     !IN_STOCK_CLASSIFICATION ||
-    !(productStatus === ProductEnum.FLASH_SALE || productStatus === ProductEnum.OFFICIAL)
+    !(productStatus === ProductEnum.FLASH_SALE || productStatus === ProductEnum.OFFICIAL) ||
+    EVENT_CANCELLED ||
+    EVENT_ENDED ||
+    EVENT_INACTIVE ||
+    EVENT_SOLD_OUT
 
   useEffect(() => {
     setQuantity(productQuantity)
     setInputValue(productQuantity.toString())
   }, [productQuantity])
+
   return (
     <div className={`w-full py-4 border-b border-gray-200`}>
       <div className={`w-full flex gap-2 items-center`}>
@@ -284,14 +311,22 @@ const ProductCardLandscape = ({
             <ProductTag tag={ProductCartStatusEnum.UN_PUBLISHED} />
           ) : productStatus === ProductEnum.OUT_OF_STOCK ? (
             <ProductTag tag={ProductCartStatusEnum.SOLD_OUT} />
-          ) : IS_ACTIVE ? (
-            <Checkbox id={cartItemId} checked={isSelected} onClick={() => onChooseProduct(cartItemId)} />
+          ) : EVENT_CANCELLED ? (
+            <ProductTag tag={ProductCartStatusEnum.CANCELLED} />
+          ) : EVENT_ENDED ? (
+            <ProductTag tag={ProductCartStatusEnum.ENDED} />
+          ) : EVENT_INACTIVE ? (
+            <ProductTag tag={ProductCartStatusEnum.INACTIVE} />
+          ) : EVENT_SOLD_OUT ? (
+            <ProductTag tag={ProductCartStatusEnum.SOLD_OUT} />
           ) : HIDDEN ? (
             <ProductTag tag={ProductCartStatusEnum.HIDDEN} />
           ) : OUT_OF_STOCK ? (
             <ProductTag tag={ProductCartStatusEnum.SOLD_OUT} />
-          ) : IN_STOCK_CLASSIFICATION ? (
+          ) : !IN_STOCK_CLASSIFICATION ? (
             <ProductTag tag={ProductCartStatusEnum.SOLD_OUT} />
+          ) : IS_ACTIVE ? (
+            <Checkbox id={cartItemId} checked={isSelected} onClick={() => onChooseProduct(cartItemId)} />
           ) : null}
 
           {/* product image */}
@@ -378,6 +413,46 @@ const ProductCardLandscape = ({
                     message={t('cart.soldOutMessage')}
                   />
                 </div>
+              ) : EVENT_SOLD_OUT ? (
+                <div>
+                  <AlertMessage
+                    className="w-fit border-0 outline-none rounded-md p-1 px-2 bg-red-50"
+                    textSize="small"
+                    color="danger"
+                    text="danger"
+                    message={t('cart.eventSoldOutMessage', { eventName: eventName })}
+                  />
+                </div>
+              ) : EVENT_ENDED ? (
+                <div>
+                  <AlertMessage
+                    className="w-fit border-0 outline-none rounded-md p-1 px-2 bg-red-50"
+                    textSize="small"
+                    color="danger"
+                    text="danger"
+                    message={t('cart.eventEndedMessage', { eventName: eventName })}
+                  />
+                </div>
+              ) : EVENT_CANCELLED ? (
+                <div>
+                  <AlertMessage
+                    className="w-fit border-0 outline-none rounded-md p-1 px-2 bg-red-50"
+                    textSize="small"
+                    color="danger"
+                    text="danger"
+                    message={t('cart.eventCancelledMessage', { eventName: eventName })}
+                  />
+                </div>
+              ) : EVENT_INACTIVE ? (
+                <div>
+                  <AlertMessage
+                    className="w-fit border-0 outline-none rounded-md p-1 px-2 bg-red-50"
+                    textSize="small"
+                    color="danger"
+                    text="danger"
+                    message={t('cart.eventInactiveMessage', { eventName: eventName })}
+                  />
+                </div>
               ) : null}
             </div>
           </div>
@@ -415,15 +490,10 @@ const ProductCardLandscape = ({
               </div>
             </div>
           ) : (
-            <div className="order-2 md:order-3 w-full md:w-[25%] lg:w-[20%] flex flex-col items-start md:items-center">
+            <div className="order-2 md:order-3 w-full md:w-[25%] lg:w-[20%] flex items-start md:items-center">
               <span className="lg:text-base md:text-sm sm:text-xs text-xs">
                 {t('productCard.price', { price: price })}
               </span>
-              {hasLivestreamDiscount && (
-                <span className="text-yellow-600 lg:text-sm md:text-xs sm:text-xs text-xs">
-                  {formattedLivestreamDiscount}%
-                </span>
-              )}
             </div>
           )}
         </div>
@@ -460,9 +530,7 @@ const ProductCardLandscape = ({
         <span
           className={`text-red-500 lg:text-base md:text-sm sm:text-xs text-xs w-[16%] md:w-[8%] sm:w-[12%] flex flex-col items-center ${PREVENT_ACTION ? 'opacity-40' : ''}`}
         >
-          {hasLivestreamDiscount
-            ? t('productCard.currentPrice', { price: finalPrice })
-            : t('productCard.currentPrice', { price: totalPrice })}
+          {t('productCard.currentPrice', { price: totalPrice })}
         </span>
 
         {/* delete action */}

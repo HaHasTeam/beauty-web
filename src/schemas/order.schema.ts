@@ -21,6 +21,11 @@ export const getCreateOrderSchema = () => {
     platformVoucherId: z.string().optional(), // Optional UUID
   })
 }
+export const getUpdatePaymentMethodSchema = () => {
+  return z.object({
+    paymentMethod: z.string().min(1, i18next.t('validation.paymentRequired')), // string
+  })
+}
 
 export const getCancelOrderSchema = () => {
   return z.object({
@@ -48,5 +53,6 @@ export const getReturnOrderSchema = () => {
 }
 
 export const CreateOrderSchema = getCreateOrderSchema()
+export const UpdatePaymentMethodSchema = getUpdatePaymentMethodSchema()
 export const CancelOrderSchema = getCancelOrderSchema()
 export const ReturnOrderSchema = getRequestReturnOrderSchema()

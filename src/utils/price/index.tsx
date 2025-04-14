@@ -1,5 +1,5 @@
 import { ICartByBrand, ICartItem } from '@/types/cart'
-import { DiscountTypeEnum, ProductDiscountEnum, VoucherApplyTypeEnum } from '@/types/enum'
+import { DiscountTypeEnum, LiveStreamEnum, ProductDiscountEnum, VoucherApplyTypeEnum } from '@/types/enum'
 import { DiscountType } from '@/types/product-discount'
 import { TVoucher } from '@/types/voucher'
 
@@ -175,20 +175,20 @@ export const calculateCartTotals = (
 ): {
   totalProductCost: number
   totalProductDiscount: number
-  totalLivestreamDiscount: number
+  // totalLivestreamDiscount: number
   totalPrice: number
 } => {
   if (!cartByBrand)
     return {
       totalProductCost: 0,
       totalProductDiscount: 0,
-      totalLivestreamDiscount: 0,
+      // totalLivestreamDiscount: 0,
       totalPrice: 0,
     }
 
   let totalProductCost = 0
   let totalProductDiscount = 0
-  let totalLivestreamDiscount = 0
+  // let totalLivestreamDiscount = 0
   let totalPrice = 0
 
   selectedCartItems?.forEach((itemId) => {
@@ -201,13 +201,13 @@ export const calculateCartTotals = (
           cartItem?.productClassification?.productDiscount &&
           cartItem?.productClassification?.productDiscount?.status === ProductDiscountEnum.ACTIVE
             ? cartItem?.productClassification?.productDiscount?.discount
-            : cartItem.livestreamDiscount
+            : cartItem.livestream && cartItem.livestream.status === LiveStreamEnum.LIVE
               ? cartItem.livestreamDiscount
               : 0
         const discountType = DiscountTypeEnum.PERCENTAGE
 
         // Check if livestream discount exists
-        const hasLivestreamDiscount = (cartItem.livestreamDiscount ?? 0) > 0
+        // const hasLivestreamDiscount = (cartItem.livestreamDiscount ?? 0) > 0
         // Calculate total product cost (price without discount)
         const itemTotalCost = productPrice * cartItemQuantity
         totalProductCost += itemTotalCost
@@ -220,15 +220,15 @@ export const calculateCartTotals = (
         }
 
         // Calculate livestream discount if it exists
-        let livestreamDiscountAmount = 0
-        console.log('discount 224', discount)
-        if (hasLivestreamDiscount) {
-          // Apply livestream discount on top of any existing discount
+        // let livestreamDiscountAmount = 0
+        // console.log('discount 224', discount)
+        // if (hasLivestreamDiscount) {
+        //   // Apply livestream discount on top of any existing discount
 
-          const priceAfterDiscount = calculateDiscountPrice(productPrice, discount, discountType)
-          livestreamDiscountAmount = priceAfterDiscount * (cartItem.livestreamDiscount ?? 0)
-          totalLivestreamDiscount += livestreamDiscountAmount * cartItemQuantity
-        }
+        //   const priceAfterDiscount = calculateDiscountPrice(productPrice, discount, discountType)
+        //   livestreamDiscountAmount = priceAfterDiscount * (cartItem.livestreamDiscount ?? 0)
+        //   totalLivestreamDiscount += livestreamDiscountAmount * cartItemQuantity
+        // }
 
         // Calculate total price after applying all discounts
         const finalPrice = calculateDiscountPrice(productPrice, discount, discountType)
@@ -242,7 +242,7 @@ export const calculateCartTotals = (
   return {
     totalProductCost,
     totalProductDiscount,
-    totalLivestreamDiscount,
+    // totalLivestreamDiscount,
     totalPrice,
   }
 }
@@ -429,12 +429,14 @@ export const calculateBrandVoucherDiscount = (
     if (!selectedCartItems.includes(cartItem.id)) return total
 
     const productClassification = cartItem.productClassification
-    const discount = productClassification?.productDiscount?.discount
-      ? productClassification?.productDiscount?.discount
-      : cartItem?.livestreamDiscount
-        ? cartItem?.livestreamDiscount
-        : 0
-    const productDiscountType = discount > 0 ? DiscountTypeEnum.PERCENTAGE : null
+    const discount =
+      cartItem?.productClassification?.productDiscount &&
+      cartItem?.productClassification?.productDiscount?.status === ProductDiscountEnum.ACTIVE
+        ? productClassification?.productDiscount?.discount
+        : cartItem?.livestream && cartItem?.livestream?.status === LiveStreamEnum.LIVE
+          ? cartItem?.livestreamDiscount
+          : 0
+    const productDiscountType = discount && discount > 0 ? DiscountTypeEnum.PERCENTAGE : null
 
     return total + calculateTotalPrice(productClassification.price, cartItem.quantity, discount, productDiscountType)
   }, 0)
@@ -786,12 +788,14 @@ export const calculatePlatformVoucherDiscount = (
       }
 
       const productClassification = cartItem.productClassification
-      const discount = productClassification?.productDiscount?.discount
-        ? productClassification?.productDiscount?.discount
-        : cartItem.livestreamDiscount
-          ? cartItem.livestreamDiscount
-          : 0
-      const productDiscountType = discount > 0 ? DiscountTypeEnum.PERCENTAGE : null
+      const discount =
+        cartItem?.productClassification?.productDiscount &&
+        cartItem?.productClassification?.productDiscount?.status === ProductDiscountEnum.ACTIVE
+          ? productClassification?.productDiscount?.discount
+          : cartItem.livestream && cartItem.livestream.status === LiveStreamEnum.LIVE
+            ? cartItem.livestreamDiscount
+            : 0
+      const productDiscountType = discount && discount > 0 ? DiscountTypeEnum.PERCENTAGE : null
       console.log('calculatePlatformVoucherDiscount 791', discount)
 
       // Calculate the price of this product before brand discount
@@ -826,12 +830,14 @@ export const calculatePlatformVoucherDiscount = (
         }
 
         const productClassification = cartItem.productClassification
-        const discount = productClassification?.productDiscount?.discount
-          ? productClassification?.productDiscount?.discount
-          : cartItem.livestreamDiscount
-            ? cartItem.livestreamDiscount
-            : 0
-        const productDiscountType = discount > 0 ? DiscountTypeEnum.PERCENTAGE : null
+        const discount =
+          cartItem?.productClassification?.productDiscount &&
+          cartItem?.productClassification?.productDiscount?.status === ProductDiscountEnum.ACTIVE
+            ? productClassification?.productDiscount?.discount
+            : cartItem.livestream && cartItem.livestream.status === LiveStreamEnum.LIVE
+              ? cartItem.livestreamDiscount
+              : 0
+        const productDiscountType = discount && discount > 0 ? DiscountTypeEnum.PERCENTAGE : null
 
         // Calculate item price before brand discount
         const itemPrice = calculateTotalPrice(

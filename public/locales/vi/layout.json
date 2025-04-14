@@ -77,7 +77,9 @@
     "cancelled": "Đã hủy",
     "inactive": "Đã ẩn",
     "banned": "Đã cấm",
-    "unPublished": "Không khả dụng"
+    "unPublished": "Không khả dụng",
+    "eventCancelled": "Sự kiện đã hủy",
+    "eventEnded": "Đã kết thúc"
   },
   "statusTag": {
     "default": "Mặc định"
@@ -508,7 +510,13 @@
     "days": "Ngày",
     "hours": "Giờ",
     "minutes": "Phút",
-    "seconds": "Giây"
+    "seconds": "Giây",
+    "status": {
+      "PRE_ORDER": "Đặt trước",
+      "GROUP_BUYING": "Mua nhóm",
+      "FLASH_SALE": "Flash sale",
+      "LIVE_STREAM": "Livestream"
+    }
   },
   "reviews": {
     "title": "Đánh giá",
@@ -646,6 +654,10 @@
     "productLeft": "Còn {{count}} sản phẩm",
     "updateClassificationSuccess": "Thay đổi phân loại sản phẩm thành công!",
     "soldOutMessage": "Phân loại hàng này đã bán hết, vui lòng chọn phân loại khác.",
+    "eventSoldOutMessage": "Phân loại sản phẩm trong sự kiện {{eventName}} đã hết hàng.",
+    "eventEndedMessage": "Sự kiện {{eventName}} đã kết thúc.",
+    "eventCancelledMessage": "Sự kiện {{eventName}} đã bị hủy.",
+    "eventInactiveMessage": "Phân loại sản phẩm trong sự kiện {{eventName}} hiện không hoạt động.",
     "soldOutAllMessage": "Sản phẩm này đã hết hàng.",
     "bannedMessage": "Sản phẩm này đã bị cấm.",
     "inactiveMessage": "Sản phẩm này đang không hoạt động.",
@@ -777,7 +789,6 @@
     "message": "Tin nhắn"
   },
   "wallet": {
-    "choosePaymentMethod": "Chọn phương thức thanh toán",
     "title": "Ví",
     "description": "Ví của bạn trống. Vui lòng thêm phương thức thanh toán trước.",
     "addCard": "Thêm Thẻ Mới",
@@ -1998,7 +2009,7 @@
       "visa_card": "Visa/Mastercard",
       "none": "Không có"
     },
-    "notifyPayment": "Đơn hàng của bạn chưa được thanh toán. Vui lòng hoàn tất thanh toán bằng {{method}} trong {{val}}.",
+    "notifyPayment": "Đơn hàng của bạn chưa được thanh toán. Vui lòng hoàn tất thanh toán số tiền {{total}} bằng {{method}} trong {{val}}.",
     "changePaymentMethod": "Đổi phương thức thanh toán"
   },
   "bookingStatus": {

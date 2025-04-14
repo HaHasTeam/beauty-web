@@ -77,7 +77,9 @@
     "cancelled": "Cancelled",
     "inactive": "Inactive",
     "banned": "Banned",
-    "unPublished": "Unavailable"
+    "unPublished": "Unavailable",
+    "eventCancelled": "Event Cancelled",
+    "eventEnded": "Event Ended"
   },
   "statusTag": {
     "default": "Default"
@@ -491,7 +493,13 @@
     "days": "Days",
     "hours": "Hours",
     "minutes": "Minutes",
-    "seconds": "Seconds"
+    "seconds": "Seconds",
+    "status": {
+      "PRE_ORDER": "Pre-Order",
+      "GROUP_BUYING": "Group buying",
+      "FLASH_SALE": "Flash sale",
+      "LIVE_STREAM": "Livestream"
+    }
   },
   "reviews": {
     "title": "Reviews",
@@ -628,6 +636,10 @@
     "productLeft": "{{count}} products left",
     "updateClassificationSuccess": "Update product classification successfully!",
     "soldOutMessage": "This product classification is sold out, please choose another.",
+    "eventSoldOutMessage": "The product classification for this {{eventName}} event is sold out.",
+    "eventEndedMessage": "This {{eventName}} event has ended.",
+    "eventCancelledMessage": "This {{eventName}} event has been cancelled.",
+    "eventInactiveMessage": "The product classification for this {{eventName}} event is inactive.",
     "soldOutAllMessage": "This product is sold out.",
     "bannedMessage": "This product is banned.",
     "inactiveMessage": "This product is inactive.",
@@ -1931,7 +1943,7 @@
       "visa_card": "Visa/Mastercard",
       "none": "None"
     },
-    "notifyPayment": "Your order hasn’t been paid yet. Please complete the payment via {{method}} by {{val}}.",
+    "notifyPayment": "Your order hasn’t been paid yet. Please complete the payment of {{total}} via {{method}} by {{val}}.",
     "changePaymentMethod": "Change payment method"
   },
   "bookingStatus": {

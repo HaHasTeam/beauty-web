@@ -80,7 +80,7 @@ const Checkout = () => {
     return acc
   }, {})
 
-  const { totalProductCost, totalProductDiscount, totalLivestreamDiscount, totalPrice } = useMemo(() => {
+  const { totalProductCost, totalProductDiscount, totalPrice } = useMemo(() => {
     return calculateCartTotals(selectedCartItems, selectedCartItem)
   }, [selectedCartItem, selectedCartItems])
 
@@ -113,8 +113,8 @@ const Checkout = () => {
 
   // Total saved price (product discounts + brand vouchers + platform voucher)
   const totalSavings = totalProductDiscount + totalBrandDiscount + (platformVoucherDiscount ?? 0)
-  const totalPayment = totalPrice - totalBrandDiscount - (platformVoucherDiscount ?? 0)
-
+  const totalPayment = Math.floor(totalPrice - totalBrandDiscount - (platformVoucherDiscount ?? 0))
+  console.log(totalPrice, totalBrandDiscount, platformVoucherDiscount)
   const defaultOrderValues = {
     orders: [],
     addressId: '',
@@ -496,7 +496,6 @@ const Checkout = () => {
                         totalProductCost={totalProductCost}
                         totalBrandDiscount={totalBrandDiscount}
                         totalPlatformDiscount={platformVoucherDiscount ?? 0}
-                        totalLivestreamDiscount={totalLivestreamDiscount}
                         totalSavings={totalSavings}
                         totalPayment={totalPayment}
                         formId={`form-${formId}`}

@@ -49,9 +49,9 @@ const OrderParentDetail = () => {
 
   useEffect(() => {
     if (masterConfig && useOrderData && useOrderData.data) {
-      setTimeLeft(calculatePaymentCountdown(useOrderData.data, masterConfig.data))
+      setTimeLeft(calculatePaymentCountdown(useOrderData.data, masterConfig.data).timeLeft)
       const timer = setInterval(() => {
-        setTimeLeft(calculatePaymentCountdown(useOrderData.data, masterConfig.data))
+        setTimeLeft(calculatePaymentCountdown(useOrderData.data, masterConfig.data).timeLeft)
       }, 1000)
 
       return () => clearInterval(timer)
@@ -88,11 +88,13 @@ const OrderParentDetail = () => {
           <>
             <div className="space-y-6 w-full">
               {/* payment */}
-              {useOrderData.data.paymentMethod === PaymentMethod.WALLET &&
+              {(useOrderData.data.paymentMethod === PaymentMethod.WALLET ||
+                useOrderData.data.paymentMethod === PaymentMethod.BANK_TRANSFER) &&
                 useOrderData.data.status === ShippingStatusEnum.TO_PAY && (
                   <AlertMessage
                     title={t('order.paymentTitle')}
                     message={t('payment.notifyPayment', {
+                      total: t('productCard.currentPrice', { price: useOrderData?.data.totalPrice }),
                       val:
                         String(timeLeft.hours).padStart(2, '0') +
                         ':' +
@@ -210,23 +212,27 @@ const OrderParentDetail = () => {
                     />
                   </div>
                 ))}
-              <div className="flex items-center gap-3 w-full justify-between">
-                <Button
-                  variant="outline"
-                  className="w-1/3 border border-primary text-primary hover:text-primary hover:bg-primary/10"
-                  onClick={() => setOpenCancelParentOrderDialog(true)}
-                >
-                  {t('order.cancelOrder')}
-                </Button>
-                <Button
-                  variant="outline"
-                  className="w-1/3 border border-primary text-primary hover:text-primary hover:bg-primary/10"
-                  onClick={() => {}}
-                >
-                  {t('payment.changePaymentMethod')}
-                </Button>
-                <Button className="w-1/3">{t('order.payment')}</Button>
-              </div>
+              {(useOrderData.data.paymentMethod === PaymentMethod.WALLET ||
+                useOrderData.data.paymentMethod === PaymentMethod.BANK_TRANSFER) &&
+                useOrderData.data.status === ShippingStatusEnum.TO_PAY && (
+                  <div className="flex items-center gap-3 w-full justify-between">
+                    <Button
+                      variant="outline"
+                      className="w-1/3 border border-primary text-primary hover:text-primary hover:bg-primary/10"
+                      onClick={() => setOpenCancelParentOrderDialog(true)}
+                    >
+                      {t('order.cancelOrder')}
+                    </Button>
+                    <Button
+                      variant="outline"
+                      className="w-1/3 border border-primary text-primary hover:text-primary hover:bg-primary/10"
+                      onClick={() => {}}
+                    >
+                      {t('payment.changePaymentMethod')}
+                    </Button>
+                    <Button className="w-1/3">{t('order.payment')}</Button>
+                  </div>
+                )}
             </div>
           </>
         )}
