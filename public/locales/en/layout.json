@@ -1872,6 +1872,7 @@
   },
   "walletTerm": {
     "balance": "Balance",
+    "availableBalance": "Available balance",
     "topUp": "Top Up",
     "withdraw": "Withdraw",
     "createWallet": "Create Wallet"
@@ -1947,7 +1948,8 @@
     "notifyPayment": "Your order hasn’t been paid yet. Please complete the payment of {{total}} via {{method}} by {{val}}.",
     "changePaymentMethod": "Change payment method",
     "paymentSuccess": "Payment successful!",
-    "methodMessage": "For group-buying purchases, the default payment method is wallet. The amount will be automatically deducted once the group order is successfully completed. Please ensure your wallet has sufficient available balance to avoid any transaction interruptions."
+    "methodMessage": "For group-buying purchases, the default payment method is wallet. The amount will be automatically deducted once the group order is successfully completed. Please ensure your wallet has sufficient available balance to avoid any transaction interruptions.",
+    "notEnoughBalance": "Insufficient available balance"
   },
   "bookingStatus": {
     "pending": "Pending",

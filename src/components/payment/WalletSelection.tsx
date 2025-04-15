@@ -50,7 +50,7 @@ export default function WalletSelection({ totalPayment }: WalletSelectionProps) 
           <div className="flex flex-col">
             <span className="font-medium">{t('wallet.WALLET')}</span>
             <div className="flex items-center text-sm text-gray-600 space-x-1 max-w-[180px] sm:max-w-[220px]">
-              <span>{t('walletTerm.balance')}:</span>
+              <span>{t('walletTerm.availableBalance')}:</span>
               <span className="font-medium text-primary truncate">
                 {myWallet?.data.availableBalance !== undefined
                   ? t('format.currency', {
@@ -63,7 +63,7 @@ export default function WalletSelection({ totalPayment }: WalletSelectionProps) 
         </div>
       ),
       action: (
-        <div className="ml-auto">
+        <div>
           {isWalletAvailable && (
             <Dialog>
               <DialogTrigger>
@@ -87,9 +87,12 @@ export default function WalletSelection({ totalPayment }: WalletSelectionProps) 
           {!isWalletAvailable && <CreateWalletBtn />}
         </div>
       ),
-      isDisabled: !isWalletAvailable || !isEnoughBalance,
+      isDisabled: !isWalletAvailable,
       icon: <WalletMinimal className="text-primary" />,
       isAddMore: false,
+      more: !isEnoughBalance ? (
+        <span className="text-red-500 text-sm font-medium">{t('payment.notEnoughBalance')}</span>
+      ) : null,
     },
   ]
 
@@ -103,7 +106,7 @@ export default function WalletSelection({ totalPayment }: WalletSelectionProps) 
               key={method.id}
               className={`flex flex-col gap-3 border justify-center rounded-lg p-2 sm:p-4 border-red-500 text-red-500`}
             >
-              <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 sm:items-center">
+              <div className="flex gap-2 sm:gap-4 sm:items-center">
                 <RadioGroupItem value={method.id} id={method.id} disabled={method.isDisabled} className="mt-1 " />
                 <div className="flex flex-row items-center gap-2 w-full justify-between flex-wrap">
                   <Label
@@ -115,12 +118,15 @@ export default function WalletSelection({ totalPayment }: WalletSelectionProps) 
                   >
                     {method.label}
                   </Label>
-                  {method.action}
                 </div>
+              </div>
+              <div className="flex gap-1 justify-between items-center">
+                {method?.more}
+                {method.action}
               </div>
             </div>
           ))}
-          <AlertMessage message={t('payment.methodMessage')} />
+          <AlertMessage message={t('payment.methodMessage')} className="mt-2 text-justify" />
         </div>
       </RadioGroup>
     </div>

@@ -1821,6 +1821,7 @@
   },
   "walletTerm": {
     "balance": "Số dư",
+    "availableBalance": "Số dư khả dụng",
     "topUp": "Nạp tiền",
     "withdraw": "Rút tiền",
     "createWallet": "Tạo ví"
@@ -2013,7 +2014,8 @@
     "notifyPayment": "Đơn hàng của bạn chưa được thanh toán. Vui lòng hoàn tất thanh toán số tiền {{total}} bằng {{method}} trong {{val}}.",
     "changePaymentMethod": "Đổi phương thức thanh toán",
     "paymentSuccess": "Thanh toán thành công!",
-    "methodMessage": "Đối với giao dịch mua nhóm, phương thức thanh toán mặc định là ví. Số tiền sẽ được tự động trừ khi đơn mua nhóm hoàn tất. Vui lòng đảm bảo số dư khả dụng trong ví để tránh gián đoạn giao dịch."
+    "methodMessage": "Đối với giao dịch mua nhóm, phương thức thanh toán mặc định là ví. Số tiền sẽ được tự động trừ khi đơn mua nhóm hoàn tất. Vui lòng đảm bảo số dư khả dụng hợp lệ trong ví để tránh gián đoạn giao dịch.",
+    "notEnoughBalance": "Số dư khả dụng không đủ"
   },
   "bookingStatus": {
     "pending": "Đang chờ",
