@@ -41,6 +41,8 @@ const AddAddressDialog = ({ triggerComponent }: AddAddressDialogProps) => {
     province: '',
     fullAddress: '',
     type: AddressEnum.HOME,
+    notes: '',
+    isDefault: false,
   }
 
   const form = useForm<z.infer<typeof CreateAddressSchema>>({
@@ -48,7 +50,7 @@ const AddAddressDialog = ({ triggerComponent }: AddAddressDialogProps) => {
     defaultValues,
   })
   const handleReset = () => {
-    form.reset()
+    form.reset(defaultValues)
     setOpen(false)
   }
   const { data: useProfileData } = useQuery({
@@ -117,7 +119,14 @@ const AddAddressDialog = ({ triggerComponent }: AddAddressDialogProps) => {
               </div>
               <DialogFooter>
                 <div className="flex justify-end gap-2 w-full">
-                  <Button type="button" variant="outline" onClick={() => setOpen(false)}>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => {
+                      form.reset(defaultValues)
+                      setOpen(false)
+                    }}
+                  >
                     {t('dialog.cancel')}
                   </Button>
                   <Button form={`form-${id}`} type="submit" loading={isLoading}>

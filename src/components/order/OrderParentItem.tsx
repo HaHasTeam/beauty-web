@@ -4,11 +4,13 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import configs from '@/config'
+import useHandleServerError from '@/hooks/useHandleServerError'
 import { useToast } from '@/hooks/useToast'
 import { getMasterConfigApi } from '@/network/apis/master-config'
 import { filterOrdersParentApi, getParentOrderByIdApi } from '@/network/apis/order'
 import { payTransactionApi } from '@/network/apis/transaction'
 import { PAY_TYPE } from '@/network/apis/transaction/type'
+import { getMyWalletApi } from '@/network/apis/wallet'
 import { OrderEnum, PaymentMethod } from '@/types/enum'
 import { IOrder } from '@/types/order'
 import { calculatePaymentCountdown } from '@/utils/order'
@@ -33,7 +35,9 @@ const OrderParentItem = ({ order, setIsTrigger }: OrderParentItemProps) => {
   const [isLoading, setIsLoading] = useState(false)
   const [paymentId, setPaymentId] = useState<string | undefined>(undefined)
   const [openCancelParentOrderDialog, setOpenCancelParentOrderDialog] = useState<boolean>(false)
+  const [isChangePaymentMethod, setIsChangePaymentMethod] = useState<boolean>(false)
   const queryClient = useQueryClient()
+  const handleServerError = useHandleServerError()
   const [timeLeft, setTimeLeft] = useState({
     hours: 0,
     minutes: 0,
@@ -49,14 +53,21 @@ const OrderParentItem = ({ order, setIsTrigger }: OrderParentItemProps) => {
     onSuccess: () => {
       setIsLoading(false)
       successToast({
-        message: t('order.paymentSuccess'),
+        message: t('payment.paymentSuccess'),
       })
       queryClient.invalidateQueries({
         queryKey: [filterOrdersParentApi.queryKey],
       })
       queryClient.invalidateQueries({
+        queryKey: [getMyWalletApi.queryKey],
+      })
+      queryClient.invalidateQueries({
         queryKey: [getParentOrderByIdApi.queryKey],
       })
+    },
+    onError: (error) => {
+      setIsLoading(false)
+      handleServerError({ error })
     },
   })
 
@@ -78,9 +89,26 @@ const OrderParentItem = ({ order, setIsTrigger }: OrderParentItemProps) => {
 
   const onPaymentSuccess = useCallback(() => {
     successToast({
-      message: t('order.paymentSuccess'),
+      message: t('payment.paymentSuccess'),
     })
+    setOpenRepayment(false)
+    setIsLoading(false)
   }, [successToast, t])
+  const onClose = useCallback(() => {
+    setIsLoading(false)
+    setOpenRepayment(false)
+    if (isChangePaymentMethod) {
+      queryClient.invalidateQueries({
+        queryKey: [filterOrdersParentApi.queryKey],
+      })
+      queryClient.invalidateQueries({
+        queryKey: [getMyWalletApi.queryKey],
+      })
+      queryClient.invalidateQueries({
+        queryKey: [getParentOrderByIdApi.queryKey],
+      })
+    }
+  }, [isChangePaymentMethod, queryClient])
   return (
     <div className="bg-white border rounded-md">
       {order.children?.map((orderItem) => (
@@ -142,7 +170,7 @@ const OrderParentItem = ({ order, setIsTrigger }: OrderParentItemProps) => {
             </Button>
             {isShowPayment && (
               <>
-                {order.type !== OrderEnum.GROUP_BUYING && (
+                {order.type !== OrderEnum.GROUP_BUYING && !order.isPaymentMethodUpdated && (
                   <Button
                     variant="outline"
                     className="border border-primary text-primary hover:text-primary hover:bg-primary/10"
@@ -192,6 +220,7 @@ const OrderParentItem = ({ order, setIsTrigger }: OrderParentItemProps) => {
         type={PAY_TYPE.ORDER}
         paymentId={paymentId}
         onSuccess={onPaymentSuccess}
+        onClose={onClose}
       />
       <RePaymentDialog
         onOpenChange={setOpenRepayment}
@@ -201,6 +230,7 @@ const OrderParentItem = ({ order, setIsTrigger }: OrderParentItemProps) => {
         setIsOpenQRCodePayment={setIsOpenQRCodePayment}
         setPaymentId={setPaymentId}
         totalPayment={order?.totalPrice}
+        setIsChangePaymentMethod={setIsChangePaymentMethod}
       />
     </div>
   )

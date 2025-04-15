@@ -1,5 +1,5 @@
 export const basePayOSConfig = {
-  RETURN_URL: 'https://allure-e.netlify.app',
+  RETURN_URL: 'http://localhost:3001',
   ELEMENT_ID: 'payOs-checkout', // required
   embedded: true, //
 }

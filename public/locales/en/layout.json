@@ -962,6 +962,7 @@
     "refunded": "Returned & Refunded",
     "lastUpdated": "Last updated",
     "success": "Order placed successfully!",
+    "successNoPayment": "Order placed successfully! Please complete the payment to proceed.",
     "prepareCash": "Prepare cash",
     "failure": "Order placement failed!",
     "retry": "Please try again later",
@@ -1944,7 +1945,9 @@
       "none": "None"
     },
     "notifyPayment": "Your order hasn’t been paid yet. Please complete the payment of {{total}} via {{method}} by {{val}}.",
-    "changePaymentMethod": "Change payment method"
+    "changePaymentMethod": "Change payment method",
+    "paymentSuccess": "Payment successful!",
+    "methodMessage": "For group-buying purchases, the default payment method is wallet. The amount will be automatically deducted once the group order is successfully completed. Please ensure your wallet has sufficient available balance to avoid any transaction interruptions."
   },
   "bookingStatus": {
     "pending": "Pending",

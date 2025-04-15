@@ -446,7 +446,7 @@ const ProductCardLandscape = ({
               ) : EVENT_INACTIVE ? (
                 <div>
                   <AlertMessage
-                    className="w-fit border-0 outline-none rounded-md p-1 px-2 bg-red-50"
+                    className="w-fit border-0 outline-none rounded-md p-1 px-2 bg-gray-200"
                     textSize="small"
                     color="danger"
                     text="danger"

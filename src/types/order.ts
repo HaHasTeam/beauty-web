@@ -72,6 +72,7 @@ export type IOrder = {
   account: TUser
   children: IOrderItem[]
   orderDetails: IOrderItem[] // for requests
+  isPaymentMethodUpdated: boolean
 }
 
 export type IOrderFilter = {

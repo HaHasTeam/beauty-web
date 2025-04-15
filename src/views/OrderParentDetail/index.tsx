@@ -1,11 +1,12 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { MessageSquareText, Truck } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 
 import AlertMessage from '@/components/alert/AlertMessage'
 import BrandOrderInformation from '@/components/brand/BrandOrderInformation'
+import Button from '@/components/button'
 import Empty from '@/components/empty/Empty'
 import LoadingContentLayer from '@/components/loading-icon/LoadingContentLayer'
 import CancelOrderDialog from '@/components/order/CancelOrderDialog'
@@ -13,11 +14,17 @@ import OrderDetailItems from '@/components/order-detail/OrderDetailItems'
 import OrderGeneral from '@/components/order-detail/OrderGeneral'
 import OrderSummary from '@/components/order-detail/OrderSummary'
 import OrderStatus from '@/components/order-status'
-import { Button } from '@/components/ui/button'
+import { QRCodeAlertDialog } from '@/components/payment'
+import RePaymentDialog from '@/components/payment/RePaymentDialog'
 import configs from '@/config'
+import useHandleServerError from '@/hooks/useHandleServerError'
+import { useToast } from '@/hooks/useToast'
 import { getMasterConfigApi } from '@/network/apis/master-config'
-import { getParentOrderByIdApi, getStatusTrackingByIdApi } from '@/network/apis/order'
-import { PaymentMethod, ShippingStatusEnum } from '@/types/enum'
+import { filterOrdersParentApi, getParentOrderByIdApi, getStatusTrackingByIdApi } from '@/network/apis/order'
+import { payTransactionApi } from '@/network/apis/transaction'
+import { PAY_TYPE } from '@/network/apis/transaction/type'
+import { getMyWalletApi } from '@/network/apis/wallet'
+import { OrderEnum, PaymentMethod, ShippingStatusEnum } from '@/types/enum'
 import { calculatePaymentCountdown } from '@/utils/order'
 
 const OrderParentDetail = () => {
@@ -26,6 +33,13 @@ const OrderParentDetail = () => {
   const queryClient = useQueryClient()
   const [openCancelParentOrderDialog, setOpenCancelParentOrderDialog] = useState<boolean>(false)
   const [isTrigger, setIsTrigger] = useState<boolean>(false)
+  const [isOpenQRCodePayment, setIsOpenQRCodePayment] = useState(false)
+  const [openRepayment, setOpenRepayment] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [isChangePaymentMethod, setIsChangePaymentMethod] = useState<boolean>(false)
+  const [paymentId, setPaymentId] = useState<string | undefined>(undefined)
+  const { successToast } = useToast()
+  const handleServerError = useHandleServerError()
   const [timeLeft, setTimeLeft] = useState({
     hours: 0,
     minutes: 0,
@@ -46,6 +60,29 @@ const OrderParentDetail = () => {
     queryKey: [getMasterConfigApi.queryKey],
     queryFn: getMasterConfigApi.fn,
   })
+  const { mutateAsync: payTransaction } = useMutation({
+    mutationKey: [payTransactionApi.mutationKey],
+    mutationFn: payTransactionApi.fn,
+    onSuccess: () => {
+      setIsLoading(false)
+      successToast({
+        message: t('payment.paymentSuccess'),
+      })
+      queryClient.invalidateQueries({
+        queryKey: [filterOrdersParentApi.queryKey],
+      })
+      queryClient.invalidateQueries({
+        queryKey: [getMyWalletApi.queryKey],
+      })
+      queryClient.invalidateQueries({
+        queryKey: [getParentOrderByIdApi.queryKey],
+      })
+    },
+    onError: (error) => {
+      setIsLoading(false)
+      handleServerError({ error })
+    },
+  })
 
   useEffect(() => {
     if (masterConfig && useOrderData && useOrderData.data) {
@@ -64,6 +101,33 @@ const OrderParentDetail = () => {
     })
   }, [isTrigger, queryClient])
 
+  const isShowPayment = useMemo(
+    () =>
+      masterConfig && useOrderData && calculatePaymentCountdown(useOrderData.data, masterConfig.data).remainingTime > 0,
+    [masterConfig, useOrderData],
+  )
+
+  const onPaymentSuccess = useCallback(() => {
+    successToast({
+      message: t('payment.paymentSuccess'),
+    })
+    setOpenRepayment(false)
+  }, [successToast, t])
+  const onClose = useCallback(() => {
+    setIsLoading(false)
+    setOpenRepayment(false)
+    if (isChangePaymentMethod) {
+      queryClient.invalidateQueries({
+        queryKey: [filterOrdersParentApi.queryKey],
+      })
+      queryClient.invalidateQueries({
+        queryKey: [getMyWalletApi.queryKey],
+      })
+      queryClient.invalidateQueries({
+        queryKey: [getParentOrderByIdApi.queryKey],
+      })
+    }
+  }, [isChangePaymentMethod, queryClient])
   return (
     <div>
       {isFetching && <LoadingContentLayer />}
@@ -109,8 +173,6 @@ const OrderParentDetail = () => {
                             : t('payment.methods.cash'),
                     })}
                     isShowIcon={false}
-                    buttonText="payment"
-                    onClick={() => {}}
                   />
                 )}
 
@@ -215,22 +277,54 @@ const OrderParentDetail = () => {
               {(useOrderData.data.paymentMethod === PaymentMethod.WALLET ||
                 useOrderData.data.paymentMethod === PaymentMethod.BANK_TRANSFER) &&
                 useOrderData.data.status === ShippingStatusEnum.TO_PAY && (
-                  <div className="flex items-center gap-3 w-full justify-between">
+                  <div className="flex items-center gap-3 w-full justify-between flex-wrap">
                     <Button
                       variant="outline"
-                      className="w-1/3 border border-primary text-primary hover:text-primary hover:bg-primary/10"
+                      className="w-full border border-primary text-primary hover:text-primary hover:bg-primary/10"
                       onClick={() => setOpenCancelParentOrderDialog(true)}
                     >
                       {t('order.cancelOrder')}
                     </Button>
-                    <Button
-                      variant="outline"
-                      className="w-1/3 border border-primary text-primary hover:text-primary hover:bg-primary/10"
-                      onClick={() => {}}
-                    >
-                      {t('payment.changePaymentMethod')}
-                    </Button>
-                    <Button className="w-1/3">{t('order.payment')}</Button>
+                    {isShowPayment && (
+                      <>
+                        {useOrderData?.data.type !== OrderEnum.GROUP_BUYING &&
+                          !useOrderData?.data.isPaymentMethodUpdated && (
+                            <Button
+                              variant="outline"
+                              className="w-full border border-primary text-primary hover:text-primary hover:bg-primary/10"
+                              onClick={() => {
+                                setOpenRepayment(true)
+                              }}
+                            >
+                              {t('payment.changePaymentMethod')}
+                            </Button>
+                          )}
+                        <Button
+                          className="w-full"
+                          loading={isLoading}
+                          onClick={() => {
+                            if (useOrderData.data.paymentMethod === PaymentMethod.BANK_TRANSFER) {
+                              setIsOpenQRCodePayment(true)
+                              setPaymentId(useOrderData?.data.id)
+                              return
+                            }
+                            if (useOrderData?.data.paymentMethod === PaymentMethod.WALLET) {
+                              if (useOrderData?.data && useOrderData?.data.id) {
+                                setIsLoading(true)
+                                payTransaction({
+                                  orderId: useOrderData?.data.id,
+                                  id: useOrderData?.data.id,
+                                  type: PAY_TYPE.ORDER,
+                                })
+                              }
+                              return
+                            }
+                          }}
+                        >
+                          {t('order.payment')}
+                        </Button>
+                      </>
+                    )}
                   </div>
                 )}
             </div>
@@ -245,14 +339,35 @@ const OrderParentDetail = () => {
           />
         )}
         {!isFetching && useOrderData?.data && (
-          <CancelOrderDialog
-            open={openCancelParentOrderDialog}
-            setOpen={setOpenCancelParentOrderDialog}
-            onOpenChange={setOpenCancelParentOrderDialog}
-            setIsTrigger={setIsTrigger}
-            orderId={useOrderData?.data?.id ?? ''}
-            isParent
-          />
+          <>
+            <CancelOrderDialog
+              open={openCancelParentOrderDialog}
+              setOpen={setOpenCancelParentOrderDialog}
+              onOpenChange={setOpenCancelParentOrderDialog}
+              setIsTrigger={setIsTrigger}
+              orderId={useOrderData?.data?.id ?? ''}
+              isParent
+            />
+            <QRCodeAlertDialog
+              amount={useOrderData?.data.totalPrice}
+              open={isOpenQRCodePayment}
+              onOpenChange={setIsOpenQRCodePayment}
+              type={PAY_TYPE.ORDER}
+              paymentId={paymentId}
+              onSuccess={onPaymentSuccess}
+              onClose={onClose}
+            />
+            <RePaymentDialog
+              onOpenChange={setOpenRepayment}
+              open={openRepayment}
+              orderId={useOrderData?.data?.id}
+              paymentMethod={useOrderData?.data?.paymentMethod as PaymentMethod}
+              setIsOpenQRCodePayment={setIsOpenQRCodePayment}
+              setPaymentId={setPaymentId}
+              totalPayment={useOrderData?.data?.totalPrice}
+              setIsChangePaymentMethod={setIsChangePaymentMethod}
+            />
+          </>
         )}
       </div>
     </div>

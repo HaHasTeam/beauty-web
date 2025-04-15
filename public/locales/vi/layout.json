@@ -1004,6 +1004,7 @@
     "refunded": "Đã Trả Hàng & Hoàn Tiền",
     "lastUpdated": "Cập nhật lần cuối",
     "success": "Đặt hàng thành công!",
+    "successNoPayment": "Đặt hàng thành công! Vui lòng hoàn tất thanh toán để tiếp tục.",
     "prepareCash": "Chuẩn bị tiền mặt",
     "failure": "Đặt hàng thất bại!",
     "retry": "Vui lòng thử lại sau",
@@ -2010,7 +2011,9 @@
       "none": "Không có"
     },
     "notifyPayment": "Đơn hàng của bạn chưa được thanh toán. Vui lòng hoàn tất thanh toán số tiền {{total}} bằng {{method}} trong {{val}}.",
-    "changePaymentMethod": "Đổi phương thức thanh toán"
+    "changePaymentMethod": "Đổi phương thức thanh toán",
+    "paymentSuccess": "Thanh toán thành công!",
+    "methodMessage": "Đối với giao dịch mua nhóm, phương thức thanh toán mặc định là ví. Số tiền sẽ được tự động trừ khi đơn mua nhóm hoàn tất. Vui lòng đảm bảo số dư khả dụng trong ví để tránh gián đoạn giao dịch."
   },
   "bookingStatus": {
     "pending": "Đang chờ",

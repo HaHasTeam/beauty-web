@@ -21,7 +21,15 @@ import { PaymentMethodEnum } from '@/types/payment'
 import TopUpModal from '@/views/Wallet/TopUpModal'
 
 import Button from '../button'
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '../ui/dialog'
 import { Form, FormControl, FormField, FormItem, FormMessage } from '../ui/form'
 import AddPaymentCardDialog from './AddPaymentCardDialog'
 
@@ -33,15 +41,17 @@ interface RePaymentDialogProps {
   orderId: string
   open: boolean
   onOpenChange: (open: boolean) => void
+  setIsChangePaymentMethod: Dispatch<SetStateAction<boolean>>
 }
 export default function RePaymentDialog({
   orderId,
   setPaymentId,
   setIsOpenQRCodePayment,
-  paymentMethod,
   totalPayment,
+  paymentMethod,
   open,
   onOpenChange,
+  setIsChangePaymentMethod,
 }: RePaymentDialogProps) {
   const { t } = useTranslation()
   const UpdatePaymentMethodSchema = getUpdatePaymentMethodSchema()
@@ -60,8 +70,9 @@ export default function RePaymentDialog({
     mutationFn: payTransactionApi.fn,
     onSuccess: () => {
       setIsLoading(false)
+      onOpenChange(false)
       successToast({
-        message: t('order.paymentSuccess'),
+        message: t('payment.paymentSuccess'),
       })
       queryClient.invalidateQueries({
         queryKey: [filterOrdersParentApi.queryKey],
@@ -69,6 +80,23 @@ export default function RePaymentDialog({
       queryClient.invalidateQueries({
         queryKey: [getParentOrderByIdApi.queryKey],
       })
+      queryClient.invalidateQueries({
+        queryKey: [getMyWalletApi.queryKey],
+      })
+    },
+    onError: (error) => {
+      setIsLoading(false)
+      onOpenChange(false)
+      queryClient.invalidateQueries({
+        queryKey: [filterOrdersParentApi.queryKey],
+      })
+      queryClient.invalidateQueries({
+        queryKey: [getMyWalletApi.queryKey],
+      })
+      queryClient.invalidateQueries({
+        queryKey: [getParentOrderByIdApi.queryKey],
+      })
+      handleServerError({ error })
     },
   })
   const defaultValues = {
@@ -84,18 +112,19 @@ export default function RePaymentDialog({
     mutationKey: [updateOrderPaymentMethod.mutationKey],
     mutationFn: updateOrderPaymentMethod.fn,
     onSuccess: () => {
-      if (paymentMethod === PaymentMethod.BANK_TRANSFER) {
+      if (form.getValues('paymentMethod') === PaymentMethod.BANK_TRANSFER) {
         setIsOpenQRCodePayment(true)
         setPaymentId(orderId)
+        setIsLoading(false)
         return
       }
-      if (paymentMethod === PaymentMethod.WALLET) {
+      if (form.getValues('paymentMethod') === PaymentMethod.WALLET) {
         if (orderId) {
           payTransaction({ orderId: orderId, id: orderId, type: PAY_TYPE.ORDER })
-          setIsLoading(false)
         }
         return
       }
+      setIsChangePaymentMethod(true)
     },
   })
 
@@ -137,7 +166,7 @@ export default function RePaymentDialog({
       action: (
         <div className="ml-auto">
           <Dialog>
-            <DialogTrigger>
+            <DialogTrigger asChild>
               <Button
                 className="bg-primary hover:bg-primary/70 text-white text-xs sm:text-sm whitespace-nowrap"
                 type="button"
@@ -173,9 +202,24 @@ export default function RePaymentDialog({
 
   async function onSubmit(values: z.infer<typeof UpdatePaymentMethodSchema>) {
     try {
+      console.log(values)
       if (paymentMethod !== values.paymentMethod) {
         setIsLoading(true)
         await updatePaymentMethodFn({ id: orderId, paymentMethod: values.paymentMethod as PaymentMethodEnum })
+        onOpenChange(false)
+      } else {
+        setIsLoading(true)
+        if (paymentMethod === PaymentMethod.BANK_TRANSFER) {
+          setIsOpenQRCodePayment(true)
+          setPaymentId(orderId)
+          return
+        }
+        if (paymentMethod === PaymentMethod.WALLET) {
+          if (orderId) {
+            payTransaction({ orderId: orderId, id: orderId, type: PAY_TYPE.ORDER })
+          }
+          return
+        }
       }
     } catch (error) {
       setIsLoading(false)
@@ -185,12 +229,14 @@ export default function RePaymentDialog({
       })
     }
   }
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-md sm:max-w-xl lg:max-w-3xl">
         <DialogHeader>
           <div className="flex justify-between items-center">
             <DialogTitle>{t('wallet.choosePaymentMethod')}</DialogTitle>
+            <DialogDescription></DialogDescription>
           </div>
         </DialogHeader>
         <div className="w-full">
@@ -278,7 +324,7 @@ export default function RePaymentDialog({
                   >
                     {t('dialog.cancel')}
                   </Button>
-                  <Button form={formId} type="submit" className="" loading={isLoading}>
+                  <Button form={`form-${formId}`} type="submit" loading={isLoading}>
                     {t('button.submit')}
                   </Button>
                 </div>
