@@ -45,47 +45,50 @@ const HomeBanner = () => {
     }
   }
   return (
-    <Carousel
-      className="w-full"
-      plugins={[plugin.current]}
-      onMouseEnter={plugin.current.stop}
-      onMouseLeave={plugin.current.reset}
-      setApi={setApi}
-    >
-      <CarouselContent>
-        {masterConfig?.data[0]?.banners.map((banner) => (
-          <CarouselItem key={banner?.id}>
-            <div className="p-1 w-full h-80 rounded-lg">
-              <ImageWithFallback
-                className="w-full h-full object-cover object-center rounded-lg"
-                src={banner?.fileUrl}
-                alt={banner?.fileUrl}
-                fallback={fallBackImage}
-              />
-            </div>
-          </CarouselItem>
-        ))}
-      </CarouselContent>
-      <div className="absolute bottom-2 flex w-full justify-center text-primary-foreground ">
-        <RadioGroup
-          value={masterConfig?.data[0]?.banners[current]?.id}
-          onValueChange={handleRadioChange}
-          className="flex space-x-1"
-        >
+    masterConfig &&
+    masterConfig?.data[0]?.banners?.length > 0 && (
+      <Carousel
+        className="w-full"
+        plugins={[plugin.current]}
+        onMouseEnter={plugin.current.stop}
+        onMouseLeave={plugin.current.reset}
+        setApi={setApi}
+      >
+        <CarouselContent>
           {masterConfig?.data[0]?.banners.map((banner) => (
-            <div key={banner?.id}>
-              <RadioGroupItem value={banner?.id} id={banner?.id} className="bg-secondary/30" />
-            </div>
+            <CarouselItem key={banner?.id}>
+              <div className="p-1 w-full h-80 rounded-lg">
+                <ImageWithFallback
+                  className="w-full h-full object-cover object-center rounded-lg"
+                  src={banner?.fileUrl}
+                  alt={banner?.fileUrl}
+                  fallback={fallBackImage}
+                />
+              </div>
+            </CarouselItem>
           ))}
-        </RadioGroup>
-      </div>
-      <div className="absolute left-14 top-2/4">
-        <CarouselPrevious />
-      </div>
-      <div className="absolute right-14 top-2/4">
-        <CarouselNext />
-      </div>
-    </Carousel>
+        </CarouselContent>
+        <div className="absolute bottom-2 flex w-full justify-center text-primary-foreground ">
+          <RadioGroup
+            value={masterConfig?.data[0]?.banners[current]?.id}
+            onValueChange={handleRadioChange}
+            className="flex space-x-1"
+          >
+            {masterConfig?.data[0]?.banners.map((banner) => (
+              <div key={banner?.id}>
+                <RadioGroupItem value={banner?.id} id={banner?.id} className="bg-secondary/30" />
+              </div>
+            ))}
+          </RadioGroup>
+        </div>
+        <div className="absolute left-14 top-2/4">
+          <CarouselPrevious className="text-primary hover:text-primary" />
+        </div>
+        <div className="absolute right-14 top-2/4">
+          <CarouselNext className="text-primary hover:text-primary" />
+        </div>
+      </Carousel>
+    )
   )
 }
 

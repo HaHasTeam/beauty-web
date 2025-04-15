@@ -23,7 +23,6 @@ interface ProductCheckoutLandscapeProps {
   discount?: number | null
   price: number
   productQuantity: number
-  livestreamDiscount?: number
   productClassification: IClassification | null
 }
 const ProductCheckoutLandscape = ({
@@ -36,26 +35,22 @@ const ProductCheckoutLandscape = ({
   productQuantity,
   selectedClassification,
   price,
-  livestreamDiscount,
   productClassification,
 }: ProductCheckoutLandscapeProps) => {
   const { t } = useTranslation()
-  const hasLivestreamDiscount = livestreamDiscount !== undefined && livestreamDiscount > 0
+  // const hasLivestreamDiscount = livestreamDiscount !== undefined && livestreamDiscount > 0
 
   // Format the livestream discount percentage (multiply by 100 if it's in decimal format)
-  const formattedLivestreamDiscount = hasLivestreamDiscount
-    ? livestreamDiscount! <= 1
-      ? livestreamDiscount! * 100
-      : livestreamDiscount
-    : 0
-  console.log('discountType22', discountType)
+  // const formattedLivestreamDiscount = hasLivestreamDiscount
+  //   ? livestreamDiscount! <= 1
+  //     ? livestreamDiscount! * 100
+  //     : livestreamDiscount
+  //   : 0
+  // console.log('discountType22', discountType)
 
   // Calculate base price after regular discounts
   const basePrice = calculateTotalPrice(price, productQuantity, discount, discountType)
   const discountPrice = calculateDiscountPrice(price, discount, discountType)
-
-  // Final price after all discounts
-  const finalPrice = basePrice
 
   return (
     <div className="w-full py-4 border-b border-gray-200">
@@ -104,9 +99,7 @@ const ProductCheckoutLandscape = ({
             <div className="order-2 md:order-3 w-full md:w-[25%] lg:w-[20%] flex-col md:items-center sm:items-start items-start">
               <div className="flex gap-1 items-center">
                 <span className="text-red-500 lg:text-base md:text-sm sm:text-xs text-xs">
-                  {hasLivestreamDiscount
-                    ? t('productCard.currentPrice', { price: finalPrice })
-                    : t('productCard.currentPrice', { price: discountPrice })}
+                  {t('productCard.price', { price: discountPrice })}
                 </span>
                 <span className="text-gray-400 lg:text-sm text-xs line-through">
                   {t('productCard.price', { price: price })}
@@ -122,15 +115,8 @@ const ProductCheckoutLandscape = ({
           ) : (
             <div className="order-2 sm:order-3 w-full md:w-[25%] lg:w-[25%] xl:w-[20%] flex flex-col items-start sm:items-center">
               <span className="xl:text-base lg:text-sm md:text-sm sm:text-xs text-xs">
-                {hasLivestreamDiscount
-                  ? t('productCard.currentPrice', { price: finalPrice })
-                  : t('productCard.price', { price: price })}
+                {t('productCard.price', { price: price })}
               </span>
-              {hasLivestreamDiscount && (
-                <span className="text-yellow-600 lg:text-sm md:text-xs sm:text-xs text-xs">
-                  {formattedLivestreamDiscount}%
-                </span>
-              )}
             </div>
           )}
         </div>
@@ -139,7 +125,7 @@ const ProductCheckoutLandscape = ({
           <span className="lg:text-sm md:text-sm sm:text-xs text-xs">{productQuantity}</span>
         </div>
         <span className="font-medium text-red-500 lg:text-base md:text-sm sm:text-xs text-xs w-[20%] md:w-[14%] sm:w-[12%] text-center">
-          {t('productCard.currentPrice', { price: hasLivestreamDiscount ? finalPrice : basePrice })}
+          {t('productCard.currentPrice', { price: basePrice })}
         </span>
       </div>
     </div>

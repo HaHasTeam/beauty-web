@@ -34,19 +34,26 @@ export default function Header() {
       <div className="">
         <div className="px-4 flex items-center justify-between py-2 text-sm">
           <div className="flex space-x-4">
-            <Link to={configs.routes.sellLanding} className="font-semibold">
-              {t('sell.action')}
-            </Link>
             <Link
               to={
                 configs.externalLink.brandManagement +
                 `?accessToken=${authData?.accessToken}&refreshToken=${authData?.refreshToken}`
               }
-              replace
+              target="_blank"
+              className="font-semibold"
+            >
+              {t('sell.action')}
+            </Link>
+            {/* <Link
+              to={
+                configs.externalLink.brandManagement +
+                `?accessToken=${authData?.accessToken}&refreshToken=${authData?.refreshToken}`
+              }
+              target="_blank"
               className="border-l border-secondary px-3 font-semibold"
             >
               {t('professional.action')}
-            </Link>
+            </Link> */}
           </div>
           <div className="flex items-center space-x-4">
             <Link to={configs.routes.helpCenter} className="flex gap-2 items-center text-black h-8 w-full px-2">

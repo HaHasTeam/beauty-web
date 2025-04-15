@@ -1,24 +1,25 @@
-import { useMutation } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import Empty from '@/components/empty/Empty'
 import LoadingContentLayer from '@/components/loading-icon/LoadingContentLayer'
 import OrderItem from '@/components/order/OrderItem'
+import OrderParentItem from '@/components/order/OrderParentItem'
 import { OrderRequestFilter } from '@/components/order/OrderRequestFilter'
 import SearchOrders from '@/components/order/SearchOrders'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { getMyOrdersApi, getMyRequestsApi } from '@/network/apis/order'
+import { filterOrdersParentApi, filterRequestApi } from '@/network/apis/order'
 import { OrderRequestTypeEnum, RequestStatusEnum, ShippingStatusEnum } from '@/types/enum'
-import { IOrderFilter, IOrderItem, IRequest, IRequestFilter } from '@/types/order'
 
 export default function ProfileOrder() {
   const { t } = useTranslation()
-  const [orders, setOrders] = useState<IOrderItem[]>([])
-  const [requests, setRequests] = useState<IRequest[]>([])
+  // const [orders, setOrders] = useState<IOrderItem[]>([])
+  // const [requests, setRequests] = useState<IRequest[]>([])
   const [activeTab, setActiveTab] = useState<string>('all')
-  const [isLoading, setIsLoading] = useState<boolean>(true)
+  const queryClient = useQueryClient()
+  // const [isLoading, setIsLoading] = useState<boolean>(true)
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [isTrigger, setIsTrigger] = useState<boolean>(false)
 
@@ -60,80 +61,118 @@ export default function ProfileOrder() {
     ],
     [t],
   )
-  const { mutateAsync: getMyOrderFn } = useMutation({
-    mutationKey: [getMyOrdersApi.mutationKey],
-    mutationFn: getMyOrdersApi.fn,
-    onSuccess: (data) => {
-      setOrders(data?.data)
-      setIsLoading(false)
-    },
+  // const { mutateAsync: getMyOrderFn } = useMutation({
+  //   mutationKey: [filterOrdersParentApi.mutationKey],
+  //   mutationFn: filterOrdersParentApi.fn,
+  //   onSuccess: (data) => {
+  //     setOrders(data?.data)
+  //     setIsLoading(false)
+  //   },
+  // })
+  const { data: filterOrdersData, isFetching: isLoading } = useQuery({
+    queryKey: [
+      filterOrdersParentApi.queryKey,
+      {
+        page: 1,
+        limit: 100,
+        order: 'DESC',
+        statuses: simplifiedTriggers.find((trigger) => trigger.value === activeTab)?.statuses
+          ? simplifiedTriggers.find((trigger) => trigger.value === activeTab)?.statuses
+          : activeTab === 'all'
+            ? undefined
+            : (activeTab.toUpperCase() as ShippingStatusEnum),
+        search: searchQuery || undefined,
+      },
+    ],
+    queryFn: filterOrdersParentApi.fn,
   })
-  const { mutateAsync: getMyRequestFn } = useMutation({
-    mutationKey: [getMyRequestsApi.mutationKey],
-    mutationFn: getMyRequestsApi.fn,
-    onSuccess: (data) => {
-      setRequests(data?.data)
-      setIsLoading(false)
-    },
+  const { data: filterRequestsData, isFetching: isLoadingRequest } = useQuery({
+    queryKey: [
+      filterRequestApi.queryKey,
+      {
+        page: 1,
+        limit: 100,
+        order: 'DESC',
+        statuses: requestStatuses.length > 0 ? requestStatuses : undefined,
+        types: requestTypes.length > 0 ? requestTypes : undefined,
+      },
+    ],
+    queryFn: filterRequestApi.fn,
   })
+
+  // const { mutateAsync: getMyRequestFn } = useMutation({
+  //   mutationKey: [getMyRequestsApi.mutationKey],
+  //   mutationFn: getMyRequestsApi.fn,
+  //   onSuccess: (data) => {
+  //     setRequests(data?.data)
+  //     setIsLoading(false)
+  //   },
+  // })
 
   const handleSearch = (query: string) => {
     setSearchQuery(query)
   }
-  const handleRequestFilterChange = (types: OrderRequestTypeEnum[], statuses: RequestStatusEnum[]) => {
+  const handleRequestFilterChange = async (types: OrderRequestTypeEnum[], statuses: RequestStatusEnum[]) => {
     setRequestTypes(types)
     setRequestStatuses(statuses)
     // Trigger refetch with new filters
-    setIsTrigger((prev) => !prev)
+    await Promise.all([
+      queryClient.invalidateQueries({ queryKey: [filterOrdersParentApi.queryKey] }),
+      queryClient.invalidateQueries({ queryKey: [filterRequestApi.queryKey] }),
+    ])
   }
-
   useEffect(() => {
-    const fetchOrders = async () => {
-      setIsLoading(true)
-      if (activeTab === 'request') {
-        const requestFilters: IRequestFilter = {
-          types: requestTypes.length > 0 ? requestTypes : undefined,
-          statusList: requestStatuses.length > 0 ? requestStatuses : undefined,
-          search: searchQuery || undefined,
-        }
-        await getMyRequestFn(requestFilters)
-      } else {
-        let statusFilters
+    queryClient.invalidateQueries({ queryKey: [filterOrdersParentApi.queryKey] })
+    queryClient.invalidateQueries({ queryKey: [filterRequestApi.queryKey] })
+  }, [isTrigger, queryClient])
 
-        const selectedTrigger = simplifiedTriggers.find((trigger) => trigger.value === activeTab)
+  // useEffect(() => {
+  //   const fetchOrders = async () => {
+  //     setIsLoading(true)
+  //     if (activeTab === 'request') {
+  //       const requestFilters: IRequestFilter = {
+  //         types: requestTypes.length > 0 ? requestTypes : undefined,
+  //         statusList: requestStatuses.length > 0 ? requestStatuses : undefined,
+  //         search: searchQuery || undefined,
+  //       }
+  //       await getMyRequestFn(requestFilters)
+  //     } else {
+  //       let statusFilters
 
-        // If it's a group with multiple statuses, use them all
-        if (selectedTrigger?.statuses) {
-          statusFilters = selectedTrigger.statuses
-        }
-        // If it's "all", don't filter by status
-        else if (activeTab === 'all') {
-          statusFilters = undefined
-        }
-        // Otherwise, use the single status value
-        else {
-          statusFilters = [activeTab.toUpperCase()]
-        }
+  //       const selectedTrigger = simplifiedTriggers.find((trigger) => trigger.value === activeTab)
 
-        const filters: IOrderFilter = {
-          statusList: statusFilters,
-          search: searchQuery || undefined,
-        }
-        await getMyOrderFn(filters)
-      }
-    }
+  //       // If it's a group with multiple statuses, use them all
+  //       if (selectedTrigger?.statuses) {
+  //         statusFilters = selectedTrigger.statuses
+  //       }
+  //       // If it's "all", don't filter by status
+  //       else if (activeTab === 'all') {
+  //         statusFilters = undefined
+  //       }
+  //       // Otherwise, use the single status value
+  //       else {
+  //         statusFilters = [activeTab.toUpperCase()]
+  //       }
 
-    fetchOrders()
-  }, [
-    activeTab,
-    getMyOrderFn,
-    searchQuery,
-    isTrigger,
-    simplifiedTriggers,
-    getMyRequestFn,
-    requestTypes,
-    requestStatuses,
-  ])
+  //       const filters: IOrderFilter = {
+  //         statusList: statusFilters,
+  //         search: searchQuery || undefined,
+  //       }
+  //       await getMyOrderFn(filters)
+  //     }
+  //   }
+
+  //   fetchOrders()
+  // }, [
+  //   activeTab,
+  //   getMyOrderFn,
+  //   searchQuery,
+  //   isTrigger,
+  //   simplifiedTriggers,
+  //   getMyRequestFn,
+  //   requestTypes,
+  //   requestStatuses,
+  // ])
 
   // const renderOrders = () => {
   //   // if (!isLoading && orders && orders?.length === 0) {
@@ -214,8 +253,8 @@ export default function ProfileOrder() {
   // }
   const renderOrders = () => {
     if (
-      (activeTab === 'request' && !isLoading && requests?.length === 0) ||
-      (activeTab !== 'request' && !isLoading && orders?.length === 0)
+      (activeTab === 'request' && !isLoadingRequest && filterRequestsData?.data?.total === 0) ||
+      (activeTab !== 'request' && !isLoading && filterOrdersData?.data?.total === 0)
     ) {
       return (
         <div className="flex flex-col items-center justify-center min-h-[400px] text-center">
@@ -230,7 +269,7 @@ export default function ProfileOrder() {
     return (
       <div className="space-y-4">
         {activeTab === 'request'
-          ? requests?.map((request) => (
+          ? filterRequestsData?.data?.items?.map((request) => (
               <div key={request?.id} className="bg-white border rounded-md">
                 <OrderItem
                   brand={
@@ -244,18 +283,28 @@ export default function ProfileOrder() {
                 />
               </div>
             ))
-          : orders?.map((orderItem) => (
-              <div key={orderItem?.id} className="bg-white border rounded-md">
-                <OrderItem
-                  brand={
-                    orderItem?.orderDetails[0]?.productClassification?.preOrderProduct?.product?.brand ??
-                    orderItem?.orderDetails[0]?.productClassification?.productDiscount?.product?.brand ??
-                    orderItem?.orderDetails[0]?.productClassification?.product?.brand ??
-                    null
-                  }
-                  orderItem={orderItem}
-                  setIsTrigger={setIsTrigger}
-                />
+          : filterOrdersData?.data?.items?.map((order) => (
+              <div key={order?.id}>
+                {order?.status === ShippingStatusEnum.TO_PAY ? (
+                  <OrderParentItem setIsTrigger={setIsTrigger} order={order} />
+                ) : (
+                  <div className="space-y-4">
+                    {order.children?.map((orderItem) => (
+                      <div key={orderItem?.id} className="bg-white border rounded-md">
+                        <OrderItem
+                          brand={
+                            orderItem?.orderDetails[0]?.productClassification?.preOrderProduct?.product?.brand ??
+                            orderItem?.orderDetails[0]?.productClassification?.productDiscount?.product?.brand ??
+                            orderItem?.orderDetails[0]?.productClassification?.product?.brand ??
+                            null
+                          }
+                          orderItem={orderItem}
+                          setIsTrigger={setIsTrigger}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             ))}
       </div>

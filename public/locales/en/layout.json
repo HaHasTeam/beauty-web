@@ -77,7 +77,9 @@
     "cancelled": "Cancelled",
     "inactive": "Inactive",
     "banned": "Banned",
-    "unPublished": "Unavailable"
+    "unPublished": "Unavailable",
+    "eventCancelled": "Event Cancelled",
+    "eventEnded": "Event Ended"
   },
   "statusTag": {
     "default": "Default"
@@ -106,6 +108,7 @@
   "loginRcm": "Log in to update your skills!",
   "facebook": "Facebook",
   "button": {
+    "payment": "Payment",
     "collect": "Collect",
     "received": "Received",
     "notReceived": "Haven't received",
@@ -158,6 +161,10 @@
     "vietnamese": "VN"
   },
   "search": {
+    "mask": "mask",
+    "toner": "toner",
+    "cushion": "cushion",
+    "lipstick": "lipstick",
     "result": "Search results for {{keyword}}: {{total}} data",
     "reset": "Reset",
     "orderPlaceholder": "Search for orders by Order ID, Product Name, or Brand Name",
@@ -178,7 +185,6 @@
     "productStatus": "Product Status",
     "loading": "Loading categories...",
     "noCategories": "No categories found",
-
     "tags": {
       "bestSeller": "Best Seller",
       "hot": "Hot",
@@ -188,7 +194,8 @@
       "preOrder": "Pre-Order",
       "official": "Official",
       "outOfStock": "Out of Stock",
-      "inactive": "Inactive"
+      "inactive": "Inactive",
+      "flashSale": "Flash sale"
     },
     "price": {
       "slider": "Slider",
@@ -486,7 +493,13 @@
     "days": "Days",
     "hours": "Hours",
     "minutes": "Minutes",
-    "seconds": "Seconds"
+    "seconds": "Seconds",
+    "status": {
+      "PRE_ORDER": "Pre-Order",
+      "GROUP_BUYING": "Group buying",
+      "FLASH_SALE": "Flash sale",
+      "LIVE_STREAM": "Livestream"
+    }
   },
   "reviews": {
     "title": "Reviews",
@@ -623,6 +636,10 @@
     "productLeft": "{{count}} products left",
     "updateClassificationSuccess": "Update product classification successfully!",
     "soldOutMessage": "This product classification is sold out, please choose another.",
+    "eventSoldOutMessage": "The product classification for this {{eventName}} event is sold out.",
+    "eventEndedMessage": "This {{eventName}} event has ended.",
+    "eventCancelledMessage": "This {{eventName}} event has been cancelled.",
+    "eventInactiveMessage": "The product classification for this {{eventName}} event is inactive.",
     "soldOutAllMessage": "This product is sold out.",
     "bannedMessage": "This product is banned.",
     "inactiveMessage": "This product is inactive.",
@@ -913,7 +930,7 @@
   },
   "order": {
     "paymentTitle": "Payment Incomplete",
-    "paymentMessage": "It looks like your order hasn't been paid yet. Please complete the payment soon to avoid any delays in processing.",
+    "paymentMessage": "Your order hasn’t been paid yet. Please complete the payment via {{method}} by {{val}}.",
     "payment": "Payment",
     "requestManagement": "Request Management",
     "loading": "Loading order...",
@@ -945,6 +962,7 @@
     "refunded": "Returned & Refunded",
     "lastUpdated": "Last updated",
     "success": "Order placed successfully!",
+    "successNoPayment": "Order placed successfully! Please complete the payment to proceed.",
     "prepareCash": "Prepare cash",
     "failure": "Order placement failed!",
     "retry": "Please try again later",
@@ -1854,6 +1872,7 @@
   },
   "walletTerm": {
     "balance": "Balance",
+    "availableBalance": "Available balance",
     "topUp": "Top Up",
     "withdraw": "Withdraw",
     "createWallet": "Create Wallet"
@@ -1925,7 +1944,12 @@
       "stripe": "Stripe",
       "visa_card": "Visa/Mastercard",
       "none": "None"
-    }
+    },
+    "notifyPayment": "Your order hasn’t been paid yet. Please complete the payment of {{total}} via {{method}} by {{val}}.",
+    "changePaymentMethod": "Change payment method",
+    "paymentSuccess": "Payment successful!",
+    "methodMessage": "For group-buying purchases, the default payment method is wallet. The amount will be automatically deducted once the group order is successfully completed. Please ensure your wallet has sufficient available balance to avoid any transaction interruptions.",
+    "notEnoughBalance": "Insufficient available balance"
   },
   "bookingStatus": {
     "pending": "Pending",
@@ -2089,5 +2113,8 @@
       "un_published": "Unpublished",
       "inactive": "Inactive"
     }
+  },
+  "backendError": {
+    "invalidEmail": "Email is invalid"
   }
 }

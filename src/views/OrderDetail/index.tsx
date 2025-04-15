@@ -409,8 +409,7 @@ const OrderDetail = () => {
                     paymentMethod={useOrderData?.data?.paymentMethod}
                   />
                 </div>
-                {(useOrderData?.data?.status === ShippingStatusEnum.TO_PAY ||
-                  useOrderData?.data?.status === ShippingStatusEnum.WAIT_FOR_CONFIRMATION) &&
+                {useOrderData?.data?.status === ShippingStatusEnum.WAIT_FOR_CONFIRMATION &&
                   useOrderData?.data?.type !== OrderEnum.GROUP_BUYING && (
                     <div className="w-full">
                       <Button
@@ -454,7 +453,7 @@ const OrderDetail = () => {
                       className="w-full border border-primary text-primary hover:text-primary hover:bg-primary/10"
                       onClick={() => setOpenReqReturnDialog(true)}
                     >
-                      {isLoading ? <LoadingIcon color="primaryBackground" /> : t('order.returnOrder')}
+                      {t('order.returnOrder')}
                     </Button>
                   )}
                 </div>

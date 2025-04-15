@@ -30,10 +30,16 @@ export type TServerResponseWithPagination<TItems = undefined> = {
     totalPages: number
   }
 }
-
 export type BaseFilterParams = {
   sortBy?: string
   order?: 'ASC' | 'DESC'
   page?: number
   limit?: number
 }
+
+export type BaseParams<T> = {
+  page?: number
+  limit?: number
+  sortBy?: string
+  order?: 'ASC' | 'DESC'
+} & Partial<T>

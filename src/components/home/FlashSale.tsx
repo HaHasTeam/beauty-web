@@ -59,10 +59,8 @@ const FlashSale = () => {
     <div>
       <div className="flex items-center justify-between w-full max-w-screen-xl mx-auto">
         <div className="flex items-center gap-2 mb-4">
-          <h2 className="text-xl font-semibold flex items-center gap-1 text-rose-500">
-            {t('flashSale.title')}
-            <Zap className="w-5 h-5 fill-current text-rose-500" />
-          </h2>
+          <Zap className="w-5 h-5 fill-current text-rose-500" />
+          <h2 className="text-2xl font-bold flex items-center gap-1 text-rose-500">{t('flashSale.title')}</h2>
           {/* <div className="flex gap-1 ml-2">
             {[time.hours, time.minutes, time.seconds].map((unit, index) => (
               <div

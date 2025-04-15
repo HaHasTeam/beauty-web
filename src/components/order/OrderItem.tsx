@@ -22,6 +22,7 @@ import { IOrderItem } from '@/types/order'
 import LoadingIcon from '../loading-icon'
 import OrderStatus from '../order-status'
 import { getRequestStatusColor } from '../request-status'
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 import { Button } from '../ui/button'
 import CancelOrderDialog from './CancelOrderDialog'
 import ProductOrderLandscape from './ProductOrderLandscape'
@@ -32,8 +33,10 @@ interface OrderItemProps {
   brand: IBrand | null
   orderItem: IOrderItem
   setIsTrigger: Dispatch<SetStateAction<boolean>>
+  isShowAction?: boolean
+  orderId?: string
 }
-const OrderItem = ({ brand, orderItem, setIsTrigger }: OrderItemProps) => {
+const OrderItem = ({ brand, orderItem, setIsTrigger, isShowAction = true, orderId }: OrderItemProps) => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const [openCancelOrderDialog, setOpenCancelOrderDialog] = useState<boolean>(false)
@@ -184,9 +187,12 @@ const OrderItem = ({ brand, orderItem, setIsTrigger }: OrderItemProps) => {
         {/* Order Item Header */}
         <div className="flex flex-col-reverse gap-2 md:flex-row items-start md:justify-between md:items-center border-b py-2 mb-4">
           {/* Brand */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             <div className="flex items-center gap-2">
-              <Store className="w-5 h-5 text-red-500" />
+              <Avatar className="w-10 h-10">
+                <AvatarImage src={brand?.logo} alt={brand?.name} />
+                <AvatarFallback>{brand?.name?.charAt(0).toUpperCase() ?? 'A'}</AvatarFallback>
+              </Avatar>
               <Link to={configs.routes.brands + `/${brand?.id}`}>
                 <span className="font-medium">{brand?.name}</span>
               </Link>
@@ -200,7 +206,7 @@ const OrderItem = ({ brand, orderItem, setIsTrigger }: OrderItemProps) => {
                 to={configs.routes.brands + '/' + brand?.id}
                 className="hidden md:flex py-1.5 px-2 rounded-md items-center flex-1 md:flex-none border border-primary text-primary hover:text-primary hover:bg-primary/10 text-sm"
               >
-                <Store className="w-4 h-4 mr-2" />
+                <Store className="w-4 h-4" />
                 {t('brand.viewShop')}
               </Link>
             </div>
@@ -229,7 +235,14 @@ const OrderItem = ({ brand, orderItem, setIsTrigger }: OrderItemProps) => {
         {/* Product list */}
         {orderItem?.orderDetails && orderItem?.orderDetails?.length > 0
           ? orderItem?.orderDetails?.map((productOder) => (
-              <Link to={configs.routes.profileOrder + '/' + orderItem?.id} key={productOder?.id}>
+              <Link
+                to={
+                  orderId && orderId !== ''
+                    ? configs.routes.profileOrderOrigin + '/' + orderId
+                    : configs.routes.profileOrder + '/' + orderItem?.id
+                }
+                key={productOder?.id}
+              >
                 <div className="border-b mb-2">
                   <ProductOrderLandscape
                     orderDetail={productOder}
@@ -239,13 +252,7 @@ const OrderItem = ({ brand, orderItem, setIsTrigger }: OrderItemProps) => {
                       productOder?.productClassification?.product
                     }
                     productClassification={productOder?.productClassification}
-                    productType={
-                      productOder?.productClassification?.preOrderProduct?.product
-                        ? OrderEnum.PRE_ORDER
-                        : productOder?.productClassification?.productDiscount?.product
-                          ? OrderEnum.FLASH_SALE
-                          : OrderEnum.NORMAL
-                    }
+                    productType={productOder?.type}
                   />
                 </div>
               </Link>
@@ -333,73 +340,75 @@ const OrderItem = ({ brand, orderItem, setIsTrigger }: OrderItemProps) => {
         )}
 
         {/* Action button */}
-        <div className="flex flex-col items-end md:flex-row md:justify-between gap-2 pt-4 md:items-center">
-          <div>
-            <span className="text-gray-700 lg:text-base md:text-sm text-xs">
-              {t('order.lastUpdated')}: {t('date.toLocaleDateTimeString', { val: new Date(orderItem?.updatedAt) })}
-            </span>
-          </div>
-          <div className="flex gap-2 items-center flex-wrap">
-            <Button
-              variant="outline"
-              className="border border-primary text-primary hover:text-primary hover:bg-primary/10"
-              onClick={() => navigate(configs.routes.profileOrder + '/' + orderItem?.id)}
-            >
-              {t('order.viewDetail')}
-            </Button>
-            {(orderItem?.status === ShippingStatusEnum.TO_PAY ||
-              orderItem?.status === ShippingStatusEnum.WAIT_FOR_CONFIRMATION) &&
-              orderItem?.type !== OrderEnum.GROUP_BUYING && (
-                <Button
-                  variant="outline"
-                  className="border border-primary text-primary hover:text-primary hover:bg-primary/10"
-                  onClick={() => setOpenCancelOrderDialog(true)}
-                >
-                  {t('order.cancelOrder')}
-                </Button>
-              )}
-            {orderItem?.status === ShippingStatusEnum.PREPARING_ORDER &&
-              orderItem?.type !== OrderEnum.GROUP_BUYING &&
-              !cancelAndReturnRequestData?.data?.cancelRequest && (
-                <Button
-                  variant="outline"
-                  className="border border-primary text-primary hover:text-primary hover:bg-primary/10"
-                  onClick={() => setOpenRequestCancelOrderDialog(true)}
-                >
-                  {t('order.cancelOrder')}
-                </Button>
-              )}
-            {showReturnButton && (
-              <Button
-                variant="outline"
-                className="border border-primary text-primary hover:text-primary hover:bg-primary/10"
-                onClick={() => setOpenReqReturnDialog(true)}
-              >
-                {t('order.returnOrder')}
-              </Button>
-            )}
-            {showReceivedButton && (
-              <Button
-                className="hover:bg-primary/80"
-                onClick={() => {
-                  handleUpdateStatus(ShippingStatusEnum.COMPLETED)
-                }}
-              >
-                {isLoading ? <LoadingIcon color="primaryBackground" /> : t('order.received')}
-              </Button>
-            )}
+        {isShowAction && (
+          <div className="flex flex-col items-end md:flex-row md:justify-between gap-2 pt-4 md:items-center">
+            <div>
+              <span className="text-gray-700 lg:text-base md:text-sm text-xs">
+                {t('order.lastUpdated')}: {t('date.toLocaleDateTimeString', { val: new Date(orderItem?.updatedAt) })}
+              </span>
+            </div>
 
-            {orderItem?.status === ShippingStatusEnum.COMPLETED && (
+            <div className="flex gap-2 items-center flex-wrap">
               <Button
                 variant="outline"
                 className="border border-primary text-primary hover:text-primary hover:bg-primary/10"
-                onClick={() => handleCreateCartItem()}
+                onClick={() => navigate(configs.routes.profileOrder + '/' + orderItem?.id)}
               >
-                {isProcessing ? <LoadingIcon color="primaryBackground" /> : t('order.buyAgain')}
+                {t('order.viewDetail')}
               </Button>
-            )}
+              {orderItem?.status === ShippingStatusEnum.WAIT_FOR_CONFIRMATION &&
+                orderItem?.type !== OrderEnum.GROUP_BUYING && (
+                  <Button
+                    variant="outline"
+                    className="border border-primary text-primary hover:text-primary hover:bg-primary/10"
+                    onClick={() => setOpenCancelOrderDialog(true)}
+                  >
+                    {t('order.cancelOrder')}
+                  </Button>
+                )}
+              {orderItem?.status === ShippingStatusEnum.PREPARING_ORDER &&
+                orderItem?.type !== OrderEnum.GROUP_BUYING &&
+                !cancelAndReturnRequestData?.data?.cancelRequest && (
+                  <Button
+                    variant="outline"
+                    className="border border-primary text-primary hover:text-primary hover:bg-primary/10"
+                    onClick={() => setOpenRequestCancelOrderDialog(true)}
+                  >
+                    {t('order.cancelOrder')}
+                  </Button>
+                )}
+              {showReturnButton && (
+                <Button
+                  variant="outline"
+                  className="border border-primary text-primary hover:text-primary hover:bg-primary/10"
+                  onClick={() => setOpenReqReturnDialog(true)}
+                >
+                  {t('order.returnOrder')}
+                </Button>
+              )}
+              {showReceivedButton && (
+                <Button
+                  className="hover:bg-primary/80"
+                  onClick={() => {
+                    handleUpdateStatus(ShippingStatusEnum.COMPLETED)
+                  }}
+                >
+                  {isLoading ? <LoadingIcon color="primaryBackground" /> : t('order.received')}
+                </Button>
+              )}
+
+              {orderItem?.status === ShippingStatusEnum.COMPLETED && (
+                <Button
+                  variant="outline"
+                  className="border border-primary text-primary hover:text-primary hover:bg-primary/10"
+                  onClick={() => handleCreateCartItem()}
+                >
+                  {isProcessing ? <LoadingIcon color="primaryBackground" /> : t('order.buyAgain')}
+                </Button>
+              )}
+            </div>
           </div>
-        </div>
+        )}
       </div>
       <CancelOrderDialog
         open={openCancelOrderDialog}

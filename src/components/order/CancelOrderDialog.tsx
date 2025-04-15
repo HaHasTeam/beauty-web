@@ -10,7 +10,12 @@ import Label from '@/components/form-label'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import useHandleServerError from '@/hooks/useHandleServerError'
 import { useToast } from '@/hooks/useToast'
-import { cancelOrderApi, getCancelAndReturnRequestApi } from '@/network/apis/order'
+import {
+  cancelOrderApi,
+  cancelParentOrderApi,
+  getCancelAndReturnRequestApi,
+  getParentOrderByIdApi,
+} from '@/network/apis/order'
 import { getCancelOrderSchema } from '@/schemas/order.schema'
 
 import AlertMessage from '../alert/AlertMessage'
@@ -25,6 +30,7 @@ interface CancelOrderDialogProps {
   setOpen: Dispatch<SetStateAction<boolean>>
   onOpenChange: (open: boolean) => void
   setIsTrigger: Dispatch<SetStateAction<boolean>>
+  isParent?: boolean
 }
 
 export default function CancelOrderDialog({
@@ -33,6 +39,7 @@ export default function CancelOrderDialog({
   setOpen,
   onOpenChange,
   setIsTrigger,
+  isParent = false,
 }: CancelOrderDialogProps) {
   const { t } = useTranslation()
   const { successToast } = useToast()
@@ -84,11 +91,33 @@ export default function CancelOrderDialog({
       handleReset()
     },
   })
+  const { mutateAsync: cancelParentOrderFn } = useMutation({
+    mutationKey: [cancelParentOrderApi.mutationKey],
+    mutationFn: cancelParentOrderApi.fn,
+    onSuccess: () => {
+      successToast({
+        message: t('order.cancelSuccess'),
+      })
+      setIsTrigger((prev) => !prev)
+      queryClient.invalidateQueries({
+        queryKey: [getCancelAndReturnRequestApi.queryKey],
+      })
+      queryClient.invalidateQueries({
+        queryKey: [getParentOrderByIdApi.queryKey],
+      })
+      handleReset()
+    },
+  })
   async function onSubmit(values: z.infer<typeof CancelOrderSchema>) {
     try {
       setIsLoading(true)
       const payload = isOtherReason ? { reason: values.otherReason } : { reason: values.reason }
-      await cancelOrderFn({ orderId, ...payload })
+      if (isParent) {
+        await cancelParentOrderFn({ orderId, ...payload })
+      } else {
+        await cancelOrderFn({ orderId, ...payload })
+      }
+
       setIsLoading(false)
     } catch (error) {
       setIsLoading(false)

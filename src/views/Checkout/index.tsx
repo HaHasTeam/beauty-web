@@ -16,6 +16,7 @@ import Empty from '@/components/empty/Empty'
 import LoadingContentLayer from '@/components/loading-icon/LoadingContentLayer'
 import { QRCodeAlertDialog } from '@/components/payment'
 import PaymentSelection from '@/components/payment/PaymentSelection'
+import WalletSelection from '@/components/payment/WalletSelection'
 import { Button } from '@/components/ui/button'
 import { Form } from '@/components/ui/form'
 import VoucherDialog from '@/components/voucher/VoucherDialog'
@@ -69,7 +70,7 @@ const Checkout = () => {
   const [bestPlatformVoucher, setBestPlatformVoucher] = useState<IPlatformBestVoucher | null>(null)
   const queryClient = useQueryClient()
   const CreateOrderSchema = getCreateOrderSchema()
-
+  console.log(groupBuying)
   const selectedCartItems = useMemo(() => {
     return selectedCartItem
       ? Object.values(selectedCartItem).flatMap((cartBrandItems) => cartBrandItems.map((item) => item.id))
@@ -80,7 +81,7 @@ const Checkout = () => {
     return acc
   }, {})
 
-  const { totalProductCost, totalProductDiscount, totalLivestreamDiscount, totalPrice } = useMemo(() => {
+  const { totalProductCost, totalProductDiscount, totalPrice } = useMemo(() => {
     return calculateCartTotals(selectedCartItems, selectedCartItem)
   }, [selectedCartItem, selectedCartItems])
 
@@ -113,8 +114,8 @@ const Checkout = () => {
 
   // Total saved price (product discounts + brand vouchers + platform voucher)
   const totalSavings = totalProductDiscount + totalBrandDiscount + (platformVoucherDiscount ?? 0)
-  const totalPayment = totalPrice - totalBrandDiscount - (platformVoucherDiscount ?? 0)
-
+  const totalPayment = Math.floor(totalPrice - totalBrandDiscount - (platformVoucherDiscount ?? 0))
+  console.log(totalPrice, totalBrandDiscount, platformVoucherDiscount)
   const defaultOrderValues = {
     orders: [],
     addressId: '',
@@ -174,8 +175,15 @@ const Checkout = () => {
 
     navigate(configs.routes.checkoutResult, { state: { orderData, status: ResultEnum.SUCCESS } })
   }, [navigate, orderData, resetCart, handleReset, t, successToast])
+  const onClose = useCallback(() => {
+    successToast({
+      message: t('order.successNoPayment'),
+    })
+    resetCart()
+    handleReset()
 
-  console.log(orderData, 'orderData')
+    navigate(configs.routes.checkoutResult, { state: { orderData, status: ResultEnum.SUCCESS } })
+  }, [navigate, orderData, resetCart, handleReset, t, successToast])
 
   const { mutateAsync: createOrderFn } = useMutation({
     mutationKey: [createOderApi.mutationKey],
@@ -330,6 +338,7 @@ const Checkout = () => {
         type={PAY_TYPE.ORDER}
         paymentId={paymentId}
         onSuccess={onPaymentSuccess}
+        onClose={onClose}
       />
       {(isGettingProfile || isGettingAddress) && <LoadingContentLayer />}
       {selectedCartItem && Object.keys(selectedCartItem)?.length > 0 && (
@@ -489,6 +498,7 @@ const Checkout = () => {
                         />
                       </div>
                     )}
+                    {isInGroupBuying && <WalletSelection totalPayment={totalPayment} />}
                     <div>
                       <CheckoutTotal
                         isLoading={isLoading}
@@ -496,7 +506,6 @@ const Checkout = () => {
                         totalProductCost={totalProductCost}
                         totalBrandDiscount={totalBrandDiscount}
                         totalPlatformDiscount={platformVoucherDiscount ?? 0}
-                        totalLivestreamDiscount={totalLivestreamDiscount}
                         totalSavings={totalSavings}
                         totalPayment={totalPayment}
                         formId={`form-${formId}`}

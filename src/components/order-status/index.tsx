@@ -106,7 +106,7 @@ export default function OrderStatus({ tag, text, size = 'medium' }: OrderStatusP
 
   return (
     <span
-      className={`${sizeClasses[size]} p-2 ${bgColorClass} rounded-full uppercase cursor-default font-bold ${tagColorClass}`}
+      className={`${sizeClasses[size]} w-fit line-clamp-1 overflow-ellipsis p-2 ${bgColorClass} rounded-full uppercase cursor-default font-bold ${tagColorClass}`}
     >
       {text ? text : tagText}
     </span>

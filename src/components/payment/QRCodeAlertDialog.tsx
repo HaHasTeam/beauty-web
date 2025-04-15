@@ -44,6 +44,7 @@ interface QRCodeAlertDialogProps {
   className?: string
   type: PAY_TYPE
   onSuccess?: () => void
+  onClose?: () => void
 }
 
 export function QRCodeAlertDialog({
@@ -57,6 +58,7 @@ export function QRCodeAlertDialog({
   type,
   className,
   onSuccess,
+  onClose,
 }: QRCodeAlertDialogProps) {
   const { t } = useTranslation()
   const [paymentStatus, setPaymentStatus] = useState<'pending' | 'success' | 'error'>('pending')
@@ -170,7 +172,13 @@ export function QRCodeAlertDialog({
                 )}
               </div>
 
-              <Button onClick={() => onOpenChange(false)} className="w-full">
+              <Button
+                onClick={() => {
+                  onOpenChange(false)
+                  onClose?.()
+                }}
+                className="w-full"
+              >
                 {t('wallet.close')}
               </Button>
             </div>
@@ -206,7 +214,14 @@ export function QRCodeAlertDialog({
                 <Button variant="outline" onClick={() => setPaymentStatus('pending')} className="flex-1">
                   {t('wallet.tryAgain')}
                 </Button>
-                <Button variant="destructive" onClick={() => onOpenChange(false)} className="flex-1">
+                <Button
+                  variant="destructive"
+                  onClick={() => {
+                    onOpenChange(false)
+                    onClose?.()
+                  }}
+                  className="flex-1"
+                >
                   {t('wallet.cancel')}
                 </Button>
               </div>
@@ -224,15 +239,20 @@ export function QRCodeAlertDialog({
           </div>
         )}
 
-        <AlertDialogFooter className="p-6 pt-0">
-          <Button
-            variant={'outline'}
-            onClick={() => onOpenChange(!open)}
-            className="hover:bg-primary/30 text-primary border border-primary hover:text-primary"
-          >
-            {t('button.close')}
-          </Button>
-        </AlertDialogFooter>
+        {paymentStatus !== 'error' && paymentStatus !== 'success' && (
+          <AlertDialogFooter className="p-6 pt-0">
+            <Button
+              variant={'outline'}
+              onClick={() => {
+                onOpenChange(!open)
+                onClose?.()
+              }}
+              className="hover:bg-primary/30 text-primary border border-primary hover:text-primary"
+            >
+              {t('button.close')}
+            </Button>
+          </AlertDialogFooter>
+        )}
       </AlertDialogContent>
     </AlertDialog>
   )

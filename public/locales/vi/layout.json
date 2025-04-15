@@ -77,7 +77,9 @@
     "cancelled": "Đã hủy",
     "inactive": "Đã ẩn",
     "banned": "Đã cấm",
-    "unPublished": "Không khả dụng"
+    "unPublished": "Không khả dụng",
+    "eventCancelled": "Sự kiện đã hủy",
+    "eventEnded": "Đã kết thúc"
   },
   "statusTag": {
     "default": "Mặc định"
@@ -106,6 +108,7 @@
   "loginRcm": "Đăng nhập để cập nhật kỹ năng của bạn!",
   "facebook": "Facebook",
   "button": {
+    "payment": "Thanh toán",
     "collect": "Thu thập",
     "received": "Đã nhận",
     "notReceived": "Chưa nhận",
@@ -158,6 +161,10 @@
     "vietnamese": "VN"
   },
   "search": {
+    "mask": "mặt nạ",
+    "toner": "nước cân bằng",
+    "cushion": "phấn nước",
+    "lipstick": "son môi",
     "result": "Kết quả tìm kiếm cho từ khóa {{keyword}}: {{total}} dữ liệu",
     "reset": "Đặt lại",
     "orderPlaceholder": "Tìm đơn hàng theo Mã đơn hàng, Tên sản phẩm hoặc Tên thương hiệu",
@@ -187,7 +194,8 @@
       "preOrder": "Đặt trước",
       "official": "Chính hãng",
       "outOfStock": "Hết hàng",
-      "inactive": "Không hoạt động"
+      "inactive": "Không hoạt động",
+      "flashSale": "Flash sale"
     },
     "price": {
       "slider": "Thanh trượt",
@@ -502,7 +510,13 @@
     "days": "Ngày",
     "hours": "Giờ",
     "minutes": "Phút",
-    "seconds": "Giây"
+    "seconds": "Giây",
+    "status": {
+      "PRE_ORDER": "Đặt trước",
+      "GROUP_BUYING": "Mua nhóm",
+      "FLASH_SALE": "Flash sale",
+      "LIVE_STREAM": "Livestream"
+    }
   },
   "reviews": {
     "title": "Đánh giá",
@@ -640,6 +654,10 @@
     "productLeft": "Còn {{count}} sản phẩm",
     "updateClassificationSuccess": "Thay đổi phân loại sản phẩm thành công!",
     "soldOutMessage": "Phân loại hàng này đã bán hết, vui lòng chọn phân loại khác.",
+    "eventSoldOutMessage": "Phân loại sản phẩm trong sự kiện {{eventName}} đã hết hàng.",
+    "eventEndedMessage": "Sự kiện {{eventName}} đã kết thúc.",
+    "eventCancelledMessage": "Sự kiện {{eventName}} đã bị hủy.",
+    "eventInactiveMessage": "Phân loại sản phẩm trong sự kiện {{eventName}} hiện không hoạt động.",
     "soldOutAllMessage": "Sản phẩm này đã hết hàng.",
     "bannedMessage": "Sản phẩm này đã bị cấm.",
     "inactiveMessage": "Sản phẩm này đang không hoạt động.",
@@ -771,7 +789,6 @@
     "message": "Tin nhắn"
   },
   "wallet": {
-    "choosePaymentMethod": "Chọn phương thức thanh toán",
     "title": "Ví",
     "description": "Ví của bạn trống. Vui lòng thêm phương thức thanh toán trước.",
     "addCard": "Thêm Thẻ Mới",
@@ -987,6 +1004,7 @@
     "refunded": "Đã Trả Hàng & Hoàn Tiền",
     "lastUpdated": "Cập nhật lần cuối",
     "success": "Đặt hàng thành công!",
+    "successNoPayment": "Đặt hàng thành công! Vui lòng hoàn tất thanh toán để tiếp tục.",
     "prepareCash": "Chuẩn bị tiền mặt",
     "failure": "Đặt hàng thất bại!",
     "retry": "Vui lòng thử lại sau",
@@ -1803,6 +1821,7 @@
   },
   "walletTerm": {
     "balance": "Số dư",
+    "availableBalance": "Số dư khả dụng",
     "topUp": "Nạp tiền",
     "withdraw": "Rút tiền",
     "createWallet": "Tạo ví"
@@ -1991,7 +2010,12 @@
       "stripe": "Stripe",
       "visa_card": "Visa/Mastercard",
       "none": "Không có"
-    }
+    },
+    "notifyPayment": "Đơn hàng của bạn chưa được thanh toán. Vui lòng hoàn tất thanh toán số tiền {{total}} bằng {{method}} trong {{val}}.",
+    "changePaymentMethod": "Đổi phương thức thanh toán",
+    "paymentSuccess": "Thanh toán thành công!",
+    "methodMessage": "Đối với giao dịch mua nhóm, phương thức thanh toán mặc định là ví. Số tiền sẽ được tự động trừ khi đơn mua nhóm hoàn tất. Vui lòng đảm bảo số dư khả dụng hợp lệ trong ví để tránh gián đoạn giao dịch.",
+    "notEnoughBalance": "Số dư khả dụng không đủ"
   },
   "bookingStatus": {
     "pending": "Đang chờ",
@@ -2086,5 +2110,8 @@
   },
   "currency": {
     "vnd": "Đồng Việt Nam"
+  },
+  "backendError": {
+    "invalidEmail": "Email is invalid"
   }
 }

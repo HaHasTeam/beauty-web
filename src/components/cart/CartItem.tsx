@@ -10,7 +10,14 @@ import useCartStore from '@/store/cart'
 import type { IBrand } from '@/types/brand'
 import type { ICartItem } from '@/types/cart'
 import type { IClassification } from '@/types/classification'
-import { ClassificationTypeEnum, DiscountTypeEnum, OrderEnum, ProductDiscountEnum, StatusEnum } from '@/types/enum'
+import {
+  ClassificationTypeEnum,
+  DiscountTypeEnum,
+  LiveStreamEnum,
+  OrderEnum,
+  ProductDiscountEnum,
+  StatusEnum,
+} from '@/types/enum'
 import { PreOrderProductEnum } from '@/types/pre-order'
 import type { IBrandBestVoucher, ICheckoutItem, TVoucher } from '@/types/voucher'
 import { calculateBrandVoucherDiscount } from '@/utils/price'
@@ -143,14 +150,14 @@ const CartItem = ({
         // const selectedClassification = cartItem?.classification ?? ''
 
         // Check if this item is from a livestream
-        const isLivestreamItem = cartItem.livestream || (cartItem.livestreamDiscount && cartItem.livestreamDiscount > 0)
+        const isLivestreamItem = cartItem.livestream && cartItem.livestream.status === LiveStreamEnum.LIVE
 
         // Determine event type, adding LIVESTREAM as a new option
         let eventType = ''
         if (isInGroupBuying) {
           eventType = ''
         } else if (isLivestreamItem) {
-          eventType = 'LIVESTREAM' // Use OrderEnum.LIVESTREAM if defined
+          eventType = OrderEnum.LIVE_STREAM
         } else if (
           cartItem?.productClassification?.preOrderProduct &&
           cartItem?.productClassification?.preOrderProduct?.status === PreOrderProductEnum.ACTIVE
@@ -167,7 +174,7 @@ const CartItem = ({
           ? null
           : eventType === OrderEnum.FLASH_SALE
             ? cartItem?.productClassification?.productDiscount?.discount
-            : eventType == 'LIVESTREAM'
+            : eventType == OrderEnum.LIVE_STREAM
               ? cartItem.livestreamDiscount
               : null
 
@@ -178,6 +185,7 @@ const CartItem = ({
             : isLivestreamItem
               ? DiscountTypeEnum.PERCENTAGE
               : null
+        console.log('live', discount, discountType)
         const productStatus = product.status
 
         return (

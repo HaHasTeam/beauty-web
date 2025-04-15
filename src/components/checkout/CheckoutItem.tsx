@@ -11,7 +11,15 @@ import { CreateOrderSchema } from '@/schemas/order.schema'
 import useCartStore from '@/store/cart'
 import { IBrand } from '@/types/brand'
 import { ICartItem } from '@/types/cart'
-import { ClassificationTypeEnum, DiscountTypeEnum, OrderEnum, StatusEnum } from '@/types/enum'
+import {
+  ClassificationTypeEnum,
+  DiscountTypeEnum,
+  LiveStreamEnum,
+  OrderEnum,
+  ProductDiscountEnum,
+  StatusEnum,
+} from '@/types/enum'
+import { PreOrderProductEnum } from '@/types/pre-order'
 import { IBrandBestVoucher, ICheckoutItem, TVoucher } from '@/types/voucher'
 import { formatCurrency, formatNumber } from '@/utils/number'
 import { calculateCheckoutBrandVoucherDiscount, getTotalBrandProductsPrice } from '@/utils/price'
@@ -103,30 +111,37 @@ const CheckoutItem = ({
         const selectedClassification = cartItem?.classification ?? ''
         const productPrice = cartItem?.productClassification?.price ?? 0
         const productQuantity = cartItem?.quantity ?? 0
-        const eventType = isInGroupBuying
-          ? ''
-          : cartItem?.productClassification?.preOrderProduct
-            ? OrderEnum.PRE_ORDER
-            : cartItem?.productClassification?.productDiscount || (product?.productDiscounts ?? [])[0]?.discount
-              ? OrderEnum.FLASH_SALE
-              : cartItem.livestreamDiscount
-                ? 'LIVESTREAM'
-                : ''
+
+        // Check if this item is from a livestream
+        const isLivestreamItem = cartItem.livestream && cartItem.livestream.status === LiveStreamEnum.LIVE
+
+        let eventType = ''
+        if (isInGroupBuying) {
+          eventType = ''
+        } else if (isLivestreamItem) {
+          eventType = OrderEnum.LIVE_STREAM
+        } else if (
+          cartItem?.productClassification?.preOrderProduct &&
+          cartItem?.productClassification?.preOrderProduct?.status === PreOrderProductEnum.ACTIVE
+        ) {
+          eventType = OrderEnum.PRE_ORDER
+        } else if (
+          cartItem?.productClassification?.productDiscount &&
+          cartItem?.productClassification?.productDiscount?.status === ProductDiscountEnum.ACTIVE
+        ) {
+          eventType = OrderEnum.FLASH_SALE
+        }
         const discount = isInGroupBuying
           ? null
           : eventType === OrderEnum.FLASH_SALE
             ? cartItem?.productClassification?.productDiscount?.discount
-            : (product?.productDiscounts ?? [])[0]?.discount
-              ? (product?.productDiscounts ?? [])[0]?.discount
-              : cartItem.livestreamDiscount
-                ? cartItem.livestreamDiscount
-                : null
+            : isLivestreamItem
+              ? cartItem.livestreamDiscount
+              : null
 
         const discountType = isInGroupBuying
           ? null
-          : eventType === OrderEnum.FLASH_SALE ||
-              (product?.productDiscounts ?? [])[0]?.discount ||
-              cartItem.livestreamDiscount
+          : eventType === OrderEnum.FLASH_SALE || eventType === OrderEnum.LIVE_STREAM
             ? DiscountTypeEnum.PERCENTAGE
             : null
 
@@ -143,7 +158,7 @@ const CheckoutItem = ({
             eventType={eventType}
             productQuantity={productQuantity}
             productClassification={productClassification}
-            livestreamDiscount={cartItem?.livestreamDiscount}
+            // livestreamDiscount={cartItem?.livestreamDiscount}
           />
         )
       })}

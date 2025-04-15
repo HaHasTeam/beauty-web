@@ -635,11 +635,11 @@ export default function ReportList() {
             onValueChange={(value) => setActiveTypeTab(value)}
             className="w-full hidden md:block"
           >
-            <TabsList className="sticky top-0 z-10 h-12 w-full justify-start overflow-x-auto p-0 bg-white border-b border-border/20">
+            <TabsList className="sticky top-0 z-10 h-14 w-full justify-start overflow-x-auto p-0 bg-white border-b border-border/20">
               {typeTabOptions?.map((trigger) => (
                 <TabsTrigger
                   key={trigger.value}
-                  className="h-12 w-full my-auto rounded-none text-sm data-[state=active]:text-primary hover:text-secondary-foreground/80 data-[state=active]:border-b-2 data-[state=active]:border-primary"
+                  className="overflow-y-hidden h-12 w-full my-auto rounded-none text-sm data-[state=active]:text-primary hover:text-secondary-foreground/80 data-[state=active]:border-b-2 data-[state=active]:border-primary"
                   value={trigger.value}
                 >
                   {trigger.text}

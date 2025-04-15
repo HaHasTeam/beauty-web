@@ -35,7 +35,7 @@ const UpdateAddressDialog = ({ address, triggerComponent }: UpdateAddressDialogP
 
   const defaultValues = {
     fullName: address?.fullName ?? '',
-    phoneNumber: address?.phone ?? '',
+    phone: address?.phone ?? '',
     detailAddress: address?.detailAddress ?? '',
     ward: address?.ward ?? '',
     district: address?.district ?? '',
@@ -45,14 +45,12 @@ const UpdateAddressDialog = ({ address, triggerComponent }: UpdateAddressDialogP
     notes: address?.notes ?? '',
     isDefault: address?.isDefault ?? false,
   }
-  console.log(defaultValues)
 
   const form = useForm<z.infer<typeof CreateAddressSchema>>({
     resolver: zodResolver(CreateAddressSchema),
     defaultValues,
   })
   const handleReset = () => {
-    form.reset()
     setOpen(false)
   }
   const { mutateAsync: updateAddressFn } = useMutation({
@@ -118,7 +116,14 @@ const UpdateAddressDialog = ({ address, triggerComponent }: UpdateAddressDialogP
               </div>
               <DialogFooter>
                 <div className="flex justify-end gap-2 w-full">
-                  <Button type="button" variant="outline" onClick={() => setOpen(false)}>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => {
+                      form.reset()
+                      setOpen(false)
+                    }}
+                  >
                     {t('dialog.cancel')}
                   </Button>
                   <Button type="submit" loading={isLoading}>

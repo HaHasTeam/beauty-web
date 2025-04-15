@@ -69,6 +69,7 @@ export enum OrderEnum {
   NORMAL = 'NORMAL',
   GROUP_BUYING = 'GROUP_BUYING',
   FLASH_SALE = 'FLASH_SALE',
+  LIVE_STREAM = 'LIVE_STREAM',
 }
 
 export enum ProjectInformationEnum {
@@ -132,6 +133,8 @@ export enum ProductCartStatusEnum {
   INACTIVE = 'INACTIVE',
   BANNED = 'BANNED',
   UN_PUBLISHED = 'UN_PUBLISHED',
+  ENDED = 'ENDED',
+  CANCELLED = 'CANCELLED',
 }
 export enum ClassificationTypeEnum {
   DEFAULT = 'DEFAULT',
@@ -218,4 +221,11 @@ export enum WeekDay {
 export enum BookingTypeEnum {
   SERVICE = 'SERVICE',
   INTERVIEW = 'INTERVIEW',
+}
+
+export enum LiveStreamEnum {
+  SCHEDULED = 'SCHEDULED',
+  LIVE = 'LIVE',
+  ENDED = 'ENDED',
+  CANCELLED = 'CANCELLED',
 }
