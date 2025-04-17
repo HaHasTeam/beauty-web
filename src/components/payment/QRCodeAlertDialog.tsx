@@ -3,13 +3,7 @@ import { XIcon } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import {
-  AlertDialog,
-  AlertDialogContent,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@/components/ui/alert-dialog'
+import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import { payTransactionApi } from '@/network/apis/transaction'
 import { PAY_TYPE } from '@/network/apis/transaction/type'
@@ -237,21 +231,6 @@ export function QRCodeAlertDialog({
               <span className="font-medium text-xl">{formatCurrency(amount)}</span>
             </div>
           </div>
-        )}
-
-        {paymentStatus !== 'error' && paymentStatus !== 'success' && (
-          <AlertDialogFooter className="p-6 pt-0">
-            <Button
-              variant={'outline'}
-              onClick={() => {
-                onOpenChange(!open)
-                onClose?.()
-              }}
-              className="hover:bg-primary/30 text-primary border border-primary hover:text-primary"
-            >
-              {t('button.close')}
-            </Button>
-          </AlertDialogFooter>
         )}
       </AlertDialogContent>
     </AlertDialog>

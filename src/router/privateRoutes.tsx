@@ -92,7 +92,7 @@ const privateRoutes = [
         element: <OrderParentDetail />,
       },
       {
-        path: configs.routes.bookingDetail, // user booking detail
+        path: configs.routes.profileBookingDetail, // user booking detail
         element: <BookingDetail />,
       },
       {

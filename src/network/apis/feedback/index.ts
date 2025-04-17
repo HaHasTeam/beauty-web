@@ -30,6 +30,34 @@ export const getFeedbackByIdApi = toQueryFetcher<string, TServerResponse<IRespon
     return privateRequest(`/feedbacks/get-by-id/${feedbackId}`)
   },
 )
+
+export const getConsultantFeedbackApi = toQueryFetcher<string, TServerResponse<IResponseFeedback[]>>(
+  'getConsultantFeedbackApi',
+  async (consultantId) => {
+    return privateRequest(`/feedbacks/get-consultant-feedbacks/${consultantId}`)
+  },
+)
+
+export interface IFilterConsultantFeedbackParams {
+  consultantId: string
+  page?: number
+  limit?: number
+}
+
+export const getFilterConsultantFeedbackApi = toQueryFetcher<
+  IFilterConsultantFeedbackParams,
+  TServerResponse<{ total: number; totalPages: number }, IResponseFilterFeedback[]>
+>('getFilterConsultantFeedbackApi', async (params) => {
+  const { consultantId, page = 1, limit = 10 } = params || {}
+  return privateRequest(`/feedbacks/filter-consultant-feedbacks/${consultantId}`, {
+    method: 'GET',
+    params: {
+      page,
+      limit,
+    },
+  })
+})
+
 export const getFeedbackGeneralOfProductApi = toQueryFetcher<string, TServerResponse<IFeedbackGeneral>>(
   'getFeedbackGeneralOfProductApi',
   async (feedbackId) => {

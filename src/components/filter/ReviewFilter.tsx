@@ -1,11 +1,11 @@
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { Check, Star } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Button } from '@/components/ui/button'
 import useHandleServerError from '@/hooks/useHandleServerError'
-import { filterFeedbackApi } from '@/network/apis/feedback'
+import { filterFeedbackApi, getFilterConsultantFeedbackApi } from '@/network/apis/feedback'
 import { IFilterFeedbackData } from '@/network/apis/feedback/type'
 import { IBrand } from '@/types/brand'
 import { FeedbackFilterEnum } from '@/types/enum'
@@ -25,18 +25,19 @@ interface FilterOption {
 
 interface ReviewFilterProps {
   productId: string
+  consultantId?: string
   brand?: IBrand
 }
-export default function ReviewFilter({ productId, brand }: ReviewFilterProps) {
+
+export default function ReviewFilter({ productId, consultantId, brand }: ReviewFilterProps) {
   const { t } = useTranslation()
-  // const [selectedFilters, setSelectedFilters] = useState<Set<string>>(new Set())
   const [selectedFilter, setSelectedFilter] = useState<string>('')
   const [reviews, setReviews] = useState<IResponseFilterFeedback[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [totalPages, setTotalPages] = useState<number>(1)
+  const [limit] = useState<number>(10)
   const handleServerError = useHandleServerError()
-  // const [total, setTotal] = useState<number>(1)
 
   const filterOptions: FilterOption[] = [
     // { id: 'newest', label: `${t('filter.newest')}`, value: 'newest', type: 'toggle' },
@@ -48,40 +49,34 @@ export default function ReviewFilter({ productId, brand }: ReviewFilterProps) {
     { id: 'star-1', label: `${t('filter.numberOfStar', { count: 1 })}`, value: 1, type: 'star' },
   ]
 
-  // API mutation
+  // Consultant feedback query
+  const {
+    data: consultantFeedbackData,
+    isLoading: isConsultantFeedbackLoading,
+    refetch: refetchConsultantFeedback,
+  } = useQuery({
+    queryKey: [
+      getFilterConsultantFeedbackApi.queryKey,
+      {
+        consultantId: consultantId || '',
+        page: currentPage,
+        limit,
+      },
+    ],
+    queryFn: getFilterConsultantFeedbackApi.fn,
+    enabled: !!consultantId,
+  })
+
+  // Product feedback mutation
   const { mutateAsync: getFeedbackOfProduct } = useMutation({
     mutationKey: [filterFeedbackApi.mutationKey, productId],
     mutationFn: filterFeedbackApi.fn,
     onSuccess: (data) => {
       setReviews(data?.data?.items || [])
       setTotalPages(data?.data?.totalPages || 1)
-      // setTotal(data?.data?.totalPages || 1)
       setIsLoading(false)
     },
   })
-
-  // Function to convert selected filters to API params
-  // const convertFiltersToApiParams = () => {
-  //   const filters: Array<{ type: string; value: string }> = []
-
-  //   // Check for star ratings
-  //   const starFilters = Array.from(selectedFilters)
-  //     .filter((id) => id.startsWith('star-'))
-  //     .map((id) => parseInt(id.split('-')[1]))
-
-  //   if (starFilters.length > 0) {
-  //     starFilters.forEach((rating) => {
-  //       filters.push({ type: 'RATING', value: rating.toString() })
-  //     })
-  //   }
-
-  //   // Check for has-image filter
-  //   if (selectedFilters.has('has-image')) {
-  //     filters.push({ type: 'IMAGE_VIDEO', value: '' })
-  //   }
-
-  //   return filters
-  // }
 
   // Apply filters and fetch data
   const applyFilters = useCallback(
@@ -107,6 +102,16 @@ export default function ReviewFilter({ productId, brand }: ReviewFilterProps) {
 
           return filter
         }
+
+        // If consultant ID is provided, use consultant feedback API
+        if (consultantId) {
+          await refetchConsultantFeedback()
+          setCurrentPage(page)
+          setIsLoading(false)
+          return
+        }
+
+        // Otherwise use product feedback API
         // Convert selected filters to API parameters
         const filterParams = convertFiltersToApiParams()
 
@@ -126,20 +131,11 @@ export default function ReviewFilter({ productId, brand }: ReviewFilterProps) {
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [selectedFilter, getFeedbackOfProduct, productId],
+    [selectedFilter, getFeedbackOfProduct, productId, consultantId, refetchConsultantFeedback],
   )
 
   // Toggle a filter and apply filters
   const toggleFilter = (filterId: string) => {
-    // const newFilters = new Set(selectedFilters)
-
-    // if (newFilters.has(filterId)) {
-    //   newFilters.delete(filterId)
-    // } else {
-    //   newFilters.add(filterId)
-    // }
-
-    // setSelectedFilters(newFilters)
     setSelectedFilter((prevFilter) => {
       if (prevFilter === filterId) {
         return ''
@@ -166,6 +162,16 @@ export default function ReviewFilter({ productId, brand }: ReviewFilterProps) {
     applyFilters(1)
   }, [selectedFilter, applyFilters])
 
+  // Get review data based on the API source
+  const reviewData = consultantId ? consultantFeedbackData?.data?.items || [] : reviews
+
+  // Determine if data is loading
+  const isLoadingData = consultantId ? isConsultantFeedbackLoading : isLoading
+
+  // Get total pages based on the API source
+  const displayTotalPages =
+    consultantId && consultantFeedbackData?.data?.totalPages ? consultantFeedbackData.data.totalPages : totalPages
+
   return (
     <div>
       <div className="border-b border-gray-200 ">
@@ -188,11 +194,11 @@ export default function ReviewFilter({ productId, brand }: ReviewFilterProps) {
         </div>
       </div>
       <div className="p-4">
-        {isLoading && <LoadingIcon />}
-        {!isLoading &&
-          reviews &&
-          reviews.length > 0 &&
-          reviews.map((review) => {
+        {isLoadingData && <LoadingIcon />}
+        {!isLoadingData &&
+          reviewData &&
+          reviewData.length > 0 &&
+          reviewData.map((review) => {
             const feedback: IResponseFeedbackItemInFilter = {
               id: review.id,
               content: review.content,
@@ -222,20 +228,29 @@ export default function ReviewFilter({ productId, brand }: ReviewFilterProps) {
               />
             )
           })}
-        {!isLoading && reviews.length === 0 && (
+        {!isLoadingData && (!reviewData || reviewData.length === 0) && (
           <Empty
-            title={t('empty.feedback.title')}
-            description={t('empty.feedback.description', {
-              filter: !selectedFilter ? '' : t('empty.feedback.filter'),
-              filterCallAction: !selectedFilter ? '' : t('empty.feedback.filterCallAction'),
-            })}
+            title={
+              consultantId ? t('empty.consultantFeedback.title', 'Chưa có đánh giá nào') : t('empty.feedback.title')
+            }
+            description={
+              consultantId
+                ? t(
+                    'empty.consultantFeedback.description',
+                    'Chuyên gia này chưa có đánh giá nào. Hãy là người đầu tiên chia sẻ trải nghiệm của bạn!',
+                  )
+                : t('empty.feedback.description', {
+                    filter: !selectedFilter ? '' : t('empty.feedback.filter'),
+                    filterCallAction: !selectedFilter ? '' : t('empty.feedback.filterCallAction'),
+                  })
+            }
           />
         )}
       </div>
       {/* pagination */}
-      {reviews && reviews.length > 0 && (
+      {reviewData && reviewData.length > 0 && (
         <div className="mb-2">
-          <APIPagination currentPage={currentPage} onPageChange={handlePageChange} totalPages={totalPages} />
+          <APIPagination currentPage={currentPage} onPageChange={handlePageChange} totalPages={displayTotalPages} />
         </div>
       )}
     </div>
