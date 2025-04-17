@@ -206,7 +206,7 @@ const OrderItem = ({ brand, orderItem, setIsTrigger, isShowAction = true, orderI
                 to={configs.routes.brands + '/' + brand?.id}
                 className="hidden md:flex py-1.5 px-2 rounded-md items-center flex-1 md:flex-none border border-primary text-primary hover:text-primary hover:bg-primary/10 text-sm"
               >
-                <Store className="w-4 h-4" />
+                <Store className="w-4 h-4 mr-1" />
                 {t('brand.viewShop')}
               </Link>
             </div>

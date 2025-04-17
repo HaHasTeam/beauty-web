@@ -1,5 +1,5 @@
 import { TBrand } from './brand'
-import { IConsultantService } from './consultant-service'
+import { IConsultantService, IConsultantServiceDetailServer } from './consultant-service'
 import { BookingStatusEnum, BookingTypeEnum } from './enum'
 import { PaymentMethodEnum } from './payment'
 import { TMetaData } from './request'
@@ -28,6 +28,29 @@ export type IBooking = TMetaData & {
   consultantService: IConsultantService
   statusTrackings: IStatusTracking[]
   report: Report
+  bookingFormAnswer: IBookingFormAnswer
+}
+export type IBookingServer = TMetaData & {
+  totalPrice: number
+  startTime: string
+  endTime: string
+  voucherDiscount: number
+  paymentMethod: PaymentMethodEnum
+  notes: string
+  meetUrl: string
+  record: string
+  type: BookingTypeEnum
+  status: BookingStatusEnum
+  voucher: TVoucher
+  slot: ISlot
+  account: TUser
+  brand: TBrand
+  assigneeToInterview: TUser
+  resultNote: string
+  consultantService: IConsultantServiceDetailServer
+  statusTrackings: IStatusTracking[]
+  report: Report
+  bookingFormAnswer: IBookingFormAnswer
 }
 
 export interface IBookingFilter {
