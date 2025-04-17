@@ -99,18 +99,6 @@ export const filterOrdersParentApi = toQueryFetcher<IOrderFilterFilter, TServerR
     if (rest.search) {
       body.search = rest.search
     }
-    if (rest.statuses?.length) {
-      body.statuses = rest.statuses
-    }
-    if (rest.types?.length) {
-      body.types = rest.types
-    }
-    if (rest.paymentMethods?.length) {
-      body.paymentMethods = rest.paymentMethods
-    }
-    if (rest.productIds?.length) {
-      body.productIds = rest.productIds
-    }
 
     return privateRequest('/orders/filter-parent', {
       method: 'POST',
@@ -128,7 +116,7 @@ export const filterRequestApi = toQueryFetcher<IRequestFilterFilter, TServerResp
   'filterRequestApi',
   async (filterData) => {
     const { page, limit, sortBy, order, ...rest } = filterData || {}
-
+    console.log('testing', rest)
     const body: IRequestFilterFilter = {}
 
     if (rest.statuses?.length) {
@@ -138,7 +126,7 @@ export const filterRequestApi = toQueryFetcher<IRequestFilterFilter, TServerResp
       body.types = rest.types
     }
 
-    return privateRequest('/orders/filter-parent', {
+    return privateRequest('/orders/filter-requests', {
       method: 'POST',
       data: body,
       params: {
