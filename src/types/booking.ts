@@ -31,7 +31,7 @@ export type IBooking = TMetaData & {
 }
 
 export interface IBookingFilter {
-  statusList?: BookingStatusEnum[]
+  statuses?: string
   search?: string
 }
 
@@ -139,4 +139,17 @@ export type CalendarEvent = {
   start: Date
   end: Date
   resource: IBooking
+}
+
+export interface TSlot {
+  id: string
+  startTime: string
+  endTime: string
+  isAvailable: boolean
+  consultantId: string
+  serviceId: string
+  date: string
+  status: 'AVAILABLE' | 'BOOKED' | 'CANCELLED'
+  createdAt: string
+  updatedAt: string
 }

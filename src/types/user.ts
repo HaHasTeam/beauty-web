@@ -1,6 +1,7 @@
 import { IAddress } from './address'
 import { IBrand } from './brand'
 import { RoleEnum } from './enum'
+import { TFile } from './file'
 import { TMetaData } from './request'
 import { TRoleResponse } from './role'
 
@@ -54,6 +55,8 @@ export type TUser = TMetaData & {
   yoe?: number
   brand?: IBrand[]
   addresses?: IAddress[]
+  certificates?: TFile[]
+  thumbnailImageList?: TFile[]
 }
 
 // Type cho user response

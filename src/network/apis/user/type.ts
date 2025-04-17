@@ -1,3 +1,4 @@
+import { BaseFilterParams } from '@/types/request'
 import { TUser, UserStatusEnum } from '@/types/user'
 
 export type TCreateUserRequestParams = Pick<TUser, 'username' | 'email' | 'password' | 'phone'> & {
@@ -35,4 +36,14 @@ export type TUpdateUserStatusRequestParams = {
 export type TUpdateUsersListStatusRequestParams = {
   ids: string[]
   status: UserStatusEnum
+}
+
+export type TGetAccountFilterRequestParams = BaseFilterParams & {
+  searchKey?: string
+  statuses?: string
+  role?: string
+}
+
+export type TGetConsultantsFilterRequestParams = BaseFilterParams & {
+  searchKey?: string
 }

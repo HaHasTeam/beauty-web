@@ -42,13 +42,13 @@ export default function BeautyConsulting() {
           title={t('home.standardConsultantTitle')}
           description={t('home.standardConsultantDescription')}
           icon={<Star className="w-6 h-6 text-orange-400" />}
-          linkTo={configs.routes.consultationStandard}
+          linkTo={configs.routes.beautyConsultation}
         />
         <ConsultationCard
           title={t('home.premiumConsultantTitle')}
           description={t('home.premiumConsultantDescription')}
           icon={<ShoppingCart className="w-6 h-6 text-orange-400" />}
-          linkTo={configs.routes.consultationPremium}
+          linkTo={configs.routes.beautyConsultation}
         />
       </div>
     </section>
