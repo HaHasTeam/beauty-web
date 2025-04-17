@@ -92,7 +92,7 @@ export default function RouterProvider() {
           element: <ServiceCheckout />,
         },
         {
-          path: configs.routes.bookingDetail,
+          path: configs.routes.profileBookingDetail,
           element: <BookingDetail />,
         },
       ],

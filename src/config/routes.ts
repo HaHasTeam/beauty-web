@@ -55,10 +55,9 @@ const routes = {
   groupBuyByBrand: '/products/group-buying/:brandId',
   groupBuyDetail: '/products/group-buying/:brandId/:groupId',
   beautyConsultation: '/beauty-consultation',
-  beautyConsultationDetail: '/beauty-consultation/:serviceId',
+  beautyConsultationDetail: '/beauty-consultation/:consultantId',
   serviceCheckout: '/beauty-consultation/:serviceId/checkout',
   notFound: '*',
-  bookingDetail: '/booking/:bookingId',
 }
 
 export default routes
