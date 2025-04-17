@@ -4,12 +4,14 @@ import { TMetaData } from './request'
 import { ISystemService } from './system-service'
 import { TUser } from './user'
 
+
 type BaseConsultantServiceField = {
   id?: string
   question: string
   orderIndex?: number
   mandatory: boolean
   images: TFile[]
+  status: ServiceBookingFormQuestionStatusEnum
 }
 
 type Option = Record<string, string>
@@ -54,6 +56,27 @@ export type ConsultantServiceType = BaseConsultantServiceField &
 export type IConsultantServiceDetail = ConsultantServiceType
 
 export interface IConsultantService extends TMetaData {
+  description: string
+  account: TUser
+  price: number
+  duration: number // Thời gian thực hiện dịch vụ (phút)
+  images: TFile[]
+  systemService: ISystemService
+  serviceBookingForm: {
+    id?: string
+    title: string
+    questions: IConsultantServiceDetail[]
+    status: ServiceBookingFormStatusEnum
+  }
+  serviceBookingFormData: {
+    id?: string
+    title: string
+    questions: IConsultantServiceDetail[]
+    status: ServiceBookingFormStatusEnum
+  }
+  status: ConsultantServiceStatusEnum
+}
+export interface IConsultantServiceDetailServer extends TMetaData {
   account: TUser
   price: number
   images: TFile[]
@@ -61,13 +84,13 @@ export interface IConsultantService extends TMetaData {
   serviceBookingForm: {
     id?: string
     title: string
-    questions: IConsultantServiceDetail[]
+    questions: IQuestion[]
     status: StatusEnum
   }
   serviceBookingFormData: {
     id?: string
     title: string
-    questions: IConsultantServiceDetail[]
+    questions: IQuestion[]
   }
   status: ConsultantServiceStatusEnum
 }
@@ -94,4 +117,14 @@ export enum ConsultantServiceStatusEnum {
   ACTIVE = 'ACTIVE',
   INACTIVE = 'INACTIVE',
   BANNED = 'BANNED',
+}
+
+export enum ServiceBookingFormStatusEnum {
+  ACTIVE = 'ACTIVE',
+  INACTIVE = 'INACTIVE',
+}
+
+export enum ServiceBookingFormQuestionStatusEnum {
+  ACTIVE = 'ACTIVE',
+  INACTIVE = 'INACTIVE',
 }

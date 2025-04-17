@@ -54,6 +54,8 @@ type TFieldFile =
 const UploadFiles = ({ dropZoneConfigOptions, field, triggerRef }: UploadFilesProps) => {
   const [files, setFiles] = useState<CustomFile[]>([])
   const handleServerError = useHandleServerError()
+  console.log(field.value, 'dsfsd')
+  console.log(files, 'files')
 
   const dropZoneConfig = {
     accept: {
