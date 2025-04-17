@@ -235,6 +235,11 @@
       "description": "Blog bạn đang tìm kiếm không tồn tại, đã bị xóa hoặc hiện không khả dụng.",
       "button": "Xem các blog khác"
     },
+    "bookingDetail": {
+      "title": "Không tìm thấy đặt lịch",
+      "description": "Lịch bạn đang tìm kiếm không tồn tại, đã bị xóa hoặc hiện không khả dụng.",
+      "button": "Quay lại danh sách"
+    },
     "report": {
       "title": "Không tìm thấy báo cáo",
       "description": "Chưa có báo cáo nào trong hệ thống",
@@ -400,6 +405,7 @@
       "description": "Hiện tại không có sản phẩm gợi ý nào. Vui lòng quay lại sau!"
     },
     "booking": {
+      "customerInfo": "Thông Tin Khách Hàng",
       "all": "Tất cả đặt lịch",
       "pending": "Đang Chờ",
       "confirmed": "Đã Xác Nhận",
@@ -442,6 +448,7 @@
       "by": "bởi",
       "created": "Đã Tạo Đặt Lịch",
       "reason": "Lý Do",
+      "success": "Đặt lịch thành công",
       "status": {
         "toPay": "Chờ Thanh Toán",
         "waitForConfirmation": "Chờ Xác Nhận",
@@ -579,6 +586,7 @@
   "date": {
     "toLocaleDateString": "{{val, DD/MM/YYYY}}",
     "toLocaleDateTimeString": "{{val, DD/MM/YYYY HH:mm:ss}}",
+    "toLocaleDateHourMinutesString": "{{val, DD/MM/YYYY HH:mm}}",
     "expiredDate": "Hạn sử dụng",
     "exp": "HSD"
   },

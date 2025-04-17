@@ -8,6 +8,7 @@ import OrderItem from '@/components/order/OrderItem'
 import OrderParentItem from '@/components/order/OrderParentItem'
 import { OrderRequestFilter } from '@/components/order/OrderRequestFilter'
 import SearchOrders from '@/components/order/SearchOrders'
+import APIPagination from '@/components/pagination/Pagination'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { filterOrdersParentApi, filterRequestApi } from '@/network/apis/order'
@@ -15,13 +16,12 @@ import { OrderRequestTypeEnum, RequestStatusEnum, ShippingStatusEnum } from '@/t
 
 export default function ProfileOrder() {
   const { t } = useTranslation()
-  // const [orders, setOrders] = useState<IOrderItem[]>([])
-  // const [requests, setRequests] = useState<IRequest[]>([])
   const [activeTab, setActiveTab] = useState<string>('all')
   const queryClient = useQueryClient()
-  // const [isLoading, setIsLoading] = useState<boolean>(true)
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [isTrigger, setIsTrigger] = useState<boolean>(false)
+  const [currentPage, setCurrentPage] = useState<number>(1)
+  const [totalPages, setTotalPages] = useState<number>(1)
 
   const [requestTypes, setRequestTypes] = useState<OrderRequestTypeEnum[]>([])
   const [requestStatuses, setRequestStatuses] = useState<RequestStatusEnum[]>([])
@@ -61,20 +61,13 @@ export default function ProfileOrder() {
     ],
     [t],
   )
-  // const { mutateAsync: getMyOrderFn } = useMutation({
-  //   mutationKey: [filterOrdersParentApi.mutationKey],
-  //   mutationFn: filterOrdersParentApi.fn,
-  //   onSuccess: (data) => {
-  //     setOrders(data?.data)
-  //     setIsLoading(false)
-  //   },
-  // })
+
   const { data: filterOrdersData, isFetching: isLoading } = useQuery({
     queryKey: [
       filterOrdersParentApi.queryKey,
       {
-        page: 1,
-        limit: 100,
+        page: currentPage,
+        limit: 10,
         order: 'DESC',
         statuses: simplifiedTriggers.find((trigger) => trigger.value === activeTab)?.statuses
           ? simplifiedTriggers.find((trigger) => trigger.value === activeTab)?.statuses
@@ -90,24 +83,15 @@ export default function ProfileOrder() {
     queryKey: [
       filterRequestApi.queryKey,
       {
-        page: 1,
-        limit: 100,
+        page: currentPage,
+        limit: 10,
         order: 'DESC',
-        statuses: requestStatuses.length > 0 ? requestStatuses : undefined,
-        types: requestTypes.length > 0 ? requestTypes : undefined,
+        statuses: requestStatuses.length > 0 ? requestStatuses : [],
+        types: requestTypes.length > 0 ? requestTypes : [],
       },
     ],
     queryFn: filterRequestApi.fn,
   })
-
-  // const { mutateAsync: getMyRequestFn } = useMutation({
-  //   mutationKey: [getMyRequestsApi.mutationKey],
-  //   mutationFn: getMyRequestsApi.fn,
-  //   onSuccess: (data) => {
-  //     setRequests(data?.data)
-  //     setIsLoading(false)
-  //   },
-  // })
 
   const handleSearch = (query: string) => {
     setSearchQuery(query)
@@ -126,131 +110,6 @@ export default function ProfileOrder() {
     queryClient.invalidateQueries({ queryKey: [filterRequestApi.queryKey] })
   }, [isTrigger, queryClient])
 
-  // useEffect(() => {
-  //   const fetchOrders = async () => {
-  //     setIsLoading(true)
-  //     if (activeTab === 'request') {
-  //       const requestFilters: IRequestFilter = {
-  //         types: requestTypes.length > 0 ? requestTypes : undefined,
-  //         statusList: requestStatuses.length > 0 ? requestStatuses : undefined,
-  //         search: searchQuery || undefined,
-  //       }
-  //       await getMyRequestFn(requestFilters)
-  //     } else {
-  //       let statusFilters
-
-  //       const selectedTrigger = simplifiedTriggers.find((trigger) => trigger.value === activeTab)
-
-  //       // If it's a group with multiple statuses, use them all
-  //       if (selectedTrigger?.statuses) {
-  //         statusFilters = selectedTrigger.statuses
-  //       }
-  //       // If it's "all", don't filter by status
-  //       else if (activeTab === 'all') {
-  //         statusFilters = undefined
-  //       }
-  //       // Otherwise, use the single status value
-  //       else {
-  //         statusFilters = [activeTab.toUpperCase()]
-  //       }
-
-  //       const filters: IOrderFilter = {
-  //         statusList: statusFilters,
-  //         search: searchQuery || undefined,
-  //       }
-  //       await getMyOrderFn(filters)
-  //     }
-  //   }
-
-  //   fetchOrders()
-  // }, [
-  //   activeTab,
-  //   getMyOrderFn,
-  //   searchQuery,
-  //   isTrigger,
-  //   simplifiedTriggers,
-  //   getMyRequestFn,
-  //   requestTypes,
-  //   requestStatuses,
-  // ])
-
-  // const renderOrders = () => {
-  //   // if (!isLoading && orders && orders?.length === 0) {
-  //   //   return (
-  //   //     <div className="flex flex-col items-center justify-center min-h-[400px] text-center">
-  //   //       <Empty
-  //   //         title={t('empty.order.title')}
-  //   //         description={activeTab === 'all' ? t('empty.order.description') : t('empty.order.statusDescription')}
-  //   //       />
-  //   //     </div>
-  //   //   )
-  //   // }
-  //   if ((activeTab === 'request' && requests?.length === 0) ||
-  //       (activeTab !== 'request' && orders?.length === 0)) {
-  //     return (
-  //       <div className="flex flex-col items-center justify-center min-h-[400px] text-center">
-  //         <Empty
-  //           title={t('empty.order.title')}
-  //           description={activeTab === 'all' ? t('empty.order.description') : t('empty.order.statusDescription')}
-  //         />
-  //       </div>
-  //     )
-  //   }
-
-  //   return (
-  //     <div className="space-y-4">
-  //       {activeTab === 'request'
-  //         ? requests?.map((request) => (
-  //             <div key={request?.id} className="bg-white border rounded-md">
-  //               <OrderItem
-  //                 brand={
-  //                   request?.order?.orderDetails[0]?.productClassification?.preOrderProduct?.product?.brand ??
-  //                   request?.order?.orderDetails[0]?.productClassification?.productDiscount?.product?.brand ??
-  //                   request?.order?.orderDetails[0]?.productClassification?.product?.brand ??
-  //                   null
-  //                 }
-  //                 orderItem={request?.order}
-  //                 request={request}
-  //                 setIsTrigger={setIsTrigger}
-  //               />
-  //             </div>
-  //           ))
-  //         : orders?.map((orderItem) => (
-  //             <div key={orderItem?.id} className="bg-white border rounded-md">
-  //               <OrderItem
-  //                 brand={
-  //                   orderItem?.orderDetails[0]?.productClassification?.preOrderProduct?.product?.brand ??
-  //                   orderItem?.orderDetails[0]?.productClassification?.productDiscount?.product?.brand ??
-  //                   orderItem?.orderDetails[0]?.productClassification?.product?.brand ??
-  //                   null
-  //                 }
-  //                 orderItem={orderItem}
-  //                 setIsTrigger={setIsTrigger}
-  //               />
-  //             </div>
-  //           ))}
-  //     </div>
-  //   )
-  // }
-  //   return (
-  //     <div className="space-y-4">
-  //       { orders?.map((orderItem) => (
-  //             <div key={orderItem?.id} className="bg-white border rounded-md">
-  //               <OrderItem
-  //                 brand={
-  //                   orderItem?.orderDetails[0]?.productClassification?.preOrderProduct?.product?.brand ??
-  //                   orderItem?.orderDetails[0]?.productClassification?.productDiscount?.product?.brand ??
-  //                   orderItem?.orderDetails[0]?.productClassification?.product?.brand ??
-  //                   null
-  //                 }
-  //                 orderItem={orderItem}
-  //                 setIsTrigger={setIsTrigger}
-  //               />
-  //             </div>
-  //           ))}
-  //     </div>
-  //   )
-  // }
   const renderOrders = () => {
     if (
       (activeTab === 'request' && !isLoadingRequest && filterRequestsData?.data?.total === 0) ||
@@ -310,6 +169,20 @@ export default function ProfileOrder() {
       </div>
     )
   }
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page)
+    // Refetch data with the new page
+    queryClient.invalidateQueries({
+      queryKey: [activeTab === 'request' ? filterRequestApi.queryKey : filterOrdersParentApi.queryKey],
+    })
+  }
+  useEffect(() => {
+    if (activeTab === 'request' && filterRequestsData?.data) {
+      setTotalPages(filterRequestsData.data.totalPages) // Assuming 10 items per page
+    } else if (filterOrdersData?.data) {
+      setTotalPages(filterOrdersData.data.totalPages) // Assuming 10 items per page
+    }
+  }, [filterOrdersData, filterRequestsData, activeTab])
   return (
     <>
       {isLoading && <LoadingContentLayer />}
@@ -318,7 +191,13 @@ export default function ProfileOrder() {
         <div className="w-full p-4 max-w-sm sm:max-w-[838px] md:max-w-[1060px] lg:max-w-[1820px] xl:max-w-[2180px] 2xl:max-w-[2830px]">
           {/* Dropdown for mobile */}
           <div className="block md:hidden w-full mb-4">
-            <Select value={activeTab} onValueChange={(value) => setActiveTab(value)}>
+            <Select
+              value={activeTab}
+              onValueChange={(value) => {
+                setActiveTab(value)
+                setCurrentPage(1)
+              }}
+            >
               <SelectTrigger className="w-full border border-primary/40 text-primary hover:text-primary hover:bg-primary/10">
                 <SelectValue>
                   {simplifiedTriggers.find((trigger) => trigger.value === activeTab)?.text || t('order.all')}
@@ -335,7 +214,14 @@ export default function ProfileOrder() {
           </div>
 
           {/* Tabs for desktop */}
-          <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value)} className="w-full hidden md:block">
+          <Tabs
+            value={activeTab}
+            onValueChange={(value) => {
+              setActiveTab(value)
+              setCurrentPage(1)
+            }}
+            className="w-full hidden md:block"
+          >
             <TabsList className="sticky top-0 z-10 h-14 w-full justify-start overflow-x-auto p-0 bg-white">
               {/* <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value)} className="w-full">
             <TabsList className="sticky top-0 z-10 h-14 w-full justify-start overflow-x-auto p-0 bg-white"> */}
@@ -361,6 +247,14 @@ export default function ProfileOrder() {
               )}
             </div>
             {renderOrders()}
+            {((activeTab !== 'request' && filterOrdersData?.data.items && filterOrdersData?.data.items.length > 0) ||
+              (activeTab === 'request' &&
+                filterRequestsData?.data.items &&
+                filterRequestsData?.data.items.length > 0)) && (
+              <div className="mb-2">
+                <APIPagination currentPage={currentPage} onPageChange={handlePageChange} totalPages={totalPages} />
+              </div>
+            )}
           </div>
         </div>
       </div>

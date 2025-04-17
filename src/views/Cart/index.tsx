@@ -116,13 +116,19 @@ const Cart = ({ isInGroupBuy = false, isInPeriod = false }: CartProps) => {
     setSelectedCartItems((prev) => {
       if (isSelected) {
         // Add all cartItems of the brand
-        return [...prev, ...cartItemIds.filter((id) => !prev.includes(id))]
+        const validCartItemIds = cartItemIds.filter((id) => {
+          const cartItem = findCartItemById(id, cartItems)
+          return cartItem && !checkPreventAction(cartItem)
+        })
+        return [...prev, ...validCartItemIds.filter((id) => !prev.includes(id))]
       } else {
-        // Remove all cartItems of the brand
+        // Remove all valid cartItems of the brand
         return prev.filter((id) => !cartItemIds.includes(id))
       }
     })
   }
+  console.log('checkCartItem', selectedCartItems)
+
   const handleVoucherSelection = (brandId: string, voucher: TVoucher | null) => {
     setChosenVouchersByBrand((prev) => ({
       ...prev,
