@@ -7,11 +7,7 @@ const CheckoutResult = () => {
   const { orderData, status, isBooking } = location.state
   return (
     <div>
-      <CheckoutResultAll 
-        status={status} 
-        orderId={orderData?.id ?? ''} 
-        isBooking={isBooking || false} 
-      />
+      <CheckoutResultAll status={status} orderId={orderData?.id ?? ''} isBooking={isBooking || false} />
     </div>
   )
 }

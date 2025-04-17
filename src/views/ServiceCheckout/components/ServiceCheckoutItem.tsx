@@ -30,31 +30,22 @@ const ServiceCheckoutItem = ({ service, form, selectedDateTime }: ServiceCheckou
   const serviceName = service.systemService?.name || 'Dịch vụ tư vấn'
   const serviceCategory = service.systemService?.category?.name || ''
   const serviceDuration = serviceType === ServiceTypeEnum.PREMIUM ? 60 : 0
-  
-  // Lấy avatar và tên consultant từ account
-  const consultantName = service.account.firstName+" "+service.account.lastName || 'Chuyên gia tư vấn'
-  const consultantTitle = service.account.majorTitle|| "Chuyên gia tư vấn"
 
-  
+  // Lấy avatar và tên consultant từ account
+  const consultantName = service.account.firstName + ' ' + service.account.lastName || 'Chuyên gia tư vấn'
+  const consultantTitle = service.account.majorTitle || 'Chuyên gia tư vấn'
+
   return (
     <div className="w-full">
       {/* Desktop header - only visible on md and above */}
       <div className="hidden md:block">
         <div className="flex items-center gap-3 p-4 border-b border-border/70 bg-primary/25">
-          <div className="flex-1 font-medium">
-            {t('booking.service', 'Dịch vụ')}
-          </div>
+          <div className="flex-1 font-medium">{t('booking.service', 'Dịch vụ')}</div>
           {serviceType === 'PREMIUM' && (
-            <div className="w-[160px] flex-shrink-0 font-medium">
-              {t('booking.schedule', 'Lịch hẹn')}
-            </div>
+            <div className="w-[160px] flex-shrink-0 font-medium">{t('booking.schedule', 'Lịch hẹn')}</div>
           )}
-          <div className="w-[160px] flex-shrink-0 font-medium">
-            {t('booking.consultant', 'Chuyên viên')}
-          </div>
-          <div className="w-[100px] flex-shrink-0 font-medium text-right">
-            {t('booking.price', 'Giá')}
-          </div>
+          <div className="w-[160px] flex-shrink-0 font-medium">{t('booking.consultant', 'Chuyên viên')}</div>
+          <div className="w-[100px] flex-shrink-0 font-medium text-right">{t('booking.price', 'Giá')}</div>
         </div>
       </div>
 
@@ -187,9 +178,7 @@ const ServiceCheckoutItem = ({ service, form, selectedDateTime }: ServiceCheckou
           </div>
 
           {/* Price column - fixed width and right-aligned */}
-          <div className="w-[100px] flex-shrink-0 text-right font-medium">
-            {formatCurrency(service.price || 0)}
-          </div>
+          <div className="w-[100px] flex-shrink-0 text-right font-medium">{formatCurrency(service.price || 0)}</div>
         </div>
       </div>
     </div>

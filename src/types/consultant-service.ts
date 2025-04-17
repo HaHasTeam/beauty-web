@@ -1,7 +1,7 @@
 import { TFile } from './file'
 import { TMetaData } from './request'
 import { ISystemService } from './system-service'
-import {  TUser } from './user'
+import { TUser } from './user'
 
 type BaseConsultantServiceField = {
   id?: string
@@ -58,7 +58,7 @@ export interface IConsultantService extends TMetaData {
     status: ServiceBookingFormStatusEnum
   }
   status: ConsultantServiceStatusEnum
-  account:TUser
+  account: TUser
 }
 
 export enum ConsultantServiceStatusEnum {
@@ -69,10 +69,10 @@ export enum ConsultantServiceStatusEnum {
 
 export enum ServiceBookingFormStatusEnum {
   ACTIVE = 'ACTIVE',
-  INACTIVE = 'INACTIVE'
+  INACTIVE = 'INACTIVE',
 }
 
 export enum ServiceBookingFormQuestionStatusEnum {
   ACTIVE = 'ACTIVE',
-  INACTIVE = 'INACTIVE'
+  INACTIVE = 'INACTIVE',
 }

@@ -50,12 +50,19 @@ export default function ReviewFilter({ productId, consultantId, brand }: ReviewF
   ]
 
   // Consultant feedback query
-  const { data: consultantFeedbackData, isLoading: isConsultantFeedbackLoading, refetch: refetchConsultantFeedback } = useQuery({
-    queryKey: [getFilterConsultantFeedbackApi.queryKey, { 
-      consultantId: consultantId || '', 
-      page: currentPage, 
-      limit 
-    }],
+  const {
+    data: consultantFeedbackData,
+    isLoading: isConsultantFeedbackLoading,
+    refetch: refetchConsultantFeedback,
+  } = useQuery({
+    queryKey: [
+      getFilterConsultantFeedbackApi.queryKey,
+      {
+        consultantId: consultantId || '',
+        page: currentPage,
+        limit,
+      },
+    ],
     queryFn: getFilterConsultantFeedbackApi.fn,
     enabled: !!consultantId,
   })
@@ -98,10 +105,10 @@ export default function ReviewFilter({ productId, consultantId, brand }: ReviewF
 
         // If consultant ID is provided, use consultant feedback API
         if (consultantId) {
-          await refetchConsultantFeedback();
-          setCurrentPage(page);
-          setIsLoading(false);
-          return;
+          await refetchConsultantFeedback()
+          setCurrentPage(page)
+          setIsLoading(false)
+          return
         }
 
         // Otherwise use product feedback API
@@ -156,19 +163,14 @@ export default function ReviewFilter({ productId, consultantId, brand }: ReviewF
   }, [selectedFilter, applyFilters])
 
   // Get review data based on the API source
-  const reviewData = consultantId 
-    ? consultantFeedbackData?.data?.items || []
-    : reviews;
-  
+  const reviewData = consultantId ? consultantFeedbackData?.data?.items || [] : reviews
+
   // Determine if data is loading
-  const isLoadingData = consultantId
-    ? isConsultantFeedbackLoading
-    : isLoading;
-  
+  const isLoadingData = consultantId ? isConsultantFeedbackLoading : isLoading
+
   // Get total pages based on the API source
-  const displayTotalPages = consultantId && consultantFeedbackData?.data?.totalPages
-    ? consultantFeedbackData.data.totalPages
-    : totalPages;
+  const displayTotalPages =
+    consultantId && consultantFeedbackData?.data?.totalPages ? consultantFeedbackData.data.totalPages : totalPages
 
   return (
     <div>
@@ -228,16 +230,19 @@ export default function ReviewFilter({ productId, consultantId, brand }: ReviewF
           })}
         {!isLoadingData && (!reviewData || reviewData.length === 0) && (
           <Empty
-            title={consultantId ? 
-              t('empty.consultantFeedback.title', 'Chưa có đánh giá nào') : 
-              t('empty.feedback.title')
+            title={
+              consultantId ? t('empty.consultantFeedback.title', 'Chưa có đánh giá nào') : t('empty.feedback.title')
             }
-            description={consultantId ? 
-              t('empty.consultantFeedback.description', 'Chuyên gia này chưa có đánh giá nào. Hãy là người đầu tiên chia sẻ trải nghiệm của bạn!') : 
-              t('empty.feedback.description', {
-                filter: !selectedFilter ? '' : t('empty.feedback.filter'),
-                filterCallAction: !selectedFilter ? '' : t('empty.feedback.filterCallAction'),
-              })
+            description={
+              consultantId
+                ? t(
+                    'empty.consultantFeedback.description',
+                    'Chuyên gia này chưa có đánh giá nào. Hãy là người đầu tiên chia sẻ trải nghiệm của bạn!',
+                  )
+                : t('empty.feedback.description', {
+                    filter: !selectedFilter ? '' : t('empty.feedback.filter'),
+                    filterCallAction: !selectedFilter ? '' : t('empty.feedback.filterCallAction'),
+                  })
             }
           />
         )}
@@ -245,11 +250,7 @@ export default function ReviewFilter({ productId, consultantId, brand }: ReviewF
       {/* pagination */}
       {reviewData && reviewData.length > 0 && (
         <div className="mb-2">
-          <APIPagination 
-            currentPage={currentPage} 
-            onPageChange={handlePageChange} 
-            totalPages={displayTotalPages} 
-          />
+          <APIPagination currentPage={currentPage} onPageChange={handlePageChange} totalPages={displayTotalPages} />
         </div>
       )}
     </div>

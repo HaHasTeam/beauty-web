@@ -82,11 +82,11 @@ export default function ConsultantList({ filter = 'all', searchQuery = '' }: Con
   const filteredConsultants = consultantsData?.data?.items
     ? consultantsData.data.items.filter((item: ConsultantWithServices) => {
         if (filter === 'all') return true
-        
+
         return item.services.some((service) =>
-          filter === 'standard' 
+          filter === 'standard'
             ? service.systemService.type === ServiceTypeEnum.STANDARD
-            : service.systemService.type === ServiceTypeEnum.PREMIUM
+            : service.systemService.type === ServiceTypeEnum.PREMIUM,
         )
       })
     : []
@@ -182,7 +182,10 @@ export default function ConsultantList({ filter = 'all', searchQuery = '' }: Con
             {t('beautyConsultation.noConsultants', 'Không tìm thấy chuyên gia phù hợp.')}
           </h3>
           <p className="text-sm text-muted-foreground max-w-md">
-            {t('beautyConsultation.tryDifferentSearch', 'Hãy thử tìm kiếm với từ khoá khác hoặc chọn loại dịch vụ khác.')}
+            {t(
+              'beautyConsultation.tryDifferentSearch',
+              'Hãy thử tìm kiếm với từ khoá khác hoặc chọn loại dịch vụ khác.',
+            )}
           </p>
         </div>
       </div>
@@ -196,19 +199,20 @@ export default function ConsultantList({ filter = 'all', searchQuery = '' }: Con
         {filteredConsultants.map((item: ConsultantWithServices) => {
           const consultant = item.consultant
           const services = item.services
-          
+
           // Get full name
-          const fullName = consultant.firstName && consultant.lastName 
-            ? `${consultant.firstName} ${consultant.lastName}`
-            : consultant.username;
-          
+          const fullName =
+            consultant.firstName && consultant.lastName
+              ? `${consultant.firstName} ${consultant.lastName}`
+              : consultant.username
+
           // Filter services based on the selected tab
           const filteredServices = services.filter(
             (service) =>
-              filter === 'all' || 
-              (filter === 'standard' 
-                ? service.systemService.type === ServiceTypeEnum.STANDARD 
-                : service.systemService.type === ServiceTypeEnum.PREMIUM)
+              filter === 'all' ||
+              (filter === 'standard'
+                ? service.systemService.type === ServiceTypeEnum.STANDARD
+                : service.systemService.type === ServiceTypeEnum.PREMIUM),
           )
 
           // Only show up to 2 services
@@ -229,8 +233,8 @@ export default function ConsultantList({ filter = 'all', searchQuery = '' }: Con
                   ) : (
                     <div className="w-full h-full bg-gradient-to-r from-primary/30 to-secondary/30 flex items-center justify-center text-white">
                       <span className="text-4xl font-bold opacity-50">
-                        {consultant.firstName 
-                          ? consultant.firstName.charAt(0).toUpperCase() 
+                        {consultant.firstName
+                          ? consultant.firstName.charAt(0).toUpperCase()
                           : consultant.username?.charAt(0).toUpperCase()}
                       </span>
                     </div>
@@ -257,16 +261,10 @@ export default function ConsultantList({ filter = 'all', searchQuery = '' }: Con
                   <div className="mb-2 quill-content-small">
                     {consultant.description.includes('<') ? (
                       <div className="line-clamp-4">
-                        <ReactQuill 
-                          value={consultant.description} 
-                          readOnly={true} 
-                          theme="bubble" 
-                        />
+                        <ReactQuill value={consultant.description} readOnly={true} theme="bubble" />
                       </div>
                     ) : (
-                      <p className="text-sm text-muted-foreground line-clamp-4">
-                        {consultant.description}
-                      </p>
+                      <p className="text-sm text-muted-foreground line-clamp-4">{consultant.description}</p>
                     )}
                   </div>
                 ) : (
@@ -286,7 +284,9 @@ export default function ConsultantList({ filter = 'all', searchQuery = '' }: Con
                         <div className="flex flex-col gap-0.5">
                           <div className="flex items-center gap-1">
                             <Badge
-                              variant={service.systemService.type === ServiceTypeEnum.PREMIUM ? 'destructive' : 'secondary'}
+                              variant={
+                                service.systemService.type === ServiceTypeEnum.PREMIUM ? 'destructive' : 'secondary'
+                              }
                               className="text-[10px] h-5 px-1.5 whitespace-nowrap"
                             >
                               {service.systemService.type === ServiceTypeEnum.PREMIUM
@@ -307,7 +307,9 @@ export default function ConsultantList({ filter = 'all', searchQuery = '' }: Con
                           variant="ghost"
                           size="sm"
                           className="h-7 px-3 rounded-full text-sm hover:bg-primary hover:text-primary-foreground"
-                          onClick={() => navigate(`${configs.routes.beautyConsultation}/${consultant.id}?service=${service.id}`)}
+                          onClick={() =>
+                            navigate(`${configs.routes.beautyConsultation}/${consultant.id}?service=${service.id}`)
+                          }
                         >
                           {t('beautyConsultation.book', 'Đặt')}
                         </Button>
@@ -345,23 +347,23 @@ export default function ConsultantList({ filter = 'all', searchQuery = '' }: Con
         <Pagination className="mt-8">
           <PaginationContent>
             <PaginationItem>
-              <PaginationPrevious 
-                href="#" 
+              <PaginationPrevious
+                href="#"
                 onClick={(e) => {
-                  e.preventDefault();
-                  handlePageChange(currentPage - 1);
+                  e.preventDefault()
+                  handlePageChange(currentPage - 1)
                 }}
                 className={currentPage === 1 ? 'pointer-events-none opacity-50' : ''}
               />
             </PaginationItem>
-            
+
             {getPageNumbers().map((pageNum) => (
               <PaginationItem key={pageNum}>
-                <PaginationLink 
-                  href="#" 
+                <PaginationLink
+                  href="#"
                   onClick={(e) => {
-                    e.preventDefault();
-                    handlePageChange(pageNum);
+                    e.preventDefault()
+                    handlePageChange(pageNum)
                   }}
                   isActive={currentPage === pageNum}
                 >
@@ -369,19 +371,15 @@ export default function ConsultantList({ filter = 'all', searchQuery = '' }: Con
                 </PaginationLink>
               </PaginationItem>
             ))}
-            
+
             <PaginationItem>
-              <PaginationNext 
-                href="#" 
+              <PaginationNext
+                href="#"
                 onClick={(e) => {
-                  e.preventDefault();
-                  handlePageChange(currentPage + 1);
+                  e.preventDefault()
+                  handlePageChange(currentPage + 1)
                 }}
-                className={
-                  currentPage === totalPages 
-                    ? 'pointer-events-none opacity-50' 
-                    : ''
-                }
+                className={currentPage === totalPages ? 'pointer-events-none opacity-50' : ''}
               />
             </PaginationItem>
           </PaginationContent>

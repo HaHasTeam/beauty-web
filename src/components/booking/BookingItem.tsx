@@ -34,24 +34,24 @@ const BookingItem: React.FC<BookingItemProps> = ({ booking, setIsTrigger }) => {
 
   // Helper function to properly format time strings
   const formatTimeString = (timeStr: string) => {
-    if (!timeStr) return '00:00';
-    
+    if (!timeStr) return '00:00'
+
     // If it starts with :, add 0 in front
     if (timeStr.startsWith(':')) {
-      timeStr = '0' + timeStr;
+      timeStr = '0' + timeStr
     }
-    
+
     // If it's just hours like '09:00', return as is
     if (timeStr.includes(':')) {
-      return timeStr;
+      return timeStr
     }
-    
+
     // If it's a full date-time string, parse it
     try {
-      return format(new Date(timeStr), 'HH:mm');
+      return format(new Date(timeStr), 'HH:mm')
     } catch {
       // If parsing fails, return original with best guess formatting
-      return timeStr.padStart(5, '0');
+      return timeStr.padStart(5, '0')
     }
   }
 
@@ -69,7 +69,8 @@ const BookingItem: React.FC<BookingItemProps> = ({ booking, setIsTrigger }) => {
   const canCancel = ['TO_PAY', 'WAIT_FOR_CONFIRMATION'].includes(booking.status)
 
   // Use account from consultantService
-  const consultantUsername = booking.consultantService?.account?.firstName+ " "+ booking.consultantService?.account?.lastName || 'Consultant'
+  const consultantUsername =
+    booking.consultantService?.account?.firstName + ' ' + booking.consultantService?.account?.lastName || 'Consultant'
   const consultantId = booking.consultantService?.account?.id || ''
   const consultantAvatar = booking.consultantService?.account?.avatar || undefined
   const consultantEmail = booking.consultantService?.account?.email || ''
@@ -89,33 +90,31 @@ const BookingItem: React.FC<BookingItemProps> = ({ booking, setIsTrigger }) => {
       if (!url) return false
       const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.bmp']
       const lowercaseUrl = url.toLowerCase()
-      return imageExtensions.some(ext => lowercaseUrl.endsWith(ext))
+      return imageExtensions.some((ext) => lowercaseUrl.endsWith(ext))
     }
 
     // First try to use consultantService.images
     if (booking.consultantService?.images && booking.consultantService.images.length > 0) {
       // Try to find the first valid image by extension
-      const validImage = booking.consultantService.images.find(img => 
-        img.fileUrl && isImageUrl(img.fileUrl)
-      )
-      
+      const validImage = booking.consultantService.images.find((img) => img.fileUrl && isImageUrl(img.fileUrl))
+
       if (validImage) {
         return validImage.fileUrl
       }
     }
-    
+
     // Fallback to systemService images
     if (booking.consultantService?.systemService?.images && booking.consultantService.systemService.images.length > 0) {
       // Find first valid image from systemService
-      const validSystemImage = booking.consultantService.systemService.images.find(img => 
-        img.fileUrl && isImageUrl(img.fileUrl)
+      const validSystemImage = booking.consultantService.systemService.images.find(
+        (img) => img.fileUrl && isImageUrl(img.fileUrl),
       )
-      
+
       if (validSystemImage) {
         return validSystemImage.fileUrl
       }
     }
-    
+
     // Use default image if no valid images found
     return DEFAULT_IMAGE
   }
@@ -144,12 +143,16 @@ const BookingItem: React.FC<BookingItemProps> = ({ booking, setIsTrigger }) => {
             <span className="text-sm text-muted-foreground">{consultantEmail}</span>
           </div>
           <div className="flex items-center gap-2 ml-2">
-            <Button className="flex items-center gap-1 bg-primary hover:bg-primary/90 transition-colors" variant="default" size="sm">
+            <Button
+              className="flex items-center gap-1 bg-primary hover:bg-primary/90 transition-colors"
+              variant="default"
+              size="sm"
+            >
               <MessageSquare className="w-3.5 h-3.5" />
               <span className="text-sm">{t('booking.chat')}</span>
             </Button>
             <Link
-              to={routes.beautyConsultationDetail.replace(":consultantId", consultantId)}
+              to={routes.beautyConsultationDetail.replace(':consultantId', consultantId)}
               className="hidden md:flex py-1.5 px-2 rounded-md items-center border border-primary text-primary hover:text-primary hover:bg-primary/10 transition-colors text-sm"
             >
               <User className="w-3.5 h-3.5 mr-1" />
@@ -194,11 +197,7 @@ const BookingItem: React.FC<BookingItemProps> = ({ booking, setIsTrigger }) => {
             <h3 className="font-medium text-lg text-gray-800">{booking.consultantService.systemService.name}</h3>
             {booking.consultantService.description && booking.consultantService.description.includes('<') ? (
               <div className="text-base text-muted-foreground" style={{ maxHeight: '3.6em', overflow: 'hidden' }}>
-                <ReactQuill
-                  value={booking.consultantService.description}
-                  readOnly={true}
-                  theme="bubble"
-                />
+                <ReactQuill value={booking.consultantService.description} readOnly={true} theme="bubble" />
               </div>
             ) : (
               <p className="text-base text-muted-foreground line-clamp-2">
@@ -210,15 +209,16 @@ const BookingItem: React.FC<BookingItemProps> = ({ booking, setIsTrigger }) => {
               <Badge
                 variant={booking.consultantService.systemService.type === 'PREMIUM' ? 'default' : 'secondary'}
                 className={
-                  booking.consultantService.systemService.type === 'PREMIUM' 
-                    ? 'bg-primary/90 text-sm hover:bg-primary/80 transition-colors' 
+                  booking.consultantService.systemService.type === 'PREMIUM'
+                    ? 'bg-primary/90 text-sm hover:bg-primary/80 transition-colors'
                     : 'text-sm hover:bg-secondary/80 transition-colors'
                 }
               >
                 {booking.consultantService.systemService.type}
               </Badge>
               <Badge variant="outline" className="text-sm border-gray-200">
-                {booking.consultantService.price && formatCurrency(booking.consultantService.price)} / {booking.consultantService.duration || 60} {t('booking.minutes')}
+                {booking.consultantService.price && formatCurrency(booking.consultantService.price)} /{' '}
+                {booking.consultantService.duration || 60} {t('booking.minutes')}
               </Badge>
             </div>
           </div>
@@ -233,8 +233,13 @@ const BookingItem: React.FC<BookingItemProps> = ({ booking, setIsTrigger }) => {
               <div className="flex items-center gap-2 text-base">
                 <Clock className="h-4 w-4 text-primary" />
                 <span className="text-gray-700">
-                  {booking.slot?.startTime ? formatTimeString(String(booking.slot.startTime)) : format(new Date(String(booking.startTime)), 'HH:mm')} -{' '}
-                  {booking.slot?.endTime ? formatTimeString(String(booking.slot.endTime)) : format(new Date(String(booking.endTime)), 'HH:mm')}
+                  {booking.slot?.startTime
+                    ? formatTimeString(String(booking.slot.startTime))
+                    : format(new Date(String(booking.startTime)), 'HH:mm')}{' '}
+                  -{' '}
+                  {booking.slot?.endTime
+                    ? formatTimeString(String(booking.slot.endTime))
+                    : format(new Date(String(booking.endTime)), 'HH:mm')}
                 </span>
               </div>
               <div className="flex items-center gap-2 text-base">

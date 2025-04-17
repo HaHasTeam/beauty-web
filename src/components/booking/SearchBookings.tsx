@@ -30,16 +30,16 @@ const SearchBookings = ({ onSearch }: SearchBookingsProps) => {
         <Input
           type="text"
           placeholder={t('booking.searchPlaceholder', 'Tìm kiếm theo ID...')}
-           className="w-full rounded-md  pl-10 pr-4 py-2 h-11 bg-white"
+          className="w-full rounded-md  pl-10 pr-4 py-2 h-11 bg-white"
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
           onKeyDown={handleKeyDown}
         />
       </div>
-      <Button 
-        onClick={handleSearch} 
-        variant="default" 
-        size="sm" 
+      <Button
+        onClick={handleSearch}
+        variant="default"
+        size="sm"
         className="h-11 px-4 bg-primary hover:bg-primary/90 transition-colors shadow-sm"
       >
         <Search className="h-4 w-4 mr-2" />

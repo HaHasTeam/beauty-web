@@ -25,9 +25,9 @@ export interface BookingCalendarProps {
   onFocusChange?: (date: Date) => void
 }
 
-export function BookingCalendar({ 
-  onDateTimeSelect, 
-  onClose, 
+export function BookingCalendar({
+  onDateTimeSelect,
+  onClose,
   selectedDateTime,
   consultantId,
   onFocusChange,
@@ -64,17 +64,20 @@ export function BookingCalendar({
 
   // Fetch available slots when date changes
   const { data: slotsData } = useQuery({
-    queryKey: [getSomeoneSlotApi.queryKey, {
-      id: consultantId,
-      startDate: new Date(date.toString() || "").toUTCString(),
-      endDate: new Date(date.toString() || "").toUTCString()
-    }],
+    queryKey: [
+      getSomeoneSlotApi.queryKey,
+      {
+        id: consultantId,
+        startDate: new Date(date.toString() || '').toUTCString(),
+        endDate: new Date(date.toString() || '').toUTCString(),
+      },
+    ],
     queryFn: getSomeoneSlotApi.fn,
-    enabled: !!consultantId && !!date
+    enabled: !!consultantId && !!date,
   })
 
   // Lọc ra các slot có sẵn (status là AVAILABLE hoặc isAvailable là true)
-  const availableSlots = slotsData?.data?.filter((slot) => slot.isAvailable)  
+  const availableSlots = slotsData?.data?.filter((slot) => slot.isAvailable)
 
   const weeksInMonth = getWeeksInMonth(focusedDate as DateValue, locale)
 
@@ -89,49 +92,47 @@ export function BookingCalendar({
 
   const handleChangeAvailableTime = (time: string, slotId?: string) => {
     setSelectedTime(time)
-    
+
     // Nếu đã có slotId được truyền từ component con
     if (slotId) {
-      handleDateTimeSelection(date, time, slotId);
+      handleDateTimeSelection(date, time, slotId)
     } else {
       // Tìm slotId tương ứng với time được chọn
-      const selectedSlotId = findSlotId(date, time);
-      handleDateTimeSelection(date, time, selectedSlotId);
+      const selectedSlotId = findSlotId(date, time)
+      handleDateTimeSelection(date, time, selectedSlotId)
     }
   }
-  
+
   // Hàm tìm slotId dựa trên date và time
   const findSlotId = (selectedDate: CalendarDate, time: string): string | undefined => {
-    if (!availableSlots || availableSlots.length === 0) return undefined;
-    
+    if (!availableSlots || availableSlots.length === 0) return undefined
+
     // Tách giờ và phút từ time string
-    const [hours, minutes] = time.split(':').map(Number);
-    if (isNaN(hours) || isNaN(minutes)) return undefined;
-    
+    const [hours, minutes] = time.split(':').map(Number)
+    if (isNaN(hours) || isNaN(minutes)) return undefined
+
     // Tạo date object từ CalendarDate và time
-    const dateObj = selectedDate.toDate(localTimeZone);
-    dateObj.setHours(hours, minutes, 0, 0);
-    
+    const dateObj = selectedDate.toDate(localTimeZone)
+    dateObj.setHours(hours, minutes, 0, 0)
+
     // Tìm slot phù hợp
-    const matchingSlot = availableSlots.find(slot => {
-      let slotHours, slotMinutes;
-      
+    const matchingSlot = availableSlots.find((slot) => {
+      let slotHours, slotMinutes
+
       // Kiểm tra nếu startTime là định dạng giờ:phút đơn giản (như "10:00")
       if (slot.startTime && slot.startTime.length <= 5 && slot.startTime.includes(':')) {
-        [slotHours, slotMinutes] = slot.startTime.split(':').map(Number);
+        ;[slotHours, slotMinutes] = slot.startTime.split(':').map(Number)
       } else {
         // Nếu là ISO string hoặc định dạng khác, parse thành Date
-        const slotStart = new Date(slot.startTime);
-        slotHours = slotStart.getHours();
-        slotMinutes = slotStart.getMinutes();
+        const slotStart = new Date(slot.startTime)
+        slotHours = slotStart.getHours()
+        slotMinutes = slotStart.getMinutes()
       }
-      
-      return slotHours === hours && 
-             slotMinutes === minutes &&
-             slot.isAvailable === true;
-    });
-    
-    return matchingSlot?.id;
+
+      return slotHours === hours && slotMinutes === minutes && slot.isAvailable === true
+    })
+
+    return matchingSlot?.id
   }
 
   // Tạo datetime string từ ngày và giờ đã chọn (định dạng 24h)
@@ -185,7 +186,7 @@ export function BookingCalendar({
       }
     `
     document.head.appendChild(style)
-    
+
     return () => {
       document.head.removeChild(style)
     }
@@ -208,9 +209,9 @@ export function BookingCalendar({
                 value={date}
                 onChange={handleChangeDate}
                 onFocusChange={(focused) => {
-                  setFocusedDate(focused);
+                  setFocusedDate(focused)
                   if (focused && onFocusChange) {
-                    onFocusChange(focused.toDate(localTimeZone));
+                    onFocusChange(focused.toDate(localTimeZone))
                   }
                 }}
                 isDisabled={false}
@@ -221,10 +222,12 @@ export function BookingCalendar({
               <h3 className="text-lg font-semibold text-foreground mb-3 flex items-center gap-2 before:content-[''] before:w-3 before:h-3 before:bg-primary before:rounded-full">
                 Chọn thời gian
               </h3>
-              <div className={cn(
-                "min-h-[320px] flex-1 w-full overflow-y-auto pr-2",
-                "scrollbar-thin scrollbar-thumb-rounded-full scrollbar-track-rounded-full"
-              )}>
+              <div
+                className={cn(
+                  'min-h-[320px] flex-1 w-full overflow-y-auto pr-2',
+                  'scrollbar-thin scrollbar-thumb-rounded-full scrollbar-track-rounded-full',
+                )}
+              >
                 <RightPanel
                   date={date}
                   timeZone={localTimeZone}

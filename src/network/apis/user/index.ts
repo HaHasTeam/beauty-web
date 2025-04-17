@@ -1,6 +1,6 @@
 import configs from '@/config'
 import { TAuth } from '@/types/auth'
-import { ConsultantServiceStatusEnum,IConsultantService } from '@/types/consultant-service'
+import { ConsultantServiceStatusEnum, IConsultantService } from '@/types/consultant-service'
 import { TServerResponse, TServerResponseWithPaging } from '@/types/request'
 import { TRoleResponse } from '@/types/role'
 import { TUser, UserRoleEnum, UserStatusEnum } from '@/types/user'
@@ -120,27 +120,27 @@ export const getActiveConsultantsApi = toQueryFetcher<
   const filterParams: TGetAccountFilterRequestParams = {
     ...params,
     statuses: [UserStatusEnum.ACTIVE].join(','),
-    role: UserRoleEnum.CONSULTANT
+    role: UserRoleEnum.CONSULTANT,
   }
- 
-  const res = ((await publicRequest('/accounts/filter-account', {
-    method: 'GET',
-    params: filterParams
-  })) as TServerResponseWithPaging<TUserResponse[]> )
 
+  const res = (await publicRequest('/accounts/filter-account', {
+    method: 'GET',
+    params: filterParams,
+  })) as TServerResponseWithPaging<TUserResponse[]>
 
   const { data: userData } = res
 
   // Process to format the user data
   const parsedData = userData.items.map<TUser>((user) => {
     // Handle the role which might be an object with a 'role' property or just a string
-    const userRole = typeof user.role === 'object' && user.role !== null 
-      ? (user.role as TRoleResponse).role 
-      : user.role || UserRoleEnum.CONSULTANT
-      
+    const userRole =
+      typeof user.role === 'object' && user.role !== null
+        ? (user.role as TRoleResponse).role
+        : user.role || UserRoleEnum.CONSULTANT
+
     return {
       ...user,
-      role: userRole
+      role: userRole,
     } as TUser
   })
 
@@ -149,56 +149,61 @@ export const getActiveConsultantsApi = toQueryFetcher<
     message: res.message,
     data: {
       ...res.data,
-      items: parsedData
-    }
+      items: parsedData,
+    },
   }
 })
 
-export const getConsultantsWithServicesApi = toQueryFetcher<TGetConsultantsFilterRequestParams, TServerResponseWithPaging<{
-  consultant: TUser
-  services: IConsultantService[]
-}[]>>(
-  'getConsultantsWithServicesApi',
-  async (params) => {
-    
-    const consultants = await getActiveConsultantsApi.raw(params)
-    
-    const services = await Promise.all(consultants.data.items.map(async (consultant) => {
+export const getConsultantsWithServicesApi = toQueryFetcher<
+  TGetConsultantsFilterRequestParams,
+  TServerResponseWithPaging<
+    {
+      consultant: TUser
+      services: IConsultantService[]
+    }[]
+  >
+>('getConsultantsWithServicesApi', async (params) => {
+  const consultants = await getActiveConsultantsApi.raw(params)
+
+  const services = await Promise.all(
+    consultants.data.items.map(async (consultant) => {
       const services = await filterConsultantServicesApi.raw({
         accountIds: consultant.id,
         statuses: [ConsultantServiceStatusEnum.ACTIVE].join(','),
-        limit: 2
+        limit: 2,
       })
       return services.data.items
-    })).catch((error) => {
-      console.log('error', error);
-      return []
-    })
-    
-    const consultantWithServices = consultants.data.items.map((consultant, index) => {
-       const existAnyService= services[index].length > 0
-       if(existAnyService){
+    }),
+  ).catch((error) => {
+    console.log('error', error)
+    return []
+  })
+
+  const consultantWithServices = consultants.data.items
+    .map((consultant, index) => {
+      const existAnyService = services[index].length > 0
+      if (existAnyService) {
         return {
           consultant,
-          services: services[index]
+          services: services[index],
         }
-       }  
+      }
 
       return null
-    }).filter((item) => item !== null)
+    })
+    .filter((item) => item !== null)
 
-    return {
-      message: consultants.message,
-      data: {
-        items: consultantWithServices,
-        total: consultants.data.total,
-        totalPages: consultants.data.totalPages,
-        page: consultants.data.page,
-        limit: consultants.data.limit
-      }
-    }
+  return {
+    message: consultants.message,
+    data: {
+      items: consultantWithServices,
+      total: consultants.data.total,
+      totalPages: consultants.data.totalPages,
+      page: consultants.data.page,
+      limit: consultants.data.limit,
+    },
   }
-)
+})
 
 /**
  * Get an active consultant by ID
@@ -209,7 +214,7 @@ export const getConsultantActiveById = toQueryFetcher<string, TServerResponse<TU
   'getConsultantActiveById',
   async (id) => {
     return publicRequest(`/accounts/get-by-id/${id}`)
-  }
+  },
 )
 
 /**
@@ -218,36 +223,33 @@ export const getConsultantActiveById = toQueryFetcher<string, TServerResponse<TU
  * @returns The consultant data with all their active services
  */
 export const getConsultantActiveByIdWithFullActiveService = toQueryFetcher<
-  string, 
+  string,
   TServerResponse<{
-    consultant: TUser,
+    consultant: TUser
     services: IConsultantService[]
   }>
->(
-  'getConsultantActiveByIdWithFullActiveService',
-  async (id) => {
-    try {
-      // First get the consultant data
-      const consultant = await getConsultantActiveById.raw(id)
-      
-      // Then get all their active services (no limit)
-      const services = await filterConsultantServicesApi.raw({
-        accountIds: id,
-        statuses: [ConsultantServiceStatusEnum.ACTIVE].join(','),
-        limit: 1000// TODO: remove this limit
-      })
-       
-      // Return combined data
-      return {
-        message: consultant.message,
-        data: {
-          consultant: consultant.data,
-          services: services.data.items
-        }
-      }
-    } catch (error) {
-      console.error('Error fetching consultant with services:', error)
-      throw error
+>('getConsultantActiveByIdWithFullActiveService', async (id) => {
+  try {
+    // First get the consultant data
+    const consultant = await getConsultantActiveById.raw(id)
+
+    // Then get all their active services (no limit)
+    const services = await filterConsultantServicesApi.raw({
+      accountIds: id,
+      statuses: [ConsultantServiceStatusEnum.ACTIVE].join(','),
+      limit: 1000, // TODO: remove this limit
+    })
+
+    // Return combined data
+    return {
+      message: consultant.message,
+      data: {
+        consultant: consultant.data,
+        services: services.data.items,
+      },
     }
+  } catch (error) {
+    console.error('Error fetching consultant with services:', error)
+    throw error
   }
-)
+})

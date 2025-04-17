@@ -3,11 +3,7 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Button } from '@/components/ui/button'
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-} from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog'
 
 // Helper function to handle different video URL formats
 const getEmbedUrl = (url: string): string => {
@@ -15,25 +11,25 @@ const getEmbedUrl = (url: string): string => {
   if (url.includes('embed')) {
     return url
   }
-  
+
   // YouTube video
   if (url.includes('youtube.com/watch')) {
     const videoId = new URL(url).searchParams.get('v')
     return `https://www.youtube.com/embed/${videoId}`
   }
-  
+
   // YouTube short URL
   if (url.includes('youtu.be')) {
     const videoId = url.split('/').pop()
     return `https://www.youtube.com/embed/${videoId}`
   }
-  
+
   // Vimeo
   if (url.includes('vimeo.com')) {
     const videoId = url.split('/').pop()
     return `https://player.vimeo.com/video/${videoId}`
   }
-  
+
   // If it's a direct video link, just return it
   return url
 }
@@ -45,23 +41,18 @@ interface VideoDialogProps {
   title?: string
 }
 
-export default function VideoDialog({
-  isOpen,
-  onOpenChange,
-  videoUrl,
-  title = 'Video',
-}: VideoDialogProps) {
+export default function VideoDialog({ isOpen, onOpenChange, videoUrl, title = 'Video' }: VideoDialogProps) {
   const { t } = useTranslation()
   const [embedUrl, setEmbedUrl] = useState<string>('')
   const [isVideoLoading, setIsVideoLoading] = useState(true)
-  
+
   // Process the video URL when it changes
   useEffect(() => {
     if (videoUrl) {
       setEmbedUrl(getEmbedUrl(videoUrl))
     }
   }, [videoUrl])
-  
+
   // Reset loading state when dialog opens
   useEffect(() => {
     if (isOpen) {
@@ -72,7 +63,7 @@ export default function VideoDialog({
   const handleVideoLoad = () => {
     setIsVideoLoading(false)
   }
-  
+
   const isExternalVideo = embedUrl.includes('youtube.com') || embedUrl.includes('vimeo.com')
 
   return (
@@ -80,7 +71,12 @@ export default function VideoDialog({
       <DialogContent className="max-w-3xl w-[90vw] max-h-[90vh] p-0 bg-black border-0">
         <div className="p-4 flex justify-between items-center">
           <DialogTitle className="text-lg text-white">{title}</DialogTitle>
-          <Button variant="ghost" size="icon" className="h-8 w-8 text-white hover:bg-white/10" onClick={() => onOpenChange(false)}>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8 text-white hover:bg-white/10"
+            onClick={() => onOpenChange(false)}
+          >
             <XIcon className="h-4 w-4" />
           </Button>
         </div>
@@ -91,7 +87,7 @@ export default function VideoDialog({
               <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
             </div>
           )}
-          
+
           {isExternalVideo ? (
             // YouTube/Vimeo embed
             <iframe

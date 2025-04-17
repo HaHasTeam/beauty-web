@@ -16,7 +16,7 @@ import { BookingStatusEnum } from '@/types/enum'
 
 export default function ProfileBookings() {
   const { t } = useTranslation()
-  
+
   // Use useQueryState for maintaining state in URL
   const [activeTab, setActiveTab] = useQueryState('tab', { defaultValue: 'all' })
   const [searchQuery, setSearchQuery] = useQueryState('search', { defaultValue: '' })
@@ -57,36 +57,40 @@ export default function ProfileBookings() {
 
   // Prepare filter for API request
   const prepareFilter = (): IBookingFilter => {
-    let statusesStr: string | undefined;
-    const selectedTrigger = simplifiedTriggers.find((trigger) => trigger.value === activeTab);
-    
+    let statusesStr: string | undefined
+    const selectedTrigger = simplifiedTriggers.find((trigger) => trigger.value === activeTab)
+
     if (selectedTrigger?.statuses) {
-      statusesStr = selectedTrigger.statuses.join(',');
+      statusesStr = selectedTrigger.statuses.join(',')
     } else if (activeTab !== 'all') {
-      statusesStr = activeTab;
+      statusesStr = activeTab
     }
-    
+
     return {
       statuses: statusesStr,
-      search: searchQuery || undefined
-    };
-  };
+      search: searchQuery || undefined,
+    }
+  }
 
   // Use React Query to fetch data
-  const { data:myBookings, isLoading,refetch } = useQuery({
+  const {
+    data: myBookings,
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: [getAllureMyBookingsApi.queryKey, { ...prepareFilter() }],
-    queryFn: getAllureMyBookingsApi.fn
-  });
+    queryFn: getAllureMyBookingsApi.fn,
+  })
 
-  const bookings = myBookings?.data || [];
+  const bookings = myBookings?.data || []
 
   const handleSearch = (query: string) => {
-    setSearchQuery(query);
+    setSearchQuery(query)
   }
 
   const handleTriggerRefresh = () => {
     refetch()
-  };
+  }
 
   const renderBookings = () => {
     if (bookings?.length === 0) {

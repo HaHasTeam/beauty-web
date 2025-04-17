@@ -109,7 +109,6 @@ export type SchemaType = z.infer<typeof formSchema>
 
 export const convertConsultantServiceToForm = (data: IConsultantService): FormType => {
   console.log(data)
-  
-  return {
-  } as FormType
+
+  return {} as FormType
 }

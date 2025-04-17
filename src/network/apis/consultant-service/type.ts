@@ -13,4 +13,4 @@ export type GetConsultantServicesParams = {
 
 export type GetConsultantServiceByIdParams = {
   id: string
-} 
+}

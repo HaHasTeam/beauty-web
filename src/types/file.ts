@@ -3,7 +3,7 @@ import { TMetaData } from './request'
 
 export enum FileStatusEnum {
   ACTIVE = 'ACTIVE',
-  INACTIVE = 'INACTIVE'
+  INACTIVE = 'INACTIVE',
 }
 
 export type TFile = {

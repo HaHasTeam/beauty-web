@@ -14,11 +14,11 @@ export default function BeautyConsultation() {
   const [activeTab, setActiveTab] = useState<'all' | 'standard' | 'premium'>('all')
   const [searchParams, setSearchParams] = useSearchParams()
   const [searchInput, setSearchInput] = useState(searchParams.get('search') || '')
-  
+
   // Handle search submission
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    
+
     // Update search params in URL
     const newParams = new URLSearchParams(searchParams)
     if (searchInput) {
@@ -26,10 +26,10 @@ export default function BeautyConsultation() {
     } else {
       newParams.delete('search')
     }
-    
+
     // Reset to page 1 when searching
     newParams.set('page', '1')
-    
+
     setSearchParams(newParams)
   }
 
@@ -156,7 +156,7 @@ export default function BeautyConsultation() {
                       {t('beautyConsultation.premium', 'Cao cấp')}
                     </TabsTrigger>
                   </TabsList>
-                  
+
                   {/* Search Bar */}
                   <form onSubmit={handleSearchSubmit} className="flex w-full max-w-xs">
                     <Input

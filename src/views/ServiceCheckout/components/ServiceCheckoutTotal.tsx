@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
-import  Button  from '@/components/button'
+import Button from '@/components/button'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import configs from '@/config'
 import { IBooking } from '@/types/booking'
@@ -24,11 +24,11 @@ const ServiceCheckoutTotal = ({
   totalPayment,
   formId,
   isSubmitting,
-  bookingData
+  bookingData,
 }: ServiceCheckoutTotalProps) => {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  
+
   return (
     <Card className="border-border shadow-sm">
       <CardContent className="p-4 space-y-3">
@@ -55,11 +55,25 @@ const ServiceCheckoutTotal = ({
       </CardContent>
 
       <CardFooter className="p-4 pt-0">
-        {bookingData?.id ? <Button variant="outline" className="w-full" onClick={() => navigate(configs.routes.profileBookingDetail.replace(':bookingId', bookingData.id))}>
-          {t('booking.viewBooking', 'Xem đơn hàng')}
-        </Button> : <Button type="submit" form={formId} disabled={isLoading || isSubmitting} className="w-full" loading={isSubmitting}>
-          {t('booking.confirmBooking', 'Xác nhận đặt lịch')}
-        </Button> }
+        {bookingData?.id ? (
+          <Button
+            variant="outline"
+            className="w-full"
+            onClick={() => navigate(configs.routes.profileBookingDetail.replace(':bookingId', bookingData.id))}
+          >
+            {t('booking.viewBooking', 'Xem đơn hàng')}
+          </Button>
+        ) : (
+          <Button
+            type="submit"
+            form={formId}
+            disabled={isLoading || isSubmitting}
+            className="w-full"
+            loading={isSubmitting}
+          >
+            {t('booking.confirmBooking', 'Xác nhận đặt lịch')}
+          </Button>
+        )}
       </CardFooter>
     </Card>
   )

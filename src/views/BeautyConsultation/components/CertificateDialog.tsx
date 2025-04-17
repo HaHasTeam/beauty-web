@@ -25,15 +25,15 @@ export default function CertificateDialog({ isOpen, onClose, certificate }: Cert
             <XIcon className="h-4 w-4" />
           </Button>
         </div>
-        
+
         <div className="w-full flex items-center justify-center p-4">
-          <img 
-            src={certificate.fileUrl} 
+          <img
+            src={certificate.fileUrl}
             alt={certificate.name || t('beautyConsultation.certificate', 'Chứng chỉ')}
-            className="max-w-full max-h-[70vh] object-contain" 
+            className="max-w-full max-h-[70vh] object-contain"
           />
         </div>
       </DialogContent>
     </Dialog>
   )
-} 
+}

@@ -48,7 +48,7 @@ export const getFilterConsultantFeedbackApi = toQueryFetcher<
   IFilterConsultantFeedbackParams,
   TServerResponse<{ total: number; totalPages: number }, IResponseFilterFeedback[]>
 >('getFilterConsultantFeedbackApi', async (params) => {
-  const { consultantId, page = 1, limit = 10 } = params ||{}
+  const { consultantId, page = 1, limit = 10 } = params || {}
   return privateRequest(`/feedbacks/filter-consultant-feedbacks/${consultantId}`, {
     method: 'GET',
     params: {

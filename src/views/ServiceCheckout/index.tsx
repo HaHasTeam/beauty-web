@@ -29,7 +29,7 @@ import { getConsultantServiceByIdApi } from '@/network/apis/consultant-service'
 import { PAY_TYPE } from '@/network/apis/transaction/type'
 import { getUserProfileApi } from '@/network/apis/user'
 import { IConsultantService } from '@/types/consultant-service'
-import {  PaymentMethod, ResultEnum } from '@/types/enum'
+import { PaymentMethod, ResultEnum } from '@/types/enum'
 
 // Import service details related components
 import { ServiceCheckoutItem, ServiceCheckoutTotal } from './components'
@@ -62,12 +62,11 @@ type BookingServiceFormValues = z.infer<typeof bookingServiceSchema>
 
 // Hàm minify string để rút gọn ID
 const minifyString = (str: string, length: number = 8) => {
-  if (!str) return '';
-  return str.substring(0, length);
+  if (!str) return ''
+  return str.substring(0, length)
 }
 
 // Hàm tìm ảnh đầu tiên có type là Image
-
 
 // Hàm để chuyển đổi từ response API sang service model
 
@@ -78,13 +77,16 @@ const ServiceCheckout = () => {
   const { successToast } = useToast()
   const handleServerError = useHandleServerError()
   const navigate = useNavigate()
-  
+
   const { data: serviceData, isLoading: isLoadingService } = useQuery({
-    queryKey: [getConsultantServiceByIdApi.queryKey, {
-      id: serviceId as string
-    }],
+    queryKey: [
+      getConsultantServiceByIdApi.queryKey,
+      {
+        id: serviceId as string,
+      },
+    ],
     queryFn: getConsultantServiceByIdApi.fn,
-    enabled: !!serviceId
+    enabled: !!serviceId,
   })
 
   // States
@@ -94,7 +96,6 @@ const ServiceCheckout = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [selectedDateTime, setSelectedDateTime] = useState<string | null>(null)
   const [selectedSlotId, setSelectedSlotId] = useState<string | null>(null)
-  
 
   // Lọc ra các slot có sẵn
 
@@ -175,7 +176,11 @@ const ServiceCheckout = () => {
   })
 
   // Mutation để tạo booking
-  const { mutateAsync: bookServiceFn,isSuccess: isBookingSuccess, data: bookingDataRes } = useMutation({
+  const {
+    mutateAsync: bookServiceFn,
+    isSuccess: isBookingSuccess,
+    data: bookingDataRes,
+  } = useMutation({
     mutationKey: [createBookingApi.mutationKey],
     mutationFn: createBookingApi.fn,
     onSuccess: (response) => {
@@ -183,7 +188,7 @@ const ServiceCheckout = () => {
       if (paymentMethod === PaymentMethod.BANK_TRANSFER) {
         setIsOpenQRCodePayment(true)
         setPaymentId(response.data.id)
-        
+
         // Tạo dữ liệu booking để sử dụng sau khi thanh toán thành công
         const bookingDetails: ServiceBookingData = {
           id: response.data.id,
@@ -193,7 +198,7 @@ const ServiceCheckout = () => {
           paymentMethod: PaymentMethod.BANK_TRANSFER,
           createdAt: response.data.createdAt || new Date().toISOString(),
           status: 'PENDING',
-          paymentStatus: 'PENDING'
+          paymentStatus: 'PENDING',
         }
         setBookingData(bookingDetails)
         return bookingDetails
@@ -206,7 +211,7 @@ const ServiceCheckout = () => {
 
       // Reset form và state
       handleReset()
-      
+
       // Chuyển hướng đến trang kết quả thành công
       navigate(configs.routes.checkoutResult, {
         state: { orderData: response, status: ResultEnum.SUCCESS, isBooking: true },
@@ -214,8 +219,8 @@ const ServiceCheckout = () => {
     },
   })
 
-  console.log("bookingDataRes", bookingDataRes);
-  
+  console.log('bookingDataRes', bookingDataRes)
+
   const handleReset = useCallback(() => {
     form.reset()
     setSelectedDate('')
@@ -232,7 +237,7 @@ const ServiceCheckout = () => {
 
     // Reset form và state
     handleReset()
-    
+
     // Chuyển hướng đến trang kết quả thành công
     navigate(configs.routes.checkoutResult, {
       state: { orderData: bookingData, status: ResultEnum.SUCCESS, isBooking: true },
@@ -242,38 +247,37 @@ const ServiceCheckout = () => {
   // Handle form submission
   async function onSubmit(values: BookingServiceFormValues) {
     try {
-      
       // Kiểm tra nếu dịch vụ là PREMIUM thì cần phải có bookingDateTime
       if (serviceData?.data.systemService?.type === 'PREMIUM' && !values.bookingDateTime) {
         form.setError('bookingDateTime', {
           type: 'manual',
-          message: t('booking.errorNoDateTime', 'Vui lòng chọn ngày và giờ cho lịch hẹn')
+          message: t('booking.errorNoDateTime', 'Vui lòng chọn ngày và giờ cho lịch hẹn'),
         })
         return
       }
 
-      console.log("Form values:", values);
-      
+      console.log('Form values:', values)
+
       // Đảm bảo serviceId và slotId được lấy từ form values
-      const currentServiceId = values.serviceId || serviceId || '';
-      const currentSlotId = values.slotId || selectedSlotId || '';
-      
+      const currentServiceId = values.serviceId || serviceId || ''
+      const currentSlotId = values.slotId || selectedSlotId || ''
+
       if (!currentServiceId) {
-        console.error("ServiceId is missing");
+        console.error('ServiceId is missing')
         form.setError('serviceId', {
           type: 'manual',
-          message: t('booking.errorMissingServiceId', 'Thiếu thông tin dịch vụ')
-        });
-        return;
+          message: t('booking.errorMissingServiceId', 'Thiếu thông tin dịch vụ'),
+        })
+        return
       }
-      
+
       if (serviceData?.data.systemService?.type === 'PREMIUM' && !currentSlotId) {
-        console.error("SlotId is missing for PREMIUM service");
+        console.error('SlotId is missing for PREMIUM service')
         form.setError('bookingDateTime', {
           type: 'manual',
-          message: t('booking.errorMissingSlotId', 'Vui lòng chọn thời gian cho lịch hẹn')
-        });
-        return;
+          message: t('booking.errorMissingSlotId', 'Vui lòng chọn thời gian cho lịch hẹn'),
+        })
+        return
       }
 
       // Tạo dữ liệu cho booking API
@@ -281,20 +285,18 @@ const ServiceCheckout = () => {
         totalPrice: totalPayment,
         startTime: values.bookingDateTime,
         endTime: values.bookingDateTime,
-        type: "SERVICE",
+        type: 'SERVICE',
         slot: currentSlotId || null,
         paymentMethod: values.paymentMethod,
-        consultantService: currentServiceId
+        consultantService: currentServiceId,
       }
-      
-      
+
       // Sử dụng lodash để loại bỏ các giá trị null, undefined, NaN, ""
-      const cleanParams = _.omitBy(bookingParams, val => !val && val !== 0);
-      console.log("Clean booking params:", cleanParams);
+      const cleanParams = _.omitBy(bookingParams, (val) => !val && val !== 0)
+      console.log('Clean booking params:', cleanParams)
 
       // Gọi API để tạo booking
-      await bookServiceFn(cleanParams as unknown as ICreateBookingParams);
-
+      await bookServiceFn(cleanParams as unknown as ICreateBookingParams)
     } catch (error) {
       handleServerError({
         error,
@@ -308,13 +310,13 @@ const ServiceCheckout = () => {
     form.setValue('bookingDateTime', dateTime)
     setBookingDateTime(dateTime)
     setSelectedDateTime(dateTime)
-    
+
     // Cập nhật slotId nếu có
     if (slotId) {
       setSelectedSlotId(slotId)
       form.setValue('slotId', slotId)
     }
-    
+
     // Chỉ đóng dialog khi đã chọn cả thời gian (có slotId)
     setIsDialogOpen(false)
   }
@@ -352,7 +354,7 @@ const ServiceCheckout = () => {
         onSuccess={onPaymentSuccess}
       />
 
-      {(isGettingProfile  || isLoadingService) && <LoadingContentLayer />}
+      {(isGettingProfile || isLoadingService) && <LoadingContentLayer />}
 
       {serviceData?.data && (
         <div className="relative w-full mx-auto py-5">
@@ -378,7 +380,9 @@ const ServiceCheckout = () => {
                 <h2 className="uppercase font-bold text-xl">
                   {t('booking.checkout', 'Đặt lịch dịch vụ')}
                   {serviceData.data && (
-                    <span className="ml-2 text-primary font-normal text-base">#{minifyString(serviceData.data.id)}</span>
+                    <span className="ml-2 text-primary font-normal text-base">
+                      #{minifyString(serviceData.data.id)}
+                    </span>
                   )}
                 </h2>
 
@@ -387,7 +391,11 @@ const ServiceCheckout = () => {
                   <div className="w-full md:w-full lg:w-[calc(65%-6px)] xl:w-[calc(70%-6px)]">
                     {/* Service Details Section */}
                     <div className="w-full bg-white rounded-md border border-border/70 shadow-sm mb-4">
-                      <ServiceCheckoutItem service={serviceData?.data as IConsultantService} form={form} selectedDateTime={selectedDateTime} />
+                      <ServiceCheckoutItem
+                        service={serviceData?.data as IConsultantService}
+                        form={form}
+                        selectedDateTime={selectedDateTime}
+                      />
                     </div>
                   </div>
 
@@ -430,7 +438,7 @@ const ServiceCheckout = () => {
 
                     {/* Order Total */}
                     <ServiceCheckoutTotal
-                      isSubmitting={form.formState.isSubmitting||isBookingSuccess}
+                      isSubmitting={form.formState.isSubmitting || isBookingSuccess}
                       isLoading={isLoadingService}
                       servicePrice={servicePrice}
                       platformVoucherDiscount={0}
@@ -446,7 +454,7 @@ const ServiceCheckout = () => {
         </div>
       )}
 
-      {!serviceData?.data  && !isLoadingService && (
+      {!serviceData?.data && !isLoadingService && (
         <div className="my-10 w-full h-full flex flex-col justify-center">
           <div className="text-center">
             <h2 className="text-2xl font-bold mb-4">{t('booking.serviceNotFound', 'Không tìm thấy dịch vụ')}</h2>

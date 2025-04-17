@@ -1,4 +1,4 @@
-import { IBooking, IBookingFilter , TSlot } from '@/types/booking'
+import { IBooking, IBookingFilter, TSlot } from '@/types/booking'
 import { TServerResponse } from '@/types/request'
 import { toMutationFetcher, toQueryFetcher } from '@/utils/query'
 import { privateRequest } from '@/utils/request'
@@ -26,21 +26,21 @@ export const getAllureMyBookingsApi = toQueryFetcher<IBookingFilter, TServerResp
   },
 )
 
-export type TGetSlotParams= {
-    startDate: string
-    endDate: string
-    id?: string
-  }
+export type TGetSlotParams = {
+  startDate: string
+  endDate: string
+  id?: string
+}
 
-export const getSomeoneSlotApi = toQueryFetcher<
-  TGetSlotParams,
-  TServerResponse<TSlot[]>
->('getSomeoneSlotApi', async (data) => {
-  return privateRequest(`/bookings/get-someone-slots/${data?.id}`, {
-    method: 'POST',
-    data: data
-  })
-})
+export const getSomeoneSlotApi = toQueryFetcher<TGetSlotParams, TServerResponse<TSlot[]>>(
+  'getSomeoneSlotApi',
+  async (data) => {
+    return privateRequest(`/bookings/get-someone-slots/${data?.id}`, {
+      method: 'POST',
+      data: data,
+    })
+  },
+)
 
 export interface ICreateBookingParams {
   totalPrice: number
@@ -52,15 +52,15 @@ export interface ICreateBookingParams {
   consultantService: string
 }
 
-export const createBookingApi = toMutationFetcher<
-  ICreateBookingParams,
-  TServerResponse<IBooking>
->('createBookingApi', async (data) => {
-  return privateRequest('/bookings/', {
-    method: 'POST',
-    data: data
-  })
-})
+export const createBookingApi = toMutationFetcher<ICreateBookingParams, TServerResponse<IBooking>>(
+  'createBookingApi',
+  async (data) => {
+    return privateRequest('/bookings/', {
+      method: 'POST',
+      data: data,
+    })
+  },
+)
 
 export interface ICancelBookingParams {
   reason?: string

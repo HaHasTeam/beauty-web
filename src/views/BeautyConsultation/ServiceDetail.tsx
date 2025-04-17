@@ -2,7 +2,17 @@ import 'react-quill-new/dist/quill.bubble.css'
 import './components/quill-styles.css'
 
 import { useQuery } from '@tanstack/react-query'
-import { ArrowLeftIcon, CalendarIcon, FileIcon, FileTextIcon, FormInputIcon, ImageIcon, Star, VideoIcon, XIcon } from 'lucide-react'
+import {
+  ArrowLeftIcon,
+  CalendarIcon,
+  FileIcon,
+  FileTextIcon,
+  FormInputIcon,
+  ImageIcon,
+  Star,
+  VideoIcon,
+  XIcon,
+} from 'lucide-react'
 import { useQueryState } from 'nuqs'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -46,44 +56,48 @@ export default function ServiceDetail() {
   const [activeTab, setActiveTab] = useState<string>('services')
   const [showAllCertificates, setShowAllCertificates] = useState(false)
   const [enlargedImage, setEnlargedImage] = useState<string | null>(null)
-  const [activeConsultantImage, setActiveConsultantImage] = useState<{url: string, type: 'image' | 'video'} | null>(null)
+  const [activeConsultantImage, setActiveConsultantImage] = useState<{ url: string; type: 'image' | 'video' } | null>(
+    null,
+  )
   const consultantId = useParams().consultantId
   const [searchParams] = useSearchParams()
   const serviceId = searchParams.get('service')
-  
+
   // Refs for scrolling into view
   const selectedCardRef = useRef<HTMLDivElement>(null)
   const serviceDetailRef = useRef<HTMLDivElement>(null)
   const tabsRef = useRef<HTMLDivElement>(null)
 
   // Query consultant data with services
-  const { data: consultantWithServices, isLoading: isConsultantWithServicesLoading, isError: isConsultantWithServicesError } = useQuery({
+  const {
+    data: consultantWithServices,
+    isLoading: isConsultantWithServicesLoading,
+    isError: isConsultantWithServicesError,
+  } = useQuery({
     queryKey: [getConsultantActiveByIdWithFullActiveService.queryKey, consultantId as string],
-    queryFn: getConsultantActiveByIdWithFullActiveService.fn
+    queryFn: getConsultantActiveByIdWithFullActiveService.fn,
   })
 
   // Query consultant feedback data for overall review statistics
   const { data: consultantFeedbackData, isLoading: isFeedbackLoading } = useQuery({
     queryKey: [getConsultantFeedbackApi.queryKey, consultantId || ''],
     queryFn: getConsultantFeedbackApi.fn,
-    enabled: !!consultantId && activeTab === 'reviews'
+    enabled: !!consultantId && activeTab === 'reviews',
   })
 
   // Query other available consultants and their services
   const { data: relatedConsultantsData } = useQuery({
-    queryKey: [getConsultantsWithServicesApi.queryKey, { limit:4 }],
+    queryKey: [getConsultantsWithServicesApi.queryKey, { limit: 4 }],
     queryFn: getConsultantsWithServicesApi.fn,
-    select: (data) =>{
+    select: (data) => {
       return data.data.items.filter((item) => item.consultant.id !== consultantId)
     },
-    enabled: !!consultantId
-  });
+    enabled: !!consultantId,
+  })
 
   // Helper functions to adapt between TUser and ConsultantInfo properties
   const getConsultantName = (user: TUser): string => {
-    return user.firstName && user.lastName
-      ? `${user.firstName} ${user.lastName}`
-      : user.username
+    return user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : user.username
   }
 
   const getConsultantTitle = (user: TUser): string => {
@@ -102,17 +116,17 @@ export default function ServiceDetail() {
 
   const getConsultantAddress = (user: TUser): string | null => {
     // First check for default address
-    const defaultAddress = user.addresses?.find(addr => addr.isDefault)
-    
+    const defaultAddress = user.addresses?.find((addr) => addr.isDefault)
+
     // Then fall back to first address
     const firstAddress = user.addresses?.[0]
-    
+
     if (defaultAddress) {
       return defaultAddress.fullAddress || defaultAddress.province || defaultAddress.detailAddress || null
     } else if (firstAddress) {
       return firstAddress.fullAddress || firstAddress.province || firstAddress.detailAddress || null
     }
-    
+
     return null
   }
 
@@ -128,77 +142,81 @@ export default function ServiceDetail() {
 
     return user.certificates.map((cert, index) => {
       // Parse name and year from certificate name (format: name_year)
-      const certName = cert.name || '';
+      const certName = cert.name || ''
       const [name, yearStr] = certName.split('_')
       const year = yearStr ? parseInt(yearStr) : new Date().getFullYear()
-      
+
       return {
         id: cert.id || `cert-${index}`,
         name: name || certName,
         issuer: t('beautyConsultation.certIssuer', 'Tổ chức chứng nhận'),
         year: year,
-        imageUrl: cert.fileUrl || DEFAULT_IMAGE
+        imageUrl: cert.fileUrl || DEFAULT_IMAGE,
       }
     })
   }
 
   // Extract consultant media (videos and thumbnails)
   const getConsultantMedia = (user: TUser) => {
-    const media: {id: string, url: string, thumbnailUrl: string, title: string, type: 'image' | 'video'}[] = []
-    
+    const media: { id: string; url: string; thumbnailUrl: string; title: string; type: 'image' | 'video' }[] = []
+
     // Add video introduction if available
     if (user.introduceVideo) {
       // Get thumbnail for video - use avatar as fallback
-      const videoThumbnail = user.thumbnailImageList?.find(img => img.name?.includes('video_thumb'))?.fileUrl || user.avatar || DEFAULT_IMAGE
-      
+      const videoThumbnail =
+        user.thumbnailImageList?.find((img) => img.name?.includes('video_thumb'))?.fileUrl ||
+        user.avatar ||
+        DEFAULT_IMAGE
+
       media.push({
         id: 'video-intro',
         url: user.introduceVideo,
         thumbnailUrl: videoThumbnail,
         title: t('beautyConsultation.introVideo', 'Giới thiệu'),
-        type: 'video'
+        type: 'video',
       })
     }
-    
+
     // Add thumbnail images if available
     if (user.thumbnailImageList && user.thumbnailImageList.length > 0) {
       user.thumbnailImageList.forEach((item, index) => {
         // Determine if it's a video or image based on file extension or MIME type
-        const fileUrl = item.fileUrl || '';
-        const isVideo = fileUrl.toLowerCase().endsWith('.mp4') || 
-                        fileUrl.toLowerCase().endsWith('.mov') ||
-                        fileUrl.toLowerCase().includes('youtube') ||
-                        fileUrl.toLowerCase().includes('vimeo');
-        
+        const fileUrl = item.fileUrl || ''
+        const isVideo =
+          fileUrl.toLowerCase().endsWith('.mp4') ||
+          fileUrl.toLowerCase().endsWith('.mov') ||
+          fileUrl.toLowerCase().includes('youtube') ||
+          fileUrl.toLowerCase().includes('vimeo')
+
         // For videos, we need a thumbnail URL (which may be the same item or a different one)
-        let thumbnailUrl = fileUrl;
-        
+        let thumbnailUrl = fileUrl
+
         // If it's a video, try to find a matching thumbnail
         if (isVideo && user.thumbnailImageList) {
           // Try to find a matching thumbnail in the list
-          const thumbnailImage = user.thumbnailImageList.find(t => 
-            t.name?.includes(`thumb_${item.id || ''}`) || 
-            (item.name && t.name?.includes(item.name.split('.')[0]))
-          );
-          
+          const thumbnailImage = user.thumbnailImageList.find(
+            (t) =>
+              t.name?.includes(`thumb_${item.id || ''}`) || (item.name && t.name?.includes(item.name.split('.')[0])),
+          )
+
           if (thumbnailImage && thumbnailImage.fileUrl) {
-            thumbnailUrl = thumbnailImage.fileUrl;
+            thumbnailUrl = thumbnailImage.fileUrl
           } else {
             // Fallback to avatar or default image
-            thumbnailUrl = user.avatar || DEFAULT_IMAGE;
+            thumbnailUrl = user.avatar || DEFAULT_IMAGE
           }
         }
-        
+
         media.push({
           id: item.id || `thumbnail-${index}`,
           url: fileUrl,
           thumbnailUrl: thumbnailUrl,
           title: item.name || t('beautyConsultation.portfolioItem', 'Tác phẩm'),
-          type: isVideo ? 'video' : 'image'
+          type: isVideo ? 'video' : 'image',
         })
       })
     }
-    
+
     // If no media, add avatar as fallback
     if (media.length === 0 && user.avatar) {
       media.push({
@@ -206,17 +224,17 @@ export default function ServiceDetail() {
         url: user.avatar,
         thumbnailUrl: user.avatar,
         title: getConsultantName(user),
-        type: 'image'
+        type: 'image',
       })
     }
-    
+
     return media
   }
 
   // Helper function to get consultant rating
   const getConsultantRating = (): { rating: number; count: number } => {
     // Mock data for now - will be replaced with actual API data
-    return { rating: 0, count: 0 };
+    return { rating: 0, count: 0 }
   }
 
   // Helper function to convert feedback data to IFeedbackGeneral format
@@ -229,23 +247,23 @@ export default function ServiceDetail() {
         rating2Count: 0,
         rating3Count: 0,
         rating4Count: 0,
-        rating5Count: 0
-      };
+        rating5Count: 0,
+      }
     }
 
-    const feedbacks = consultantFeedbackData.data;
-    const totalCount = feedbacks.length;
-    
+    const feedbacks = consultantFeedbackData.data
+    const totalCount = feedbacks.length
+
     // Count ratings
-    const rating1Count = feedbacks.filter(f => f.rating === 1).length;
-    const rating2Count = feedbacks.filter(f => f.rating === 2).length;
-    const rating3Count = feedbacks.filter(f => f.rating === 3).length;
-    const rating4Count = feedbacks.filter(f => f.rating === 4).length;
-    const rating5Count = feedbacks.filter(f => f.rating === 5).length;
-    
+    const rating1Count = feedbacks.filter((f) => f.rating === 1).length
+    const rating2Count = feedbacks.filter((f) => f.rating === 2).length
+    const rating3Count = feedbacks.filter((f) => f.rating === 3).length
+    const rating4Count = feedbacks.filter((f) => f.rating === 4).length
+    const rating5Count = feedbacks.filter((f) => f.rating === 5).length
+
     // Calculate average
-    const sum = feedbacks.reduce((acc, f) => acc + f.rating, 0);
-    const averageRating = totalCount > 0 ? Number((sum / totalCount).toFixed(1)) : 0;
+    const sum = feedbacks.reduce((acc, f) => acc + f.rating, 0)
+    const averageRating = totalCount > 0 ? Number((sum / totalCount).toFixed(1)) : 0
 
     return {
       averageRating,
@@ -254,22 +272,22 @@ export default function ServiceDetail() {
       rating2Count,
       rating3Count,
       rating4Count,
-      rating5Count
-    };
-  };
+      rating5Count,
+    }
+  }
 
   // Add states to track if descriptions are expanded
-  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
-  const [isServiceDescriptionExpanded, setIsServiceDescriptionExpanded] = useState(false);
-  const [isShortDescriptionExpanded, setIsShortDescriptionExpanded] = useState(false);
+  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false)
+  const [isServiceDescriptionExpanded, setIsServiceDescriptionExpanded] = useState(false)
+  const [isShortDescriptionExpanded, setIsShortDescriptionExpanded] = useState(false)
 
   // Toggle description expansion
   const toggleDescriptionExpand = () => {
-    setIsDescriptionExpanded(prev => !prev);
+    setIsDescriptionExpanded((prev) => !prev)
   }
 
   // State để lưu trữ URL video hiện tại
-  const [currentVideoUrl, setCurrentVideoUrl] = useState<string | null>(null);
+  const [currentVideoUrl, setCurrentVideoUrl] = useState<string | null>(null)
 
   useEffect(() => {
     // Reset states when service changes
@@ -289,53 +307,61 @@ export default function ServiceDetail() {
     setEnlargedImage(null)
 
     if (consultantWithServices) {
-      const consultantData = consultantWithServices.data.consultant;
-      const services = consultantWithServices.data.services;
-      
+      const consultantData = consultantWithServices.data.consultant
+      const services = consultantWithServices.data.services
+
       // Find the current service within consultant services
-      const foundService = services.find(s => s.id === serviceId);
-      
+      const foundService = services.find((s) => s.id === serviceId)
+
       if (foundService) {
-        setService(foundService);
-        setConsultant(consultantData);
-        setConsultantServices(services);
-        
+        setService(foundService)
+        setConsultant(consultantData)
+        setConsultantServices(services)
+
         // Set active consultant media - prioritize video intro if available
         if (consultantData.introduceVideo) {
           // Store the video URL (the thumbnail will be found through getConsultantMedia)
           setActiveConsultantImage({
             url: consultantData.introduceVideo,
-            type: 'video'
-          });
+            type: 'video',
+          })
         } else if (consultantData.thumbnailImageList && consultantData.thumbnailImageList.length > 0) {
           // Use first thumbnail
-          const firstItem = consultantData.thumbnailImageList[0];
-          const fileUrl = firstItem.fileUrl || '';
-          const isVideo = fileUrl.toLowerCase().endsWith('.mp4') || 
-                          fileUrl.toLowerCase().endsWith('.mov') ||
-                          fileUrl.toLowerCase().includes('youtube') ||
-                          fileUrl.toLowerCase().includes('vimeo');
-          
+          const firstItem = consultantData.thumbnailImageList[0]
+          const fileUrl = firstItem.fileUrl || ''
+          const isVideo =
+            fileUrl.toLowerCase().endsWith('.mp4') ||
+            fileUrl.toLowerCase().endsWith('.mov') ||
+            fileUrl.toLowerCase().includes('youtube') ||
+            fileUrl.toLowerCase().includes('vimeo')
+
           setActiveConsultantImage({
             url: fileUrl,
-            type: isVideo ? 'video' : 'image'
-          });
+            type: isVideo ? 'video' : 'image',
+          })
         } else if (consultantData.avatar) {
           // Fallback to avatar
           setActiveConsultantImage({
             url: consultantData.avatar,
-            type: 'image'
-          });
+            type: 'image',
+          })
         }
       }
-      
-      setLoading(false);
+
+      setLoading(false)
     } else if (isConsultantWithServicesError) {
-      setLoading(false);
+      setLoading(false)
     } else {
-      setLoading(isConsultantWithServicesLoading);
+      setLoading(isConsultantWithServicesLoading)
     }
-  }, [serviceId, setSelectedServiceId, selectedServiceId, consultantWithServices, isConsultantWithServicesLoading, isConsultantWithServicesError]);
+  }, [
+    serviceId,
+    setSelectedServiceId,
+    selectedServiceId,
+    consultantWithServices,
+    isConsultantWithServicesLoading,
+    isConsultantWithServicesError,
+  ])
 
   // Scroll selected service card and tabs into view when selection changes
   useEffect(() => {
@@ -371,7 +397,6 @@ export default function ServiceDetail() {
     navigate(configs.routes.beautyConsultation)
   }
 
-
   // Handle video play for consultant intro
   const handleConsultantVideoPlay = () => {
     setConsultantVideoOpen(true)
@@ -403,8 +428,8 @@ export default function ServiceDetail() {
 
   // Handle thumbnail click
   const handleThumbnailClick = (url: string, type: 'image' | 'video') => {
-    setActiveConsultantImage({url, type})
-    
+    setActiveConsultantImage({ url, type })
+
     // Auto-play video if it's a video type
     if (type === 'video') {
       handleConsultantVideoPlay()
@@ -437,7 +462,7 @@ export default function ServiceDetail() {
   const getVideoUrl = () => {
     // Nếu có currentVideoUrl, sử dụng nó
     if (currentVideoUrl) {
-      return currentVideoUrl;
+      return currentVideoUrl
     }
 
     // Fallback sang video mặc định dựa trên loại dịch vụ
@@ -497,11 +522,11 @@ export default function ServiceDetail() {
   }
 
   const selectedService = getSelectedService() || service
-console.log(selectedService,"SDf");
+  console.log(selectedService, 'SDf')
 
   // If we have certificates, prepare them for display
   const consultantCertificates = getCertificatesToDisplay()
-console.log(consultantServices[0].images[0].fileUrl,"SDAf");
+  console.log(consultantServices[0].images[0].fileUrl, 'SDAf')
 
   return (
     <div className="w-full min-h-screen bg-background">
@@ -522,15 +547,15 @@ console.log(consultantServices[0].images[0].fileUrl,"SDAf");
                 className="relative group cursor-pointer overflow-hidden"
                 onClick={() => {
                   if (activeConsultantImage?.type === 'video') {
-                    handleConsultantVideoPlay();
+                    handleConsultantVideoPlay()
                   } else if (activeConsultantImage?.url) {
-                    setEnlargedImage(activeConsultantImage.url);
+                    setEnlargedImage(activeConsultantImage.url)
                   }
                 }}
               >
                 <div className="aspect-video relative">
                   {activeConsultantImage?.type === 'video' ? (
-                    <VideoThumbnail 
+                    <VideoThumbnail
                       src={activeConsultantImage.url}
                       alt={getConsultantName(consultant)}
                       className="w-full h-full"
@@ -572,38 +597,39 @@ console.log(consultantServices[0].images[0].fileUrl,"SDAf");
                   className="w-full"
                 >
                   <CarouselContent className="ml-1">
-                    {consultant && getConsultantMedia(consultant).map((mediaItem) => (
-                      <CarouselItem key={mediaItem.id} className="basis-1/4 pl-1">
-                        <div
-                          className={`aspect-video cursor-pointer relative overflow-hidden rounded-md`}
-                          onClick={() => handleThumbnailClick(mediaItem.url, mediaItem.type)}
-                        >
-                          {mediaItem.type === 'video' ? (
-                            <VideoThumbnail 
-                              src={mediaItem.url}
-                              alt={mediaItem.title}
-                              className={cn(
-                                activeConsultantImage?.url === mediaItem.url
-                                  ? 'border-2 border-primary p-1 rounded-lg opacity-50'
-                                  : ''
-                              )}
-                              onClick={() => handleThumbnailClick(mediaItem.url, mediaItem.type)}
-                            />
-                          ) : (
-                            <img
-                              src={mediaItem.thumbnailUrl}
-                              alt={mediaItem.title}
-                              className={cn(
-                                'w-full h-full object-cover transition-transform duration-300 hover:scale-110',
-                                activeConsultantImage?.url === mediaItem.url
-                                  ? 'border-2 border-primary p-1 rounded-lg opacity-50'
-                                  : '',
-                              )}
-                            />
-                          )}
-                        </div>
-                      </CarouselItem>
-                    ))}
+                    {consultant &&
+                      getConsultantMedia(consultant).map((mediaItem) => (
+                        <CarouselItem key={mediaItem.id} className="basis-1/4 pl-1">
+                          <div
+                            className={`aspect-video cursor-pointer relative overflow-hidden rounded-md`}
+                            onClick={() => handleThumbnailClick(mediaItem.url, mediaItem.type)}
+                          >
+                            {mediaItem.type === 'video' ? (
+                              <VideoThumbnail
+                                src={mediaItem.url}
+                                alt={mediaItem.title}
+                                className={cn(
+                                  activeConsultantImage?.url === mediaItem.url
+                                    ? 'border-2 border-primary p-1 rounded-lg opacity-50'
+                                    : '',
+                                )}
+                                onClick={() => handleThumbnailClick(mediaItem.url, mediaItem.type)}
+                              />
+                            ) : (
+                              <img
+                                src={mediaItem.thumbnailUrl}
+                                alt={mediaItem.title}
+                                className={cn(
+                                  'w-full h-full object-cover transition-transform duration-300 hover:scale-110',
+                                  activeConsultantImage?.url === mediaItem.url
+                                    ? 'border-2 border-primary p-1 rounded-lg opacity-50'
+                                    : '',
+                                )}
+                              />
+                            )}
+                          </div>
+                        </CarouselItem>
+                      ))}
                   </CarouselContent>
                   {getConsultantMedia(consultant).length > 4 && (
                     <>
@@ -649,14 +675,16 @@ console.log(consultantServices[0].images[0].fileUrl,"SDAf");
                           {getConsultantExperience(consultant)} {t('beautyConsultation.yearsExp', 'Năm KN')}
                         </div>
                       )}
-                      
+
                       <div className="px-2 py-0.5 bg-primary/10 text-primary text-xs font-medium rounded-full flex items-center">
                         <span className="inline-block mr-1 w-1.5 h-1.5 bg-primary rounded-full"></span>
                         <Star className="h-3 w-3 mr-0.5 text-yellow-400 fill-yellow-400" />
-                        <span className="mr-0.5">{getConsultantRating().rating > 0 ? getConsultantRating().rating.toFixed(1) : 0}</span>
+                        <span className="mr-0.5">
+                          {getConsultantRating().rating > 0 ? getConsultantRating().rating.toFixed(1) : 0}
+                        </span>
                         <span>({getConsultantRating().count})</span>
                       </div>
-                      
+
                       {getConsultantAddress(consultant) && (
                         <div className="px-2 py-0.5 bg-primary/10 text-primary text-xs font-medium rounded-full flex items-center">
                           <span className="inline-block mr-1 w-1.5 h-1.5 bg-primary rounded-full"></span>
@@ -697,62 +725,65 @@ console.log(consultantServices[0].images[0].fileUrl,"SDAf");
                         consultantCertificates.map((cert) => (
                           <Tooltip key={cert.id}>
                             <TooltipTrigger asChild>
-                              <div 
+                              <div
                                 className="hover:bg-muted/5 transition-colors cursor-pointer p-2.5 flex items-center group"
                                 onClick={() => {
                                   // Create download link for certificate
-                                  const link = document.createElement('a');
-                                  link.href = cert.imageUrl;
-                                  link.download = cert.name || 'certificate.jpg';
-                                  link.target = '_blank';
-                                  document.body.appendChild(link);
-                                  link.click();
-                                  document.body.removeChild(link);
+                                  const link = document.createElement('a')
+                                  link.href = cert.imageUrl
+                                  link.download = cert.name || 'certificate.jpg'
+                                  link.target = '_blank'
+                                  document.body.appendChild(link)
+                                  link.click()
+                                  document.body.removeChild(link)
                                 }}
                               >
                                 <div className="w-6 h-6 rounded-full bg-muted/30 flex items-center justify-center mr-2.5 text-primary/70 text-xs font-medium group-hover:bg-primary/20 transition-colors">
                                   {cert.year.toString().substring(2)}
                                 </div>
                                 <div className="flex-1">
-                                  <span
-                                    className="text-sm font-medium text-foreground group-hover:text-primary transition-colors block leading-tight"
-                                  >
+                                  <span className="text-sm font-medium text-foreground group-hover:text-primary transition-colors block leading-tight">
                                     {cert.name}
                                   </span>
-                                  <p className="text-xs text-muted-foreground mt-0.5 group-hover:text-muted-foreground/80 transition-colors">{cert.year}</p>
+                                  <p className="text-xs text-muted-foreground mt-0.5 group-hover:text-muted-foreground/80 transition-colors">
+                                    {cert.year}
+                                  </p>
                                 </div>
-                                
+
                                 <div className="opacity-0 group-hover:opacity-100 transition-opacity">
                                   <FileIcon className="h-3.5 w-3.5 text-primary" />
                                 </div>
                               </div>
                             </TooltipTrigger>
-                            <TooltipContent side="right" className="max-w-xs bg-white/95 backdrop-blur-sm shadow-lg border-border">
+                            <TooltipContent
+                              side="right"
+                              className="max-w-xs bg-white/95 backdrop-blur-sm shadow-lg border-border"
+                            >
                               <div className="space-y-2 p-1">
                                 <div className="font-medium text-foreground">{cert.name}</div>
                                 <div className="text-xs text-muted-foreground">
                                   {t('beautyConsultation.yearObtained', 'Năm nhận')}: {cert.year}
                                 </div>
                                 <div className="h-24 w-full overflow-hidden rounded-md mt-2 bg-muted/10 flex items-center justify-center border border-border/40">
-                                  {cert.imageUrl.toLowerCase().endsWith('.jpg') || 
-                                   cert.imageUrl.toLowerCase().endsWith('.jpeg') || 
-                                   cert.imageUrl.toLowerCase().endsWith('.png') || 
-                                   cert.imageUrl.toLowerCase().endsWith('.gif') || 
-                                   cert.imageUrl.toLowerCase().endsWith('.webp') ? (
+                                  {cert.imageUrl.toLowerCase().endsWith('.jpg') ||
+                                  cert.imageUrl.toLowerCase().endsWith('.jpeg') ||
+                                  cert.imageUrl.toLowerCase().endsWith('.png') ||
+                                  cert.imageUrl.toLowerCase().endsWith('.gif') ||
+                                  cert.imageUrl.toLowerCase().endsWith('.webp') ? (
                                     <img src={cert.imageUrl} alt={cert.name} className="w-full h-full object-cover" />
                                   ) : cert.imageUrl.toLowerCase().endsWith('.pdf') ? (
                                     <div className="flex flex-col items-center">
                                       <FileTextIcon className="h-8 w-8 text-rose-500" />
                                       <span className="text-xs mt-1 font-medium">PDF</span>
                                     </div>
-                                  ) : cert.imageUrl.toLowerCase().endsWith('.doc') || 
-                                     cert.imageUrl.toLowerCase().endsWith('.docx') ? (
+                                  ) : cert.imageUrl.toLowerCase().endsWith('.doc') ||
+                                    cert.imageUrl.toLowerCase().endsWith('.docx') ? (
                                     <div className="flex flex-col items-center">
                                       <FileTextIcon className="h-8 w-8 text-blue-500" />
                                       <span className="text-xs mt-1 font-medium">DOC</span>
                                     </div>
-                                  ) : cert.imageUrl.toLowerCase().endsWith('.ppt') || 
-                                     cert.imageUrl.toLowerCase().endsWith('.pptx') ? (
+                                  ) : cert.imageUrl.toLowerCase().endsWith('.ppt') ||
+                                    cert.imageUrl.toLowerCase().endsWith('.pptx') ? (
                                     <div className="flex flex-col items-center">
                                       <FileTextIcon className="h-8 w-8 text-orange-500" />
                                       <span className="text-xs mt-1 font-medium">PPT</span>
@@ -760,7 +791,9 @@ console.log(consultantServices[0].images[0].fileUrl,"SDAf");
                                   ) : (
                                     <div className="flex flex-col items-center">
                                       <FileIcon className="h-8 w-8 text-primary" />
-                                      <span className="text-xs mt-1 font-medium">{t('beautyConsultation.document', 'Tài liệu')}</span>
+                                      <span className="text-xs mt-1 font-medium">
+                                        {t('beautyConsultation.document', 'Tài liệu')}
+                                      </span>
                                     </div>
                                   )}
                                 </div>
@@ -779,7 +812,7 @@ console.log(consultantServices[0].images[0].fileUrl,"SDAf");
                     </TooltipProvider>
                   </div>
                 </div>
-                
+
                 {/* Description Section - Card with Quote Style */}
                 <div className="bg-white rounded-md border-muted/70 overflow-hidden">
                   <div className="p-3 relative">
@@ -790,18 +823,20 @@ console.log(consultantServices[0].images[0].fileUrl,"SDAf");
                     {/* Description with styled first letter */}
                     <div className="text-sm leading-relaxed text-muted-foreground relative z-10">
                       {consultant.description && consultant.description.includes('<') ? (
-                        <div className={cn("quill-content-small", isDescriptionExpanded && "expanded")}>
-                          <div className={isDescriptionExpanded ? "" : "max-h-[150px] overflow-hidden"}>
-                            <ReactQuill
-                              value={consultant.description}
-                              readOnly={true}
-                              theme="bubble"
-                            />
+                        <div className={cn('quill-content-small', isDescriptionExpanded && 'expanded')}>
+                          <div className={isDescriptionExpanded ? '' : 'max-h-[150px] overflow-hidden'}>
+                            <ReactQuill value={consultant.description} readOnly={true} theme="bubble" />
                           </div>
                         </div>
                       ) : (
                         <div className="relative">
-                          <p className={isDescriptionExpanded ? "whitespace-pre-line" : "max-h-[150px] overflow-hidden whitespace-pre-line"}>
+                          <p
+                            className={
+                              isDescriptionExpanded
+                                ? 'whitespace-pre-line'
+                                : 'max-h-[150px] overflow-hidden whitespace-pre-line'
+                            }
+                          >
                             <span className="text-primary text-lg font-medium">
                               {getConsultantDescription(consultant).charAt(0)}
                             </span>
@@ -813,18 +848,20 @@ console.log(consultantServices[0].images[0].fileUrl,"SDAf");
                   </div>
 
                   {/* See more/less button outside the container */}
-                  {(getConsultantDescription(consultant).length > 200 || 
-                    (consultant.description && consultant.description.includes('<') && consultant.description.length > 200)) && (
+                  {(getConsultantDescription(consultant).length > 200 ||
+                    (consultant.description &&
+                      consultant.description.includes('<') &&
+                      consultant.description.length > 200)) && (
                     <div className="flex justify-center border-t border-muted/20 bg-muted/5 py-2">
-                      <Button 
-                        variant="ghost" 
-                        size="sm" 
+                      <Button
+                        variant="ghost"
+                        size="sm"
                         onClick={toggleDescriptionExpand}
                         className="text-xs h-7 px-4 hover:bg-primary/10"
                       >
-                        {isDescriptionExpanded ? 
-                          t('beautyConsultation.showLess', 'Thu gọn') : 
-                          t('beautyConsultation.showMore', 'Xem thêm')}
+                        {isDescriptionExpanded
+                          ? t('beautyConsultation.showLess', 'Thu gọn')
+                          : t('beautyConsultation.showMore', 'Xem thêm')}
                       </Button>
                     </div>
                   )}
@@ -890,7 +927,11 @@ console.log(consultantServices[0].images[0].fileUrl,"SDAf");
                             <div>
                               <div className="mb-1">
                                 <Badge
-                                  variant={consultantService.systemService.type === ServiceTypeEnum.PREMIUM ? 'destructive' : 'secondary'}
+                                  variant={
+                                    consultantService.systemService.type === ServiceTypeEnum.PREMIUM
+                                      ? 'destructive'
+                                      : 'secondary'
+                                  }
                                   className="text-[10px]"
                                 >
                                   {consultantService.systemService.type === ServiceTypeEnum.PREMIUM
@@ -898,7 +939,9 @@ console.log(consultantServices[0].images[0].fileUrl,"SDAf");
                                     : t('beautyConsultation.standardShort', 'Standard')}
                                 </Badge>
                               </div>
-                              <h3 className="text-sm font-medium line-clamp-1">{consultantService.systemService.name}</h3>
+                              <h3 className="text-sm font-medium line-clamp-1">
+                                {consultantService.systemService.name}
+                              </h3>
                             </div>
                             <div className="flex justify-between items-center mt-1">
                               <div className="font-bold text-sm">{formatPrice(consultantService.price)}</div>
@@ -934,54 +977,57 @@ console.log(consultantServices[0].images[0].fileUrl,"SDAf");
                             {selectedService.images && selectedService.images.length > 0 ? (
                               selectedService.images.map((image, index) => {
                                 // Kiểm tra nếu là file video
-                                const fileUrl = image.fileUrl || '';
-                                const isVideo = fileUrl.toLowerCase().endsWith('.mp4') || 
-                                              fileUrl.toLowerCase().endsWith('.mov') ||
-                                              fileUrl.toLowerCase().includes('youtube') ||
-                                              fileUrl.toLowerCase().includes('vimeo');
-console.log(fileUrl,isVideo);
+                                const fileUrl = image.fileUrl || ''
+                                const isVideo =
+                                  fileUrl.toLowerCase().endsWith('.mp4') ||
+                                  fileUrl.toLowerCase().endsWith('.mov') ||
+                                  fileUrl.toLowerCase().includes('youtube') ||
+                                  fileUrl.toLowerCase().includes('vimeo')
+                                console.log(fileUrl, isVideo)
 
                                 return (
-                                <CarouselItem key={index}>
-                                  <div className="relative aspect-video overflow-hidden">
-                                    {isVideo ? (
-                                      <VideoThumbnail 
-                                        src={fileUrl}
-                                        alt={`${selectedService.systemService.name} - ${index + 1}`}
-                                        className="w-full h-full"
-                                        onClick={() => {
-                                          setCurrentVideoUrl(fileUrl);
-                                          setVideoOpen(true);
-                                        }}
-                                      />
-                                    ) : (
-                                      <img
-                                        src={image.fileUrl || DEFAULT_IMAGE}
-                                        alt={`${selectedService.systemService.name} - ${index + 1}`}
-                                        className="w-full h-full object-cover"
-                                        onError={(e) => {
-                                          const target = e.target as HTMLImageElement;
-                                          target.src = DEFAULT_IMAGE;
-                                        }}
-                                      />
-                                    )}
-                                    {(index === 0 && selectedService.systemService.type === ServiceTypeEnum.PREMIUM) || isVideo ? null : (
-                                      <div
-                                        className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 hover:opacity-100 transition-opacity cursor-pointer group"
-                                        onClick={() => setEnlargedImage(image.fileUrl || DEFAULT_IMAGE)}
-                                      >
-                                        <div className="relative flex items-center justify-center group">
-                                          {/* Hiệu ứng xem ảnh phóng to */}
-                                          <div className="absolute w-16 h-16 rounded-full bg-black/40 backdrop-blur-sm transform group-hover:scale-110 transition-transform duration-300"></div>
-                                          <div className="absolute w-12 h-12 rounded-full bg-white/20 flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300">
-                                            <ImageIcon className="h-6 w-6 text-white" />
+                                  <CarouselItem key={index}>
+                                    <div className="relative aspect-video overflow-hidden">
+                                      {isVideo ? (
+                                        <VideoThumbnail
+                                          src={fileUrl}
+                                          alt={`${selectedService.systemService.name} - ${index + 1}`}
+                                          className="w-full h-full"
+                                          onClick={() => {
+                                            setCurrentVideoUrl(fileUrl)
+                                            setVideoOpen(true)
+                                          }}
+                                        />
+                                      ) : (
+                                        <img
+                                          src={image.fileUrl || DEFAULT_IMAGE}
+                                          alt={`${selectedService.systemService.name} - ${index + 1}`}
+                                          className="w-full h-full object-cover"
+                                          onError={(e) => {
+                                            const target = e.target as HTMLImageElement
+                                            target.src = DEFAULT_IMAGE
+                                          }}
+                                        />
+                                      )}
+                                      {(index === 0 &&
+                                        selectedService.systemService.type === ServiceTypeEnum.PREMIUM) ||
+                                      isVideo ? null : (
+                                        <div
+                                          className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 hover:opacity-100 transition-opacity cursor-pointer group"
+                                          onClick={() => setEnlargedImage(image.fileUrl || DEFAULT_IMAGE)}
+                                        >
+                                          <div className="relative flex items-center justify-center group">
+                                            {/* Hiệu ứng xem ảnh phóng to */}
+                                            <div className="absolute w-16 h-16 rounded-full bg-black/40 backdrop-blur-sm transform group-hover:scale-110 transition-transform duration-300"></div>
+                                            <div className="absolute w-12 h-12 rounded-full bg-white/20 flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300">
+                                              <ImageIcon className="h-6 w-6 text-white" />
+                                            </div>
                                           </div>
                                         </div>
-                                      </div>
-                                    )}
-                                  </div>
-                                </CarouselItem>
-                              );
+                                      )}
+                                    </div>
+                                  </CarouselItem>
+                                )
                               })
                             ) : (
                               <CarouselItem>
@@ -991,7 +1037,7 @@ console.log(fileUrl,isVideo);
                               </CarouselItem>
                             )}
                           </CarouselContent>
-                          {(selectedService.images && selectedService.images.length > 1) && (
+                          {selectedService.images && selectedService.images.length > 1 && (
                             <>
                               <CarouselPrevious className="left-2" />
                               <CarouselNext className="right-2" />
@@ -1004,7 +1050,11 @@ console.log(fileUrl,isVideo);
                       <div className="p-5 border-t border-border">
                         <div className="flex items-center gap-2 mb-3">
                           <Badge
-                            variant={selectedService.systemService.type === ServiceTypeEnum.PREMIUM ? 'destructive' : 'secondary'}
+                            variant={
+                              selectedService.systemService.type === ServiceTypeEnum.PREMIUM
+                                ? 'destructive'
+                                : 'secondary'
+                            }
                             className="uppercase"
                           >
                             {selectedService.systemService.type === ServiceTypeEnum.PREMIUM ? (
@@ -1024,40 +1074,49 @@ console.log(fileUrl,isVideo);
 
                         <h1 className="text-xl font-bold mb-2">{selectedService.systemService.name}</h1>
                         <div className="relative mb-1">
-                          <div className={cn("prose prose-sm max-w-none overflow-hidden", !isShortDescriptionExpanded && "max-h-[80px]")}>
+                          <div
+                            className={cn(
+                              'prose prose-sm max-w-none overflow-hidden',
+                              !isShortDescriptionExpanded && 'max-h-[80px]',
+                            )}
+                          >
                             {selectedService.systemService.description?.includes('<') ? (
                               <div className="pt-2">
-                                <ReactQuill 
+                                <ReactQuill
                                   value={selectedService.systemService.description}
                                   readOnly={true}
                                   theme="bubble"
                                 />
                               </div>
                             ) : (
-                              <p className="text-sm text-muted-foreground pt-2">{selectedService.systemService.description}</p>
+                              <p className="text-sm text-muted-foreground pt-2">
+                                {selectedService.systemService.description}
+                              </p>
                             )}
-                            {!isShortDescriptionExpanded && selectedService.systemService.description && 
+                            {!isShortDescriptionExpanded &&
+                              selectedService.systemService.description &&
                               typeof selectedService.systemService.description === 'string' &&
                               selectedService.systemService.description.length > 80 && (
-                              <div className="absolute bottom-0 left-0 right-0 h-10 bg-gradient-to-t from-white to-transparent pointer-events-none"></div>
-                            )}
+                                <div className="absolute bottom-0 left-0 right-0 h-10 bg-gradient-to-t from-white to-transparent pointer-events-none"></div>
+                              )}
                           </div>
                         </div>
-                        
-                        {(selectedService.systemService.description && selectedService.systemService.description.length > 150) && (
-                          <div className="flex justify-center">
-                            <Button 
-                              variant="outline" 
-                              size="sm" 
-                              onClick={() => setIsShortDescriptionExpanded(prev => !prev)}
-                              className="text-xs h-6 px-3 mb-3 hover:bg-primary/5 border-primary/30"
-                            >
-                              {isShortDescriptionExpanded ? 
-                                t('beautyConsultation.showLess', 'Thu gọn') : 
-                                t('beautyConsultation.showMore', 'Xem thêm')}
-                            </Button>
-                          </div>
-                        )}
+
+                        {selectedService.systemService.description &&
+                          selectedService.systemService.description.length > 150 && (
+                            <div className="flex justify-center">
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => setIsShortDescriptionExpanded((prev) => !prev)}
+                                className="text-xs h-6 px-3 mb-3 hover:bg-primary/5 border-primary/30"
+                              >
+                                {isShortDescriptionExpanded
+                                  ? t('beautyConsultation.showLess', 'Thu gọn')
+                                  : t('beautyConsultation.showMore', 'Xem thêm')}
+                              </Button>
+                            </div>
+                          )}
 
                         <div className="flex justify-between items-center my-4">
                           <div className="text-xl font-bold text-primary">{formatPrice(selectedService.price)}</div>
@@ -1086,14 +1145,15 @@ console.log(fileUrl,isVideo);
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <div className={cn("prose max-w-none", !isServiceDescriptionExpanded && "max-h-[200px] overflow-hidden relative")}>
+                      <div
+                        className={cn(
+                          'prose max-w-none',
+                          !isServiceDescriptionExpanded && 'max-h-[200px] overflow-hidden relative',
+                        )}
+                      >
                         {selectedService.description?.includes('<') ? (
                           <div className="pt-1">
-                            <ReactQuill
-                              value={selectedService.description}
-                              readOnly={true}
-                              theme="bubble"
-                            />
+                            <ReactQuill value={selectedService.description} readOnly={true} theme="bubble" />
                           </div>
                         ) : selectedService.description ? (
                           <p className="text-muted-foreground text-sm whitespace-pre-line pt-1">
@@ -1104,25 +1164,26 @@ console.log(fileUrl,isVideo);
                             {t('beautyConsultation.noDescription', 'Không có mô tả.')}
                           </p>
                         )}
-                        {!isServiceDescriptionExpanded && selectedService.description && 
-                          typeof selectedService.description === 'string' && 
+                        {!isServiceDescriptionExpanded &&
+                          selectedService.description &&
+                          typeof selectedService.description === 'string' &&
                           selectedService.description.length > 100 && (
-                          <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-background to-transparent pointer-events-none"></div>
-                        )}
+                            <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-background to-transparent pointer-events-none"></div>
+                          )}
                       </div>
-                      
+
                       {/* Toggle expand button */}
-                      {(selectedService.description && selectedService.description.length > 200) && (
+                      {selectedService.description && selectedService.description.length > 200 && (
                         <div className="flex justify-center mt-3">
-                          <Button 
-                            variant="outline" 
-                            size="sm" 
-                            onClick={() => setIsServiceDescriptionExpanded(prev => !prev)}
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => setIsServiceDescriptionExpanded((prev) => !prev)}
                             className="text-xs h-7 px-4 hover:bg-primary/10 border-primary/30"
                           >
-                            {isServiceDescriptionExpanded ? 
-                              t('beautyConsultation.showLess', 'Thu gọn') : 
-                              t('beautyConsultation.showMore', 'Xem thêm')}
+                            {isServiceDescriptionExpanded
+                              ? t('beautyConsultation.showLess', 'Thu gọn')
+                              : t('beautyConsultation.showMore', 'Xem thêm')}
                           </Button>
                         </div>
                       )}
@@ -1137,7 +1198,8 @@ console.log(fileUrl,isVideo);
               <div className="bg-white border border-border rounded-lg shadow-sm overflow-hidden">
                 <div className="p-6">
                   <h2 className="text-lg font-medium mb-4">
-                    {t('beautyConsultation.consultantReviews', 'Đánh giá về chuyên gia')} {getConsultantName(consultant)}
+                    {t('beautyConsultation.consultantReviews', 'Đánh giá về chuyên gia')}{' '}
+                    {getConsultantName(consultant)}
                   </h2>
 
                   {isFeedbackLoading ? (
@@ -1148,17 +1210,12 @@ console.log(fileUrl,isVideo);
                     <div className="flex flex-col lg:flex-row gap-6">
                       {/* Review Overview Component */}
                       <div className="lg:w-1/3 bg-muted/5 rounded-lg p-4">
-                        <ReviewOverall 
-                          reviewGeneral={convertToFeedbackGeneral()} 
-                        />
+                        <ReviewOverall reviewGeneral={convertToFeedbackGeneral()} />
                       </div>
 
                       {/* Review Filter and List */}
                       <div className="lg:w-2/3">
-                        <ReviewFilter 
-                          productId=""
-                          consultantId={consultant?.id || ''}
-                        />
+                        <ReviewFilter productId="" consultantId={consultant?.id || ''} />
                       </div>
                     </div>
                   )}
@@ -1170,12 +1227,16 @@ console.log(fileUrl,isVideo);
           {/* Related Services Section - Moved outside the tabs as separate section */}
           <div className="pt-6 border-t border-border">
             <h2 className="text-lg font-medium mb-4">{t('beautyConsultation.relatedServices', 'Dịch vụ tương tự')}</h2>
-            
+
             {/* Kiểm tra nếu không có dịch vụ tương tự */}
-            {consultantServices.filter(s => s.id !== selectedService.id).length === 0 && !relatedConsultantsData?.length ? (
-              <Empty 
+            {consultantServices.filter((s) => s.id !== selectedService.id).length === 0 &&
+            !relatedConsultantsData?.length ? (
+              <Empty
                 title={t('beautyConsultation.noRelatedServices', 'Không có dịch vụ tương tự')}
-                description={t('beautyConsultation.tryOtherServices', 'Bạn có thể tìm kiếm các dịch vụ khác từ chuyên gia')}
+                description={t(
+                  'beautyConsultation.tryOtherServices',
+                  'Bạn có thể tìm kiếm các dịch vụ khác từ chuyên gia',
+                )}
                 icon=""
               />
             ) : (
@@ -1193,22 +1254,23 @@ console.log(fileUrl,isVideo);
                       <div className="relative h-40 overflow-hidden">
                         <div className="relative aspect-video overflow-hidden">
                           {relatedService.systemService.type === ServiceTypeEnum.PREMIUM ? (
-                            <VideoThumbnail 
+                            <VideoThumbnail
                               src={getVideoUrl()}
                               alt={relatedService.systemService.name}
                               className="w-full h-full"
                             />
                           ) : relatedService.images && relatedService.images.length > 0 ? (
                             (() => {
-                              const image = relatedService.images[0];
-                              const fileUrl = image.fileUrl || '';
-                              const isVideo = fileUrl.toLowerCase().endsWith('.mp4') || 
-                                          fileUrl.toLowerCase().endsWith('.mov') ||
-                                          fileUrl.toLowerCase().includes('youtube') ||
-                                          fileUrl.toLowerCase().includes('vimeo');
-                              
+                              const image = relatedService.images[0]
+                              const fileUrl = image.fileUrl || ''
+                              const isVideo =
+                                fileUrl.toLowerCase().endsWith('.mp4') ||
+                                fileUrl.toLowerCase().endsWith('.mov') ||
+                                fileUrl.toLowerCase().includes('youtube') ||
+                                fileUrl.toLowerCase().includes('vimeo')
+
                               return isVideo ? (
-                                <VideoThumbnail 
+                                <VideoThumbnail
                                   src={fileUrl}
                                   alt={relatedService.systemService.name}
                                   className="w-full h-full"
@@ -1219,11 +1281,11 @@ console.log(fileUrl,isVideo);
                                   alt={relatedService.systemService.name}
                                   className="w-full h-full object-cover transition-transform group-hover:scale-105"
                                   onError={(e) => {
-                                    const target = e.target as HTMLImageElement;
-                                    target.src = DEFAULT_IMAGE;
+                                    const target = e.target as HTMLImageElement
+                                    target.src = DEFAULT_IMAGE
                                   }}
                                 />
-                              );
+                              )
                             })()
                           ) : (
                             <div className="w-full h-full bg-muted flex items-center justify-center">
@@ -1232,7 +1294,9 @@ console.log(fileUrl,isVideo);
                           )}
                         </div>
                         <Badge
-                          variant={relatedService.systemService.type === ServiceTypeEnum.PREMIUM ? 'destructive' : 'secondary'}
+                          variant={
+                            relatedService.systemService.type === ServiceTypeEnum.PREMIUM ? 'destructive' : 'secondary'
+                          }
                           className="absolute bottom-2 right-2"
                         >
                           {relatedService.systemService.type === ServiceTypeEnum.PREMIUM
@@ -1281,32 +1345,37 @@ console.log(fileUrl,isVideo);
                   ))}
 
                 {/* Hiển thị dịch vụ từ các consultant khác */}
-                {relatedConsultantsData?.slice(0, 2).flatMap((item) => 
+                {relatedConsultantsData?.slice(0, 2).flatMap((item) =>
                   item.services.slice(0, 1).map((relatedService) => (
                     <Card
                       key={`${item.consultant.id}-${relatedService.id}`}
                       className="overflow-hidden flex flex-col transition-all hover:shadow-md group cursor-pointer"
-                      onClick={() => navigate(`${configs.routes.beautyConsultation}/${item.consultant.id}?service=${relatedService.id}`)}
+                      onClick={() =>
+                        navigate(
+                          `${configs.routes.beautyConsultation}/${item.consultant.id}?service=${relatedService.id}`,
+                        )
+                      }
                     >
                       <div className="relative h-40 overflow-hidden">
                         <div className="relative aspect-video overflow-hidden">
                           {relatedService.systemService.type === ServiceTypeEnum.PREMIUM ? (
-                            <VideoThumbnail 
+                            <VideoThumbnail
                               src={getVideoUrl()}
                               alt={relatedService.systemService.name}
                               className="w-full h-full"
                             />
                           ) : relatedService.images && relatedService.images.length > 0 ? (
                             (() => {
-                              const image = relatedService.images[0];
-                              const fileUrl = image.fileUrl || '';
-                              const isVideo = fileUrl.toLowerCase().endsWith('.mp4') || 
-                                          fileUrl.toLowerCase().endsWith('.mov') ||
-                                          fileUrl.toLowerCase().includes('youtube') ||
-                                          fileUrl.toLowerCase().includes('vimeo');
-                              
+                              const image = relatedService.images[0]
+                              const fileUrl = image.fileUrl || ''
+                              const isVideo =
+                                fileUrl.toLowerCase().endsWith('.mp4') ||
+                                fileUrl.toLowerCase().endsWith('.mov') ||
+                                fileUrl.toLowerCase().includes('youtube') ||
+                                fileUrl.toLowerCase().includes('vimeo')
+
                               return isVideo ? (
-                                <VideoThumbnail 
+                                <VideoThumbnail
                                   src={fileUrl}
                                   alt={relatedService.systemService.name}
                                   className="w-full h-full"
@@ -1317,11 +1386,11 @@ console.log(fileUrl,isVideo);
                                   alt={relatedService.systemService.name}
                                   className="w-full h-full object-cover transition-transform group-hover:scale-105"
                                   onError={(e) => {
-                                    const target = e.target as HTMLImageElement;
-                                    target.src = DEFAULT_IMAGE;
+                                    const target = e.target as HTMLImageElement
+                                    target.src = DEFAULT_IMAGE
                                   }}
                                 />
-                              );
+                              )
                             })()
                           ) : (
                             <div className="w-full h-full bg-muted flex items-center justify-center">
@@ -1330,7 +1399,9 @@ console.log(fileUrl,isVideo);
                           )}
                         </div>
                         <Badge
-                          variant={relatedService.systemService.type === ServiceTypeEnum.PREMIUM ? 'destructive' : 'secondary'}
+                          variant={
+                            relatedService.systemService.type === ServiceTypeEnum.PREMIUM ? 'destructive' : 'secondary'
+                          }
                           className="absolute bottom-2 right-2"
                         >
                           {relatedService.systemService.type === ServiceTypeEnum.PREMIUM
@@ -1368,15 +1439,13 @@ console.log(fileUrl,isVideo);
                                 {item.consultant.yoe || 0} {t('beautyConsultation.yearsExp', 'Năm KN')}
                               </span>
                               <span className="mx-1">•</span>
-                              <span>
-                                0 {t('beautyConsultation.reviewsShort', 'Đánh giá')}
-                              </span>
+                              <span>0 {t('beautyConsultation.reviewsShort', 'Đánh giá')}</span>
                             </div>
                           </div>
                         </div>
                       </CardContent>
                     </Card>
-                  ))
+                  )),
                 )}
               </div>
             )}

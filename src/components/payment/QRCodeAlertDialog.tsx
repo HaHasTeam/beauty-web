@@ -3,12 +3,7 @@ import { XIcon } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import {
-  AlertDialog,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@/components/ui/alert-dialog'
+import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import { payTransactionApi } from '@/network/apis/transaction'
 import { PAY_TYPE } from '@/network/apis/transaction/type'
@@ -237,7 +232,6 @@ export function QRCodeAlertDialog({
             </div>
           </div>
         )}
-
       </AlertDialogContent>
     </AlertDialog>
   )
