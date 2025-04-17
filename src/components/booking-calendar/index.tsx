@@ -136,7 +136,13 @@ export function BookingCalendar({
   }
 
   // Tạo datetime string từ ngày và giờ đã chọn (định dạng 24h)
-  const handleDateTimeSelection = (selectedDate: CalendarDate, time: string, slotId?: string, slotStartTime?: string, slotEndTime?: string) => {
+  const handleDateTimeSelection = (
+    selectedDate: CalendarDate,
+    time: string,
+    slotId?: string,
+    slotStartTime?: string,
+    slotEndTime?: string,
+  ) => {
     // Tách thời gian định dạng 24h (ví dụ: "14:30")
     const [hoursStr, minutesStr] = time.split(':')
     if (!hoursStr || !minutesStr) return

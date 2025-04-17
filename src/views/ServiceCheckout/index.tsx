@@ -248,7 +248,6 @@ const ServiceCheckout = () => {
 
   // Handle form submission
   async function onSubmit(values: BookingServiceFormValues) {
-
     try {
       // Kiểm tra nếu dịch vụ là PREMIUM thì cần phải có bookingDateTime
       if (serviceData?.data.systemService?.type === 'PREMIUM' && !values.bookingDateTime) {
@@ -285,13 +284,13 @@ const ServiceCheckout = () => {
 
       // Extract date part from bookingDateTime
       const datePart = values.bookingDateTime.split('T')[0]
-      console.log(values.bookingDateTime);
+      console.log(values.bookingDateTime)
       // Create complete startTime and endTime with selected date and slot times
       let startTimeValue = values.bookingDateTime
       let endTimeValue = values.bookingDateTime
       console.log('selectedSlotStartTime', selectedSlotStartTime)
       console.log('selectedSlotEndTime', selectedSlotEndTime)
-      
+
       // If we have selectedSlotStartTime and selectedSlotEndTime, use them
       if (selectedSlotStartTime && selectedSlotEndTime) {
         startTimeValue = `${datePart}T${selectedSlotStartTime}:00.000Z`
@@ -301,7 +300,7 @@ const ServiceCheckout = () => {
       // Tạo dữ liệu cho booking API
       const bookingParams = {
         totalPrice: totalPayment,
-        startTime: startTimeValue ,
+        startTime: startTimeValue,
         endTime: endTimeValue,
         type: 'SERVICE',
         slot: currentSlotId || null,
@@ -333,12 +332,12 @@ const ServiceCheckout = () => {
     if (slotId) {
       setSelectedSlotId(slotId)
       form.setValue('slotId', slotId)
-      
+
       // Store slot start and end times
       if (slotStartTime) {
         setSelectedSlotStartTime(slotStartTime)
       }
-      
+
       if (slotEndTime) {
         setSelectedSlotEndTime(slotEndTime)
       }
