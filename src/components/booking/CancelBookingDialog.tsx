@@ -1,5 +1,4 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Loader2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -15,7 +14,9 @@ import {
 import { Textarea } from '@/components/ui/textarea'
 import useHandleServerError from '@/hooks/useHandleServerError'
 import { useToast } from '@/hooks/useToast'
-import { cancelBookingApi, getBookingByIdApi, getBookingStatusTrackingApi } from '@/network/apis/booking/details'
+import { cancelBookingApi, getBookingByIdApi } from '@/network/apis/booking/details'
+
+import LoadingIcon from '../loading-icon'
 
 interface CancelBookingDialogProps {
   open: boolean
@@ -40,10 +41,7 @@ const CancelBookingDialog = ({ open, setOpen, onOpenChange, setIsTrigger, bookin
       })
       setOpen(false)
       setIsTrigger(true)
-      await Promise.all([
-        queryClient.invalidateQueries({ queryKey: [getBookingByIdApi.queryKey] }),
-        queryClient.invalidateQueries({ queryKey: [getBookingStatusTrackingApi.queryKey] }),
-      ])
+      await Promise.all([queryClient.invalidateQueries({ queryKey: [getBookingByIdApi.queryKey] })])
     },
     onError: (error) => {
       handleServerError({
@@ -93,8 +91,7 @@ const CancelBookingDialog = ({ open, setOpen, onOpenChange, setIsTrigger, bookin
           <Button variant="destructive" onClick={handleCancelBooking} disabled={isPending || reason.trim().length < 3}>
             {isPending ? (
               <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                {t('common.loading')}
+                <LoadingIcon color="primaryBackground" />
               </>
             ) : (
               t('booking.confirmCancel')

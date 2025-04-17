@@ -240,6 +240,11 @@
       "description": "The blog you're looking for either does not exist, has been removed, or is currently unavailable.",
       "button": "Browse Other Blog"
     },
+    "bookingDetail": {
+      "title": "No Booking Found",
+      "description": "The booking you're looking for either does not exist, has been removed, or is currently unavailable.",
+      "button": "Back to list"
+    },
     "brandHasGroupProduct": {
       "title": "There no brands selling group-buying products",
       "description": "Please come back later to check out the latest group-buying deals from your favorite brands."
@@ -562,6 +567,7 @@
   "date": {
     "toLocaleDateString": "{{val, MM/DD/YYYY}}",
     "toLocaleDateTimeString": "{{val, MM/DD/YYYY HH:mm:ss}}",
+    "toLocaleDateHourMinutesString": "{{val, MM/DD/YYYY HH:mm}}",
     "expiredDate": "Expired Date",
     "exp": "Exp"
   },
@@ -1878,6 +1884,7 @@
     "createWallet": "Create Wallet"
   },
   "booking": {
+    "customerInfo": "Customer Information",
     "all": "All Bookings",
     "pending": "Pending",
     "confirmed": "Confirmed",

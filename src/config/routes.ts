@@ -58,7 +58,7 @@ const routes = {
   beautyConsultationDetail: '/beauty-consultation/:serviceId',
   serviceCheckout: '/beauty-consultation/:serviceId/checkout',
   notFound: '*',
-  bookingDetail: '/booking/:bookingId',
+  bookingDetail: '/profile/bookings/:bookingId',
 }
 
 export default routes
