@@ -54,6 +54,9 @@ type TFieldFile =
 const UploadFiles = ({ dropZoneConfigOptions, field, triggerRef }: UploadFilesProps) => {
   const [files, setFiles] = useState<CustomFile[]>([])
   const handleServerError = useHandleServerError()
+console.log(field.value,"dsfsd");
+console.log(files,"files");
+
 
   const dropZoneConfig = {
     accept: {
@@ -119,6 +122,7 @@ const UploadFiles = ({ dropZoneConfigOptions, field, triggerRef }: UploadFilesPr
     // eslint-disable-next-line
   }, [fieldValue, fieldType, files])
 
+
   const onFileDrop = async (newFiles: CustomFile[] | null) => {
     try {
       if (fieldType === 'single') {
@@ -164,6 +168,7 @@ const UploadFiles = ({ dropZoneConfigOptions, field, triggerRef }: UploadFilesPr
       })
     }
   }
+
 
   const handleUploadFiles = useCallback(async () => {
     try {

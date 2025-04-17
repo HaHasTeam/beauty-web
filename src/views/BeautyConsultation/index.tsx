@@ -1,15 +1,37 @@
-import { FormInputIcon, VideoIcon } from 'lucide-react'
+import { FormInputIcon, Search, VideoIcon } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useSearchParams } from 'react-router-dom'
 
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import ConsultantList from '@/views/BeautyConsultation/components/ConsultantList'
 
 export default function BeautyConsultation() {
   const { t } = useTranslation()
   const [activeTab, setActiveTab] = useState<'all' | 'standard' | 'premium'>('all')
+  const [searchParams, setSearchParams] = useSearchParams()
+  const [searchInput, setSearchInput] = useState(searchParams.get('search') || '')
+  
+  // Handle search submission
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    
+    // Update search params in URL
+    const newParams = new URLSearchParams(searchParams)
+    if (searchInput) {
+      newParams.set('search', searchInput)
+    } else {
+      newParams.delete('search')
+    }
+    
+    // Reset to page 1 when searching
+    newParams.set('page', '1')
+    
+    setSearchParams(newParams)
+  }
 
   return (
     <div className="w-full min-h-screen bg-background">
@@ -120,7 +142,7 @@ export default function BeautyConsultation() {
                 onValueChange={(value) => setActiveTab(value as 'all' | 'standard' | 'premium')}
                 className="w-full"
               >
-                <div className="flex justify-center mb-5">
+                <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-5">
                   <TabsList className="grid grid-cols-3 w-full max-w-xs">
                     <TabsTrigger value="all" className="rounded-full">
                       {t('beautyConsultation.all', 'Tất cả')}
@@ -134,16 +156,30 @@ export default function BeautyConsultation() {
                       {t('beautyConsultation.premium', 'Cao cấp')}
                     </TabsTrigger>
                   </TabsList>
+                  
+                  {/* Search Bar */}
+                  <form onSubmit={handleSearchSubmit} className="flex w-full max-w-xs">
+                    <Input
+                      type="text"
+                      placeholder={t('beautyConsultation.searchConsultants', 'Tìm kiếm chuyên gia...')}
+                      value={searchInput}
+                      onChange={(e) => setSearchInput(e.target.value)}
+                      className="flex-grow rounded-r-none focus-visible:ring-0 focus-visible:ring-offset-0 border-r-0"
+                    />
+                    <Button type="submit" className="rounded-l-none px-3">
+                      <Search className="h-4 w-4" />
+                    </Button>
+                  </form>
                 </div>
 
                 <TabsContent value="all" className="mt-0">
-                  <ConsultantList filter="all" />
+                  <ConsultantList filter="all" searchQuery={searchParams.get('search') || ''} />
                 </TabsContent>
                 <TabsContent value="standard" className="mt-0">
-                  <ConsultantList filter="standard" />
+                  <ConsultantList filter="standard" searchQuery={searchParams.get('search') || ''} />
                 </TabsContent>
                 <TabsContent value="premium" className="mt-0">
-                  <ConsultantList filter="premium" />
+                  <ConsultantList filter="premium" searchQuery={searchParams.get('search') || ''} />
                 </TabsContent>
               </Tabs>
             </section>

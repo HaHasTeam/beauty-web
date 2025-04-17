@@ -32,7 +32,7 @@ export default function ReviewOverall({ reviewGeneral }: ReviewOverallProps) {
 
       <div className="space-y-2">
         {ratings.map(({ stars, count }) => {
-          const percentage = (count / reviewGeneral.totalCount) * 100
+          const percentage = reviewGeneral.totalCount > 0 ? (count / reviewGeneral.totalCount) * 100 : 0;
           return (
             <div key={stars} className="flex items-center gap-2">
               <Ratings rating={stars} size={13} variant="yellow" />

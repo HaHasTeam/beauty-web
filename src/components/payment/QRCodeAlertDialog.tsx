@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next'
 import {
   AlertDialog,
   AlertDialogContent,
-  AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
@@ -239,20 +238,6 @@ export function QRCodeAlertDialog({
           </div>
         )}
 
-        {paymentStatus !== 'error' && paymentStatus !== 'success' && (
-          <AlertDialogFooter className="p-6 pt-0">
-            <Button
-              variant={'outline'}
-              onClick={() => {
-                onOpenChange(!open)
-                onClose?.()
-              }}
-              className="hover:bg-primary/30 text-primary border border-primary hover:text-primary"
-            >
-              {t('button.close')}
-            </Button>
-          </AlertDialogFooter>
-        )}
       </AlertDialogContent>
     </AlertDialog>
   )

@@ -1,0 +1,115 @@
+/* Custom styles for Quill editor content in consultant cards */
+.quill-content-small {
+  max-height: 180px;
+  overflow: hidden;
+  position: relative;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: hsl(var(--muted-foreground));
+}
+
+.quill-content-small::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 30px;
+  background: linear-gradient(to top, white, transparent);
+  pointer-events: none;
+}
+
+.quill-content-small .ql-editor {
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Remove margin from paragraphs to better fit the card design */
+.quill-content-small .ql-editor p {
+  margin: 0;
+}
+
+/* Style for links within the quill content */
+.quill-content-small .ql-editor a {
+  color: hsl(var(--primary));
+  text-decoration: none;
+}
+
+.quill-content-small .ql-editor a:hover {
+  text-decoration: underline;
+}
+
+/* Remove toolbar entirely */
+.quill-content-small .ql-toolbar {
+  display: none;
+}
+
+/* Hide unnecessary Quill container styles */
+.quill-content-small .ql-container {
+  border: none !important;
+}
+
+/* Full content styles for service detail page */
+.quill-content {
+  font-size: 0.875rem;
+  line-height: 1.5rem;
+  color: hsl(var(--muted-foreground));
+}
+
+.quill-content .ql-editor {
+  padding: 0;
+}
+
+.quill-content .ql-editor p {
+  margin-bottom: 0.75rem;
+}
+
+.quill-content .ql-editor a {
+  color: hsl(var(--primary));
+  text-decoration: none;
+}
+
+.quill-content .ql-editor a:hover {
+  text-decoration: underline;
+}
+
+.quill-content .ql-toolbar {
+  display: none;
+}
+
+.quill-content .ql-container {
+  border: none;
+}
+
+/* Add styles to adjust the quill content when expanded */
+.quill-content-small.expanded {
+  max-height: none;
+}
+
+.quill-content-small.expanded::after {
+  display: none;
+}
+
+/* Make sure the ReactQuill bubble theme looks clean */
+.ql-bubble .ql-editor {
+  padding: 0;
+}
+
+/* Style the root bubble container */
+.quill-content-small .ql-container.ql-bubble {
+  border: none;
+}
+
+/* Thêm quy tắc CSS cho ReactQuill trong line-clamp-4 */
+.line-clamp-4 .ql-editor {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  max-height: 6em;
+  padding: 0 !important;
+}
+
+.line-clamp-4 .ql-container {
+  height: auto !important;
+} 

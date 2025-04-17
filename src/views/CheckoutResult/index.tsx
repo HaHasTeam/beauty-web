@@ -4,10 +4,14 @@ import CheckoutResultAll from '@/checkout-result/CheckoutResultAll'
 
 const CheckoutResult = () => {
   const location = useLocation()
-  const { orderData, status } = location.state
+  const { orderData, status, isBooking } = location.state
   return (
     <div>
-      <CheckoutResultAll status={status} orderId={orderData?.id ?? ''} />
+      <CheckoutResultAll 
+        status={status} 
+        orderId={orderData?.id ?? ''} 
+        isBooking={isBooking || false} 
+      />
     </div>
   )
 }
