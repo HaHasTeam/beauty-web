@@ -96,6 +96,8 @@ const ServiceCheckout = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [selectedDateTime, setSelectedDateTime] = useState<string | null>(null)
   const [selectedSlotId, setSelectedSlotId] = useState<string | null>(null)
+  const [selectedSlotStartTime, setSelectedSlotStartTime] = useState<string>('')
+  const [selectedSlotEndTime, setSelectedSlotEndTime] = useState<string>('')
 
   // Lọc ra các slot có sẵn
 
@@ -219,8 +221,6 @@ const ServiceCheckout = () => {
     },
   })
 
-  console.log('bookingDataRes', bookingDataRes)
-
   const handleReset = useCallback(() => {
     form.reset()
     setSelectedDate('')
@@ -228,6 +228,8 @@ const ServiceCheckout = () => {
     setBookingDateTime('')
     setSelectedDateTime(null)
     setSelectedSlotId(null)
+    setSelectedSlotStartTime('')
+    setSelectedSlotEndTime('')
   }, [form])
 
   const onPaymentSuccess = useCallback(() => {
@@ -246,6 +248,7 @@ const ServiceCheckout = () => {
 
   // Handle form submission
   async function onSubmit(values: BookingServiceFormValues) {
+
     try {
       // Kiểm tra nếu dịch vụ là PREMIUM thì cần phải có bookingDateTime
       if (serviceData?.data.systemService?.type === 'PREMIUM' && !values.bookingDateTime) {
@@ -280,17 +283,31 @@ const ServiceCheckout = () => {
         return
       }
 
+      // Extract date part from bookingDateTime
+      const datePart = values.bookingDateTime.split('T')[0]
+      console.log(values.bookingDateTime);
+      // Create complete startTime and endTime with selected date and slot times
+      let startTimeValue = values.bookingDateTime
+      let endTimeValue = values.bookingDateTime
+      console.log('selectedSlotStartTime', selectedSlotStartTime)
+      console.log('selectedSlotEndTime', selectedSlotEndTime)
+      
+      // If we have selectedSlotStartTime and selectedSlotEndTime, use them
+      if (selectedSlotStartTime && selectedSlotEndTime) {
+        startTimeValue = `${datePart}T${selectedSlotStartTime}:00.000Z`
+        endTimeValue = `${datePart}T${selectedSlotEndTime}:00.000Z`
+      }
+
       // Tạo dữ liệu cho booking API
       const bookingParams = {
         totalPrice: totalPayment,
-        startTime: values.bookingDateTime,
-        endTime: values.bookingDateTime,
+        startTime: startTimeValue ,
+        endTime: endTimeValue,
         type: 'SERVICE',
         slot: currentSlotId || null,
         paymentMethod: values.paymentMethod,
         consultantService: currentServiceId,
       }
-
       // Sử dụng lodash để loại bỏ các giá trị null, undefined, NaN, ""
       const cleanParams = _.omitBy(bookingParams, (val) => !val && val !== 0)
       console.log('Clean booking params:', cleanParams)
@@ -305,16 +322,26 @@ const ServiceCheckout = () => {
     }
   }
 
-  const handleDateTimeSelect = (dateTime: string, slotId?: string) => {
+  const handleDateTimeSelect = (dateTime: string, slotId?: string, slotStartTime?: string, slotEndTime?: string) => {
     // Cập nhật bookingDateTime trong form
+
     form.setValue('bookingDateTime', dateTime)
     setBookingDateTime(dateTime)
     setSelectedDateTime(dateTime)
 
-    // Cập nhật slotId nếu có
+    // Cập nhật slotId và slot times nếu có
     if (slotId) {
       setSelectedSlotId(slotId)
       form.setValue('slotId', slotId)
+      
+      // Store slot start and end times
+      if (slotStartTime) {
+        setSelectedSlotStartTime(slotStartTime)
+      }
+      
+      if (slotEndTime) {
+        setSelectedSlotEndTime(slotEndTime)
+      }
     }
 
     // Chỉ đóng dialog khi đã chọn cả thời gian (có slotId)

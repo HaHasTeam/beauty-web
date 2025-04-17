@@ -18,7 +18,7 @@ import { RightPanel } from './right-panel'
 export type TSlot = BookingTSlot
 
 export interface BookingCalendarProps {
-  onDateTimeSelect?: (dateTime: string, slotId?: string) => void
+  onDateTimeSelect?: (dateTime: string, slotId?: string, slotStartTime?: string, slotEndTime?: string) => void
   onClose?: () => void
   selectedDateTime?: string
   consultantId?: string
@@ -90,16 +90,16 @@ export function BookingCalendar({
     // Không đóng dialog khi chỉ chọn ngày
   }
 
-  const handleChangeAvailableTime = (time: string, slotId?: string) => {
+  const handleChangeAvailableTime = (time: string, slotId?: string, slotStartTime?: string, slotEndTime?: string) => {
     setSelectedTime(time)
 
     // Nếu đã có slotId được truyền từ component con
     if (slotId) {
-      handleDateTimeSelection(date, time, slotId)
+      handleDateTimeSelection(date, time, slotId, slotStartTime, slotEndTime)
     } else {
       // Tìm slotId tương ứng với time được chọn
       const selectedSlotId = findSlotId(date, time)
-      handleDateTimeSelection(date, time, selectedSlotId)
+      handleDateTimeSelection(date, time, selectedSlotId, slotStartTime, slotEndTime)
     }
   }
 
@@ -136,7 +136,7 @@ export function BookingCalendar({
   }
 
   // Tạo datetime string từ ngày và giờ đã chọn (định dạng 24h)
-  const handleDateTimeSelection = (selectedDate: CalendarDate, time: string, slotId?: string) => {
+  const handleDateTimeSelection = (selectedDate: CalendarDate, time: string, slotId?: string, slotStartTime?: string, slotEndTime?: string) => {
     // Tách thời gian định dạng 24h (ví dụ: "14:30")
     const [hoursStr, minutesStr] = time.split(':')
     if (!hoursStr || !minutesStr) return
@@ -153,7 +153,7 @@ export function BookingCalendar({
     const dateTimeString = currentDate.toISOString()
 
     if (onDateTimeSelect) {
-      onDateTimeSelect(dateTimeString, slotId)
+      onDateTimeSelect(dateTimeString, slotId, slotStartTime, slotEndTime)
       // Chỉ đóng khi có slotId (đã chọn thời gian)
       if (onClose && slotId) {
         onClose()
