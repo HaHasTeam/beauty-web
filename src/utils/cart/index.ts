@@ -125,7 +125,7 @@ export const checkPreventAction = (cartItem: ICartItem) => {
 
   const HAS_ACTIVE_CLASSIFICATION = hasActiveClassification(classifications)
   const IN_STOCK_CLASSIFICATION = hasClassificationWithQuantity(classifications)
-
+  const ACTIVE_PRODUCT_CLASSIFICATION = productClassification.status === StatusEnum.ACTIVE
   return (
     !HAS_ACTIVE_CLASSIFICATION ||
     !IN_STOCK_CLASSIFICATION ||
@@ -133,7 +133,8 @@ export const checkPreventAction = (cartItem: ICartItem) => {
     EVENT_CANCELLED ||
     EVENT_ENDED ||
     EVENT_INACTIVE ||
-    EVENT_SOLD_OUT
+    EVENT_SOLD_OUT ||
+    !ACTIVE_PRODUCT_CLASSIFICATION
   )
 }
 
