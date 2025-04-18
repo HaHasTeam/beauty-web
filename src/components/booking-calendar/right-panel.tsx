@@ -11,7 +11,7 @@ export interface RightPanelProps {
   date: CalendarDate
   timeZone: string
   weeksInMonth: number
-  handleChangeAvailableTime: (time: string, slotId?: string) => void
+  handleChangeAvailableTime: (time: string, slotId?: string, slotStartTime?: string, slotEndTime?: string) => void
   selectedTime: string | null
   availableSlots?: TSlot[]
 }
@@ -120,7 +120,7 @@ export function RightPanel({ handleChangeAvailableTime, selectedTime, availableS
                       ? 'bg-primary text-white border-primary font-semibold'
                       : 'hover:bg-primary/10 hover:text-primary hover:border-primary hover:-translate-y-0.5',
                   )}
-                  onClick={() => handleChangeAvailableTime(startTimeStr, slot.id)}
+                  onClick={() => handleChangeAvailableTime(startTimeStr, slot.id, slot.startTime, slot.endTime)}
                 >
                   <div className="flex flex-row items-center justify-center w-full">
                     <span className="text-sm">{startTimeStr}</span>
