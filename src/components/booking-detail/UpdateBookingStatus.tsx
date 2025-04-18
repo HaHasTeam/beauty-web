@@ -250,7 +250,13 @@ export default function UpdateBookingStatus({
           )}
 
           {booking.status === BookingStatusEnum.SERVICE_BOOKING_FORM_SUBMITED && (
-            <Button onClick={() => {}} loading={isLoading} className="bg-primary hover:bg-primary/80 flex gap-2">
+            <Button
+              onClick={() => {
+                window.location.href = booking.meetUrl
+              }}
+              loading={isLoading}
+              className="bg-primary hover:bg-primary/80 flex gap-2"
+            >
               {t('button.joinMeeting')}
               <CircleChevronRight />
             </Button>

@@ -448,6 +448,7 @@
       "by": "bởi",
       "created": "Đã Tạo Đặt Lịch",
       "reason": "Lý Do",
+      "success": "Đặt lịch thành công",
       "status": {
         "toPay": "Chờ Thanh Toán",
         "waitForConfirmation": "Chờ Xác Nhận",

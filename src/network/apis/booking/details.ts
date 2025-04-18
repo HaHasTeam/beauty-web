@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import { BookingFormAnswerSchema, ConsultationResultSchema } from '@/schemas/booking.schema'
+import { BookingFormAnswerUpdateSchema, ConsultationResultSchema } from '@/schemas/booking.schema'
 import { IBooking } from '@/types/booking'
 import { TServerResponse } from '@/types/request'
 import { IStatusTracking } from '@/types/statusTracking'
@@ -27,7 +27,7 @@ export const getBookingStatusTrackingApi = toQueryFetcher<string, TServerRespons
 interface UpdateBookingStatusParams {
   id: string
   status: string
-  bookingFormAnswer?: z.infer<typeof BookingFormAnswerSchema>
+  bookingFormAnswer?: z.infer<typeof BookingFormAnswerUpdateSchema>
   consultationResult?: z.infer<typeof ConsultationResultSchema>
   mediaFiles?: string[]
   resultNote?: string
