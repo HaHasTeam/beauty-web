@@ -23,6 +23,16 @@ export default function SaleProductCard({ product }: ProductCardProps) {
     () => getCheapestClassification(product.productClassifications ?? []),
     [product.productClassifications],
   )
+  console.log('product', product)
+
+  const getTotalSellProduct = useMemo(() => {
+    const totalQuantity = product.productClassifications.reduce((a, b) => {
+      return a + b.quantity
+    }, 0)
+    // console.log('totalQuantity', totalQuantity)
+    return totalQuantity
+  }, [product.productClassifications])
+
   return (
     <Link to={configs.routes.products + '/' + product.product.id}>
       <Card>
@@ -70,7 +80,7 @@ export default function SaleProductCard({ product }: ProductCardProps) {
             )}
           </div>
           <div className="w-full space-y-1.5">
-            <SoldProgress soldAmount={0} maxAmount={0} />
+            <SoldProgress soldAmount={10} maxAmount={getTotalSellProduct} />
           </div>
           {/* <Button className="w-full bg-primary hover:bg-primary/70 text-primary-foreground">
             {t('button.addToCard')}

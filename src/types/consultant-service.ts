@@ -4,7 +4,6 @@ import { TMetaData } from './request'
 import { ISystemService } from './system-service'
 import { TUser } from './user'
 
-
 type BaseConsultantServiceField = {
   id?: string
   question: string
@@ -94,24 +93,24 @@ export interface IConsultantServiceDetailServer extends TMetaData {
   }
   status: ConsultantServiceStatusEnum
 }
-export interface IConsultantServiceDetailServer extends TMetaData {
-  account: TUser
-  price: number
-  images: TFile[]
-  systemService: ISystemService & TMetaData
-  serviceBookingForm: {
-    id?: string
-    title: string
-    questions: IQuestion[]
-    status: StatusEnum
-  }
-  serviceBookingFormData: {
-    id?: string
-    title: string
-    questions: IQuestion[]
-  }
-  status: ConsultantServiceStatusEnum
-}
+// export interface IConsultantServiceDetailServer extends TMetaData {
+//   account: TUser
+//   price: number
+//   images: TFile[]
+//   systemService: ISystemService & TMetaData
+//   serviceBookingForm: {
+//     id?: string
+//     title: string
+//     questions: IQuestion[]
+//     status: StatusEnum
+//   }
+//   serviceBookingFormData: {
+//     id?: string
+//     title: string
+//     questions: IQuestion[]
+//   }
+//   status: ConsultantServiceStatusEnum
+// }
 
 export enum ConsultantServiceStatusEnum {
   ACTIVE = 'ACTIVE',

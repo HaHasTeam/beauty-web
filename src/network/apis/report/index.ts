@@ -1,5 +1,5 @@
 import { IReport } from '@/types/report'
-import { TServerResponse, TServerResponseWithPagination } from '@/types/request'
+import { TServerResponse } from '@/types/request'
 import { toMutationFetcher, toQueryFetcher } from '@/utils/query'
 import { privateRequest } from '@/utils/request'
 
@@ -7,21 +7,21 @@ import { TCreateReportRequestParams, TGetFilteredReportRequestParams } from './t
 
 export const getFilteredReports = toQueryFetcher<
   TGetFilteredReportRequestParams,
-  TServerResponseWithPagination<IReport[]>
+  TServerResponse<{ total: number; totalPages: number; items: IReport[] }>
 >('getFilteredReports', async (query) => {
-  const res = (await privateRequest('/reports/filter-reports', {
+  const res = (await privateRequest('/reports/filter', {
     method: 'POST',
     data: query,
-  })) as TServerResponse<IReport[]>
+  })) as TServerResponse<{ total: number; totalPages: number; items: IReport[] }>
 
-  const result: TServerResponseWithPagination<IReport[]> = {
-    message: res.message,
-    data: {
-      items: res.data,
-      total: res.data.length ?? 0,
-    },
-  } as TServerResponseWithPagination<IReport[]>
-  return result
+  // const result: TServerResponseWithPagination<IReport[]> = {
+  //   message: res.message,
+  //   data: {
+  //     items: res.data,
+  //     total: res.data.length ?? 0,
+  //   },
+  // } as TServerResponseWithPagination<IReport[]>
+  return res
 })
 
 export const createReport = toMutationFetcher<TCreateReportRequestParams, TServerResponse<IReport>>(

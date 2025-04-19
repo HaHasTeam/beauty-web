@@ -7,6 +7,7 @@ import { useShallow } from 'zustand/react/shallow'
 
 import fallBackImage from '@/assets/images/fallBackImage.jpg'
 import ImageWithFallback from '@/components/ImageFallback'
+import { PhoneInputWithCountries } from '@/components/phone-input'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -103,25 +104,17 @@ export default function Profile() {
                       </div>
                     )}
                   </div>
-                  <Button variant="outline" className="shrink-0 text-primary">
-                    {t('profile.change')}
-                  </Button>
                 </div>
-                {user?.isEmailVerify && <p className="text-xs text-green-500">{t('profile.emailVerified')}</p>}
               </div>
               <div className="space-y-2">
                 <Label htmlFor="phone">{t('profile.phone')}</Label>
                 <div className="flex items-center gap-2">
-                  <Input
-                    id="phone"
-                    type="tel"
+                  <PhoneInputWithCountries
                     value={user?.phone || ''}
                     placeholder={t('profile.phonePlaceholder')}
                     disabled
+                    isShowCountry={false}
                   />
-                  <Button variant="outline" className="shrink-0 text-primary">
-                    {t('profile.change')}
-                  </Button>
                 </div>
               </div>
               <div className="space-y-2">
@@ -151,9 +144,6 @@ export default function Profile() {
                     placeholder={t('profile.dobPlaceholder')}
                     disabled
                   />
-                  <Button variant="outline" className="shrink-0 text-primary">
-                    {t('profile.change')}
-                  </Button>
                 </div>
               </div>
 
