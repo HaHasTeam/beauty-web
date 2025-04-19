@@ -132,6 +132,7 @@ export default function UpdateBookingStatus({
       alertDescription: t('booking.statusDescription.completedConsultingCall'),
       nextStatus: BookingStatusEnum.SENDED_RESULT_SHEET,
     },
+
     [BookingStatusEnum.SENDED_RESULT_SHEET]: {
       borderColor: 'border-green-300',
       bgColor: 'bg-green-100',
@@ -158,6 +159,7 @@ export default function UpdateBookingStatus({
       alertDescription: t('booking.statusDescription.completed'),
       nextStatus: '',
     },
+
     [BookingStatusEnum.CANCELLED]: {
       borderColor: 'border-red-300',
       bgColor: 'bg-red-100',

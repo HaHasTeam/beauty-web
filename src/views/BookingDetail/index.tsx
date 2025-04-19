@@ -119,7 +119,10 @@ const BookingDetail = () => {
                     icon={<History className="w-5 h-5" />}
                     content={
                       bookingData?.data?.statusTrackings ? (
-                        <BookingStatusTrackingDetail statusTrackingData={bookingData?.data?.statusTrackings} />
+                        <BookingStatusTrackingDetail
+                          statusTrackingData={bookingData?.data?.statusTrackings}
+                          booking={bookingData?.data}
+                        />
                       ) : (
                         <p></p>
                       )
