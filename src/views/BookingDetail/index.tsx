@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { Calendar, History, MessageSquare, SquareUserRound, User } from 'lucide-react'
+import { Calendar, History, SquareUserRound, User } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useParams } from 'react-router-dom'
@@ -161,7 +161,7 @@ const BookingDetail = () => {
                           </div>
                         </div>
 
-                        <div className="mt-2 flex gap-3">
+                        {/* <div className="mt-2 flex gap-3">
                           <Button className="flex items-center gap-1 bg-primary hover:bg-primary/90" variant="default">
                             <MessageSquare className="w-4 h-4" />
                             <span>{t('booking.chatWithConsultant')}</span>
@@ -173,7 +173,7 @@ const BookingDetail = () => {
                             <User className="w-4 h-4 mr-1" />
                             {t('booking.viewProfile')}
                           </Link>
-                        </div>
+                        </div> */}
                       </div>
                     }
                   />
@@ -249,7 +249,7 @@ const BookingDetail = () => {
                         <p className="text-sm text-muted-foreground">{bookingData?.data?.account?.phone}</p>
                       </div>
                     </div>
-
+                    {/* 
                     <div className="flex gap-3">
                       <Button className="flex items-center gap-1 bg-primary hover:bg-primary/90" variant="default">
                         <MessageSquare className="w-4 h-4" />
@@ -262,7 +262,7 @@ const BookingDetail = () => {
                         <User className="w-4 h-4 mr-1" />
                         {t('booking.viewProfile')}
                       </Link>
-                    </div>
+                    </div> */}
                   </div>
                 }
               />
