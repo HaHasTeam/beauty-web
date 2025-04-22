@@ -29,7 +29,7 @@ export const getAnswerSchema = () => {
     answers: z.record(z.string(), z.string()).refine((val) => Object.keys(val).length > 0, {
       message: i18next.t('validation.required'),
     }),
-    images: z.array(ImageSchema).optional(),
+    images: z.array(z.instanceof(File)).optional(),
   })
 }
 
@@ -42,7 +42,29 @@ export const getBookingFormAnswerSchema = () => {
     answers: z.array(AnswerSchema),
   })
 }
-
+export const getBookingFormAnswerUpdateSchema = () => {
+  return z.object({
+    formId: z.string(),
+    form: z.array(QuestionSchema),
+    answers: z.array(
+      z.object({
+        question: z.string().min(1, i18next.t('validation.required')),
+        orderIndex: z.number().int().min(0),
+        answers: z.record(z.string(), z.string()).refine((val) => Object.keys(val).length > 0, {
+          message: i18next.t('validation.required'),
+        }),
+        images: z
+          .array(
+            z.object({
+              name: z.string().optional(),
+              fileUrl: z.string().optional(),
+            }),
+          )
+          .optional(),
+      }),
+    ),
+  })
+}
 export const getCriteriaSchema = () => {
   return z.object({
     section: z.string().min(1, i18next.t('validation.required')),
@@ -101,6 +123,7 @@ export const getConsultationResultSchema = () => {
 export const ConsultationResultSchema = getConsultationResultSchema()
 
 export const BookingFormAnswerSchema = getBookingFormAnswerSchema()
+export const BookingFormAnswerUpdateSchema = getBookingFormAnswerUpdateSchema()
 
 export const getCompleteConsultingCallSchema = () => {
   return z.object({

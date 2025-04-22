@@ -502,6 +502,7 @@ export default function ReportList() {
     queryKey: [getFilteredReports.queryKey, filterParams],
     queryFn: getFilteredReports.fn,
   })
+  console.log('reportData', reportData)
 
   useEffect(() => {
     if (reportData?.data) {
