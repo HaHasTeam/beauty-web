@@ -18,7 +18,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import configs from '@/config'
 import routes from '@/config/routes'
 import { useToast } from '@/hooks/useToast'
-import { getMyBookingsApi } from '@/network/apis/booking'
+import { getAllureMyBookingsApi } from '@/network/apis/booking'
 import { PAY_TYPE } from '@/network/apis/transaction/type'
 import { getMyWalletApi } from '@/network/apis/wallet'
 import { IBooking } from '@/types/booking'
@@ -122,14 +122,14 @@ const BookingItem: React.FC<BookingItemProps> = ({ booking, setIsTrigger }) => {
       message: t('payment.paymentSuccess'),
     })
     setIsOpenQRCodePayment(false)
-    queryClient.invalidateQueries({ queryKey: [getMyBookingsApi.queryKey] })
+    queryClient.invalidateQueries({ queryKey: [getAllureMyBookingsApi.queryKey] })
     queryClient.invalidateQueries({ queryKey: [getMyWalletApi.queryKey] })
   }, [successToast, t, queryClient])
 
   const onClose = useCallback(() => {
     setIsOpenQRCodePayment(false)
     if (isChangePaymentMethod) {
-      queryClient.invalidateQueries({ queryKey: [getMyBookingsApi.queryKey] })
+      queryClient.invalidateQueries({ queryKey: [getAllureMyBookingsApi.queryKey] })
       queryClient.invalidateQueries({ queryKey: [getMyWalletApi.queryKey] })
     }
     setIsChangePaymentMethod(false)
@@ -291,12 +291,11 @@ const BookingItem: React.FC<BookingItemProps> = ({ booking, setIsTrigger }) => {
           >
             {t('booking.viewDetail')}
           </Button>
-          
+
           {canPay && (
             <>
               <Button
                 size="sm"
-                
                 onClick={() => {
                   setIsOpenQRCodePayment(true)
                 }}
@@ -312,7 +311,6 @@ const BookingItem: React.FC<BookingItemProps> = ({ booking, setIsTrigger }) => {
               {t('booking.cancel')}
             </Button>
           )}
-
         </div>
       </div>
 
