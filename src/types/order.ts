@@ -54,7 +54,7 @@ export interface IOrderItem {
   account: TUser
 }
 
-export type IOrder = TMetaData&{
+export type IOrder = TMetaData & {
   platformVoucherDiscount: number
   shopVoucherDiscount: number
   id: string
