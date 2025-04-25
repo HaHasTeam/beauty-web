@@ -1884,6 +1884,7 @@
     "createWallet": "Create Wallet"
   },
   "booking": {
+    "rePayment": "Repay",
     "customerInfo": "Customer Information",
     "all": "All Bookings",
     "pending": "Pending",
