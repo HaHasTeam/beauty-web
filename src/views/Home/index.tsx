@@ -1,3 +1,4 @@
+import ConsultantServiceBanner from '@/components/home/ConsultantServiceBanner'
 import FlashSale from '@/components/home/FlashSale'
 import HomeBanner from '@/components/home/HomeBanner'
 import RecommendProduct from '@/components/home/RecommendProduct'
@@ -13,6 +14,7 @@ function Home() {
           <div className="space-y-16 animate-fadeIn">
             {/* <BeautyConsulting /> */}
             {/* <BeautyOffers /> */}
+            <ConsultantServiceBanner />
             <FlashSale />
             <PreOrderProductSections />
             <RecommendProduct />
