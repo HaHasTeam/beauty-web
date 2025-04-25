@@ -16,6 +16,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import configs from '@/config'
 import routes from '@/config/routes'
 import { IBooking } from '@/types/booking'
+import { ServiceTypeEnum } from '@/types/enum'
 import { formatCurrency } from '@/views/BeautyConsultation/data/mockData'
 
 interface BookingItemProps {
@@ -225,23 +226,28 @@ const BookingItem: React.FC<BookingItemProps> = ({ booking, setIsTrigger }) => {
 
           {/* Booking details - right side */}
           <div className="flex flex-col md:flex-row gap-5 ml-auto md:ml-8 mt-4 md:mt-0 bg-gray-50 md:bg-transparent p-3 md:p-0 rounded-lg md:rounded-none w-full md:w-auto">
-            <div className="space-y-2">
-              <div className="flex items-center gap-2 text-base">
-                <Calendar className="h-4 w-4 text-primary" />
-                <span className="text-gray-700">{getFormattedDateTime(String(booking.startTime))}</span>
-              </div>
-              <div className="flex items-center gap-2 text-base">
-                <Clock className="h-4 w-4 text-primary" />
-                <span className="text-gray-700">
-                  {booking.slot?.startTime
-                    ? formatTimeString(String(booking.slot.startTime))
-                    : format(new Date(String(booking.startTime)), 'HH:mm')}{' '}
-                  -{' '}
-                  {booking.slot?.endTime
-                    ? formatTimeString(String(booking.slot.endTime))
-                    : format(new Date(String(booking.endTime)), 'HH:mm')}
-                </span>
-              </div>
+            <div className="space-y-2 ">
+              {booking.consultantService.systemService.type == ServiceTypeEnum.PREMIUM && (
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2 text-base">
+                    <Calendar className="h-4 w-4 text-primary" />
+                    <span className="text-gray-700">{getFormattedDateTime(String(booking.startTime))}</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-base">
+                    <Clock className="h-4 w-4 text-primary" />
+                    <span className="text-gray-700">
+                      {booking.slot?.startTime
+                        ? formatTimeString(String(booking.slot.startTime))
+                        : format(new Date(String(booking.startTime)), 'HH:mm')}{' '}
+                      -{' '}
+                      {booking.slot?.endTime
+                        ? formatTimeString(String(booking.slot.endTime))
+                        : format(new Date(String(booking.endTime)), 'HH:mm')}
+                    </span>
+                  </div>
+                </div>
+              )}
+
               <div className="flex items-center gap-2 text-base">
                 <CreditCard className="h-4 w-4 text-primary" />
                 <span className="text-gray-700">{getPaymentMethodTranslation(String(booking.paymentMethod))}</span>

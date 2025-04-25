@@ -2158,7 +2158,7 @@
     "vnd": "Đồng Việt Nam"
   },
   "backendError": {
-   "firstNameRequired": "Tên phải ít nhất 1 ký tự",
+    "firstNameRequired": "Tên phải ít nhất 1 ký tự",
     "firstNameMaxLength": "Tên không được vượt quá 100 ký tự",
     "lastNameRequired": "Họ phải ít nhất 1 ký tự",
     "lastNameMaxLength": "Họ không được vượt quá 100 ký tự",
@@ -2188,7 +2188,6 @@
     "invalidStatus": "Trạng thái không hợp lệ",
     "invalidResultNote": "Ghi chú kết quả không hợp lệ",
 
-
     "accountNotFound": "Tài khoản không tồn tại",
     "updatedByAccountNotFound": "Người cập nhật tài khoản không tồn tại",
     "emailAlreadyExists": "Email đã tồn tại",
@@ -2205,7 +2204,7 @@
     "emailNotVerified": "Email chưa được xác minh",
     "invalidPassword": "Mật khẩu không hợp lệ",
     "loginMethodNotAllowed": "Người dùng phải đăng nhập bằng phương thức khác, không sử dụng mật khẩu",
-    
+
     "blogNotExisted": "Blog không tồn tại",
     "blogTagAlreadyExisted": "Thẻ blog đã tồn tại",
 
