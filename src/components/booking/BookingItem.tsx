@@ -1,8 +1,10 @@
 import 'react-quill-new/dist/quill.bubble.css'
 
+import { useQueryClient } from '@tanstack/react-query'
 import { format } from 'date-fns'
 import { Calendar, Clock, CreditCard, MessageSquare, User } from 'lucide-react'
 import * as React from 'react'
+import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import ReactQuill from 'react-quill-new'
 import { Link, useNavigate } from 'react-router-dom'
@@ -15,9 +17,15 @@ import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import configs from '@/config'
 import routes from '@/config/routes'
+import { useToast } from '@/hooks/useToast'
+import { getMyBookingsApi } from '@/network/apis/booking'
+import { PAY_TYPE } from '@/network/apis/transaction/type'
+import { getMyWalletApi } from '@/network/apis/wallet'
 import { IBooking } from '@/types/booking'
-import { ServiceTypeEnum } from '@/types/enum'
-import { formatCurrency } from '@/views/BeautyConsultation/data/mockData'
+import { BookingStatusEnum, ServiceTypeEnum } from '@/types/enum'
+import { formatCurrency } from '@/utils/number'
+
+import { QRCodeAlertDialog } from '../payment'
 
 interface BookingItemProps {
   booking: IBooking
@@ -27,66 +35,60 @@ interface BookingItemProps {
 const BookingItem: React.FC<BookingItemProps> = ({ booking, setIsTrigger }) => {
   const { t } = useTranslation()
   const navigate = useNavigate()
+  const { successToast } = useToast()
+  const queryClient = useQueryClient()
+
+  const [isOpenQRCodePayment, setIsOpenQRCodePayment] = useState(false)
+  const [isChangePaymentMethod, setIsChangePaymentMethod] = useState<boolean>(false)
 
   const getFormattedDateTime = (dateTimeString: string) => {
     const date = new Date(dateTimeString)
     return format(date, 'dd/MM/yyyy - HH:mm')
   }
 
-  // Helper function to properly format time strings
   const formatTimeString = (timeStr: string) => {
     if (!timeStr) return '00:00'
 
-    // If it starts with :, add 0 in front
     if (timeStr.startsWith(':')) {
       timeStr = '0' + timeStr
     }
 
-    // If it's just hours like '09:00', return as is
     if (timeStr.includes(':')) {
       return timeStr
     }
 
-    // If it's a full date-time string, parse it
     try {
       return format(new Date(timeStr), 'HH:mm')
     } catch {
-      // If parsing fails, return original with best guess formatting
       return timeStr.padStart(5, '0')
     }
   }
 
   const handleViewDetail = () => {
-    // Navigate to booking detail page
     navigate(configs.routes.profileBookingDetail.replace(':bookingId', booking.id))
   }
 
   const handleCancelBooking = () => {
-    // Implementation for cancel booking
     console.log('Cancel booking', booking.id)
     setIsTrigger((prev) => !prev)
   }
 
-  const canCancel = ['TO_PAY', 'WAIT_FOR_CONFIRMATION'].includes(booking.status)
+  const canCancel = [BookingStatusEnum.TO_PAY, BookingStatusEnum.WAIT_FOR_CONFIRMATION].includes(booking.status)
+  const canPay = booking.status === BookingStatusEnum.TO_PAY
 
-  // Use account from consultantService
   const consultantUsername =
     booking.consultantService?.account?.firstName + ' ' + booking.consultantService?.account?.lastName || 'Consultant'
   const consultantId = booking.consultantService?.account?.id || ''
   const consultantAvatar = booking.consultantService?.account?.avatar || undefined
   const consultantEmail = booking.consultantService?.account?.email || ''
 
-  // Check if booking has results available based on status
   const hasResults = booking.status === 'SENDED_RESULT_SHEET' || booking.status === 'COMPLETED'
 
-  // Format payment method for display
   const getPaymentMethodTranslation = (method: string) => {
     return t(`payment.${method.toLowerCase()}`, String(method).replace('_', ' '))
   }
 
-  // Get the first valid image from consultantService or systemService
   const getServiceImage = () => {
-    // Helper function to check if URL is an image based on extension
     const isImageUrl = (url: string) => {
       if (!url) return false
       const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.bmp']
@@ -94,9 +96,7 @@ const BookingItem: React.FC<BookingItemProps> = ({ booking, setIsTrigger }) => {
       return imageExtensions.some((ext) => lowercaseUrl.endsWith(ext))
     }
 
-    // First try to use consultantService.images
     if (booking.consultantService?.images && booking.consultantService.images.length > 0) {
-      // Try to find the first valid image by extension
       const validImage = booking.consultantService.images.find((img) => img.fileUrl && isImageUrl(img.fileUrl))
 
       if (validImage) {
@@ -104,9 +104,7 @@ const BookingItem: React.FC<BookingItemProps> = ({ booking, setIsTrigger }) => {
       }
     }
 
-    // Fallback to systemService images
     if (booking.consultantService?.systemService?.images && booking.consultantService.systemService.images.length > 0) {
-      // Find first valid image from systemService
       const validSystemImage = booking.consultantService.systemService.images.find(
         (img) => img.fileUrl && isImageUrl(img.fileUrl),
       )
@@ -116,15 +114,30 @@ const BookingItem: React.FC<BookingItemProps> = ({ booking, setIsTrigger }) => {
       }
     }
 
-    // Use default image if no valid images found
     return DEFAULT_IMAGE
   }
 
+  const onPaymentSuccess = useCallback(() => {
+    successToast({
+      message: t('payment.paymentSuccess'),
+    })
+    setIsOpenQRCodePayment(false)
+    queryClient.invalidateQueries({ queryKey: [getMyBookingsApi.queryKey] })
+    queryClient.invalidateQueries({ queryKey: [getMyWalletApi.queryKey] })
+  }, [successToast, t, queryClient])
+
+  const onClose = useCallback(() => {
+    setIsOpenQRCodePayment(false)
+    if (isChangePaymentMethod) {
+      queryClient.invalidateQueries({ queryKey: [getMyBookingsApi.queryKey] })
+      queryClient.invalidateQueries({ queryKey: [getMyWalletApi.queryKey] })
+    }
+    setIsChangePaymentMethod(false)
+  }, [isChangePaymentMethod, queryClient])
+
   return (
     <div className="p-4 bg-white rounded-lg shadow hover:shadow-md transition-all duration-300 border border-gray-100">
-      {/* Booking Item Header */}
       <div className="flex flex-col-reverse gap-3 md:flex-row items-start md:justify-between md:items-center border-b border-gray-100 py-3 mb-4">
-        {/* Consultant */}
         <div className="flex items-center gap-3">
           <Avatar className="h-12 w-12 border border-primary/20 shadow-sm">
             <AvatarImage src={consultantAvatar} alt={consultantUsername} />
@@ -161,7 +174,6 @@ const BookingItem: React.FC<BookingItemProps> = ({ booking, setIsTrigger }) => {
             </Link>
           </div>
         </div>
-        {/* Booking Status */}
         <div className="flex flex-col items-end gap-1">
           <div className="flex items-center">
             <BookingStatus status={booking.status} />
@@ -183,7 +195,6 @@ const BookingItem: React.FC<BookingItemProps> = ({ booking, setIsTrigger }) => {
         </div>
       </div>
 
-      {/* Service Info */}
       <div className="border-b border-gray-100 mb-4 pb-4">
         <div className="flex flex-col md:flex-row gap-5 items-start">
           <div className="w-full md:w-24 h-32 md:h-24 rounded-lg overflow-hidden flex-shrink-0 bg-primary/5 border border-gray-100 shadow-sm">
@@ -218,13 +229,11 @@ const BookingItem: React.FC<BookingItemProps> = ({ booking, setIsTrigger }) => {
                 {booking.consultantService.systemService.type}
               </Badge>
               <Badge variant="outline" className="text-sm border-gray-200">
-                {booking.consultantService.price && formatCurrency(booking.consultantService.price)} /{' '}
-                {booking.consultantService.duration || 60} {t('booking.minutes')}
+                {booking.consultantService.price && formatCurrency(booking.consultantService.price)}
               </Badge>
             </div>
           </div>
 
-          {/* Booking details - right side */}
           <div className="flex flex-col md:flex-row gap-5 ml-auto md:ml-8 mt-4 md:mt-0 bg-gray-50 md:bg-transparent p-3 md:p-0 rounded-lg md:rounded-none w-full md:w-auto">
             <div className="space-y-2 ">
               {booking.consultantService.systemService.type == ServiceTypeEnum.PREMIUM && (
@@ -253,7 +262,6 @@ const BookingItem: React.FC<BookingItemProps> = ({ booking, setIsTrigger }) => {
                 <span className="text-gray-700">{getPaymentMethodTranslation(String(booking.paymentMethod))}</span>
               </div>
 
-              {/* Show result icon for bookings with sent results or completed status */}
               {hasResults && (
                 <div className="flex items-center gap-2 text-base">
                   <MessageSquare className="h-4 w-4 text-green-500" />
@@ -262,7 +270,6 @@ const BookingItem: React.FC<BookingItemProps> = ({ booking, setIsTrigger }) => {
               )}
             </div>
 
-            {/* Price info */}
             <div className="md:w-[140px] flex-shrink-0 text-right">
               <div className="text-xl font-semibold text-primary">{formatCurrency(booking.totalPrice)}</div>
             </div>
@@ -270,15 +277,12 @@ const BookingItem: React.FC<BookingItemProps> = ({ booking, setIsTrigger }) => {
         </div>
       </div>
 
-      {/* Footer with action buttons */}
       <div className="flex flex-col-reverse md:flex-row md:items-center justify-between gap-3 pt-1">
-        {/* Last update information */}
         <div className="text-sm text-muted-foreground mt-2 md:mt-0">
           {t('booking.lastUpdate')}: {format(new Date(booking.updatedAt), 'dd/MM/yyyy HH:mm')}
         </div>
 
-        {/* Action buttons */}
-        <div className="flex justify-end gap-2">
+        <div className="flex justify-end gap-2 flex-wrap">
           <Button
             variant="outline"
             size="sm"
@@ -287,14 +291,40 @@ const BookingItem: React.FC<BookingItemProps> = ({ booking, setIsTrigger }) => {
           >
             {t('booking.viewDetail')}
           </Button>
+          
+          {canPay && (
+            <>
+              <Button
+                size="sm"
+                
+                onClick={() => {
+                  setIsOpenQRCodePayment(true)
+                }}
+                className="text-sm"
+              >
+                {t('booking.rePayment')}
+              </Button>
+            </>
+          )}
 
           {canCancel && (
             <Button variant="destructive" size="sm" onClick={handleCancelBooking} className="text-sm transition-colors">
               {t('booking.cancel')}
             </Button>
           )}
+
         </div>
       </div>
+
+      <QRCodeAlertDialog
+        amount={booking.totalPrice}
+        open={isOpenQRCodePayment}
+        onOpenChange={setIsOpenQRCodePayment}
+        type={PAY_TYPE.BOOKING}
+        paymentId={booking.id}
+        onSuccess={onPaymentSuccess}
+        onClose={onClose}
+      />
     </div>
   )
 }

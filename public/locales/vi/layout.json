@@ -405,6 +405,7 @@
       "description": "Hiện tại không có sản phẩm gợi ý nào. Vui lòng quay lại sau!"
     },
     "booking": {
+      "rePayment": "Thanh Toán Lại",
       "customerInfo": "Thông Tin Khách Hàng",
       "all": "Tất cả đặt lịch",
       "pending": "Đang Chờ",
@@ -1951,6 +1952,7 @@
     "yearsExperience": "năm kinh nghiệm"
   },
   "booking": {
+    "rePayment": "Thanh Toán Lại",
     "all": "Tất Cả Đặt Lịch",
     "pending": "Đang Chờ",
     "customerInfo": "Thông Tin Khách Hàng",
