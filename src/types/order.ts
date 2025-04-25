@@ -3,7 +3,7 @@ import { OrderEnum, OrderRequestTypeEnum, PaymentMethod, RequestStatusEnum, Ship
 import { IResponseFeedback } from './feedback'
 import { TFile, TServerFile } from './file'
 import { PaymentMethodEnum } from './payment'
-import { BaseParams } from './request'
+import { BaseParams, TMetaData } from './request'
 import { TUser } from './user'
 import { TVoucher } from './voucher'
 
@@ -54,7 +54,7 @@ export interface IOrderItem {
   account: TUser
 }
 
-export type IOrder = {
+export type IOrder = TMetaData&{
   platformVoucherDiscount: number
   shopVoucherDiscount: number
   id: string
