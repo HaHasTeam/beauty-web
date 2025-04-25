@@ -177,25 +177,26 @@ const ConsultantServiceBanner = (/*props: Props*/) => {
             {isLoading ? (
               <Skeleton className="w-full h-full rounded-lg" />
             ) : (
-              consultantPreviewData?.items.map((item, index) =>
-                // Check if serviceImage exists AND is likely an image URL
-                item.serviceImage && isImageUrl(item.serviceImage) ? (
-                  <img
-                    key={item.consultant.id + '-img'} // Added -img for potential key conflict
-                    src={item.serviceImage}
-                    alt={`Service provided by ${item.consultant.username}`}
-                    className={`absolute w-3/5 h-3/5 rounded-lg object-cover shadow-lg border-2 border-white/50 transition-all duration-300 ease-in-out ${
-                      index === 0
-                        ? 'z-30 transform scale-100 rotate-[-6deg] translate-x-[-15%] translate-y-[-5%]'
-                        : index === 1
-                          ? 'z-20 transform scale-90 rotate-[4deg] translate-x-[20%] translate-y-[10%]'
-                          : 'z-10 transform scale-80 rotate-[-10deg] translate-x-[5%] translate-y-[25%]'
-                    } group-hover:rotate-0 group-hover:scale-100`}
-                    onError={(e) => {
-                      ;(e.target as HTMLImageElement).style.display = 'none'
-                    }} // Hide on error
-                  />
-                ) : null, // Don't render if no image or not an image URL
+              consultantPreviewData?.items.map(
+                (item, index) =>
+                  // Check if serviceImage exists AND is likely an image URL
+                  item.serviceImage && isImageUrl(item.serviceImage) ? (
+                    <img
+                      key={item.consultant.id + '-img'} // Added -img for potential key conflict
+                      src={item.serviceImage}
+                      alt={`Service provided by ${item.consultant.username}`}
+                      className={`absolute w-3/5 h-3/5 rounded-lg object-cover shadow-lg border-2 border-white/50 transition-all duration-300 ease-in-out ${
+                        index === 0
+                          ? 'z-30 transform scale-100 rotate-[-6deg] translate-x-[-15%] translate-y-[-5%]'
+                          : index === 1
+                            ? 'z-20 transform scale-90 rotate-[4deg] translate-x-[20%] translate-y-[10%]'
+                            : 'z-10 transform scale-80 rotate-[-10deg] translate-x-[5%] translate-y-[25%]'
+                      } group-hover:rotate-0 group-hover:scale-100`}
+                      onError={(e) => {
+                        ;(e.target as HTMLImageElement).style.display = 'none'
+                      }} // Hide on error
+                    />
+                  ) : null, // Don't render if no image or not an image URL
               )
             )}
           </div>
