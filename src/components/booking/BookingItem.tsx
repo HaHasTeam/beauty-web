@@ -307,7 +307,12 @@ const BookingItem: React.FC<BookingItemProps> = ({ booking, setIsTrigger }) => {
           )}
 
           {canCancel && (
-            <Button variant="destructive" size="sm" onClick={handleCancelBooking} className="text-sm transition-colors hidden">
+            <Button
+              variant="destructive"
+              size="sm"
+              onClick={handleCancelBooking}
+              className="text-sm transition-colors hidden"
+            >
               {t('booking.cancel')}
             </Button>
           )}

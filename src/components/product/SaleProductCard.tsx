@@ -23,7 +23,6 @@ export default function SaleProductCard({ product }: ProductCardProps) {
     () => getCheapestClassification(product.productClassifications ?? []),
     [product.productClassifications],
   )
-  console.log('product', product)
 
   const getTotalSellProduct = useMemo(() => {
     const totalQuantity = product.productClassifications.reduce((a, b) => {
