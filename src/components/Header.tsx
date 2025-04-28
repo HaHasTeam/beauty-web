@@ -6,7 +6,6 @@ import { useShallow } from 'zustand/react/shallow'
 
 import { Button } from '@/components/ui/button'
 import configs from '@/config'
-import useCartStore from '@/store/cart'
 import { useStore } from '@/store/store'
 import { ProjectInformationEnum } from '@/types/enum'
 
@@ -15,7 +14,7 @@ import WebNotification from './notification/WebNotification'
 import SearchBar from './search-bar/SearchBar'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 
-export default function Header() {
+export default function Header({ totalItems }: { totalItems: number }) {
   const { t } = useTranslation()
   const [menuOpen, setMenuOpen] = useState(false)
   const { isAuthenticated, isLoading, authData, user } = useStore(
@@ -26,8 +25,6 @@ export default function Header() {
       user: state.user,
     })),
   )
-  const { cartItems } = useCartStore()
-  const totalItems = Object.values(cartItems).reduce((acc, items) => acc + items.length, 0)
 
   return (
     <header className="w-full bg-white relative shadow-lg">
@@ -102,7 +99,7 @@ export default function Header() {
             <Link to={configs.routes.cart}>
               <div className="relative cursor-pointer">
                 <ShoppingCart />
-                {cartItems && totalItems > 0 && (
+                {totalItems && totalItems > 0 && (
                   <span className="absolute -top-1 -right-1 rounded-full bg-primary text-white text-xs w-4 h-4 flex items-center justify-center">
                     {totalItems}
                   </span>
@@ -139,9 +136,9 @@ export default function Header() {
               >
                 <div className="relative cursor-pointer">
                   <ShoppingCart className="h-5 w-5" />
-                  {cartItems && Object.keys(cartItems)?.length > 0 && (
+                  {totalItems && totalItems > 0 && (
                     <span className="absolute -top-1 -right-1 rounded-full bg-primary text-white text-xs w-4 h-4 flex items-center justify-center">
-                      {Object.keys(cartItems)?.length}
+                      {totalItems}
                     </span>
                   )}
                 </div>
