@@ -171,6 +171,9 @@ const ProductDetailAction = ({
           quantity: quantity,
         })
       }
+      queryClient.invalidateQueries({
+        queryKey: [getMyCartApi.queryKey],
+      })
     } catch (error) {
       handleServerError({ error })
     } finally {
@@ -185,6 +188,7 @@ const ProductDetailAction = ({
     product?.productClassifications,
     handleServerError,
     groupBuying,
+    queryClient,
   ])
 
   const decreaseQuantity = () => {
