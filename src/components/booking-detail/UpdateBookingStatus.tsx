@@ -44,6 +44,7 @@ export default function UpdateBookingStatus({
   const [isViewBookingFormDialog, setIsViewBookingFormDialog] = useState<boolean>(false)
   const [isViewConsultationResultDialog, setIsViewConsultationResultDialog] = useState<boolean>(false)
   const queryClient = useQueryClient()
+  console.log('  isConsultant,isCustomer,', isConsultant, isCustomer)
 
   const { mutateAsync: updateBookingStatusFn } = useMutation({
     mutationKey: [updateBookingStatusApi.mutationKey],
@@ -121,7 +122,7 @@ export default function UpdateBookingStatus({
       icon: VideoIcon,
       alertDescription: t('booking.statusDescription.serviceBookingFormSubmitted'),
       nextStatus:
-        booking.consultantService.systemService.type === ServiceTypeEnum.PREMIUM
+        booking.consultantService.systemService.type == ServiceTypeEnum.PREMIUM
           ? BookingStatusEnum.COMPLETED_CONSULTING_CALL
           : '',
     },
@@ -195,6 +196,8 @@ export default function UpdateBookingStatus({
   }
 
   const config = statusConfig[booking.status]
+  console.log('config', config)
+
   if (!config) return null
 
   const IconComponent = config.icon || Siren
@@ -279,24 +282,25 @@ export default function UpdateBookingStatus({
             </>
           )}
 
-          {booking.status === BookingStatusEnum.SERVICE_BOOKING_FORM_SUBMITED && (
-            <Button
-              onClick={() => {
-                window.location.href = booking.meetUrl
-              }}
-              loading={isLoading}
-              className="bg-primary hover:bg-primary/80 flex gap-2"
-            >
-              {t('button.joinMeeting')}
-              <CircleChevronRight />
-            </Button>
-          )}
+          {booking.status === BookingStatusEnum.SERVICE_BOOKING_FORM_SUBMITED &&
+            booking.consultantService.systemService.type == ServiceTypeEnum.PREMIUM && (
+              <Button
+                onClick={() => {
+                  window.location.href = booking.meetUrl
+                }}
+                loading={isLoading}
+                className="bg-primary hover:bg-primary/80 flex gap-2"
+              >
+                {t('button.joinMeeting')}
+                <CircleChevronRight />
+              </Button>
+            )}
 
           {/* description for this status for customer: is when if consultant not join, customer can send evidence and notes to report consultant or any problems.
          description for this status for consultant: after finish, consultant must submit evidence. if customer not join, they can include notes.
          */}
 
-          {booking.consultantService.systemService.type === ServiceTypeEnum.PREMIUM &&
+          {/* {booking.consultantService.systemService.type === ServiceTypeEnum.PREMIUM &&
             booking.status === BookingStatusEnum.SERVICE_BOOKING_FORM_SUBMITED && (
               <Button
                 onClick={() => setIsOpenCompleteConsultingCallDialog(true)}
@@ -306,7 +310,7 @@ export default function UpdateBookingStatus({
                 {config.buttonText}
                 <CircleChevronRight />
               </Button>
-            )}
+            )} */}
 
           {/* Customer actions */}
           {isCustomer && (
