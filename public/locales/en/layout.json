@@ -1900,6 +1900,7 @@
     "answerImages": "Answer Images",
     "cancelled": "Cancelled",
     "refunded": "Refunded",
+    "updateBookingStatusSuccess": "Booking status updated successfully",
     "cancel": "Cancel Booking",
     "consultationResultInfo": "Consultation Result Information",
     "submitBookingFormSuccess": "Booking form submitted successfully",
