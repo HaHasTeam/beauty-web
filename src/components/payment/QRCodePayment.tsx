@@ -71,7 +71,8 @@ export function QRCodePayment({
     if (paidId) {
       onSuccess?.(paidId)
     }
-  }, [paidId, onSuccess])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [paidId])
 
   const { open } = usePayOS(payOsConfig)
   useEffect(() => {

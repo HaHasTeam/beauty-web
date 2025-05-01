@@ -16,6 +16,10 @@ const publicRoutes = [
         element: <SignIn />,
       },
       {
+        path: configs.routes.authGoogle,
+        element: <SignIn />,
+      },
+      {
         path: configs.routes.signUp,
         element: <SignUp />,
       },
