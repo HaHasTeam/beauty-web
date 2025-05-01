@@ -2291,6 +2291,7 @@
     "systemServiceNotFound": "Không tìm thấy dịch vụ hệ thống",
     "serviceAlreadyExisted": "Dịch vụ đã tồn tại",
     "activeServicesUsingCriteriaNotFound": "Không tìm thấy dịch vụ đang hoạt động sử dụng tiêu chí này",
-    "imageUpdateFailed": "Không thể cập nhật hình ảnh liên kết với dịch vụ hệ thống"
+    "imageUpdateFailed": "Không thể cập nhật hình ảnh liên kết với dịch vụ hệ thống",
+    "invalidStatusValue": "Trạng thái không hợp lệ"
   }
 }

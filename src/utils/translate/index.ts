@@ -16,7 +16,7 @@ const messageMap: Record<string, string> = {
   "Phone must be a string with 10 to 15 digits": "backendError.invalidPhone",
   "Date of birth must be a valid date (YYYY-MM-DD)": "backendError.invalidDob",
   "Email is required": "backendError.emailRequired",
-  "Paassword is required": "backendError.passwordRequired",
+  "Password is required": "backendError.passwordRequired",
   
   "String must contain at most 100 character(s)": "backendError.fullNameMaxLength",
   "Phone must contain at most 100 character(s)": "backendError.phoneMaxLength",
@@ -144,6 +144,8 @@ const messageMap: Record<string, string> = {
   "Service already Existed": "backendError.serviceAlreadyExisted",
   "No active services using this criteria found.": "backendError.activeServicesUsingCriteriaNotFound",
   "Failed to update image associated with the system service": "backendError.imageUpdateFailed",
-  "Failed to update consultation criteria section.": "backendError.criteriaSectionUpdateFailed"
+  "Failed to update consultation criteria section.": "backendError.criteriaSectionUpdateFailed",
+
+  "Invalid status value": "backendError.invalidStatusValue"
 }
 export const translateError = (message: string) => i18next.t(messageMap[message] ?? message)
