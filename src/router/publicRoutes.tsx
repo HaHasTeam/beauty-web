@@ -1,4 +1,5 @@
 import configs from '@/config'
+import AuthGoogle from '@/views/AuthGoogle'
 import EmailVerification from '@/views/EmailVerifycation'
 import ForgotPassword from '@/views/ForgotPassword'
 import ResetPassword from '@/views/ResetPassword'
@@ -17,7 +18,7 @@ const publicRoutes = [
       },
       {
         path: configs.routes.authGoogle,
-        element: <SignIn />,
+        element: <AuthGoogle />,
       },
       {
         path: configs.routes.signUp,
