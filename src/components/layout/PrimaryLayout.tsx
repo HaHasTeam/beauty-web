@@ -151,6 +151,7 @@ const PrimaryLayout = ({ children }: { children?: React.ReactNode }) => {
     if (authData?.accessToken && !isLoadingToken) {
       ;(async () => {
         const deviceToken = await getRegistrationToken()
+        console.log('deviceToken', deviceToken, 'tokenFCM', tokenFCM)
 
         if (deviceToken) {
           // Always store the token in localStorage for normal use
