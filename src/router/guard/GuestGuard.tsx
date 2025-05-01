@@ -15,7 +15,6 @@ const GuestGuard: FC<PropsWithChildren> = ({ children }) => {
       isLoading: state.isLoading,
     })),
   )
-  console.log('isAuthenticated', isAuthenticated)
 
   if (isLoading) return <LoadingContentLayer />
 
