@@ -37,8 +37,6 @@ const RecommendProduct = () => {
     const hasDiscount = isActive && productClassification?.productDiscount
     const hasPreOrder = isActive && productClassification?.preOrderProduct
 
-    console.log('discount', hasDiscount, productClassification, isActive && productClassification?.productDiscount)
-
     const currentPrice = calculateDiscountPrice(
       productClassification?.price ?? 0,
       hasDiscount ? productClassification?.productDiscount?.discount : 0,

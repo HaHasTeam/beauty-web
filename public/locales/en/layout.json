@@ -119,6 +119,7 @@
     "addToCard": "Add to Cart",
     "seeAll": "See All",
     "viewAll": "View All",
+    "joinMeeting": "Join Meeting",
     "cancel": "Cancel",
     "create": "Create",
     "addSection": "Add section",
@@ -1487,6 +1488,7 @@
     "content": "Share Your Experiences",
     "contentPlaceholder": "Enter your message here...",
     "mediaFiles": "Upload video and images",
+
     "mediaFilesHint": "You are allowed to upload a maximum of {{videoCount}} video(s) and {{imageCount}} image(s), provided that the total file size remains within {{size}}MB. Please ensure your files are in one of the supported formats: {{format}}.",
     "imagesHint": {
       "TO_SHIP": "Show order contents, packaging, shipping label.",
@@ -1884,6 +1886,7 @@
     "createWallet": "Create Wallet"
   },
   "booking": {
+    "rePayment": "Repay",
     "customerInfo": "Customer Information",
     "all": "All Bookings",
     "pending": "Pending",
@@ -1897,8 +1900,14 @@
     "answerImages": "Answer Images",
     "cancelled": "Cancelled",
     "refunded": "Refunded",
+    "updateBookingStatusSuccess": "Booking status updated successfully",
     "cancel": "Cancel Booking",
     "consultationResultInfo": "Consultation Result Information",
+    "submitBookingFormSuccess": "Booking form submitted successfully",
+    "enterYourAnswer": "Enter your answer",
+    "serviceBookingForm": "Service Booking Form",
+    "serviceBookingFormDescription": "Please fill out this form to complete your booking",
+    "imagesHint": "You can upload up to 3 images related to your booking",
     "suggestedProducts": "Suggested Products",
     "markAsCompleted": "Mark as Completed",
     "id": "ID",
@@ -1951,6 +1960,11 @@
     "by": "by",
     "success": "Booking Successfully",
     "created": "Booking Created",
+    "completeConsultingCall": "Complete Consulting Call",
+    "completeConsultingCallDescription": "Please provide details about the consulting call completion including any relevant media files and notes.",
+    "resultNoteDescription": "Add any additional notes or observations from the consulting call",
+    "resultNotePlaceholder": "Enter your notes here...",
+
     "reason": "Reason",
     "status": {
       "toPay": "To Pay",

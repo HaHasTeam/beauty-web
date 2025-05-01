@@ -33,6 +33,23 @@ const PrimaryLayout = ({ children }: { children?: React.ReactNode }) => {
   const { isCurrentPath: isMatchCartPath } = useCurrentPath(routes.cart)
   const { isCurrentPath: isMatchProductDetailPath } = useCurrentPath(routes.productDetail)
   const groupId = useParams().groupId
+
+  // Calculate total items based on current path
+  let totalCartItems = 0
+  if (myCart?.data) {
+    if (isMatchGroupBuyPath && groupId) {
+      totalCartItems = Object.values(myCart.data).reduce((acc, items) => {
+        const groupBuyingItems = items.filter((item) => item.groupBuying && item.groupBuying.id === groupId)
+        return acc + groupBuyingItems.length
+      }, 0)
+    } else {
+      totalCartItems = Object.values(myCart.data).reduce((acc, items) => {
+        const nonGroupBuyingItems = items.filter((item) => !item.groupBuying)
+        return acc + nonGroupBuyingItems.length
+      }, 0)
+    }
+  }
+
   const { data: tokenFCM, isLoading: isLoadingToken } = useQuery({
     queryKey: [getFCMTokenApi.queryKey],
     queryFn: getFCMTokenApi.fn,
@@ -105,7 +122,6 @@ const PrimaryLayout = ({ children }: { children?: React.ReactNode }) => {
           }
         }
       }
-      console.log('myFilteredCart', myFilteredCart)
 
       setCartItems(myFilteredCart)
     }
@@ -170,7 +186,7 @@ const PrimaryLayout = ({ children }: { children?: React.ReactNode }) => {
   }, [authData?.accessToken])
   return (
     <div className="primary-layout bg-secondary/10">
-      <Header />
+      <Header totalItems={totalCartItems} />
       <main>{children || <Outlet />}</main>
       <Footer />
     </div>

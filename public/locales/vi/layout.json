@@ -119,6 +119,7 @@
     "addToCard": "Thêm vào giỏ",
     "seeAll": "Xem tất cả",
     "viewAll": "Xem tất cả",
+    "joinMeeting": "Tham gia cuộc họp",
     "cancel": "Hủy",
     "create": "Tạo",
     "addSection": "Thêm mục",
@@ -405,6 +406,7 @@
       "description": "Hiện tại không có sản phẩm gợi ý nào. Vui lòng quay lại sau!"
     },
     "booking": {
+      "rePayment": "Thanh Toán Lại",
       "customerInfo": "Thông Tin Khách Hàng",
       "all": "Tất cả đặt lịch",
       "pending": "Đang Chờ",
@@ -1951,10 +1953,12 @@
     "yearsExperience": "năm kinh nghiệm"
   },
   "booking": {
+    "rePayment": "Thanh Toán Lại",
     "all": "Tất Cả Đặt Lịch",
     "pending": "Đang Chờ",
     "customerInfo": "Thông Tin Khách Hàng",
     "confirmed": "Đã Xác Nhận",
+    "updateBookingStatusSuccess": "Cập nhật trạng thái đặt lịch thành công",
     "completed": "Hoàn Thành",
     "consultationResultInfo": "Thông Tin Kết Quả Tư Vấn",
     "suggestedProducts": "Sản Phẩm Đề Xuất",
@@ -1995,15 +1999,25 @@
     "cancelReasonPlaceholder": "Vui lòng giải thích lý do bạn hủy đặt lịch này...",
     "cancelReasonRequired": "Vui lòng cung cấp lý do (ít nhất 3 ký tự)",
     "confirmCancel": "Đồng ý, Hủy đặt lịch",
+    "submitBookingFormSuccess": "Gửi biểu mẫu yêu cầu tư vấn dịch vụ thành công",
+    "enterYourAnswer": "Nhập câu trả lời của bạn",
+    "serviceBookingForm": "Biểu mẫu đặt dịch vụ",
+    "serviceBookingFormDescription": "Vui lòng điền vào biểu mẫu này để hoàn tất đặt lịch của bạn",
+    "imagesHint": "Bạn có thể tải lên tối đa 3 hình ảnh liên quan đến đặt lịch của bạn",
     "reason": "Lý do",
     "bookingFormAnswers": "Câu Trả Lời Biểu Mẫu Đặt Lịch",
-    "noBookingFormAnswers": "Không có câu trả lời biểu mẫu đặt lịch",
+    "noBookingFormAnswers": "Không có câu trả lời biểu mẫu yêu cầu tư vấn dịch vụ",
     "questionImages": "Hình Ảnh Câu Hỏi",
     "answer": "Câu Trả Lời",
     "noAnswerProvided": "Không có câu trả lời nào được cung cấp",
     "answerImages": "Hình Ảnh Câu Trả Lời",
     "by": "bởi",
     "system": "Hệ thống",
+    "completeConsultingCall": "Hoàn thành cuộc gọi tư vấn",
+    "resultNoteDescription": "Thêm bất kỳ ghi chú hoặc quan sát nào từ cuộc gọi tư vấn",
+    "resultNotePlaceholder": "Nhập ghi chú của bạn tại đây...",
+
+    "completeConsultingCallDescription": "Vui lòng cung cấp chi tiết về việc hoàn thành cuộc gọi tư vấn bao gồm các tệp phương tiện và ghi chú liên quan.",
     "created": "Đã tạo đặt lịch",
     "statusDescription": {
       "waitConfirm": "Đặt chỗ của bạn đang chờ xác nhận từ nhà cung cấp dịch vụ. Bạn sẽ được thông báo khi nó được xác nhận.",
@@ -2015,8 +2029,8 @@
       "resultSheetSent": "Bảng kết quả cho dịch vụ của bạn đã được gửi. Bạn có thể xem kết quả chi tiết ngay bây giờ.",
       "refunded": "Khoản thanh toán cho đặt chỗ này đã được hoàn trả vào phương thức thanh toán ban đầu của bạn.",
       "waitForConfirmation": "Đặt lịch của bạn đang chờ xác nhận từ nhà tư vấn.",
-      "bookingConfirmed": "Đặt lịch của bạn đã được xác nhận. Vui lòng gửi biểu mẫu đặt lịch để tiếp tục.",
-      "serviceBookingFormSubmitted": "Biểu mẫu đặt lịch của bạn đã được gửi. Vui lòng tham gia cuộc gọi tư vấn theo lịch đã hẹn.",
+      "bookingConfirmed": "Đặt lịch của bạn đã được xác nhận. Vui lòng gửi biểu mẫu yêu cầu tư vấn dịch vụ để tiếp tục.",
+      "serviceBookingFormSubmitted": "Biểu mẫu yêu cầu tư vấn dịch vụ của bạn đã được gửi. Vui lòng tham gia cuộc gọi tư vấn theo lịch đã hẹn.",
       "completedConsultingCall": "Cuộc gọi tư vấn đã hoàn thành. Đang chờ bảng kết quả.",
       "sendedResultSheet": "Bảng kết quả đã được gửi. Vui lòng xem xét và đánh dấu là đã hoàn thành."
     },
@@ -2035,8 +2049,8 @@
       "COMPLETED": "Hoàn thành",
       "CANCELLED": "Đã hủy",
       "SENDED_RESULT_SHEET": "Đã gửi kết quả",
-      "submitBookingForm": "Gửi biểu mẫu đặt lịch",
-      "bookingFormSubmitted": "Đã gửi biểu mẫu đặt lịch",
+      "submitBookingForm": "Gửi biểu mẫu yêu cầu tư vấn dịch vụ",
+      "bookingFormSubmitted": "Đã gửi biểu mẫu yêu cầu tư vấn dịch vụ",
       "completeConsultingCall": "Hoàn thành cuộc gọi tư vấn",
       "completedConsultingCall": "Đã hoàn thành cuộc gọi tư vấn",
       "sendResultSheet": "Gửi bảng kết quả",
@@ -2158,7 +2172,7 @@
     "vnd": "Đồng Việt Nam"
   },
   "backendError": {
-   "firstNameRequired": "Tên phải ít nhất 1 ký tự",
+    "firstNameRequired": "Tên phải ít nhất 1 ký tự",
     "firstNameMaxLength": "Tên không được vượt quá 100 ký tự",
     "lastNameRequired": "Họ phải ít nhất 1 ký tự",
     "lastNameMaxLength": "Họ không được vượt quá 100 ký tự",
@@ -2188,7 +2202,6 @@
     "invalidStatus": "Trạng thái không hợp lệ",
     "invalidResultNote": "Ghi chú kết quả không hợp lệ",
 
-
     "accountNotFound": "Tài khoản không tồn tại",
     "updatedByAccountNotFound": "Người cập nhật tài khoản không tồn tại",
     "emailAlreadyExists": "Email đã tồn tại",
@@ -2205,7 +2218,7 @@
     "emailNotVerified": "Email chưa được xác minh",
     "invalidPassword": "Mật khẩu không hợp lệ",
     "loginMethodNotAllowed": "Người dùng phải đăng nhập bằng phương thức khác, không sử dụng mật khẩu",
-    
+
     "blogNotExisted": "Blog không tồn tại",
     "blogTagAlreadyExisted": "Thẻ blog đã tồn tại",
 
@@ -2244,7 +2257,7 @@
     "categoryNotFound": "Không tìm thấy danh mục",
     "newParentCategoryNotFound": "Không tìm thấy danh mục cha mới",
 
-    "bookingFormNotFound": "Biểu mẫu đặt lịch không tồn tại",
+    "bookingFormNotFound": "Biểu mẫu yêu cầu tư vấn dịch vụ không tồn tại",
     "systemServiceNotFoundOrInactive": "Dịch vụ hệ thống không tồn tại hoặc không hoạt động",
     "invalidStatusUpdate": "Không thể cập nhật trạng thái",
     "activeServicesUsingFormNotFound": "Không tìm thấy dịch vụ đang hoạt động sử dụng biểu mẫu này",

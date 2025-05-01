@@ -31,11 +31,12 @@ interface UpdateBookingStatusParams {
   consultationResult?: z.infer<typeof ConsultationResultSchema>
   mediaFiles?: string[]
   resultNote?: string
+  meetUrl?: string
 }
 
 export const updateBookingStatusApi = toMutationFetcher<UpdateBookingStatusParams, TServerResponse<IBooking>>(
   'updateBookingStatus',
-  async ({ id, status, bookingFormAnswer, consultationResult, mediaFiles, resultNote }) => {
+  async ({ id, status, bookingFormAnswer, consultationResult, mediaFiles, resultNote, meetUrl }) => {
     return privateRequest(`/bookings/update-booking-status/${id}`, {
       method: 'PUT',
       data: {
@@ -44,6 +45,7 @@ export const updateBookingStatusApi = toMutationFetcher<UpdateBookingStatusParam
         consultationResult: consultationResult ? consultationResult : undefined,
         mediaFiles: mediaFiles ? mediaFiles : undefined,
         resultNote: resultNote ? resultNote : undefined,
+        meetUrl: meetUrl ? meetUrl : undefined,
       },
     })
   },
