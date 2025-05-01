@@ -4,6 +4,8 @@ const routes = {
   home: '/',
   signIn: '/sign-in',
   signUp: '/sign-up',
+  authGoogle: '/auth/google',
+
   feed: '/feed',
   community: '/community',
   notification: '/notifications',
