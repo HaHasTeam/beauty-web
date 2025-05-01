@@ -3,28 +3,27 @@ import i18next from 'i18next'
 const messageMap: Record<string, string> = {
   'Invalid email': 'backendError.invalidEmail',
 
-  'First name is required': 'backendError.firstNameRequired',
-  'First name cannot exceed 100 characters': 'backendError.firstNameMaxLength',
-  'Last name is required': 'backendError.lastNameRequired',
-  'Last name cannot exceed 100 characters': 'backendError.lastNameMaxLength',
-  'Username is required and must be at least 3 characters long': 'backendError.usernameRequired',
-  'Username cannot exceed 20 characters': 'backendError.usernameMaxLength',
-  'User name should starting with a letter, 3-20 characters and can contain letters, numbers and underscores':
-    'backendError.invalidUsername',
-  'Invalid email address': 'backendError.invalidEmail',
-  'Password must be at least 8 characters long': 'backendError.passwordMinLength',
-  'avatar must more than 1 character': 'backendError.avatarMinLength',
-  'Phone must be a string with 10 to 15 digits': 'backendError.invalidPhone',
-  'Date of birth must be a valid date (YYYY-MM-DD)': 'backendError.invalidDob',
-  'Email is required': 'backendError.emailRequired',
-  'Paassword is required': 'backendError.passwordRequired',
-
-  'String must contain at most 100 character(s)': 'backendError.fullNameMaxLength',
-  'Phone must contain at most 100 character(s)': 'backendError.phoneMaxLength',
-  'District must contain at most 100 character(s)': 'backendError.districtMaxLength',
-  'Ward must contain at most 100 character(s)': 'backendError.wardMaxLength',
-  'Province must contain at most 255 character(s)': 'backendError.provinceMaxLength',
-  'Invalid enum value. Expected AddressEnum': 'backendError.invalidType',
+  "First name is required": "backendError.firstNameRequired",
+  "First name cannot exceed 100 characters": "backendError.firstNameMaxLength",
+  "Last name is required": "backendError.lastNameRequired",
+  "Last name cannot exceed 100 characters": "backendError.lastNameMaxLength",
+  "Username is required and must be at least 3 characters long": "backendError.usernameRequired",
+  "Username cannot exceed 20 characters": "backendError.usernameMaxLength",
+  "User name should starting with a letter, 3-20 characters and can contain letters, numbers and underscores": "backendError.invalidUsername",
+  "Invalid email address": "backendError.invalidEmail",
+  "Password must be at least 8 characters long": "backendError.passwordMinLength",
+  "avatar must more than 1 character": "backendError.avatarMinLength",
+  "Phone must be a string with 10 to 15 digits": "backendError.invalidPhone",
+  "Date of birth must be a valid date (YYYY-MM-DD)": "backendError.invalidDob",
+  "Email is required": "backendError.emailRequired",
+  "Password is required": "backendError.passwordRequired",
+  
+  "String must contain at most 100 character(s)": "backendError.fullNameMaxLength",
+  "Phone must contain at most 100 character(s)": "backendError.phoneMaxLength",
+  "District must contain at most 100 character(s)": "backendError.districtMaxLength",
+  "Ward must contain at most 100 character(s)": "backendError.wardMaxLength",
+  "Province must contain at most 255 character(s)": "backendError.provinceMaxLength",
+  "Invalid enum value. Expected AddressEnum": "backendError.invalidType",
 
   'Start time must be a valid date string': 'backendError.invalidStartTime',
   'End time must be a valid date string': 'backendError.invalidEndTime',
@@ -143,10 +142,12 @@ const messageMap: Record<string, string> = {
   'Failed to update order index for questions': 'backendError.updateOrderIndexFailed',
   'Failed to delete image associated with the question': 'backendError.imageDeleteFailed',
 
-  'System service not found.': 'backendError.systemServiceNotFound',
-  'Service already Existed': 'backendError.serviceAlreadyExisted',
-  'No active services using this criteria found.': 'backendError.activeServicesUsingCriteriaNotFound',
-  'Failed to update image associated with the system service': 'backendError.imageUpdateFailed',
-  'Failed to update consultation criteria section.': 'backendError.criteriaSectionUpdateFailed',
+  "System service not found.": "backendError.systemServiceNotFound",
+  "Service already Existed": "backendError.serviceAlreadyExisted",
+  "No active services using this criteria found.": "backendError.activeServicesUsingCriteriaNotFound",
+  "Failed to update image associated with the system service": "backendError.imageUpdateFailed",
+  "Failed to update consultation criteria section.": "backendError.criteriaSectionUpdateFailed",
+
+  "Invalid status value": "backendError.invalidStatusValue"
 }
 export const translateError = (message: string) => i18next.t(messageMap[message] ?? message)
