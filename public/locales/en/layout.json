@@ -2284,6 +2284,7 @@
     "systemServiceNotFound": "System service not found.",
     "serviceAlreadyExisted": "Service already Existed",
     "activeServicesUsingCriteriaNotFound": "No active services using this criteria found.",
-    "imageUpdateFailed": "Failed to update image associated with the system service"
+    "imageUpdateFailed": "Failed to update image associated with the system service",
+    "invalidStatusValue": "Invalid status value"
   }
 }
