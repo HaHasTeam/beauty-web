@@ -16,7 +16,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import configs from '@/config'
 import useHandleServerError from '@/hooks/useHandleServerError'
 import { useToast } from '@/hooks/useToast'
-import { formRegisterSchema } from '@/lib/schema'
+import { getFormRegisterSchema } from '@/lib/schema'
 import { cn } from '@/lib/utils'
 import { getRoleIdByEnum } from '@/network/apis/role'
 import { createUserApi } from '@/network/apis/user'
@@ -25,11 +25,12 @@ import Button from '../button'
 import { Icons } from '../Icons'
 import ImageWithFallback from '../ImageFallback'
 import LoadingLayer from '../loading-icon/LoadingLayer'
+import { PhoneInputWithCountries } from '../phone-input'
 
 export default function SignUp() {
   // const [isSubmitting, setIsSubmitting] = useState(false)
   const handleServerError = useHandleServerError()
-
+  const formRegisterSchema = getFormRegisterSchema()
   const navigate = useNavigate()
   const { successToast } = useToast()
   const { isLoading: isGettingRolesIdByEnum, data: getRoleIdByEnumData } = useQuery({
@@ -65,6 +66,7 @@ export default function SignUp() {
     try {
       const formateData = {
         ...values,
+        phone: '0' + values?.phone?.slice(3),
         role: getRoleIdByEnumData?.CUSTOMER.id || '',
         username: values.username,
       }
@@ -146,7 +148,7 @@ export default function SignUp() {
                 <FormItem className="flex-1">
                   <FormLabel>Phone</FormLabel>
                   <FormControl>
-                    <Input placeholder="Please enter your phone number" {...field} />
+                    <PhoneInputWithCountries {...field} className="bg-background" />
                   </FormControl>
 
                   <FormMessage />

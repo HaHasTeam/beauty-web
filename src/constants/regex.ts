@@ -37,7 +37,7 @@ export const phoneRegex = {
   pattern: (value: string) => {
     return isValidPhoneNumber(value)
   },
-  message: () => i18next.t('validation.required'),
+  message: () => i18next.t('validation.phoneValid'),
 }
 
 export const defaultRequiredRegex = requiredRegex()
