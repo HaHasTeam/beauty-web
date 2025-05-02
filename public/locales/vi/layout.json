@@ -38,7 +38,34 @@
     "avatar": "Ảnh đại diện",
     "chooseImage": "Chọn Ảnh",
     "fileSizeLimit": "Dung lượng file tối đa 1 MB",
-    "fileFormat": "Định dạng: .JPEG, .PNG"
+    "fileFormat": "Định dạng: .JPEG, .PNG",
+    "personalInformation": "Thông Tin Cá Nhân",
+    "updateInfo": "Cập nhật thông tin cá nhân của bạn tại đây. Một số trường không thể chỉnh sửa.",
+    "profilePicture": "Ảnh Đại Diện",
+    "uploadPictureDesc": "Tải lên ảnh đại diện để cá nhân hóa tài khoản của bạn",
+    "firstName": "Tên",
+    "firstNamePlaceholder": "VD: Nguyễn",
+    "firstNameCannotChange": "Tên không thể thay đổi",
+    "lastName": "Họ",
+    "lastNamePlaceholder": "VD: Văn A",
+    "lastNameCannotChange": "Họ không thể thay đổi",
+
+    "usernameDesc": "Đây là định danh duy nhất của bạn trên nền tảng và không thể thay đổi",
+
+    "emailVerified": "Địa chỉ email của bạn đã được xác minh và không thể thay đổi",
+
+    "selectGender": "Chọn giới tính",
+
+    "notSpecified": "Chưa xác định",
+
+    "notProvided": "Chưa cung cấp",
+    "dob": "Ngày Sinh",
+    "selectDob": "Chọn Ngày Sinh",
+    "accountStatus": "Trạng Thái Tài Khoản",
+    "active": "Đang hoạt động",
+    "saveProfile": "Lưu Hồ Sơ",
+    "updateSuccess": "Tuyệt vời! Hồ sơ của bạn đã được cập nhật!",
+    "yourProfile": "Hồ Sơ Của Bạn"
   },
   "home": {
     "consultantTitle": "Tư vấn sắc đẹp",
@@ -1310,6 +1337,10 @@
     "BRAND": "Thương hiệu",
     "MODERATOR": "Quản trị viên"
   },
+  "signUp": {
+    "passwordsDoNotMatch": "Mật khẩu không khớp"
+  },
+
   "productFormMessage": {
     "SKURequired": "SKU phân loại sản phẩm không thể trùng",
     "SKURequiredLength": "SKU là bắt buộc.",
@@ -1340,6 +1371,7 @@
     "certificateRequired": "Chứng nhận sản phẩm là bắt buộc.",
     "totalQuantityTooLow": "Tổng số lượng quá thấp. Vui lòng tăng số lượng để đáp ứng mức tối thiểu yêu cầu là: {{count}}."
   },
+
   "createProduct": {
     "successOfficial": "Tạo sản phẩm thành công!",
     "successOfficialDescription": "Sản phẩm đã hoạt động và sẽ hiển thị trên trang web sau khi được duyệt.",

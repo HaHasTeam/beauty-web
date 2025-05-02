@@ -99,7 +99,7 @@ export default function Header({ totalItems }: { totalItems: number }) {
             <Link to={configs.routes.cart}>
               <div className="relative cursor-pointer">
                 <ShoppingCart />
-                {totalItems && totalItems > 0 && (
+                {Number(totalItems) > 0 && (
                   <span className="absolute -top-1 -right-1 rounded-full bg-primary text-white text-xs w-4 h-4 flex items-center justify-center">
                     {totalItems}
                   </span>
@@ -136,7 +136,7 @@ export default function Header({ totalItems }: { totalItems: number }) {
               >
                 <div className="relative cursor-pointer">
                   <ShoppingCart className="h-5 w-5" />
-                  {totalItems && totalItems > 0 && (
+                  {totalItems > 0 && (
                     <span className="absolute -top-1 -right-1 rounded-full bg-primary text-white text-xs w-4 h-4 flex items-center justify-center">
                       {totalItems}
                     </span>

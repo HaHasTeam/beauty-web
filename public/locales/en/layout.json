@@ -38,7 +38,29 @@
     "avatar": "Avatar",
     "chooseImage": "Choose Image",
     "fileSizeLimit": "Max file size: 1 MB",
-    "fileFormat": "Format: .JPEG, .PNG"
+    "fileFormat": "Format: .JPEG, .PNG",
+    "personalInformation": "Personal Information",
+    "updateInfo": "Update your personal information here. Some fields cannot be edited.",
+    "profilePicture": "Profile Picture",
+    "uploadPictureDesc": "Upload a profile picture to personalize your account",
+    "firstName": "First Name",
+    "firstNamePlaceholder": "e.g. John",
+    "firstNameCannotChange": "First name cannot be changed",
+    "lastName": "Last Name",
+    "lastNamePlaceholder": "e.g. Doe",
+    "lastNameCannotChange": "Last name cannot be changed",
+    "usernameDesc": "This is your unique identifier on our platform and cannot be changed",
+    "emailVerified": "Your email address is verified and cannot be changed",
+    "selectGender": "Select gender",
+    "notSpecified": "Not specified",
+    "notProvided": "Not provided",
+    "dob": "Date of Birth",
+    "selectDob": "Select Date of Birth",
+    "accountStatus": "Account Status",
+    "active": "Active",
+    "saveProfile": "Save Profile",
+    "updateSuccess": "Amazing! Your profile has been updated!",
+    "yourProfile": "Your Profile"
   },
   "home": {
     "consultantTitle": "Beauty Consulting",
@@ -2172,6 +2194,9 @@
       "un_published": "Unpublished",
       "inactive": "Inactive"
     }
+  },
+  "signUp": {
+    "passwordsDoNotMatch": "Passwords do not match"
   },
   "backendError": {
     "invalidEmail": "Invalid email",

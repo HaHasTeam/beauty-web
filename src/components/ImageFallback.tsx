@@ -9,7 +9,7 @@ const ImageWithFallback: React.FC<Props> = ({ fallback, src, ...props }) => {
   const [imgSrc, setImgSrc] = useState<string | undefined>(src)
   const onError = () => setImgSrc(fallback)
 
-  return <img src={imgSrc || fallback} onError={onError} {...props} />
+  return <img src={imgSrc} onError={onError} {...props} />
 }
 
 export default ImageWithFallback
