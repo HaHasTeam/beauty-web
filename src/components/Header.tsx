@@ -36,11 +36,6 @@ export default function Header({ totalItems }: { totalItems: number }) {
           <SearchBar />
           {/* desktop menu */}
           <div className="md:flex gap-3 hidden items-center justify-center">
-            <WebNotification
-            // notifications={notifications}
-            // notificationCount={notifications.length}
-            // onNotificationClick={handleNotificationClick}
-            />
             {!isLoading && isAuthenticated ? (
               <Link
                 to={configs.routes.profile}
@@ -64,7 +59,7 @@ export default function Header({ totalItems }: { totalItems: number }) {
                 {t('header.loginOrRegister')}
               </Link>
             )}
-
+            <WebNotification />
             <Link to={configs.routes.cart}>
               <div className="relative cursor-pointer">
                 <ShoppingCart />
@@ -83,6 +78,7 @@ export default function Header({ totalItems }: { totalItems: number }) {
             <Button variant="ghost" size="icon" onClick={() => setMenuOpen(!menuOpen)} className={`transition-colors `}>
               {menuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </Button>
+            <LanguageSwitcher />
           </div>
         </div>
       </div>
@@ -147,7 +143,6 @@ export default function Header({ totalItems }: { totalItems: number }) {
                 </Link>
               )}
             </div>
-            <LanguageSwitcher />
           </div>
         </div>
       )}

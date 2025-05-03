@@ -200,6 +200,8 @@ const ProductDetailAction = ({
     handleServerError,
     groupBuying,
     queryClient,
+    navigate,
+    user,
   ])
 
   const decreaseQuantity = () => {
