@@ -2374,7 +2374,7 @@
     "balanceNonNegative": "Balance must be non-negative",
     "invalidBankAccountId": "Invalid bank account ID",
     "invalidRelatedAccountId": "Invalid related account ID",
-    
+
     "bankAccountNotFound": "Bank account not found",
     "cannotUnselectDefaultBankAccount": "Cannot unselect default bank account",
     "cannotDeleteDefaultBankAccount": "Cannot delete default bank account",
