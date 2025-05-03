@@ -6,14 +6,16 @@ import { TUserFull } from './user'
 export type ISubmitFeedbackScheme = {
   rating: number
   content: string
-  orderDetailId: string
+  orderDetailId?: string
+  bookingId?: string
   mediaFiles: string[]
 }
 
 export type IResponseFeedback = TMetaData & {
   rating: number
   content: string
-  orderDetailId: string
+  orderDetailId?: string
+  bookingId?: string
   mediaFiles: TServerFile[]
   replies: IReplyFeedback[]
 }

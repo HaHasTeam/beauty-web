@@ -130,6 +130,8 @@
   "loginRcm": "Log in to update your skills!",
   "facebook": "Facebook",
   "button": {
+    "writeFeedback": "Write review",
+    "backToShopping": "Back to shopping",
     "payment": "Payment",
     "collect": "Collect",
     "received": "Received",
@@ -242,7 +244,6 @@
       }
     }
   },
-
   "bookingDetail": {
     "title": "Booking not found",
     "description": "The booking you are looking for does not exist or may have been cancelled.",
@@ -262,6 +263,16 @@
       "title": "No Blog Found",
       "description": "The blog you're looking for either does not exist, has been removed, or is currently unavailable.",
       "button": "Browse Other Blog"
+    },
+    "blogList": {
+      "title": "No Blogs Available",
+      "description": "There are currently no blogs to display. Please check back later or create a new blog.",
+      "button": "Create a Blog"
+    },
+    "blogSearch": {
+      "title": "No Results Found",
+      "description": "We couldn’t find any blogs matching your search. Try different keywords or filters.",
+      "button": "Clear Search Filters"
     },
     "bookingDetail": {
       "title": "No Booking Found",
@@ -1474,7 +1485,8 @@
     "aboutUs": "About us",
     "blog": "Blog",
     "privacyPolicy": "Privacy Policy",
-    "termsAndConditions": "Terms And Conditions"
+    "termsAndConditions": "Terms And Conditions",
+    "partnerWithUs": "Partner with us"
   },
   "contact": {
     "contactUs": "Contact Us",
@@ -1510,7 +1522,7 @@
     "content": "Share Your Experiences",
     "contentPlaceholder": "Enter your message here...",
     "mediaFiles": "Upload video and images",
-
+    "booking": "Booking",
     "mediaFilesHint": "You are allowed to upload a maximum of {{videoCount}} video(s) and {{imageCount}} image(s), provided that the total file size remains within {{size}}MB. Please ensure your files are in one of the supported formats: {{format}}.",
     "imagesHint": {
       "TO_SHIP": "Show order contents, packaging, shipping label.",
@@ -1908,6 +1920,7 @@
     "createWallet": "Create Wallet"
   },
   "booking": {
+    "service": "Service",
     "rePayment": "Repay",
     "customerInfo": "Customer Information",
     "all": "All Bookings",
@@ -1986,7 +1999,6 @@
     "completeConsultingCallDescription": "Please provide details about the consulting call completion including any relevant media files and notes.",
     "resultNoteDescription": "Add any additional notes or observations from the consulting call",
     "resultNotePlaceholder": "Enter your notes here...",
-
     "reason": "Reason",
     "status": {
       "toPay": "To Pay",
@@ -2184,7 +2196,14 @@
   },
   "blog": {
     "title": "Blogs",
-    "createdAt": "Created At"
+    "createdAt": "Created At",
+    "all": "All",
+    "type": {
+      "blog": "Blog",
+      "condition": "Policy"
+    },
+    "search": "Search",
+    "readMore": "Read more"
   },
   "blogDetails": {
     "createdAt": "Created at",

@@ -8,7 +8,7 @@ import { useParams } from 'react-router-dom'
 
 import Empty from '@/components/empty/Empty'
 import LoadingLayer from '@/components/loading-icon/LoadingLayer'
-import { getBlogApi } from '@/network/apis/blog'
+import { getBlogByTagApi } from '@/network/apis/blog'
 import { BlogEnum } from '@/types/enum'
 
 const BlogDetail = () => {
@@ -17,8 +17,8 @@ const BlogDetail = () => {
 
   // Fetch blog data
   const { data: blogData, isLoading: isBlogLoading } = useQuery({
-    queryKey: [getBlogApi.queryKey, id as string],
-    queryFn: getBlogApi.fn,
+    queryKey: [getBlogByTagApi.queryKey, id as string],
+    queryFn: getBlogByTagApi.fn,
     enabled: !!id, // Only fetch if blogId exists
   })
 

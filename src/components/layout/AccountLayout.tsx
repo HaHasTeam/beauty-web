@@ -30,11 +30,6 @@ function AccountLayout() {
       path: configs.routes.profileWallet,
     },
     {
-      title: 'Báo Cáo',
-      icon: <Flag className="mr-3 h-5 w-5" />,
-      path: configs.routes.profileReport,
-    },
-    {
       title: 'Địa Chỉ',
       icon: <Home className="mr-3 h-5 w-5" />,
       path: configs.routes.profileAddress,
@@ -66,6 +61,11 @@ function AccountLayout() {
       title: 'Kho Voucher',
       icon: <Ticket className="mr-3 h-5 w-5" />,
       path: configs.routes.profileVoucher,
+    },
+    {
+      title: 'Báo Cáo',
+      icon: <Flag className="mr-3 h-5 w-5" />,
+      path: configs.routes.profileReport,
     },
   ]
 

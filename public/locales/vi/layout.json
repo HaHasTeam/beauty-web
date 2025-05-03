@@ -49,15 +49,10 @@
     "lastName": "Họ",
     "lastNamePlaceholder": "VD: Văn A",
     "lastNameCannotChange": "Họ không thể thay đổi",
-
     "usernameDesc": "Đây là định danh duy nhất của bạn trên nền tảng và không thể thay đổi",
-
     "emailVerified": "Địa chỉ email của bạn đã được xác minh và không thể thay đổi",
-
     "selectGender": "Chọn giới tính",
-
     "notSpecified": "Chưa xác định",
-
     "notProvided": "Chưa cung cấp",
     "dob": "Ngày Sinh",
     "selectDob": "Chọn Ngày Sinh",
@@ -135,6 +130,8 @@
   "loginRcm": "Đăng nhập để cập nhật kỹ năng của bạn!",
   "facebook": "Facebook",
   "button": {
+    "writeFeedback": "Viết đánh giá",
+    "backToShopping": "Quay lại trang chủ",
     "payment": "Thanh toán",
     "collect": "Thu thập",
     "received": "Đã nhận",
@@ -262,6 +259,16 @@
       "title": "Không tìm thấy blog",
       "description": "Blog bạn đang tìm kiếm không tồn tại, đã bị xóa hoặc hiện không khả dụng.",
       "button": "Xem các blog khác"
+    },
+    "blogList": {
+      "title": "Không có blog nào",
+      "description": "Hiện tại chưa có blog nào để hiển thị. Vui lòng quay lại sau hoặc tạo một blog mới.",
+      "button": "Tạo Blog"
+    },
+    "blogSearch": {
+      "title": "Không tìm thấy kết quả",
+      "description": "Chúng tôi không tìm thấy blog nào phù hợp với từ khóa tìm kiếm của bạn. Hãy thử lại với từ khóa hoặc bộ lọc khác.",
+      "button": "Xóa bộ lọc tìm kiếm"
     },
     "bookingDetail": {
       "title": "Không tìm thấy đặt lịch",
@@ -619,7 +626,6 @@
     "expiredDate": "Hạn sử dụng",
     "exp": "HSD"
   },
-
   "notification": {
     "title": "Thông báo",
     "viewAll": "Xem tất cả",
@@ -1340,7 +1346,6 @@
   "signUp": {
     "passwordsDoNotMatch": "Mật khẩu không khớp"
   },
-
   "productFormMessage": {
     "SKURequired": "SKU phân loại sản phẩm không thể trùng",
     "SKURequiredLength": "SKU là bắt buộc.",
@@ -1371,7 +1376,6 @@
     "certificateRequired": "Chứng nhận sản phẩm là bắt buộc.",
     "totalQuantityTooLow": "Tổng số lượng quá thấp. Vui lòng tăng số lượng để đáp ứng mức tối thiểu yêu cầu là: {{count}}."
   },
-
   "createProduct": {
     "successOfficial": "Tạo sản phẩm thành công!",
     "successOfficialDescription": "Sản phẩm đã hoạt động và sẽ hiển thị trên trang web sau khi được duyệt.",
@@ -1549,7 +1553,8 @@
     "aboutUs": "Về chúng tôi",
     "blog": "Blog",
     "privacyPolicy": "Chính sách quyền riêng tư",
-    "termsAndConditions": "Điều khoản & Điều kiện"
+    "termsAndConditions": "Điều khoản & Điều kiện",
+    "partnerWithUs": "Hợp tác cùng chúng tôi"
   },
   "contact": {
     "contactUs": "Liên Hệ",
@@ -1608,7 +1613,8 @@
     "order": "Đơn hàng",
     "reply": "Reply",
     "writeYourRep": "Viết phản hồi của bạn...",
-    "yourReply": "Phản hồi của bạn"
+    "yourReply": "Phản hồi của bạn",
+    "booking": "Lịch hẹn"
   },
   "media": {
     "previewImage": "Xem trước Hình ảnh/Video",
@@ -1870,7 +1876,14 @@
   },
   "blog": {
     "title": "Danh sách bài viết",
-    "createdAt": "Ngày tạo"
+    "createdAt": "Ngày tạo",
+    "all": "Tất cả",
+    "type": {
+      "blog": "Bài viết",
+      "condition": "Chính sách"
+    },
+    "search": "Tìm kiếm",
+    "readMore": "Đọc thêm"
   },
   "blogDetails": {
     "createdAt": "Ngày tạo",
@@ -1985,6 +1998,7 @@
     "yearsExperience": "năm kinh nghiệm"
   },
   "booking": {
+    "service": "Dịch vụ",
     "rePayment": "Thanh Toán Lại",
     "all": "Tất Cả Đặt Lịch",
     "pending": "Đang Chờ",
@@ -2048,7 +2062,6 @@
     "completeConsultingCall": "Hoàn thành cuộc gọi tư vấn",
     "resultNoteDescription": "Thêm bất kỳ ghi chú hoặc quan sát nào từ cuộc gọi tư vấn",
     "resultNotePlaceholder": "Nhập ghi chú của bạn tại đây...",
-
     "completeConsultingCallDescription": "Vui lòng cung cấp chi tiết về việc hoàn thành cuộc gọi tư vấn bao gồm các tệp phương tiện và ghi chú liên quan.",
     "created": "Đã tạo đặt lịch",
     "statusDescription": {
@@ -2218,14 +2231,12 @@
     "invalidDob": "Ngày sinh phải là ngày hợp lệ (YYYY-MM-DD)",
     "emailRequired": "Email là bắt buộc",
     "passwordRequired": "Mật khẩu là bắt buộc",
-
     "fullNameMaxLength": "Họ và tên không được vượt quá 100 ký tự",
     "phoneMaxLength": "Số điện thoại không được vượt quá 100 ký tự",
     "districtMaxLength": "Quận/Huyện không được vượt quá 100 ký tự",
     "wardMaxLength": "Phường/Xã không được vượt quá 100 ký tự",
     "provinceMaxLength": "Tỉnh/Thành phố không được vượt quá 255 ký tự",
     "invalidType": "Loại địa chỉ không hợp lệ",
-
     "invalidStartTime": "Thời gian bắt đầu phải là chuỗi ngày hợp lệ",
     "invalidEndTime": "Thời gian kết thúc phải là chuỗi ngày hợp lệ",
     "totalPriceNonNegative": "Tổng giá phải là số không âm",
@@ -2233,7 +2244,6 @@
     "invalidBookingType": "Loại đặt lịch không hợp lệ",
     "invalidStatus": "Trạng thái không hợp lệ",
     "invalidResultNote": "Ghi chú kết quả không hợp lệ",
-
     "accountNotFound": "Tài khoản không tồn tại",
     "updatedByAccountNotFound": "Người cập nhật tài khoản không tồn tại",
     "emailAlreadyExists": "Email đã tồn tại",
@@ -2243,17 +2253,13 @@
     "consultantNotFound": "Tư vấn viên không tồn tại",
     "brandNotFound": "Thương hiệu không tồn tại",
     "exceededApprovedReportsLimit": "Tài khoản đã bị cấm do vượt quá giới hạn báo cáo được phê duyệt",
-
     "addressNotFound": "Địa chỉ không tồn tại",
     "atLeastOneDefaultAddress": "Phải có ít nhất một địa chỉ mặc định",
-
     "emailNotVerified": "Email chưa được xác minh",
     "invalidPassword": "Mật khẩu không hợp lệ",
     "loginMethodNotAllowed": "Người dùng phải đăng nhập bằng phương thức khác, không sử dụng mật khẩu",
-
     "blogNotExisted": "Blog không tồn tại",
     "blogTagAlreadyExisted": "Thẻ blog đã tồn tại",
-
     "bookingNotFound": "Đặt lịch không tồn tại",
     "onlyReviewerCanNoteResult": "Chỉ người đánh giá mới có thể ghi chú kết quả",
     "slotBooked": "Slot đã được đặt",
@@ -2271,7 +2277,6 @@
     "alreadyBookedSlot": "Bạn đã đặt một slot. Vui lòng chờ xử lý",
     "bookingCancelledSuccessfully": "Hủy đặt lịch thành công",
     "bookingStatusUpdatedSuccessfully": "Cập nhật trạng thái đặt lịch thành công",
-
     "classificationNotFound": "Phân loại sản phẩm không tồn tại",
     "invalidProduct": "Không thể thêm sản phẩm không hợp lệ",
     "quantityNotEnough": "Số lượng không đủ",
@@ -2282,30 +2287,25 @@
     "noItemsFoundForIds": "Không tìm thấy mục nào cho các ID được cung cấp",
     "accountIdRequired": "Yêu cầu ID tài khoản",
     "noItemsInCart": "Không tìm thấy mục nào trong giỏ hàng cho tài khoản đã cho",
-
     "categoryAlreadyExisted": "Danh mục đã tồn tại",
     "parentCategoryNotFound": "Không tìm thấy danh mục cha",
     "maxCategoryLevelExceeded": "Một danh mục không thể có hơn 4 cấp danh mục con",
     "categoryNotFound": "Không tìm thấy danh mục",
     "newParentCategoryNotFound": "Không tìm thấy danh mục cha mới",
-
     "bookingFormNotFound": "Biểu mẫu yêu cầu tư vấn dịch vụ không tồn tại",
     "systemServiceNotFoundOrInactive": "Dịch vụ hệ thống không tồn tại hoặc không hoạt động",
     "invalidStatusUpdate": "Không thể cập nhật trạng thái",
     "activeServicesUsingFormNotFound": "Không tìm thấy dịch vụ đang hoạt động sử dụng biểu mẫu này",
     "questionNotFound": "Câu hỏi không tồn tại",
     "imageNotFound": "Hình ảnh không tồn tại",
-
     "consultationCriteriaNotFound": "Tiêu chí tư vấn không tồn tại",
     "consultationCriteriaSectionNotFound": "Phần tiêu chí tư vấn không tồn tại",
     "criteriaCreationFailed": "Không thể tạo tiêu chí tư vấn",
     "criteriaUpdateFailed": "Không thể cập nhật tiêu chí tư vấn",
     "criteriaSectionUpdateFailed": "Không thể cập nhật phần tiêu chí tư vấn",
-
     "sectionNotFound": "Phần tiêu chí tư vấn không tồn tại",
     "livestreamNotFound": "Không tìm thấy livestream",
     "invalidLivestreamStatus": "Trạng thái livestream không hợp lệ",
-
     "classificationQuantityRequired": "Phân loại sản phẩm phải có ít nhất một số lượng",
     "skuRequired": "SKU là bắt buộc",
     "skuAlreadyExists": "SKU của phân loại sản phẩm đã tồn tại",
@@ -2315,24 +2315,19 @@
     "overlappingDiscountEvent": "Khoảng thời gian trùng với một sự kiện giảm giá hiện có",
     "preOrderProductNotFound": "Không tìm thấy sản phẩm đặt trước",
     "invalidFilterOptions": "Tùy chọn lọc không hợp lệ",
-
     "classificationSkuAlreadyExists": "SKU của phân loại sản phẩm đã tồn tại",
     "classificationTitleAlreadyExists": "Tiêu đề của phân loại sản phẩm đã tồn tại",
     "invalidSortBy": "Tham số sắp xếp không hợp lệ",
     "invalidProductStatus": "Trạng thái sản phẩm không hợp lệ",
-
     "productDiscountNotFound": "Không tìm thấy giảm giá sản phẩm",
     "classificationInvalid": "Phân loại sản phẩm không hợp lệ",
     "classificationQuantityInvalid": "Số lượng phân loại phải lớn hơn 0",
     "invalidClassificationQuantity": "Số lượng phân loại không hợp lệ: Số lượng phải nhỏ hơn hoặc bằng số lượng hiện tại",
     "productStatusInvalid": "Trạng thái sản phẩm không hợp lệ",
-
     "originalClassificationNotFound": "Không tìm thấy phân loại sản phẩm gốc",
-
     "deleteQuestionFailed": "Không thể xóa câu hỏi",
     "updateOrderIndexFailed": "Không thể cập nhật thứ tự câu hỏi",
     "imageDeleteFailed": "Không thể xóa hình ảnh liên kết với câu hỏi",
-
     "systemServiceNotFound": "Không tìm thấy dịch vụ hệ thống",
     "serviceAlreadyExisted": "Dịch vụ đã tồn tại",
     "activeServicesUsingCriteriaNotFound": "Không tìm thấy dịch vụ đang hoạt động sử dụng tiêu chí này",

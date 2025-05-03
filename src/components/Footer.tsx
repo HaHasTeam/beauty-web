@@ -1,17 +1,22 @@
 import { Mail, MapPin, Phone } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
+import { useShallow } from 'zustand/react/shallow'
 
-import fallBackImage from '@/assets/images/fallBackImage.jpg'
 import configs from '@/config'
+import { useStore } from '@/store/store'
 import { ProjectInformationEnum } from '@/types/enum'
-
-import appGooglePlayDownload from '../assets/images/appGooglePlayDownload.png'
-import appQRDownload from '../assets/images/appQRDownload.png'
-import ImageWithFallback from './ImageFallback'
 
 export default function Footer() {
   const { t } = useTranslation()
+  const { authData } = useStore(
+    useShallow((state) => ({
+      isAuthenticated: state.isAuthenticated,
+      isLoading: state.isLoading,
+      authData: state.authData,
+      user: state.user,
+    })),
+  )
   return (
     <footer className="w-full  bg-zinc-800 text-zinc-200">
       <div className="p-6">
@@ -41,10 +46,7 @@ export default function Footer() {
                 <Link to={configs.routes.contact}>{t('layout.contactUs')}</Link>
               </li>
               <li>
-                <Link to={configs.routes.helpCenter}>{t('layout.faq')}</Link>
-              </li>
-              <li>
-                <Link to={configs.routes.helpCenter}>{t('layout.shippingReturns')}</Link>
+                <Link to={configs.routes.returnCondition}>{t('layout.shippingReturns')}</Link>
               </li>
             </ul>
           </div>
@@ -73,24 +75,17 @@ export default function Footer() {
               </li>
             </ul>
           </div>
-          <div className="flex flex-col justify-center align-middle">
-            <div className="w-32 h-32 mb-2">
-              <ImageWithFallback
-                src={appQRDownload}
-                fallback={fallBackImage}
-                alt={'QR Code'}
-                className="object-contain"
-              />
-            </div>
-            <Link to={configs.externalLink.appDownloadUrl} className="bg-transparent hover:bg-transparent">
-              <div className="w-32 h-4">
-                <ImageWithFallback
-                  src={appGooglePlayDownload}
-                  fallback={fallBackImage}
-                  alt={'Google Play'}
-                  className="w-full object-contain"
-                />
-              </div>
+          <div>
+            <h3 className="mb-4 font-semibold text-secondary opacity-80 uppercase">{t('layout.partnerWithUs')}</h3>
+            <Link
+              to={
+                configs.externalLink.brandManagement +
+                `?accessToken=${authData?.accessToken}&refreshToken=${authData?.refreshToken}`
+              }
+              target="_blank"
+              className="font-semibold"
+            >
+              {t('sell.action')}
             </Link>
           </div>
         </div>
@@ -99,7 +94,7 @@ export default function Footer() {
         <p>{ProjectInformationEnum.copyRight}</p>
         <div className="mt-2 space-x-4">
           <Link to={configs.routes.privacyPolicy}>{t('layout.privacyPolicy')}</Link>
-          <Link to={configs.routes.blogs}>{t('layout.termsAndConditions')}</Link>
+          <Link to={configs.routes.termsAndConditions}>{t('layout.termsAndConditions')}</Link>
         </div>
       </div>
     </footer>

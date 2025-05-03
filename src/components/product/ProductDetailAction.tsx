@@ -4,6 +4,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
+import { useShallow } from 'zustand/react/shallow'
 
 import fallBackImage from '@/assets/images/fallBackImage.jpg'
 import configs from '@/config'
@@ -11,6 +12,7 @@ import useHandleServerError from '@/hooks/useHandleServerError'
 import { useToast } from '@/hooks/useToast'
 import { createCartItemApi, getMyCartApi } from '@/network/apis/cart'
 import useCartStore from '@/store/cart'
+import { useStore } from '@/store/store'
 import { IClassification } from '@/types/classification'
 import { DiscountTypeEnum, OrderEnum, ProductDiscountEnum, ProductEnum, StatusEnum } from '@/types/enum'
 import { IProduct } from '@/types/product'
@@ -44,6 +46,11 @@ const ProductDetailAction = ({
 }: ProductDetailActionProps) => {
   const { t } = useTranslation()
   const { setSelectedCartItem, cartItems } = useCartStore()
+  const { user } = useStore(
+    useShallow((state) => ({
+      user: state.user,
+    })),
+  )
   let groupBuying = useParams().groupId
   groupBuying = isInGroupBuying ? groupBuying : undefined
 
@@ -149,6 +156,10 @@ const ProductDetailAction = ({
   })
 
   const handleCreateCartItem = useCallback(async () => {
+    if (!user) {
+      navigate(configs.routes.signIn)
+      return
+    }
     if (isProcessing) return
     setIsProcessing(true)
     setQuantity(quantity)

@@ -154,76 +154,6 @@ const ProfileDetails = () => {
       {isGettingUserProfile && <LoadingContentLayer />}
 
       <div className="flex flex-col lg:flex-row gap-6">
-        <div className="lg:w-1/3">
-          <Card className="sticky top-20">
-            <CardHeader className="pb-4 flex flex-col items-center">
-              <div className="h-32 w-32 rounded-full overflow-hidden mb-4 border-4 border-primary/10 shadow-lg">
-                <ImageWithFallback
-                  src={imageUrl}
-                  alt="Profile Avatar"
-                  fallback={fallBackImage}
-                  className="object-contain "
-                />
-              </div>
-              <CardTitle className="text-center text-2xl font-bold">{getFullName()}</CardTitle>
-              <p className="text-muted-foreground text-center">{form.watch('username') || 'username'}</p>
-
-              {form.watch('email') && (
-                <div className="flex items-center gap-2 mt-4">
-                  <MailIcon className="w-4 h-4 text-muted-foreground" />
-                  <span className="text-sm">{form.watch('email')}</span>
-                  <CheckCircle2 className="w-4 h-4 text-green-500" />
-                </div>
-              )}
-            </CardHeader>
-            <Separator />
-            <CardContent className="pt-4">
-              <div className="space-y-4">
-                <div className="flex items-center gap-3">
-                  <UserIcon className="text-primary h-5 w-5" />
-                  <div>
-                    <p className="text-sm font-medium">{t('profile.gender')}</p>
-                    <p className="text-sm text-muted-foreground">
-                      {form.watch('gender') === UserGenderEnum.MALE
-                        ? t('profile.male')
-                        : form.watch('gender') === UserGenderEnum.FEMALE
-                          ? t('profile.female')
-                          : form.watch('gender') === UserGenderEnum.OTHER
-                            ? t('profile.other')
-                            : t('profile.notSpecified')}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <PhoneIcon className="text-primary h-5 w-5" />
-                  <div>
-                    <p className="text-sm font-medium">{t('profile.phone')}</p>
-                    <p className="text-sm text-muted-foreground">{form.watch('phone') || t('profile.notProvided')}</p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <CalendarIcon className="text-primary h-5 w-5" />
-                  <div>
-                    <p className="text-sm font-medium">{t('profile.dob')}</p>
-                    <p className="text-sm text-muted-foreground">{form.watch('dob') || t('profile.notProvided')}</p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <BuildingIcon className="text-primary h-5 w-5" />
-                  <div>
-                    <p className="text-sm font-medium">{t('profile.accountStatus')}</p>
-                    <span className="inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20 mt-1">
-                      {t('profile.active')}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
         <div className="lg:w-2/3">
           <Card>
             <CardHeader>
@@ -392,6 +322,7 @@ const ProfileDetails = () => {
                                 {...field}
                                 className="bg-background"
                                 placeholder={t('profile.phonePlaceholder')}
+                                isShowCountry={false}
                               />
                             </FormControl>
                             <FormMessage />
@@ -436,6 +367,76 @@ const ProfileDetails = () => {
               {t('profile.saveProfile')}
             </Button>
           </div>
+        </div>
+        <div className="lg:w-1/3">
+          <Card className="sticky top-0">
+            <CardHeader className="pb-4 flex flex-col items-center">
+              <div className="h-32 w-32 rounded-full overflow-hidden mb-4 border-4 border-primary/10 shadow-lg">
+                <ImageWithFallback
+                  src={imageUrl}
+                  alt="Profile Avatar"
+                  fallback={fallBackImage}
+                  className="object-contain "
+                />
+              </div>
+              <CardTitle className="text-center text-2xl font-bold">{getFullName()}</CardTitle>
+              <p className="text-muted-foreground text-center">{form.watch('username') || 'username'}</p>
+
+              {form.watch('email') && (
+                <div className="flex items-center gap-2 mt-4">
+                  <MailIcon className="w-4 h-4 text-muted-foreground" />
+                  <span className="text-sm">{form.watch('email')}</span>
+                  <CheckCircle2 className="w-4 h-4 text-green-500" />
+                </div>
+              )}
+            </CardHeader>
+            <Separator />
+            <CardContent className="pt-4">
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <UserIcon className="text-primary h-5 w-5" />
+                  <div>
+                    <p className="text-sm font-medium">{t('profile.gender')}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {form.watch('gender') === UserGenderEnum.MALE
+                        ? t('profile.male')
+                        : form.watch('gender') === UserGenderEnum.FEMALE
+                          ? t('profile.female')
+                          : form.watch('gender') === UserGenderEnum.OTHER
+                            ? t('profile.other')
+                            : t('profile.notSpecified')}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <PhoneIcon className="text-primary h-5 w-5" />
+                  <div>
+                    <p className="text-sm font-medium">{t('profile.phone')}</p>
+                    <p className="text-sm text-muted-foreground">{form.watch('phone') || t('profile.notProvided')}</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <CalendarIcon className="text-primary h-5 w-5" />
+                  <div>
+                    <p className="text-sm font-medium">{t('profile.dob')}</p>
+                    <p className="text-sm text-muted-foreground">{form.watch('dob') || t('profile.notProvided')}</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <BuildingIcon className="text-primary h-5 w-5" />
+                  <div>
+                    <p className="text-sm font-medium">{t('profile.accountStatus')}</p>
+                    <span className="inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20 mt-1">
+                      {t('profile.active')}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>
