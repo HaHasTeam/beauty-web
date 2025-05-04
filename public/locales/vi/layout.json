@@ -5,6 +5,28 @@
     "currency": "{{value, currency}}"
   },
   "welcome": "Chào mừng đến với Allure",
+
+  "unleashBeauty": "Khơi dậy vẻ đẹp bên trong bạn. Đăng nhập ngay.",
+  "or": "HOẶC",
+  "continueWithGoogle": "Tiếp tục với Google",
+  "noAccount": "Chưa có tài khoản?",
+  "createAccount": "Tạo tài khoản",
+  "backToShopping": "Quay lại mua sắm",
+  "email": "Email",
+  "emailPlaceholder": "Vui lòng nhập email của bạn",
+  "password": "Mật khẩu",
+  "passwordPlaceholder": "Vui lòng nhập mật khẩu của bạn.",
+  "forgotPassword": "Quên mật khẩu?",
+  "loginButton": "Đăng nhập",
+  "welcomeBack": "Chào mừng trở lại!, {{email}}",
+  "forgotPasswordTitle": "Quên mật khẩu?",
+  "forgotPasswordInstructions": "Nhập email của bạn để nhận hướng dẫn.",
+  "orDivider": "Hoặc",
+  "signInWithEmailPassword": "Đăng nhập bằng email và mật khẩu",
+  "noAccountQuestion": "Bạn chưa có tài khoản?",
+  "signUpLink": "Đăng ký",
+  "sendEmailButton": "Gửi Email",
+  "resetRequestSuccess": "Gửi yêu cầu thành công",
   "header": {
     "login": "Đăng nhập",
     "logout": "Đăng xuất",
@@ -2132,7 +2154,8 @@
     "update": "Cập Nhật",
     "delete": "Xóa",
     "search": "Tìm kiếm",
-    "continue": "Tiếp tục"
+    "continue": "Tiếp tục",
+    "view": "Xem"
   },
   "report": {
     "title": "Báo cáo",
@@ -2532,5 +2555,60 @@
     "cannotUpdateStatusApproved": "Không thể cập nhật trạng thái khi đang là ĐÃ DUYỆT",
     "evidencesRequired": "Yêu cầu cung cấp bằng chứng",
     "notAllowedToAccessResource": "Bạn không được phép truy cập tài nguyên này"
+  },
+  "profileVoucher": {
+    "title": "Voucher Của Tôi",
+    "status": {
+      "available": "Khả dụng",
+      "unavailable": "Không khả dụng",
+      "unclaimed": "Chưa nhận"
+    },
+    "discount": {
+      "percentage": "Giảm giá theo phần trăm: {value}%",
+      "fixed": "Giảm giá cố định: ${value}"
+    },
+    "minOrder": "Đơn hàng tối thiểu: ${value}",
+    "maxDiscount": "Giảm giá tối đa: ${value}",
+    "validity": "Có hiệu lực: {startDate} - {endDate}",
+    "buttons": {
+      "useVoucher": "Sử Dụng Voucher",
+      "unavailable": "Không Khả Dụng",
+      "tryAgain": "Thử Lại",
+      "copy": "Sao chép mã"
+    },
+    "notifications": {
+      "copied": "Đã sao chép mã!",
+      "copiedDescription": "Mã voucher {code} đã được sao chép vào clipboard"
+    },
+    "emptyState": {
+      "title": "Không Tìm Thấy Voucher",
+      "description": "Bạn chưa nhận voucher nào. Hãy kiểm tra trang khuyến mãi để xem các ưu đãi hiện có."
+    },
+    "error": {
+      "title": "Lỗi Khi Tải Voucher",
+      "description": "Chúng tôi không thể tải voucher của bạn. Vui lòng thử lại sau."
+    }
+  },
+  "account": {
+    "title": "Tài khoản",
+    "profile": "Hồ Sơ",
+    "walletAndTransactions": "Ví & Giao Dịch",
+    "reports": "Báo Cáo",
+    "address": "Địa Chỉ",
+    "changePassword": "Đổi Mật Khẩu",
+    "logout": "Đăng xuất"
+  },
+  "services": {
+    "title": "Dịch vụ",
+    "myOrders": "Đơn Hàng Của Tôi",
+    "myAppointments": "Lịch Hẹn Của Tôi",
+    "notifications": "Thông Báo",
+    "voucherStorage": "Kho Voucher"
+  },
+  "mobileNav": {
+    "account": "Tài khoản",
+    "orders": "Đơn hàng",
+    "notifications": "Thông báo",
+    "vouchers": "Voucher"
   }
 }
