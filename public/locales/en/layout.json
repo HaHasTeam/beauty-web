@@ -5,6 +5,28 @@
     "currency": "{{value, currency}}"
   },
   "welcome": "Welcome to Allure",
+  "unleashBeauty": "Unleash your inner beauty. Log in now.",
+  "or": "OR",
+  "continueWithGoogle": "Continue with Google",
+  "noAccount": "Haven't an account yet?",
+  "createAccount": "Create an Account",
+  "backToShopping": "Back to shopping",
+  "email": "Email",
+  "emailPlaceholder": "Please enter your email",
+  "password": "Password",
+  "passwordPlaceholder": "Please Enter your password.",
+  "forgotPassword": "Forgot your password?",
+  "loginButton": "Log in",
+  "welcomeBack": "Welcome back!, {{email}}",
+  "forgotPasswordTitle": "Forgot password?",
+  "forgotPasswordInstructions": "Enter your email for instructions.",
+  "orDivider": "Or",
+  "signInWithEmailPassword": "Sign in with email and password",
+  "noAccountQuestion": "Don't have an account?",
+  "signUpLink": "Sign up",
+
+  "sendEmailButton": "Send Email",
+  "resetRequestSuccess": "Send request success",
   "header": {
     "login": "Login",
     "logout": "Logout",
@@ -2052,7 +2074,8 @@
     "update": "Update",
     "delete": "Delete",
     "search": "Search",
-    "continue": "Continue"
+    "continue": "Continue",
+    "view": "View"
   },
   "transaction": {
     "history": "Transaction History",
@@ -2374,7 +2397,7 @@
     "balanceNonNegative": "Balance must be non-negative",
     "invalidBankAccountId": "Invalid bank account ID",
     "invalidRelatedAccountId": "Invalid related account ID",
-    
+
     "bankAccountNotFound": "Bank account not found",
     "cannotUnselectDefaultBankAccount": "Cannot unselect default bank account",
     "cannotDeleteDefaultBankAccount": "Cannot delete default bank account",
@@ -2502,5 +2525,60 @@
     "cannotUpdateStatusApproved": "Can not update this status when current is APPROVED",
     "evidencesRequired": "Evidences are required",
     "notAllowedToAccessResource": "You are not allowed to access this resource"
+  },
+  "profileVoucher": {
+    "title": "My Vouchers",
+    "status": {
+      "available": "Available",
+      "unavailable": "Unavailable",
+      "unclaimed": "Unclaimed"
+    },
+    "discount": {
+      "percentage": "Percentage discount: {value}%",
+      "fixed": "Fixed discount: ${value}"
+    },
+    "minOrder": "Min. order: ${value}",
+    "maxDiscount": "Max. discount: ${value}",
+    "validity": "Valid: {startDate} - {endDate}",
+    "buttons": {
+      "useVoucher": "Use Voucher",
+      "unavailable": "Unavailable",
+      "tryAgain": "Try Again",
+      "copy": "Copy code"
+    },
+    "notifications": {
+      "copied": "Code copied!",
+      "copiedDescription": "Voucher code {code} copied to clipboard"
+    },
+    "emptyState": {
+      "title": "No Vouchers Found",
+      "description": "You haven't claimed any vouchers yet. Check our promotions page for available offers."
+    },
+    "error": {
+      "title": "Error Loading Vouchers",
+      "description": "We couldn't load your vouchers. Please try again later."
+    }
+  },
+  "account": {
+    "title": "Account",
+    "profile": "Profile",
+    "walletAndTransactions": "Wallet & Transactions",
+    "reports": "Reports",
+    "address": "Address",
+    "changePassword": "Change Password",
+    "logout": "Logout"
+  },
+  "services": {
+    "title": "Services",
+    "myOrders": "My Orders",
+    "myAppointments": "My Appointments",
+    "notifications": "Notifications",
+    "voucherStorage": "Voucher Storage"
+  },
+  "mobileNav": {
+    "account": "Account",
+    "orders": "Orders",
+    "notifications": "Notifications",
+    "vouchers": "Vouchers"
   }
 }

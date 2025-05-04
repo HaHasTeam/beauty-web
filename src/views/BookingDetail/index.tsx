@@ -33,6 +33,8 @@ const BookingDetail = () => {
   const { t } = useTranslation()
   const queryClient = useQueryClient()
   const [openCancelBookingDialog, setOpenCancelBookingDialog] = useState<boolean>(false)
+  const [notRefund, setNotRefund] = useState<boolean>(false)
+
   const [isTrigger, setIsTrigger] = useState<boolean>(false)
   // const { successToast } = useToast()
   // const handleServerError = useHandleServerError()
@@ -105,6 +107,7 @@ const BookingDetail = () => {
 
               {/* Update booking status */}
               <UpdateBookingStatus
+                setNotRefund={setNotRefund}
                 booking={bookingData?.data}
                 statusTracking={bookingData?.data?.statusTrackings ?? []}
                 isConsultant={user?.role === RoleEnum.CONSULTANT}
@@ -372,6 +375,7 @@ const BookingDetail = () => {
         {/* Cancel Booking Dialog */}
         {!isFetching && bookingData?.data && (
           <CancelBookingDialog
+            notRefund={notRefund}
             open={openCancelBookingDialog}
             setOpen={setOpenCancelBookingDialog}
             onOpenChange={setOpenCancelBookingDialog}

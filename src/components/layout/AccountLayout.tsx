@@ -1,4 +1,5 @@
 import { Bell, Calendar, Flag, Home, Lock, LogOutIcon, Package, Ticket, User, Wallet } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { useShallow } from 'zustand/react/shallow'
 
@@ -16,31 +17,32 @@ function AccountLayout() {
   )
   const navigate = useNavigate()
   const location = useLocation()
+  const { t } = useTranslation()
 
   // Define navigation items
   const accountMenuItems = [
     {
-      title: 'Hồ Sơ',
+      title: t('account.profile'),
       icon: <User className="mr-3 h-5 w-5" />,
       path: configs.routes.profile,
     },
     {
-      title: 'Ví & Giao Dịch',
+      title: t('account.walletAndTransactions'),
       icon: <Wallet className="mr-3 h-5 w-5" />,
       path: configs.routes.profileWallet,
     },
     {
-      title: 'Báo Cáo',
+      title: t('account.reports'),
       icon: <Flag className="mr-3 h-5 w-5" />,
       path: configs.routes.profileReport,
     },
     {
-      title: 'Địa Chỉ',
+      title: t('account.address'),
       icon: <Home className="mr-3 h-5 w-5" />,
       path: configs.routes.profileAddress,
     },
     {
-      title: 'Đổi Mật Khẩu',
+      title: t('account.changePassword'),
       icon: <Lock className="mr-3 h-5 w-5" />,
       path: configs.routes.profilePassword,
     },
@@ -48,22 +50,22 @@ function AccountLayout() {
 
   const serviceMenuItems = [
     {
-      title: 'Đơn Hàng Của Tôi',
+      title: t('services.myOrders'),
       icon: <Package className="mr-3 h-5 w-5" />,
       path: configs.routes.profileOrder,
     },
     {
-      title: 'Lịch Hẹn Của Tôi',
+      title: t('services.myAppointments'),
       icon: <Calendar className="mr-3 h-5 w-5" />,
       path: configs.routes.profileBookings,
     },
     {
-      title: 'Thông Báo',
+      title: t('services.notifications'),
       icon: <Bell className="mr-3 h-5 w-5" />,
       path: configs.routes.profileNotification,
     },
     {
-      title: 'Kho Voucher',
+      title: t('services.voucherStorage'),
       icon: <Ticket className="mr-3 h-5 w-5" />,
       path: configs.routes.profileVoucher,
     },
@@ -92,7 +94,9 @@ function AccountLayout() {
 
       <div className="flex-1 p-4">
         <div className="space-y-1 py-1">
-          <h3 className="text-xs font-semibold text-primary mb-2 uppercase tracking-wider px-1">Tài khoản</h3>
+          <h3 className="text-xs font-semibold text-primary mb-2 uppercase tracking-wider px-1">
+            {t('account.title')}
+          </h3>
           {accountMenuItems.map((item) => (
             <Button
               key={item.path}
@@ -133,7 +137,9 @@ function AccountLayout() {
         <Separator className="my-3 bg-muted/60" />
 
         <div className="space-y-1 py-1">
-          <h3 className="text-xs font-semibold text-primary mb-2 uppercase tracking-wider px-1">Dịch vụ</h3>
+          <h3 className="text-xs font-semibold text-primary mb-2 uppercase tracking-wider px-1">
+            {t('services.title')}
+          </h3>
           {serviceMenuItems.map((item) => (
             <Button
               key={item.path}
@@ -183,7 +189,7 @@ function AccountLayout() {
           <span className="flex-shrink-0 mr-2.5 text-destructive">
             <LogOutIcon className="h-5 w-5" />
           </span>
-          Đăng xuất
+          {t('account.logout')}
         </Button>
       </div>
     </ScrollArea>
@@ -210,7 +216,7 @@ function AccountLayout() {
             onClick={() => navigate(configs.routes.profile)}
           >
             <User className="h-5 w-5 mb-1" />
-            Tài khoản
+            {t('mobileNav.account')}
           </Button>
 
           <Button
@@ -222,7 +228,7 @@ function AccountLayout() {
             onClick={() => navigate(configs.routes.profileOrder)}
           >
             <Package className="h-5 w-5 mb-1" />
-            Đơn hàng
+            {t('mobileNav.orders')}
           </Button>
 
           <Button
@@ -234,7 +240,7 @@ function AccountLayout() {
             onClick={() => navigate(configs.routes.profileNotification)}
           >
             <Bell className="h-5 w-5 mb-1" />
-            Thông báo
+            {t('mobileNav.notifications')}
           </Button>
 
           <Button
@@ -246,7 +252,7 @@ function AccountLayout() {
             onClick={() => navigate(configs.routes.profileVoucher)}
           >
             <Ticket className="h-5 w-5 mb-1" />
-            Voucher
+            {t('mobileNav.vouchers')}
           </Button>
         </div>
       </div>

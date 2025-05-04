@@ -31,7 +31,10 @@ export default function SaleProductCard({ product }: ProductCardProps) {
     // console.log('totalQuantity', totalQuantity)
     return totalQuantity
   }, [product.productClassifications])
-
+  const imageUrl =
+    cheapestClassification?.title == 'Default'
+      ? product?.images?.filter((el) => el.status === StatusEnum.ACTIVE)?.[0]?.fileUrl
+      : cheapestClassification?.images?.filter((img) => img.status === StatusEnum.ACTIVE)?.[0]?.fileUrl
   return (
     <Link to={configs.routes.products + '/' + product.product.id}>
       <Card>
@@ -46,7 +49,7 @@ export default function SaleProductCard({ product }: ProductCardProps) {
           <div className="relative aspect-square">
             <ImageWithFallback
               fallback={fallBackImage}
-              src={cheapestClassification?.images?.filter((img) => img.status === StatusEnum.ACTIVE)?.[0]?.fileUrl}
+              src={imageUrl}
               alt={cheapestClassification?.title}
               className="object-cover w-full h-full rounded-tl-xl rounded-tr-xl"
             />

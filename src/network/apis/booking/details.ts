@@ -55,15 +55,17 @@ export const updateBookingStatusApi = toMutationFetcher<UpdateBookingStatusParam
 interface CancelBookingParams {
   bookingId: string
   reason: string
+  notRefund: boolean
 }
 
 export const cancelBookingApi = toMutationFetcher<CancelBookingParams, TServerResponse<IBooking>>(
   'cancelBooking',
-  async ({ bookingId, reason }) => {
+  async ({ bookingId, reason, notRefund }) => {
     return privateRequest(`/bookings/cancelled-booking/${bookingId}`, {
       method: 'PUT',
       data: {
         reason,
+        notRefund,
       },
     })
   },

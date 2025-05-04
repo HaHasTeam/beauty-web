@@ -208,7 +208,7 @@ const ServiceCheckout = () => {
 
       // Nếu phương thức thanh toán là ví, chuyển thẳng đến trang thành công
       successToast({
-        message: t('booking.success'),
+        message: t('booking.success', 'Đặt lịch thành công'),
       })
 
       // Reset form và state
