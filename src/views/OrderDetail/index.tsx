@@ -335,7 +335,9 @@ const OrderDetail = () => {
                         </p>
                         <p>
                           <span className="font-medium">{t('orderDetail.notes')}:</span>{' '}
-                          {useOrderData?.data?.notes ?? t('orderDetail.no')}
+                          {useOrderData?.data?.notes && useOrderData?.data?.notes !== ''
+                            ? useOrderData?.data?.notes
+                            : t('orderDetail.no')}
                         </p>
                       </div>
                     }
