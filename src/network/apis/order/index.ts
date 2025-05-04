@@ -96,6 +96,9 @@ export const filterOrdersParentApi = toQueryFetcher<IOrderFilterFilter, TServerR
     const { page, limit, sortBy, order, ...rest } = filterData || {}
 
     const body: IOrderFilterFilter = {}
+    if (rest.statuses?.length) {
+      body.statuses = rest.statuses
+    }
     if (rest.search) {
       body.search = rest.search
     }
@@ -116,7 +119,6 @@ export const filterRequestApi = toQueryFetcher<IRequestFilterFilter, TServerResp
   'filterRequestApi',
   async (filterData) => {
     const { page, limit, sortBy, order, ...rest } = filterData || {}
-    console.log('testing', rest)
     const body: IRequestFilterFilter = {}
 
     if (rest.statuses?.length) {

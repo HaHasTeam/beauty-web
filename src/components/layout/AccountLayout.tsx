@@ -69,6 +69,11 @@ function AccountLayout() {
       icon: <Ticket className="mr-3 h-5 w-5" />,
       path: configs.routes.profileVoucher,
     },
+    {
+      title: 'Báo Cáo',
+      icon: <Flag className="mr-3 h-5 w-5" />,
+      path: configs.routes.profileReport,
+    },
   ]
 
   // Check if a menu item is active
