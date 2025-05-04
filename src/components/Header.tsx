@@ -1,4 +1,4 @@
-import { CircleUserRound, HelpCircle, Menu, ShoppingCart, X } from 'lucide-react'
+import { CircleUserRound, Menu, ShoppingCart, X } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
@@ -17,7 +17,7 @@ import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 export default function Header({ totalItems }: { totalItems: number }) {
   const { t } = useTranslation()
   const [menuOpen, setMenuOpen] = useState(false)
-  const { isAuthenticated, isLoading, authData, user } = useStore(
+  const { isAuthenticated, isLoading, user } = useStore(
     useShallow((state) => ({
       isAuthenticated: state.isAuthenticated,
       isLoading: state.isLoading,
@@ -28,38 +28,7 @@ export default function Header({ totalItems }: { totalItems: number }) {
 
   return (
     <header className="w-full bg-white relative shadow-lg">
-      <div className="">
-        <div className="px-4 flex items-center justify-between py-2 text-sm">
-          <div className="flex space-x-4">
-            <Link
-              to={
-                configs.externalLink.brandManagement +
-                `?accessToken=${authData?.accessToken}&refreshToken=${authData?.refreshToken}`
-              }
-              target="_blank"
-              className="font-semibold"
-            >
-              {t('sell.action')}
-            </Link>
-            {/* <Link
-              to={
-                configs.externalLink.brandManagement +
-                `?accessToken=${authData?.accessToken}&refreshToken=${authData?.refreshToken}`
-              }
-              target="_blank"
-              className="border-l border-secondary px-3 font-semibold"
-            >
-              {t('professional.action')}
-            </Link> */}
-          </div>
-          <div className="flex items-center space-x-4">
-            <Link to={configs.routes.helpCenter} className="flex gap-2 items-center text-black h-8 w-full px-2">
-              <HelpCircle className="h-4 w-4" />
-              <span className="text-sm">{t('helpCenter.name')}</span>
-            </Link>
-            <LanguageSwitcher />
-          </div>
-        </div>
+      <div>
         <div className="px-2 md:px-8 flex justify-between py-4 border-t border-secondary">
           <Link to={configs.routes.home} className="text-3xl font-bold text-primary hidden md:block">
             {ProjectInformationEnum.name}
@@ -67,21 +36,16 @@ export default function Header({ totalItems }: { totalItems: number }) {
           <SearchBar />
           {/* desktop menu */}
           <div className="md:flex gap-3 hidden items-center justify-center">
-            <WebNotification
-            // notifications={notifications}
-            // notificationCount={notifications.length}
-            // onNotificationClick={handleNotificationClick}
-            />
             {!isLoading && isAuthenticated ? (
               <Link
                 to={configs.routes.profile}
-                className="flex gap-1 justify-start text-base"
+                className="flex gap-1 justify-start text-base items-center"
                 onClick={() => {
                   setMenuOpen(false)
                 }}
               >
                 {user ? (
-                  <Avatar className="w-6 h-6">
+                  <Avatar className="w-5 h-5">
                     <AvatarImage src={user.avatar} alt={user.username} />
                     <AvatarFallback>{user.username?.charAt(0).toUpperCase() ?? 'A'}</AvatarFallback>
                   </Avatar>
@@ -95,24 +59,26 @@ export default function Header({ totalItems }: { totalItems: number }) {
                 {t('header.loginOrRegister')}
               </Link>
             )}
-
+            <WebNotification />
             <Link to={configs.routes.cart}>
               <div className="relative cursor-pointer">
                 <ShoppingCart />
-                {Number(totalItems) > 0 && (
+                {Number(totalItems) > 0 ? (
                   <span className="absolute -top-1 -right-1 rounded-full bg-primary text-white text-xs w-4 h-4 flex items-center justify-center">
                     {totalItems}
                   </span>
-                )}
+                ) : null}
               </div>
               <span className="sr-only">{t('header.shoppingCart')}</span>
             </Link>
+            <LanguageSwitcher />
           </div>
           {/* Mobile Menu Toggle */}
           <div className="flex md:hidden">
             <Button variant="ghost" size="icon" onClick={() => setMenuOpen(!menuOpen)} className={`transition-colors `}>
               {menuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </Button>
+            <LanguageSwitcher />
           </div>
         </div>
       </div>
@@ -136,45 +102,47 @@ export default function Header({ totalItems }: { totalItems: number }) {
               >
                 <div className="relative cursor-pointer">
                   <ShoppingCart className="h-5 w-5" />
-                  {totalItems > 0 && (
+                  {totalItems > 0 ? (
                     <span className="absolute -top-1 -right-1 rounded-full bg-primary text-white text-xs w-4 h-4 flex items-center justify-center">
                       {totalItems}
                     </span>
-                  )}
+                  ) : null}
                 </div>
                 <span>{t('header.shoppingCart')}</span>
               </Link>
             </div>
-            {!isLoading && isAuthenticated ? (
-              <Link
-                to={configs.routes.profile}
-                className="w-full flex gap-2 items-center justify-start p-2 hover:bg-primary/10 rounded-md "
-                onClick={() => {
-                  setMenuOpen(false)
-                }}
-              >
-                {user ? (
-                  <Avatar>
-                    <AvatarImage src={user.avatar} alt={user.username} />
-                    <AvatarFallback>{user.username?.charAt(0).toUpperCase() ?? 'A'}</AvatarFallback>
-                  </Avatar>
-                ) : (
-                  <CircleUserRound className="h-5 w-5" />
-                )}
+            <div>
+              {!isLoading && isAuthenticated ? (
+                <Link
+                  to={configs.routes.profile}
+                  className="w-full flex gap-2 items-center justify-start p-2 hover:bg-primary/10 rounded-md "
+                  onClick={() => {
+                    setMenuOpen(false)
+                  }}
+                >
+                  {user ? (
+                    <Avatar className="h-5 w-5">
+                      <AvatarImage src={user.avatar} alt={user.username} />
+                      <AvatarFallback>{user.username?.charAt(0).toUpperCase() ?? 'A'}</AvatarFallback>
+                    </Avatar>
+                  ) : (
+                    <CircleUserRound className="h-5 w-5" />
+                  )}
 
-                <span>{t('header.profile')}</span>
-              </Link>
-            ) : (
-              <Link
-                to={configs.routes.signIn}
-                className="w-full text-background-foreground"
-                onClick={() => {
-                  setMenuOpen(false)
-                }}
-              >
-                {t('header.loginOrRegister')}
-              </Link>
-            )}
+                  <span>{t('header.profile')}</span>
+                </Link>
+              ) : (
+                <Link
+                  to={configs.routes.signIn}
+                  className="w-full text-background-foreground p-2"
+                  onClick={() => {
+                    setMenuOpen(false)
+                  }}
+                >
+                  {t('header.loginOrRegister')}
+                </Link>
+              )}
+            </div>
           </div>
         </div>
       )}

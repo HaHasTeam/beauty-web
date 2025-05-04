@@ -83,25 +83,27 @@ const VoucherCartItem = ({
           </div>
         )}
         <CardContent
-          className={cn(
-            'px-2 py-4 relative',
-            status === VoucherUsedStatusEnum.UNAVAILABLE ? 'opacity-50 cursor-default' : '',
-          )}
+          className={cn('px-2 py-4 relative', status === VoucherUsedStatusEnum.UNAVAILABLE ? 'cursor-default' : '')}
         >
           <div className="flex gap-2 items-center">
             {/* Logo Section */}
 
             {brandLogo && brandLogo !== '' ? (
-              <div className="w-14 h-14">
+              <div className={cn('w-14 h-14', status === VoucherUsedStatusEnum.UNAVAILABLE ? 'opacity-40' : '')}>
                 <ImageWithFallback
                   fallback={fallBackImage}
                   src={brandLogo}
                   alt="Brand logo"
-                  className="w-full h-full object-contain"
+                  className="w-full h-full object-contain rounded-sm"
                 />
               </div>
             ) : (
-              <div className="flex justify-center items-center">
+              <div
+                className={cn(
+                  'flex justify-center items-center',
+                  status === VoucherUsedStatusEnum.UNAVAILABLE ? 'opacity-40' : '',
+                )}
+              >
                 <span className="text-lg font-bold uppercase">{brandName}</span>
               </div>
             )}
@@ -111,7 +113,12 @@ const VoucherCartItem = ({
               <div className="flex justify-between items-start">
                 <div className="w-full">
                   <div className="flex gap-2">
-                    <p className="text-base font-medium flex items-start flex-wrap gap-1">
+                    <p
+                      className={cn(
+                        'text-base font-medium flex items-start flex-wrap gap-1',
+                        status === VoucherUsedStatusEnum.UNAVAILABLE ? 'opacity-40' : '',
+                      )}
+                    >
                       <span className="w-fit">
                         {voucher?.discountType === DiscountTypeEnum.PERCENTAGE
                           ? t('voucher.off.percentage', { percentage: voucher?.discountValue * 100 }) + '. '
@@ -130,14 +137,25 @@ const VoucherCartItem = ({
                   )}
 
                   {voucher?.applyType === VoucherApplyTypeEnum.SPECIFIC && (
-                    <span className="inline-block border border-red-500 text-red-500 text-xs px-2 py-0.5 rounded mt-1">
+                    <span
+                      className={cn(
+                        'inline-block border border-red-500 text-red-500 text-xs px-2 py-0.5 rounded mt-1',
+                        status === VoucherUsedStatusEnum.UNAVAILABLE ? 'opacity-40' : '',
+                      )}
+                    >
                       {t('voucher.off.specific')}
                     </span>
                   )}
                 </div>
               </div>
-              <div className="mt-1 text-xs text-muted-foreground">
-                {t('date.exp')}: {t('date.toLocaleDateTimeString', { val: new Date(voucher?.endTime) })}
+              <div
+                className={cn(
+                  'mt-1 text-xs text-muted-foreground',
+                  status === VoucherUsedStatusEnum.UNAVAILABLE ? 'opacity-40' : '',
+                )}
+              >
+                {t('date.exp')}: {t('date.toLocaleDateTimeString', { val: new Date(voucher?.startTime) })} -{' '}
+                {t('date.toLocaleDateTimeString', { val: new Date(voucher?.endTime) })}
               </div>
             </div>
 

@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import fallBackImage from '@/assets/images/fallBackImage.jpg'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import configs from '@/config'
-import { DiscountTypeEnum, OrderEnum, StatusEnum } from '@/types/enum'
+import { ClassificationTypeEnum, DiscountTypeEnum, OrderEnum, StatusEnum } from '@/types/enum'
 import { TFlashSale } from '@/types/flash-sale'
 import { calculateDiscountPrice } from '@/utils/price'
 import { getCheapestClassification } from '@/utils/product'
@@ -31,10 +31,18 @@ export default function SaleProductCard({ product }: ProductCardProps) {
     // console.log('totalQuantity', totalQuantity)
     return totalQuantity
   }, [product.productClassifications])
-  const imageUrl =
-    cheapestClassification?.title == 'Default'
-      ? product?.images?.filter((el) => el.status === StatusEnum.ACTIVE)?.[0]?.fileUrl
-      : cheapestClassification?.images?.filter((img) => img.status === StatusEnum.ACTIVE)?.[0]?.fileUrl
+
+  const images = useMemo(
+    () =>
+      cheapestClassification &&
+      cheapestClassification.type === ClassificationTypeEnum.CUSTOM &&
+      cheapestClassification?.images &&
+      cheapestClassification?.images.length > 0
+        ? cheapestClassification.images
+        : product.images,
+    [cheapestClassification, product.images],
+  )
+
   return (
     <Link to={configs.routes.products + '/' + product.product.id}>
       <Card>
@@ -49,7 +57,7 @@ export default function SaleProductCard({ product }: ProductCardProps) {
           <div className="relative aspect-square">
             <ImageWithFallback
               fallback={fallBackImage}
-              src={imageUrl}
+              src={images?.filter((img) => img.status === StatusEnum.ACTIVE)?.[0]?.fileUrl}
               alt={cheapestClassification?.title}
               className="object-cover w-full h-full rounded-tl-xl rounded-tr-xl"
             />

@@ -18,6 +18,10 @@ export enum BlogEnum {
   PUBLISHED = 'PUBLISHED',
   INACTIVE = 'INACTIVE',
 }
+export enum BlogTypeEnum {
+  CONDITION = 'CONDITION',
+  BLOG = 'BLOG',
+}
 
 export enum StatusEnum {
   PENDING = 'PENDING',

@@ -31,13 +31,13 @@ export default function VoucherInformationPopup({
           <AlertCircle className="w-4 h-4 text-gray-600" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-96 bg-white">
+      <PopoverContent className="w-96 bg-white text-base">
         <ScrollArea className="max-h-[80vh]">
           <h3 className="font-semibold text-center text-lg">{t('voucher.informationTitle')}</h3>
           <div className="space-y-2">
             <div>
               <span className="font-medium">{t('voucher.discount')}</span>
-              <p>
+              <p className="font-normal">
                 {voucher?.discountType === DiscountTypeEnum.PERCENTAGE
                   ? t('voucher.off.percentage', { percentage: voucher?.discountValue * 100 })
                   : t('voucher.off.amount', { amount: voucher?.discountValue })}
@@ -51,22 +51,22 @@ export default function VoucherInformationPopup({
             </div>
             <div>
               <span className="font-medium">{t('date.expiredDate')}</span>
-              <p>
+              <p className="font-normal">
                 {t('date.toLocaleDateTimeString', { val: new Date(voucher?.startTime) })} -{' '}
                 {t('date.toLocaleDateTimeString', { val: new Date(voucher?.endTime) })}
               </p>
             </div>
             <div>
               <span className="font-medium">{t('voucher.nameTitle')}</span>
-              <p>{voucher?.name}</p>
+              <p className="font-normal">{voucher?.name}</p>
             </div>
             <div>
               <span className="font-medium">{t('voucher.descriptionTitle')}</span>
-              <p>{voucher?.description}</p>
+              <p className="font-normal">{voucher?.description}</p>
             </div>
             <div>
               <span className="font-medium">{t('voucher.applicableProducts')}</span>
-              <p>
+              <p className="font-normal">
                 {voucher?.applyType === VoucherApplyTypeEnum.SPECIFIC
                   ? t('voucher.off.specificDescription', { val: t(`voucher.${applyFor}`) })
                   : t('voucher.off.allDescription', { val: t(`voucher.${applyFor}`) })}

@@ -16,7 +16,8 @@ export const getFeedbackSchema = () => {
         MAX_FEEDBACK_LENGTH,
         i18next.t('validation.contentFeedback', { minLength: MIN_FEEDBACK_LENGTH, maxLength: MAX_FEEDBACK_LENGTH }),
       ),
-    orderDetailId: z.string().uuid(), // uuid
+    orderDetailId: z.string().optional(),
+    bookingId: z.string().optional(),
     mediaFiles: z.array(z.instanceof(File)).optional(),
     videos: z.array(z.instanceof(File)).optional(),
     images: z.array(z.instanceof(File)).optional(),

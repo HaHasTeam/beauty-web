@@ -21,9 +21,12 @@ const SignIn = () => {
       <div className="w-full max-w-4xl bg-white rounded-lg shadow-lg overflow-hidden">
         <div className="flex flex-col md:flex-row">
           <div className="md:w-1/2 relative bg-blend-color-burn">
-            <div className="absolute  top-4 right-4 bg-white px-2 py-1 rounded text-sm flex cursor-pointer">
-              {t('backToShopping')} <ChevronRight className="text-primary" />
-            </div>
+            <Link
+              to={configs.routes.home}
+              className="absolute  top-4 right-4 bg-white px-2 py-1 rounded text-sm flex cursor-pointer"
+            >
+              {t('button.backToShopping')} <ChevronRight className="text-primary" />
+            </Link>
             <img
               src={Hero01 || '/placeholder.svg'}
               alt="Beauty product application"
