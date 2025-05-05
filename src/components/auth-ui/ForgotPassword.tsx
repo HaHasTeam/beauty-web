@@ -1,8 +1,10 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { z } from 'zod'
 
+import routes from '@/config/routes'
 import useHandleServerError from '@/hooks/useHandleServerError'
 import { useToast } from '@/hooks/useToast'
 import { formEmailSchema } from '@/lib/schema'
@@ -13,6 +15,8 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '../ui/input'
 
 export default function ForgotPassword() {
+  const verifyEmailRedirectUrl = import.meta.env.VITE_APP_URL + routes.resetPassword
+  const { t } = useTranslation()
   const handleServerError = useHandleServerError()
   const { successToast } = useToast()
   const form = useForm<z.infer<typeof formEmailSchema>>({
@@ -27,20 +31,21 @@ export default function ForgotPassword() {
     mutationFn: requestResetPasswordApi.fn,
     onSuccess: () => {
       successToast({
-        message: `Send request success`,
+        message: t('resetRequestSuccess'),
       })
     },
   })
 
   async function onSubmit(values: z.infer<typeof formEmailSchema>) {
     try {
-      await sendRequestResetPassword(values.email)
+      await sendRequestResetPassword({ email: values.email, url: verifyEmailRedirectUrl })
     } catch (error) {
       handleServerError({
         error,
       })
     }
   }
+
   return (
     <div className="mb-8">
       <Form {...form}>
@@ -51,9 +56,9 @@ export default function ForgotPassword() {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>{t('email')}</FormLabel>
                   <FormControl>
-                    <Input placeholder="Please enter your email" type="email" {...field} />
+                    <Input placeholder={t('emailPlaceholder')} type="email" {...field} />
                   </FormControl>
 
                   <FormMessage />
@@ -67,7 +72,7 @@ export default function ForgotPassword() {
               size={'lg'}
               className="mt-2 flex w-full items-center justify-center rounded-lg text-sm font-medium"
             >
-              'Send Email'
+              {t('sendEmailButton')}
             </Button>
           </div>
         </form>

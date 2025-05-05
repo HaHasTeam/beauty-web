@@ -2,20 +2,28 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { BuildingIcon, CalendarIcon, CheckCircle2, MailIcon, PhoneIcon, SaveIcon, User2, UserIcon } from 'lucide-react'
+import {
+  BuildingIcon,
+  CalendarIcon,
+  CheckCircle2,
+  MailIcon,
+  Pen,
+  PhoneIcon,
+  SaveIcon,
+  User2,
+  UserIcon,
+} from 'lucide-react'
 import { useEffect, useId, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import * as z from 'zod'
 
-import fallBackImage from '@/assets/images/fallBackImage.jpg'
 import Button from '@/components/button'
-import UploadFiles, { type TriggerUploadRef } from '@/components/file-input/UploadFiles'
 import { FlexDatePicker } from '@/components/flexible-date-picker/FlexDatePicker'
 import FormLabel from '@/components/form-label'
-import ImageWithFallback from '@/components/ImageFallback'
 import LoadingContentLayer from '@/components/loading-icon/LoadingContentLayer'
 import { PhoneInputWithCountries } from '@/components/phone-input'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
@@ -24,8 +32,9 @@ import { Separator } from '@/components/ui/separator'
 import { defaultRequiredRegex, emailRegex, longRequiredRegex, phoneRegex } from '@/constants/regex'
 import useHandleServerError from '@/hooks/useHandleServerError'
 import { useToast } from '@/hooks/useToast'
+import { uploadFilesApi } from '@/network/apis/file'
 import { getUserProfileApi, updateProfileApi } from '@/network/apis/user'
-import { FileStatusEnum, type TFile } from '@/types/file'
+import { FileStatusEnum } from '@/types/file'
 import { type TUser, UserGenderEnum } from '@/types/user'
 
 import { convertFormIntoProfile, convertProfileIntoForm } from './helper'
@@ -52,6 +61,7 @@ const getFormSchema = () => {
           name: z.string().optional(),
           id: z.string().optional(),
           status: z.nativeEnum(FileStatusEnum).optional(),
+          file: z.instanceof(File).optional(),
         }),
       )
       .optional()
@@ -82,7 +92,8 @@ const ProfileDetails = () => {
     queryKey: [getUserProfileApi.queryKey],
     queryFn: getUserProfileApi.fn,
   })
-  const triggerRef = useRef<TriggerUploadRef>(null)
+
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const { mutateAsync: updateProfileFn } = useMutation({
     mutationKey: [updateProfileApi.mutationKey],
@@ -94,10 +105,28 @@ const ProfileDetails = () => {
     },
   })
 
+  const { mutateAsync: uploadFilesFn } = useMutation({
+    mutationKey: [uploadFilesApi.mutationKey],
+    mutationFn: uploadFilesApi.fn,
+  })
+
+  const convertFileToUrl = async (files: File[]) => {
+    const formData = new FormData()
+    files.forEach((file) => {
+      formData.append('files', file)
+    })
+
+    const uploadedFilesResponse = await uploadFilesFn(formData)
+
+    return uploadedFilesResponse.data
+  }
+
   useEffect(() => {
     if (userProfileData?.data) {
       const userData = userProfileData.data as unknown as TUser
       const formData = convertProfileIntoForm(userData)
+      console.log('formData', formData)
+
       form.reset({
         ...formData,
         avatar: userData.avatar
@@ -114,11 +143,64 @@ const ProfileDetails = () => {
     }
   }, [userProfileData?.data, form])
 
+  const handleAvatarUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    try {
+      const files = event.target.files
+      if (!files || files.length === 0) return
+
+      // Store the file in the form without uploading it yet
+      // Just create a temporary URL for preview
+      const tempUrl = URL.createObjectURL(files[0])
+
+      form.setValue('avatar', [
+        {
+          name: files[0].name,
+          fileUrl: tempUrl,
+          status: FileStatusEnum.ACTIVE,
+          // Store the actual file for later upload
+          file: files[0],
+        },
+      ])
+    } catch (error) {
+      handleServerError({
+        error,
+        form,
+      })
+    } finally {
+      // Reset the file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ''
+      }
+    }
+  }
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      await triggerRef.current?.triggers[0]()
+      // Get the current values from the form
       values = form.getValues()
 
+      // Check if there's a new file to upload
+      const avatarData = values.avatar[0]
+      if (avatarData && avatarData.file) {
+        // Upload the file using convertFileToUrl
+        const uploadedUrls = await convertFileToUrl([avatarData.file as File])
+
+        // Update the avatar with the real URL from the server
+        if (uploadedUrls && uploadedUrls.length > 0) {
+          form.setValue('avatar', [
+            {
+              name: avatarData.name,
+              fileUrl: uploadedUrls[0],
+              status: FileStatusEnum.ACTIVE,
+            },
+          ])
+
+          // Get the updated values after setting the new URL
+          values = form.getValues()
+        }
+      }
+
+      // Continue with the existing profile update logic
       const updateData = convertFormIntoProfile({
         ...values,
         avatar: values.avatar[0]?.fileUrl,
@@ -148,6 +230,7 @@ const ProfileDetails = () => {
     return avatar && avatar[0]?.fileUrl ? avatar[0].fileUrl : '/placeholder.svg'
   }
   const imageUrl = getAvatarUrl()
+  console.log('imageUrl', imageUrl)
 
   return (
     <div className="container px-4 mx-auto max-w-6xl py-4">
@@ -167,7 +250,7 @@ const ProfileDetails = () => {
               <Form {...form}>
                 <form noValidate onSubmit={form.handleSubmit(onSubmit)} className="w-full" id={`form-${id}`}>
                   <div className="space-y-6">
-                    <FormField
+                    {/* <FormField
                       control={form.control}
                       name="avatar"
                       render={({ field }) => (
@@ -199,7 +282,7 @@ const ProfileDetails = () => {
                           <FormMessage />
                         </FormItem>
                       )}
-                    />
+                    /> */}
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <FormField
@@ -209,14 +292,9 @@ const ProfileDetails = () => {
                           <FormItem>
                             <FormLabel required>{t('profile.firstName')}</FormLabel>
                             <FormControl>
-                              <Input
-                                placeholder={t('profile.firstNamePlaceholder')}
-                                {...field}
-                                className="bg-muted"
-                                disabled
-                              />
+                              <Input placeholder={t('profile.firstNamePlaceholder')} {...field} className="bg-muted" />
                             </FormControl>
-                            <p className="text-xs text-muted-foreground mt-1">{t('profile.firstNameCannotChange')}</p>
+
                             <FormMessage />
                           </FormItem>
                         )}
@@ -229,14 +307,9 @@ const ProfileDetails = () => {
                           <FormItem>
                             <FormLabel required>{t('profile.lastName')}</FormLabel>
                             <FormControl>
-                              <Input
-                                placeholder={t('profile.lastNamePlaceholder')}
-                                {...field}
-                                className="bg-muted"
-                                disabled
-                              />
+                              <Input placeholder={t('profile.lastNamePlaceholder')} {...field} className="bg-muted" />
                             </FormControl>
-                            <p className="text-xs text-muted-foreground mt-1">{t('profile.lastNameCannotChange')}</p>
+
                             <FormMessage />
                           </FormItem>
                         )}
@@ -294,7 +367,7 @@ const ProfileDetails = () => {
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel required>{t('profile.gender')}</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <Select onValueChange={field.onChange} value={field.value}>
                               <FormControl>
                                 <SelectTrigger className="bg-background">
                                   <SelectValue placeholder={t('profile.selectGender')} />
@@ -369,15 +442,31 @@ const ProfileDetails = () => {
           </div>
         </div>
         <div className="lg:w-1/3">
-          <Card className="sticky top-0">
+          <Card className="sticky top-20">
             <CardHeader className="pb-4 flex flex-col items-center">
-              <div className="h-32 w-32 rounded-full overflow-hidden mb-4 border-4 border-primary/10 shadow-lg">
-                <ImageWithFallback
-                  src={imageUrl}
-                  alt="Profile Avatar"
-                  fallback={fallBackImage}
-                  className="object-contain "
-                />
+              <div className="relative">
+                <div className=" h-32 w-32 rounded-full overflow-hidden mb-4 border-4 border-primary/10 shadow-lg">
+                  <Avatar className="w-full h-full border-2 border-white">
+                    <AvatarImage src={imageUrl || undefined} alt={getFullName() || 'User'} />
+                    <AvatarFallback className="bg-white text-primary font-bold">
+                      {getFullName().charAt(0).toUpperCase() || 'U'}
+                    </AvatarFallback>
+                  </Avatar>
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    className="hidden"
+                    accept="image/*"
+                    onChange={handleAvatarUpload}
+                    title="Upload your profile picture"
+                  />
+                </div>
+                <div
+                  className="absolute right-2 bottom-5 border bg-white rounded-full p-1 shadow-md cursor-pointer"
+                  onClick={() => fileInputRef.current?.click()}
+                >
+                  <Pen className="w-5 h-5" />
+                </div>
               </div>
               <CardTitle className="text-center text-2xl font-bold">{getFullName()}</CardTitle>
               <p className="text-muted-foreground text-center">{form.watch('username') || 'username'}</p>

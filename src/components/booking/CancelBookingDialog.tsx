@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { CircleAlert } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -20,13 +21,21 @@ import LoadingIcon from '../loading-icon'
 
 interface CancelBookingDialogProps {
   open: boolean
+  notRefund: boolean
   setOpen: (open: boolean) => void
   onOpenChange: (open: boolean) => void
   setIsTrigger: (isTrigger: boolean) => void
   bookingId: string
 }
 
-const CancelBookingDialog = ({ open, setOpen, onOpenChange, setIsTrigger, bookingId }: CancelBookingDialogProps) => {
+const CancelBookingDialog = ({
+  open,
+  setOpen,
+  onOpenChange,
+  setIsTrigger,
+  bookingId,
+  notRefund,
+}: CancelBookingDialogProps) => {
   const { t } = useTranslation()
   const { successToast } = useToast()
   const handleServerError = useHandleServerError()
@@ -58,6 +67,7 @@ const CancelBookingDialog = ({ open, setOpen, onOpenChange, setIsTrigger, bookin
     cancelBookingFn({
       bookingId,
       reason,
+      notRefund,
     })
   }
 
@@ -72,7 +82,14 @@ const CancelBookingDialog = ({ open, setOpen, onOpenChange, setIsTrigger, bookin
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>{t('booking.cancelBookingTitle')}</DialogTitle>
-          <DialogDescription>{t('booking.cancelBookingDescription')}</DialogDescription>
+          <DialogDescription>
+            {t('booking.cancelBookingDescription')}
+            <br />
+            <span className="text-yellow-600 flex items-center gap-2">
+              <CircleAlert className="w-10 h-10" />
+              {'Nếu đơn hàng đã được tư vấn viên xác nhận và khách hàng tự hủy, hệ thống sẽ không hoàn tiền.'}
+            </span>
+          </DialogDescription>
         </DialogHeader>
         <div className="flex flex-col gap-4 py-4">
           <Textarea

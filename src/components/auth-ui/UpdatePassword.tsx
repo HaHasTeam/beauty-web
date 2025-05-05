@@ -9,7 +9,7 @@ import configs from '@/config'
 import useHandleServerError from '@/hooks/useHandleServerError'
 import { useToast } from '@/hooks/useToast'
 import { formChangePasswordSchema } from '@/lib/schema'
-import { changePasswordApi } from '@/network/apis/auth'
+import { resetPasswordApi } from '@/network/apis/auth'
 import { TEmailDecoded } from '@/types'
 
 import Button from '../button'
@@ -35,8 +35,8 @@ export default function UpdatePassword() {
   })
 
   const { mutateAsync: setPasswordMutation, isPending: isSubmitting } = useMutation({
-    mutationKey: [changePasswordApi.mutationKey],
-    mutationFn: changePasswordApi.fn,
+    mutationKey: [resetPasswordApi.mutationKey],
+    mutationFn: resetPasswordApi.fn,
     onSuccess: () => {
       form.reset()
       navigate(configs.routes.signIn)

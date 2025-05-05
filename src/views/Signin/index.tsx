@@ -28,27 +28,24 @@ const SignIn = () => {
               {t('button.backToShopping')} <ChevronRight className="text-primary" />
             </Link>
             <img
-              src={Hero01}
+              src={Hero01 || '/placeholder.svg'}
               alt="Beauty product application"
               width={600}
               height={600}
               className="object-cover w-full h-full pointer-events-none"
             />
-            {/* <div className="absolute bottom-4 right-1/2 bg-white px-2 py-1 rounded text-sm">
-              Be beautiful right now!
-            </div> */}
           </div>
           <div className="md:w-1/2 p-8">
             <h2 className="text-2xl font-medium mb-2 text-center text-primary">{t('welcome')}</h2>
-            <p className="text-gray-500 mb-6 text-center">Unleash your inner beauty. Log in now.</p>
+            <p className="text-gray-500 mb-6 text-center">{t('unleashBeauty')}</p>
 
             {/* form sign in here  */}
             <AuthUI />
             <div className="mt-6 text-center">
               <div className="flex items-baseline justify-center gap-2">
-                <img src={OrVector} alt="vector" />
-                <p className="text-sm text-gray-600 mb-4">OR</p>
-                <img src={OrVector02} alt="vector" />
+                <img src={OrVector || '/placeholder.svg'} alt="vector" />
+                <p className="text-sm text-gray-600 mb-4">{t('or')}</p>
+                <img src={OrVector02 || '/placeholder.svg'} alt="vector" />
               </div>
               <a
                 href={getOauthGoogleUrl()}
@@ -58,12 +55,12 @@ const SignIn = () => {
                 )}
               >
                 <Icons.GoogleIcon />
-                Continue with Google
+                {t('continueWithGoogle')}
               </a>
               <p className="mt-4 text-sm text-gray-600">
-                Haven't an account yet?{' '}
+                {t('noAccount')}{' '}
                 <Link to={configs.routes.signUp} className="text-primary hover:underline">
-                  Create an Account
+                  {t('createAccount')}
                 </Link>
               </p>
             </div>

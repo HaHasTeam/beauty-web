@@ -148,6 +148,7 @@ export interface IConsultationResult {
   suggestedProductClassifications: {
     name: string
     productClassificationId: string
+    productId: string
   }[]
 }
 

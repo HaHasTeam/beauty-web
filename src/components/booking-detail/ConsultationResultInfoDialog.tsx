@@ -1,11 +1,14 @@
 'use client'
-import { X, ZoomIn } from 'lucide-react'
+import { ExternalLink, X, ZoomIn } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router-dom'
 
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import type { IBooking } from '@/types/booking'
+
+import { Card, CardContent } from '../ui/card'
 
 interface ConsultationResultInfoDialogProps {
   isOpen: boolean
@@ -38,30 +41,32 @@ export default function ConsultationResultInfoDialog({ isOpen, onClose, booking 
         <div className="overflow-y-auto px-6 pb-6 h-[calc(80vh-80px)]">
           <div className="space-y-6">
             {booking.consultationResult.results.map((result, index) => (
-              <div key={index} className="space-y-2">
-                <h3 className="font-semibold text-lg">{result.section}</h3>
-                <p className="text-sm text-gray-700 whitespace-pre-line">{result.answers}</p>
-                {result.images && result.images.length > 0 && (
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mt-2">
-                    {result.images.map((image, imgIndex) => (
-                      <div
-                        key={imgIndex}
-                        className="group relative aspect-square rounded-md overflow-hidden border border-gray-200 cursor-pointer"
-                        onClick={() => handleImageClick(image.fileUrl || '/placeholder.svg')}
-                      >
-                        <img
-                          src={image.fileUrl || '/placeholder.svg'}
-                          alt={image.name || `Image ${imgIndex + 1}`}
-                          className="object-cover w-full h-full transition-transform duration-200 group-hover:scale-105"
-                        />
-                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-200 flex items-center justify-center opacity-0 group-hover:opacity-100">
-                          <ZoomIn className="text-white h-6 w-6 drop-shadow-md" />
+              <Card key={index} className="overflow-hidden">
+                <CardContent className="p-4 space-y-3">
+                  <h3 className="font-semibold text-lg">{result.section}</h3>
+                  <p className="text-sm text-gray-700 whitespace-pre-line">{result.answers}</p>
+                  {result.images && result.images.length > 0 && (
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mt-2">
+                      {result.images.map((image, imgIndex) => (
+                        <div
+                          key={imgIndex}
+                          className="group relative aspect-square rounded-md overflow-hidden border border-gray-200 cursor-pointer"
+                          onClick={() => handleImageClick(image.fileUrl || '/placeholder.svg')}
+                        >
+                          <img
+                            src={image.fileUrl || '/placeholder.svg'}
+                            alt={image.name || `Image ${imgIndex + 1}`}
+                            className="object-cover w-full h-full transition-transform duration-200 group-hover:scale-105"
+                          />
+                          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-200 flex items-center justify-center opacity-0 group-hover:opacity-100">
+                            <ZoomIn className="text-white h-6 w-6 drop-shadow-md" />
+                          </div>
                         </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
+                      ))}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
             ))}
 
             {booking.consultationResult.suggestedProductClassifications &&
@@ -70,8 +75,19 @@ export default function ConsultationResultInfoDialog({ isOpen, onClose, booking 
                   <h3 className="font-semibold text-lg">{t('booking.suggestedProducts')}</h3>
                   <ul className="list-disc pl-5 space-y-1">
                     {booking.consultationResult.suggestedProductClassifications.map((product, index) => (
-                      <li key={index} className="text-sm text-gray-700">
-                        {product.name}
+                      <li key={index} className="text-sm text-gray-700 flex items-center justify-between">
+                        <span>{product.name}</span>
+                        <Link to={`/products/${product.productId || index}`}>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="ml-2 p-1 h-auto"
+                            aria-label={`View ${product.name}`}
+                          >
+                            <ExternalLink className="h-4 w-4" />
+                            <span className="ml-1 text-xs">{t('common.view')}</span>
+                          </Button>
+                        </Link>
                       </li>
                     ))}
                   </ul>
