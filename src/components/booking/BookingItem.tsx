@@ -87,6 +87,7 @@ const BookingItem: React.FC<BookingItemProps> = ({ booking, setIsTrigger }) => {
   const getPaymentMethodTranslation = (method: string) => {
     return t(`payment.${method.toLowerCase()}`, String(method).replace('_', ' '))
   }
+  const [serviceImage, setServiceImage] = useState<string>(DEFAULT_IMAGE)
 
   const getServiceImage = () => {
     const isImageUrl = (url: string) => {
@@ -96,26 +97,29 @@ const BookingItem: React.FC<BookingItemProps> = ({ booking, setIsTrigger }) => {
       return imageExtensions.some((ext) => lowercaseUrl.endsWith(ext))
     }
 
-    if (booking.consultantService?.images && booking.consultantService.images.length > 0) {
-      const validImage = booking.consultantService.images.find((img) => img.fileUrl && isImageUrl(img.fileUrl))
-
-      if (validImage) {
-        return validImage.fileUrl
-      }
-    }
-
     if (booking.consultantService?.systemService?.images && booking.consultantService.systemService.images.length > 0) {
       const validSystemImage = booking.consultantService.systemService.images.find(
         (img) => img.fileUrl && isImageUrl(img.fileUrl),
       )
 
       if (validSystemImage) {
+        const image = new Image()
+        image.src = validSystemImage.fileUrl || ''
+        image.onload = () => {
+          setServiceImage(validSystemImage.fileUrl || DEFAULT_IMAGE)
+        }
         return validSystemImage.fileUrl
       }
     }
+    console.log('default image')
 
     return DEFAULT_IMAGE
   }
+
+  React.useEffect(() => {
+    getServiceImage()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [booking.id])
 
   const onPaymentSuccess = useCallback(() => {
     successToast({
@@ -199,7 +203,7 @@ const BookingItem: React.FC<BookingItemProps> = ({ booking, setIsTrigger }) => {
         <div className="flex flex-col md:flex-row gap-5 items-start">
           <div className="w-full md:w-24 h-32 md:h-24 rounded-lg overflow-hidden flex-shrink-0 bg-primary/5 border border-gray-100 shadow-sm">
             <img
-              src={getServiceImage()}
+              src={serviceImage}
               alt={booking.consultantService?.systemService?.name}
               className="w-full h-full object-cover"
             />
