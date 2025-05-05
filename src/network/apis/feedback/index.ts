@@ -1,7 +1,7 @@
 import { IFeedbackGeneral, IResponseFeedback, IResponseFilterFeedback, ISubmitFeedback } from '@/types/feedback'
 import { TServerResponse } from '@/types/request'
 import { toMutationFetcher, toQueryFetcher } from '@/utils/query'
-import { privateRequest } from '@/utils/request'
+import { privateRequest, publicRequest } from '@/utils/request'
 
 import { IFilterFeedback, IReplyFeedback } from './type'
 
@@ -9,6 +9,15 @@ export const createFeedbackApi = toMutationFetcher<ISubmitFeedback, TServerRespo
   'createFeedbackApi',
   async (data) => {
     return privateRequest('/feedbacks/create', {
+      method: 'POST',
+      data,
+    })
+  },
+)
+export const createBookingFeedbackApi = toMutationFetcher<ISubmitFeedback, TServerResponse<string>>(
+  'createBookingFeedbackApi',
+  async (data) => {
+    return privateRequest('/feedbacks/create-for-booking', {
       method: 'POST',
       data,
     })
@@ -34,7 +43,7 @@ export const getFeedbackByIdApi = toQueryFetcher<string, TServerResponse<IRespon
 export const getConsultantFeedbackApi = toQueryFetcher<string, TServerResponse<IResponseFeedback[]>>(
   'getConsultantFeedbackApi',
   async (consultantId) => {
-    return privateRequest(`/feedbacks/get-consultant-feedbacks/${consultantId}`)
+    return publicRequest(`/feedbacks/get-consultant-feedbacks/${consultantId}`)
   },
 )
 
@@ -49,7 +58,7 @@ export const getFilterConsultantFeedbackApi = toQueryFetcher<
   TServerResponse<{ total: number; totalPages: number }, IResponseFilterFeedback[]>
 >('getFilterConsultantFeedbackApi', async (params) => {
   const { consultantId, page = 1, limit = 10 } = params || {}
-  return privateRequest(`/feedbacks/filter-consultant-feedbacks/${consultantId}`, {
+  return publicRequest(`/feedbacks/filter-consultant-feedbacks/${consultantId}`, {
     method: 'GET',
     params: {
       page,
@@ -61,7 +70,7 @@ export const getFilterConsultantFeedbackApi = toQueryFetcher<
 export const getFeedbackGeneralOfProductApi = toQueryFetcher<string, TServerResponse<IFeedbackGeneral>>(
   'getFeedbackGeneralOfProductApi',
   async (feedbackId) => {
-    return privateRequest(`/feedbacks/review-general-of-product/${feedbackId}`)
+    return publicRequest(`/feedbacks/review-general-of-product/${feedbackId}`)
   },
 )
 
@@ -69,7 +78,7 @@ export const filterFeedbackApi = toMutationFetcher<
   IFilterFeedback,
   TServerResponse<{ total: number; totalPages: number }, IResponseFilterFeedback[]>
 >('filterFeedbackApi', async ({ params, data, page, limit }) => {
-  return privateRequest(`/feedbacks/filter/${params}`, {
+  return publicRequest(`/feedbacks/filter/${params}`, {
     method: 'POST',
     params: {
       page: page || '1',

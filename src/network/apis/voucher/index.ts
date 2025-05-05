@@ -51,6 +51,11 @@ export const getAllVouchersApi = toQueryFetcher<void, TServerResponse<TVoucher[]
     method: 'GET',
   })
 })
+export const getMyVouchersApi = toQueryFetcher<void, TServerResponse<TVoucher[]>>('getMyVouchers', async () => {
+  return privateRequest(`/vouchers/get-my-vouchers`, {
+    method: 'GET',
+  })
+})
 export const getPlatformVouchersApi = toQueryFetcher<void, TServerResponse<TVoucher[]>>(
   'getPlatformVouchersApi',
   async () => {

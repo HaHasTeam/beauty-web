@@ -19,41 +19,7 @@ const FlashSale = () => {
     queryFn: getFlashSaleProductFilterApi.fn,
     select: (data) => data.data,
   })
-
-  // const [time, setTime] = useState({
-  //   hours: 1,
-  //   minutes: 1,
-  //   seconds: 1,
-  // })
-
-  // useEffect(() => {
-  //   const timer = setInterval(() => {
-  //     setTime((prevTime) => {
-  //       const newTime = { ...prevTime }
-
-  //       if (newTime.seconds > 0) {
-  //         newTime.seconds--
-  //       } else {
-  //         newTime.seconds = 59
-  //         if (newTime.minutes > 0) {
-  //           newTime.minutes--
-  //         } else {
-  //           newTime.minutes = 59
-  //           if (newTime.hours > 0) {
-  //             newTime.hours--
-  //           } else {
-  //             // Timer completed
-  //             clearInterval(timer)
-  //           }
-  //         }
-  //       }
-
-  //       return newTime
-  //     })
-  //   }, 1000)
-
-  //   return () => clearInterval(timer)
-  // }, [])
+  console.log('flashSaleProductData', flashSaleProductData)
 
   return (
     <div>

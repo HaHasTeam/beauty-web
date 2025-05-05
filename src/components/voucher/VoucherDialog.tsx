@@ -132,16 +132,9 @@ export default function VoucherDialog({
                 {t('voucher.chooseProductAppAlert')}
               </div>
             )}
-            {/* Voucher Input */}
-            {/* <div className="flex gap-2 bg-muted/50 p-2 md:p-4 rounded-lg items-center">
-              <label className="text-sm font-medium mb-1.5 block"> {t('voucher.title')}</label>
-              <Input placeholder={t('voucher.title')} className=" border border-gray-300 focus:border-primary/50" />
-              <Button className="self-end uppercase"> {t('voucher.apply')}</Button>
-            </div> */}
           </div>
 
           {/* Voucher List */}
-
           {isLoading ? (
             <div className="h-36 flex justify-center items-center">
               <LoadingIcon color="primaryBackground" />
@@ -149,8 +142,8 @@ export default function VoucherDialog({
           ) : (availableVouchers && availableVouchers?.length > 0) ||
             (unAvailableVouchers && unAvailableVouchers?.length > 0) ||
             (unclaimedVouchers && unclaimedVouchers?.length > 0) ? (
-            <ScrollArea className="h-72">
-              <div className="">
+            <ScrollArea className="h-72 mt-0">
+              <div>
                 <RadioGroup value={selectedVoucher} onValueChange={setSelectedVoucher}>
                   <div className="space-y-3">
                     {availableVouchers?.map((voucher) => (

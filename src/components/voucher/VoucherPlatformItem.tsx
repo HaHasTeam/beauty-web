@@ -68,16 +68,21 @@ const VoucherPlatformItem = ({
     }
   }
   return (
-    <div className="space-y-1">
-      <div className={cn('relative', status === VoucherUsedStatusEnum.UNAVAILABLE ? 'opacity-50 cursor-default' : '')}>
+    <div className="space-y-1 mt-2">
+      <div className={cn('relative', status === VoucherUsedStatusEnum.UNAVAILABLE ? 'cursor-default' : '')}>
         {bestVoucherForPlatform?.bestVoucher?.id === voucher?.id && (
-          <div className="absolute -left-1 -top-3">
+          <div className="absolute lef-0 -top-2">
             <StatusTag tag="BestVoucher" />
           </div>
         )}
         <div className="flex gap-4 p-2 md:p-4 border rounded-lg min-h-44">
           {/* Left Section */}
-          <div className={`w-32 bg-primary p-4 rounded-lg flex flex-col items-center justify-center text-center`}>
+          <div
+            className={cn(
+              `w-32 bg-primary p-4 rounded-lg flex flex-col items-center justify-center text-center`,
+              status === VoucherUsedStatusEnum.UNAVAILABLE ? 'opacity-40' : '',
+            )}
+          >
             <div className="mt-2 text-sm font-medium uppercase text-primary-foreground">
               {voucher.name.toUpperCase()}
             </div>
@@ -88,7 +93,7 @@ const VoucherPlatformItem = ({
             <div className="flex justify-between items-center">
               <div>
                 <div className="flex text-lg font-medium gap-2">
-                  <span className="w-fit">
+                  <span className={cn('w-fit', status === VoucherUsedStatusEnum.UNAVAILABLE ? 'opacity-40' : '')}>
                     {voucher?.discountType === DiscountTypeEnum.PERCENTAGE
                       ? t('voucher.off.percentage', { percentage: voucher?.discountValue * 100 })
                       : t('voucher.off.amount', { amount: voucher?.discountValue })}
@@ -96,19 +101,36 @@ const VoucherPlatformItem = ({
 
                   <VoucherInformationPopup voucher={voucher} applyFor="platform" className="flex items-start" />
                 </div>
-                {voucher?.maxDiscount && (
-                  <div className="w-fit text-base">
+                {voucher?.maxDiscount ? (
+                  <div
+                    className={cn('w-fit text-base', status === VoucherUsedStatusEnum.UNAVAILABLE ? 'opacity-40' : '')}
+                  >
                     {t('voucher.off.maxDiscount', { amount: voucher?.maxDiscount })}
                   </div>
+                ) : (
+                  <></>
                 )}
-                {voucher?.minOrderValue && (
-                  <div className="w-fit text-base">{t('voucher.off.minOrder', { amount: voucher?.minOrderValue })}</div>
+                {voucher?.minOrderValue ? (
+                  <div
+                    className={cn('w-fit text-base', status === VoucherUsedStatusEnum.UNAVAILABLE ? 'opacity-40' : '')}
+                  >
+                    {t('voucher.off.minOrder', { amount: voucher?.minOrderValue })}
+                  </div>
+                ) : (
+                  <></>
                 )}
 
-                {voucher?.applyType === VoucherApplyTypeEnum.SPECIFIC && (
-                  <span className="inline-block border border-red-500 text-red-500 text-xs px-2 py-0.5 rounded mt-1">
+                {voucher?.applyType === VoucherApplyTypeEnum.SPECIFIC ? (
+                  <span
+                    className={cn(
+                      'inline-block border border-red-500 text-red-500 text-xs px-2 py-0.5 rounded mt-1',
+                      status === VoucherUsedStatusEnum.UNAVAILABLE ? 'opacity-40' : '',
+                    )}
+                  >
                     {t('voucher.off.specific')}
                   </span>
+                ) : (
+                  <></>
                 )}
               </div>
               {/* User only use voucher 1 time */}
@@ -116,10 +138,16 @@ const VoucherPlatformItem = ({
                 <StatusTag tag="numberCount" text="x100" />
               </div> */}
             </div>
-            <div className="flex gap-1 mt-2 text-sm text-muted-foreground">
+            <div
+              className={cn(
+                'flex gap-1 mt-2 text-sm text-muted-foreground',
+                status === VoucherUsedStatusEnum.UNAVAILABLE ? 'opacity-40' : '',
+              )}
+            >
               {/* {t('voucher.used')} {voucher.used}%, */}
               <div className="mt-1 text-xs text-muted-foreground">
-                {t('date.exp')}: {t('date.toLocaleDateTimeString', { val: new Date(voucher?.endTime) })}
+                {t('date.exp')}: {t('date.toLocaleDateTimeString', { val: new Date(voucher?.startTime) })} -{' '}
+                {t('date.toLocaleDateTimeString', { val: new Date(voucher?.endTime) })}
               </div>
             </div>
           </div>

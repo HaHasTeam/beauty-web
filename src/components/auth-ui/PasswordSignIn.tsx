@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router-dom'
 import { z } from 'zod'
 import { useShallow } from 'zustand/react/shallow'
@@ -25,6 +26,7 @@ import { PasswordInput } from '../ui/password-input'
 // }
 
 export default function PasswordSignIn() {
+  const { t } = useTranslation()
   const { authenticate, setFirebaseToken } = useStore(
     useShallow((state) => ({
       authenticate: state.setAuthState,
@@ -50,7 +52,7 @@ export default function PasswordSignIn() {
     mutationFn: signInWithPasswordApi.fn,
     onSuccess: () => {
       successToast({
-        message: `Welcome back!, ${form.getValues('email')}`,
+        message: t('welcomeBack', { email: form.getValues('email') }),
       })
     },
   })
@@ -89,9 +91,9 @@ export default function PasswordSignIn() {
             name="email"
             render={({ field }) => (
               <FormItem autoFocus>
-                <FormLabel>Email</FormLabel>
+                <FormLabel>{t('email')}</FormLabel>
                 <FormControl>
-                  <Input placeholder="Please enter your email" type="email" {...field} />
+                  <Input placeholder={t('emailPlaceholder')} type="email" {...field} />
                 </FormControl>
 
                 <FormMessage />
@@ -103,9 +105,9 @@ export default function PasswordSignIn() {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password</FormLabel>
+                <FormLabel>{t('password')}</FormLabel>
                 <FormControl>
-                  <PasswordInput placeholder="Please Enter your password." {...field} />
+                  <PasswordInput placeholder={t('passwordPlaceholder')} {...field} />
                 </FormControl>
 
                 <FormMessage />
@@ -113,10 +115,10 @@ export default function PasswordSignIn() {
             )}
           />
           <Link to="/forgot-password" className="text-xs sm:text-sm text-primary hover:underline block text-right mt-1">
-            Forgot your password?
+            {t('forgotPassword')}
           </Link>
           <Button disabled={isSignInWithPasswordLoading} className="w-full">
-            Log in
+            {t('loginButton')}
           </Button>
         </form>
       </Form>

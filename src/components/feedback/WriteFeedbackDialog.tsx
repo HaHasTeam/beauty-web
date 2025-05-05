@@ -12,7 +12,8 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormMessage } 
 import { Textarea } from '@/components/ui/textarea'
 import useHandleServerError from '@/hooks/useHandleServerError'
 import { useToast } from '@/hooks/useToast'
-import { createFeedbackApi } from '@/network/apis/feedback'
+import { getBookingByIdApi } from '@/network/apis/booking/details'
+import { createBookingFeedbackApi, createFeedbackApi } from '@/network/apis/feedback'
 import { uploadFilesApi } from '@/network/apis/file'
 import { getOrderByIdApi } from '@/network/apis/order'
 import { getFeedbackSchema, IFeedbackSchema, MAX_FEEDBACK_LENGTH } from '@/schemas/feedback.schema'
@@ -24,10 +25,16 @@ import { VideoThumbnail } from '../file-input/VideoThumbnail'
 interface WriteFeedbackDialogProps {
   isOpen: boolean
   onClose: () => void
-  orderDetailId: string
+  orderDetailId?: string
+  bookingId?: string
 }
 
-export const WriteFeedbackDialog: React.FC<WriteFeedbackDialogProps> = ({ isOpen, onClose, orderDetailId }) => {
+export const WriteFeedbackDialog: React.FC<WriteFeedbackDialogProps> = ({
+  isOpen,
+  onClose,
+  orderDetailId,
+  bookingId,
+}) => {
   const MAX_IMAGES = 4
   const MAX_VIDEOS = 1
   // const MAX_FILES = MAX_IMAGES + MAX_VIDEOS
@@ -47,6 +54,7 @@ export const WriteFeedbackDialog: React.FC<WriteFeedbackDialogProps> = ({ isOpen
     rating: 0,
     content: '',
     orderDetailId,
+    bookingId,
     mediaFiles: [],
     videos: [],
     images: [],
@@ -67,6 +75,21 @@ export const WriteFeedbackDialog: React.FC<WriteFeedbackDialogProps> = ({ isOpen
       })
       queryClient.invalidateQueries({
         queryKey: [getOrderByIdApi.queryKey],
+      })
+      handleReset()
+      onClose()
+    },
+  })
+  const { mutateAsync: submitBookingFeedbackFn } = useMutation({
+    mutationKey: [createBookingFeedbackApi.mutationKey],
+    mutationFn: createBookingFeedbackApi.fn,
+    onSuccess: () => {
+      successToast({
+        message: t('feedback.successTitle'),
+        description: t('feedback.successDescription'),
+      })
+      queryClient.invalidateQueries({
+        queryKey: [getBookingByIdApi.queryKey],
       })
       handleReset()
       onClose()
@@ -98,10 +121,21 @@ export const WriteFeedbackDialog: React.FC<WriteFeedbackDialogProps> = ({ isOpen
       setIsLoading(true)
       const imgUrls = values.images ? await convertFileToUrl(values.images) : []
       const videoUrls = values.videos ? await convertFileToUrl(values.videos) : []
-      await submitFeedbackFn({
-        ...values,
-        mediaFiles: [...imgUrls, ...videoUrls],
-      })
+
+      console.log(orderDetailId)
+      console.log(bookingId)
+      if (orderDetailId && orderDetailId !== '') {
+        await submitFeedbackFn({
+          ...values,
+          mediaFiles: [...imgUrls, ...videoUrls],
+        })
+      } else if (bookingId && bookingId !== '') {
+        await submitBookingFeedbackFn({
+          ...values,
+          mediaFiles: [...imgUrls, ...videoUrls],
+        })
+      }
+
       setIsLoading(false)
     } catch (error) {
       setIsLoading(false)

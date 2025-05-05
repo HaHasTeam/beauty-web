@@ -19,12 +19,22 @@ export const changePasswordApi = toMutationFetcher<TChangePasswordRequestParams,
     })
   },
 )
-export const requestResetPasswordApi = toMutationFetcher<string, TServerError>(
+
+export const resetPasswordApi = toMutationFetcher<TChangePasswordRequestParams, TServerError>(
+  'resetPasswordApi',
+  async (params) => {
+    return publicRequest(`/accounts/set-password/${params?.accountId}`, {
+      method: 'PUT',
+      data: params,
+    })
+  },
+)
+export const requestResetPasswordApi = toMutationFetcher<{ email: string; url: string }, TServerError>(
   'requestResetPasswordApi',
-  async (email) => {
+  async ({ email, url }) => {
     return publicRequest(`/accounts/request-reset-pass`, {
       method: 'POST',
-      data: { email },
+      data: { email, url },
     })
   },
 )

@@ -23,6 +23,8 @@ import ServiceBookingFormDialog from './ServiceBookingFormDialog'
 interface UpdateBookingStatusProps {
   booking: IBooking
   setOpenCancelBookingDialog: Dispatch<SetStateAction<boolean>>
+  setNotRefund: Dispatch<SetStateAction<boolean>>
+
   statusTracking: IStatusTracking[]
   isConsultant: boolean
   isCustomer: boolean
@@ -33,6 +35,7 @@ export default function UpdateBookingStatus({
   setOpenCancelBookingDialog,
   isConsultant,
   isCustomer,
+  setNotRefund,
 }: UpdateBookingStatusProps) {
   const { t } = useTranslation()
   const { successToast } = useToast()
@@ -199,6 +202,9 @@ export default function UpdateBookingStatus({
   console.log('config', config)
 
   if (!config) return null
+  console.log('booking', booking)
+  const isBeforeSixHours = new Date(booking.startTime).getTime() - new Date().getTime() > 6 * 60 * 60 * 1000
+  console.log('isBeforeSixHours', isBeforeSixHours, 'new Date(booking.startTime)', new Date(booking.startTime))
 
   const IconComponent = config.icon || Siren
 
@@ -338,11 +344,26 @@ export default function UpdateBookingStatus({
               )}
 
               {(booking.status === BookingStatusEnum.TO_PAY ||
-                booking.status === BookingStatusEnum.WAIT_FOR_CONFIRMATION) && (
+                booking.status === BookingStatusEnum.WAIT_FOR_CONFIRMATION ||
+                booking.status === BookingStatusEnum.BOOKING_CONFIRMED ||
+                (booking.consultantService.systemService.type === ServiceTypeEnum.PREMIUM &&
+                  booking.status === BookingStatusEnum.SERVICE_BOOKING_FORM_SUBMITED &&
+                  isBeforeSixHours)) && (
                 <Button
                   variant="outline"
                   className="w-full border border-primary text-primary hover:text-primary hover:bg-primary/10"
-                  onClick={() => setOpenCancelBookingDialog(true)}
+                  onClick={() => {
+                    if (
+                      booking.consultantService.systemService.type === ServiceTypeEnum.PREMIUM &&
+                      booking.status === BookingStatusEnum.SERVICE_BOOKING_FORM_SUBMITED &&
+                      isBeforeSixHours
+                    ) {
+                      setNotRefund(true)
+                    } else {
+                      setNotRefund(false)
+                    }
+                    setOpenCancelBookingDialog(true)
+                  }}
                 >
                   {t('booking.cancelBooking')}
                 </Button>

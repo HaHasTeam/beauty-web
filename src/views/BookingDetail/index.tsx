@@ -14,6 +14,8 @@ import BookingStatusTrackingDetail from '@/components/booking-detail/BookingStat
 import BookingSummary from '@/components/booking-detail/BookingSummary'
 import UpdateBookingStatus from '@/components/booking-detail/UpdateBookingStatus'
 import Empty from '@/components/empty/Empty'
+import { ViewFeedbackDialog } from '@/components/feedback/ViewFeedbackDialog'
+import { WriteFeedbackDialog } from '@/components/feedback/WriteFeedbackDialog'
 import ImageWithFallback from '@/components/ImageFallback'
 import LoadingContentLayer from '@/components/loading-icon/LoadingContentLayer'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -33,6 +35,10 @@ const BookingDetail = () => {
   const { t } = useTranslation()
   const queryClient = useQueryClient()
   const [openCancelBookingDialog, setOpenCancelBookingDialog] = useState<boolean>(false)
+  const [notRefund, setNotRefund] = useState<boolean>(false)
+
+  const [openFeedbackDialog, setOpenFeedbackDialog] = useState<boolean>(false)
+  const [openViewFeedbackDialog, setOpenViewFeedbackDialog] = useState<boolean>(false)
   const [isTrigger, setIsTrigger] = useState<boolean>(false)
   // const { successToast } = useToast()
   // const handleServerError = useHandleServerError()
@@ -58,6 +64,11 @@ const BookingDetail = () => {
   const canCancel =
     bookingData?.data?.status === BookingStatusEnum.TO_PAY ||
     bookingData?.data?.status === BookingStatusEnum.WAIT_FOR_CONFIRMATION
+
+  const canFeedback =
+    bookingData?.data && bookingData.data.status === BookingStatusEnum.COMPLETED && !bookingData.data.feedback
+
+  const canViewFeedback = bookingData && bookingData.data && bookingData.data.feedback !== null
 
   const isMeetingJoinable =
     bookingData?.data?.status === BookingStatusEnum.BOOKING_CONFIRMED && bookingData?.data?.meetUrl
@@ -105,6 +116,7 @@ const BookingDetail = () => {
 
               {/* Update booking status */}
               <UpdateBookingStatus
+                setNotRefund={setNotRefund}
                 booking={bookingData?.data}
                 statusTracking={bookingData?.data?.statusTrackings ?? []}
                 isConsultant={user?.role === RoleEnum.CONSULTANT}
@@ -160,20 +172,6 @@ const BookingDetail = () => {
                             </p>
                           </div>
                         </div>
-
-                        {/* <div className="mt-2 flex gap-3">
-                          <Button className="flex items-center gap-1 bg-primary hover:bg-primary/90" variant="default">
-                            <MessageSquare className="w-4 h-4" />
-                            <span>{t('booking.chatWithConsultant')}</span>
-                          </Button>
-                          <Link
-                            to={`/consultant/${bookingData?.data?.consultantService?.account?.id}`}
-                            className="flex py-1.5 px-3 rounded-md items-center border border-primary text-primary hover:text-primary hover:bg-primary/10"
-                          >
-                            <User className="w-4 h-4 mr-1" />
-                            {t('booking.viewProfile')}
-                          </Link>
-                        </div> */}
                       </div>
                     }
                   />
@@ -251,20 +249,6 @@ const BookingDetail = () => {
                         <p className="text-sm text-muted-foreground">{bookingData?.data?.account?.phone}</p>
                       </div>
                     </div>
-                    {/* 
-                    <div className="flex gap-3">
-                      <Button className="flex items-center gap-1 bg-primary hover:bg-primary/90" variant="default">
-                        <MessageSquare className="w-4 h-4" />
-                        <span>{t('store.chat')}</span>
-                      </Button>
-                      <Link
-                        to={`/consultant/${bookingData?.data?.account?.id}`}
-                        className="flex py-1.5 px-3 rounded-md items-center border border-primary text-primary hover:text-primary hover:bg-primary/10"
-                      >
-                        <User className="w-4 h-4 mr-1" />
-                        {t('booking.viewProfile')}
-                      </Link>
-                    </div> */}
                   </div>
                 }
               />
@@ -353,6 +337,17 @@ const BookingDetail = () => {
                     {t('booking.joinMeeting')}
                   </a>
                 )}
+
+                {canFeedback && (
+                  <Button className="w-full" onClick={() => setOpenFeedbackDialog(true)}>
+                    {t('button.writeFeedback')}
+                  </Button>
+                )}
+                {canViewFeedback && (
+                  <Button className="w-full" onClick={() => setOpenViewFeedbackDialog(true)}>
+                    {t('order.viewFeedback')}
+                  </Button>
+                )}
               </div>
             </div>
           </>
@@ -371,13 +366,34 @@ const BookingDetail = () => {
 
         {/* Cancel Booking Dialog */}
         {!isFetching && bookingData?.data && (
-          <CancelBookingDialog
-            open={openCancelBookingDialog}
-            setOpen={setOpenCancelBookingDialog}
-            onOpenChange={setOpenCancelBookingDialog}
-            setIsTrigger={setIsTrigger}
-            bookingId={bookingData?.data?.id ?? ''}
-          />
+          <>
+            <CancelBookingDialog
+              notRefund={notRefund}
+              open={openCancelBookingDialog}
+              setOpen={setOpenCancelBookingDialog}
+              onOpenChange={setOpenCancelBookingDialog}
+              setIsTrigger={setIsTrigger}
+              bookingId={bookingData?.data?.id ?? ''}
+            />
+            <WriteFeedbackDialog
+              isOpen={openFeedbackDialog}
+              onClose={() => setOpenFeedbackDialog(false)}
+              bookingId={bookingData?.data.id}
+            />
+            {bookingData?.data?.feedback && (
+              <ViewFeedbackDialog
+                systemServiceName={bookingData?.data?.consultantService?.systemService?.name}
+                systemServiceType={bookingData?.data?.consultantService?.systemService?.type}
+                isOpen={openViewFeedbackDialog}
+                onClose={() => setOpenViewFeedbackDialog(false)}
+                feedback={bookingData?.data?.feedback}
+                brand={null}
+                accountAvatar={bookingData?.data?.account?.avatar || ''}
+                accountName={bookingData?.data?.account?.username}
+                bookingId={bookingId}
+              />
+            )}
+          </>
         )}
       </div>
     </div>

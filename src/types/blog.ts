@@ -1,4 +1,4 @@
-import { BlogEnum } from './enum'
+import { BlogEnum, BlogTypeEnum } from './enum'
 
 export interface IServerCreateBlog {
   title: string
@@ -13,4 +13,6 @@ export interface IBlogDetails {
   title: string
   content: string
   status: BlogEnum
+  tag: string
+  type: BlogTypeEnum
 }
