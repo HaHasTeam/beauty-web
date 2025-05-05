@@ -380,17 +380,19 @@ const BookingDetail = () => {
               onClose={() => setOpenFeedbackDialog(false)}
               bookingId={bookingData?.data.id}
             />
-            <ViewFeedbackDialog
-              systemServiceName={bookingData?.data?.consultantService?.systemService?.name}
-              systemServiceType={bookingData?.data?.consultantService?.systemService?.type}
-              isOpen={openViewFeedbackDialog}
-              onClose={() => setOpenViewFeedbackDialog(false)}
-              feedback={bookingData?.data?.feedback}
-              brand={null}
-              accountAvatar={bookingData?.data?.account?.avatar || ''}
-              accountName={bookingData?.data?.account?.username}
-              bookingId={bookingId}
-            />
+            {bookingData?.data?.feedback && (
+              <ViewFeedbackDialog
+                systemServiceName={bookingData?.data?.consultantService?.systemService?.name}
+                systemServiceType={bookingData?.data?.consultantService?.systemService?.type}
+                isOpen={openViewFeedbackDialog}
+                onClose={() => setOpenViewFeedbackDialog(false)}
+                feedback={bookingData?.data?.feedback}
+                brand={null}
+                accountAvatar={bookingData?.data?.account?.avatar || ''}
+                accountName={bookingData?.data?.account?.username}
+                bookingId={bookingId}
+              />
+            )}
           </>
         )}
       </div>
