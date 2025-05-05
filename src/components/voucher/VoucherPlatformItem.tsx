@@ -101,22 +101,26 @@ const VoucherPlatformItem = ({
 
                   <VoucherInformationPopup voucher={voucher} applyFor="platform" className="flex items-start" />
                 </div>
-                {voucher?.maxDiscount && (
+                {voucher?.maxDiscount ? (
                   <div
                     className={cn('w-fit text-base', status === VoucherUsedStatusEnum.UNAVAILABLE ? 'opacity-40' : '')}
                   >
                     {t('voucher.off.maxDiscount', { amount: voucher?.maxDiscount })}
                   </div>
+                ) : (
+                  <></>
                 )}
-                {voucher?.minOrderValue && (
+                {voucher?.minOrderValue ? (
                   <div
                     className={cn('w-fit text-base', status === VoucherUsedStatusEnum.UNAVAILABLE ? 'opacity-40' : '')}
                   >
                     {t('voucher.off.minOrder', { amount: voucher?.minOrderValue })}
                   </div>
+                ) : (
+                  <></>
                 )}
 
-                {voucher?.applyType === VoucherApplyTypeEnum.SPECIFIC && (
+                {voucher?.applyType === VoucherApplyTypeEnum.SPECIFIC ? (
                   <span
                     className={cn(
                       'inline-block border border-red-500 text-red-500 text-xs px-2 py-0.5 rounded mt-1',
@@ -125,6 +129,8 @@ const VoucherPlatformItem = ({
                   >
                     {t('voucher.off.specific')}
                   </span>
+                ) : (
+                  <></>
                 )}
               </div>
               {/* User only use voucher 1 time */}
