@@ -260,7 +260,10 @@ const OrderItem = ({ brand, orderItem, setIsTrigger, isShowAction = true, orderI
           : null}
         {/* total price */}
         <div className="w-full ml-auto flex justify-end gap-1 text-lg">
-          <span className="text-muted-foreground font-medium">{t('cart.totalPrice')}: </span>
+          <span className="text-muted-foreground font-medium">
+            {t('cart.totalPrice')}
+            {orderItem.status === ShippingStatusEnum.JOIN_GROUP_BUYING ? ` (${t('cart.estimated')})` : ''}:{' '}
+          </span>
           <span className="text-red-500 font-semibold">{t('productCard.price', { price: orderItem?.totalPrice })}</span>
         </div>
 

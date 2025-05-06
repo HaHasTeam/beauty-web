@@ -259,6 +259,7 @@ const OrderParentDetail = () => {
                         totalPlatformDiscount={orderItem?.platformVoucherDiscount}
                         totalPayment={orderItem?.totalPrice}
                         paymentMethod={orderItem?.paymentMethod}
+                        orderStatus={orderItem.status}
                       />
                     </div>
 
