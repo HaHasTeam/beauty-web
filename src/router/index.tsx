@@ -21,6 +21,7 @@ import ProductDetail from '@/views/ProductDetail'
 import RecommendProducts from '@/views/RecommendProducts'
 // import RecommendProducts from '@/views/RecommendProducts'
 import SearchPage from '@/views/Search'
+import SearchBrand from '@/views/SearchBrand'
 import ServerError from '@/views/ServerError'
 import ServiceCheckout from '@/views/ServiceCheckout'
 
@@ -50,6 +51,10 @@ export default function RouterProvider() {
         {
           path: configs.routes.search,
           element: <SearchPage />,
+        },
+        {
+          path: configs.routes.searchBrand,
+          element: <SearchBrand />,
         },
         {
           path: configs.routes.productDetail,

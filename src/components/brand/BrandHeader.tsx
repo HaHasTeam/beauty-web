@@ -23,7 +23,6 @@ const BrandHeader = ({ brandName, brandId, brandLogo }: BrandHeaderProps) => {
   return (
     <div className="space-y-2">
       <h1 className="text-xl font-bold">{brandName}</h1>
-      <div className="text-sm text-muted-foreground">{t('brand.lastOnline', { time: '59 Minutes' })}</div>
       <div className="flex gap-2 w-full md:w-auto">
         <Button
           className="flex-1 md:flex-none bg-primary hover:bg-primary/80"

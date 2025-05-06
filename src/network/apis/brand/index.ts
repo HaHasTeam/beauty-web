@@ -1,9 +1,14 @@
-import { IBranch, TBrand } from '@/types/brand'
-import { TServerResponse } from '@/types/request'
+import { IBranch, IBrand, TBrand } from '@/types/brand'
+import { TServerResponse, TServerResponseWithPagination } from '@/types/request'
 import { toMutationFetcher, toQueryFetcher } from '@/utils/query'
 import { privateRequest, publicRequest } from '@/utils/request'
 
-import { TRequestCreateBrandParams, TUpdateBrandRequestParams, TUpdateStatusBrandRequestParams } from './type'
+import {
+  FilterParamBrands,
+  TRequestCreateBrandParams,
+  TUpdateBrandRequestParams,
+  TUpdateStatusBrandRequestParams,
+} from './type'
 
 export const requestCreateBrandApi = toMutationFetcher<TRequestCreateBrandParams, TServerResponse<IBranch>>(
   'requestCreateBrand',
@@ -53,6 +58,29 @@ export const getBrandsHasGroupProductApi = toQueryFetcher<void, TServerResponse<
   async () => {
     return publicRequest(`/group-products/get-brands-have-group-products/`, {
       method: 'GET',
+    })
+  },
+)
+
+export const getBrandFilterApi = toQueryFetcher<FilterParamBrands, TServerResponseWithPagination<IBrand[]>>(
+  'getBrandFilterApi',
+  async (params) => {
+    const { page, limit, sortBy, order, ...filterParams } = params || {}
+    const body: FilterParamBrands = {}
+    if (filterParams?.name) {
+      body.name = filterParams.name
+    }
+    if (filterParams?.reviewerId) {
+      body.reviewerId = filterParams.reviewerId
+    }
+    if (filterParams?.statuses?.length) {
+      body.statuses = filterParams.statuses
+    }
+
+    return privateRequest('/brands/filter', {
+      method: 'POST',
+      data: body,
+      params: { page, limit, sortBy, order },
     })
   },
 )
