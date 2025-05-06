@@ -43,7 +43,7 @@ const Blog = () => {
       getFilteredBlogs.queryKey,
       {
         page: currentPage,
-        limit: 2,
+        limit: 10,
         order: 'DESC',
         statuses: BlogEnum.PUBLISHED,
         types: types.length > 0 ? types.join(', ') : '',

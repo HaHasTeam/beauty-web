@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 
-import { PaymentMethod } from '@/types/enum'
+import { PaymentMethod, ShippingStatusEnum } from '@/types/enum'
 
 interface OrderSummaryProps {
   totalProductCost: number
@@ -8,6 +8,7 @@ interface OrderSummaryProps {
   totalPlatformDiscount: number
   totalPayment: number
   paymentMethod: PaymentMethod
+  orderStatus: ShippingStatusEnum
 }
 export default function OrderSummary({
   totalProductCost,
@@ -15,6 +16,7 @@ export default function OrderSummary({
   totalPlatformDiscount,
   totalPayment,
   paymentMethod,
+  orderStatus,
 }: OrderSummaryProps) {
   const { t } = useTranslation()
 
@@ -28,7 +30,10 @@ export default function OrderSummary({
           </div>
 
           <div className="flex justify-between items-center">
-            <span className="text-sm text-muted-foreground">{t('cart.discountBrand')}</span>
+            <span className="text-sm text-muted-foreground">
+              {t('cart.discountBrand')}
+              {orderStatus === ShippingStatusEnum.JOIN_GROUP_BUYING ? ` (${t('cart.estimated')})` : ''}{' '}
+            </span>
             <span className="text-green-700 font-medium">
               {totalBrandDiscount && totalBrandDiscount > 0 ? '-' : ''}
               {t('productCard.price', { price: totalBrandDiscount })}
@@ -44,7 +49,10 @@ export default function OrderSummary({
           </div>
           <div className="flex flex-col">
             <div className="flex justify-between items-center pt-3 border-t">
-              <span className="text-sm sm:text-base">{t('cart.totalPayment')}</span>
+              <span className="text-sm sm:text-base">
+                {t('cart.totalPayment')}
+                {orderStatus === ShippingStatusEnum.JOIN_GROUP_BUYING ? ` (${t('cart.estimated')})` : ''}{' '}
+              </span>
               <span className="font-semibold text-red-500 text-lg">
                 {t('productCard.price', { price: totalPayment })}
               </span>

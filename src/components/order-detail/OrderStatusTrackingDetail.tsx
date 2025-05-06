@@ -17,14 +17,15 @@ interface IStep {
 }
 interface OrderStatusTrackingDetailProps {
   statusTrackingData: IStatusTracking[]
+  orderCreatedAt: string
 }
-const OrderStatusTrackingDetail = ({ statusTrackingData }: OrderStatusTrackingDetailProps) => {
+const OrderStatusTrackingDetail = ({ statusTrackingData, orderCreatedAt }: OrderStatusTrackingDetailProps) => {
   const { t } = useTranslation()
 
   const defaultTimeline = [
     {
       status: 'ORDER_CREATED',
-      createdAt: statusTrackingData[0]?.createdAt,
+      createdAt: orderCreatedAt,
       text: t('order.created'),
       icon: <Package className="w-5 h-5" />,
       reason: '',

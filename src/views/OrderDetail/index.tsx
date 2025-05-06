@@ -309,7 +309,10 @@ const OrderDetail = () => {
                     icon={<History />}
                     content={
                       !isFetchingStatusTracking && useStatusTrackingData && useStatusTrackingData?.data ? (
-                        <OrderStatusTrackingDetail statusTrackingData={useStatusTrackingData?.data} />
+                        <OrderStatusTrackingDetail
+                          statusTrackingData={useStatusTrackingData?.data}
+                          orderCreatedAt={useOrderData?.data?.createdAt}
+                        />
                       ) : (
                         <p></p>
                       )
@@ -409,6 +412,7 @@ const OrderDetail = () => {
                     totalPlatformDiscount={useOrderData?.data?.platformVoucherDiscount}
                     totalPayment={useOrderData?.data?.totalPrice}
                     paymentMethod={useOrderData?.data?.paymentMethod}
+                    orderStatus={useOrderData?.data?.status}
                   />
                 </div>
                 {useOrderData?.data?.status === ShippingStatusEnum.WAIT_FOR_CONFIRMATION &&
