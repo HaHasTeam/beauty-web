@@ -50,6 +50,7 @@ const routes = {
   sellLanding: '/landing/sell',
   professionalLanding: '/landing/professional',
   search: '/search',
+  searchBrand: '/search/brands',
   brands: '/brands',
   brandDetail: '/brands/:brandId',
   blogDetail: '/blogs/:id',

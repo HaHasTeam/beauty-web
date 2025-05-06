@@ -24,7 +24,6 @@
   "signInWithEmailPassword": "Sign in with email and password",
   "noAccountQuestion": "Don't have an account?",
   "signUpLink": "Sign up",
-
   "sendEmailButton": "Send Email",
   "resetRequestSuccess": "Send request success",
   "header": {
@@ -601,7 +600,7 @@
       "value": "within {{time}}"
     },
     "joined": {
-      "title": "Joined",
+      "title": "Joined on",
       "value": "{{time}} ago",
       "time": "{{time}}"
     },
@@ -615,7 +614,10 @@
     },
     "chatNow": "Chat Now",
     "chat": "Chat",
-    "viewShop": "View Shop"
+    "viewShop": "View Shop",
+    "follower": {
+      "title": "Followers"
+    }
   },
   "breadcrumb": {
     "home": "Home"
@@ -652,6 +654,7 @@
     }
   },
   "cart": {
+    "estimated": "Estimated",
     "finalPrice": "Estimated Price",
     "brannedAllMessage": "This product is banned.",
     "unPublishAllMessage": "This product is not available for purchase.",
@@ -2353,7 +2356,6 @@
     "activeServicesUsingCriteriaNotFound": "No active services using this criteria found.",
     "imageUpdateFailed": "Failed to update image associated with the system service",
     "invalidStatusValue": "Invalid status value",
-
     "invalidBankAccount": "Account number is required",
     "invalidAccountName": "Account name is required",
     "invalidBankName": "Bank name is required",
@@ -2416,7 +2418,6 @@
     "balanceNonNegative": "Balance must be non-negative",
     "invalidBankAccountId": "Invalid bank account ID",
     "invalidRelatedAccountId": "Invalid related account ID",
-
     "bankAccountNotFound": "Bank account not found",
     "cannotUnselectDefaultBankAccount": "Cannot unselect default bank account",
     "cannotDeleteDefaultBankAccount": "Cannot delete default bank account",
@@ -2599,5 +2600,8 @@
     "orders": "Orders",
     "notifications": "Notifications",
     "vouchers": "Vouchers"
+  },
+  "searchBrand": {
+    "showResult": "Brands related to the keyword \"{{query}}\""
   }
 }
