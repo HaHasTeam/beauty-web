@@ -5,7 +5,6 @@
     "currency": "{{value, currency}}"
   },
   "welcome": "Chào mừng đến với Allure",
-
   "unleashBeauty": "Khơi dậy vẻ đẹp bên trong bạn. Đăng nhập ngay.",
   "or": "HOẶC",
   "continueWithGoogle": "Tiếp tục với Google",
@@ -639,7 +638,10 @@
     },
     "chatNow": "Nhắn tin ngay",
     "chat": "Nhắn tin",
-    "viewShop": "Xem thương hiệu"
+    "viewShop": "Xem thương hiệu",
+    "follower": {
+      "title": "Người theo dõi"
+    }
   },
   "breadcrumb": {
     "home": "Trang chủ"
@@ -2360,7 +2362,6 @@
     "activeServicesUsingCriteriaNotFound": "Không tìm thấy dịch vụ đang hoạt động sử dụng tiêu chí này",
     "imageUpdateFailed": "Không thể cập nhật hình ảnh liên kết với dịch vụ hệ thống",
     "invalidStatusValue": "Trạng thái không hợp lệ",
-
     "invalidBankAccount": "Số tài khoản là bắt buộc",
     "invalidAccountName": "Tên tài khoản là bắt buộc",
     "invalidBankName": "Tên ngân hàng là bắt buộc",
@@ -2423,7 +2424,6 @@
     "balanceNonNegative": "Số dư không được âm",
     "invalidBankAccountId": "ID tài khoản ngân hàng không hợp lệ",
     "invalidRelatedAccountId": "ID tài khoản liên quan không hợp lệ",
-
     "bankAccountNotFound": "Không tìm thấy tài khoản ngân hàng",
     "cannotUnselectDefaultBankAccount": "Không thể bỏ chọn tài khoản ngân hàng mặc định",
     "cannotDeleteDefaultBankAccount": "Không thể xóa tài khoản ngân hàng mặc định",
@@ -2495,7 +2495,6 @@
     "orderCancelStatusInvalid": "Không thể hủy đơn hàng do trạng thái hiện tại",
     "orderStatusInvalidRETUNRING": "Thương hiệu chỉ nhận đơn hàng khi trạng thái là ĐANG TRẢ",
     "cannotUpdateStatus": "Không thể cập nhật trạng thái này",
-    "walletNotFound": "Không tìm thấy ví",
     "orderToPayCancel": "Không thể hủy đơn hàng đang cần thanh toán",
     "orderStatusNotToPay": "Trạng thái đơn hàng không phải là CẦN THANH TOÁN",
     "onlyRequestCancelOnce": "Chỉ được yêu cầu hủy một lần",
@@ -2606,5 +2605,8 @@
     "orders": "Đơn hàng",
     "notifications": "Thông báo",
     "vouchers": "Voucher"
+  },
+  "searchBrand": {
+    "showResult": "Thương hiệu liên quan đến từ khóa \"{{query}}\""
   }
 }

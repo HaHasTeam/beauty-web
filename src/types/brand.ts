@@ -30,6 +30,7 @@ export type IBrand = {
   id: string
   createdAt: string
   updatedAt: string
+  establishmentDate: string
   name: string
   logo: string
   document: string
@@ -44,6 +45,8 @@ export type IBrand = {
     | BrandStatusEnum.INACTIVE
     | BrandStatusEnum.PENDING
     | BrandStatusEnum.DENIED
+  followers: number
+  totalProducts: number
 }
 
 export type IBranch = {

@@ -28,7 +28,7 @@ const Index = () => {
           {!isFetching && brand && brand?.data && (
             <>
               <div className="flex gap-2 w-full flex-col">
-                <BrandOverview brand={brand?.data as IBrand} />
+                <BrandOverview brand={brand?.data as unknown as IBrand} />
               </div>
             </>
           )}
