@@ -1,27 +1,23 @@
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Link, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 
 import emptySearch from '@/assets/images/NoSearchResult.png'
-import BrandSection from '@/components/brand/BrandSection'
-import CustomBreadcrumb from '@/components/breadcrumb/CustomBreadcrumb'
 import Empty from '@/components/empty/Empty'
 import ProductFilter, { PriceRange } from '@/components/filter/ProductFilter'
 import LoadingContentLayer from '@/components/loading-icon/LoadingContentLayer'
 import APIPagination from '@/components/pagination/Pagination'
 import ProductCard from '@/components/product/ProductCard'
 import ProductSort from '@/components/sort/ProductSort'
-import configs from '@/config'
 import { limit, page } from '@/constants/infor'
-import { getBrandFilterApi } from '@/network/apis/brand'
 import { getProductFilterApi } from '@/network/apis/product'
-import { BrandStatusEnum } from '@/types/brand'
 import { DiscountTypeEnum, OrderEnum, ProductEnum, ProductTagEnum, StatusEnum } from '@/types/enum'
 import { calculateDiscountPrice } from '@/utils/price'
 import { getCheapestClassification } from '@/utils/product'
 
-const SearchPage = ({ brandId }: { brandId?: string }) => {
+// eslint-disable-next-line unused-imports/no-unused-vars
+const SearchProducts = ({ brandId }: { brandId?: string }) => {
   const [currentPage, setCurrentPage] = useState(page)
   const { t } = useTranslation()
   const [sortOption, setSortOption] = useState<undefined | string>('priceLowToHigh')
@@ -58,34 +54,12 @@ const SearchPage = ({ brandId }: { brandId?: string }) => {
     queryFn: getProductFilterApi.fn,
     select: (data) => data.data,
   })
-
-  const { data: brandData, isFetching: isFetchingBrand } = useQuery({
-    queryKey: [
-      getBrandFilterApi.queryKey,
-      {
-        page: currentPage,
-        limit: limit,
-        order: 'ASC',
-        statuses: [BrandStatusEnum.ACTIVE] as unknown as string & BrandStatusEnum[],
-        name: query,
-      },
-    ],
-    queryFn: getBrandFilterApi.fn,
-  })
-  console.log(brandData)
-
   return (
     <>
       {isFetching && <LoadingContentLayer />}
-      <div className="container w-full mx-auto sm:px-4 px-2 pt-4 pb-8 my-5">
-        <div className="w-full lg:px-8 md:px-4 sm:px-2 px-0 space-y-8">
+      <div className="w-full mx-auto my-5">
+        <div className="w-full px-0 space-y-8">
           <div className="flex flex-col gap-2">
-            <CustomBreadcrumb
-              customSegments={{
-                search: t('search.result', { total: productData?.total ?? 0, keyword: query }),
-              }}
-            />
-
             {/* Replace the existing flex gap-3 div with this responsive layout */}
             <div className="flex flex-col md:flex-row gap-4">
               {/* Filter section with responsive styling */}
@@ -103,19 +77,6 @@ const SearchPage = ({ brandId }: { brandId?: string }) => {
               {/* Results section */}
               <div className="flex-1">
                 {/* Brand result */}
-                {!isFetchingBrand && brandData && brandData.data.items.length > 0 && (
-                  <div className="pb-5 space-y-3">
-                    <div className="flex items-center gap-3 justify-between">
-                      <span className="text-gray-400">{t('searchBrand.showResult', { query: query })}</span>
-                      {brandData.data.items.length > 0 ? (
-                        <Link to={configs.routes.searchBrand + `?keyword=${query}`} className="text-primary">
-                          {t('button.viewAll') + ` (${brandData.data.items.length})`}
-                        </Link>
-                      ) : null}
-                    </div>
-                    <BrandSection brand={brandData.data.items[0]} />
-                  </div>
-                )}
                 {/* Products result */}
                 <ProductSort setSortOption={setSortOption} sortOption={sortOption} />
                 {productData && productData.items?.length > 0 && (
@@ -207,4 +168,4 @@ const SearchPage = ({ brandId }: { brandId?: string }) => {
   )
 }
 
-export default SearchPage
+export default SearchProducts

@@ -52,15 +52,17 @@ export default function ProductCard({ product, isProductDiscount = false, isInGr
               {isProductDiscount && product?.deal && product?.deal > 0 ? (
                 <ProductTag tag="DealPercent" text={`-${(product?.deal * 100).toFixed(0)}%`} />
               ) : null}
-              <div className="min-h-[90px]">
-                <span className="text-semibold line-clamp-2 sm:text-sm text-xs">{product?.name}</span>
-                <ProductStar rating={product?.rating} ratingAmount={product?.ratingAmount} />
-                <div className="mt-1 mb-2">
-                  <span className="text-gray-500 text-sm line-clamp-1">
-                    {t('productCard.soldInPastMonth', { amount: product?.salesLast30Days ?? 0 })}
-                  </span>
+              {!isInGroupBuying && (
+                <div className="min-h-[90px]">
+                  <span className="text-semibold line-clamp-2 sm:text-sm text-xs">{product?.name}</span>
+                  <ProductStar rating={product?.rating} ratingAmount={product?.ratingAmount} />
+                  <div className="mt-1 mb-2">
+                    <span className="text-gray-500 text-sm line-clamp-1">
+                      {t('productCard.soldInPastMonth', { amount: product?.salesLast30Days ?? 0 })}
+                    </span>
+                  </div>
                 </div>
-              </div>
+              )}
               <div className="flex justify-between items-center w-full">
                 {product?.deal && product?.deal > 0 ? (
                   <div className="flex gap-1 items-center">

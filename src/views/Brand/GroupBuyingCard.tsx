@@ -375,7 +375,7 @@ export default function GroupBuyingCard({ brand, groupProduct }: GroupBuyingCard
               <div className="flex justify-between items-center w-full mt-3 pt-2 border-t border-gray-100">
                 <div className="flex gap-1 items-center">
                   <span className="text-red-500 text-xs font-medium">
-                    {tiers.length > 0 ? tiers[tiers.length - 1].discount : '0%'} {t('groupBuy.maxDiscount')}
+                    {tiers.length > 0 ? tiers[0].discount : '0%'} {t('groupBuy.maxDiscount')}
                   </span>
                 </div>
                 <Button size="sm" variant="outline" className="px-2.5 py-1 h-auto text-xs border-primary text-primary">

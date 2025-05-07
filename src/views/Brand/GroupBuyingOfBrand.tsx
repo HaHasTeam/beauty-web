@@ -44,7 +44,7 @@ const GroupBuyingOfBrand = () => {
             .map((group, index) => <GroupBuyingCard key={index} brand={brand?.data as IBranch} groupProduct={group} />)}
         </div>
         {!isFetching && !groupProducts?.data.length && (
-          <Empty title={t('groupBuy.noGroupBuy')} description="groupBuy.noGroupBuyDes" />
+          <Empty title={t('groupBuy.noGroupBuy')} description={t('groupBuy.noGroupBuyDes')} />
         )}
       </div>
     </div>
