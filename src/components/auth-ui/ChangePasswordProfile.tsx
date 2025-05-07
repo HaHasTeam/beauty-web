@@ -128,7 +128,7 @@ export default function ChangePasswordProfile() {
                   ></path>
                 </svg>
               ) : (
-                'change password đang đợi ghep api'
+                'Change password'
               )}
             </Button>
           </div>

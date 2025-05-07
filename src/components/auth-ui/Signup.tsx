@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router-dom'
 import { z } from 'zod'
 
@@ -14,6 +15,7 @@ import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/ui/password-input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import configs from '@/config'
+import { getOauthGoogleUrl } from '@/config/contants'
 import useHandleServerError from '@/hooks/useHandleServerError'
 import { useToast } from '@/hooks/useToast'
 import { getFormRegisterSchema } from '@/lib/schema'
@@ -28,6 +30,7 @@ import LoadingLayer from '../loading-icon/LoadingLayer'
 import { PhoneInputWithCountries } from '../phone-input'
 
 export default function SignUp() {
+  const { t } = useTranslation()
   // const [isSubmitting, setIsSubmitting] = useState(false)
   const handleServerError = useHandleServerError()
   const formRegisterSchema = getFormRegisterSchema()
@@ -198,7 +201,7 @@ export default function SignUp() {
                   <FormLabel>
                     {' '}
                     I accept the{' '}
-                    <Link to="/terms" className="text-[#FFA07A] hover:underline">
+                    <Link to="/terms" className="text-primary hover:underline">
                       Terms and Conditions
                     </Link>
                   </FormLabel>
@@ -220,13 +223,14 @@ export default function SignUp() {
           <ImageWithFallback src={OrVector02} alt="vector" fallback={fallBackImage} className="object-contain" />
         </div>
         <a
+          href={getOauthGoogleUrl()}
           className={cn(
             buttonVariants({ variant: 'outline' }),
             'w-full mb-4 flex items-center justify-center cursor-pointer',
           )}
         >
           <Icons.GoogleIcon />
-          Continue with Google
+          {t('continueWithGoogle')}
         </a>
         <p className="mt-4 text-sm text-gray-600">
           Already have an account?{' '}

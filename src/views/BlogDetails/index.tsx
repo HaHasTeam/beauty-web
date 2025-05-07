@@ -2,6 +2,7 @@ import 'react-quill-new/dist/quill.snow.css'
 import './index.css'
 
 import { useQuery } from '@tanstack/react-query'
+import { Calendar } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import ReactQuill from 'react-quill-new'
 import { useParams } from 'react-router-dom'
@@ -46,12 +47,15 @@ const BlogDetail = () => {
               <h2 className="text-2xl font-bold text-primary">{blogData.data.title}</h2>
               {/* <BlogState state={blogData.data.status} /> */}
             </div>
-            <div className="text-sm text-muted-foreground ">
-              <p>
+            <div className="text-sm text-muted-foreground flex items-center gap-3 justify-between">
+              <p className="flex items-center gap-1">
+                <Calendar className="w-4 h-4" />
                 {t('blogDetails.createdAt')}:{' '}
                 {t('date.toLocaleDateTimeString', { val: new Date(blogData.data.createdAt) })}
               </p>
-              <p>
+              <p>•</p>
+              <p className="flex items-center gap-1">
+                <Calendar className="w-4 h-4" />
                 {t('blogDetails.updatedAt')}:{' '}
                 {t('date.toLocaleDateTimeString', { val: new Date(blogData.data.updatedAt) })}
               </p>

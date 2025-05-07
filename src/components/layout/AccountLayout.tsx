@@ -32,11 +32,6 @@ function AccountLayout() {
       path: configs.routes.profileWallet,
     },
     {
-      title: t('account.reports'),
-      icon: <Flag className="mr-3 h-5 w-5" />,
-      path: configs.routes.profileReport,
-    },
-    {
       title: t('account.address'),
       icon: <Home className="mr-3 h-5 w-5" />,
       path: configs.routes.profileAddress,
@@ -70,7 +65,7 @@ function AccountLayout() {
       path: configs.routes.profileVoucher,
     },
     {
-      title: 'Báo Cáo',
+      title: t('account.reports'),
       icon: <Flag className="mr-3 h-5 w-5" />,
       path: configs.routes.profileReport,
     },

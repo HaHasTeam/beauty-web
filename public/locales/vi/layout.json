@@ -641,7 +641,8 @@
     "viewShop": "Xem thương hiệu",
     "follower": {
       "title": "Người theo dõi"
-    }
+    },
+    "creating": "Đang tạo"
   },
   "breadcrumb": {
     "home": "Trang chủ"

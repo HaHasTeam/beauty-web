@@ -136,20 +136,20 @@ function ProfileVoucher() {
                     <Tag className="h-4 w-4 mr-2" />
                     <span>
                       {voucher.discountType === 'PERCENTAGE'
-                        ? t('profileVoucher.discount.percentage', { value: voucher.discountValue })
-                        : t('profileVoucher.discount.fixed', { value: voucher.discountValue.toFixed(2) })}
+                        ? t('profileVoucher.discount.percentage', { value: voucher.discountValue * 100 })
+                        : t('profileVoucher.discount.fixed', { value: voucher.discountValue })}
                     </span>
                   </div>
 
                   {voucher.minOrderValue > 0 && (
                     <div className="text-muted-foreground">
-                      {t('profileVoucher.minOrder', { value: voucher.minOrderValue.toFixed(2) })}
+                      {t('profileVoucher.minOrder', { value: voucher.minOrderValue })}
                     </div>
                   )}
 
                   {voucher.maxDiscount > 0 && voucher.discountType === 'PERCENTAGE' && (
                     <div className="text-muted-foreground">
-                      {t('profileVoucher.maxDiscount', { value: voucher.maxDiscount.toFixed(2) })}
+                      {t('profileVoucher.maxDiscount', { value: voucher.maxDiscount })}
                     </div>
                   )}
 

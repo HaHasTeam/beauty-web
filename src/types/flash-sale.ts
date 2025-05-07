@@ -13,6 +13,7 @@ export type TFlashSale = TMetaData & {
   images: IImage[]
   status: FlashSaleStatusEnum
   productClassifications: IClassification[]
+  soldAmount: string
 }
 
 export enum FlashSaleStatusEnum {
