@@ -41,7 +41,7 @@ export default function ChangePasswordProfile() {
       form.reset()
       queryClient.invalidateQueries({ queryKey: [getUserProfileApi.queryKey] })
       successToast({
-        message: t('toast.successMessage'),
+        message: t('toast.successChangePasswordMessage'),
       })
     },
   })
