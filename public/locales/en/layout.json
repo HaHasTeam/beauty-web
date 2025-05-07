@@ -667,7 +667,7 @@
   },
   "cart": {
     "estimated": "Estimated",
-    "finalPrice": "Estimated Price",
+    "finalPrice": "Max total when buy together",
     "brannedAllMessage": "This product is banned.",
     "unPublishAllMessage": "This product is not available for purchase.",
     "deleteItem": "Delete {{count}} item(s)",

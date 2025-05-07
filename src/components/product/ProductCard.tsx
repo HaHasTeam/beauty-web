@@ -5,6 +5,7 @@ import fallBackImage from '@/assets/images/fallBackImage.jpg'
 import { Card, CardContent } from '@/components/ui/card'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import configs from '@/config'
+import { cn } from '@/lib/utils'
 import { IProduct } from '@/types/product'
 import ProductDetail from '@/views/ProductDetail'
 
@@ -48,21 +49,25 @@ export default function ProductCard({ product, isProductDiscount = false, isInGr
                 className="object-cover w-full h-full rounded-tl-xl rounded-tr-xl"
               />
             </div>
-            <div className="w-full h-lg-[130px] h-[150px] p-2 p-md-3">
+            <div className={cn('w-full h-lg-[130px] h-[150px] p-2 p-md-3', isInGroupBuying && 'h-fit')}>
               {isProductDiscount && product?.deal && product?.deal > 0 ? (
                 <ProductTag tag="DealPercent" text={`-${(product?.deal * 100).toFixed(0)}%`} />
               ) : null}
-              {!isInGroupBuying && (
-                <div className="min-h-[90px]">
+              {
+                <div className={cn('min-h-[90px]', isInGroupBuying ? 'h-fit min-h-fit' : '')}>
                   <span className="text-semibold line-clamp-2 sm:text-sm text-xs">{product?.name}</span>
-                  <ProductStar rating={product?.rating} ratingAmount={product?.ratingAmount} />
-                  <div className="mt-1 mb-2">
-                    <span className="text-gray-500 text-sm line-clamp-1">
-                      {t('productCard.soldInPastMonth', { amount: product?.salesLast30Days ?? 0 })}
-                    </span>
-                  </div>
+                  {!isInGroupBuying && (
+                    <>
+                      <ProductStar rating={product?.rating} ratingAmount={product?.ratingAmount} />
+                      <div className="mt-1 mb-2">
+                        <span className="text-gray-500 text-sm line-clamp-1">
+                          {t('productCard.soldInPastMonth', { amount: product?.salesLast30Days ?? 0 })}
+                        </span>
+                      </div>
+                    </>
+                  )}
                 </div>
-              )}
+              }
               <div className="flex justify-between items-center w-full">
                 {product?.deal && product?.deal > 0 ? (
                   <div className="flex gap-1 items-center">
