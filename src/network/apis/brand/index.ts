@@ -77,7 +77,7 @@ export const getBrandFilterApi = toQueryFetcher<FilterParamBrands, TServerRespon
       body.statuses = filterParams.statuses
     }
 
-    return privateRequest('/brands/filter', {
+    return publicRequest('/brands/filter', {
       method: 'POST',
       data: body,
       params: { page, limit, sortBy, order },

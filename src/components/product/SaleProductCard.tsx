@@ -90,11 +90,8 @@ export default function SaleProductCard({ product }: ProductCardProps) {
             )}
           </div>
           <div className="w-full space-y-1.5">
-            <SoldProgress soldAmount={10} maxAmount={getTotalSellProduct} />
+            <SoldProgress soldAmount={parseInt(product.soldAmount || '')} maxAmount={getTotalSellProduct} />
           </div>
-          {/* <Button className="w-full bg-primary hover:bg-primary/70 text-primary-foreground">
-            {t('button.addToCard')}
-          </Button> */}
         </CardFooter>
       </Card>
     </Link>

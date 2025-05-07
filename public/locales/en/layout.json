@@ -617,7 +617,8 @@
     "viewShop": "View Shop",
     "follower": {
       "title": "Followers"
-    }
+    },
+    "creating": "Creating"
   },
   "breadcrumb": {
     "home": "Home"
@@ -2554,12 +2555,12 @@
       "unclaimed": "Unclaimed"
     },
     "discount": {
-      "percentage": "Percentage discount: {value}%",
-      "fixed": "Fixed discount: ${value}"
+      "percentage": "Percentage discount: {{value}}%",
+      "fixed": "Fixed discount: {{value, currency}}"
     },
-    "minOrder": "Min. order: ${value}",
-    "maxDiscount": "Max. discount: ${value}",
-    "validity": "Valid: {startDate} - {endDate}",
+    "minOrder": "Min. order: {{value, currency}}",
+    "maxDiscount": "Max. discount: {{value, currency}}",
+    "validity": "{{startDate, MM/DD/YYYY HH:mm:ss}} - {{endDate, MM/DD/YYYY HH:mm:ss}}",
     "buttons": {
       "useVoucher": "Use Voucher",
       "unavailable": "Unavailable",
@@ -2568,7 +2569,7 @@
     },
     "notifications": {
       "copied": "Code copied!",
-      "copiedDescription": "Voucher code {code} copied to clipboard"
+      "copiedDescription": "Voucher code {{code}} copied to clipboard"
     },
     "emptyState": {
       "title": "No Vouchers Found",
@@ -2577,7 +2578,8 @@
     "error": {
       "title": "Error Loading Vouchers",
       "description": "We couldn't load your vouchers. Please try again later."
-    }
+    },
+    "valid": "Valid"
   },
   "account": {
     "title": "Account",
