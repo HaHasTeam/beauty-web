@@ -157,7 +157,7 @@ const ConsultantServiceBanner = (/*props: Props*/) => {
                   </div>
                   <span className="text-xs font-medium text-white/80">
                     {t('consultantServiceBanner.available', '{{count}} chuyên gia sẵn sàng', {
-                      count: consultantPreviewData.totalItems,
+                      count: consultantPreviewData?.items.filter((item) => item.consultant.status === 'ACTIVE').length,
                     })}
                   </span>
                 </>
