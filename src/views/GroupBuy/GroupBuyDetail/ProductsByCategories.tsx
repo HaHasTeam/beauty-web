@@ -1,11 +1,7 @@
-import { ArrowRight } from 'lucide-react'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router-dom'
 
 import ProductCard from '@/components/product/ProductCard'
-import configs from '@/config'
-import { buildOneWayResource } from '@/router'
 import { TGroupBuying } from '@/types/group-buying'
 
 type ProductsByCategoriesProps = {
@@ -29,13 +25,6 @@ const ProductsByCategories = ({ groupBuyingInfo }: ProductsByCategoriesProps) =>
               })}
             </h2>
           </div>
-          <Link
-            to={buildOneWayResource(configs.routes.recommendProducts)}
-            className="text-[#FF6B35] hover:opacity-80 transition-opacity flex items-center gap-1"
-          >
-            {t('button.seeAll')}
-            <ArrowRight className="w-4 h-4" />
-          </Link>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
           {allProducts?.slice(0, 10)?.map((product) => {

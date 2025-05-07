@@ -42,7 +42,7 @@ const GroupBuyingOfBrand = () => {
           ))}
         </div>
         {!isFetching && !groupProducts?.data.length && (
-          <Empty title={t('groupBuy.noGroupBuy')} description="groupBuy.noGroupBuyDes" />
+          <Empty title={t('groupBuy.noGroupBuy')} description={t('groupBuy.noGroupBuyDes')} />
         )}
       </div>
     </div>

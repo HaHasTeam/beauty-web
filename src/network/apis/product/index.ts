@@ -49,6 +49,7 @@ interface FilterParamProducts extends TBaseFilterRequestParams {
   minPrice?: number
   maxPrice?: number
   statuses?: string
+  brandId?: string
 }
 
 export const getProductFilterApi = toQueryFetcher<
