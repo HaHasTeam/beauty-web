@@ -52,9 +52,8 @@ export const getConsultantFeedbackApi = toQueryFetcher<string, TServerResponse<I
 export interface IFilterConsultantFeedbackParams {
   consultantId: string
   page?: number
-  limit?: number,
-  type?: 'ALL' | 'RATING' | 'IMAGE_VIDEO' | 'CLASSIFICATION',
-  
+  limit?: number
+  type?: 'ALL' | 'RATING' | 'IMAGE_VIDEO' | 'CLASSIFICATION'
 }
 
 export const getFilterConsultantFeedbackApi = toQueryFetcher<
@@ -68,9 +67,9 @@ export const getFilterConsultantFeedbackApi = toQueryFetcher<
       page,
       limit,
     },
-    data:{
-      type: params?.type??'ALL',
-    }
+    data: {
+      type: params?.type ?? 'ALL',
+    },
   })
 })
 
