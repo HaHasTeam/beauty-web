@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom'
 
 import AuthUI from '@/components/auth/AuthUI'
 import { Button } from '@/components/ui/button'
+import configs from '@/config'
 import routes from '@/config/routes'
 
 const ForgotPassword = () => {
@@ -37,7 +38,7 @@ const ForgotPassword = () => {
         </div>
         <div className="text-center text-sm">
           {t('noAccountQuestion')}{' '}
-          <Link to="/signup" className="font-semibold text-primary hover:underline">
+          <Link to={configs.routes.signUp} className="font-semibold text-primary hover:underline">
             {t('signUpLink')}
           </Link>
         </div>

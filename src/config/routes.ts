@@ -7,7 +7,7 @@ const routes = {
   authGoogle: '/auth/google',
   feed: '/feed',
   community: '/community',
-  notification: '/notifications',
+  notification: '/profile/notification',
   explore: '/explore',
   settings: '/settings',
   forgotPassword: '/forgot-password',
