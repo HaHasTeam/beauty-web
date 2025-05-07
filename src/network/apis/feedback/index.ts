@@ -43,14 +43,18 @@ export const getFeedbackByIdApi = toQueryFetcher<string, TServerResponse<IRespon
 export const getConsultantFeedbackApi = toQueryFetcher<string, TServerResponse<IResponseFeedback[]>>(
   'getConsultantFeedbackApi',
   async (consultantId) => {
-    return publicRequest(`/feedbacks/get-consultant-feedbacks/${consultantId}`)
+    return publicRequest(`/feedbacks/get-consultant-feedbacks/${consultantId}`, {
+      method: 'GET',
+    })
   },
 )
 
 export interface IFilterConsultantFeedbackParams {
   consultantId: string
   page?: number
-  limit?: number
+  limit?: number,
+  type?: 'ALL' | 'RATING' | 'IMAGE_VIDEO' | 'CLASSIFICATION',
+  
 }
 
 export const getFilterConsultantFeedbackApi = toQueryFetcher<
@@ -59,11 +63,14 @@ export const getFilterConsultantFeedbackApi = toQueryFetcher<
 >('getFilterConsultantFeedbackApi', async (params) => {
   const { consultantId, page = 1, limit = 10 } = params || {}
   return publicRequest(`/feedbacks/filter-consultant-feedbacks/${consultantId}`, {
-    method: 'GET',
+    method: 'POST',
     params: {
       page,
       limit,
     },
+    data:{
+      type: params?.type??'ALL',
+    }
   })
 })
 

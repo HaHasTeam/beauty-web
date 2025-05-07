@@ -263,7 +263,7 @@ const Banner = ({ brand, groupBuyingInfo }: BannerProps) => {
                 </Avatar>
                 <div>
                   <h3 className="text-white font-bold text-lg">{brand.name}</h3>
-                  <p className="text-rose-100 text-sm line-clamp-2 truncate">{brand.description}</p>
+                  <p className="text-rose-100 text-sm">{brand.description?.slice(0, 150) + '...'}</p>
                 </div>
               </div>
 
