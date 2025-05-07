@@ -2560,7 +2560,7 @@
     },
     "minOrder": "Min. order: {{value, currency}}",
     "maxDiscount": "Max. discount: {{value, currency}}",
-    "validity": "Valid: {{startDate}} - {{endDate}}",
+    "validity": "{{startDate, MM/DD/YYYY HH:mm:ss}} - {{endDate, MM/DD/YYYY HH:mm:ss}}",
     "buttons": {
       "useVoucher": "Use Voucher",
       "unavailable": "Unavailable",
@@ -2578,7 +2578,8 @@
     "error": {
       "title": "Error Loading Vouchers",
       "description": "We couldn't load your vouchers. Please try again later."
-    }
+    },
+    "valid": "Valid"
   },
   "account": {
     "title": "Account",

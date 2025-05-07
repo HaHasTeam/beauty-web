@@ -1,7 +1,6 @@
 'use client'
 
 import { useQuery } from '@tanstack/react-query'
-import { format } from 'date-fns'
 import { AlertCircle, Clock, Copy, Tag } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
@@ -104,7 +103,7 @@ function ProfileVoucher() {
           <p className="text-muted-foreground">{t('profileVoucher.emptyState.description')}</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
           {vouchers.map((voucher) => (
             <Card
               key={voucher.id}
@@ -153,12 +152,15 @@ function ProfileVoucher() {
                     </div>
                   )}
 
-                  <div className="flex items-center text-muted-foreground">
-                    <Clock className="h-4 w-4 mr-2" />
+                  <div className="text-muted-foreground text-sm">
+                    <div className="flex items-center gap-1">
+                      <Clock className="h-4 w-4" />
+                      <span>{t('profileVoucher.valid')}</span>
+                    </div>
                     <span>
                       {t('profileVoucher.validity', {
-                        startDate: format(new Date(voucher.startTime), 'MMM d, yyyy'),
-                        endDate: format(new Date(voucher.endTime), 'MMM d, yyyy'),
+                        startDate: new Date(voucher.startTime),
+                        endDate: new Date(voucher.endTime),
                       })}
                     </span>
                   </div>

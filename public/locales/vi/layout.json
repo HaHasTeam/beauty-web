@@ -2560,12 +2560,12 @@
       "unclaimed": "Chưa nhận"
     },
     "discount": {
-      "percentage": "Giảm giá theo phần trăm: {value}%",
-      "fixed": "Giảm giá cố định: ${value}"
+      "percentage": "Giảm giá theo phần trăm: {{value}}%",
+      "fixed": "Giảm giá cố định: {{value, currency}}"
     },
-    "minOrder": "Đơn hàng tối thiểu: ${value}",
-    "maxDiscount": "Giảm giá tối đa: ${value}",
-    "validity": "Có hiệu lực: {startDate} - {endDate}",
+    "minOrder": "Đơn hàng tối thiểu: {{value, currency}}",
+    "maxDiscount": "Giảm giá tối đa: {{value, currency}}",
+    "validity": "{{startDate, MM/DD/YYYY HH:mm:ss}} - {{endDate, MM/DD/YYYY HH:mm:ss}}",
     "buttons": {
       "useVoucher": "Sử Dụng Voucher",
       "unavailable": "Không Khả Dụng",
@@ -2583,7 +2583,8 @@
     "error": {
       "title": "Lỗi Khi Tải Voucher",
       "description": "Chúng tôi không thể tải voucher của bạn. Vui lòng thử lại sau."
-    }
+    },
+    "valid": "Có hiệu lực"
   },
   "account": {
     "title": "Tài khoản",
