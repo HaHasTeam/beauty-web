@@ -21,7 +21,6 @@ export default function ChangePasswordProfile() {
     queryKey: [getUserProfileApi.queryKey],
     queryFn: getUserProfileApi.fn,
   })
-  console.log('userProfileData', userProfileData)
 
   const form = useForm<z.infer<typeof formChangePasswordProfileSchema>>({
     resolver: zodResolver(formChangePasswordProfileSchema),
@@ -35,9 +34,10 @@ export default function ChangePasswordProfile() {
     mutationKey: [changePasswordApi.mutationKey],
     mutationFn: changePasswordApi.fn,
     onSuccess: () => {
+      form.reset()
       queryClient.invalidateQueries({ queryKey: [getUserProfileApi.queryKey] })
       successToast({
-        message: `Change password successfully`,
+        message: `Cập nhật mật khẩu thành công`,
       })
     },
   })
@@ -46,6 +46,7 @@ export default function ChangePasswordProfile() {
     try {
       const formateData = {
         password: values.password,
+        currentPassword: values.currentPassword,
         accountId: userProfileData?.data.id || '',
       }
       console.log('sign up', formateData)
@@ -106,7 +107,6 @@ export default function ChangePasswordProfile() {
             <Button
               type="submit"
               size={'lg'}
-              disabled
               className="mt-2 flex w-full items-center justify-center rounded-lg text-sm font-medium"
             >
               {isPending ? (
@@ -128,7 +128,7 @@ export default function ChangePasswordProfile() {
                   ></path>
                 </svg>
               ) : (
-                'change password đang đợi ghep api'
+                'Cập nhật mật khẩu'
               )}
             </Button>
           </div>
