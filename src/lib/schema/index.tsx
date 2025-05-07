@@ -70,6 +70,7 @@ export const formEmailSchema = z.object({
 })
 export const formChangePasswordSchema = z
   .object({
+    currentPassword: z.string().min(8).max(20),
     password: z.string().min(8).max(20),
     passwordConfirm: z.string().min(8).max(20),
   })

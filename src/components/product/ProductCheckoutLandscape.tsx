@@ -38,15 +38,6 @@ const ProductCheckoutLandscape = ({
   productClassification,
 }: ProductCheckoutLandscapeProps) => {
   const { t } = useTranslation()
-  // const hasLivestreamDiscount = livestreamDiscount !== undefined && livestreamDiscount > 0
-
-  // Format the livestream discount percentage (multiply by 100 if it's in decimal format)
-  // const formattedLivestreamDiscount = hasLivestreamDiscount
-  //   ? livestreamDiscount! <= 1
-  //     ? livestreamDiscount! * 100
-  //     : livestreamDiscount
-  //   : 0
-  // console.log('discountType22', discountType)
 
   // Calculate base price after regular discounts
   const basePrice = calculateTotalPrice(price, productQuantity, discount, discountType)

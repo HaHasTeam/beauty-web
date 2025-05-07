@@ -1,12 +1,15 @@
+'use client'
+
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
-import { z } from 'zod'
+import { useTranslation } from 'react-i18next'
+import type { z } from 'zod'
 
 import { Button } from '@/components/ui/button'
 import useHandleServerError from '@/hooks/useHandleServerError'
 import { useToast } from '@/hooks/useToast'
-import { formChangePasswordProfileSchema, formChangePasswordSchema } from '@/lib/schema'
+import { formChangePasswordProfileSchema, type formChangePasswordSchema } from '@/lib/schema'
 import { changePasswordApi } from '@/network/apis/auth'
 import { getUserProfileApi } from '@/network/apis/user'
 
@@ -14,6 +17,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { PasswordInput } from '../ui/password-input'
 
 export default function ChangePasswordProfile() {
+  const { t } = useTranslation()
   const queryClient = useQueryClient()
   const { successToast } = useToast()
   const handleServerError = useHandleServerError()
@@ -21,7 +25,6 @@ export default function ChangePasswordProfile() {
     queryKey: [getUserProfileApi.queryKey],
     queryFn: getUserProfileApi.fn,
   })
-  console.log('userProfileData', userProfileData)
 
   const form = useForm<z.infer<typeof formChangePasswordProfileSchema>>({
     resolver: zodResolver(formChangePasswordProfileSchema),
@@ -35,9 +38,10 @@ export default function ChangePasswordProfile() {
     mutationKey: [changePasswordApi.mutationKey],
     mutationFn: changePasswordApi.fn,
     onSuccess: () => {
+      form.reset()
       queryClient.invalidateQueries({ queryKey: [getUserProfileApi.queryKey] })
       successToast({
-        message: `Change password successfully`,
+        message: t('toast.successChangePasswordMessage'),
       })
     },
   })
@@ -46,6 +50,7 @@ export default function ChangePasswordProfile() {
     try {
       const formateData = {
         password: values.password,
+        currentPassword: values.currentPassword,
         accountId: userProfileData?.data.id || '',
       }
       console.log('sign up', formateData)
@@ -66,9 +71,9 @@ export default function ChangePasswordProfile() {
               name="currentPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Current Password</FormLabel>
+                  <FormLabel>{t('formLabels.currentPassword')}</FormLabel>
                   <FormControl>
-                    <PasswordInput placeholder="Please Enter your current password." {...field} />
+                    <PasswordInput placeholder={t('placeholders.currentPassword')} {...field} />
                   </FormControl>
 
                   <FormMessage />
@@ -80,9 +85,9 @@ export default function ChangePasswordProfile() {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel>{t('formLabels.password')}</FormLabel>
                   <FormControl>
-                    <PasswordInput placeholder="Please Enter your password." {...field} />
+                    <PasswordInput placeholder={t('placeholders.password')} {...field} />
                   </FormControl>
 
                   <FormMessage />
@@ -94,9 +99,9 @@ export default function ChangePasswordProfile() {
               name="passwordConfirm"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Confirm Password</FormLabel>
+                  <FormLabel>{t('formLabels.confirmPassword')}</FormLabel>
                   <FormControl>
-                    <PasswordInput placeholder="Please Enter your confirm password." {...field} />
+                    <PasswordInput placeholder={t('placeholders.confirmPassword')} {...field} />
                   </FormControl>
 
                   <FormMessage />
@@ -106,7 +111,6 @@ export default function ChangePasswordProfile() {
             <Button
               type="submit"
               size={'lg'}
-              disabled
               className="mt-2 flex w-full items-center justify-center rounded-lg text-sm font-medium"
             >
               {isPending ? (
@@ -128,7 +132,7 @@ export default function ChangePasswordProfile() {
                   ></path>
                 </svg>
               ) : (
-                'Change password'
+                t('button.updatePassword')
               )}
             </Button>
           </div>

@@ -99,6 +99,16 @@
       "waiting": "Waiting"
     }
   },
+  "formLabels": {
+    "currentPassword": "Current Password",
+    "password": "Password",
+    "confirmPassword": "Confirm Password"
+  },
+  "placeholders": {
+    "currentPassword": "Please Enter your current password.",
+    "password": "Please Enter your password.",
+    "confirmPassword": "Please Enter your confirm password."
+  },
   "productCard": {
     "currentPrice": "{{price, currency}}",
     "price": "{{price, currency}}",
@@ -153,6 +163,7 @@
   "button": {
     "writeFeedback": "Write review",
     "backToShopping": "Back to shopping",
+    "updatePassword": "Update Password",
     "payment": "Payment",
     "collect": "Collect",
     "received": "Received",
@@ -1154,6 +1165,7 @@
     "estimatedPriceNote": "This is an estimated price, the price may change after the event ends"
   },
   "toast": {
+    "successChangePasswordMessage": "Password updated successfully",
     "success": "Your request has been successfully processed, continue with your work.",
     "error": "An error occurred while processing your request, please try again later. If the problem persists, please contact the support team.",
     "info": "This is a message to provide important additional information related to your work.",
