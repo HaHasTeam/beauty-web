@@ -99,6 +99,16 @@
       "waiting": "Sắp diễn ra"
     }
   },
+  "formLabels": {
+    "currentPassword": "Mật khẩu hiện tại",
+    "password": "Mật khẩu",
+    "confirmPassword": "Xác nhận mật khẩu"
+  },
+  "placeholders": {
+    "currentPassword": "Vui lòng nhập mật khẩu hiện tại của bạn.",
+    "password": "Vui lòng nhập mật khẩu của bạn.",
+    "confirmPassword": "Vui lòng nhập xác nhận mật khẩu của bạn."
+  },
   "productCard": {
     "currentPrice": "{{price, currency}}",
     "price": "{{price, currency}}",
@@ -152,6 +162,7 @@
   "facebook": "Facebook",
   "button": {
     "writeFeedback": "Viết đánh giá",
+    "updatePassword": "Cập nhật mật khẩu",
     "backToShopping": "Quay lại trang chủ",
     "payment": "Thanh toán",
     "collect": "Thu thập",
@@ -641,7 +652,8 @@
     "viewShop": "Xem thương hiệu",
     "follower": {
       "title": "Người theo dõi"
-    }
+    },
+    "creating": "Đang tạo"
   },
   "breadcrumb": {
     "home": "Trang chủ"
@@ -1256,6 +1268,7 @@
     "selectBrandToChat": "Chọn một thương hiệu từ thanh bên trái để bắt đầu trò chuyện hoặc xem các cuộc hội thoại của bạn."
   },
   "toast": {
+    "successChangePasswordMessage": "Cập nhật mật khẩu thành công",
     "success": "Yêu cầu của bạn đã được xử lý thành công, tiếp tục công việc của bạn.",
     "error": "Đã xảy ra lỗi khi xử lý yêu cầu của bạn, vui lòng thử lại sau. Nếu vấn đề vẫn tiếp diễn, vui lòng liên hệ với đội ngũ hỗ trợ.",
     "info": "Đây là một thông báo để cung cấp thêm thông tin quan trọng liên quan đến công việc của bạn.",
@@ -2559,12 +2572,12 @@
       "unclaimed": "Chưa nhận"
     },
     "discount": {
-      "percentage": "Giảm giá theo phần trăm: {value}%",
-      "fixed": "Giảm giá cố định: ${value}"
+      "percentage": "Giảm giá theo phần trăm: {{value}}%",
+      "fixed": "Giảm giá cố định: {{value, currency}}"
     },
-    "minOrder": "Đơn hàng tối thiểu: ${value}",
-    "maxDiscount": "Giảm giá tối đa: ${value}",
-    "validity": "Có hiệu lực: {startDate} - {endDate}",
+    "minOrder": "Đơn hàng tối thiểu: {{value, currency}}",
+    "maxDiscount": "Giảm giá tối đa: {{value, currency}}",
+    "validity": "{{startDate, MM/DD/YYYY HH:mm:ss}} - {{endDate, MM/DD/YYYY HH:mm:ss}}",
     "buttons": {
       "useVoucher": "Sử Dụng Voucher",
       "unavailable": "Không Khả Dụng",
@@ -2582,7 +2595,8 @@
     "error": {
       "title": "Lỗi Khi Tải Voucher",
       "description": "Chúng tôi không thể tải voucher của bạn. Vui lòng thử lại sau."
-    }
+    },
+    "valid": "Có hiệu lực"
   },
   "account": {
     "title": "Tài khoản",
